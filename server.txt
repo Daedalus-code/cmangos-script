@@ -1,0 +1,57 @@
+##########
+# server #
+##########
+
+server_name="REALM_NAME" # please edit.
+server_name_lan="REALM_NAME(lan)" # please edit.
+internet="HOSTNAME" # please edit.
+intranet="LOCALHOST" # please edit.
+realm_port="8085" # please edit if wrong.
+
+##########
+# SYSTEM #
+##########
+
+group="ubuntu" # please edit if wrong.
+user="ubuntu" # please edit if wrong.
+patch="CMaNGOS.patch" # please edit if wrong name.
+
+###########
+# FOLDERS #
+###########
+
+folder_build="/home/ubuntu/wow/mangos-classic/build" # please edit if wrong.
+folder_core="/home/ubuntu/wow/mangos-classic" # please edit if wrong.
+folder_db="/home/ubuntu/wow/classic-db" # please" edit if wrong.
+folder_helper="/scripts/cmangos-script" # please edit if wrong.
+folder_wow="/home/ubuntu/wow" # please edit if wrong.
+
+#########
+# MYSQL #
+#########
+
+db_characters="characters" # please edit if wrong.
+db_mangos="mangos" # please edit if wrong.
+db_realmd="realmd" # please edit if wrong.
+sql_mycnf="/scripts/server.cnf" # please edit.
+
+#########
+# color #
+#########
+
+color_green="\e[1;32m"
+color_no='\033[0m'
+color_red='\033[1;31m'
+
+#########
+# cmake #
+#########
+
+cmake="-DCMAKE_INSTALL_PREFIX=\../run -DBUILD_EXTRACTORS=ON -DPCH=1 -DDEBUG=0 -DBUILD_PLAYERBOT=OFF" # please edit if wrong.
+
+#############
+# RA/NETCAT #
+#############
+
+host_nc="localhost" # please edit if wrong.
+port_nc="3443" # please edit if wrong.

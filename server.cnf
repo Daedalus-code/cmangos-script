@@ -1,0 +1,5 @@
+[mysql]
+host=HOSTNAME # please edit.
+port=3306 # please edit if wrong.
+user=USERNAME # please edit.
+password=PASSWORD # please edit.
