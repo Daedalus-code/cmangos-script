@@ -7,3 +7,5 @@ edit server.cnf & server.txt
 
 ---What
 
+https://github.com/cmangos  
+https://cmangos.net  
