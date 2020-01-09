@@ -28,7 +28,7 @@ patch="CMaNGOS.patch" # please edit if wrong name.
 
 folder_build="/home/ubuntu/wow/mangos-classic/build" # please edit if wrong.
 folder_core="/home/ubuntu/wow/mangos-classic" # please edit if wrong.
-folder_db="/home/ubuntu/wow/classic-db" # please" edit if wrong.
+folder_db="/home/ubuntu/wow/classic-db" # please edit if wrong.
 folder_helper="/scripts/cmangos-script" # please edit if wrong.
 folder_wow="/home/ubuntu/wow" # please edit if wrong.
 
@@ -39,13 +39,13 @@ folder_wow="/home/ubuntu/wow" # please edit if wrong.
 db_characters="characters" # please edit if wrong.
 db_mangos="mangos" # please edit if wrong.
 db_realmd="realmd" # please edit if wrong.
-sql_mycnf="/scripts/server.cnf" # please edit.
+sql_mycnf="/scripts/server.cnf" # please edit if wrong.
 
 #########
 # color #
 #########
 
-color_green="\e[1;32m"
+color_green='\e[1;32m'
 color_no='\033[0m'
 color_red='\033[1;31m'
 
