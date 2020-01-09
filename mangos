@@ -466,6 +466,7 @@ else
 printf "\033[1;31m$server_name Not online.\033[0m"
  echo
 fi
+ echo
 if nc -zw1 $intranet $realm_port; then
  echo "$server_name_lan is online!"
 ping -qc1 $intranet 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "$5" ms":"FAIL") }'
