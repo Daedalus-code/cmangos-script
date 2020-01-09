@@ -475,7 +475,6 @@ else
 printf "\033[1;31m$server_name_lan Not online.\033[0m"
  echo
 fi
- echo
  read -p "Press Enter to continue" </dev/tty
 
 #end_task
