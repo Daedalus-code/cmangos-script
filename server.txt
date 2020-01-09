@@ -8,6 +8,12 @@ internet="HOSTNAME" # please edit.
 intranet="LOCALHOST" # please edit.
 realm_port="8085" # please edit if wrong.
 
+#########
+# cmake #
+#########
+
+cmake="-DCMAKE_INSTALL_PREFIX=\../run -DBUILD_EXTRACTORS=ON -DPCH=1 -DDEBUG=0 -DBUILD_PLAYERBOT=OFF" # please edit if wrong.
+
 ##########
 # SYSTEM #
 ##########
@@ -43,15 +49,17 @@ color_green="\e[1;32m"
 color_no='\033[0m'
 color_red='\033[1;31m'
 
-#########
-# cmake #
-#########
-
-cmake="-DCMAKE_INSTALL_PREFIX=\../run -DBUILD_EXTRACTORS=ON -DPCH=1 -DDEBUG=0 -DBUILD_PLAYERBOT=OFF" # please edit if wrong.
-
 #############
 # RA/NETCAT #
 #############
 
 host_nc="localhost" # please edit if wrong.
 port_nc="3443" # please edit if wrong.
+
+########
+# date #
+########
+
+NOW=$(date +"%m.%d.%Y")
+
+# END

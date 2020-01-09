@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20200801
-# 0.4.8.6
+# 0.4.8.5
 
 ###############
 # server/info #
@@ -16,8 +16,6 @@
 source /scripts/server.txt # please edit if wrong.
 
 # easter_egg
-
-NOW=$(date +"%m.%d.%Y")
 
 printf "\e[31m
                                     ▄▄▄▄▄
@@ -52,22 +50,22 @@ printf "
 
 while :
 do
-    clear
-    printf "\e[31m-----------------------------------------------
+clear
+printf "\e[31m-----------------------------------------------
     _____ _____     _____ _____ _____ _____
    |     |     |___|   | |   __|     |   __|
    |   --| | | | .'| | | |  |  |  |  |__   |
    |_____|_|_|_|__,|_|___|_____|_____|_____|\n\e[0m"
-    cat<<EOF
+cat<<EOF
            C(ontinued)-MaNGOS Helper
              --------------------
 EOF
-  id=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT SUM(online) FROM $db_characters.characters;");
-  echo "               Online Players $id"
-  guilds=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.guild;");
-  echo "                   Guilds $guilds"
-  echo
-    cat<<EOF
+id=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT SUM(online) FROM $db_characters.characters;");
+ echo "               Online Players $id"
+guilds=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.guild;");
+ echo "                   Guilds $guilds"
+ echo
+cat<<EOF
                 $(cat /proc/loadavg 2> /dev/null | awk '{ print $1,$2,$3 }')
 
 EOF
@@ -104,7 +102,7 @@ printf "$out" | column -ts $',' | sed -e 's/^/  /'
 
 # service_status_end
 
-    cat<<EOF
+cat<<EOF
 
        start with checking for updates c)
 
@@ -117,8 +115,8 @@ printf "$out" | column -ts $',' | sed -e 's/^/  /'
   o : online check
 
 EOF
-    read -n1 -s
-    case "$REPLY" in
+ read -n1 -s
+ case "$REPLY" in
 
 # menu_end
 
@@ -126,7 +124,7 @@ EOF
 
 #start_task
 
-    printf "\e[31m
+printf "\e[31m
               _
   ___ _____ _| |
  |  _|     | . |
@@ -142,8 +140,9 @@ printf " CMaNGOS Command
   ------------------------------------------------
  'commands' will list all of the available commands
  'quit' and then hit Enter to exit"
-  echo
+ echo
 nc $host_nc $port_nc
+ echo
 
 #end_task
 
@@ -153,20 +152,20 @@ nc $host_nc $port_nc
 
 #start_task
 
-  echo "checking mangos-classic (world) for any updates.."
-  echo
-  sudo chown -R $user:$group $folder_wow
-  cd $folder_core
-  git pull
-  echo
-  echo "checking classic-db (database) for any updates.."
-  echo
-  sudo chown -R $user:$group $folder_wow
-  cd $folder_db
-  git pull
-  echo
-  read -p "Press Enter to continue" </dev/tty
-  echo
+ echo "checking mangos-classic (world) for any updates.."
+ echo
+sudo chown -R $user:$group $folder_wow
+cd $folder_core
+git pull
+ echo
+ echo "checking classic-db (database) for any updates.."
+ echo
+sudo chown -R $user:$group $folder_wow
+cd $folder_db
+git pull
+ echo
+ read -p "Press Enter to continue" </dev/tty
+ echo
 
 #end_task
 
@@ -176,41 +175,41 @@ nc $host_nc $port_nc
 
 #start_task
 
-  echo "updating mangos-classic (world)"
-  echo
-  read -p "Are you sure? (y/n) " -n 1 -r
-  echo
+ echo "updating mangos-classic (world)"
+ echo
+ read -p "Are you sure? (y/n) " -n 1 -r
+ echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-  sudo apt-get install checkinstall -y 1> /dev/null
-  echo -ne '(10%)\r'
-  sleep 1
-  sudo chown -R $user:$group $folder_wow
-  echo -ne '(20%)\r'
-  sleep 1
-  cd $folder_build
-  echo -ne '(30%)\r'
-  sleep 1
-  sudo service realmd stop
-  echo -ne '(40%)\r'
-  sleep 1
-  sudo service mangosd stop
-  echo -ne '(50%)\r'
-  sleep 1
-  cmake .. $cmake
-  echo -ne '(60%)\r'
-  sleep 1
-  make
-  echo
-  echo -ne '(90%)\r'
-  sleep 1
-  echo "select the install operation"
-  echo
-  echo " 1) make install"
-  echo " 2) checkinstall with backup"
-  echo
-  read n
-  case $n in
+sudo apt-get install checkinstall -y 1> /dev/null
+ echo -ne '(10%)\r'
+ sleep 1
+sudo chown -R $user:$group $folder_wow
+ echo -ne '(20%)\r'
+ sleep 1
+cd $folder_build
+ echo -ne '(30%)\r'
+ sleep 1
+sudo service realmd stop
+ echo -ne '(40%)\r'
+ sleep 1
+sudo service mangosd stop
+ echo -ne '(50%)\r'
+ sleep 1
+cmake .. $cmake
+ echo -ne '(60%)\r'
+ sleep 1
+make
+ echo
+ echo -ne '(90%)\r'
+ sleep 1
+ echo "select the install operation"
+ echo
+ echo " 1) make install"
+ echo " 2) checkinstall with backup"
+ echo
+ read n
+case $n in
     1) echo "make install"
     sudo make install
     ;;
@@ -218,11 +217,11 @@ then
     sudo checkinstall
     ;;
     *) echo "invalid option";;
-  esac
-  echo -ne '(100%)\r'
-  sleep 1
-  echo
-  read -p "Press Enter to continue" </dev/tty
+esac
+ echo -ne '(100%)\r'
+ sleep 1
+ echo
+ read -p "Press Enter to continue" </dev/tty
 fi
 
 #end_task
@@ -233,31 +232,31 @@ fi
 
 #start_task
 
-echo "updating classic-db (database)"
-echo
-read -p "Are you sure? (y/n) " -n 1 -r
-echo
+ echo "updating classic-db (database)"
+ echo
+ read -p "Are you sure? (y/n) " -n 1 -r
+ echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-  echo -ne '(0%)\r'
-  sleep 1
+ echo -ne '(0%)\r'
+ sleep 1
 sudo chown -R $user:$group $folder_wow
 cd $folder_db
-echo -ne '(10%)\r'
-sleep 1
+ echo -ne '(10%)\r'
+ sleep 1
 sudo service realmd stop
-echo -ne '(20%)\r'
-sleep 1
+ echo -ne '(20%)\r'
+ sleep 1
 sudo service mangosd stop
-echo -ne '(30%)\r'
-sleep 1
+ echo -ne '(30%)\r'
+ sleep 1
 ./InstallFullDB.sh
-echo -ne '(40%)\r'
-sleep 1
+ echo -ne '(40%)\r'
+ sleep 1
 fi
 
-read -p "Converting myisam -> innodb? (y/n) " -n 1 -r
-echo
+ read -p "Converting myisam -> innodb? (y/n) " -n 1 -r
+ echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 
@@ -266,25 +265,25 @@ then
 TABLES=$(mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_mangos -e 'show tables')
 for T in $TABLES
 do
-    mysql --defaults-extra-file="$sql_mycnf" -D $db_mangos -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
+mysql --defaults-extra-file="$sql_mycnf" -D $db_mangos -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
-echo -ne '(60%)\r'
-sleep 1
+ echo -ne '(60%)\r'
+ sleep 1
 TABLES=$(mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_realmd -e 'show tables')
 for T in $TABLES
 do
-    mysql --defaults-extra-file="$sql_mycnf" -D $db_realmd -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
+mysql --defaults-extra-file="$sql_mycnf" -D $db_realmd -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
-echo -ne '(80%)\r'
-sleep 1
+ echo -ne '(80%)\r'
+ sleep 1
 TABLES=$(mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_characters -e 'show tables')
 for T in $TABLES
 do
-    mysql --defaults-extra-file="$sql_mycnf" -D $db_characters -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
+mysql --defaults-extra-file="$sql_mycnf" -D $db_characters -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
-echo -ne '(100%)\r'
-sleep 1
-read -p "Press Enter to continue" </dev/tty
+ echo -ne '(100%)\r'
+ sleep 1
+ read -p "Press Enter to continue" </dev/tty
 fi
 
 #end_task
@@ -295,10 +294,10 @@ fi
 
 #start_task
 
-  echo "User Accounts"
-  echo
-  mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, joindate, last_login, last_ip FROM $db_realmd.account;"
-  read -p "Press Enter to continue" </dev/tty
+ echo "User Accounts"
+ echo
+mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, last_login, last_ip FROM $db_realmd.account;"
+ read -p "Press Enter to continue" </dev/tty
 
 #end_task
 
@@ -306,27 +305,27 @@ fi
 
  "t")
 
- #start_task
+#start_task
 
-   echo "Characters"
-   echo
-   mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, level, online FROM $db_characters.characters;"
-   read -p "Press Enter to continue" </dev/tty
+ echo "Characters"
+ echo
+mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, level, online FROM $db_characters.characters;"
+ read -p "Press Enter to continue" </dev/tty
 
- #end_task
+#end_task
 
   ;;
 
   "g")
 
-  #start_task
+#start_task
 
-    echo "Guilds"
-    echo
-    mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, motd FROM $db_characters.guild;"
-    read -p "Press Enter to continue" </dev/tty
+ echo "Guilds"
+ echo
+mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, motd FROM $db_characters.guild;"
+ read -p "Press Enter to continue" </dev/tty
 
-  #end_task
+#end_task
 
    ;;
 
@@ -334,21 +333,21 @@ fi
 
 #start_task
 
-  echo
-  read -p "Are you sure? (y/n) " -n 1 -r
-  echo
+ echo
+ read -p "Are you sure? (y/n) " -n 1 -r
+ echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-  echo "Shutting down server."
-  echo -ne '(0%)\r'
-  sleep 1
-  sudo service realmd stop 1> /dev/null
-  echo -ne '(50%)\r'
-  sleep 1
-  sudo service mangosd stop 1> /dev/null
-  echo -ne '(100%)\r'
-  sleep 1
-  echo
+ echo "Shutting down server."
+ echo -ne '(0%)\r'
+ sleep 1
+sudo service realmd stop 1> /dev/null
+ echo -ne '(50%)\r'
+ sleep 1
+sudo service mangosd stop 1> /dev/null
+ echo -ne '(100%)\r'
+ sleep 1
+ echo
 fi
 
 #end_task
@@ -359,21 +358,21 @@ fi
 
 #start_task
 
-  echo "restarting server"
-  echo
-  read -p "Are you sure? (y/n) " -n 1 -r
-  echo
+ echo "restarting server"
+ echo
+ read -p "Are you sure? (y/n) " -n 1 -r
+ echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-  echo -ne '(0%)\r'
-  sleep 1
-  sudo service realmd restart
-  echo -ne '(50%)\r'
-  sleep 1
-  sudo service mangosd restart
-  echo -ne '(100%)\r'
-  sleep 1
-  echo
+ echo -ne '(0%)\r'
+ sleep 1
+sudo service realmd restart
+ echo -ne '(50%)\r'
+ sleep 1
+sudo service mangosd restart
+ echo -ne '(100%)\r'
+ sleep 1
+ echo
 fi
 
 #end_task
@@ -384,38 +383,38 @@ fi
 
 #start_task
 
-  echo "updating Helper"
-  echo -ne '(0%)\r'
-  sleep 1
-  sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old
-  echo -ne '(10%)\r'
-  sleep 1
-  sudo chmod -x /usr/local/bin/mangos.old
-  echo -ne '(20%)\r'
-  sleep 1
-  sudo chown -R $user:$group $folder_helper
-  echo -ne '(30%)\r'
-  sleep 1
-  cd $folder_helper
-  echo -ne '(40%)\r'
-  sleep 1
-  git pull
-  echo -ne '(60%)\r'
-  sleep 1
-  echo "Overwriting old mangos -> mangos.old"
-  sleep 1
-  sudo cp mangos /usr/local/bin
-  echo -ne '(80%)\r'
-  sleep 1
-  sudo chmod +x /usr/local/bin/mangos
-  echo -ne '(100%)\r'
-  sleep 1
-  echo
-  echo "Restart mangos please.. will exit now."
-  sleep 1
+ echo "updating Helper"
+ echo -ne '(0%)\r'
+ sleep 1
+sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old
+ echo -ne '(10%)\r'
+ sleep 1
+sudo chmod -x /usr/local/bin/mangos.old
+ echo -ne '(20%)\r'
+ sleep 1
+sudo chown -R $user:$group $folder_helper
+ echo -ne '(30%)\r'
+ sleep 1
+cd $folder_helper
+ echo -ne '(40%)\r'
+ sleep 1
+git pull
+ echo -ne '(60%)\r'
+ sleep 1
+ echo "Overwriting old mangos -> mangos.old"
+ sleep 1
+sudo cp mangos /usr/local/bin
+ echo -ne '(80%)\r'
+ sleep 1
+sudo chmod +x /usr/local/bin/mangos
+ echo -ne '(100%)\r'
+ sleep 1
+ echo
+ echo "Restart mangos please.. will exit now."
+ sleep 1
 exit
 
-  #end_task
+#end_task
 
  ;;
 
@@ -423,28 +422,28 @@ exit
 
 #start_task
 
-  echo "creating a patch file"
-  echo
-  read -p "Are you sure? (y/n) " -n 1 -r
-  echo
+ echo "creating a patch file"
+ echo
+ read -p "Are you sure? (y/n) " -n 1 -r
+ echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-  echo -ne '(0%)\r'
-  sleep 1
-  sudo chown -R $user:$group $folder_wow
-  echo -ne '(20%)\r'
-  sleep 1
-  cd $folder_core
-  echo -ne '(40%)\r'
-  sleep 1
-  git checkout sql/create/db_create_mysql.sql 1> /dev/null
-  echo -ne '(80%)\r'
-  sleep 1
-  git diff > $patch
-  sleep 1
-  echo -ne '(100%)\r'
-  sleep 1
-  echo
+ echo -ne '(0%)\r'
+ sleep 1
+sudo chown -R $user:$group $folder_wow
+ echo -ne '(20%)\r'
+ sleep 1
+cd $folder_core
+ echo -ne '(40%)\r'
+ sleep 1
+git checkout sql/create/db_create_mysql.sql 1> /dev/null
+ echo -ne '(80%)\r'
+ sleep 1
+git diff > $patch
+ sleep 1
+ echo -ne '(100%)\r'
+ sleep 1
+ echo
 fi
 
 #end_task
@@ -453,34 +452,34 @@ fi
 
  "o")
 
- #start_task
+#start_task
 
-  printf "\e[1;32mOnline check -> internet/intranet\033[0m"
-  echo
-  if nc -zw1 $internet $realm_port; then
-    echo "$server_name is online!"
-    ping -qc1 $internet 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "$5" ms":"FAIL") }'
-  else
-  printf "\033[1;31m$server_name Not online.\033[0m"
-  echo
-  fi
-    if nc -zw1 $intranet $realm_port; then
-    echo "$server_name_lan is online!"
-    ping -qc1 $intranet 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "$5" ms":"FAIL") }'
-  else
-  printf "\033[1;31m$server_name_lan Not online.\033[0m"
-  echo
-  fi
-  echo
-read -p "Press Enter to continue" </dev/tty
+printf "\e[1;32mOnline check -> internet/intranet\033[0m"
+ echo
+if nc -zw1 $internet $realm_port; then
+ echo "$server_name is online!"
+ping -qc1 $internet 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "$5" ms":"FAIL") }'
+else
+printf "\033[1;31m$server_name Not online.\033[0m"
+ echo
+fi
+if nc -zw1 $intranet $realm_port; then
+ echo "$server_name_lan is online!"
+ping -qc1 $intranet 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "$5" ms":"FAIL") }'
+else
+printf "\033[1;31m$server_name_lan Not online.\033[0m"
+ echo
+fi
+ echo
+ read -p "Press Enter to continue" </dev/tty
 
- #end_task
+#end_task
 
   ;;
 
 "Q")  exit                      ;;
 "q")  echo "case sensitive!!"   ;;
  * )  echo "invalid option"     ;;
-    esac
-    sleep 1
+esac
+ sleep 1
 done
