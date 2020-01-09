@@ -455,6 +455,7 @@ fi
 #start_task
 
 printf "\e[1;32mOnline check -> internet/intranet\033[0m"
+echo
 if nc -zw1 $internet $realm_port; then
  echo "$server_name is online!"
 ping -qc1 $internet 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "$5" ms":"FAIL") }'
