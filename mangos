@@ -479,7 +479,7 @@ printf "\033[1;31m✗\033[0m $server_name_lan - [ $intranet ]"
  echo
 fi
  echo
-read -p "Press Enter to continue" </dev/tty
+ read -p "Press Enter to continue" </dev/tty
 
 #end_task
 
