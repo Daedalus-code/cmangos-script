@@ -60,7 +60,7 @@ port_nc="3443" # please edit if wrong.
 # date #
 ########
 
-NOW=$(date +"%m.%d.%Y")
+NOW="$(date +"%m.%d.%Y")"
 
 ########
 # temp #
