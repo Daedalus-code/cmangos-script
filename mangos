@@ -104,7 +104,7 @@ printf "$out" | column -ts $',' | sed -e 's/^/  /'
 
 cat<<EOF
 
-       start with checking for updates c)
+       Start with checking for updates c)
 
   a : login (command)      t : characters
   c : check for updates    u : accounts
@@ -153,19 +153,19 @@ nc $host_nc $port_nc
 
 #start_task
 
- echo "checking mangos-classic (world) for any updates.."
+ echo "Checking mangos-classic (world) for any updates.."
  echo
 sudo chown -R $user:$group $folder_wow
 cd $folder_core
 git pull
  echo
- echo "checking classic-db (database) for any updates.."
+ echo "Checking classic-db (database) for any updates.."
  echo
 sudo chown -R $user:$group $folder_wow
 cd $folder_db
 git pull
  echo
- echo "checking mangos helper for any updates.."
+ echo "Checking mangos helper for any updates.."
  echo
 sudo chown -R $user:$group $folder_helper
 cd $folder_helper
@@ -182,7 +182,7 @@ git pull
 
 #start_task
 
- echo "updating mangos-classic (world)"
+ echo "Updating mangos-classic (world)"
  echo
  read -p "Are you sure? (y/n) " -n 1 -r
  echo
@@ -210,20 +210,20 @@ make
  echo
  echo -ne '(90%)\r'
  sleep 1
- echo "select the install operation"
+ echo "Select the install operation"
  echo
  echo " 1) make install"
  echo " 2) checkinstall with backup"
  echo
  read n
 case $n in
-    1) echo "make install"
-    sudo make install
-    ;;
-    2) echo "checkinstall"
-    sudo checkinstall
-    ;;
-    *) echo "invalid option";;
+ 1) echo "make install"
+sudo make install
+ ;;
+ 2) echo "checkinstall"
+sudo checkinstall
+ ;;
+ *) echo "invalid option";;
 esac
  echo -ne '(100%)\r'
  sleep 1
@@ -239,7 +239,7 @@ fi
 
 #start_task
 
- echo "updating classic-db (database)"
+ echo "Updating classic-db (database)"
  echo
  read -p "Are you sure? (y/n) " -n 1 -r
  echo
@@ -365,7 +365,7 @@ fi
 
 #start_task
 
- echo "restarting server"
+ echo "Restarting server"
  echo
  read -p "Are you sure? (y/n) " -n 1 -r
  echo
@@ -390,7 +390,7 @@ fi
 
 #start_task
 
- echo "updating Helper"
+ echo "Updating Helper"
  echo -ne '(0%)\r'
  sleep 1
 sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old
@@ -429,7 +429,7 @@ exit
 
 #start_task
 
- echo "creating a patch file"
+ echo "Creating patch file"
  echo
  read -p "Are you sure? (y/n) " -n 1 -r
  echo
@@ -466,7 +466,7 @@ fi
  echo
 printf "\e[1;32mOnline check\033[0m -> \e[1;32minternet\033[0m/\e[1;32mintranet\033[0m"
  echo
- echo "checking.."
+ echo "Checking.."
  echo
 if nc -z $internet $realm_port 2>/dev/null; then
 printf "\e[1;32m✓\033[0m $server_name - [ $internet ]"
