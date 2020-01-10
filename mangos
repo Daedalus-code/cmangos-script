@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201001
-# 0.5.2.3
+# 0.5.2.8
 
 ###############
 # server/info #
@@ -202,6 +202,7 @@ git pull
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 printf "\e[1;32mUpdating mangos-classic (world) ..\033[0m"
+ echo
 sudo apt-get install checkinstall -y 1> /dev/null
  echo -ne '(10%)\r'
  sleep 1
@@ -259,6 +260,7 @@ fi
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 printf "\e[1;32mUpdating classic-db (database) ..\033[0m"
+ echo
  echo -ne '(0%)\r'
  sleep 1
 sudo chown -R $user:$group $folder_wow
@@ -360,6 +362,7 @@ mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, motd FROM $db_c
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 printf "\033[1;31mShutting down server ..\033[0m"
+ echo
  echo -ne '(0%)\r'
  sleep 1
 sudo service realmd stop 1> /dev/null
@@ -385,6 +388,7 @@ fi
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 printf "\e[1;32mRestarting server ..\033[0m"
+ echo
  echo -ne '(0%)\r'
  sleep 1
 sudo service realmd restart
@@ -410,6 +414,7 @@ fi
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 printf "\e[1;32mUpdating Helper\033[0m"
+ echo
  echo -ne '(0%)\r'
  sleep 1
  echo "Moving older mangos -> /usr/local/bin/mangos.old .."
