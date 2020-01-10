@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201001
-# 0.4.9.4
+# 0.5.0.0
 
 ###############
 # server/info #
@@ -163,6 +163,12 @@ git pull
  echo
 sudo chown -R $user:$group $folder_wow
 cd $folder_db
+git pull
+ echo
+ echo "checking mangos helper for any updates.."
+ echo
+sudo chown -R $user:$group $folder_helper
+cd $folder_helper
 git pull
  echo
  read -p "Press Enter to continue" </dev/tty
