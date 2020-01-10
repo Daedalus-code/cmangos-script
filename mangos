@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201001
-# 0.5.1.2
+# 0.5.2.3
 
 ###############
 # server/info #
@@ -124,12 +124,23 @@ EOF
 
 #start_task
 
-printf "\e[31m
-              _
-  ___ _____ _| |
- |  _|     | . |
- |___|_|_|_|___|\n\e[0m"
-printf " CMaNGOS Command
+ echo
+printf "\e[31m   ._________________.
+   |.---------------.|
+   || \033[0mmangos>\e[31m       ||
+   ||               ||
+   ||               ||
+   ||               ||
+   || \e[1;32m$temp\033[1;31m          ||
+   ||_______________||
+   /.-.-.-.-.-.-.-.-.\\
+  /.-.-.-.-.-.-.-.-.-.\\
+ /.-.-.-.-.-.-.-.-.-.-.\\
+/______/__________\___\e[1;32mo\033[1;31m_\\
+\_______________________/\033[0m"
+ echo
+printf "
+ CMaNGOS Command Center
 
  Account Creation Example
 
@@ -153,21 +164,21 @@ nc $host_nc $port_nc
 
 #start_task
 
- echo "Checking mangos-classic (world) for any updates .."
+printf "\e[1;32mChecking mangos-classic (world) for any updates ..\033[0m"
  echo
 sudo chown -R $user:$group $folder_core
 cd $folder_core
  sleep 1
 git pull
  echo
- echo "Checking classic-db (database) for any updates .."
+printf "\e[1;32mChecking classic-db (database) for any updates ..\033[0m"
  echo
 sudo chown -R $user:$group $folder_db
 cd $folder_db
  sleep 1
 git pull
  echo
- echo "Checking mangos helper for any updates .."
+printf "\e[1;32mChecking mangos helper for any updates ..\033[0m"
  echo
 sudo chown -R $user:$group $folder_helper
 cd $folder_helper
@@ -190,7 +201,7 @@ git pull
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
- echo "Updating mangos-classic (world) .."
+printf "\e[1;32mUpdating mangos-classic (world) ..\033[0m"
 sudo apt-get install checkinstall -y 1> /dev/null
  echo -ne '(10%)\r'
  sleep 1
@@ -213,7 +224,7 @@ make
  echo
  echo -ne '(90%)\r'
  sleep 1
- echo "Select the install operation"
+printf "\e[1;32mSelect the install operation\033[0m"
  echo
  echo " 1) make install"
  echo " 2) checkinstall with backup"
@@ -247,7 +258,7 @@ fi
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
- echo "Updating classic-db (database) .."
+printf "\e[1;32mUpdating classic-db (database) ..\033[0m"
  echo -ne '(0%)\r'
  sleep 1
 sudo chown -R $user:$group $folder_wow
@@ -348,7 +359,7 @@ mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, motd FROM $db_c
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
- echo "Shutting down server .."
+printf "\033[1;31mShutting down server ..\033[0m"
  echo -ne '(0%)\r'
  sleep 1
 sudo service realmd stop 1> /dev/null
@@ -373,7 +384,7 @@ fi
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
- echo "Restarting server .."
+printf "\e[1;32mRestarting server ..\033[0m"
  echo -ne '(0%)\r'
  sleep 1
 sudo service realmd restart
@@ -398,7 +409,7 @@ fi
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
- echo "Updating Helper .."
+printf "\e[1;32mUpdating Helper\033[0m"
  echo -ne '(0%)\r'
  sleep 1
  echo "Moving older mangos -> /usr/local/bin/mangos.old .."

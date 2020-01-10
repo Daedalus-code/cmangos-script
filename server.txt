@@ -62,4 +62,10 @@ port_nc="3443" # please edit if wrong.
 
 NOW=$(date +"%m.%d.%Y")
 
+########
+# temp #
+########
+
+temp="$((`cat /sys/class/thermal/thermal_zone0/temp`/1000))°C"
+
 # END
