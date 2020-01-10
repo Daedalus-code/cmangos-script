@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201001
-# 0.5.0.3
+# 0.5.1.2
 
 ###############
 # server/info #
@@ -153,21 +153,21 @@ nc $host_nc $port_nc
 
 #start_task
 
- echo "Checking mangos-classic (world) for any updates.."
+ echo "Checking mangos-classic (world) for any updates .."
  echo
 sudo chown -R $user:$group $folder_core
 cd $folder_core
  sleep 1
 git pull
  echo
- echo "Checking classic-db (database) for any updates.."
+ echo "Checking classic-db (database) for any updates .."
  echo
 sudo chown -R $user:$group $folder_db
 cd $folder_db
  sleep 1
 git pull
  echo
- echo "Checking mangos helper for any updates.."
+ echo "Checking mangos helper for any updates .."
  echo
 sudo chown -R $user:$group $folder_helper
 cd $folder_helper
@@ -190,7 +190,7 @@ git pull
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
- echo "Updating mangos-classic (world)"
+ echo "Updating mangos-classic (world) .."
 sudo apt-get install checkinstall -y 1> /dev/null
  echo -ne '(10%)\r'
  sleep 1
@@ -247,7 +247,7 @@ fi
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
- echo "Updating classic-db (database)"
+ echo "Updating classic-db (database) .."
  echo -ne '(0%)\r'
  sleep 1
 sudo chown -R $user:$group $folder_wow
@@ -348,7 +348,7 @@ mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, motd FROM $db_c
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
- echo "Shutting down server."
+ echo "Shutting down server .."
  echo -ne '(0%)\r'
  sleep 1
 sudo service realmd stop 1> /dev/null
@@ -373,7 +373,7 @@ fi
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
- echo "Restarting server"
+ echo "Restarting server .."
  echo -ne '(0%)\r'
  sleep 1
 sudo service realmd restart
@@ -393,12 +393,19 @@ fi
 
 #start_task
 
- echo "Updating Helper"
+ echo
+ read -p "Are you sure? (y/n) " -n 1 -r
+ echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+ echo "Updating Helper .."
  echo -ne '(0%)\r'
  sleep 1
-sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old
+ echo "Moving older mangos -> /usr/local/bin/mangos.old .."
+sudo mv /usr/local/bin/mangos /usr/local/bin/mangos.old
  echo -ne '(10%)\r'
  sleep 1
+ echo "Stripping executable flag on mangos.old .."
 sudo chmod -x /usr/local/bin/mangos.old
  echo -ne '(20%)\r'
  sleep 1
@@ -411,7 +418,8 @@ cd $folder_helper
 git pull
  echo -ne '(60%)\r'
  sleep 1
- echo "Overwriting old mangos -> mangos.old"
+ echo "Installing new mangos .."
+ echo -ne '(60%)\r'
  sleep 1
 sudo cp mangos /usr/local/bin
  echo -ne '(80%)\r'
@@ -423,6 +431,7 @@ sudo chmod +x /usr/local/bin/mangos
  echo "Restart mangos please.. will exit now."
  sleep 1
 exit
+fi
 
 #end_task
 
@@ -437,7 +446,7 @@ exit
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
- echo "Creating patch file"
+ echo "Creating patch file .."
  echo -ne '(0%)\r'
  sleep 1
 sudo chown -R $user:$group $folder_wow
@@ -469,7 +478,7 @@ fi
  echo
 printf "\e[1;32mOnline check\033[0m -> \e[1;32minternet\033[0m/\e[1;32mintranet\033[0m"
  echo
- echo "Checking.."
+ echo "Checking .."
  echo
 if nc -z $internet $realm_port 2>/dev/null; then
 printf "\e[1;32m✓\033[0m $server_name - [ $internet ]"
