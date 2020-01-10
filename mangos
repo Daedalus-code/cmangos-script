@@ -185,12 +185,12 @@ git pull
 
 #start_task
 
- echo "Updating mangos-classic (world)"
  echo
  read -p "Are you sure? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+ echo "Updating mangos-classic (world)"
 sudo apt-get install checkinstall -y 1> /dev/null
  echo -ne '(10%)\r'
  sleep 1
@@ -242,12 +242,12 @@ fi
 
 #start_task
 
- echo "Updating classic-db (database)"
  echo
  read -p "Are you sure? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+ echo "Updating classic-db (database)"
  echo -ne '(0%)\r'
  sleep 1
 sudo chown -R $user:$group $folder_wow
@@ -368,12 +368,12 @@ fi
 
 #start_task
 
- echo "Restarting server"
  echo
  read -p "Are you sure? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+ echo "Restarting server"
  echo -ne '(0%)\r'
  sleep 1
 sudo service realmd restart
@@ -432,12 +432,12 @@ exit
 
 #start_task
 
- echo "Creating patch file"
  echo
  read -p "Are you sure? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+ echo "Creating patch file"
  echo -ne '(0%)\r'
  sleep 1
 sudo chown -R $user:$group $folder_wow
