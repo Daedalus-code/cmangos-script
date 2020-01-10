@@ -1,7 +1,7 @@
 # C(ontinued)-MaNGOS
 admin helper in bash
 
-![alt text](https://i.imgur.com/R51qJ33.png)
+![alt text](https://i.imgur.com/9Gwn3Tf.png)
 
 edit server.cnf & server.txt
 
