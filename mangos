@@ -6,7 +6,7 @@
 ############################################################################
 
 # By Rainman
-# V20201001
+# V20201101
 # 0.5.2.8
 
 ###############
@@ -332,7 +332,7 @@ mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, la
 
  echo "Characters"
  echo
-mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, level, online FROM $db_characters.characters;"
+mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, level, online, account FROM $db_characters.characters;"
  read -p "Press Enter to continue" </dev/tty
 
 #end_task
