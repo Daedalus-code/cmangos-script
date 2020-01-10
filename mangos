@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201001
-# 0.4.9.3
+# 0.4.9.4
 
 ###############
 # server/info #
@@ -139,7 +139,8 @@ printf " CMaNGOS Command
 
   ------------------------------------------------
  'commands' will list all of the available commands
- 'quit' and then hit Enter to exit"
+ 'quit' and then hit Enter to exit
+ "
  echo
 nc $host_nc $port_nc
  echo
@@ -461,7 +462,7 @@ printf "\e[1;32mOnline check\033[0m -> \e[1;32minternet\033[0m/\e[1;32mintranet\
  echo
  echo "checking.."
  echo
-if nc -z $internet 8085 2>/dev/null; then
+if nc -z $internet $realm_port 2>/dev/null; then
 printf "\e[1;32m✓\033[0m $server_name - [ $internet ]"
 ping -qc1 $internet 2>&1 | awk -F/ '/^rtt/ { printf " - OK %.2f ms\n", $5; ok = 1 } END { if (!ok) print " - FAIL" }'
 else
@@ -471,7 +472,7 @@ fi
 
 # intranet
 
-if nc -z $intranet 8085 2>/dev/null; then
+if nc -z $intranet $realm_port 2>/dev/null; then
 printf "\e[1;32m✓\033[0m $server_name_lan - [ $intranet ]"
 ping -qc1 $intranet 2>&1 | awk -F/ '/^rtt/ { printf " - OK %.2f ms\n", $5; ok = 1 } END { if (!ok) print " - FAIL" }'
 else
