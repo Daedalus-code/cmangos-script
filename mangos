@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201001
-# 0.4.8.4
+# 0.4.9.3
 
 ###############
 # server/info #
@@ -454,23 +454,32 @@ fi
 
 #start_task
 
-printf "\e[1;32mOnline check -> internet/intranet\033[0m"
+# internet
+
  echo
-if nc -zw1 $internet $realm_port; then
- echo "$server_name is online!"
-ping -qc1 $internet 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "$5" ms":"FAIL") }'
+printf "\e[1;32mOnline check\033[0m -> \e[1;32minternet\033[0m/\e[1;32mintranet\033[0m"
+ echo
+ echo "checking.."
+ echo
+if nc -z $internet 8085 2>/dev/null; then
+printf "\e[1;32m✓\033[0m $server_name - [ $internet ]"
+ping -qc1 $internet 2>&1 | awk -F/ '/^rtt/ { printf " - OK %.2f ms\n", $5; ok = 1 } END { if (!ok) print " - FAIL" }'
 else
-printf "\033[1;31m$server_name Not online.\033[0m"
+printf "\033[1;31m✗\033[0m $server_name - [ $internet ]"
  echo
 fi
-if nc -zw1 $intranet $realm_port; then
- echo "$server_name_lan is online!"
-ping -qc1 $intranet 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "$5" ms":"FAIL") }'
+
+# intranet
+
+if nc -z $intranet 8085 2>/dev/null; then
+printf "\e[1;32m✓\033[0m $server_name_lan - [ $intranet ]"
+ping -qc1 $intranet 2>&1 | awk -F/ '/^rtt/ { printf " - OK %.2f ms\n", $5; ok = 1 } END { if (!ok) print " - FAIL" }'
 else
-printf "\033[1;31m$server_name_lan Not online.\033[0m"
+printf "\033[1;31m✗\033[0m $server_name_lan - [ $intranet ]"
  echo
 fi
- read -p "Press Enter to continue" </dev/tty
+ echo
+read -p "Press Enter to continue" </dev/tty
 
 #end_task
 
