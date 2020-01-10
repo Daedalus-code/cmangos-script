@@ -319,7 +319,7 @@ fi
 
  echo "User Accounts"
  echo
-mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, last_login, last_ip FROM $db_realmd.account;"
+mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, last_login, last_ip, id FROM $db_realmd.account;"
  read -p "Press Enter to continue" </dev/tty
 
 #end_task
