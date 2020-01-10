@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201001
-# 0.5.0.2
+# 0.5.0.3
 
 ###############
 # server/info #
@@ -155,13 +155,14 @@ nc $host_nc $port_nc
 
  echo "Checking mangos-classic (world) for any updates.."
  echo
-sudo chown -R $user:$group $folder_wow
+sudo chown -R $user:$group $folder_core
 cd $folder_core
  sleep 1
 git pull
  echo
  echo "Checking classic-db (database) for any updates.."
  echo
+sudo chown -R $user:$group $folder_db
 cd $folder_db
  sleep 1
 git pull
