@@ -319,7 +319,7 @@ fi
 
  echo "User Accounts"
  echo
-mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, last_ip, id, DATE_FORMAT(last_login, '%Y-%m-%d') last_login FROM $db_realmd.account;"
+mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, last_ip, DATE_FORMAT(last_login, '%Y-%m-%d') last_login, id FROM $db_realmd.account;"
  read -p "Press Enter to continue" </dev/tty
 
 #end_task
