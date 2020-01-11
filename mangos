@@ -65,8 +65,8 @@ id=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT SUM(online) F
 guilds=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.guild;");
  echo "                   Guilds $guilds"
  echo
-cat<<EOF
-                $(cat /proc/loadavg 2> /dev/null | awk '{ print $1,$2,$3 }')
+ cat<<EOF
+                 $load
 
 EOF
 

@@ -68,4 +68,10 @@ NOW="$(date +"%m.%d.%Y")"
 
 temp="$((`cat /sys/class/thermal/thermal_zone*/temp`/1000))°C"
 
+########
+# load #
+########
+
+load="$(cat /proc/loadavg 2> /dev/null | awk '{ print $1,$2,$3 }')"
+
 # END
