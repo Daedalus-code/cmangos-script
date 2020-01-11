@@ -65,7 +65,7 @@ id=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT SUM(online) F
 guilds=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.guild;");
  echo "                   Guilds $guilds"
  echo
- cat<<EOF
+cat<<EOF
                 $load
 
 EOF
@@ -164,21 +164,21 @@ nc $host_nc $port_nc
 
 #start_task
 
-printf "\e[1;32mChecking mangos-classic (world) for any updates ..\033[0m"
+printf "Checking mangos-classic (\e[1;32mworld\033[0m) for any updates .."
  echo
 sudo chown -R $user:$group $folder_core
 cd $folder_core
  sleep 1
 git pull
  echo
-printf "\e[1;32mChecking classic-db (database) for any updates ..\033[0m"
+printf "Checking classic-db (\e[1;32mdatabase\033[0m) for any updates .."
  echo
 sudo chown -R $user:$group $folder_db
 cd $folder_db
  sleep 1
 git pull
  echo
-printf "\e[1;32mChecking mangos helper for any updates ..\033[0m"
+printf "Checking mangos helper (\e[1;32mscript\033[0m) for any updates .."
  echo
 sudo chown -R $user:$group $folder_helper
 cd $folder_helper
@@ -201,7 +201,7 @@ git pull
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-printf "\e[1;32mUpdating mangos-classic (world) ..\033[0m"
+printf "Updating mangos-classic (\e[1;32mworld\033[0m) .."
  echo
 sudo apt-get install checkinstall -y 1> /dev/null
  echo -ne '(10%)\r'
@@ -225,7 +225,7 @@ make
  echo
  echo -ne '(90%)\r'
  sleep 1
-printf "\e[1;32mSelect the install operation\033[0m"
+printf "Select the install operation"
  echo
  echo " 1) make install"
  echo " 2) checkinstall with backup"
@@ -259,7 +259,7 @@ fi
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-printf "\e[1;32mUpdating classic-db (database) ..\033[0m"
+printf "Updating classic-db (\e[1;32mdatabase\033[0m) .."
  echo
  echo -ne '(0%)\r'
  sleep 1
