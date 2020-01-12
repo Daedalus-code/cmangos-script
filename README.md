@@ -17,7 +17,7 @@ After=network.target mysql.service
 
 [Service]
 Type=simple
-User=manager
+User=ubuntu
 ExecStart=/home/ubuntu/wow/mangos-classic/run/bin/realmd -c /home/ubuntu/wow/mangos-classic/run/etc/realmd.conf
 Restart=on-abort
 
@@ -33,7 +33,7 @@ After=network.target mysql.service realmd.service getty@tty3.service
 
 [Service]
 Type=simple
-User=manager
+User=ubuntu
 StandardInput=tty
 TTYPath=/dev/tty3
 TTYReset=yes
