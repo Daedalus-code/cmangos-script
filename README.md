@@ -39,7 +39,7 @@ TTYPath=/dev/tty3
 TTYReset=yes
 TTYVHangup=yes
 WorkingDirectory=/home/ubuntu/wow/mangos-classic/run/bin
-ExecStart=/home/ubuntu/wow/mangos-classic/run/bin/mangosd -c /home/ubuntu/wow/mangos-classic/run/etc/mangosd.conf -a /home/manager/wow/mangos-classic/run/etc/playerbot.conf
+ExecStart=/home/ubuntu/wow/mangos-classic/run/bin/mangosd -c /home/ubuntu/wow/mangos-classic/run/etc/mangosd.conf -a /home/ubuntu/wow/mangos-classic/run/etc/playerbot.conf
 Restart=on-abort
 
 [Install]
