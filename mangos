@@ -274,6 +274,20 @@ sudo service mangosd stop
  echo -ne '(1%)\r'
  sleep 1
 
+ # DROP DATABASES >
+
+ mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_characters;
+  echo -ne '(7%)\r'
+  sleep 1
+ mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_mangos;
+  echo -ne '(8%)\r'
+  sleep 1
+ mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_realmd;
+  echo -ne '(9%)\r'
+  sleep 1
+
+  # DROP DATABASES done
+
 # Install databases >
 
 mysql --defaults-extra-file="$sql_mycnf" < $folder_sql/create/db_create_mysql.sql
