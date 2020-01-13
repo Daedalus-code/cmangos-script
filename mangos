@@ -279,10 +279,10 @@ mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_character
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
  echo -ne '(3%)\r'
  sleep 1
-mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_characters;
+mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_characters; 1> /dev/null
  echo -ne '(4%)\r'
  sleep 1
-mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_realmd;
+mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_realmd; 1> /dev/null
  echo -ne '(5%)\r'
  sleep 1
 mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters"
@@ -298,11 +298,11 @@ mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_wow/$db_realmd-$NO
  echo -ne '(9%)\r'
  sleep 1
 cd $folder_characters
-for SQL in *.sql; do DB=${SQL/\.sql/}; echo importing $db_characters; mysql $db_characters < $SQL; done
+for SQL in *.sql; do DB=${SQL/\.sql/}; echo importing $db_characters; mysql --defaults-extra-file="$sql_mycnf" $db_characters < $SQL; done
  echo -ne '(10%)\r'
  sleep 1
 cd $folder_realmd
-for SQL in *.sql; do DB=${SQL/\.sql/}; echo importing $db_realmd; mysql $db_realmd < $SQL; done
+for SQL in *.sql; do DB=${SQL/\.sql/}; echo importing $db_realmd; mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $SQL; done
  echo -ne '(15%)\r'
  sleep 1
  echo -ne '(20%)\r'
