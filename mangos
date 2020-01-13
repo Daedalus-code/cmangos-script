@@ -311,32 +311,32 @@ fi
 # Install databases >
 
 sudo mysql --defaults-extra-file="$sql_mycnf" < $folder_sql/create/db_create_mysql.sql
- echo -ne '(2%)\r'
- sleep 1
-sudo mysql --defaults-extra-file="$sql_mycnf" classicmangos < $folder_sql/base/mangos.sql
- echo -ne '(3%)\r'
- sleep 1
-sudo mysql --defaults-extra-file="$sql_mycnf" classicrealmd < $folder_sql/base/realmd.sql
- echo -ne '(4%)\r'
- sleep 1
-sudo mysql --defaults-extra-file="$sql_mycnf" classiccharacters < $folder_sql/base/characters.sql
  echo -ne '(5%)\r'
  sleep 1
-for sql_file in $(ls $folder_sql/base/dbc/cmangos_fixes/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
+sudo mysql --defaults-extra-file="$sql_mycnf" classicmangos < $folder_sql/base/mangos.sql
  echo -ne '(6%)\r'
  sleep 1
-for sql_file in $(ls $folder_sql/base/dbc/original_data/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
+sudo mysql --defaults-extra-file="$sql_mycnf" classicrealmd < $folder_sql/base/realmd.sql
  echo -ne '(7%)\r'
  sleep 1
-for sql_file in $(ls $folder_sql/updates/characters/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=classiccharacters < $sql_file ; done
+sudo mysql --defaults-extra-file="$sql_mycnf" classiccharacters < $folder_sql/base/characters.sql
  echo -ne '(8%)\r'
+ sleep 1
+for sql_file in $(ls $folder_sql/base/dbc/cmangos_fixes/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
+ echo -ne '(9%)\r'
+ sleep 1
+for sql_file in $(ls $folder_sql/base/dbc/original_data/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
+ echo -ne '(10%)\r'
+ sleep 1
+for sql_file in $(ls $folder_sql/updates/characters/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=classiccharacters < $sql_file ; done
+ echo -ne '(15%)\r'
  sleep 1
 
 # Install databases done
 
 # MaNGOS InstallFullDB script >
 
- echo -ne '(15%)\r'
+ echo -ne '(20%)\r'
 sudo chown -R $user:$group $folder_wow
 cd $folder_db
  echo -ne '(30%)\r'
