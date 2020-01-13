@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201301
-# 0.5.7.5
+# 0.5.8.9
 
 ###############
 # server/info #
@@ -278,6 +278,20 @@ mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_character
  sleep 1
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
  echo -ne '(40%)\r'
+ sleep 1
+mysqladmin --defaults-extra-file="$sql_mycnf" drop $db_characters
+ echo -ne '(45%)\r'
+ sleep 1
+mysqladmin --defaults-extra-file="$sql_mycnf" drop $db_realmd
+ echo -ne '(46%)\r'
+ sleep 1
+mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters"
+mysql --defaults-extra-file="$sql_mycnf" -e "GRANT ALL PRIVILEGES ON $db_characters.* TO '$host'@'%' IDENTIFIED BY '$password!'"
+ echo -ne '(47%)\r'
+sleep 1
+mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd"
+mysql --defaults-extra-file="$sql_mycnf" -e "GRANT ALL PRIVILEGES ON $db_realmd.* TO '$host'@'%' IDENTIFIED BY '$password!'"
+ echo -ne '(48%)\r'
  sleep 1
 for sql_file in `ls $folder_characters/*.sql`; do mysql --defaults-extra-file="$sql_mycnf" --database=$db_characters < $sql_file ; done
  echo -ne '(50%)\r'
