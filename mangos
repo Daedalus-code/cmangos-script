@@ -276,7 +276,6 @@ sudo service mangosd stop
 ./InstallFullDB.sh
  echo -ne '(40%)\r'
  sleep 1
-fi
 mysqldump --defaults-extra-file="$sql_mycnf" --socket characters > $folder_wow/$db_characters-$NOW.sql --socket=/home/mysql/mysql.sock;
  echo -ne '(50%)\r'
  sleep 1
@@ -289,6 +288,7 @@ mysql --defaults-extra-file="$sql_mycnf" characters < $folder_sql/characters.sql
 mysql --defaults-extra-file="$sql_mycnf" realmd < $folder_sql/realmd.sql;
  echo -ne '(70%)\r'
  sleep 1
+fi
  read -p "Converting myisam -> innodb? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
@@ -417,7 +417,7 @@ sudo service mangosd restart
  echo
 fi
  echo
- read -p "Check server logs? CTRL + C to exit! (y/n) " -n 1 -r
+ read -p "Check server log? CTRL + C to exit! (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
