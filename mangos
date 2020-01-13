@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201301
-# 0.6.5.1
+# 0.6.6.9
 
 ###############
 # server/info #
@@ -279,7 +279,8 @@ sudo service mangosd stop
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
 if [ "$RESULT" == "$db_characters" ]; then
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/$db_characters-$NOW.sql
- echo "Ok"
+ echo -ne '(2%)\r'
+ sleep 1
 else
 mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHARACTER SET utf8 COLLATE utf8_general_ci";
 fi
@@ -287,7 +288,8 @@ fi
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_mangos`
 if [ "$RESULT" == "$db_mangos" ]; then
 # Not dumping mangos - kek
- echo "Ok"
+ echo -ne '(3%)\r'
+ sleep 1
 else
 mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTER SET utf8 COLLATE utf8_general_ci";
 fi
@@ -295,7 +297,8 @@ fi
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_realmd`
 if [ "$RESULT" == "$db_realmd" ]; then
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
- echo "Ok"
+ echo -ne '(4%)\r'
+ sleep 1
 else
 mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTER SET utf8 COLLATE utf8_general_ci";
 fi
@@ -306,10 +309,10 @@ fi
 
  sleep 1
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/$db_characters-$NOW.sql
- echo -ne '(2%)\r'
+ echo -ne '(5%)\r'
  sleep 1
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
- echo -ne '(3%)\r'
+ echo -ne '(6%)\r'
  sleep 1
 
 # BACKUP done
@@ -317,13 +320,13 @@ mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > 
 # DROP DATABASES >
 
 mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_characters;
- echo -ne '(4%)\r'
+ echo -ne '(7%)\r'
  sleep 1
 mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_mangos;
- echo -ne '(5%)\r'
+ echo -ne '(8%)\r'
  sleep 1
 mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_realmd;
- echo -ne '(6%)\r'
+ echo -ne '(9%)\r'
  sleep 1
 
 # DROP DATABASES done
@@ -331,13 +334,13 @@ mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_realmd;
 # CREATE DATABASES >
 
 mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHARACTER SET utf8 COLLATE utf8_general_ci";
- echo -ne '(7%)\r'
+ echo -ne '(10%)\r'
 sleep 1
 mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTER SET utf8 COLLATE utf8_general_ci";
- echo -ne '(8%)\r'
+ echo -ne '(15%)\r'
  sleep 1
 mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTER SET utf8 COLLATE utf8_general_ci";
- echo -ne '(9%)\r'
+ echo -ne '(20%)\r'
  sleep 1
 
 # CREATE DATABASES done
@@ -345,6 +348,7 @@ mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTE
 # Trying to import base start >
 
 mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_core/sql/base/characters.sql;
+mysql --defaults-extra-file="$sql_mycnf" $db_mangos < $folder_core/sql/base/mangos.sql;
 mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_core/sql/base/realmd.sql;
 
 # Trying to import base done
@@ -353,11 +357,11 @@ mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_core/sql/base/real
 
 cd $folder_characters
 for SQL in *.sql; do mysql --defaults-extra-file="$sql_mycnf" $db_characters < $SQL; done
- echo -ne '(20%)\r'
+ echo -ne '(25%)\r'
  sleep 1
 cd $folder_realmd
 for SQL in *.sql; do mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $SQL; done
- echo -ne '(25%)\r'
+ echo -ne '(30%)\r'
  sleep 1
 
 # New UPDATES done
@@ -365,23 +369,23 @@ for SQL in *.sql; do mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $SQL;
 # IMPORT BACKUP >
 
 mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_wow/$db_characters-$NOW.sql;
- echo -ne '(10%)\r'
+ echo -ne '(40%)\r'
  sleep 1
 mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_wow/$db_realmd-$NOW.sql;
- echo -ne '(15%)\r'
+ echo -ne '(50%)\r'
  sleep 1
 
 # IMPORT BACKUP done
 
 # MaNGOS InstallFullDB script start >
 
- echo -ne '(30%)\r'
+ echo -ne '(55%)\r'
 sudo chown -R $user:$group $folder_wow
 cd $folder_db
- echo -ne '(35%)\r'
+ echo -ne '(60%)\r'
  sleep 1
 ./InstallFullDB.sh
- echo -ne '(40%)\r'
+ echo -ne '(65%)\r'
  sleep 1
 
 # MaNGOS InstallFullDB done
@@ -390,7 +394,7 @@ cd $folder_db
 
  read -p "Converting myisam -> innodb? (y/n) " -n 1 -r
  echo
- echo -ne '(50%)\r'
+ echo -ne '(70%)\r'
  sleep 1
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -399,21 +403,21 @@ for T in $TABLES
 do
 mysql --defaults-extra-file="$sql_mycnf" -D $db_mangos -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
- echo -ne '(60%)\r'
+ echo -ne '(75%)\r'
  sleep 1
 TABLES=$(mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_realmd -e 'show tables')
 for T in $TABLES
 do
 mysql --defaults-extra-file="$sql_mycnf" -D $db_realmd -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
- echo -ne '(70%)\r'
+ echo -ne '(80%)\r'
  sleep 1
 TABLES=$(mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_characters -e 'show tables')
 for T in $TABLES
 do
 mysql --defaults-extra-file="$sql_mycnf" -D $db_characters -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
- echo -ne '(80%)\r'
+ echo -ne '(85%)\r'
  sleep 1
 mysql --defaults-extra-file="$sql_mycnf" --execute="characters < $folder_wow/$db_characters-$NOW.sql"
  echo -ne '(90%)\r'
