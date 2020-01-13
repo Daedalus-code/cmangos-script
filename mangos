@@ -273,10 +273,10 @@ mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_character
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
  echo -ne '(20%)\r'
  sleep 1
-mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_sql/$db_characters.sql;
+mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_updates/characters/*.sql;
  echo -ne '(30%)\r'
  sleep 1
-mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_sql/$db_realmd.sql;
+mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_updates/realmd/*.sql;
  echo -ne '(40%)\r'
  sleep 1
 mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_wow/$db_characters-$NOW.sql;
