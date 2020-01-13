@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201301
-# 0.6.0.2
+# 0.6.1.6
 
 ###############
 # server/info #
@@ -275,6 +275,20 @@ sudo service realmd stop
 sudo service mangosd stop
  echo -ne '(10%)\r'
  sleep 1
+
+ # Delete and start over >
+
+ echo
+ read -p "Fresh install? (delete all databases) (y/n) " -n 1 -r
+ echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_characters;
+mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_mangos;
+mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_realmd;
+fi
+
+# Delete and start over done
 
 # Install databases >
 
