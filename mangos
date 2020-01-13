@@ -265,7 +265,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
 printf "Updating classic-db (\e[1;32mdatabase\033[0m) .."
  echo
-suso mysqldump --defaults-extra-file="$sql_mycnf" --socket characters > $folder_wow/$db_characters-$NOW.sql;
+sudo mysqldump --defaults-extra-file="$sql_mycnf" --socket characters > $folder_wow/$db_characters-$NOW.sql;
  echo -ne '(10%)\r'
  sleep 1
 sudo mysqldump --defaults-extra-file="$sql_mycnf" --socket realmd > $folder_wow/$db_realmd-$NOW.sql;
