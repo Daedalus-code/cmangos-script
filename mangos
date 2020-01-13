@@ -310,11 +310,7 @@ mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTE
 # IMPORT BACKUP >
 
 mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_wow/$db_characters-$NOW.sql;
- echo -ne '(40%)\r'
- sleep 1
 mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_wow/$db_realmd-$NOW.sql;
- echo -ne '(50%)\r'
- sleep 1
 
 # IMPORT BACKUP done
 
