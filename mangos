@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201301
-# 0.5.7.5
+# 0.5.7.4
 
 ###############
 # server/info #
@@ -263,9 +263,8 @@ fi
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-sudo apt-get install mysql-server -y 1> /dev/null
+sudo apt-get install mysql-server mysql-client -y 1> /dev/null
  sleep 1
-sudo apt-get install mysql-client -y 1> /dev/null
 printf "Updating classic-db (\e[1;32mdatabase\033[0m) .."
  echo
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 characters > $folder_wow/$db_characters-$NOW.sql
