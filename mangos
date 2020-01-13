@@ -335,6 +335,13 @@ mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTE
 
 # CREATE DATABASES done
 
+# Trying to import base start >
+
+mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_core/sql/base/characters.sql;
+mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_core/sql/base/realmd.sql;
+
+# Trying to import base done
+
 # IMPORT BACKUP >
 
 mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_wow/$db_characters-$NOW.sql;
