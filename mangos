@@ -264,6 +264,7 @@ fi
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 printf "Updating classic-db (\e[1;32mdatabase\033[0m) .."
+ echo
 sudo apt-get install mysql-server mysql-client -y 1> /dev/null
  echo -ne '(5%)\r'
  sleep 1
