@@ -294,7 +294,7 @@ fi
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
 if [ "$RESULT" == "$db_characters" ]; then
- printf "[\e[1;32mok\033[0m] Characters "
+ printf "[\e[1;32mok\033[0m] Characters database installed."
 else
 sudo mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHARACTER SET utf8 COLLATE utf8_general_ci";
 sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_characters < $folder_sql/base/characters.sql
@@ -302,7 +302,7 @@ fi
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_mangos`
 if [ "$RESULT" == "$db_mangos" ]; then
- printf "[\e[1;32mok\033[0m] Mangos "
+ printf "[\e[1;32mok\033[0m] Mangos database installed."
 else
 sudo mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTER SET utf8 COLLATE utf8_general_ci";
 sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $folder_sql/base/mangos.sql
@@ -310,7 +310,7 @@ fi
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_realmd`
 if [ "$RESULT" == "$db_realmd" ]; then
- printf "[\e[1;32mok\033[0m] Realmd "
+ printf "[\e[1;32mok\033[0m] Realmd database installed."
 else
 sudo mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTER SET utf8 COLLATE utf8_general_ci";
 sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_realmd < $folder_sql/base/realmd.sql
