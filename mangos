@@ -277,13 +277,13 @@ sudo service mangosd stop
  # DROP DATABASES >
 
  mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_characters;
-  echo -ne '(7%)\r'
+  echo -ne '(2%)\r'
   sleep 1
  mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_mangos;
-  echo -ne '(8%)\r'
+  echo -ne '(3%)\r'
   sleep 1
  mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_realmd;
-  echo -ne '(9%)\r'
+  echo -ne '(4%)\r'
   sleep 1
 
   # DROP DATABASES done
@@ -291,22 +291,22 @@ sudo service mangosd stop
 # Install databases >
 
 mysql --defaults-extra-file="$sql_mycnf" < $folder_sql/create/db_create_mysql.sql
-echo -ne '(2%)\r'
-sleep 1
-mysql --defaults-extra-file="$sql_mycnf" classicmangos < $folder_sql/base/mangos.sql
-echo -ne '(3%)\r'
-sleep 1
-mysql --defaults-extra-file="$sql_mycnf" classicrealmd < $folder_sql/base/realmd.sql
-echo -ne '(4%)\r'
-sleep 1
-mysql --defaults-extra-file="$sql_mycnf" classiccharacters < $folder_sql/base/characters.sql
 echo -ne '(5%)\r'
 sleep 1
-for sql_file in $(ls $folder_sql/base/dbc/cmangos_fixes/*.sql); do mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
+mysql --defaults-extra-file="$sql_mycnf" classicmangos < $folder_sql/base/mangos.sql
 echo -ne '(6%)\r'
 sleep 1
-for sql_file in $(ls $folder_sql/base/dbc/original_data/*.sql); do mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
+mysql --defaults-extra-file="$sql_mycnf" classicrealmd < $folder_sql/base/realmd.sql
 echo -ne '(7%)\r'
+sleep 1
+mysql --defaults-extra-file="$sql_mycnf" classiccharacters < $folder_sql/base/characters.sql
+echo -ne '(8%)\r'
+sleep 1
+for sql_file in $(ls $folder_sql/base/dbc/cmangos_fixes/*.sql); do mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
+echo -ne '(9%)\r'
+sleep 1
+for sql_file in $(ls $folder_sql/base/dbc/original_data/*.sql); do mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
+echo -ne '(10%)\r'
 sleep 1
 for sql_file in $(ls $folder_sql/base/dbc/*.sql); do mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
 
