@@ -304,11 +304,11 @@ mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_wow/$db_realmd-$NO
  echo -ne '(15%)\r'
  sleep 1
 cd $folder_characters
-for SQL in *.sql; do importing $db_characters; mysql --defaults-extra-file="$sql_mycnf" $db_characters < $SQL; done
+for SQL in *.sql; do mysql --defaults-extra-file="$sql_mycnf" $db_characters < $SQL; done
  echo -ne '(20%)\r'
  sleep 1
 cd $folder_realmd
-for SQL in *.sql; do importing $db_realmd; mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $SQL; done
+for SQL in *.sql; do mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $SQL; done
  echo -ne '(25%)\r'
  sleep 1
  echo -ne '(30%)\r'
