@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201301
-# 0.6.0.1
+# 0.6.0.5
 
 ###############
 # server/info #
@@ -272,7 +272,7 @@ sudo service realmd stop
  echo -ne '(0%)\r'
  sleep 1
 sudo service mangosd stop
- echo -ne '(10%)\r'
+ echo -ne '(5%)\r'
  sleep 1
 
 # Install databases >
@@ -280,38 +280,42 @@ sudo service mangosd stop
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
 if [ "$RESULT" == "$db_characters" ]; then
  echo
- printf "Characters [\e[1;32mok\033[0m]"
+ printf "[\e[1;32mok\033[0m] Characters"
 else
 sudo mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHARACTER SET utf8 COLLATE utf8_general_ci";
+sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_characters < $folder_sql/base/characters.sql
 fi
-
+ echo -ne '(10%)\r'
+ sleep 1
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_mangos`
 if [ "$RESULT" == "$db_mangos" ]; then
  echo
- printf "Mangos [\e[1;32mok\033[0m]"
+ printf "[\e[1;32mok\033[0m] Mangos"
 else
 sudo mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTER SET utf8 COLLATE utf8_general_ci";
+sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $folder_sql/base/mangos.sql
 fi
-
+ echo -ne '(15%)\r'
+ sleep 1
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_realmd`
 if [ "$RESULT" == "$db_realmd" ]; then
  echo
- printf "Realmd [\e[1;32mok\033[0m]"
+ printf "[\e[1;32mok\033[0m] Realmd"
 else
 sudo mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTER SET utf8 COLLATE utf8_general_ci";
+sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_realmd < $folder_sql/base/realmd.sql
 fi
 
-sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_characters < $folder_sql/base/characters.sql
-sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $folder_sql/base/mangos.sql
-sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_realmd < $folder_sql/base/realmd.sql
 for sql_file in $(ls $folder_sql/base/dbc/original_data/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $sql_file ; done
 for sql_file in $(ls $folder_sql/base/dbc/cmangos_fixes/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $sql_file ; done
+ echo -ne '(20%)\r'
+ sleep 1
 
 # Install databases done
 
 # MaNGOS InstallFullDB script >
 
- echo -ne '(20%)\r'
+ echo -ne '(25%)\r'
 sudo chown -R $user:$group $folder_wow
 cd $folder_db
  echo -ne '(30%)\r'
