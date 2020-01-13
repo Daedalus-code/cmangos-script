@@ -274,6 +274,18 @@ sudo service mangosd stop
  echo -ne '(1%)\r'
  sleep 1
 
+ # BACKUP start >
+
+  sleep 1
+ mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/$db_characters-$NOW.sql
+  echo -ne '(5%)\r'
+  sleep 1
+ mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
+  echo -ne '(6%)\r'
+  sleep 1
+
+ # BACKUP done
+
 # checking DATABASES if they exist start >
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
@@ -304,18 +316,6 @@ mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTE
 fi
 
 # checking DATABASES if they exist done
-
-# BACKUP start >
-
- sleep 1
-mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/$db_characters-$NOW.sql
- echo -ne '(5%)\r'
- sleep 1
-mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
- echo -ne '(6%)\r'
- sleep 1
-
-# BACKUP done
 
 # DROP DATABASES >
 
