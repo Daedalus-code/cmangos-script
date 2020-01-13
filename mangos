@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201301
-# 0.5.4.5
+# 0.5.5.1
 
 ###############
 # server/info #
@@ -277,16 +277,16 @@ sudo service mangosd stop
  echo -ne '(40%)\r'
  sleep 1
 fi
-sudo mysqldump --defaults-extra-file="$sql_mycnf" --execute="characters > $folder_wow/$db_characters-$NOW.sql"
+mysqldump --defaults-extra-file="$sql_mycnf" --socket characters > $folder_wow/$db_characters-$NOW.sql --socket=/home/mysql/mysql.sock;
  echo -ne '(50%)\r'
  sleep 1
-sudo mysqldump --defaults-extra-file="$sql_mycnf" --execute="realmd > $folder_wow/$db_realmd-$NOW.sql"
+mysqldump --defaults-extra-file="$sql_mycnf" --socket realmd > $folder_wow/$db_realmd-$NOW.sql --socket=/home/mysql/mysql.sock;
  echo -ne '(55%)\r'
  sleep 1
-sudo mysql --defaults-extra-file="$sql_mycnf" --execute="characters < $folder_sql/characters.sql"
+mysql --defaults-extra-file="$sql_mycnf" characters < $folder_sql/characters.sql;
  echo -ne '(60%)\r'
  sleep 1
-sudo mysql --defaults-extra-file="$sql_mycnf" --execute="realmd < $folder_sql/realmd.sql"
+mysql --defaults-extra-file="$sql_mycnf" realmd < $folder_sql/realmd.sql;
  echo -ne '(70%)\r'
  sleep 1
  read -p "Converting myisam -> innodb? (y/n) " -n 1 -r
@@ -415,6 +415,12 @@ sudo service mangosd restart
  echo -ne '(100%)\r'
  sleep 1
  echo
+fi
+ read -p "Check server logs? Ctrl + X to exit! (y/n) " -n 1 -r
+ echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+sudo tail -f $folder_core/run/logs/Server.log
 fi
 
 #end_task
