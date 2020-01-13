@@ -288,7 +288,6 @@ mysql --defaults-extra-file="$sql_mycnf" characters < $folder_sql/characters.sql
 mysql --defaults-extra-file="$sql_mycnf" realmd < $folder_sql/realmd.sql;
  echo -ne '(70%)\r'
  sleep 1
-fi
  read -p "Converting myisam -> innodb? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
