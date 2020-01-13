@@ -279,10 +279,10 @@ mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_character
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
  echo -ne '(3%)\r'
  sleep 1
-mysqladmin --defaults-extra-file="$sql_mycnf" -f -e "DROP DATABASE $db_characters"
+mysqladmin --defaults-extra-file="$sql_mycnf" -f "DROP DATABASE $db_characters"
  echo -ne '(4%)\r'
  sleep 1
-mysqladmin --defaults-extra-file="$sql_mycnf" -f -e "DROP DATABASE $db_realmd"
+mysqladmin --defaults-extra-file="$sql_mycnf" -f "DROP DATABASE $db_realmd"
  echo -ne '(5%)\r'
  sleep 1
 mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters"
