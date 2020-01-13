@@ -416,7 +416,8 @@ sudo service mangosd restart
  sleep 1
  echo
 fi
- read -p "Check server logs? Ctrl + X to exit! (y/n) " -n 1 -r
+ echo
+ read -p "Check server logs? CTRL + C to exit! (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
