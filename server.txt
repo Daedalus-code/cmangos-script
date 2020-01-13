@@ -34,20 +34,19 @@ port_nc="3443" # please edit if wrong.
 ###########
 
 folder_build="/home/ubuntu/wow/mangos-classic/build" # please edit if wrong.
-folder_characters="/home/ubuntu/wow/mangos-classic/sql/updates/characters" # please edit if wrong.
 folder_core="/home/ubuntu/wow/mangos-classic" # please edit if wrong.
 folder_db="/home/ubuntu/wow/classic-db" # please edit if wrong.
 folder_helper="/scripts/cmangos-script" # please edit if wrong.
-folder_realmd="/home/ubuntu/wow/mangos-classic/sql/updates/realmd" # please edit if wrong.
+folder_sql="/home/ubuntu/wow/mangos-classic/sql" # please edit if wrong.
 folder_wow="/home/ubuntu/wow" # please edit if wrong.
 
 #########
 # MYSQL #
 #########
 
-db_characters="characters" # please edit if wrong.
-db_mangos="mangos" # please edit if wrong.
-db_realmd="realmd" # please edit if wrong.
+db_characters="classiccharacters" # please edit if wrong.
+db_mangos="classicmangos" # please edit if wrong.
+db_realmd="classicrealmd" # please edit if wrong.
 sql_mycnf="/scripts/server.cnf" # please edit if wrong.
 
 #########
