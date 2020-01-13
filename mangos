@@ -324,6 +324,7 @@ sudo mysql --defaults-extra-file="$sql_mycnf" --execute="realmd < $folder_wow/$d
  sleep 1
  read -p "Press Enter to continue" </dev/tty
 fi
+fi
 
 #end_task
 
