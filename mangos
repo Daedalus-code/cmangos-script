@@ -263,7 +263,9 @@ fi
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+printf "Updating classic-db (\e[1;32mdatabase\033[0m) .."
 sudo apt-get install mysql-server mysql-client -y 1> /dev/null
+ echo -ne '(5%)\r'
  sleep 1
 sudo service realmd stop
  echo -ne '(10%)\r'
@@ -271,8 +273,6 @@ sudo service realmd stop
 sudo service mangosd stop
  echo -ne '(20%)\r'
  sleep 1
-printf "Updating classic-db (\e[1;32mdatabase\033[0m) .."
- echo
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/$db_characters-$NOW.sql
  echo -ne '(30%)\r'
  sleep 1
