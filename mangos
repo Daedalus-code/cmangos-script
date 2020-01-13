@@ -283,7 +283,6 @@ mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_character
 mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_characters;
  echo -ne '(2%)\r'
  sleep 1
-else
 fi
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_mangos`
@@ -292,7 +291,6 @@ if [ "$RESULT" == "$db_mangos" ]; then
 mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_mangos;
  echo -ne '(3%)\r'
  sleep 1
-else
 fi
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_realmd`
@@ -301,7 +299,6 @@ mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > 
 mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_realmd;
  echo -ne '(4%)\r'
  sleep 1
-else
 fi
 
 mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHARACTER SET utf8 COLLATE utf8_general_ci";
