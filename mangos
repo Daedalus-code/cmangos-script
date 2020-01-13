@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201301
-# 0.6.0.8
+# 0.6.0.2
 
 ###############
 # server/info #
@@ -267,42 +267,36 @@ printf "Updating classic-db (\e[1;32mdatabase\033[0m) .."
  echo
 sudo apt-get install mysql-server mysql-client -y 1> /dev/null
 sudo chown -R $user:$group $folder_wow
- sleep 1
-sudo service realmd stop
  echo -ne '(0%)\r'
  sleep 1
-sudo service mangosd stop
+sudo service realmd stop
  echo -ne '(5%)\r'
+ sleep 1
+sudo service mangosd stop
+ echo -ne '(10%)\r'
  sleep 1
 
 # Install databases >
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
 if [ "$RESULT" == "$db_characters" ]; then
- echo
- printf "[\e[1;32mok\033[0m] Characters"
+ printf "[\e[1;32mok\033[0m] Characters "
 else
 sudo mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHARACTER SET utf8 COLLATE utf8_general_ci";
 sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_characters < $folder_sql/base/characters.sql
 fi
- echo
- echo -ne '(10%)\r'
- sleep 1
+
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_mangos`
 if [ "$RESULT" == "$db_mangos" ]; then
- echo
- printf "[\e[1;32mok\033[0m] Mangos"
+ printf "[\e[1;32mok\033[0m] Mangos "
 else
 sudo mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTER SET utf8 COLLATE utf8_general_ci";
 sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $folder_sql/base/mangos.sql
 fi
- echo
- echo -ne '(15%)\r'
- sleep 1
+
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_realmd`
 if [ "$RESULT" == "$db_realmd" ]; then
- echo
- printf "[\e[1;32mok\033[0m] Realmd"
+ printf "[\e[1;32mok\033[0m] Realmd "
 else
 sudo mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTER SET utf8 COLLATE utf8_general_ci";
 sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_realmd < $folder_sql/base/realmd.sql
