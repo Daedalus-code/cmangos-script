@@ -266,6 +266,7 @@ then
 printf "Updating classic-db (\e[1;32mdatabase\033[0m) .."
  echo
 sudo apt-get install mysql-server mysql-client -y 1> /dev/null
+sudo chown -R $user:$group $folder_wow
  sleep 1
 sudo service realmd stop
  echo -ne '(0%)\r'
@@ -308,6 +309,8 @@ fi
 
 # checking/backup/dropping DATABASES >
 
+ read -p "Press Enter to continue" </dev/tty
+
 # Install databases >
 
 sudo mysql --defaults-extra-file="$sql_mycnf" < $folder_sql/create/db_create_mysql.sql
@@ -333,6 +336,8 @@ for sql_file in $(ls $folder_sql/updates/characters/*.sql); do sudo mysql --defa
  sleep 1
 
 # Install databases done
+
+ read -p "Press Enter to continue" </dev/tty
 
 # MaNGOS InstallFullDB script >
 
