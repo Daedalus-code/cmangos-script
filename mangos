@@ -6,8 +6,8 @@
 ############################################################################
 
 # By Rainman
-# V20201101
-# 0.5.2.8
+# V20201301
+# 0.5.4.5
 
 ###############
 # server/info #
@@ -277,7 +277,18 @@ sudo service mangosd stop
  echo -ne '(40%)\r'
  sleep 1
 fi
-
+sudo mysqldump --defaults-extra-file="$sql_mycnf" --execute="characters > $folder_wow/$db_characters-$NOW.sql"
+ echo -ne '(50%)\r'
+ sleep 1
+sudo mysqldump --defaults-extra-file="$sql_mycnf" --execute="realmd > $folder_wow/$db_realmd-$NOW.sql"
+ echo -ne '(55%)\r'
+ sleep 1
+sudo mysql --defaults-extra-file="$sql_mycnf" --execute="characters < $folder_sql/characters.sql"
+ echo -ne '(60%)\r'
+ sleep 1
+sudo mysql --defaults-extra-file="$sql_mycnf" --execute="realmd < $folder_sql/realmd.sql"
+ echo -ne '(70%)\r'
+ sleep 1
  read -p "Converting myisam -> innodb? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
@@ -290,20 +301,26 @@ for T in $TABLES
 do
 mysql --defaults-extra-file="$sql_mycnf" -D $db_mangos -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
- echo -ne '(60%)\r'
+ echo -ne '(80%)\r'
  sleep 1
 TABLES=$(mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_realmd -e 'show tables')
 for T in $TABLES
 do
 mysql --defaults-extra-file="$sql_mycnf" -D $db_realmd -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
- echo -ne '(80%)\r'
+ echo -ne '(90%)\r'
  sleep 1
 TABLES=$(mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_characters -e 'show tables')
 for T in $TABLES
 do
 mysql --defaults-extra-file="$sql_mycnf" -D $db_characters -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
+ echo -ne '(98%)\r'
+ sleep 1
+sudo mysql --defaults-extra-file="$sql_mycnf" --execute="characters < $folder_wow/$db_characters-$NOW.sql"
+ echo -ne '(99%)\r'
+ sleep 1
+sudo mysql --defaults-extra-file="$sql_mycnf" --execute="realmd < $folder_wow/$db_realmd-$NOW.sql"
  echo -ne '(100%)\r'
  sleep 1
  read -p "Press Enter to continue" </dev/tty
