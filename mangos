@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201301
-# 0.5.5.5
+# 0.5.6.7
 
 ###############
 # server/info #
@@ -197,6 +197,8 @@ git pull
 #start_task
 
  echo
+ echo "Update MaNGOS?"
+ echo
  read -p "Are you sure? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
@@ -254,6 +256,8 @@ fi
 
 #start_task
 
+ echo
+ echo "Update Database?"
  echo
  read -p "Are you sure? (y/n) " -n 1 -r
  echo
@@ -374,6 +378,8 @@ mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, motd FROM $db_c
 #start_task
 
  echo
+ echo "Shutdown Server?"
+ echo
  read -p "Are you sure? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
@@ -399,6 +405,8 @@ fi
 
 #start_task
 
+ echo
+ echo "Restart Server?"
  echo
  read -p "Are you sure? (y/n) " -n 1 -r
  echo
@@ -435,6 +443,8 @@ fi
 
 #start_task
 
+ echo
+ echo "Update MaNGOS Helper?"
  echo
  read -p "Are you sure? (y/n) " -n 1 -r
  echo
@@ -484,6 +494,8 @@ fi
 
 #start_task
 
+ echo
+ echo "Create patch?"
  echo
  read -p "Are you sure? (y/n) " -n 1 -r
  echo
