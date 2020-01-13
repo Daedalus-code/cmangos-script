@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201301
-# 0.6.6.6
+# 0.5.9.0
 
 ###############
 # server/info #
@@ -276,24 +276,37 @@ sudo service mangosd stop
 
 # Install databases >
 
-cd $folder_sql
-mysql --defaults-extra-file="$sql_mycnf" < create/db_create_mysql.sql
-mysql --defaults-extra-file="$sql_mycnf" classicmangos < base/mangos.sql
-mysql --defaults-extra-file="$sql_mycnf" classicmangos < base/dbc/*.sql
-for sql_file in $(ls sql/base/dbc/original_data/*.sql); do mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
-for sql_file in $(ls sql/base/dbc/cmangos_fixes/*.sql); do mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
-mysql --defaults-extra-file="$sql_mycnf" classiccharacters < sql/base/characters.sql
-mysql --defaults-extra-file="$sql_mycnf" classicrealmd < sql/base/realmd.sql
+mysql --defaults-extra-file="$sql_mycnf" < $folder_sql/create/db_create_mysql.sql
+echo -ne '(2%)\r'
+sleep 1
+mysql --defaults-extra-file="$sql_mycnf" classicmangos < $folder_sql/base/mangos.sql
+echo -ne '(3%)\r'
+sleep 1
+mysql --defaults-extra-file="$sql_mycnf" classicmangos < $folder_sql/base/dbc/*.sql
+echo -ne '(4%)\r'
+sleep 1
+for sql_file in $(ls $folder_sql/base/dbc/original_data/*.sql); do mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
+echo -ne '(5%)\r'
+sleep 1
+for sql_file in $(ls $folder_sql/base/dbc/cmangos_fixes/*.sql); do mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
+echo -ne '(6%)\r'
+sleep 1
+mysql --defaults-extra-file="$sql_mycnf" classiccharacters < $folder_sql/base/characters.sql
+echo -ne '(7%)\r'
+sleep 1
+mysql --defaults-extra-file="$sql_mycnf" classicrealmd < $folder_sql/base/realmd.sql
+
+# Install databases done
 
 # MaNGOS InstallFullDB script >
 
- echo -ne '(55%)\r'
+ echo -ne '(15%)\r'
 sudo chown -R $user:$group $folder_wow
 cd $folder_db
- echo -ne '(60%)\r'
+ echo -ne '(30%)\r'
  sleep 1
 ./InstallFullDB.sh
- echo -ne '(65%)\r'
+ echo -ne '(40%)\r'
  sleep 1
 
 # MaNGOS InstallFullDB done
@@ -302,7 +315,7 @@ cd $folder_db
 
  read -p "Converting myisam -> innodb? (y/n) " -n 1 -r
  echo
- echo -ne '(70%)\r'
+ echo -ne '(50%)\r'
  sleep 1
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -311,21 +324,21 @@ for T in $TABLES
 do
 mysql --defaults-extra-file="$sql_mycnf" -D $db_mangos -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
- echo -ne '(75%)\r'
+ echo -ne '(60%)\r'
  sleep 1
 TABLES=$(mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_realmd -e 'show tables')
 for T in $TABLES
 do
 mysql --defaults-extra-file="$sql_mycnf" -D $db_realmd -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
- echo -ne '(80%)\r'
+ echo -ne '(70%)\r'
  sleep 1
 TABLES=$(mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_characters -e 'show tables')
 for T in $TABLES
 do
 mysql --defaults-extra-file="$sql_mycnf" -D $db_characters -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
- echo -ne '(85%)\r'
+ echo -ne '(80%)\r'
  sleep 1
 mysql --defaults-extra-file="$sql_mycnf" --execute="characters < $folder_wow/$db_characters-$NOW.sql"
  echo -ne '(90%)\r'
