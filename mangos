@@ -284,7 +284,6 @@ mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_characters;
  echo -ne '(2%)\r'
  sleep 1
 else
-mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHARACTER SET utf8 COLLATE utf8_general_ci";
 fi
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_mangos`
@@ -294,7 +293,6 @@ mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_mangos;
  echo -ne '(3%)\r'
  sleep 1
 else
-mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTER SET utf8 COLLATE utf8_general_ci";
 fi
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_realmd`
@@ -304,8 +302,11 @@ mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_realmd;
  echo -ne '(4%)\r'
  sleep 1
 else
-mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTER SET utf8 COLLATE utf8_general_ci";
 fi
+
+mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHARACTER SET utf8 COLLATE utf8_general_ci";
+mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTER SET utf8 COLLATE utf8_general_ci";
+mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 # check/backup/drop/create DATABASES >
 
