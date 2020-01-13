@@ -277,25 +277,25 @@ sudo service mangosd stop
 
 # Install databases >
 
-RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
+RESULT=`mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D -e "SHOW DATABASES" | grep $db_characters`
 if [ "$RESULT" == "$db_characters" ]; then
  printf "Characters [\e[1;32mok\033[0m]"
 else
-sudo mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHARACTER SET utf8 COLLATE utf8_general_ci";
+sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D -e "CREATE DATABASE $db_characters CHARACTER SET utf8 COLLATE utf8_general_ci";
 fi
 
-RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_mangos`
+RESULT=`mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D -e "SHOW DATABASES" | grep $db_mangos`
 if [ "$RESULT" == "$db_mangos" ]; then
  printf "Mangos [\e[1;32mok\033[0m]"
 else
-sudo mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTER SET utf8 COLLATE utf8_general_ci";
+sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D -e "CREATE DATABASE $db_mangos CHARACTER SET utf8 COLLATE utf8_general_ci";
 fi
 
-RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_realmd`
+RESULT=`mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D -e "SHOW DATABASES" | grep $db_realmd`
 if [ "$RESULT" == "$db_realmd" ]; then
  printf "Realmd [\e[1;32mok\033[0m]"
 else
-sudo mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTER SET utf8 COLLATE utf8_general_ci";
+sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D -e "CREATE DATABASE $db_realmd CHARACTER SET utf8 COLLATE utf8_general_ci";
 fi
 
 sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_characters < $folder_sql/base/characters.sql
