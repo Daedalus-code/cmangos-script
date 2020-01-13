@@ -297,10 +297,10 @@ mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_wow/$db_charac
 mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_wow/$db_realmd-$NOW.sql;
  echo -ne '(9%)\r'
  sleep 1
-for sql_file in `ls $folder_characters/*.sql`; do mysql --defaults-extra-file="$sql_mycnf" --database=$db_characters < $sql_file ; done
+for sql_file in ls $folder_characters/*.sql; do mysql --defaults-extra-file="$sql_mycnf" --database=$db_characters < $sql_file ; done
  echo -ne '(10%)\r'
  sleep 1
-for sql_file in `ls $folder_realmd/*.sql`; do mysql --defaults-extra-file="$sql_mycnf" --database=$db_realmd < $sql_file ; done
+for sql_file in ls $folder_realmd/*.sql; do mysql --defaults-extra-file="$sql_mycnf" --database=$db_realmd < $sql_file ; done
  echo -ne '(20%)\r'
 sudo chown -R $user:$group $folder_wow
 cd $folder_db
