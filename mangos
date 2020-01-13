@@ -279,36 +279,42 @@ mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_character
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
  echo -ne '(3%)\r'
  sleep 1
-mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_characters; 1> /dev/null
+mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_characters;
  echo -ne '(4%)\r'
  sleep 1
-mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_realmd; 1> /dev/null
+mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_mangos;
  echo -ne '(5%)\r'
  sleep 1
-mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters"
+mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_realmd;
  echo -ne '(6%)\r'
-sleep 1
-mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd"
- echo -ne '(7%)\r'
  sleep 1
-mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_wow/$db_characters-$NOW.sql;
+mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters"
+ echo -ne '(7%)\r'
+sleep 1
+mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos"
  echo -ne '(8%)\r'
  sleep 1
-mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_wow/$db_realmd-$NOW.sql;
+mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd"
  echo -ne '(9%)\r'
  sleep 1
-cd $folder_characters
-for SQL in *.sql; do DB=${SQL/\.sql/}; echo importing $db_characters; mysql --defaults-extra-file="$sql_mycnf" $db_characters < $SQL; done
+mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_wow/$db_characters-$NOW.sql;
  echo -ne '(10%)\r'
  sleep 1
-cd $folder_realmd
-for SQL in *.sql; do DB=${SQL/\.sql/}; echo importing $db_realmd; mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $SQL; done
+mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_wow/$db_realmd-$NOW.sql;
  echo -ne '(15%)\r'
  sleep 1
+cd $folder_characters
+for SQL in *.sql; do importing $db_characters; mysql --defaults-extra-file="$sql_mycnf" $db_characters < $SQL; done
  echo -ne '(20%)\r'
+ sleep 1
+cd $folder_realmd
+for SQL in *.sql; do importing $db_realmd; mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $SQL; done
+ echo -ne '(25%)\r'
+ sleep 1
+ echo -ne '(30%)\r'
 sudo chown -R $user:$group $folder_wow
 cd $folder_db
- echo -ne '(30%)\r'
+ echo -ne '(35%)\r'
  sleep 1
 ./InstallFullDB.sh
  echo -ne '(40%)\r'
