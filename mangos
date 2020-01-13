@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201301
-# 0.5.9.1
+# 0.5.9.2
 
 ###############
 # server/info #
@@ -279,22 +279,22 @@ sudo service mangosd stop
 sudo mysql --defaults-extra-file="$sql_mycnf" < $folder_sql/create/db_create_mysql.sql
  echo -ne '(2%)\r'
  sleep 1
-mysql --defaults-extra-file="$sql_mycnf" classicmangos < $folder_sql/base/mangos.sql
+sudo mysql --defaults-extra-file="$sql_mycnf" classicmangos < $folder_sql/base/mangos.sql
  echo -ne '(3%)\r'
  sleep 1
-mysql --defaults-extra-file="$sql_mycnf" classicrealmd < $folder_sql/base/realmd.sql
+sudo mysql --defaults-extra-file="$sql_mycnf" classicrealmd < $folder_sql/base/realmd.sql
  echo -ne '(4%)\r'
  sleep 1
-mysql --defaults-extra-file="$sql_mycnf" classiccharacters < $folder_sql/base/characters.sql
+sudo mysql --defaults-extra-file="$sql_mycnf" classiccharacters < $folder_sql/base/characters.sql
  echo -ne '(5%)\r'
  sleep 1
-for sql_file in $(ls $folder_sql/base/dbc/cmangos_fixes/*.sql); do mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
+for sql_file in $(ls $folder_sql/base/dbc/cmangos_fixes/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
  echo -ne '(6%)\r'
  sleep 1
-for sql_file in $(ls $folder_sql/base/dbc/original_data/*.sql); do mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
+for sql_file in $(ls $folder_sql/base/dbc/original_data/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
  echo -ne '(7%)\r'
  sleep 1
-for sql_file in $(ls $folder_sql/updates/characters/*.sql); do mysql --defaults-extra-file="$sql_mycnf" --database=classiccharacters < $sql_file ; done
+for sql_file in $(ls $folder_sql/updates/characters/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=classiccharacters < $sql_file ; done
  echo -ne '(8%)\r'
  sleep 1
 
