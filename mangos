@@ -348,9 +348,9 @@ cd $folder_db
 
 # Trying .. holy moly John >
 
-for sql_file in $(ls $folder_sql/updates/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_characters < $sql_file ; done
-for sql_file in $(ls $folder_sql/updates/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_realmd < $sql_file ; done
-for sql_file in $(ls $folder_sql/updates/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $sql_file ; done
+for sql_file in $(ls $folder_sql/updates/characters/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_characters < $sql_file ; done
+for sql_file in $(ls $folder_sql/updates/realmd/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_realmd < $sql_file ; done
+for sql_file in $(ls $folder_sql/updates/mangos/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $sql_file ; done
 
 # Trying done
 
