@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201401
-# 0.6.2.7
+# 0.6.3.3
 
 ###############
 # server/info #
@@ -283,9 +283,9 @@ sudo service mangosd stop
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_characters;
-mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_mangos;
-mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_realmd;
+sudo mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_characters;
+sudo mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_mangos;
+sudo mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_realmd;
 fi
 
 # Delete and start over done
@@ -297,6 +297,8 @@ if [ "$RESULT" == "$db_characters" ]; then
  printf "[\e[1;32mok\033[0m] Characters database installed."
  echo
 else
+ printf "[\033[1;31mFail\033[0m] Characters database not installed."
+ echo
 sudo mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHARACTER SET utf8 COLLATE utf8_general_ci";
 sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_characters < $folder_sql/base/characters.sql
 fi
@@ -306,6 +308,8 @@ if [ "$RESULT" == "$db_mangos" ]; then
  printf "[\e[1;32mok\033[0m] Mangos database installed."
  echo
 else
+ printf "[\033[1;31mFail\033[0m] Mangos database not installed."
+ echo
 sudo mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTER SET utf8 COLLATE utf8_general_ci";
 sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $folder_sql/base/mangos.sql
 fi
@@ -315,6 +319,8 @@ if [ "$RESULT" == "$db_realmd" ]; then
  printf "[\e[1;32mok\033[0m] Realmd database installed."
  echo
 else
+ printf "[\033[1;31mFail\033[0m] Realmd database not installed."
+ echo
 sudo mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTER SET utf8 COLLATE utf8_general_ci";
 sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_realmd < $folder_sql/base/realmd.sql
 fi
