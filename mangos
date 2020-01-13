@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201301
-# 0.5.7.6
+# 0.5.8.0
 
 ###############
 # server/info #
@@ -275,6 +275,8 @@ sudo service mangosd stop
  echo -ne '(10%)\r'
  sleep 1
 
+# Install databases >
+
 sudo mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHARACTER SET utf8 COLLATE utf8_general_ci";
 sudo mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTER SET utf8 COLLATE utf8_general_ci";
 sudo mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTER SET utf8 COLLATE utf8_general_ci";
@@ -283,6 +285,8 @@ sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $folder_sq
 sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_realmd < $folder_sql/base/realmd.sql
 for sql_file in $(ls $folder_sql/base/dbc/original_data/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $sql_file ; done
 for sql_file in $(ls $folder_sql/base/dbc/cmangos_fixes/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $sql_file ; done
+
+# Install databases done
 
 # MaNGOS InstallFullDB script >
 
