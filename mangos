@@ -275,7 +275,7 @@ sudo service mangosd stop
  echo -ne '(1%)\r'
  sleep 1
 
- # checking/backup/dropping DATABASES >
+# check/backup/drop/create DATABASES >
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
 if [ "$RESULT" == "$db_characters" ]; then
@@ -307,13 +307,12 @@ else
 mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTER SET utf8 COLLATE utf8_general_ci";
 fi
 
-# checking/backup/dropping DATABASES >
+# check/backup/drop/create DATABASES >
 
  read -p "Press Enter to continue" </dev/tty
 
 # Install databases >
 
-sudo mysql --defaults-extra-file="$sql_mycnf" < $folder_sql/create/db_create_mysql.sql
  echo -ne '(5%)\r'
  sleep 1
 sudo mysql --defaults-extra-file="$sql_mycnf" classicmangos < $folder_sql/base/mangos.sql
