@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201301
-# 0.5.8.9
+# 0.5.8.6
 
 ###############
 # server/info #
@@ -266,54 +266,52 @@ then
 printf "Updating classic-db (\e[1;32mdatabase\033[0m) .."
  echo
 sudo apt-get install mysql-server mysql-client -y 1> /dev/null
- echo -ne '(5%)\r'
  sleep 1
 sudo service realmd stop
- echo -ne '(10%)\r'
+ echo -ne '(0%)\r'
  sleep 1
 sudo service mangosd stop
- echo -ne '(20%)\r'
+ echo -ne '(1%)\r'
  sleep 1
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/$db_characters-$NOW.sql
- echo -ne '(30%)\r'
+ echo -ne '(2%)\r'
  sleep 1
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
- echo -ne '(40%)\r'
+ echo -ne '(3%)\r'
  sleep 1
 mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_characters
- echo -ne '(45%)\r'
+ echo -ne '(4%)\r'
  sleep 1
 mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_realmd
- echo -ne '(46%)\r'
+ echo -ne '(5%)\r'
  sleep 1
 mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters"
- echo -ne '(47%)\r'
+ echo -ne '(6%)\r'
 sleep 1
 mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd"
- echo -ne '(48%)\r'
- sleep 1
-for sql_file in `ls $folder_characters/*.sql`; do mysql --defaults-extra-file="$sql_mycnf" --database=$db_characters < $sql_file ; done
- echo -ne '(50%)\r'
- sleep 1
-for sql_file in `ls $folder_realmd/*.sql`; do mysql --defaults-extra-file="$sql_mycnf" --database=$db_realmd < $sql_file ; done
- echo -ne '(60%)\r'
+ echo -ne '(7%)\r'
  sleep 1
 mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_wow/$db_characters-$NOW.sql;
- echo -ne '(70%)\r'
+ echo -ne '(8%)\r'
  sleep 1
 mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_wow/$db_realmd-$NOW.sql;
- echo -ne '(80%)\r'
+ echo -ne '(9%)\r'
  sleep 1
+for sql_file in `ls $folder_characters/*.sql`; do mysql --defaults-extra-file="$sql_mycnf" --database=$db_characters < $sql_file ; done
+ echo -ne '(10%)\r'
+ sleep 1
+for sql_file in `ls $folder_realmd/*.sql`; do mysql --defaults-extra-file="$sql_mycnf" --database=$db_realmd < $sql_file ; done
+ echo -ne '(20%)\r'
 sudo chown -R $user:$group $folder_wow
 cd $folder_db
- echo -ne '(90%)\r'
+ echo -ne '(30%)\r'
  sleep 1
 ./InstallFullDB.sh
- echo -ne '(95%)\r'
+ echo -ne '(40%)\r'
  sleep 1
  read -p "Converting myisam -> innodb? (y/n) " -n 1 -r
  echo
- echo -ne '(100%)\r'
+ echo -ne '(50%)\r'
  sleep 1
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -325,24 +323,24 @@ for T in $TABLES
 do
 mysql --defaults-extra-file="$sql_mycnf" -D $db_mangos -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
- echo -ne '(80%)\r'
+ echo -ne '(60%)\r'
  sleep 1
 TABLES=$(mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_realmd -e 'show tables')
 for T in $TABLES
 do
 mysql --defaults-extra-file="$sql_mycnf" -D $db_realmd -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
- echo -ne '(90%)\r'
+ echo -ne '(70%)\r'
  sleep 1
 TABLES=$(mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_characters -e 'show tables')
 for T in $TABLES
 do
 mysql --defaults-extra-file="$sql_mycnf" -D $db_characters -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
- echo -ne '(98%)\r'
+ echo -ne '(80%)\r'
  sleep 1
 mysql --defaults-extra-file="$sql_mycnf" --execute="characters < $folder_wow/$db_characters-$NOW.sql"
- echo -ne '(99%)\r'
+ echo -ne '(90%)\r'
  sleep 1
 mysql --defaults-extra-file="$sql_mycnf" --execute="realmd < $folder_wow/$db_realmd-$NOW.sql"
  echo -ne '(100%)\r'
