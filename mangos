@@ -282,19 +282,19 @@ sleep 1
 mysql --defaults-extra-file="$sql_mycnf" classicmangos < $folder_sql/base/mangos.sql
 echo -ne '(3%)\r'
 sleep 1
-mysql --defaults-extra-file="$sql_mycnf" classicmangos < $folder_sql/base/dbc/*.sql
+mysql --defaults-extra-file="$sql_mycnf" classicrealmd < $folder_sql/base/realmd.sql
 echo -ne '(4%)\r'
 sleep 1
-for sql_file in $(ls $folder_sql/base/dbc/original_data/*.sql); do mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
+mysql --defaults-extra-file="$sql_mycnf" classiccharacters < $folder_sql/base/characters.sql
 echo -ne '(5%)\r'
 sleep 1
 for sql_file in $(ls $folder_sql/base/dbc/cmangos_fixes/*.sql); do mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
 echo -ne '(6%)\r'
 sleep 1
-mysql --defaults-extra-file="$sql_mycnf" classiccharacters < $folder_sql/base/characters.sql
+for sql_file in $(ls $folder_sql/base/dbc/original_data/*.sql); do mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
 echo -ne '(7%)\r'
 sleep 1
-mysql --defaults-extra-file="$sql_mycnf" classicrealmd < $folder_sql/base/realmd.sql
+for sql_file in $(ls $folder_sql/base/dbc/*.sql); do mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
 
 # Install databases done
 
