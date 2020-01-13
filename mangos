@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201301
-# 0.5.6.7
+# 0.5.7.2
 
 ###############
 # server/info #
@@ -265,35 +265,40 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
 printf "Updating classic-db (\e[1;32mdatabase\033[0m) .."
  echo
- echo -ne '(0%)\r'
+mysqldump --defaults-extra-file="$sql_mycnf" --socket characters > $folder_wow/$db_characters-$NOW.sql;
+ echo -ne '(10%)\r'
+ sleep 1
+mysqldump --defaults-extra-file="$sql_mycnf" --socket realmd > $folder_wow/$db_realmd-$NOW.sql;
+ echo -ne '(20%)\r'
+ sleep 1
+mysql --defaults-extra-file="$sql_mycnf" characters < $folder_sql/characters.sql;
+ echo -ne '(30%)\r'
+ sleep 1
+ mysql --defaults-extra-file="$sql_mycnf" realmd < $folder_sql/realmd.sql;
+ echo -ne '(40%)\r'
+ sleep 1
+mysql --defaults-extra-file="$sql_mycnf" characters < $folder_wow/$db_characters-$NOW.sql;
+ echo -ne '(50%)\r'
+ sleep 1
+mysql --defaults-extra-file="$sql_mycnf" realmd < $folder_wow/$db_realmd-$NOW.sql;
+ echo -ne '(60%)\r'
  sleep 1
 sudo chown -R $user:$group $folder_wow
 cd $folder_db
- echo -ne '(10%)\r'
- sleep 1
-sudo service realmd stop
- echo -ne '(20%)\r'
- sleep 1
-sudo service mangosd stop
- echo -ne '(30%)\r'
- sleep 1
-./InstallFullDB.sh
- echo -ne '(40%)\r'
- sleep 1
-mysqldump --defaults-extra-file="$sql_mycnf" --socket characters > $folder_wow/$db_characters-$NOW.sql;
- echo -ne '(50%)\r'
- sleep 1
-mysqldump --defaults-extra-file="$sql_mycnf" --socket realmd > $folder_wow/$db_realmd-$NOW.sql;
- echo -ne '(55%)\r'
- sleep 1
-mysql --defaults-extra-file="$sql_mycnf" characters < $folder_sql/characters.sql;
- echo -ne '(60%)\r'
- sleep 1
-mysql --defaults-extra-file="$sql_mycnf" realmd < $folder_sql/realmd.sql;
  echo -ne '(70%)\r'
  sleep 1
+sudo service realmd stop
+ echo -ne '(80%)\r'
+ sleep 1
+sudo service mangosd stop
+ echo -ne '(90%)\r'
+ sleep 1
+./InstallFullDB.sh
+ echo -ne '(95%)\r'
+ sleep 1
  read -p "Converting myisam -> innodb? (y/n) " -n 1 -r
- echo
+ echo -ne '(100%)\r'
+ sleep 1
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 
