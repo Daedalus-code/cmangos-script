@@ -265,34 +265,34 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
 sudo apt-get install mysql-server mysql-client -y 1> /dev/null
  sleep 1
+sudo service realmd stop
+ echo -ne '(10%)\r'
+ sleep 1
+sudo service mangosd stop
+ echo -ne '(20%)\r'
+ sleep 1
 printf "Updating classic-db (\e[1;32mdatabase\033[0m) .."
  echo
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/$db_characters-$NOW.sql
- echo -ne '(10%)\r'
- sleep 1
-mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
- echo -ne '(20%)\r'
- sleep 1
-mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_updates/characters/*.sql;
  echo -ne '(30%)\r'
  sleep 1
-mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_updates/realmd/*.sql;
+mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
  echo -ne '(40%)\r'
  sleep 1
-mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_wow/$db_characters-$NOW.sql;
-  echo -ne '(50%)\r'
-  sleep 1
-mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_wow/$db_realmd-$NOW.sql;
+mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_updates/characters/*.sql;
+ echo -ne '(50%)\r'
+ sleep 1
+mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_updates/realmd/*.sql;
  echo -ne '(60%)\r'
+ sleep 1
+mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_wow/$db_characters-$NOW.sql;
+ echo -ne '(70%)\r'
+ sleep 1
+mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_wow/$db_realmd-$NOW.sql;
+ echo -ne '(80%)\r'
  sleep 1
 sudo chown -R $user:$group $folder_wow
 cd $folder_db
- echo -ne '(70%)\r'
- sleep 1
-sudo service realmd stop
- echo -ne '(80%)\r'
- sleep 1
-sudo service mangosd stop
  echo -ne '(90%)\r'
  sleep 1
 ./InstallFullDB.sh
