@@ -422,6 +422,9 @@ fi
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 sudo tail -f $folder_core/run/logs/Server.log
+ echo
+ read -p "Press Enter to continue" </dev/tty
+ echo
 fi
 
 #end_task
