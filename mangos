@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201301
-# 0.6.6.9
+# 0.6.6.2
 
 ###############
 # server/info #
@@ -348,23 +348,16 @@ mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTE
 # Trying to import base start >
 
 mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_core/sql/base/characters.sql;
+echo -ne '(25%)\r'
+sleep 1
 mysql --defaults-extra-file="$sql_mycnf" $db_mangos < $folder_core/sql/base/mangos.sql;
+echo -ne '(30%)\r'
+sleep 1
 mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_core/sql/base/realmd.sql;
+echo -ne '(35%)\r'
+sleep 1
 
 # Trying to import base done
-
-# Trying to apply new UPDATES for realmd & characters databases .. WOHO!$#"!!!"
-
-cd $folder_characters
-for SQL in *.sql; do mysql --defaults-extra-file="$sql_mycnf" $db_characters < $SQL; done
- echo -ne '(25%)\r'
- sleep 1
-cd $folder_realmd
-for SQL in *.sql; do mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $SQL; done
- echo -ne '(30%)\r'
- sleep 1
-
-# New UPDATES done
 
 # IMPORT BACKUP >
 
