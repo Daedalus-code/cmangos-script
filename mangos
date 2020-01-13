@@ -293,6 +293,7 @@ for sql_file in $(ls $folder_sql/base/dbc/cmangos_fixes/*.sql); do mysql --defau
 for sql_file in $(ls $folder_sql/base/dbc/original_data/*.sql); do mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
  echo -ne '(7%)\r'
  sleep 1
+ for sql_file in $(ls $folder_sql/updates/characters/*.sql); do mysql --defaults-extra-file="$sql_mycnf" --database=classiccharacters < $sql_file ; done
  echo -ne '(8%)\r'
  sleep 1
 
