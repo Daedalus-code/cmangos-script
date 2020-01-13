@@ -265,10 +265,10 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
 printf "Updating classic-db (\e[1;32mdatabase\033[0m) .."
  echo
-sudo mysqldump --defaults-extra-file="$sql_mycnf" --socket characters > $folder_wow/$db_characters-$NOW.sql;
+mysqldump --defaults-extra-file="$sql_mycnf" --protocol=socket -S /var/run/mysqld/mysqld.sock characters > $folder_wow/$db_characters-$NOW.sql;
  echo -ne '(10%)\r'
  sleep 1
-sudo mysqldump --defaults-extra-file="$sql_mycnf" --socket realmd > $folder_wow/$db_realmd-$NOW.sql;
+mysqldump --defaults-extra-file="$sql_mycnf" --protocol=socket -S /var/run/mysqld/mysqld.sock realmd > $folder_wow/$db_realmd-$NOW.sql;
  echo -ne '(20%)\r'
  sleep 1
 mysql --defaults-extra-file="$sql_mycnf" characters < $folder_sql/characters.sql;
@@ -325,10 +325,10 @@ mysql --defaults-extra-file="$sql_mycnf" -D $db_characters -e "ALTER TABLE $T EN
 done
  echo -ne '(98%)\r'
  sleep 1
-sudo mysql --defaults-extra-file="$sql_mycnf" --execute="characters < $folder_wow/$db_characters-$NOW.sql"
+mysql --defaults-extra-file="$sql_mycnf" --execute="characters < $folder_wow/$db_characters-$NOW.sql"
  echo -ne '(99%)\r'
  sleep 1
-sudo mysql --defaults-extra-file="$sql_mycnf" --execute="realmd < $folder_wow/$db_realmd-$NOW.sql"
+mysql --defaults-extra-file="$sql_mycnf" --execute="realmd < $folder_wow/$db_realmd-$NOW.sql"
  echo -ne '(100%)\r'
  sleep 1
  read -p "Press Enter to continue" </dev/tty
@@ -449,7 +449,7 @@ fi
 #start_task
 
  echo
- echo "Update MaNGOS Helper?"
+ echo "Update Helper?"
  echo
  read -p "Are you sure? (y/n) " -n 1 -r
  echo
