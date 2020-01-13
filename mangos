@@ -346,6 +346,14 @@ cd $folder_db
 
 # MaNGOS InstallFullDB done
 
+# Trying .. holy moly John >
+
+for sql_file in $(ls $folder_sql/updates/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_characters < $sql_file ; done
+for sql_file in $(ls $folder_sql/updates/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_realmd < $sql_file ; done
+for sql_file in $(ls $folder_sql/updates/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $sql_file ; done
+
+# Trying done
+
 # convert_mysql_engine = myisam -> innodb >
 
  read -p "Converting myisam -> innodb? (y/n) " -n 1 -r
@@ -381,14 +389,6 @@ mysql --defaults-extra-file="$sql_mycnf" --execute="characters < $folder_wow/$db
 mysql --defaults-extra-file="$sql_mycnf" --execute="realmd < $folder_wow/$db_realmd-$NOW.sql"
  echo -ne '(100%)\r'
  sleep 1
-
-# Trying .. holy moly John >
-
-for sql_file in $(ls $folder_sql/updates/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_characters < $sql_file ; done
-for sql_file in $(ls $folder_sql/updates/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_realmd < $sql_file ; done
-for sql_file in $(ls $folder_sql/updates/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $sql_file ; done
-
-# Trying done
 
 # convert_mysql_engine = myisam -> innodb done
 
