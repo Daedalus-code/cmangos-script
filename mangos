@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201301
-# 0.6.3.5
+# 0.5.7.4
 
 ###############
 # server/info #
@@ -276,6 +276,11 @@ sudo service mangosd stop
  sleep 1
 
 sudo mysql --defaults-extra-file="$sql_mycnf" < $folder_sql/create/db_create_mysql.sql
+sudo mysql --defaults-extra-file="$sql_mycnf" < $folder_sql/base/mangos.sql
+for sql_file in ls $folder_sql/base/dbc/original_data/*.sql; do sudo mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
+for sql_file in ls $folder_sql/base/dbc/cmangos_fixes/*.sql; do sudo mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
+sudo mysql --defaults-extra-file="$sql_mycnf" classiccharacters < $folder_sql/base/characters.sql
+sudo mysql --defaults-extra-file="$sql_mycnf" classicrealmd < $folder_sql/base/realmd.sql
 
 # MaNGOS InstallFullDB script >
 
