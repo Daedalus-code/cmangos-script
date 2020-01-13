@@ -282,10 +282,12 @@ mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_character
 else
 mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHARACTER SET utf8 COLLATE utf8_general_ci";
 fi
-RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
+
+RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_mangos`
 if [ "$RESULT" == "$db_mangos" ]; then
 mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTER SET utf8 COLLATE utf8_general_ci";
 fi
+
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_realmd`
 if [ "$RESULT" == "$db_realmd" ]; then
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
@@ -342,17 +344,6 @@ mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_core/sql/base/real
 
 # Trying to import base done
 
-# IMPORT BACKUP >
-
-mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_wow/$db_characters-$NOW.sql;
- echo -ne '(10%)\r'
- sleep 1
-mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_wow/$db_realmd-$NOW.sql;
- echo -ne '(15%)\r'
- sleep 1
-
-# IMPORT BACKUP done
-
 # Trying to apply new UPDATES for realmd & characters databases .. WOHO!$#"!!!"
 
 cd $folder_characters
@@ -365,6 +356,17 @@ for SQL in *.sql; do mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $SQL;
  sleep 1
 
 # New UPDATES done
+
+# IMPORT BACKUP >
+
+mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_wow/$db_characters-$NOW.sql;
+ echo -ne '(10%)\r'
+ sleep 1
+mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_wow/$db_realmd-$NOW.sql;
+ echo -ne '(15%)\r'
+ sleep 1
+
+# IMPORT BACKUP done
 
 # MaNGOS InstallFullDB script start >
 
