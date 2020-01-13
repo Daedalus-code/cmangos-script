@@ -60,9 +60,9 @@ cat<<EOF
            C(ontinued)-MaNGOS Helper
              --------------------
 EOF
-id=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT SUM(online) FROM $db_characters.characters;");
+id=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT SUM(online) FROM $db_characters.characters;"); 2> /dev/null
  echo "               Online Players $id"
-guilds=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.guild;");
+guilds=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.guild;"); 2> /dev/null
  echo "                   Guilds $guilds"
  echo
 cat<<EOF
@@ -279,10 +279,10 @@ mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_character
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
  echo -ne '(40%)\r'
  sleep 1
-mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_characters/*.sql;
+for sql_file in `ls $folder_characters/*.sql`; do mysql --defaults-extra-file="$sql_mycnf" --database=$db_characters < $sql_file ; done
  echo -ne '(50%)\r'
  sleep 1
-mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_realmd/*.sql;
+for sql_file in `ls $folder_realmd/*.sql`; do mysql --defaults-extra-file="$sql_mycnf" --database=$db_realmd < $sql_file ; done
  echo -ne '(60%)\r'
  sleep 1
 mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_wow/$db_characters-$NOW.sql;
