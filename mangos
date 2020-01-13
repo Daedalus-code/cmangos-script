@@ -275,11 +275,14 @@ sudo service mangosd stop
  echo -ne '(10%)\r'
  sleep 1
 
-sudo mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $folder_sql/base/mangos.sql
-for sql_file in $folder_sql/base/dbc/original_data/*.sql; do sudo mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
-for sql_file in $folder_sql/base/dbc/cmangos_fixes/*.sql; do sudo mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
+mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHARACTER SET utf8 COLLATE utf8_general_ci";
+mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTER SET utf8 COLLATE utf8_general_ci";
+mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTER SET utf8 COLLATE utf8_general_ci";
 sudo mysql --defaults-extra-file="$sql_mycnf" --database=classiccharacters < $folder_sql/base/characters.sql
+sudo mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $folder_sql/base/mangos.sql
 sudo mysql --defaults-extra-file="$sql_mycnf" --database=classicrealmd < $folder_sql/base/realmd.sql
+for sql_file in $(ls $folder_sql/base/dbc/original_data/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
+for sql_file in $(ls $folder_sql/base/dbc/cmangos_fixes/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=classicmangos < $sql_file ; done
 
 # MaNGOS InstallFullDB script >
 
