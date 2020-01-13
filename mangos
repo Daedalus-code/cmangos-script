@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201301
-# 0.6.6.2
+# 0.6.6.6
 
 ###############
 # server/info #
@@ -276,13 +276,15 @@ sudo service mangosd stop
 
  # BACKUP start >
 
-  sleep 1
- mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/$db_characters-$NOW.sql
-  echo -ne '(5%)\r'
-  sleep 1
- mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
-  echo -ne '(6%)\r'
-  sleep 1
+ sleep 1
+mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/$db_characters-$NOW.sql
+ echo -ne '(5% .. backup characters database)\r'
+ sleep 1
+ echo -ne '(done)\r'
+mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
+ echo -ne '(6% .. backup realmd database)\r'
+ sleep 1
+ echo -ne '(done)\r'
 
  # BACKUP done
 
@@ -362,11 +364,13 @@ sleep 1
 # IMPORT BACKUP >
 
 mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_wow/$db_characters-$NOW.sql;
- echo -ne '(40%)\r'
+ echo -ne '(40% .. import characters backup)\r'
  sleep 1
+ echo -ne '(done)\r'
 mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_wow/$db_realmd-$NOW.sql;
- echo -ne '(50%)\r'
+ echo -ne '(50% .. import realmd backup)\r'
  sleep 1
+ echo -ne '(done)\r'
 
 # IMPORT BACKUP done
 
