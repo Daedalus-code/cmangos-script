@@ -33,10 +33,11 @@ port_nc="3443" # please edit if wrong.
 # FOLDERS #
 ###########
 
+folder_helper="/scripts/cmangos-script" # please edit if wrong.
 folder_build="/home/ubuntu/wow/mangos-classic/build" # please edit if wrong.
 folder_core="/home/ubuntu/wow/mangos-classic" # please edit if wrong.
 folder_db="/home/ubuntu/wow/classic-db" # please edit if wrong.
-folder_helper="/scripts/cmangos-script" # please edit if wrong.
+folder_sql="/home/ubuntu/wow/mangos-classic/sql/base" # please edit if wrong.
 folder_wow="/home/ubuntu/wow" # please edit if wrong.
 
 #########
