@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201401
-# 0.7.1.5
+# 0.7.1.8
 
 ###############
 # server/info #
@@ -232,6 +232,7 @@ sudo service mangosd stop &> /dev/null
  echo -ne '(50%)\r'
  sleep 1
 cmake .. $cmake --directory $folder_build
+sudo mkdir $folder_core/run &> /dev/null
  echo -ne '(75%)\r'
  sleep 1
 make --directory $folder_build
@@ -253,6 +254,8 @@ sudo checkinstall --directory $folder_build
  ;;
  *) echo "invalid option";;
 esac
+sudo mv /run/bin/ $folder_core/run &> /dev/null
+sudo mv /run/etc/ $folder_core/run &> /dev/null
  echo -ne '(100%)\r'
  sleep 1
  echo
