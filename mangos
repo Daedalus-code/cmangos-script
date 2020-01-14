@@ -360,7 +360,7 @@ cd $folder_db
  echo -ne '(25%)\r'
  sleep 1
 ./InstallFullDB.sh
- echo -ne '(30%)\r'
+ echo -ne '(50%)\r'
  sleep 1
 
 # MaNGOS InstallFullDB done
@@ -368,7 +368,7 @@ cd $folder_db
 # IMPORT BACKUP >
 
 mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_wow/$db_characters-$NOW.sql;
-echo -ne '(90%)\r'
+echo -ne '(75%)\r'
 sleep 1
 mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_wow/$db_realmd-$NOW.sql;
 echo -ne '(100%)\r'
@@ -380,36 +380,36 @@ sleep 1
 
  read -p "Converting myisam -> innodb? (y/n) " -n 1 -r
  echo
- echo -ne '(35%)\r'
- sleep 1
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+ echo -ne '(0%)\r'
+ sleep 1
 TABLES=$(mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_mangos -e 'show tables')
 for T in $TABLES
 do
 mysql --defaults-extra-file="$sql_mycnf" -D $db_mangos -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
- echo -ne '(40%)\r'
+ echo -ne '(10%)\r'
  sleep 1
 TABLES=$(mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_realmd -e 'show tables')
 for T in $TABLES
 do
 mysql --defaults-extra-file="$sql_mycnf" -D $db_realmd -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
- echo -ne '(50%)\r'
+ echo -ne '(25%)\r'
  sleep 1
 TABLES=$(mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_characters -e 'show tables')
 for T in $TABLES
 do
 mysql --defaults-extra-file="$sql_mycnf" -D $db_characters -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
- echo -ne '(60%)\r'
+ echo -ne '50%)\r'
  sleep 1
 mysql --defaults-extra-file="$sql_mycnf" --execute="characters < $folder_wow/$db_characters-$NOW.sql"
- echo -ne '(70%)\r'
+ echo -ne '(75%)\r'
  sleep 1
 mysql --defaults-extra-file="$sql_mycnf" --execute="realmd < $folder_wow/$db_realmd-$NOW.sql"
- echo -ne '(80%)\r'
+ echo -ne '(100%)\r'
  sleep 1
 
 # convert_mysql_engine = myisam -> innodb done
