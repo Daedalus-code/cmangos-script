@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201401
-# 0.7.1.2
+# 0.7.1.0
 
 ###############
 # server/info #
@@ -271,29 +271,25 @@ printf "\e[1;32mUpdate Database\033[0m ?"
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-printf "Updating classic-db (\e[1;32mdatabase\033[0m) .."
- echo
-sudo apt-get install mysql-server mysql-client -y 1> /dev/null
+
 sudo chown -R $user:$group $folder_wow
- echo -ne '(0%)\r'
- sleep 1
 sudo service realmd stop &> /dev/null
- echo -ne '(10%)\r'
- sleep 1
 sudo service mangosd stop &> /dev/null
- echo -ne '(25%)\r'
- sleep 1
 
 # BACKUP (regardless) >
 
 sudo mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/$db_characters-$NOW.sql
- echo -ne '(35%)\r'
  sleep 1
 sudo mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
 
 # BACKUP done
 
-# Delete and start over >
+printf "Updating classic-db (\e[1;32mdatabase\033[0m) .."
+ echo
+sudo apt-get install mysql-server mysql-client -y 1> /dev/null
+ sleep 1
+
+# Delete and start over ? >
 
  echo
  read -p "Fresh install? (backup / delete / git clone) (y/n) " -n 1 -r
@@ -308,14 +304,16 @@ printf "(\e[1;32mcharacters\033[0m) & (\e[1;32mrealmd\033[0m) backup commencing 
 # BACKUP >
 
 sudo mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/$db_characters-$NOW.sql
+ sleep 1
 sudo mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
+ sleep 1
 
 # BACKUP done
 
 sudo mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_characters;
 sudo mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_mangos;
 sudo mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_realmd;
-
+ sleep 1
 sudo chown -R $user:$group $folder_wow
 cp $folder_db/InstallFullDB.config $folder_wow &> /dev/null
 sudo rm -r $folder_db &> /dev/null
