@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201401
-# 0.7.1.9
+# 0.7.1.5
 
 ###############
 # server/info #
@@ -231,12 +231,10 @@ sudo service realmd stop &> /dev/null
 sudo service mangosd stop &> /dev/null
  echo -ne '(50%)\r'
  sleep 1
-cd $folder_build &&
-cmake .. $cmake
+cd $folder_build && cmake .. $cmake
  echo -ne '(75%)\r'
  sleep 1
-cd $folder_build &&
-make
+cd $folder_build && make
  echo
  echo -ne '(90%)\r'
  sleep 1
@@ -248,12 +246,10 @@ printf "Select the install operation"
  read n
 case $n in
  1) echo "make install"
-cd $folder_build &&
-sudo make install
+cd $folder_build && sudo make install
  ;;
  2) echo "checkinstall"
-cd $folder_build &&
-sudo checkinstall
+cd $folder_build && sudo checkinstall
  ;;
  *) echo "invalid option";;
 esac
