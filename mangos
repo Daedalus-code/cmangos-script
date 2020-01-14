@@ -221,10 +221,10 @@ sudo mkdir build &> /dev/null
 cd $folder_build
  echo -ne '(30%)\r'
  sleep 1
-sudo service realmd stop
+sudo service realmd stop &> /dev/null
  echo -ne '(40%)\r'
  sleep 1
-sudo service mangosd stop
+sudo service mangosd stop &> /dev/null
  echo -ne '(50%)\r'
  sleep 1
 cmake .. $cmake
@@ -276,10 +276,10 @@ sudo apt-get install mysql-server mysql-client -y 1> /dev/null
 sudo chown -R $user:$group $folder_wow
  echo -ne '(0%)\r'
  sleep 1
-sudo service realmd stop
+sudo service realmd stop &> /dev/null
  echo -ne '(10%)\r'
  sleep 1
-sudo service mangosd stop
+sudo service mangosd stop &> /dev/null
  echo -ne '(25%)\r'
  sleep 1
 
@@ -499,10 +499,10 @@ printf "\033[1;31mShutting down server ..\033[0m"
  echo
  echo -ne '(0%)\r'
  sleep 1
-sudo service realmd stop 1> /dev/null
+sudo service realmd stop &> /dev/null
  echo -ne '(50%)\r'
  sleep 1
-sudo service mangosd stop 1> /dev/null
+sudo service mangosd stop &> /dev/null
  echo -ne '(100%)\r'
  sleep 1
  echo
@@ -527,10 +527,10 @@ printf "\e[1;32mRestarting server ..\033[0m"
  echo
  echo -ne '(0%)\r'
  sleep 1
-sudo service realmd restart
+sudo service realmd restart &> /dev/null
  echo -ne '(50%)\r'
  sleep 1
-sudo service mangosd restart
+sudo service mangosd restart &> /dev/null
  echo -ne '(100%)\r'
  sleep 1
  echo
