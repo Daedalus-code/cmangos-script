@@ -109,9 +109,9 @@ cat<<EOF
   a : login (command)      t : characters
   c : check for updates    u : accounts
   m : update CMaNGOS       g : guilds
-  d : update Database      l : check logs
-  s : shutdown server      p : create .patch file
-  r : restart server       w : update Helper
+  d : update Database      p : create .patch file
+  s : shutdown server      w : update Helper
+  r : restart server       l : check logs
   o : online check         Q : quit
 
 EOF
