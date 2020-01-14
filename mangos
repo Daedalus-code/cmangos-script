@@ -60,9 +60,9 @@ cat<<EOF
            C(ontinued)-MaNGOS Helper
              --------------------
 EOF
-id=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT SUM(online) FROM $db_characters.characters;"); 2> /dev/null
+id=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT SUM(online) FROM $db_characters.characters;"); &> /dev/null
  echo "               Online Players $id"
-guilds=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.guild;"); 2> /dev/null
+guilds=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.guild;"); &> /dev/null
  echo "                   Guilds $guilds"
  echo
 cat<<EOF
