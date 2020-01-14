@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201401
-# 0.6.4.4
+# 0.6.5.5
 
 ###############
 # server/info #
@@ -347,29 +347,40 @@ fi
 for sql_file in $(ls $folder_sql/base/dbc/original_data/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $sql_file ; done
 for sql_file in $(ls $folder_sql/base/dbc/cmangos_fixes/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $sql_file ; done
  echo
- echo -ne '(20%)\r'
+ echo -ne '(15%)\r'
  sleep 1
 
 # Install databases done
 
 # MaNGOS InstallFullDB script >
 
- echo -ne '(25%)\r'
+ echo -ne '(20%)\r'
 sudo chown -R $user:$group $folder_wow
 cd $folder_db
- echo -ne '(30%)\r'
+ echo -ne '(25%)\r'
  sleep 1
 ./InstallFullDB.sh
- echo -ne '(40%)\r'
+ echo -ne '(30%)\r'
  sleep 1
 
 # MaNGOS InstallFullDB done
+
+# IMPORT BACKUP >
+
+mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_wow/$db_characters-$NOW.sql;
+echo -ne '(90%)\r'
+sleep 1
+mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_wow/$db_realmd-$NOW.sql;
+echo -ne '(100%)\r'
+sleep 1
+
+# IMPORT BACKUP done
 
 # convert_mysql_engine = myisam -> innodb >
 
  read -p "Converting myisam -> innodb? (y/n) " -n 1 -r
  echo
- echo -ne '(50%)\r'
+ echo -ne '(35%)\r'
  sleep 1
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -378,27 +389,27 @@ for T in $TABLES
 do
 mysql --defaults-extra-file="$sql_mycnf" -D $db_mangos -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
- echo -ne '(60%)\r'
+ echo -ne '(40%)\r'
  sleep 1
 TABLES=$(mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_realmd -e 'show tables')
 for T in $TABLES
 do
 mysql --defaults-extra-file="$sql_mycnf" -D $db_realmd -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
- echo -ne '(70%)\r'
+ echo -ne '(50%)\r'
  sleep 1
 TABLES=$(mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_characters -e 'show tables')
 for T in $TABLES
 do
 mysql --defaults-extra-file="$sql_mycnf" -D $db_characters -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
- echo -ne '(80%)\r'
+ echo -ne '(60%)\r'
  sleep 1
 mysql --defaults-extra-file="$sql_mycnf" --execute="characters < $folder_wow/$db_characters-$NOW.sql"
- echo -ne '(90%)\r'
+ echo -ne '(70%)\r'
  sleep 1
 mysql --defaults-extra-file="$sql_mycnf" --execute="realmd < $folder_wow/$db_realmd-$NOW.sql"
- echo -ne '(100%)\r'
+ echo -ne '(80%)\r'
  sleep 1
 
 # convert_mysql_engine = myisam -> innodb done
