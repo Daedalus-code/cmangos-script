@@ -278,10 +278,10 @@ sudo service mangosd stop
 
 # BACKUP (regardless) >
 
-mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/$db_characters-$NOW.sql
-echo -ne '(35%)\r'
-sleep 1
-mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
+sudo mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/$db_characters-$NOW.sql
+ echo -ne '(35%)\r'
+ sleep 1
+sudo mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
 
 # BACKUP done
 
@@ -294,13 +294,13 @@ mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > 
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 
- printf "(\e[1;32mcharacters\033[0m) & (\e[1;32mrealmd\033[0m) backup commencing ..\033[0m"
+printf "(\e[1;32mcharacters\033[0m) & (\e[1;32mrealmd\033[0m) backup commencing ..\033[0m"
  echo
 
 # BACKUP >
 
-mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/$db_characters-$NOW.sql
-mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
+sudo mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/$db_characters-$NOW.sql
+sudo mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
 
 # BACKUP done
 
@@ -323,10 +323,10 @@ fi
  echo
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
 if [ "$RESULT" == "$db_characters" ]; then
- printf "[\e[1;32mok\033[0m] 'Characters' database installed."
+printf "[\e[1;32mok\033[0m] 'Characters' database installed."
  echo
 else
- printf "[\033[1;31mempty\033[0m] 'Characters'"
+printf "[\033[1;31mempty\033[0m] 'Characters'"
  echo
 sudo mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHARACTER SET utf8 COLLATE utf8_general_ci";
 sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_characters < $folder_sql/base/characters.sql
@@ -334,10 +334,10 @@ fi
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_mangos`
 if [ "$RESULT" == "$db_mangos" ]; then
- printf "[\e[1;32mok\033[0m] 'Mangos' database installed."
+printf "[\e[1;32mok\033[0m] 'Mangos' database installed."
  echo
 else
- printf "[\033[1;31mempty\033[0m] 'Mangos'"
+printf "[\033[1;31mempty\033[0m] 'Mangos'"
  echo
 sudo mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTER SET utf8 COLLATE utf8_general_ci";
 sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $folder_sql/base/mangos.sql
@@ -345,10 +345,10 @@ fi
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_realmd`
 if [ "$RESULT" == "$db_realmd" ]; then
- printf "[\e[1;32mok\033[0m] 'Realmd' database installed."
+printf "[\e[1;32mok\033[0m] 'Realmd' database installed."
  echo
 else
- printf "[\033[1;31mempty\033[0m] 'Realmd'"
+printf "[\033[1;31mempty\033[0m] 'Realmd'"
  echo
 sudo mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTER SET utf8 COLLATE utf8_general_ci";
 sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_realmd < $folder_sql/base/realmd.sql
@@ -378,21 +378,21 @@ cd $folder_db
 # IMPORT BACKUP >
 
  echo
- read -p "Import backup? (y/n) " -n 1 -r
+ echo "$folder_wow/$db_characters-$NOW.sql <-"
+ echo "$folder_wow/$db_realmd-$NOW.sql <-"
  echo
- echo "$folder_wow/$db_characters-$NOW.sql"
- echo "$folder_wow/$db_realmd-$NOW.sql"
+ read -p "Import backup? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
  echo -ne '(0%)\r'
  sleep 1
-mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_wow/$db_characters-$NOW.sql;
+sudo mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_wow/$db_characters-$NOW.sql;
  echo -ne '(50%)\r'
-sleep 1
-mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_wow/$db_realmd-$NOW.sql;
+ sleep 1
+sudo mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_wow/$db_realmd-$NOW.sql;
  echo -ne '(100%)\r'
-sleep 1
+ sleep 1
 fi
 
 # IMPORT BACKUP done
@@ -405,31 +405,31 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
  echo -ne '(0%)\r'
  sleep 1
-TABLES=$(mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_mangos -e 'show tables')
+TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_mangos -e 'show tables')
 for T in $TABLES
 do
-mysql --defaults-extra-file="$sql_mycnf" -D $db_mangos -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
+sudo mysql --defaults-extra-file="$sql_mycnf" -D $db_mangos -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
  echo -ne '(10%)\r'
  sleep 1
-TABLES=$(mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_realmd -e 'show tables')
+TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_realmd -e 'show tables')
 for T in $TABLES
 do
-mysql --defaults-extra-file="$sql_mycnf" -D $db_realmd -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
+sudo mysql --defaults-extra-file="$sql_mycnf" -D $db_realmd -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
  echo -ne '(25%)\r'
  sleep 1
-TABLES=$(mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_characters -e 'show tables')
+TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_characters -e 'show tables')
 for T in $TABLES
 do
-mysql --defaults-extra-file="$sql_mycnf" -D $db_characters -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
+sudo mysql --defaults-extra-file="$sql_mycnf" -D $db_characters -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
  echo -ne '50%)\r'
  sleep 1
-mysql --defaults-extra-file="$sql_mycnf" --execute="characters < $folder_wow/$db_characters-$NOW.sql"
+sudo mysql --defaults-extra-file="$sql_mycnf" --execute="characters < $folder_wow/$db_characters-$NOW.sql"
  echo -ne '(75%)\r'
  sleep 1
-mysql --defaults-extra-file="$sql_mycnf" --execute="realmd < $folder_wow/$db_realmd-$NOW.sql"
+sudo mysql --defaults-extra-file="$sql_mycnf" --execute="realmd < $folder_wow/$db_realmd-$NOW.sql"
  echo -ne '(100%)\r'
  sleep 1
 
@@ -449,7 +449,7 @@ fi
 
  echo "User Accounts"
  echo
-mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, last_ip, DATE_FORMAT(last_login, '%Y-%m-%d') last_login, id FROM $db_realmd.account;"
+sudo mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, last_ip, DATE_FORMAT(last_login, '%Y-%m-%d') last_login, id FROM $db_realmd.account;"
  read -p "Press Enter to continue" </dev/tty
 
 #end_task
@@ -462,7 +462,7 @@ mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, la
 
  echo "Characters"
  echo
-mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, level, online, account FROM $db_characters.characters;"
+sudo mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, level, online, account FROM $db_characters.characters;"
  read -p "Press Enter to continue" </dev/tty
 
 #end_task
@@ -475,7 +475,7 @@ mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, level, online, 
 
  echo "Guilds"
  echo
-mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, motd FROM $db_characters.guild;"
+sudo mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, motd FROM $db_characters.guild;"
  read -p "Press Enter to continue" </dev/tty
 
 #end_task
