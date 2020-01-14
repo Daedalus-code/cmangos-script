@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201401
-# 0.6.3.1
+# 0.6.4.4
 
 ###############
 # server/info #
@@ -276,13 +276,25 @@ sudo service mangosd stop
  echo -ne '(10%)\r'
  sleep 1
 
- # Delete and start over >
+# Delete and start over >
 
  echo
  read -p "Fresh install? (delete databases / git clone) (y/n) " -n 1 -r
  echo
+
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+
+ printf "(\e[1;32mcharacters & realmd backup commencing.\033[0m)"
+ echo
+
+# BACKUP start >
+
+mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/$db_characters-$NOW.sql
+mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
+
+# BACKUP done
+
 sudo mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_characters;
 sudo mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_mangos;
 sudo mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_realmd;
