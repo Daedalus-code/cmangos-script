@@ -231,10 +231,10 @@ sudo service realmd stop &> /dev/null
 sudo service mangosd stop &> /dev/null
  echo -ne '(50%)\r'
  sleep 1
-(cd $folder_build && cmake .. $cmake)
+cmake .. $cmake --directory $folder_build
  echo -ne '(75%)\r'
  sleep 1
-(cd $folder_build && make)
+make --directory $folder_build
  echo
  echo -ne '(90%)\r'
  sleep 1
@@ -246,10 +246,10 @@ printf "Select the install operation"
  read n
 case $n in
  1) echo "make install"
-(cd $folder_build && sudo make install)
+make install --directory $folder_build
  ;;
  2) echo "checkinstall"
-(cd $folder_build && sudo checkinstall)
+sudo checkinstall --directory $folder_build
  ;;
  *) echo "invalid option";;
 esac
