@@ -276,7 +276,7 @@ sudo service mangosd stop
  echo -ne '(10%)\r'
  sleep 1
 
-# BACKUP (regardless) start >
+# BACKUP (regardless) >
 
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/$db_characters-$NOW.sql
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
@@ -295,7 +295,7 @@ then
  printf "(\e[1;32mcharacters\033[0m) & (\e[1;32mrealmd\033[0m) backup commencing ..\033[0m"
  echo
 
-# BACKUP start >
+# BACKUP >
 
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/$db_characters-$NOW.sql
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
