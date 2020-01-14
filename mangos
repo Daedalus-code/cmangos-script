@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201401
-# 0.7.0.2
+# 0.7.0.4
 
 ###############
 # server/info #
@@ -532,16 +532,17 @@ fi
 
  echo
  read -n 1 -p "Check server log? (world)? (tail/follow/exit) " ans;
+ echo
 case $ans in
     t|T)
 sudo tail $folder_core/run/logs/Server.log
+ echo
  read -p "Press Enter to continue" </dev/tty
  ;;
     f|F)
 sudo tail -f $folder_core/run/logs/Server.log
  ;;
     *)
- echo
  read -p "Press Enter to continue" </dev/tty
  ;;
 esac
@@ -607,16 +608,17 @@ fi
 
  echo
  read -n 1 -p "Check server log? (world)? (tail/follow/exit) " ans;
+ echo
 case $ans in
     t|T)
 sudo tail $folder_core/run/logs/Server.log
+ echo
  read -p "Press Enter to continue" </dev/tty
  ;;
     f|F)
 sudo tail -f $folder_core/run/logs/Server.log
  ;;
     *)
- echo
  read -p "Press Enter to continue" </dev/tty
  ;;
 esac
