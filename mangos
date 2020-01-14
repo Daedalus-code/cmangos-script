@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201401
-# 0.6.5.5
+# 0.6.5.6
 
 ###############
 # server/info #
@@ -311,6 +311,7 @@ fi
 
 # Install databases >
 
+ echo
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
 if [ "$RESULT" == "$db_characters" ]; then
  printf "[\e[1;32mok\033[0m] 'Characters' database installed."
