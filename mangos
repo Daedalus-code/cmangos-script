@@ -279,7 +279,7 @@ sudo service mangosd stop
  # Delete and start over >
 
  echo
- read -p "Fresh install? (delete all databases) (y/n) " -n 1 -r
+ read -p "Fresh install? (delete databases / git clone) (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
