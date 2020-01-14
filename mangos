@@ -491,7 +491,7 @@ sudo service mangosd restart
  echo
 fi
  echo
- read -p "Check server log? CTRL + C to exit! (y/n) " -n 1 -r
+ read -p "Check server log? (world) (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
