@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201401
-# 0.7.1.8
+# 0.7.1.6
 
 ###############
 # server/info #
@@ -216,10 +216,8 @@ fi
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-cd $folder_core
-sudo rm -r build/ &> /dev/null
-cd $folder_core
-sudo mkdir build &> /dev/null
+sudo rm -r $folder_core/build/ &> /dev/null
+sudo mkdir $folder_core/build &> /dev/null
 sudo chown -R $user:$group $folder_wow
 fi
 sudo chown -R $user:$group $folder_wow
