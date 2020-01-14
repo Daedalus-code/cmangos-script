@@ -300,11 +300,11 @@ sudo mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_mangos;
 sudo mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_realmd;
 
 sudo chown -R $user:$group $folder_wow
-cp $folder_db/InstallFullDB.config $folder_wow
-sudo rm -r $folder_db
+cp $folder_db/InstallFullDB.config $folder_wow &> /dev/null
+sudo rm -r $folder_db &> /dev/null
 cd $folder_wow
 git clone https://github.com/cmangos/classic-db.git
-mv $folder_wow/*.config $folder_db
+mv $folder_wow/*.config $folder_db &> /dev/null
 fi
 
 # Delete and start over done
