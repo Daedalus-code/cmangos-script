@@ -223,7 +223,6 @@ sudo mkdir build &> /dev/null
 sudo chown -R $user:$group $folder_wow
 fi
 sudo chown -R $user:$group $folder_wow
-cd $folder_build
  echo -ne '(10%)\r'
  sleep 1
 sudo service realmd stop &> /dev/null
@@ -236,6 +235,7 @@ cd $folder_build
 cmake .. $cmake
  echo -ne '(75%)\r'
  sleep 1
+cd $folder_build
 make
  echo
  echo -ne '(90%)\r'
