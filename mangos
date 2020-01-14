@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201401
-# 0.7.0.6
+# 0.7.1.1
 
 ###############
 # server/info #
@@ -205,7 +205,12 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
 printf "Updating mangos-classic (\e[1;32mworld\033[0m) .."
  echo
+ read -p "Install Software requirements? (y/n) " -n 1 -r
+ echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
 sudo apt-get install checkinstall build-essential gcc g++ automake git-core autoconf make patch libmysql++-dev mysql-server libtool libssl-dev grep binutils zlibc libc6 libbz2-dev cmake subversion libboost-all-dev -y 1> /dev/null
+fi
  echo -ne '(10%)\r'
  sleep 1
 sudo chown -R $user:$group $folder_wow
