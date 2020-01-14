@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201401
-# 0.6.7.7
+# 0.6.7.1
 
 ###############
 # server/info #
@@ -411,27 +411,21 @@ for T in $TABLES
 do
 sudo mysql --defaults-extra-file="$sql_mycnf" -D $db_mangos -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
- echo -ne '(10%)\r'
+ echo -ne '(25%)\r'
  sleep 1
 TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_realmd -e 'show tables')
 for T in $TABLES
 do
 sudo mysql --defaults-extra-file="$sql_mycnf" -D $db_realmd -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
- echo -ne '(25%)\r'
+ echo -ne '(50%)\r'
  sleep 1
 TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_characters -e 'show tables')
 for T in $TABLES
 do
 sudo mysql --defaults-extra-file="$sql_mycnf" -D $db_characters -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
- echo -ne '50%)\r'
- sleep 1
-sudo mysql --defaults-extra-file="$sql_mycnf" --execute="characters < $folder_wow/$db_characters-$NOW.sql"
- echo -ne '(75%)\r'
- sleep 1
-sudo mysql --defaults-extra-file="$sql_mycnf" --execute="realmd < $folder_wow/$db_realmd-$NOW.sql"
- echo -ne '(100%)\r'
+ echo -ne '100%)\r'
  sleep 1
 
 # convert_mysql_engine = myisam -> innodb done
