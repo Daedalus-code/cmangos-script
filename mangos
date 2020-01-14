@@ -205,7 +205,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
 printf "Updating mangos-classic (\e[1;32mworld\033[0m) .."
  echo
-sudo apt-get install checkinstall -y 1> /dev/null
+sudo apt-get install checkinstall build-essential gcc g++ automake git-core autoconf make patch libmysql++-dev mysql-server libtool libssl-dev grep binutils zlibc libc6 libbz2-dev cmake subversion libboost-all-dev -y 1> /dev/null
  echo -ne '(10%)\r'
  sleep 1
 sudo chown -R $user:$group $folder_wow
