@@ -286,13 +286,14 @@ then
 sudo mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_characters;
 sudo mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_mangos;
 sudo mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_realmd;
-fi
+
 sudo chown -R $user:$group $folder_wow
 cp $folder_db/InstallFullDB.config $folder_wow
 sudo rm -r $folder_db
 cd $folder_wow
 git clone https://github.com/cmangos/classic-db.git
 mv $folder_wow/*.config $folder_db
+fi
 
 # Delete and start over done
 
