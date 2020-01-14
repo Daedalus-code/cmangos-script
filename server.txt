@@ -12,7 +12,7 @@ realm_port="8085" # please edit if wrong.
 # cmake #
 #########
 
-cmake="-DCMAKE_INSTALL_PREFIX=\../run -DBUILD_EXTRACTORS=ON -DPCH=1 -DDEBUG=0 -DBUILD_PLAYERBOT=OFF" # please edit if wrong.
+cmake="-DCMAKE_INSTALL_PREFIX=$folder_core/run -DBUILD_EXTRACTORS=ON -DPCH=1 -DDEBUG=0 -DBUILD_PLAYERBOT=OFF" # please edit if wrong.
 
 ##########
 # SYSTEM #
