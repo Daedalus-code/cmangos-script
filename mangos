@@ -533,18 +533,18 @@ fi
  echo
  read -n 1 -p "Check server log? (world)? (tail/follow/exit) " ans;
 case $ans in
-     t|T)
+    t|T)
 sudo tail $folder_core/run/logs/Server.log
  read -p "Press Enter to continue" </dev/tty
  ;;
-     f|F)
+    f|F)
 sudo tail -f $folder_core/run/logs/Server.log
  ;;
-     *)
+    *)
  echo
-exit
+ read -p "Press Enter to continue" </dev/tty
  ;;
- esac
+esac
 
 #end_task
 
@@ -617,7 +617,7 @@ sudo tail -f $folder_core/run/logs/Server.log
  ;;
     *)
  echo
-exit
+ read -p "Press Enter to continue" </dev/tty
  ;;
 esac
 
