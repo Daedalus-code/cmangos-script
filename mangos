@@ -229,7 +229,7 @@ sudo service realmd stop &> /dev/null
 sudo service mangosd stop &> /dev/null
  echo -ne '(50%)\r'
  sleep 1
-cmake .. $cmake --directory $folder_build
+cmake .. -DCMAKE_INSTALL_PREFIX=$folder_core/run $cmake
 sudo mkdir $folder_core/run &> /dev/null
 sudo mkdir $folder_core/run/bin &> /dev/null
 sudo mkdir $folder_core/run/etc &> /dev/null
@@ -254,8 +254,8 @@ sudo checkinstall --directory $folder_build
  ;;
  *) echo "invalid option";;
 esac
-sudo mv /run/bin/* $folder_core/run/bin &> /dev/null
-sudo mv /run/etc/* $folder_core/run/etc &> /dev/null # holy hell.
+sudo mv -R /run/bin/* $folder_core/run/bin &> /dev/null
+sudo mv -R /run/etc/* $folder_core/run/etc &> /dev/null # holy hell.
  echo -ne '(100%)\r'
  sleep 1
  echo
