@@ -211,24 +211,29 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
 sudo apt-get install checkinstall build-essential gcc g++ automake git-core autoconf make patch libmysql++-dev mysql-server libtool libssl-dev grep binutils zlibc libc6 libbz2-dev cmake subversion libboost-all-dev -y 1> /dev/null
 fi
- echo -ne '(10%)\r'
- sleep 1
- echo -ne '(20%)\r'
- sleep 1
+ echo
+ read -p "Fresh Install? (deleting build folder) (y/n) " -n 1 -r
+ echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+cd $folder_core
+sudo rm -r build/ &> /dev/null
 cd $folder_core
 sudo mkdir build &> /dev/null
 cd $folder_build
 sudo chown -R $user:$group $folder_wow
- echo -ne '(30%)\r'
+fi
+sudo chown -R $user:$group $folder_wow
+ echo -ne '(10%)\r'
  sleep 1
 sudo service realmd stop &> /dev/null
- echo -ne '(40%)\r'
+ echo -ne '(25%)\r'
  sleep 1
 sudo service mangosd stop &> /dev/null
  echo -ne '(50%)\r'
  sleep 1
 cmake .. $cmake
- echo -ne '(60%)\r'
+ echo -ne '(75%)\r'
  sleep 1
 make
  echo
