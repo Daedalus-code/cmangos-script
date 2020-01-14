@@ -213,12 +213,12 @@ sudo apt-get install checkinstall build-essential gcc g++ automake git-core auto
 fi
  echo -ne '(10%)\r'
  sleep 1
-sudo chown -R $user:$group $folder_wow
  echo -ne '(20%)\r'
  sleep 1
 cd $folder_core
 sudo mkdir build &> /dev/null
 cd $folder_build
+sudo chown -R $user:$group $folder_wow
  echo -ne '(30%)\r'
  sleep 1
 sudo service realmd stop &> /dev/null
