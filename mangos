@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201401
-# 0.7.0.4
+# 0.7.0.6
 
 ###############
 # server/info #
@@ -211,6 +211,8 @@ sudo apt-get install checkinstall -y 1> /dev/null
 sudo chown -R $user:$group $folder_wow
  echo -ne '(20%)\r'
  sleep 1
+cd $folder_core
+sudo mkdir build &> /dev/null
 cd $folder_build
  echo -ne '(30%)\r'
  sleep 1
