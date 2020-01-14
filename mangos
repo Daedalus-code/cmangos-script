@@ -254,8 +254,8 @@ sudo checkinstall --directory $folder_build
  ;;
  *) echo "invalid option";;
 esac
-sudo mv /run/bin/ $folder_core/run/bin &> /dev/null
-sudo mv /run/etc/ $folder_core/run/etc &> /dev/null # holy hell.
+sudo mv /run/bin/ $folder_core/run/bin &> /dev/null # holy hell.
+sudo mv /run/etc/ $folder_core/run/etc &> /dev/null # UYGIHF$HR$/%JT&G(P/&%!"#$")
  echo -ne '(100%)\r'
  sleep 1
  echo
