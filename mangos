@@ -232,10 +232,10 @@ sudo service mangosd stop &> /dev/null
 sudo mkdir $folder_core/run &> /dev/null
 sudo mkdir $folder_core/run/bin &> /dev/null
 sudo mkdir $folder_core/run/etc &> /dev/null
-cmake .. -DCMAKE_INSTALL_PREFIX=$folder_core/run $cmake
+cmake .. $cmake
  echo -ne '(75%)\r'
  sleep 1
-make --directory $folder_build
+make
  echo
  echo -ne '(90%)\r'
  sleep 1
@@ -247,10 +247,10 @@ printf "Select the install operation"
  read n
 case $n in
  1) echo "make install"
-sudo make install --directory $folder_build
+sudo make install
  ;;
  2) echo "checkinstall"
-sudo checkinstall --directory $folder_build
+sudo checkinstall
  ;;
  *) echo "invalid option";;
 esac
