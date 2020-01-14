@@ -285,7 +285,7 @@ sudo service mangosd stop
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 
- printf "(\e[1;32mcharacters & realmd backup commencing.\033[0m)"
+ printf "(\e[1;32mcharacters\033[0m) & (\e[1;32mrealmd\033[0m) backup commencing ..\033[0m"
  echo
 
 # BACKUP start >
