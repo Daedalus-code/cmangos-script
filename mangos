@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201401
-# 0.7.1.5
+# 0.7.1.2
 
 ###############
 # server/info #
@@ -535,10 +535,6 @@ sudo service mangosd restart &> /dev/null
  echo -ne '(100%)\r'
  sleep 1
  echo
-fi
- echo
-
- echo
  read -n 1 -p "Check server log? (world)? (tail/follow/exit) " ans;
  echo
 case $ans in
@@ -554,6 +550,7 @@ sudo tail -f $folder_core/run/logs/Server.log
  read -p "Press Enter to continue" </dev/tty
  ;;
 esac
+fi
 
 #end_task
 
