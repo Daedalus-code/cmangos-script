@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201401
-# 0.6.7.8
+# 0.7.0.2
 
 ###############
 # server/info #
@@ -109,10 +109,10 @@ cat<<EOF
   a : login (command)      t : characters
   c : check for updates    u : accounts
   m : update CMaNGOS       g : guilds
-  d : update Database      p : create .patch file
-  s : shutdown server      w : update Helper
-  r : restart server       Q : quit
-  o : online check
+  d : update Database      l : check logs
+  s : shutdown server      p : create .patch file
+  r : restart server       w : update Helper
+  o : online check         Q : quit
 
 EOF
  read -n1 -s
@@ -451,7 +451,7 @@ sudo mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmleve
 
  ;;
 
- "t")
+"t")
 
 #start_task
 
@@ -464,7 +464,7 @@ sudo mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, level, onl
 
   ;;
 
-  "g")
+"g")
 
 #start_task
 
@@ -601,6 +601,30 @@ fi
 
  ;;
 
+"l")
+
+#start_task
+
+ echo
+ read -n 1 -p "Check server log? (world)? (tail/follow/exit) " ans;
+case $ans in
+    t|T)
+sudo tail $folder_core/run/logs/Server.log
+ read -p "Press Enter to continue" </dev/tty
+ ;;
+    f|F)
+sudo tail -f $folder_core/run/logs/Server.log
+ ;;
+    *)
+ echo
+exit
+ ;;
+esac
+
+#end_task
+
+  ;;
+
 "p")
 
 #start_task
@@ -635,7 +659,7 @@ fi
 
  ;;
 
- "o")
+"o")
 
 #start_task
 
