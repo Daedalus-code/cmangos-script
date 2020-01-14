@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201401
-# 0.6.3.3
+# 0.6.3.1
 
 ###############
 # server/info #
@@ -287,6 +287,12 @@ sudo mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_characters;
 sudo mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_mangos;
 sudo mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_realmd;
 fi
+sudo chown -R $user:$group $folder_wow
+cp $folder_db/InstallFullDB.config $folder_wow
+sudo rm -r $folder_db
+cd $folder_wow
+git clone https://github.com/cmangos/classic-db.git
+mv $folder_wow/*.config $folder_db
 
 # Delete and start over done
 
@@ -345,14 +351,6 @@ cd $folder_db
  sleep 1
 
 # MaNGOS InstallFullDB done
-
-# Trying .. holy moly John >
-
-for sql_file in $(ls $folder_sql/updates/characters/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_characters < $sql_file ; done
-for sql_file in $(ls $folder_sql/updates/realmd/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_realmd < $sql_file ; done
-for sql_file in $(ls $folder_sql/updates/mangos/*.sql); do sudo mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $sql_file ; done
-
-# Trying done
 
 # convert_mysql_engine = myisam -> innodb >
 
