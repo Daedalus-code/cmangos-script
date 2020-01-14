@@ -212,7 +212,7 @@ then
 sudo apt-get install checkinstall build-essential gcc g++ automake git-core autoconf make patch libmysql++-dev mysql-server libtool libssl-dev grep binutils zlibc libc6 libbz2-dev cmake subversion libboost-all-dev -y 1> /dev/null
 fi
  echo
- read -p "Fresh Install? (deleting build folder) (y/n) " -n 1 -r
+ read -p "Fresh Install? (Delete build folder) (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
