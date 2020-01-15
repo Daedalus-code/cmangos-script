@@ -428,21 +428,21 @@ then
 TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_mangos -e 'show tables')
 for T in $TABLES
 do
-sudo mysql --defaults-extra-file="$sql_mycnf" -D $db_mangos -e "ALTER TABLE $T ENGINE=InnoDB"
+sudo mysql --defaults-extra-file="$sql_mycnf" -D $db_mangos -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
  echo -ne '(25%)\r'
  sleep 1
 TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_realmd -e 'show tables')
 for T in $TABLES
 do
-sudo mysql --defaults-extra-file="$sql_mycnf" -D $db_realmd -e "ALTER TABLE $T ENGINE=InnoDB"
+sudo mysql --defaults-extra-file="$sql_mycnf" -D $db_realmd -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
  echo -ne '(50%)\r'
  sleep 1
 TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_characters -e 'show tables')
 for T in $TABLES
 do
-sudo mysql --defaults-extra-file="$sql_mycnf" -D $db_characters -e "ALTER TABLE $T ENGINE=InnoDB"
+sudo mysql --defaults-extra-file="$sql_mycnf" -D $db_characters -e "ALTER TABLE $T ENGINE=innodb ROW_FORMAT=DYNAMIC"
 done
  echo -ne '100%)\r'
  sleep 1
