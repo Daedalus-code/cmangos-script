@@ -402,8 +402,8 @@ printf "[\e[1;32mok\033[0m] drop 'characters'"
 mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_characters; &> /dev/null
  echo
 else
-fi
  echo
+fi
 
 # database mangos
 
@@ -413,8 +413,8 @@ printf "[\e[1;32mok\033[0m] drop 'mangos'"
 mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_mangos; &> /dev/null
  echo
 else
-fi
  echo
+fi
 
 # database realmd
 
@@ -424,8 +424,8 @@ printf "[\e[1;32mok\033[0m] drop 'realmd'"
 mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_realmd; &> /dev/null
  echo
 else
-fi
  echo
+fi
 
 # DROP databases done
 
