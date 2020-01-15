@@ -46,8 +46,21 @@ Restart=on-abort
 [Install]
 WantedBy=multi-user.target
 ```
+Make sure to reload systemd so that the new files are discovered.
+```
+sudo systemctl daemon-reload
+```
+The command to ensure both services are automatically started at boot are:
+```
+sudo systemctl enable realmd
+sudo systemctl enable mangosd
+```
 
 https://github.com/cmangos  
 https://cmangos.net  
+
+
+
+
 
 ---What
