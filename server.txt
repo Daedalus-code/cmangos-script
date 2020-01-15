@@ -67,7 +67,7 @@ NOW="$(date +"%m.%d.%Y")"
 # temp # -> different path for every kernel version. <-
 ########
 
-temp="$((`cat /sys/class/thermal/thermal_zone*/temp`/1000))°C"
+#temp="$((`cat /sys/class/thermal/thermal_zone*/temp`/1000))°C"
 
 ########
 # load #
