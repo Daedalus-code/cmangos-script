@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201601
-# 0.8.5.4
+# 0.8.1.5
 
 ###############
 # server/info #
@@ -317,28 +317,17 @@ sudo chown -R $user:$group $folder_wow
 
 # characters.sql
 
- echo
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
 if [ "$RESULT" == "$db_characters" ]; then
-printf "[\e[1;32mok\033[0m] 'characters' making backup."
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/backup/$db_characters-$NOW.sql
- echo
-else
-printf "[\033[1;31mempty\033[0m] 'characters'"
 fi
- echo
 
 # realmd.sql
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_realmd`
 if [ "$RESULT" == "$db_realmd" ]; then
-printf "[\e[1;32mok\033[0m] 'realmd' making backup."
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/backup/$db_realmd-$NOW.sql
- echo
-else
-printf "[\033[1;31mempty\033[0m] 'realmd'"
 fi
- echo
 
 # BACKUP done
 
@@ -373,23 +362,16 @@ printf "(\e[1;32mcharacters\033[0m) & (\e[1;32mrealmd\033[0m) backup commencing 
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
 if [ "$RESULT" == "$db_characters" ]; then
-printf "[\e[1;32mok\033[0m] 'characters' making backup."
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/backup/$db_characters-$NOW.sql
- echo
-else
- echo
 fi
 
 # realmd.sql
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_realmd`
 if [ "$RESULT" == "$db_realmd" ]; then
-printf "[\e[1;32mok\033[0m] 'realmd' making backup."
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/backup/$db_realmd-$NOW.sql
- echo
-else
- echo
 fi
+
 # BACKUP done
 
 # DROP databases >
@@ -398,33 +380,21 @@ fi
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
 if [ "$RESULT" == "$db_characters" ]; then
-printf "[\e[1;32mok\033[0m] drop 'characters'"
-mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_characters; &> /dev/null
- echo
-else
- echo
+mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_characters;
 fi
 
 # database mangos
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_mangos`
 if [ "$RESULT" == "$db_mangos" ]; then
-printf "[\e[1;32mok\033[0m] drop 'mangos'"
-mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_mangos; &> /dev/null
- echo
-else
- echo
+mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_mangos;
 fi
 
 # database realmd
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_realmd`
 if [ "$RESULT" == "$db_realmd" ]; then
-printf "[\e[1;32mok\033[0m] drop 'realmd'"
-mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_realmd; &> /dev/null
- echo
-else
- echo
+mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_realmd;
 fi
 
 # DROP databases done
@@ -435,36 +405,27 @@ fi
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_mangos`
 if [ "$RESULT" == "$db_mangos" ]; then
-printf "[\e[1;32mok\033[0m] 'mangos'"
-mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_mangos; &> /dev/null
- echo
+mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_mangos;
 else
 mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTER SET utf8 COLLATE utf8_general_ci";
 fi
- echo
 
 # database characters
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
 if [ "$RESULT" == "$db_characters" ]; then
-printf "[\e[1;32mok\033[0m] 'characters'"
-mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_characters; &> /dev/null
- echo
+mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_characters;
 else
 mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHARACTER SET utf8 COLLATE utf8_general_ci";
 fi
- echo
 
 # database realmd
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_realmd`
 if [ "$RESULT" == "$db_realmd" ]; then
-printf "[\e[1;32mok\033[0m] 'realmd'"
- echo
 else
 mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTER SET utf8 COLLATE utf8_general_ci";
 fi
- echo
 
 # Create databases done
 
