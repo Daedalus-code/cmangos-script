@@ -6,10 +6,11 @@
 #                      C M a N G O S  -  H E L P E R                       #
 #               Continued Massive Network Game Object Server               #
 ############################################################################
+# Build on a Ubuntu Server (raspberry pi)
 
 # By Rainman
 # V20201501
-# 0.7.2.3
+# 0.7.2.4
 
 ###############
 # server/info #
