@@ -362,7 +362,7 @@ mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_realmd;
 # DROP databases done
 
 # db_create_mysql.sql which creates the databases and sets the permissions.
-mysql -u $user -p $password -h $host < $folder_sql/create/db_create_mysql.sql
+mysql -u "$user" -p "$password" -h "$host" < $folder_sql/create/db_create_mysql.sql
 
 # Delete & git clone classic-db folder >
 
