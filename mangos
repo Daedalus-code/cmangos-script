@@ -306,19 +306,19 @@ sudo chown -R $user:$group $folder_wow
  echo -ne '(0%)\r'
  sleep 1
 sudo service realmd stop &> /dev/null
- echo -ne '(5%)\r'
+ echo -ne '(10%)\r'
  sleep 1
 sudo service mangosd stop &> /dev/null
- echo -ne '(10%)\r'
+ echo -ne '(20%)\r'
  sleep 1
 
 # BACKUP (regardless) >
 
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/backup/$db_characters-$NOW.sql &> /dev/null
- echo -ne '(15%)\r'
+ echo -ne '(30%)\r'
  sleep 1
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/backup/$db_realmd-$NOW.sql &> /dev/null
- echo -ne '(20%)\r'
+ echo -ne '(40%)\r'
  sleep 1
 
 # BACKUP done
@@ -330,7 +330,7 @@ mysql-server
 mysql-client
 )
 sudo apt-get install ${packagelist[@]} -y 1> /dev/null
- echo -ne '(25%)\r'
+ echo -ne '(50%)\r'
  sleep 1
 
 # Delete and start over ? >
@@ -426,10 +426,10 @@ fi
 
 # MaNGOS InstallFullDB script >
 
- echo -ne '(50%)\r'
+ echo -ne '(65%)\r'
  sleep 1
 sudo chown -R $user:$group $folder_wow
- echo -ne '(75%)\r'
+ echo -ne '(85%)\r'
  sleep 1
 cd $folder_db
 ./InstallFullDB.sh
