@@ -9,7 +9,7 @@
 
 # By Rainman
 # V20201501
-# 0.7.2.0
+# 0.7.2.3
 
 ###############
 # server/info #
@@ -236,7 +236,7 @@ cmake
 subversion
 libboost-all-dev
 )
-sudo apt-get install ${packagelist[@]} -y
+sudo apt-get install ${packagelist[@]} -y 1> /dev/null
 fi
  read -p "Fresh install? (delete build folder) (y/n) " -n 1 -r
  echo
@@ -322,13 +322,16 @@ mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > 
 
 printf "Updating classic-db (\e[1;32mdatabase\033[0m) .."
  echo
-sudo apt-get install mysql-server mysql-client -y 1> /dev/null
+packagelist=(
+mysql-server
+mysql-client
+)
+sudo apt-get install ${packagelist[@]} -y 1> /dev/null
  echo -ne '(25%)\r'
  sleep 1
 
 # Delete and start over ? >
 
- echo
  read -p "Fresh install? (backup / delete / git clone) (y/n) " -n 1 -r
  echo
 
