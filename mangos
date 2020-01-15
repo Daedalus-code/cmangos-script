@@ -355,14 +355,14 @@ mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > 
 
 # DROP databases >
 
-mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_characters;
-mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_mangos;
-mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_realmd;
+mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_characters; &> /dev/null
+mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_mangos; &> /dev/null
+mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_realmd; &> /dev/null
 
 # DROP databases done
 
 # db_create_mysql.sql which creates the databases and sets the permissions.
-mysqladmin --defaults-extra-file="$sql_mycnf" < $folder_sql/create/db_create_mysql.sql
+mysql --defaults-extra-file="$sql_mycnf" < $folder_sql/create/db_create_mysql.sql
 
 # Delete & git clone classic-db folder >
 
