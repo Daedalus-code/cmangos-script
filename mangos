@@ -9,7 +9,7 @@
 
 # By Rainman
 # V20201501
-# 0.7.0.0
+# 0.6.9.7
 
 ###############
 # server/info #
@@ -426,7 +426,6 @@ fi
 
  read -p "Press Enter to continue" </dev/tty
 fi
-fi
 
 # update Database done
 
@@ -694,7 +693,5 @@ fi
 esac
  sleep 1
 done
-
-
 
 # script done
