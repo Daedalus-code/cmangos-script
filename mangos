@@ -7,7 +7,7 @@
 
 # By Rainman
 # V20201501
-# 0.7.2.9
+# 0.7.3.0
 
 ###############
 # server/info #
@@ -284,10 +284,11 @@ sudo service mangosd stop &> /dev/null
 
 # BACKUP (regardless) >
 
-sudo mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/$db_characters-$NOW.sql
+sudo mkdir $folder_wow/backup &> /dev/null
+sudo mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/backup/$db_characters-$NOW.sql
  echo -ne '(15%)\r'
  sleep 1
-sudo mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
+sudo mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/backup/$db_realmd-$NOW.sql
  echo -ne '(20%)\r'
  sleep 1
 
@@ -313,9 +314,9 @@ printf "(\e[1;32mcharacters\033[0m) & (\e[1;32mrealmd\033[0m) backup commencing 
 
 # BACKUP >
 
-sudo mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/$db_characters-$NOW.sql
+sudo mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/backup/$db_characters-$NOW.sql
  sleep 1
-sudo mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/$db_realmd-$NOW.sql
+sudo mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/backup/$db_realmd-$NOW.sql
  sleep 1
 
 # BACKUP done
@@ -406,8 +407,8 @@ cd $folder_db
 # IMPORT BACKUP >
 
  echo
- echo "$folder_wow/$db_characters-$NOW.sql <--"
- echo "$folder_wow/$db_realmd-$NOW.sql <--"
+ echo "$folder_wow/backup/$db_characters-$NOW.sql <--"
+ echo "$folder_wow/backup/$db_realmd-$NOW.sql <--"
  echo
  read -p "Import backup? (y/n) " -n 1 -r
  echo
@@ -415,10 +416,10 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
  echo -ne '(0%)\r'
  sleep 1
-sudo mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_wow/$db_characters-$NOW.sql;
+sudo mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_wow/backup/$db_characters-$NOW.sql;
  echo -ne '(50%)\r'
  sleep 1
-sudo mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_wow/$db_realmd-$NOW.sql;
+sudo mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_wow/backup/$db_realmd-$NOW.sql;
  echo -ne '(100%)\r'
  sleep 1
 fi
