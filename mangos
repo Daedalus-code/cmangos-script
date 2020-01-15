@@ -315,6 +315,8 @@ sudo chown -R $user:$group $folder_wow
 
 # BACKUP (regardless) >
 
+# characters.sql
+
 echo
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
 if [ "$RESULT" == "$db_characters" ]; then
@@ -392,9 +394,38 @@ fi
 
 # DROP databases >
 
+# database characters
+
+RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
+if [ "$RESULT" == "$db_characters" ]; then
+printf "[\e[1;32mok\033[0m] drop 'characters'"
 mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_characters; &> /dev/null
+echo
+else
+printf "[\033[1;31mempty\033[0m] 'characters'"
+fi
+
+# database mangos
+
+RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_mangos`
+if [ "$RESULT" == "$db_mangos" ]; then
+printf "[\e[1;32mok\033[0m] drop 'mangos'"
 mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_mangos; &> /dev/null
+echo
+else
+printf "[\033[1;31mempty\033[0m] 'mangos'"
+fi
+
+# database realmd
+
+RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_realmd`
+if [ "$RESULT" == "$db_realmd" ]; then
+printf "[\e[1;32mok\033[0m] drop 'realmd'"
 mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_realmd; &> /dev/null
+echo
+else
+printf "[\033[1;31mempty\033[0m] 'realmd'"
+fi
 
 # DROP databases done
 
