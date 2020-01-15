@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201501
-# 0.7.8.8
+# 0.7.9.0
 
 ###############
 # server/info #
@@ -398,8 +398,13 @@ mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_realmd; &> /dev/null
 
 # DROP databases done
 
-# db_create_mysql.sql which creates the databases and sets the permissions.
-mysql --defaults-extra-file="$sql_mycnf" < $folder_sql/create/db_create_mysql.sql
+# Create databases >
+
+mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTER SET utf8 COLLATE utf8_general_ci";
+mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHARACTER SET utf8 COLLATE utf8_general_ci";
+mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTER SET utf8 COLLATE utf8_general_ci";
+
+# Create databases done
 
 # Delete & git clone classic-db folder >
 
@@ -435,7 +440,6 @@ printf "[\e[1;32mok\033[0m] 'Mangos' database installed."
 else
 printf "[\033[1;31mempty\033[0m] 'Mangos'"
  echo
-mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTER SET utf8 COLLATE utf8_general_ci";
 mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $folder_sql/base/mangos.sql
 fi
 
@@ -454,7 +458,6 @@ printf "[\e[1;32mok\033[0m] 'Characters' database installed."
 else
 printf "[\033[1;31mempty\033[0m] 'Characters'"
  echo
-mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHARACTER SET utf8 COLLATE utf8_general_ci";
 mysql --defaults-extra-file="$sql_mycnf" --database=$db_characters < $folder_sql/base/characters.sql
 fi
 
@@ -469,7 +472,6 @@ printf "[\e[1;32mok\033[0m] 'Realmd' database installed."
 else
 printf "[\033[1;31mempty\033[0m] 'Realmd'"
  echo
-mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTER SET utf8 COLLATE utf8_general_ci";
 mysql --defaults-extra-file="$sql_mycnf" --database=$db_realmd < $folder_sql/base/realmd.sql
 fi
  echo
