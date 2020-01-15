@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201601
-# 0.8.1.5
+# 0.7.9.6
 
 ###############
 # server/info #
@@ -455,17 +455,10 @@ fi
 
 # mangos.sql >
 
- echo
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_mangos`
 if [ "$RESULT" == "$db_mangos" ]; then
-printf "[\e[1;32mok\033[0m] 'Mangos' database installed."
- echo
-else
-printf "[\033[1;31mempty\033[0m] 'Mangos'"
- echo
 mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $folder_sql/base/mangos.sql
 fi
- echo
 
 # mangos.sql done
 
@@ -477,14 +470,8 @@ for sql_file in $(ls $folder_sql/base/dbc/cmangos_fixes/*.sql); do mysql --defau
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
 if [ "$RESULT" == "$db_characters" ]; then
-printf "[\e[1;32mok\033[0m] 'Characters' database installed."
- echo
-else
-printf "[\033[1;31mempty\033[0m] 'Characters'"
- echo
 mysql --defaults-extra-file="$sql_mycnf" --database=$db_characters < $folder_sql/base/characters.sql
 fi
- echo
 
 # characters.sql done
 
@@ -492,14 +479,8 @@ fi
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_realmd`
 if [ "$RESULT" == "$db_realmd" ]; then
-printf "[\e[1;32mok\033[0m] 'Realmd' database installed."
- echo
-else
-printf "[\033[1;31mempty\033[0m] 'Realmd'"
- echo
 mysql --defaults-extra-file="$sql_mycnf" --database=$db_realmd < $folder_sql/base/realmd.sql
 fi
- echo
 
 # realmd.sql done
 
