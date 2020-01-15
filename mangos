@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201601
-# 0.8.5.5
+# 0.8.5.4
 
 ###############
 # server/info #
@@ -377,8 +377,8 @@ printf "[\e[1;32mok\033[0m] 'characters' making backup."
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/backup/$db_characters-$NOW.sql
  echo
 else
-fi
  echo
+fi
 
 # realmd.sql
 
@@ -388,9 +388,8 @@ printf "[\e[1;32mok\033[0m] 'realmd' making backup."
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/backup/$db_realmd-$NOW.sql
  echo
 else
-fi
  echo
-
+fi
 # BACKUP done
 
 # DROP databases >
@@ -490,7 +489,6 @@ fi
 fi
 
 # Delete and start over done
-fi
 
 # Install databases >
 
