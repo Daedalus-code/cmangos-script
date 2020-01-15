@@ -284,10 +284,10 @@ sudo service mangosd stop &> /dev/null
 
 # BACKUP (regardless) >
 
-sudo mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/backup/$db_characters-$NOW.sql
+sudo mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/backup/$db_characters-$NOW.sql &> /dev/null
  echo -ne '(15%)\r'
  sleep 1
-sudo mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/backup/$db_realmd-$NOW.sql
+sudo mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/backup/$db_realmd-$NOW.sql &> /dev/null
  echo -ne '(20%)\r'
  sleep 1
 
