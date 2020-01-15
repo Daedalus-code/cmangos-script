@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201501
-# 0.7.3.4
+# 0.7.5.1
 
 ###############
 # server/info #
@@ -361,6 +361,17 @@ mysqladmin --defaults-extra-file="$sql_mycnf" -f drop $db_realmd;
 
 # DROP databases done
 
+# db_create_mysql.sql which creates the databases and sets the permissions.
+mysql --defaults-extra-file="$sql_mycnf" < $folder_sql/create/db_create_mysql.sql
+
+# Delete & git clone classic-db folder >
+
+ read -p "Delete & git clone classic-db folder? (y/n) " -n 1 -r
+ echo
+
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+
 sudo chown -R $user:$group $folder_wow
 cp $folder_db/InstallFullDB.config $folder_wow &> /dev/null
 sudo rm -r $folder_db &> /dev/null
@@ -368,16 +379,16 @@ cd $folder_wow
 git clone https://github.com/cmangos/classic-db.git
 mv $folder_wow/*.config $folder_db &> /dev/null
 sudo chown -R $user:$group $folder_wow
+fi
 
-# db_create_mysql.sql which creates the databases and sets the permissions.
-sudo mysql --defaults-extra-file="$sql_mycnf" < $folder_sql/create/db_create_mysql.sql
+# Delete & git clone classic-db folder done
 fi
 
 # Delete and start over done
 
 # Install databases >
 
-# mangos.sql
+# mangos.sql >
 
  echo
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_mangos`
@@ -391,11 +402,13 @@ mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTE
 mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $folder_sql/base/mangos.sql
 fi
 
+# mangos.sql done
+
 # initialize original_data & cmangos_fixes.
 for sql_file in $(ls $folder_sql/base/dbc/original_data/*.sql); do mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $sql_file ; done
 for sql_file in $(ls $folder_sql/base/dbc/cmangos_fixes/*.sql); do mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $sql_file ; done
 
-# characters.sql
+# characters.sql >
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
 if [ "$RESULT" == "$db_characters" ]; then
@@ -408,7 +421,9 @@ mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHAR
 mysql --defaults-extra-file="$sql_mycnf" --database=$db_characters < $folder_sql/base/characters.sql
 fi
 
-# realmd.sql
+# characters.sql done
+
+# realmd.sql >
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_realmd`
 if [ "$RESULT" == "$db_realmd" ]; then
@@ -421,6 +436,8 @@ mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTE
 mysql --defaults-extra-file="$sql_mycnf" --database=$db_realmd < $folder_sql/base/realmd.sql
 fi
  echo
+
+# realmd.sql done
 
 # Install databases done
 
