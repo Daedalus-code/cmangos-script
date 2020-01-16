@@ -260,10 +260,10 @@ fi
 sudo chown -R $user:$group $folder_wow
  echo -ne '(50%)\r'
  sleep 1
-cmake .. $cmake --directory $folder_build
+cmake .. $cmake --directory="$folder_build"
  echo -ne '(75%)\r'
  sleep 1
-make --directory $folder_build
+make --directory="$folder_build"
  echo
  echo -ne '(90%)\r'
  sleep 1
@@ -275,10 +275,10 @@ printf "Select the install operation"
  read n
 case $n in
  1) echo "make install"
-sudo make install --directory $folder_build
+sudo make install --directory="$folder_build"
  ;;
  2) echo "checkinstall"
-sudo checkinstall --directory $folder_build
+sudo checkinstall --directory="$folder_build"
  ;;
  *) echo "invalid option";;
 esac
