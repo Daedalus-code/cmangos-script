@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201601
-# 0.8.5.2
+# 0.8.5.1
 
 ###############
 # server/info #
@@ -311,6 +311,7 @@ printf "Edit dist.conf files ?"
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+options=("m" "r" "p" "Quit")
  echo
  echo " m) mangos.conf.dist"
  echo " r) realmd.conf.dist"
