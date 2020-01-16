@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201701
-# 0.9.2.3
+# 0.9.2.1
 
 ###############
 # server/info #
@@ -798,12 +798,10 @@ sudo chmod +x /usr/local/bin/mangos
  sleep 1
  echo "Restart mangos please .. will exit now."
  echo -ne '(100%)\r'
- sleep 3
-exit
+ sleep 3 && exit
 fi
 fi
 fi
-exit
 
 # Update Helper done
 
