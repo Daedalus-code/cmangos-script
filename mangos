@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201601
-# 0.8.5.1
+# 0.8.5.4
 
 ###############
 # server/info #
@@ -312,6 +312,8 @@ printf "Edit dist.conf files ?"
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 options=("m" "r" "p" "Quit")
+select opt in "${options[@]}"
+do
  echo
  echo " m) mangos.conf.dist"
  echo " r) realmd.conf.dist"
@@ -336,6 +338,7 @@ nano $folder_core/run/etc/playerbot.conf.dist
  ;;
  *) echo "exit";;
 esac
+done
 fi
 
 # Edit config files done
