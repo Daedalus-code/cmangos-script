@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201601
-# 0.8.0.2
+# 0.8.0.4
 
 ###############
 # server/info #
@@ -385,6 +385,7 @@ printf "(\e[1;32mcharacters\033[0m) & (\e[1;32mrealmd\033[0m) backup commencing 
 
 FILE="$folder_wow/backup/db_characters-$NOW.sql"
 if [ -f "$FILE" ]; then
+ echo
 else
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/backup/$db_characters-$NOW.sql
 fi
@@ -393,6 +394,7 @@ fi
 
 FILE="$folder_wow/backup/db_realmd-$NOW.sql"
 if [ -f "$FILE" ]; then
+ echo
 else
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/backup/$db_realmd-$NOW.sql
 fi
