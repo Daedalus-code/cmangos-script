@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# script >
+# Script >
 
 ############################################################################
 #                      C M a N G O S  -  H E L P E R                       #
@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201601
-# 0.8.0.5
+# 0.8.3.0
 
 ###############
 # server/info #
@@ -20,7 +20,7 @@
 
 source /scripts/server.txt # please edit if wrong.
 
-# easter egg >
+# Easter egg >
 
 printf "\e[31m
                                     ▄▄▄▄▄
@@ -53,7 +53,7 @@ printf "
 
 # done
 
-# menu >
+# Menu >
 
 while :
 do
@@ -77,19 +77,20 @@ cat<<EOF
 
 EOF
 
-# service status >
+# Service status >
 
-# set column width
+# Set column width
+
 COLUMNS=3
 services=("mangosd" "realmd")
 
-# sort services
+# Sort services
 
 IFS=$'\n' services=($(sort <<<"${services[*]}"))
 unset IFS
 service_status=()
 
-# get status of all services
+# Get status of all services
 
 for service in "${services[@]}"; do
 service_status+=($(systemctl is-active "$service"))
@@ -97,7 +98,7 @@ done >/dev/null 2>&1
 out="     "
 for i in ${!services[@]}; do
 
-# color green if service is active, else red
+# Color green if service is active, else red
 
 if [[ "${service_status[$i]}" == "active" ]]; then
 out+="${services[$i]}:,${color_green}${service_status[$i]}${color_no},"
@@ -105,7 +106,7 @@ else
 out+="${services[$i]}:,${color_red}${service_status[$i]}${color_no},"
 fi
 
-# insert \n every $COLUMNS column
+# Insert \n every $COLUMNS column
 
 if [ $((($i+1) % $COLUMNS)) -eq 0 ]; then
 out+="\n"
@@ -115,7 +116,7 @@ out+="\n"
 
 printf "$out" | column -ts $',' | sed -e 's/^/  /'
 
-# service status done
+# Service status done
 
 cat<<EOF
 
@@ -133,11 +134,11 @@ EOF
  read -n1 -s
  case "$REPLY" in
 
-# menu done
+# Menu done
 
 "a")
 
-# login (command) >
+# Login (command) >
 
  echo
 printf "\e[31m   ._________________.
@@ -171,13 +172,13 @@ printf "
 nc $host_nc $port_nc
  echo
 
-# login (command) done
+# Login (command) done
 
  ;;
 
 "c")
 
-# check for updates >
+# Check for updates >
 
 printf "Checking mangos-classic (\e[1;32mworld\033[0m) for any updates .."
  echo
@@ -203,13 +204,13 @@ git pull
  read -p "Press Enter to continue" </dev/tty
  echo
 
-# check for updates done
+# Check for updates done
 
  ;;
 
 "m")
 
-# update CMaNGOS >
+# Update CMaNGOS >
 
  echo
 printf "Update (\e[1;32mMaNGOS\033[0m) ?"
@@ -258,6 +259,9 @@ libboost-all-dev
 )
 sudo apt-get install ${packagelist[@]} -y 1> /dev/null
 fi
+
+# Fresh install ? >
+
  read -p "Fresh install? (delete build folder) (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
@@ -269,7 +273,28 @@ sudo rm -r $folder_core/build/ &> /dev/null
 cd $folder_wow
 git clone https://github.com/cmangos/mangos-classic.git
 sudo mkdir $folder_core/build &> /dev/null
+
+# Edit config files ? >
+
+read -n 1 -p "Would you like to edit .conf.dist files? (m/r/p/exit) " ans;
+
+case $ans in
+    m|M)
+nano $folder_core/run/etc/mangos.conf.dist;;
+    r|R)
+nano $folder_core/run/etc/realmd.conf.dist;;
+    p|P)
+nano $folder_core/run/etc/playerbot.conf.dist;;
+    *)
+        exit;;
+esac
+
+# Edit config files done
+
 fi
+
+# Fresh install done
+
 sudo chown -R $user:$group $folder_wow
 cd $folder_build
 cmake .. $cmake
@@ -297,13 +322,13 @@ esac
  read -p "Press Enter to continue" </dev/tty
 fi
 
-# update CMaNGOS done
+# Update CMaNGOS done
 
  ;;
 
 "d")
 
-# update Database >
+# Update Database >
 
  echo
 printf "Update (\e[1;32mDatabase\033[0m) ?"
@@ -405,21 +430,21 @@ fi
 
 # DROP databases >
 
-# database characters
+# Database 'characters'
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
 if [ "$RESULT" == "$db_characters" ]; then
 mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_characters;
 fi
 
-# database mangos
+# Database 'mangos'
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_mangos`
 if [ "$RESULT" == "$db_mangos" ]; then
 mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_mangos;
 fi
 
-# database realmd
+# Database 'realmd'
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_realmd`
 if [ "$RESULT" == "$db_realmd" ]; then
@@ -452,7 +477,7 @@ fi
 
 # Create databases >
 
-# database 'characters'
+# Database 'characters'
 
  echo
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
@@ -467,7 +492,7 @@ mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHAR
 mysql --defaults-extra-file="$sql_mycnf" --database=$db_characters < $folder_sql/base/characters.sql
 fi
 
-# database 'mangos'
+# Database 'mangos'
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_mangos`
 if [ "$RESULT" == "$db_mangos" ];
@@ -481,7 +506,7 @@ mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTE
 mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $folder_sql/base/mangos.sql
 fi
 
-# database 'realmd'
+# Database 'realmd'
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_realmd`
 if [ "$RESULT" == "$db_realmd" ];
@@ -531,52 +556,52 @@ fi
  read -p "Press Enter to continue" </dev/tty
 fi
 
-# update Database done
+# Update Database done
 
  ;;
 
 "u")
 
-# accounts >
+# Accounts >
 
  echo "User Accounts"
  echo
 mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, last_ip, DATE_FORMAT(last_login, '%Y-%m-%d') last_login, id FROM $db_realmd.account;"
  read -p "Press Enter to continue" </dev/tty
 
-# accounts done
+# Accounts done
 
  ;;
 
 "t")
 
-# characters >
+# Characters >
 
  echo "Characters"
  echo
 mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, level, online, account FROM $db_characters.characters;"
  read -p "Press Enter to continue" </dev/tty
 
-# characters done
+# Characters done
 
   ;;
 
 "g")
 
-# guilds >
+# Guilds >
 
  echo "Guilds"
  echo
 mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, motd FROM $db_characters.guild;"
  read -p "Press Enter to continue" </dev/tty
 
-# guilds done
+# Guilds done
 
    ;;
 
 "s")
 
-# shutdown server >
+# Shutdown server > (ﾉ °益°)ﾉ 彡 ┻━┻ holy hell .. need muh grindz x()<zz ! OO
 
  echo
  echo "Shutdown Server?"
@@ -598,13 +623,13 @@ sudo service mangosd stop &> /dev/null
  echo
 fi
 
-# shutdown server done
+# Shutdown server done
 
  ;;
 
 "r")
 
-# restart server >
+# Restart server >
 
  echo
  echo "Restart Server?"
@@ -640,13 +665,13 @@ sudo tail -f $folder_core/run/logs/Server.log
 esac
 fi
 
-# restart server done
+# Restart server done
 
  ;;
 
 "w")
 
-# update Helper >
+# Update Helper >
 
  echo
  echo "Update Helper?"
@@ -694,41 +719,41 @@ sudo chmod +x /usr/local/bin/mangos
 exit
 fi
 
-# update Helper done
+# Update Helper done
 
  ;;
 
 "l")
 
-# check logs >
+# Check logs >
 
 mkdir $folder_core/run/logs &> /dev/null
  echo "Realmd log -->"
  echo
-sudo tail $folder_core/run/logs/Realmd.log
+tail $folder_core/run/logs/Realmd.log
  echo
  read -n 1 -p "Check server log? (world) (tail/follow/exit) " ans;
  echo
 case $ans in
     t|T)
-sudo tail $folder_core/run/logs/Server.log
+tail $folder_core/run/logs/Server.log
  echo
  read -p "Press Enter to continue" </dev/tty
  ;;
     f|F)
-sudo tail -f $folder_core/run/logs/Server.log
+tail -f $folder_core/run/logs/Server.log
  ;;
     *)
  ;;
 esac
 
-# check logs done
+# Check logs done
 
   ;;
 
 "p")
 
-# create .patch file >
+# Create .patch file >
 
  echo
  echo "Create patch?"
@@ -756,15 +781,15 @@ git diff > $patch
  echo
 fi
 
-# create .patch file done
+# Create .patch file done
 
  ;;
 
 "o")
 
-# online check >
+# Online check >
 
-# internet
+# Internet
 
  echo
 printf "\e[1;32mOnline check\033[0m -> \e[1;32minternet\033[0m/\e[1;32mintranet\033[0m"
@@ -779,7 +804,7 @@ printf "\033[1;31m✗\033[0m $server_name - [ $internet ]"
  echo
 fi
 
-# intranet
+# Intranet
 
 if nc -z $intranet $realm_port 2>/dev/null; then
 printf "\e[1;32m✓\033[0m $server_name_lan - [ $intranet ]"
@@ -791,7 +816,7 @@ fi
  echo
  read -p "Press Enter to continue" </dev/tty
 
-# online check done
+# Online check done
 
   ;;
 
@@ -802,4 +827,4 @@ esac
  sleep 1
 done
 
-# script done
+# Script done
