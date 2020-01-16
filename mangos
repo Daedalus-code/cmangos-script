@@ -376,7 +376,7 @@ printf "(\e[1;32mcharacters\033[0m) & (\e[1;32mrealmd\033[0m) backup commencing 
 # characters.sql
 
 FILE="$folder_wow/backup/db_characters-$NOW.sql"
-if [ -f "$FILE" ];
+if [ ! -f "$FILE" ];
 then
  echo
 else
@@ -386,7 +386,7 @@ fi
 # realmd.sql
 
 FILE="$folder_wow/backup/db_realmd-$NOW.sql"
-if [ -f "$FILE" ];
+if [ ! -f "$FILE" ];
 then
  echo
 else
