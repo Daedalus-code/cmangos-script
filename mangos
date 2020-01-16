@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201601
-# 0.8.0.4
+# 0.7.8.7
 
 ###############
 # server/info #
@@ -210,12 +210,15 @@ printf "Update (\e[1;32mMaNGOS\033[0m) ?"
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+ echo "Shutting down Services.."
  echo -ne '(0%)\r'
  sleep 1
 sudo service realmd stop &> /dev/null
- echo -ne '(10%)\r'
+ echo -ne '(50%)\r'
  sleep 1
 sudo service mangosd stop &> /dev/null
+ echo -ne '(100%)\r'
+sleep 1
 printf "Updating mangos-classic (\e[1;32mworld\033[0m) .."
  echo
  read -p "Install Software requirements? (y/n) " -n 1 -r
@@ -259,20 +262,12 @@ cd $folder_wow
 git clone git://github.com/cmangos/mangos-classic.git
 sudo mkdir $folder_core/build &> /dev/null
 fi
- echo -ne '(25%)\r'
- sleep 1
 sudo chown -R $user:$group $folder_wow
- echo -ne '(50%)\r'
- sleep 1
 cd $folder_build
 cmake .. $cmake
- echo -ne '(75%)\r'
- sleep 1
 cd $folder_build
 make
  echo
- echo -ne '(90%)\r'
- sleep 1
 printf "Select the install operation"
  echo
  echo " 1) make install"
@@ -290,8 +285,6 @@ sudo checkinstall # --directory="$folder_build"
  ;;
  *) echo "invalid option";;
 esac
- echo -ne '(100%)\r'
- sleep 1
  echo
  read -p "Press Enter to continue" </dev/tty
 fi
@@ -311,14 +304,15 @@ printf "Update (\e[1;32mDatabase\033[0m) ?"
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+ echo "Shutting down Services.."
  echo -ne '(0%)\r'
  sleep 1
 sudo service realmd stop &> /dev/null
- echo -ne '(10%)\r'
+ echo -ne '(50%)\r'
  sleep 1
 sudo service mangosd stop &> /dev/null
 sudo chown -R $user:$group $folder_wow
- echo -ne '(25%)\r'
+ echo -ne '(100%)\r'
  sleep 1
 
 # BACKUP (regardless) >
@@ -354,8 +348,6 @@ fi
 
 # BACKUP done
 
- echo -ne '(35%)\r'
- sleep 1
  echo
 printf "Updating classic-db (\e[1;32mdatabase\033[0m) .."
  echo
@@ -364,8 +356,6 @@ mysql-server
 mysql-client
 )
 sudo apt-get install ${packagelist[@]} -y 1> /dev/null
- echo -ne '(50%)\r'
- sleep 1
 
 # Delete and start over ? >
 
@@ -495,16 +485,9 @@ fi
 
 # MaNGOS InstallFullDB script >
 
- echo -ne '(65%)\r'
- sleep 1
 sudo chown -R $user:$group $folder_wow
- echo -ne '(85%)\r'
- sleep 1
 cd $folder_db
 ./InstallFullDB.sh
- echo -ne '(100%)\r'
- sleep 1
- echo
 
 # MaNGOS InstallFullDB done
 
