@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201601
-# 0.7.9.7
+# 0.8.0.5
 
 ###############
 # server/info #
@@ -267,7 +267,7 @@ sudo mkdir wow &> /dev/null
 sudo chown -R $user:$group $folder_wow
 sudo rm -r $folder_core/build/ &> /dev/null
 cd $folder_wow
-git clone git://github.com/cmangos/mangos-classic.git
+git clone https://github.com/cmangos/mangos-classic.git
 sudo mkdir $folder_core/build &> /dev/null
 fi
 sudo chown -R $user:$group $folder_wow
