@@ -273,24 +273,6 @@ sudo rm -r $folder_core/build/ &> /dev/null
 cd $folder_wow
 git clone https://github.com/cmangos/mangos-classic.git
 sudo mkdir $folder_core/build &> /dev/null
-
-# Edit config files ? >
-
-read -n 1 -p "Would you like to edit .conf.dist files? (m/r/p/exit) " ans;
-
-case $ans in
-    m|M)
-nano $folder_core/run/etc/mangos.conf.dist;;
-    r|R)
-nano $folder_core/run/etc/realmd.conf.dist;;
-    p|P)
-nano $folder_core/run/etc/playerbot.conf.dist;;
-    *)
-        exit;;
-esac
-
-# Edit config files done
-
 fi
 
 # Fresh install done
@@ -319,6 +301,24 @@ sudo checkinstall # --directory="$folder_build"
  *) echo "invalid option";;
 esac
  echo
+
+ # Edit config files ? >
+
+ read -n 1 -p "Would you like to edit .conf.dist files? (m/r/p/exit) " ans;
+
+ case $ans in
+     m|M)
+ nano $folder_core/run/etc/mangos.conf.dist;;
+     r|R)
+ nano $folder_core/run/etc/realmd.conf.dist;;
+     p|P)
+ nano $folder_core/run/etc/playerbot.conf.dist;;
+     *)
+         exit;;
+ esac
+
+ # Edit config files done
+
  read -p "Press Enter to continue" </dev/tty
 fi
 
