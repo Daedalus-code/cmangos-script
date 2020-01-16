@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201601
-# 0.7.9.4
+# 0.7.9.5
 
 ###############
 # server/info #
@@ -671,6 +671,7 @@ git pull
  echo "Installing new mangos .."
  echo -ne '(60%)\r'
  sleep 1
+ echo -ne '(70%)\r'
 sudo cp mangos /usr/local/bin
  echo -ne '(80%)\r'
  sleep 1
