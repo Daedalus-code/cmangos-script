@@ -311,13 +311,12 @@ printf "Edit dist.conf files ?"
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
- read -n 1 -p "Would you like to edit .conf.dist files? (m/r/p/Quit) " ans;
  echo
  echo " m) mangos.conf.dist"
  echo " r) realmd.conf.dist"
  echo " p) playerbot.conf.dist"
  echo
- read n
+ read -n 1 -p "edit .conf.dist files (m/r/p/Quit) " ans;
 case $opt in
 "m")
  echo "you chose m) mangos.conf.dist"
