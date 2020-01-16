@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201601
-# 0.7.8.7
+# 0.7.9.5
 
 ###############
 # server/info #
@@ -314,6 +314,7 @@ sudo service mangosd stop &> /dev/null
 sudo chown -R $user:$group $folder_wow
  echo -ne '(100%)\r'
  sleep 1
+ echo
 
 # BACKUP (regardless) >
 
@@ -324,7 +325,8 @@ mkdir backup &> /dev/null
 
  echo
 FILE="$folder_wow/backup/db_characters-$NOW.sql"
-if [ -f "$FILE" ]; then
+if [ -f "$FILE" ];
+then
  printf "[\e[1;32mok\033[0m] 'Characters' backup."
  echo
 else
@@ -336,7 +338,8 @@ fi
 # realmd.sql
 
 FILE="$folder_wow/backup/db_realmd-$NOW.sql"
-if [ -f "$FILE" ]; then
+if [ -f "$FILE" ];
+then
  printf "[\e[1;32mok\033[0m] 'Realmd' backup."
  echo
 else
@@ -374,7 +377,8 @@ printf "(\e[1;32mcharacters\033[0m) & (\e[1;32mrealmd\033[0m) backup commencing 
 # characters.sql
 
 FILE="$folder_wow/backup/db_characters-$NOW.sql"
-if [ -f "$FILE" ]; then
+if [ -f "$FILE" ];
+then
  echo
 else
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/backup/$db_characters-$NOW.sql
@@ -383,7 +387,8 @@ fi
 # realmd.sql
 
 FILE="$folder_wow/backup/db_realmd-$NOW.sql"
-if [ -f "$FILE" ]; then
+if [ -f "$FILE" ];
+then
  echo
 else
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/backup/$db_realmd-$NOW.sql
@@ -444,7 +449,8 @@ fi
 
  echo
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
-if [ "$RESULT" == "$db_characters" ]; then
+if [ "$RESULT" == "$db_characters" ];
+then
 printf "[\e[1;32mok\033[0m] 'Characters' database installed."
  echo
 else
@@ -457,7 +463,8 @@ fi
 # database 'mangos'
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_mangos`
-if [ "$RESULT" == "$db_mangos" ]; then
+if [ "$RESULT" == "$db_mangos" ];
+then
 printf "[\e[1;32mok\033[0m] 'Mangos' database installed."
  echo
 else
@@ -470,7 +477,8 @@ fi
 # database 'realmd'
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_realmd`
-if [ "$RESULT" == "$db_realmd" ]; then
+if [ "$RESULT" == "$db_realmd" ];
+then
 printf "[\e[1;32mok\033[0m] 'Realmd' database installed."
  echo
 else
