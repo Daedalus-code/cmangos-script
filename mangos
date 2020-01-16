@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201601
-# 0.8.5.8
+# 0.8.6.4
 
 ###############
 # server/info #
@@ -304,6 +304,11 @@ esac
 
 # Edit config files ? >
 
+read -p "edit config files? (nano) (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+
 title="Edit .config files"
  echo
 prompt="Choose (nano) config file:"
@@ -344,6 +349,7 @@ nano $folder_core/run/etc/playerbot.conf;;
  *) echo "Invalid option. Try another one.";continue;;
 esac
 done
+fi
 
 # Edit config files done
 
