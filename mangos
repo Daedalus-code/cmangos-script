@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201601
-# 0.7.8.3
+# 0.7.8.7
 
 ###############
 # server/info #
@@ -251,9 +251,13 @@ fi
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-sudo rm -r $folder_core/build/ &> /dev/null
-sudo mkdir $folder_core/build &> /dev/null
+cd
+sudo mkdir wow &> /dev/null
 sudo chown -R $user:$group $folder_wow
+sudo rm -r $folder_core/build/ &> /dev/null
+cd $folder_wow
+git clone git://github.com/cmangos/mangos-classic.git
+sudo mkdir $folder_core/build &> /dev/null
 fi
  echo -ne '(25%)\r'
  sleep 1
