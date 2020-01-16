@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201601
-# 0.7.7.6
+# 0.7.8.0
 
 ###############
 # server/info #
@@ -278,11 +278,11 @@ printf "Select the install operation"
 case $n in
  1) echo "make install"
 cd $folder_build
-sudo make install
+sudo make install # --directory="$folder_build"
  ;;
  2) echo "checkinstall"
 cd $folder_build
-sudo checkinstall #--directory="$folder_build"
+sudo checkinstall # --directory="$folder_build"
  ;;
  *) echo "invalid option";;
 esac
