@@ -1,6 +1,7 @@
 # C(ontinued)-MaNGOS
 admin helper in bash  
-This script was build on a Ubuntu 19.10 - Linux 5.3.0-1014-raspi2 - (Raspberry Pi2/4)
+This script was build on a Ubuntu 19.10 - Linux 5.3.0-1014-raspi2 - (Raspberry Pi2/4)  
+https://ubuntu.com/download/raspberry-pi
 
 ![alt text](https://i.imgur.com/KUucM03.png)
 
