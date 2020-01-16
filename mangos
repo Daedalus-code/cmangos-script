@@ -685,6 +685,7 @@ fi
 
 # check logs >
 
+mkdir $folder_core/run/logs &> /dev/null
  echo "Realmd log -->"
  echo
 sudo tail $folder_core/run/logs/Realmd.log
