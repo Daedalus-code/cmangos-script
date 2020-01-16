@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201601
-# 0.8.6.4
+# 0.8.8.9
 
 ###############
 # server/info #
@@ -178,39 +178,64 @@ nc $host_nc $port_nc
 
 "c")
 
-# Check for updates >
+# Checking for updates >
 
-printf "Checking mangos-classic (\e[1;32mworld\033[0m) for any updates .."
- echo
-sudo chown -R $user:$group $folder_core
-cd $folder_core
- sleep 1
-git pull
- echo
-printf "Checking classic-db (\e[1;32mdatabase\033[0m) for any updates .."
- echo
-sudo chown -R $user:$group $folder_db
+# Classic Database (classic-db)
+
+echo
 cd $folder_db
- sleep 1
-git pull
+if git checkout master &> /dev/null &&
+git fetch origin master &> /dev/null &&
+[ `git rev-list HEAD...origin/master --count` != 0 ] &&
+git merge origin/master
+then
+printf "[\033[1;31mold\033[0m] Database Not Updated "
  echo
-printf "Checking mangos helper (\e[1;32mscript\033[0m) for any updates .."
+else
+printf "[\e[1;32mok\033[0m] Database Updated "
  echo
-sudo chown -R $user:$group $folder_helper
+fi
+
+# MaNGOS Core (mangos-classic)
+
+cd $folder_core
+if git checkout master &> /dev/null &&
+git fetch origin master &> /dev/null &&
+[ `git rev-list HEAD...origin/master --count` != 0 ] &&
+git merge origin/master
+then
+printf "[\033[1;31mold\033[0m] Core Not Updated "
+ echo
+else
+printf "[\e[1;32mok\033[0m] Core Updated "
+ echo
+fi
+
+# MaNGOS Helper
+
 cd $folder_helper
- sleep 1
-git pull
+if git checkout master &> /dev/null &&
+    git fetch origin master &> /dev/null &&
+    [ `git rev-list HEAD...origin/master --count` != 0 ] &&
+    git merge origin/master
+then
+printf "[\033[1;31mold\033[0m] Helper Not Updated "
+ echo
+else
+printf "[\e[1;32mok\033[0m] Helper Updated "
+ echo
+fi
  echo
  read -p "Press Enter to continue" </dev/tty
  echo
 
-# Check for updates done
+# Checking for updates done
 
  ;;
 
 "m")
 
-# Update CMaNGOS >
+# Update CMaNGOS ? >
 
  echo
 printf "Update (\e[1;32mMaNGOS\033[0m) ?"
@@ -362,7 +387,7 @@ fi
 
 "d")
 
-# Update Database >
+# Update Database ? >
 
  echo
 printf "Update (\e[1;32mDatabase\033[0m) ?"
@@ -388,7 +413,7 @@ sudo chown -R $user:$group $folder_wow
 cd $folder_wow
 mkdir backup &> /dev/null
 
-# characters.sql
+# Backup <- characters.sql
 
  echo
 FILE="$folder_wow/backup/db_characters-$NOW.sql"
@@ -402,7 +427,7 @@ mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_character
  echo
 fi
 
-# realmd.sql
+# Backup <- realmd.sql
 
 FILE="$folder_wow/backup/db_realmd-$NOW.sql"
 if [ ! -f "$FILE" ];
@@ -440,7 +465,7 @@ printf "(\e[1;32mcharacters\033[0m) & (\e[1;32mrealmd\033[0m) backup commencing 
 
 # BACKUP >
 
-# characters.sql
+# Backup <- characters.sql
 
 FILE="$folder_wow/backup/db_characters-$NOW.sql"
 if [ ! -f "$FILE" ];
@@ -450,7 +475,7 @@ else
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/backup/$db_characters-$NOW.sql
 fi
 
-# realmd.sql
+# Backup <- realmd.sql
 
 FILE="$folder_wow/backup/db_realmd-$NOW.sql"
 if [ ! -f "$FILE" ];
@@ -487,7 +512,7 @@ fi
 
 # DROP databases done
 
-# Delete & git clone classic-db folder >
+# Delete & git clone classic-db folder ? >
 
  read -p "Delete & git clone classic-db folder? (y/n) " -n 1 -r
  echo
@@ -635,7 +660,7 @@ mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, motd FROM $db_c
 
 "s")
 
-# Shutdown server > (ﾉ °益°)ﾉ 彡 ┻━┻ holy hell .. need muh grindz x()<zz ! OO
+# Shutdown server ? >> (ﾉ °益°)ﾉ 彡 ┻━┻ holy *@?!1kek .. need muh grindz x()<zz ! OO
 
  echo
  echo "Shutdown Server?"
@@ -657,13 +682,13 @@ sudo service mangosd stop &> /dev/null
  echo
 fi
 
-# Shutdown server done
+# Shutdown server done << it's over!!
 
  ;;
 
 "r")
 
-# Restart server >
+# Restart server ? >
 
  echo
  echo "Restart Server?"
@@ -705,7 +730,7 @@ fi
 
 "w")
 
-# Update Helper >
+# Update Helper ? >
 
  echo
  echo "Update Helper?"
@@ -787,7 +812,7 @@ esac
 
 "p")
 
-# Create .patch file >
+# Create .patch file ? >
 
  echo
  echo "Create patch?"
