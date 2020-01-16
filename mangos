@@ -325,7 +325,7 @@ mkdir backup &> /dev/null
 
  echo
 FILE="$folder_wow/backup/db_characters-$NOW.sql"
-if [ -e "$FILE" ];
+if [ ! -f "$FILE" ];
 then
  printf "[\e[1;32mok\033[0m] 'Characters' backup."
  echo
@@ -338,7 +338,7 @@ fi
 # realmd.sql
 
 FILE="$folder_wow/backup/db_realmd-$NOW.sql"
-if [ -e "$FILE" ];
+if [ ! -f "$FILE" ];
 then
  printf "[\e[1;32mok\033[0m] 'Realmd' backup."
  echo
