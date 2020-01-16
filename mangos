@@ -431,7 +431,7 @@ if [ "$RESULT" == "$db_characters" ]; then
 printf "[\e[1;32mok\033[0m] 'Characters' database installed."
  echo
 else
-printf "[\033[1;31mempty\033[0m] 'Characters'"
+printf "[\033[1;31mempty\033[0m] 'Characters' importing.."
  echo
 mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHARACTER SET utf8 COLLATE utf8_general_ci";
 mysql --defaults-extra-file="$sql_mycnf" --database=$db_characters < $folder_sql/base/characters.sql
@@ -444,7 +444,7 @@ if [ "$RESULT" == "$db_mangos" ]; then
 printf "[\e[1;32mok\033[0m] 'Mangos' database installed."
  echo
 else
-printf "[\033[1;31mempty\033[0m] 'Mangos'"
+printf "[\033[1;31mempty\033[0m] 'Mangos' importing"
  echo
 mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTER SET utf8 COLLATE utf8_general_ci";
 mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $folder_sql/base/mangos.sql
@@ -457,7 +457,7 @@ if [ "$RESULT" == "$db_realmd" ]; then
 printf "[\e[1;32mok\033[0m] 'Realmd' database installed."
  echo
 else
-printf "[\033[1;31mempty\033[0m] 'Realmd'"
+printf "[\033[1;31mempty\033[0m] 'Realmd' importing"
  echo
 mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTER SET utf8 COLLATE utf8_general_ci";
 mysql --defaults-extra-file="$sql_mycnf" --database=$db_realmd < $folder_sql/base/realmd.sql
