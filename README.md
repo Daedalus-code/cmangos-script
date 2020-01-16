@@ -3,10 +3,12 @@ admin helper in bash
 
 ![alt text](https://i.imgur.com/KUucM03.png)
 
-edit server.cnf & server.txt
+edit server.cnf & server.txt  
+edit inside mangos script at line 21: "source /scripts/server.txt # please edit if wrong."
 
 This script was build on a Ubuntu 19.10 - Linux 5.3.0-1014-raspi2 - Raspberry Pi2/4
 
+# Services
 Server is using systemd Services to run mangosd and realmd:  
 
 /etc/systemd/system/realmd.service  
