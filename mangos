@@ -319,15 +319,15 @@ options=("m" "r" "p" "Quit")
  echo
  read -n 1 -p "edit .conf.dist files (m/r/p/Quit) " ans;
 case $opt in
- m)
+ "m")
  echo "you chose m) mangos.conf.dist"
 nano $folder_core/run/etc/mangos.conf.dist
  ;;
- r)
+ "r")
  echo "you chose r) realmd.conf.dist"
 nano $folder_core/run/etc/realmd.conf.dist
  ;;
- p)
+ "p")
  echo "you chose p) playerbot.conf.dist"
 nano $folder_core/run/etc/playerbot.conf.dist
  ;;
