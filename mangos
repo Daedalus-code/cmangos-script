@@ -82,26 +82,34 @@ EOF
 # set column width
 COLUMNS=3
 services=("mangosd" "realmd")
+
 # sort services
+
 IFS=$'\n' services=($(sort <<<"${services[*]}"))
 unset IFS
 service_status=()
+
 # get status of all services
+
 for service in "${services[@]}"; do
-    service_status+=($(systemctl is-active "$service"))
+service_status+=($(systemctl is-active "$service"))
 done >/dev/null 2>&1
 out="     "
 for i in ${!services[@]}; do
-    # color green if service is active, else red
-    if [[ "${service_status[$i]}" == "active" ]]; then
-        out+="${services[$i]}:,${color_green}${service_status[$i]}${color_no},"
-    else
-        out+="${services[$i]}:,${color_red}${service_status[$i]}${color_no},"
-    fi
-    # insert \n every $COLUMNS column
-    if [ $((($i+1) % $COLUMNS)) -eq 0 ]; then
-        out+="\n"
-    fi
+
+# color green if service is active, else red
+
+if [[ "${service_status[$i]}" == "active" ]]; then
+out+="${services[$i]}:,${color_green}${service_status[$i]}${color_no},"
+else
+out+="${services[$i]}:,${color_red}${service_status[$i]}${color_no},"
+fi
+
+# insert \n every $COLUMNS column
+
+if [ $((($i+1) % $COLUMNS)) -eq 0 ]; then
+out+="\n"
+fi
 done
 out+="\n"
 
@@ -327,7 +335,7 @@ mkdir backup &> /dev/null
 FILE="$folder_wow/backup/db_characters-$NOW.sql"
 if [ ! -f "$FILE" ];
 then
- printf "[\e[1;32mok\033[0m] 'Characters' backup."
+printf "[\e[1;32mok\033[0m] 'Characters' backup."
  echo
 else
 printf "[\033[1;31mempty\033[0m] 'Characters' doing backup.."
@@ -340,7 +348,7 @@ fi
 FILE="$folder_wow/backup/db_realmd-$NOW.sql"
 if [ ! -f "$FILE" ];
 then
- printf "[\e[1;32mok\033[0m] 'Realmd' backup."
+printf "[\e[1;32mok\033[0m] 'Realmd' backup."
  echo
 else
 printf "[\033[1;31mempty\033[0m] 'Realmd' doing backup.."
