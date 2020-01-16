@@ -336,7 +336,6 @@ nano $folder_core/run/etc/playerbot.conf.dist
  ;;
  *) echo "invalid option";;
 esac
-done
 fi
 
 # Edit config files done
