@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201601
-# 0.8.5.4
+# 0.8.5.6
 
 ###############
 # server/info #
@@ -304,42 +304,44 @@ esac
 
 # Edit config files ? >
 
- echo
-printf "Edit dist.conf files ?"
- echo
- read -p "Are you sure? (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-options=("m" "r" "p" "Quit")
-select opt in "${options[@]}"
-do
- echo
- echo " m) mangos.conf.dist"
- echo " r) realmd.conf.dist"
- echo " p) playerbot.conf.dist"
- echo
- read -n 1 -p "edit .conf.dist files (m/r/p/Quit) " ans;
-case $opt in
- "m")
- echo "you chose m) mangos.conf.dist"
-nano $folder_core/run/etc/mangos.conf.dist
- ;;
- "r")
- echo "you chose r) realmd.conf.dist"
-nano $folder_core/run/etc/realmd.conf.dist
- ;;
- "p")
- echo "you chose p) playerbot.conf.dist"
-nano $folder_core/run/etc/playerbot.conf.dist
- ;;
-"Quit")
- break
- ;;
- *) echo "exit";;
+title="Edit .config files"
+prompt="Pick .config file:"
+options=(
+
+"(m)angos.conf.dist"
+"(r)realmd.conf.dist"
+"(p)layerbot.conf.dist"
+
+"(M)angos.conf"
+"(R)ealmd.conf"
+"(P)layerbot.conf"
+
+)
+
+echo "$title"
+PS3="$prompt "
+select opt in "${options[@]}" "Quit"; do
+
+case "$REPLY" in
+
+ 1 ) echo "You picked $opt mangosd.conf.dist $REPLY"
+nano $folder_core/run/etc/mangosd.conf.dist;;
+ 2 ) echo "You picked $opt realmd.conf.dist $REPLY"
+nano $folder_core/run/etc/realmd.conf.dist;;
+ 3 ) echo "You picked $opt playerbot.conf.dist $REPLY"
+nano $folder_core/run/etc/playerbot.conf;;
+
+ 4 ) echo "You picked $opt mangosd.conf $REPLY"
+nano $folder_core/run/etc/mangosd.conf;;
+ 5 ) echo "You picked $opt realmd.conf $REPLY"
+nano $folder_core/run/etc/realmd.conf;;
+ 6 ) echo "You picked $opt playerbot.conf $REPLY"
+nano $folder_core/run/etc/playerbot.conf;;
+
+$(( ${#options[@]}+1 )) ) echo "Goodbye!"; break;;
+ *) echo "Invalid option. Try another one.";continue;;
 esac
 done
-fi
 
 # Edit config files done
 
