@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201701
-# 0.9.1.0
+# 0.9.2.2
 
 ###############
 # server/info #
@@ -255,7 +255,7 @@ sudo service realmd stop &> /dev/null
  sleep 1
 sudo service mangosd stop &> /dev/null
  echo -ne '(100%)\r'
-sleep 1
+ sleep 1
 printf "Updating mangos-classic (\e[1;32mworld\033[0m) .."
  echo
  read -p "Install Software requirements? (y/n) " -n 1 -r
@@ -332,8 +332,8 @@ esac
 
 # Edit config files ? >
 
-read -p "Edit config files? (nano) (y/n) " -n 1 -r
-echo
+ read -p "Edit config files? (nano) (y/n) " -n 1 -r
+ echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 
@@ -353,7 +353,7 @@ options=(
 
 )
 
-echo "$title"
+ echo "$title"
 PS3="$prompt "
 select opt in "${options[@]}" "Quit"; do
 
@@ -708,18 +708,30 @@ sudo service realmd restart &> /dev/null
 sudo service mangosd restart &> /dev/null
  echo -ne '(100%)\r'
  sleep 1
+printf "\e[1;32m   <------------------------------------------------------------------->\033[0m"
+ echo
+ echo "Realmd log -->"
+ echo
+tail $folder_core/run/logs/Realmd.log
+ echo
+printf "\e[1;32m   <------------------------------------------------------------------->\033[0m"
+ echo
  read -n 1 -p "Check server log? (world) (tail/follow/exit) " ans;
  echo
+ echo
 case $ans in
-    t|T)
-sudo tail $folder_core/run/logs/Server.log
+     t|T)
+tail $folder_core/run/logs/Server.log
+ echo
+printf "\e[1;32m   <------------------------------------------------------------------->\033[0m"
  echo
  read -p "Press Enter to continue" </dev/tty
  ;;
-    f|F)
-sudo tail -f $folder_core/run/logs/Server.log
+     f|F)
+ echo
+tail -f $folder_core/run/logs/Server.log
  ;;
-    *)
+ *)
  ;;
 esac
 fi
