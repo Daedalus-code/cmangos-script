@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201601
-# 0.8.3.0
+# 0.8.5.7
 
 ###############
 # server/info #
@@ -302,22 +302,49 @@ sudo checkinstall # --directory="$folder_build"
 esac
  echo
 
- # Edit config files ? >
+# Edit config files ? >
 
- read -n 1 -p "Would you like to edit .conf.dist files? (m/r/p/exit) " ans;
+ echo
+printf "Edit dist.conf files ?"
+ echo
+ read -p "Are you sure? (y/n) " -n 1 -r
+ echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
 
- case $ans in
-     m|M)
- nano $folder_core/run/etc/mangos.conf.dist;;
-     r|R)
- nano $folder_core/run/etc/realmd.conf.dist;;
-     p|P)
- nano $folder_core/run/etc/playerbot.conf.dist;;
-     *)
-         exit;;
- esac
+PS3='Please enter your choice: '
+options=("m" "r" "p" "Quit")
+select opt in "${options[@]}"
+do
+ read -n 1 -p "Would you like to edit .conf.dist files? (m/r/p/Quit) " ans;
+ echo
+ echo " m) mangos.conf.dist"
+ echo " r) realmd.conf.dist"
+ echo " p) playerbot.conf.dist"
+ echo
+ read n
+case $opt in
+"m")
+ echo "you chose m) mangos.conf.dist"
+nano $folder_core/run/etc/mangos.conf.dist;;
+ ;;
+"r")
+ echo "you chose r) realmd.conf.dist"
+nano $folder_core/run/etc/realmd.conf.dist;;
+ ;;
+"p")
+ echo "you chose p) playerbot.conf.dist"
+nano $folder_core/run/etc/playerbot.conf.dist;;
+ ;;
+"Quit")
+ break
+ ;;
+ *) echo "invalid option";;
+esac
+done
+fi
 
- # Edit config files done
+# Edit config files done
 
  read -p "Press Enter to continue" </dev/tty
 fi
