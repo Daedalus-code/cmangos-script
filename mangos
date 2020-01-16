@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201601
-# 0.7.7.6
+# 0.7.8.0
 
 ###############
 # server/info #
@@ -465,6 +465,10 @@ fi
  echo
 
 # Create databases done
+
+# initialize original_data & cmangos_fixes.
+for sql_file in $(ls $folder_sql/base/dbc/original_data/*.sql); do mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $sql_file ; done
+for sql_file in $(ls $folder_sql/base/dbc/cmangos_fixes/*.sql); do mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $sql_file ; done
 
 # MaNGOS InstallFullDB script >
 
