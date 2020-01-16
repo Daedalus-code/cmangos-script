@@ -565,7 +565,7 @@ cd $folder_db
 
 # MaNGOS InstallFullDB done
 
-# IMPORT BACKUP >
+# IMPORT BACKUP ? >
 
  echo
  echo "$folder_wow/backup/$db_characters-$NOW.sql <--"
