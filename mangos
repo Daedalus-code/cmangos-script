@@ -180,6 +180,21 @@ nc $host_nc $port_nc
 
 # Checking for updates >
 
+# MaNGOS Core (mangos-classic)
+
+cd $folder_core
+if git checkout master &> /dev/null &&
+git fetch origin master &> /dev/null &&
+[ `git rev-list HEAD...origin/master --count` != 0 ] &&
+git merge origin/master
+then
+printf "[\033[1;31mold\033[0m] Core Not Updated "
+ echo
+else
+printf "[\e[1;32mok\033[0m] Core Updated "
+ echo
+fi
+
 # Classic Database (classic-db)
 
 echo
@@ -193,21 +208,6 @@ printf "[\033[1;31mold\033[0m] Database Not Updated "
  echo
 else
 printf "[\e[1;32mok\033[0m] Database Updated "
- echo
-fi
-
-# MaNGOS Core (mangos-classic)
-
-cd $folder_core
-if git checkout master &> /dev/null &&
-git fetch origin master &> /dev/null &&
-[ `git rev-list HEAD...origin/master --count` != 0 ] &&
-git merge origin/master
-then
-printf "[\033[1;31mold\033[0m] Core Not Updated "
- echo
-else
-printf "[\e[1;32mok\033[0m] Core Updated "
  echo
 fi
 
