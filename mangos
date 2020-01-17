@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201701
-# 0.9.5.6
+# 0.9.5.7
 
 ###############
 # server/info #
@@ -776,8 +776,9 @@ git merge origin/master
 then
 cd $folder_helper
  echo
-printf "[\033[1;31mold\033[0m] -> old release installed! - "
+printf "[\033[1;31mold\033[0m] -> old release installed!"
  sleep 1
+ echo
  echo
  sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old &> /dev/null
 printf "[\e[1;32mok\033[0m] -> /usr/local/bin/mangos.old"
