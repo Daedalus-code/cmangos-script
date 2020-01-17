@@ -28,7 +28,7 @@ This tool introduce helping functions and features for admins.
 ```mkdir /scripts/```  
 ```cd /scripts/```  
 ```git pull https://github.com/Daedalus-code/cmangos-script.git```  
-```cp /scripts/cmangos-script/mangos into /usr/local/bin```  
+```cp /scripts/cmangos-script/mangos /usr/local/bin```  
 ```sudo chmod +x /usr/local/bin/mangos```  
 
 You will be able to start 'mangos' from anywhere in terminal now.  
