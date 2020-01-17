@@ -26,12 +26,19 @@ Admin Helper Tool in bash
 This tool introduce helping functions and features for admins.
 
 #### How do you get it to work?
+##### First time install
+git pull & copy mangos into /usr/local/bin and chmod +x it.
 
 edit server.cnf & server.txt  
 edit inside mangos script at line 21:
 ```
 source /scripts/server.txt # please edit if wrong.
 ```  
+#### Updating/Upgrading Admin Helper  
+"update Helper" will copy "install" mangos into /usr/local/bin and chmod it.  
+You will be able to start 'mangos' from anywhere in terminal.  
+
+There will be made a mangos.old version next to it. (non executeable)
 
 #### Planned Features
 
