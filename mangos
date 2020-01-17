@@ -516,6 +516,7 @@ fi
 
 # Delete & git clone classic-db folder ? >
 
+ echo
  read -p "Delete & git clone classic-db folder? (y/n) " -n 1 -r
  echo
 
