@@ -1,6 +1,6 @@
 # C(ontinued)-MaNGOS  
 
-Admin Helper Tool in bash  
+Admin Helper Tool in bash written for (Classic fork)
 
 ![alt text](https://i.imgur.com/KUucM03.png)
 
@@ -22,7 +22,7 @@ Admin Helper Tool in bash
 * quit                -  Exit the script.
 
 #### What's the purpose of this tool?  
-This tool introduce helping functions and features for admins.  
+This tool introduce helping functions and features for admins running a WoW Vanilla server. 
 #### How do you get it to work?
 ##### First time install
 ```mkdir /scripts/```  
@@ -107,7 +107,10 @@ sudo systemctl enable mangosd
 This script was build on a Ubuntu 19.10 - Linux 5.3.0-1014-raspi2 - (Raspberry Pi2/4)  
 https://ubuntu.com/download/raspberry-pi  
 
+C(ontinued)-MaNGOS (Classic fork)
 
+https://github.com/cmangos/mangos-classic  
+https://github.com/cmangos/classic-db  
 https://github.com/cmangos  
 https://cmangos.net  
 
