@@ -241,7 +241,7 @@ fi
 # Update CMaNGOS ? >
 
  echo
-printf "Update classic-mangos [\e[1;32mMaNGOS\033[0m] ?"
+printf "Update classic-mangos [\e[1;32mCore\033[0m] ?"
  echo
  echo
  read -p "Are you sure? (y/n) " -n 1 -r
