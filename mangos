@@ -786,7 +786,7 @@ printf "[\e[1;32mok\033[0m] -> /usr/local/bin/mangos.old"
  sleep 1
  echo
 printf "[\e[1;32mok\033[0m] -> Stripping executable on 'mangos.old'"
-sleep 1
+ sleep 1
  echo
 sudo chmod -x /usr/local/bin/mangos.old
 sudo chown -R $user:$group $folder_helper
