@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201701
-# 0.9.5.5
+# 0.9.5.7
 
 ###############
 # server/info #
@@ -796,6 +796,7 @@ printf "[\e[1;32mok\033[0m] -> Installing new release"
 sudo cp mangos /usr/local/bin
 sudo chmod +x /usr/local/bin/mangos
 printf "[\e[1;32mok\033[0m] -> Installed."
+ echo
  echo
  echo "Will exit now."
  sleep 2 && exit
