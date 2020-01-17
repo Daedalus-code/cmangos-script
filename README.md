@@ -25,17 +25,30 @@ Admin Helper Tool in bash
 This tool introduce helping functions and features for admins.  
 #### How do you get it to work?
 ##### First time install
-git pull & copy mangos into /usr/local/bin and chmod +x it.  
-You will be able to start 'mangos' from anywhere in terminal.  
+```mkdir /scripts/```  
+```cd /scripts/```  
+```git pull https://github.com/Daedalus-code/cmangos-script.git```  
+```cp /scripts/cmangos-script/mangos into /usr/local/bin```  
+```sudo chmod +x /usr/local/bin/mangos```  
 
-edit server.cnf & server.txt  
-edit inside mangos script at line 21:
-```
-source /scripts/server.txt # please edit if wrong.
-```  
+You will be able to start 'mangos' from anywhere in terminal now.  
+
+mangos script will look for config files inside /scripts/  
+You need to copy config files from cmangos-script folder into /scripts/ folder.  
+
+```cp /scripts/cmangos-script/config.* /scripts/```  
+
+#### Your own directory for configs  
+Remember to edit mangos script at line 21:    
+```source /scripts/server.txt # please edit if wrong.```  
+server.txt at line 39:  
+```folder_helper="/scripts/cmangos-script" # please edit if wrong.```  
 #### Updating/Upgrading Admin Helper  
-"update Helper" will copy "install" mangos into /usr/local/bin and chmod it.  
+"update Helper" will "install" mangos into /usr/local/bin and chmod it.  
 There will be made a mangos.old version next to it. (non executeable)  
+
+The updater will install automatically if any changes and then exit.  
+If there is no new changes you will be asked if you want to Install regardless.  
 #### Planned Features  
 * Time will tell.  
 #### Services  
