@@ -800,8 +800,8 @@ sudo chmod +x /usr/local/bin/mangos
  echo -ne '(100%)\r'
 fi
 fi
-sleep 1 && exit
 fi
+sleep 1 && exit
 
 # Update Helper done
 
