@@ -412,7 +412,7 @@ sudo chown -R $user:$group $folder_wow
 
 mkdir $folder_wow/backup &> /dev/null
 mkdir $folder_wow/backup/old &> /dev/null
-cp $folder_wow/backup/*.sql $folder_wow/backup/old
+cp $folder_wow/backup/*.sql $folder_wow/backup/old &> /dev/null
  echo -ne '(100%)\r'
  sleep 1
  echo
