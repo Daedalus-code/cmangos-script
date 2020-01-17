@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201701
-# 0.9.4.6
+# 0.9.6.4
 
 ###############
 # server/info #
@@ -192,10 +192,12 @@ git fetch origin master &> /dev/null &&
 [ `git rev-list HEAD...origin/master --count` != 0 ] &&
 git merge origin/master
 then
-printf "[\033[1;31mold\033[0m] Core Not Updated "
+printf "[\033[1;31mold\033[0m] Core Not Updated - "
+ git rev-parse --short HEAD
  echo
 else
-printf "[\e[1;32mok\033[0m] Core Updated "
+printf "[\e[1;32mok\033[0m] Core Updated - "
+ git rev-parse --short HEAD
  echo
 fi
 
@@ -207,10 +209,12 @@ git fetch origin master &> /dev/null &&
 [ `git rev-list HEAD...origin/master --count` != 0 ] &&
 git merge origin/master
 then
-printf "[\033[1;31mold\033[0m] Database Not Updated "
+printf "[\033[1;31mold\033[0m] Database Not Updated - "
+ git rev-parse --short HEAD
  echo
 else
-printf "[\e[1;32mok\033[0m] Database Updated "
+printf "[\e[1;32mok\033[0m] Database Updated - "
+ git rev-parse --short HEAD
  echo
 fi
 
@@ -222,10 +226,12 @@ git fetch origin master &> /dev/null &&
 [ `git rev-list HEAD...origin/master --count` != 0 ] &&
 git merge origin/master
 then
-printf "[\033[1;31mold\033[0m] Helper Not Updated "
+printf "[\033[1;31mold\033[0m] Helper Not Updated - "
+ git rev-parse --short HEAD
  echo
 else
-printf "[\e[1;32mok\033[0m] Helper Updated "
+printf "[\e[1;32mok\033[0m] Helper Updated - "
+ git rev-parse --short HEAD
  echo
 fi
  echo
@@ -723,13 +729,13 @@ sudo service realmd restart &> /dev/null
 sudo service mangosd restart &> /dev/null
  echo -ne '(100%)\r'
  sleep 1
-printf "\e[1;32m<---------------------------------------------------------------------->\033[0m"
+printf "\e[1;32m<---------------------------------------------------------------->\033[0m"
  echo
  echo "Realmd log -->"
  echo
 tail $folder_core/run/logs/Realmd.log
  echo
-printf "\e[1;32m<---------------------------------------------------------------------->\033[0m"
+printf "\e[1;32m<-------------------------------------------------------------------->\033[0m"
  echo
  read -n 1 -p "Check server log? (world) (tail/follow/exit) " ans;
  echo
@@ -760,70 +766,82 @@ fi
 # Update Helper ? >
 
  echo
- echo "Update Helper?"
- echo
  read -p "Are you sure? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-printf "\e[1;32mUpdating Helper\033[0m"
  echo
- echo -ne '(0%)\r'
- sleep 1
- echo "Moving older mangos -> /usr/local/bin/mangos.old .."
-sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old
- echo -ne '(10%)\r'
- sleep 1
- echo "Stripping executable flag on mangos.old .."
-sudo chmod -x /usr/local/bin/mangos.old
- echo -ne '(20%)\r'
- sleep 1
-sudo chown -R $user:$group $folder_helper
- echo -ne '(30%)\r'
+ echo "Checking your current release"
+ echo
  sleep 1
 cd $folder_helper
- echo -ne '(40%)\r'
- sleep 1
 if git checkout master &> /dev/null &&
 git fetch origin master &> /dev/null &&
 [ `git rev-list HEAD...origin/master --count` != 0 ] &&
 git merge origin/master
 then
-printf "[\033[1;31mold\033[0m] Helper Not Updated .. Installing latest now .."
+cd $folder_helper
  echo
+printf "[\033[1;31mold\033[0m] old release installed! - "
+ git rev-parse --short HEAD
  sleep 1
+ echo
+ echo
+ sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old &> /dev/null
+printf "[\e[1;32mok\033[0m] -> /usr/local/bin/mangos.old"
+ sleep 1
+ echo
+printf "[\e[1;32mok\033[0m] -> Stripping executable on 'mangos.old'"
+sleep 1
+ echo
+sudo chmod -x /usr/local/bin/mangos.old
+sudo chown -R $user:$group $folder_helper
+cd $folder_helper
+printf "[\e[1;32mok\033[0m] -> Installing new release"
+ sleep 1
+ echo
 sudo cp mangos /usr/local/bin
- echo -ne '(60%)\r'
- sleep 1
 sudo chmod +x /usr/local/bin/mangos
- echo -ne '(80%)\r'
- sleep 1
- echo "Restart mangos please .. Will exit now."
- echo -ne '(100%)\r'
-sleep 2 && exit
-else
-printf "[\e[1;32mok\033[0m] Helper Updated"
+printf "[\e[1;32mok\033[0m] -> Installed."
  echo
- echo -ne '(50%)\r'
+ echo
+ echo "Will exit now."
+ sleep 2 && exit
+else
+cd $folder_helper
+printf "[\e[1;32mok\033[0m] Helper - latest release - "
+ git rev-parse --short HEAD
  sleep 1
- read -p "Install regardless .. Are you sure? (y/n) " -n 1 -r
+ echo
+ read -p "Install regardless? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
- echo "Installing new mangos .."
- echo -ne '(60%)\r'
+ echo
+printf "[\e[1;32mUpdating Helper\033[0m]"
  sleep 1
- echo -ne '(70%)\r'
+ echo
+ echo
+printf "[\e[1;32mok\033[0m] -> /usr/local/bin/mangos.old"
  sleep 1
+ echo
+sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old &> /dev/null
+printf "[\e[1;32mok\033[0m] -> Stripping executable on 'mangos.old'"
+ sleep 1
+ echo
+sudo chmod -x /usr/local/bin/mangos.old
+sudo chown -R $user:$group $folder_helper
+cd $folder_helper
+ printf "[\e[1;32mok\033[0m] -> Installing latest release"
+ sleep 1
+ echo
 sudo cp mangos /usr/local/bin
- echo -ne '(80%)\r'
- sleep 1
 sudo chmod +x /usr/local/bin/mangos
- echo -ne '(90%)\r'
- sleep 1
- echo "Restart mangos please .. Will exit now."
- echo -ne '(100%)\r'
-sleep 2 && exit
+ printf "[\e[1;32mok\033[0m] -> Installed."
+ echo
+ echo
+ echo "Will exit now."
+ sleep 2 && exit
 fi
 fi
 fi
@@ -837,13 +855,13 @@ fi
 # Check logs >
 
 mkdir $folder_core/run/logs &> /dev/null
-printf "\e[1;32m<---------------------------------------------------------------------->\033[0m"
+printf "\e[1;32m<---------------------------------------------------------------->\033[0m"
  echo
  echo "Realmd log -->"
  echo
 tail $folder_core/run/logs/Realmd.log
  echo
-printf "\e[1;32m<---------------------------------------------------------------------->\033[0m"
+printf "\e[1;32m<-------------------------------------------------------------------->\033[0m"
  echo
  read -n 1 -p "Check server log? (world) (tail/follow/exit) " ans;
  echo
