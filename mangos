@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201701
-# 0.9.6.0
+# 0.9.6.1
 
 ###############
 # server/info #
@@ -241,7 +241,8 @@ fi
 # Update CMaNGOS ? >
 
  echo
-printf "Update [\e[1;32mMaNGOS\033[0m] ?"
+printf "Update classic-mangos [\e[1;32mMaNGOS\033[0m] ?"
+ echo
  echo
  read -p "Are you sure? (y/n) " -n 1 -r
  echo
@@ -393,7 +394,7 @@ fi
 # Update Database ? >
 
  echo
-printf "Update classic-db [\e[1;32mdatabase\033[0m] ?"
+printf "Update classic-db [\e[1;32mDatabase\033[0m] ?"
  echo
  echo
  read -p "Are you sure? (y/n) " -n 1 -r
@@ -758,7 +759,7 @@ fi
 
 # Update Helper ? >
 
-printf "Update Helper?"
+printf "Update cmangos-script [\e[1;32mHelper\033[0m] ? Helper?"
  echo
  echo
  read -p "Are you sure? (y/n) " -n 1 -r
