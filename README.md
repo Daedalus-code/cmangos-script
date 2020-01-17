@@ -1,7 +1,6 @@
-# C(ontinued)-MaNGOS
-admin helper in bash  
-This script was build on a Ubuntu 19.10 - Linux 5.3.0-1014-raspi2 - (Raspberry Pi2/4)  
-https://ubuntu.com/download/raspberry-pi
+# C(ontinued)-MaNGOS  
+
+Admin Helper Tool in bash  
 
 ![alt text](https://i.imgur.com/KUucM03.png)
 
@@ -10,9 +9,28 @@ edit inside mangos script at line 21:
 ```
 source /scripts/server.txt # please edit if wrong.
 ```  
-# Services
-Server is using systemd Services to run mangosd and realmd:  
 
+#### Features
+
+* login (command)     -  Console, Remote Access.
+* check for updates   -  Checking for git updates. (core, database, helper)
+* update CMaNGOS      -  Updating/Upgrading Core.
+* update Database     -  Updating/Upgrading Database.
+* shutdown server     -  Shut down server. (realmd, mangosd)
+* restart server      -  Restart server. (realmd, mangosd)
+* online check        -  Ping server. (internet/intranet)
+* characters          -  Show characters on server.
+* accounts            -  Show accounts on server.
+* guilds              -  Show Guilds on server.
+* create .patch file  -  Create patch file. (classic-mangos dir)
+* update Helper       -  Updating/Upgrading Admin Helper
+* check logs          -  Show logs. (Realmd.log, Server.log)
+* quit                -  Exit the script.
+
+#### Services
+
+Server is using systemd Services to run mangosd and realmd:  
+Please edit username 'ubuntu' if it's wrong.
 
 /etc/systemd/system/realmd.service  
 
@@ -60,6 +78,10 @@ The command to ensure both services are automatically started at boot are:
 sudo systemctl enable realmd
 sudo systemctl enable mangosd
 ```
+
+This script was build on a Ubuntu 19.10 - Linux 5.3.0-1014-raspi2 - (Raspberry Pi2/4)  
+https://ubuntu.com/download/raspberry-pi  
+
 
 https://github.com/cmangos  
 https://cmangos.net  
