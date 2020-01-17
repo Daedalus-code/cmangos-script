@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201701
-# 0.9.3.2
+# 0.9.2.1
 
 ###############
 # server/info #
@@ -412,32 +412,33 @@ sudo chown -R $user:$group $folder_wow
 
 # BACKUP (regardless) >
 
-cd $folder_wow
-mkdir backup &> /dev/null
+mkdir $folder_wow/backup &> /dev/null
+mkdir $folder_wow/backup/old &> /dev/null
+cp $folder_wow/backup/*.sql $folder_wow/backup/old
 
 # Backup <- characters.sql
 
  echo
-FILE="$folder_wow/backup/db_characters-$NOW.sql"
+FILE="$folder_wow/backup/$db_characters-$NOW.sql"
 if [ ! -f "$FILE" ];
 then
 printf "[\e[1;32mok\033[0m] 'Characters' backup."
  echo
 else
-printf "[\033[1;31mempty\033[0m] 'Characters' doing backup .."
+printf "[\033[1;31mempty\033[0m/old\033[0m] 'Characters' ! doing backup .."
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/backup/$db_characters-$NOW.sql
  echo
 fi
 
 # Backup <- realmd.sql
 
-FILE="$folder_wow/backup/db_realmd-$NOW.sql"
+FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
 if [ ! -f "$FILE" ];
 then
 printf "[\e[1;32mok\033[0m] 'Realmd' backup."
  echo
 else
-printf "[\033[1;31mempty\033[0m] 'Realmd' doing backup .."
+printf "[\033[1;31mempty\033[0m/old\033[0m] 'Realmd' ! doing backup .."
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/backup/$db_realmd-$NOW.sql
  echo
 fi
@@ -469,50 +470,38 @@ printf "(\e[1;32mcharacters\033[0m) & (\e[1;32mrealmd\033[0m) backup ..\033[0m"
 
 # Backup <- characters.sql
 
-FILE="$folder_wow/backup/db_characters-$NOW.sql"
-if [ ! -f "$FILE" ];
-then
- echo
-else
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/backup/$db_characters-$NOW.sql
-fi
 
 # Backup <- realmd.sql
 
-FILE="$folder_wow/backup/db_realmd-$NOW.sql"
-if [ ! -f "$FILE" ];
-then
- echo
-else
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/backup/$db_realmd-$NOW.sql
-fi
 
 # BACKUP done
 
-# DROP databases >
+# DROP Databases >
 
-# Database 'characters'
+# DROP Database 'characters'
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
 if [ "$RESULT" == "$db_characters" ]; then
 mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_characters;
 fi
 
-# Database 'mangos'
+# DROP Database 'mangos'
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_mangos`
 if [ "$RESULT" == "$db_mangos" ]; then
 mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_mangos;
 fi
 
-# Database 'realmd'
+# DROP Database 'realmd'
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_realmd`
 if [ "$RESULT" == "$db_realmd" ]; then
 mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_realmd;
 fi
 
-# DROP databases done
+# DROP Databases done
 
 # Delete & git clone classic-db folder ? >
 
@@ -537,9 +526,9 @@ fi
 
 # Delete and start over done
 
-# Create databases >
+# CREATE Databases >
 
-# Database 'characters'
+# CREATE Database 'characters'
 
  echo
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
@@ -554,7 +543,7 @@ mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHAR
 mysql --defaults-extra-file="$sql_mycnf" --database=$db_characters < $folder_sql/base/characters.sql
 fi
 
-# Database 'mangos'
+# CREATE Database 'mangos'
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_mangos`
 if [ "$RESULT" == "$db_mangos" ];
@@ -568,7 +557,7 @@ mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTE
 mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $folder_sql/base/mangos.sql
 fi
 
-# Database 'realmd'
+# CREATE Database 'realmd'
 
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_realmd`
 if [ "$RESULT" == "$db_realmd" ];
@@ -583,7 +572,7 @@ mysql --defaults-extra-file="$sql_mycnf" --database=$db_realmd < $folder_sql/bas
 fi
  echo
 
-# Create databases done
+# CREATE Databases done
 
 # MaNGOS InstallFullDB script >
 
@@ -596,10 +585,10 @@ cd $folder_db
 # IMPORT BACKUP ? >
 
  echo
- echo "$folder_wow/backup/$db_characters-$NOW.sql <--"
- echo "$folder_wow/backup/$db_realmd-$NOW.sql <--"
+ls -l $folder_wow/backup 2> /dev/null
+ls -l $folder_wow/backup/old 2> /dev/null
  echo
- read -p "Import backup? (y/n) " -n 1 -r
+ read -p "Import latest backup? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
