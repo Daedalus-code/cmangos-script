@@ -6,7 +6,7 @@ https://ubuntu.com/download/raspberry-pi
 ![alt text](https://i.imgur.com/KUucM03.png)
 
 edit server.cnf & server.txt  
-edit inside mangos script at line 21: 
+edit inside mangos script at line 21:
 ```
 source /scripts/server.txt # please edit if wrong.
 ```  
