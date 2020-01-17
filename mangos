@@ -764,7 +764,7 @@ git fetch origin master &> /dev/null &&
 [ `git rev-list HEAD...origin/master --count` != 0 ] &&
 git merge origin/master
 then
-printf "[\033[1;31mold\033[0m] Helper Not Updated .. Will install latest .."
+printf "[\033[1;31mold\033[0m] Helper Not Updated .. Installing latest now .."
  echo
  sleep 1
 sudo cp mangos /usr/local/bin
@@ -773,9 +773,9 @@ sudo cp mangos /usr/local/bin
 sudo chmod +x /usr/local/bin/mangos
  echo -ne '(80%)\r'
  sleep 1
- echo "Restart mangos please .. will exit now."
+ echo "Restart mangos please .. Will exit now."
  echo -ne '(100%)\r'
-sleep 1 && exit
+sleep 2 && exit
 else
 printf "[\e[1;32mok\033[0m] Helper Updated"
  echo
@@ -796,9 +796,9 @@ sudo cp mangos /usr/local/bin
 sudo chmod +x /usr/local/bin/mangos
  echo -ne '(90%)\r'
  sleep 1
- echo "Restart mangos please .. will exit now."
+ echo "Restart mangos please .. Will exit now."
  echo -ne '(100%)\r'
-sleep 1 && exit
+sleep 2 && exit
 fi
 fi
 fi
