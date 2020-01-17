@@ -33,14 +33,13 @@ This tool introduce helping functions and features for admins.
 
 You will be able to start 'mangos' from anywhere in terminal now.  
 
-Edit config file 'config.cnf' with MySQL credentials.   
-Edit config file 'config.txt' with correct information.  
-
 mangos script will look for config files inside /scripts/  
 You need to copy config files from cmangos-script folder into /scripts/ folder.  
 
 ```cp /scripts/cmangos-script/config.* /scripts/```  
 
+Edit config file 'config.cnf' with MySQL credentials.   
+Edit config file 'config.txt' with correct information.  
 #### Your own directory for configs  
 Remember to edit mangos script at line 21:    
 ```source /scripts/server.txt # please edit if wrong.```  
