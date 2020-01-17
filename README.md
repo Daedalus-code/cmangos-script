@@ -4,12 +4,6 @@ Admin Helper Tool in bash
 
 ![alt text](https://i.imgur.com/KUucM03.png)
 
-edit server.cnf & server.txt  
-edit inside mangos script at line 21:
-```
-source /scripts/server.txt # please edit if wrong.
-```  
-
 #### Features
 
 * login (command)     -  Console, Remote Access.
@@ -26,6 +20,22 @@ source /scripts/server.txt # please edit if wrong.
 * update Helper       -  Updating/Upgrading Admin Helper
 * check logs          -  Show logs. (Realmd.log, Server.log)
 * quit                -  Exit the script.
+
+#### What's the purpose of this tool?
+
+This tool introduce helping functions and features for admins.
+
+#### How do you get it to work?
+
+edit server.cnf & server.txt  
+edit inside mangos script at line 21:
+```
+source /scripts/server.txt # please edit if wrong.
+```  
+
+#### Planned Features
+
+* Time will tell.
 
 #### Services
 
