@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201701
-# 0.9.4.1
+# 0.9.4.6
 
 ###############
 # server/info #
@@ -460,7 +460,7 @@ sudo apt-get install ${packagelist[@]} -y 1> /dev/null
 
 # Delete and start over ? >
 
- read -p "Fresh install? (backup / delete / git clone) (y/n) " -n 1 -r
+ read -p "Fresh install? (drop/import databases) (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -545,8 +545,6 @@ fi
 # Delete & git clone classic-db folder done
 fi
 
-# Delete and start over done
-
 # CREATE Databases >
 
 # CREATE Database 'characters'
@@ -595,11 +593,18 @@ fi
 
 # CREATE Databases done
 
+# Delete and start over done
+
 # MaNGOS InstallFullDB script >
 
+read -p "MaNGOS InstallFullDB? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
 sudo chown -R $user:$group $folder_wow
 cd $folder_db
 ./InstallFullDB.sh
+fi
 
 # MaNGOS InstallFullDB done
 
