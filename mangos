@@ -813,6 +813,7 @@ then
 printf "[\e[1;32mUpdating Helper\033[0m]"
  sleep 1
  echo
+ echo
 printf "[\e[1;32mok\033[0m] -> /usr/local/bin/mangos.old"
  sleep 1
  echo
