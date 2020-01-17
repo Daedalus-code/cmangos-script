@@ -799,8 +799,8 @@ sudo chmod +x /usr/local/bin/mangos
  echo "Restart mangos please .. will exit now."
  echo -ne '(100%)\r'
 fi
-sleep 1 && exit
 fi
+sleep 1 && exit
 fi
 
 # Update Helper done
