@@ -802,7 +802,6 @@ fi
 sleep 1 && exit
 fi
 fi
-sleep 1 && exit
 
 # Update Helper done
 
