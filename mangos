@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20201701
-# 0.9.2.5
+# 0.9.2.6
 
 ###############
 # server/info #
@@ -486,6 +486,7 @@ mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > 
 
 # DROP Database 'characters'
 
+echo
 RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
 if [ "$RESULT" == "$db_characters" ]; then
 mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_characters;
