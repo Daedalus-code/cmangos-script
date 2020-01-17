@@ -826,12 +826,12 @@ printf "[\e[1;32mok\033[0m] -> Stripping executable on 'mangos.old'"
 sudo chmod -x /usr/local/bin/mangos.old
 sudo chown -R $user:$group $folder_helper
 cd $folder_helper
- printf "[\e[1;32mok\033[0m] -> Installing latest release"
+printf "[\e[1;32mok\033[0m] -> Installing latest release"
  sleep 1
  echo
 sudo cp mangos /usr/local/bin
 sudo chmod +x /usr/local/bin/mangos
- printf "[\e[1;32mok\033[0m] -> Installed."
+printf "[\e[1;32mok\033[0m] -> Installed."
  echo
  echo
  echo "Will exit now."
