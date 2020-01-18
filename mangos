@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20201801
-# 1.0.8.7
+# 1.1.0.1
 
 # Config directory >
 
@@ -143,6 +143,12 @@ EOF
 
 # Create account > - Holy Shit ! OO
 
+ echo
+ echo
+read -p "Create Account? (y/n) " -n 1 -r
+ echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
  echo "Username:";
 read USR;
  echo "Password:";
@@ -158,6 +164,7 @@ rm $folder_wow/tmp.txt
  echo
 printf "[\e[1;32mAccount Created\033[0m]"
  echo
+fi
 
 # Create account done
 
@@ -196,8 +203,15 @@ printf "
  'quit' and then hit Enter to exit
  "
  echo
+ echo
+read -p "Want to login? (y/n) " -n 1 -r
+ echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+ echo
 nc $host_nc $port_nc
  echo
+fi
 
 # Login (command) done
 
