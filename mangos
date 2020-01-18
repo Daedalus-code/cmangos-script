@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20201801
-# 1.0.3.3
+# 1.0.6.5
 
 # Config directory >
 
@@ -340,24 +340,38 @@ esac
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+cp $folder_core/src/game/AuctionHouseBot/ahbot.conf.dist.in $folder_core/run/etc/ahbot.conf.dist &> /dev/null
 
-title="Edit .config files"
+title="       Save config without .dist
+     ================================
+           Server configuration
+"
  echo
-prompt="Choose (nano) config file:"
+prompt="
+
+Choose number ->
+
+>"
  echo
 options=(
 
-"mangos.conf.dist"
-"realmd.conf.dist"
-"playerbot.conf.dist"
-"ahbot.conf.dist"
+ "mangos.conf.dist"
 
-"mangos.conf"
-"realmd.conf"
-"playerbot.conf"
-"ahbot.conf"
+ "realmd.conf.dist"
 
-)
+ "playerbot.conf.dist"
+
+ "ahbot.conf.dist"
+
+ "mangos.conf"
+
+ "realmd.conf"
+
+ "playerbot.conf"
+
+ "ahbot.conf"
+
+ )
 
  echo "$title"
 PS3="$prompt "
@@ -370,7 +384,7 @@ nano $folder_core/run/etc/mangosd.conf.dist;;
  2 ) echo "You picked $opt realmd.conf.dist $REPLY"
 nano $folder_core/run/etc/realmd.conf.dist;;
  3 ) echo "You picked $opt playerbot.conf.dist $REPLY"
-nano $folder_core/run/etc/playerbot.conf;;
+nano $folder_core/run/etc/playerbot.conf.dist;;
  4 ) echo "You picked $opt ahbot.conf.dist $REPLY"
 nano $folder_core/run/etc/ahbot.conf.dist;;
 
@@ -383,7 +397,10 @@ nano $folder_core/run/etc/playerbot.conf;;
  8 ) echo "You picked $opt ahbot.conf $REPLY"
 nano $folder_core/run/etc/ahbot.conf;;
 
- $(( ${#options[@]}+1 )) ) echo "See you next time!"; break;;
+
+$(( ${#options[@]}+1 )) ) echo "
+See you next time!
+"; break;;
  *) echo "Invalid option. Try another one.";continue;;
 esac
 done
@@ -962,7 +979,7 @@ fi
 
   "e")
 
-# Edit configs >
+# Edit config files ? >
 
  read -p "Edit config files? (nano) (y/n) " -n 1 -r
  echo
@@ -970,21 +987,34 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
 cp $folder_core/src/game/AuctionHouseBot/ahbot.conf.dist.in $folder_core/run/etc/ahbot.conf.dist &> /dev/null
 
-title="Edit .config files"
+title="       Save config without .dist
+    ================================
+          Server configuration
+"
  echo
-prompt="Choose (nano) config file:"
+prompt="
+
+Choose number ->
+
+>"
  echo
 options=(
 
-"mangos.conf.dist"
-"realmd.conf.dist"
-"playerbot.conf.dist"
-"ahbot.conf.dist"
+ "mangos.conf.dist"
 
-"mangos.conf"
-"realmd.conf"
-"playerbot.conf"
-"ahbot.conf"
+ "realmd.conf.dist"
+
+ "playerbot.conf.dist"
+
+ "ahbot.conf.dist"
+
+ "mangos.conf"
+
+ "realmd.conf"
+
+ "playerbot.conf"
+
+ "ahbot.conf"
 
 )
 
@@ -999,7 +1029,7 @@ nano $folder_core/run/etc/mangosd.conf.dist;;
  2 ) echo "You picked $opt realmd.conf.dist $REPLY"
 nano $folder_core/run/etc/realmd.conf.dist;;
  3 ) echo "You picked $opt playerbot.conf.dist $REPLY"
-nano $folder_core/run/etc/playerbot.conf;;
+nano $folder_core/run/etc/playerbot.conf.dist;;
  4 ) echo "You picked $opt ahbot.conf.dist $REPLY"
 nano $folder_core/run/etc/ahbot.conf.dist;;
 
@@ -1013,13 +1043,15 @@ nano $folder_core/run/etc/playerbot.conf;;
 nano $folder_core/run/etc/ahbot.conf;;
 
 
- $(( ${#options[@]}+1 )) ) echo "See you next time!"; break;;
+ $(( ${#options[@]}+1 )) ) echo "
+ See you next time!
+ "; break;;
  *) echo "Invalid option. Try another one.";continue;;
 esac
 done
 fi
 
-# Edit configs done
+# Edit config files done
 
     ;;
 
