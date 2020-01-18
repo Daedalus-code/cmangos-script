@@ -2,7 +2,7 @@
 
 Admin Helper Tool in bash written for (Classic fork)
 
-![alt text](https://i.imgur.com/KUucM03.png)
+![alt text](https://i.imgur.com/aDsAnZS.png)
 
 #### Features
 
@@ -13,6 +13,7 @@ Admin Helper Tool in bash written for (Classic fork)
 * shutdown server     -  Shut down server. (realmd, mangosd)
 * restart server      -  Restart server. (realmd, mangosd)
 * online check        -  Ping server. (internet/intranet)
+* config files        -  Edit config files (run/etc)
 * characters          -  Show characters on server.
 * accounts            -  Show accounts on server.
 * guilds              -  Show Guilds on server.
