@@ -343,8 +343,8 @@ then
 cp $folder_core/src/game/AuctionHouseBot/ahbot.conf.dist.in $folder_core/run/etc/ahbot.conf.dist &> /dev/null
 
 title="       Save config without .dist
-     ================================
-           Server configuration
+    ================================
+          Server configuration
 "
  echo
 prompt="
