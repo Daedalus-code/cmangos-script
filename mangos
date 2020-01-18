@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20201801
-# 1.0.6.5
+# 1.0.6.3
 
 # Config directory >
 
@@ -396,7 +396,6 @@ nano $folder_core/run/etc/realmd.conf;;
 nano $folder_core/run/etc/playerbot.conf;;
  8 ) echo "You picked $opt ahbot.conf $REPLY"
 nano $folder_core/run/etc/ahbot.conf;;
-
 
 $(( ${#options[@]}+1 )) ) echo "
 See you next time!
@@ -1041,7 +1040,6 @@ nano $folder_core/run/etc/realmd.conf;;
 nano $folder_core/run/etc/playerbot.conf;;
  8 ) echo "You picked $opt ahbot.conf $REPLY"
 nano $folder_core/run/etc/ahbot.conf;;
-
 
  $(( ${#options[@]}+1 )) ) echo "
  See you next time!
