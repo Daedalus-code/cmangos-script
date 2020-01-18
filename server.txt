@@ -26,6 +26,8 @@ patch="CMaNGOS.patch" # please edit if wrong name.
 # RA/NETCAT #
 #############
 
+user_nc="USERNAME" # please edit.
+pass_nc="PASSWORD" # please edit.
 host_nc="localhost" # please edit if wrong.
 port_nc="3443" # please edit if wrong.
 
@@ -67,7 +69,7 @@ NOW="$(date +"%m.%d.%Y")"
 # temp # -> different path for every kernel version. <-
 ########
 
-#temp="$((`cat /sys/class/thermal/thermal_zone*/temp`/1000))°C"
+#temp="$((`cat /sys/class/thermal/thermal_zone*/temp`/1000))°C" # meh
 
 ########
 # load #

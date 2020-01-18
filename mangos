@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20201801
-# 1.0.6.3
+# 1.0.8.7
 
 # Config directory >
 
@@ -124,20 +124,44 @@ cat<<EOF
 
        Start with checking for updates c)
 
-  a : login (command)      t : characters
-  c : check for updates    u : accounts
-  m : update CMaNGOS       g : guilds
-  d : update Database      p : create .patch file
-  s : shutdown server      w : update Helper
-  r : restart server       l : check logs
-  o : online check         Q : quit
-  e : config files
+  A : create account      t : characters
+  a : login (command)     u : accounts
+  c : check for updates   g : guilds
+  m : update CMaNGOS      p : create .patch file
+  d : update Database     w : update Helper
+  s : shutdown server     o : online check
+  r : restart server      l : check logs
+  e : config files        Q : quit
 
 EOF
  read -n1 -s
  case "$REPLY" in
 
 # Menu done
+
+"A")
+
+# Create account > - Holy Shit ! OO
+
+ echo "Username:";
+read USR;
+ echo "Password:";
+read PWD;
+ echo "$user_nc
+$pass_nc
+.account create $USR $PWD
+.account set addon $USR 0
+.account set gmlevel $USR 0" > $folder_wow/tmp.txt
+nc -q 1 $host_nc $port_nc < $folder_wow/tmp.txt
+sudo chown -R $user:$group $folder_wow
+rm $folder_wow/tmp.txt
+ echo
+printf "[\e[1;32mAccount Created\033[0m]"
+ echo
+
+# Create account done
+
+ ;;
 
 "a")
 
