@@ -379,22 +379,22 @@ select opt in "${options[@]}" "Quit"; do
 
 case "$REPLY" in
 
- 1 ) echo "You picked $opt mangosd.conf.dist $REPLY"
+ 1 ) echo "You picked $opt $REPLY"
 nano $folder_core/run/etc/mangosd.conf.dist;;
- 2 ) echo "You picked $opt realmd.conf.dist $REPLY"
+ 2 ) echo "You picked $opt $REPLY"
 nano $folder_core/run/etc/realmd.conf.dist;;
- 3 ) echo "You picked $opt playerbot.conf.dist $REPLY"
+ 3 ) echo "You picked $opt $REPLY"
 nano $folder_core/run/etc/playerbot.conf.dist;;
- 4 ) echo "You picked $opt ahbot.conf.dist $REPLY"
+ 4 ) echo "You picked $opt $REPLY"
 nano $folder_core/run/etc/ahbot.conf.dist;;
 
- 5 ) echo "You picked $opt mangosd.conf $REPLY"
+ 5 ) echo "You picked $opt $REPLY"
 nano $folder_core/run/etc/mangosd.conf;;
- 6 ) echo "You picked $opt realmd.conf $REPLY"
+ 6 ) echo "You picked $opt $REPLY"
 nano $folder_core/run/etc/realmd.conf;;
- 7 ) echo "You picked $opt playerbot.conf $REPLY"
+ 7 ) echo "You picked $opt $REPLY"
 nano $folder_core/run/etc/playerbot.conf;;
- 8 ) echo "You picked $opt ahbot.conf $REPLY"
+ 8 ) echo "You picked $opt $REPLY"
 nano $folder_core/run/etc/ahbot.conf;;
 
 $(( ${#options[@]}+1 )) ) echo "
@@ -1023,22 +1023,22 @@ select opt in "${options[@]}" "Quit"; do
 
 case "$REPLY" in
 
- 1 ) echo "You picked $opt mangosd.conf.dist $REPLY"
+ 1 ) echo "You picked $opt $REPLY"
 nano $folder_core/run/etc/mangosd.conf.dist;;
- 2 ) echo "You picked $opt realmd.conf.dist $REPLY"
+ 2 ) echo "You picked $opt $REPLY"
 nano $folder_core/run/etc/realmd.conf.dist;;
- 3 ) echo "You picked $opt playerbot.conf.dist $REPLY"
+ 3 ) echo "You picked $opt $REPLY"
 nano $folder_core/run/etc/playerbot.conf.dist;;
- 4 ) echo "You picked $opt ahbot.conf.dist $REPLY"
+ 4 ) echo "You picked $opt $REPLY"
 nano $folder_core/run/etc/ahbot.conf.dist;;
 
- 5 ) echo "You picked $opt mangosd.conf $REPLY"
+ 5 ) echo "You picked $opt $REPLY"
 nano $folder_core/run/etc/mangosd.conf;;
- 6 ) echo "You picked $opt realmd.conf $REPLY"
+ 6 ) echo "You picked $opt $REPLY"
 nano $folder_core/run/etc/realmd.conf;;
- 7 ) echo "You picked $opt playerbot.conf $REPLY"
+ 7 ) echo "You picked $opt $REPLY"
 nano $folder_core/run/etc/playerbot.conf;;
- 8 ) echo "You picked $opt ahbot.conf $REPLY"
+ 8 ) echo "You picked $opt $REPLY"
 nano $folder_core/run/etc/ahbot.conf;;
 
  $(( ${#options[@]}+1 )) ) echo "
