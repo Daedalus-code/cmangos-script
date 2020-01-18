@@ -131,7 +131,7 @@ cat<<EOF
   s : shutdown server      w : update Helper
   r : restart server       l : check logs
   o : online check         Q : quit
-  e : edit configs
+  e : config files
 
 EOF
  read -n1 -s
