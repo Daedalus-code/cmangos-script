@@ -46,6 +46,8 @@ Edit mangos script at line 21:
 ```source /scripts/server.txt # please edit if wrong.```  
 server.txt at line 39:  
 ```folder_helper="/scripts/cmangos-script" # please edit if wrong.```  
+server.txt at line 50:  
+```sql_mycnf="/scripts/server.cnf" # please edit if wrong.```  
 #### Updating/Upgrading Admin Helper  
 "update Helper" will "install" mangos into /usr/local/bin and chmod it.  
 There will be made a mangos.old version next to it. (non executable)  
