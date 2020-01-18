@@ -1,7 +1,6 @@
-# C(ontinued)-MaNGOS  
-
-Admin Helper Tool in bash written for (Classic fork)
-
+# C(ontinued)-MaNGOS (Classic fork)  
+CMaNGOS - Helper  
+Admin Helper Tool in bash  
 ![alt text](https://i.imgur.com/aDsAnZS.png)
 
 #### Features
