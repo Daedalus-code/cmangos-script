@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20201901
-# 1.1.9.0
+# 1.2.1.0
 
 # Config directory >
 
@@ -122,7 +122,6 @@ EOF
 # Create account ? > - Holy Shit ! OO
 
  echo
- echo
  read -p "Create Account? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
@@ -130,22 +129,43 @@ then
  echo
  echo "Username:";
  read USR;
+if [[ -z "$USR" ]]; then
+printf '%s\n' "No input entered"
+exit 1
+else
+printf "[\e[1;32mok\033[0m] $USR"
  echo
- echo "Password:";
+ echo
+fi
+ echo "Password"
  read -s PWD;
- echo
-printf "0 \e[1;32m<-\033[0m [ \e[1;32mVanilla\033[0m ]"
- echo
- echo
- echo "Expansion-version:";
- echo
- read XPV;
- echo
-printf "0 \e[1;32m<->\033[0m 3 [ \e[1;32mGMLevel\033[0m ]"
+if [[ -z "$PWD" ]]; then
+printf '%s\n' "No input entered"
+exit 1
+else
+printf "[\e[1;32mok\033[0m] Password"
  echo
  echo
- echo "GMLevel:";
- read LVL;
+fi
+ echo "Choose expansion-version - 0";
+ read -s XPV;
+if [[ -z "$XPV" ]]; then
+printf '%s\n' "No input entered"
+exit 1
+else
+printf "[\e[1;32mok\033[0m] expansion-version ($XPV)"
+ echo
+ echo
+fi
+ echo "GMLevel - 0-3";
+ read -s LVL;
+if [[ -z "$LVL" ]]; then
+printf '%s\n' "No input entered"
+exit 1
+else
+printf "[\e[1;32mok\033[0m] GMLevel ($LVL)"
+ echo
+fi
  echo "$user_nc
 $pass_nc
 .account create $USR $PWD
