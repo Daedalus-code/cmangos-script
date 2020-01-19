@@ -386,7 +386,7 @@ sudo checkinstall
 esac
  echo
 
-# Edit config files ? >
+# Edit/Copy config files ? >
 
  read -p "Edit config files? (nano) (y/n) " -n 1 -r
  echo
@@ -464,7 +464,7 @@ esac
 done
 fi
 
-# Edit config files done
+# Edit/Copy config files done
 
  read -p "Press Enter to continue" </dev/tty
 fi
@@ -679,7 +679,7 @@ fi
 
 # Delete and start over done
 
-# MaNGOS InstallFullDB script >
+# MaNGOS InstallFullDB ? >
 
 read -p "MaNGOS InstallFullDB? (y/n) " -n 1 -r
 echo
@@ -972,7 +972,7 @@ esac
 
 "p")
 
-# Create .patch file ? >
+# Create/Apply .patch file ? >
 
  read -p "Create patch? (y/n) " -n 1 -r
  echo
@@ -1024,7 +1024,7 @@ fi
  read -p "Press Enter to continue" </dev/tty
  echo
 
-# Create .patch file done
+# Create/Apply .patch file done
 
  ;;
 
@@ -1065,7 +1065,7 @@ fi
 
   "e")
 
-# Edit config files ? >
+# Edit/Copy config files ? >
 
  read -p "Edit config files? (nano) (y/n) " -n 1 -r
  echo
@@ -1143,7 +1143,7 @@ esac
 done
 fi
 
-# Edit config files done
+# Edit/Copy config files done
 
     ;;
 
