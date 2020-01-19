@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20201901
-# 1.1.6.4
+# 1.1.5.7
 
 # Config directory >
 
@@ -366,7 +366,7 @@ cmake .. $cmake
 cd $folder_build
 make
  echo
-printf "Select the install operation"
+printf "Select install operation"
  echo
  echo " 1) make install"
  echo " 2) checkinstall with backup"
@@ -974,34 +974,27 @@ esac
 
 # Create/Apply .patch file ? >
 
- read -p "Create patch? (y/n) " -n 1 -r
+printf "Select patch operation"
  echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
- echo "Creating patch file.."
- echo -ne '(0%)\r'
- sleep 1
-sudo chown -R $user:$group $folder_wow
- echo -ne '(20%)\r'
- sleep 1
+ echo " 1) Create patch"
+ echo " 2) Apply patch"
+ echo
+ read n
+case $n in
+ 1) echo "Create patch"
+sudo chown -R $user:$group $folder_core
 cd $folder_core
- echo -ne '(40%)\r'
- sleep 1
 git checkout sql/create/db_create_mysql.sql 1> /dev/null
- echo -ne '(80%)\r'
- sleep 1
 git diff > $patch
- sleep 1
- echo -ne '(100%)\r'
- sleep 1
- read -p "Apply patch? (y/n) " -n 1 -r
- echo
- if [[ $REPLY =~ ^[Yy]$ ]]
-then
+ ;;
+ 2) echo "Apply patch"
 cd $folder_core
 sudo patch < *.patch -p1
-fi
-fi
+ ;;
+ *) echo "invalid option"
+ ;;
+esac
+ echo
 
  read -p "Download ARM patch (Pi2)? (y/n) " -n 1 -r
  echo
