@@ -152,7 +152,7 @@ then
  echo "Username:";
 read USR;
  echo "Password:";
-read PWD;
+read -s PWD;
  echo "$user_nc
 $pass_nc
 .account create $USR $PWD
