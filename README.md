@@ -18,7 +18,7 @@ Admin Helper Tool in bash
 * restart server      -  Restart server. (realmd, mangosd)
 * shutdown server     -  Shut down server. (realmd, mangosd)
 * update CMaNGOS      -  Updating/Upgrading Core.
-* update Database     -  Updating/Upgrading Database.
+* update Database     -  Updating/Upgrading Database / myisam -> innodb? (MariaDB)
 * update Helper       -  Updating/Upgrading Admin Helper
 * quit                -  Exit the script.
 
