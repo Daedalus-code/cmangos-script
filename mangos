@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20201901
-# 1.1.6.3
+# 1.1.6.2
 
 # Config directory >
 
@@ -158,8 +158,7 @@ $pass_nc
 .account create $USR $PWD
 .account set addon $USR 0
 .account set gmlevel $USR 0" > $folder_wow/tmp.txt
-nc -q 1 $host_nc $port_nc < $folder_wow/tmp.txt
-sudo chown -R $user:$group $folder_wow ; rm $folder_wow/tmp.txt
+nc -q 1 $host_nc $port_nc < $folder_wow/tmp.txt ; rm $folder_wow/tmp.txt
  echo
 printf "[\e[1;32mok\033[0m] Account $USR created."
  echo
