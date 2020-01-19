@@ -223,7 +223,7 @@ fi
 
 # MaNGOS Core (mangos-classic)
 
-printf "Checking for (\e[1;32m +\033[1;31m-\033[0m Updates\033[0m ) .. "
+printf "[ Checking for \e[1;32m+\033[1;31m-\033[0m Updates\033[0m ] .. "
  echo
 
  echo
