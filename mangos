@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20201901
-# 1.1.0.5
+# 1.1.1.7
 
 # Config directory >
 
@@ -330,6 +330,18 @@ libboost-all-dev
 )
 sudo apt-get install ${packagelist[@]} -y 1> /dev/null
 fi
+
+# Reset origin/master ? >
+
+ read -p "Reset --hard? (y/n) " -n 1 -r
+ echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+cd $folder_core
+git reset --hard origin/master
+fi
+
+# Reset origin/master done
 
 # Fresh install ? >
 
