@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20201901
-# 1.1.4.2
+# 1.1.5.7
 
 # Config directory >
 
@@ -124,14 +124,14 @@ cat<<EOF
 
        Start with checking for updates c)
 
-   A : login (command)     p : patch file
-   a : create account      o : online check
-   t : characters          r : restart server
-   u : accounts            s : shutdown server
-   g : guilds              m : update CMaNGOS
-   e : config              d : update Database
-   c : updates             w : update Helper
-   l : logs                Q : quit
+   A : login (command)    p : patch file
+   a : create account     o : online check
+   t : characters         r : restart server
+   u : accounts           s : shutdown server
+   g : guilds             m : update CMaNGOS
+   e : config             d : update Database
+   c : updates            w : update Helper
+   l : logs               Q : quit
 
 EOF
  read -n1 -s
@@ -343,9 +343,9 @@ fi
 
 # reset --hard origin/master done
 
-# Fresh install ? >
+# Build from scratch ? >
 
- read -p "Fresh install? (delete build folder) (y/n) " -n 1 -r
+ read -p "Build from scratch? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -358,7 +358,7 @@ git clone https://github.com/cmangos/mangos-classic.git 2> /dev/null
 sudo mkdir $folder_core/build &> /dev/null
 fi
 
-# Fresh install done
+# Build from scratch done
 
 sudo chown -R $user:$group $folder_wow
 cd $folder_build
@@ -375,13 +375,14 @@ printf "Select the install operation"
 case $n in
  1) echo "make install"
 cd $folder_build
-sudo make install # --directory="$folder_build"
+sudo make install
  ;;
  2) echo "checkinstall"
 cd $folder_build
-sudo checkinstall # --directory="$folder_build"
+sudo checkinstall
  ;;
- *) echo "invalid option";;
+ *) echo "invalid option"
+ ;;
 esac
  echo
 
@@ -391,7 +392,14 @@ esac
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+
+ read -p "Copy 'ahbot.conf.dist.in' into run/etc ? (y/n) " -n 1 -r
+ echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
 cp $folder_core/src/game/AuctionHouseBot/ahbot.conf.dist.in $folder_core/run/etc/ahbot.conf.dist &> /dev/null
+ echo "run/etc/ahbot.conf.dist created."
+fi
 
 title="       Save config without .dist
     ================================
@@ -1063,7 +1071,14 @@ fi
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+
+ read -p "Copy 'ahbot.conf.dist.in' into run/etc ? (y/n) " -n 1 -r
+ echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
 cp $folder_core/src/game/AuctionHouseBot/ahbot.conf.dist.in $folder_core/run/etc/ahbot.conf.dist &> /dev/null
+ echo "run/etc/ahbot.conf.dist created."
+fi
 
 title="       Save config without .dist
     ================================
