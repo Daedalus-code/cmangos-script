@@ -145,14 +145,29 @@ EOF
 
  echo
  echo
-read -p "Create Account? (y/n) " -n 1 -r
+ read -p "Create Account? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+ echo
  echo "Username:";
-read USR;
+ read USR;
+ echo
  echo "Password:";
-read -s PWD;
+ read -s PWD;
+ echo
+printf "0 \e[1;32m<-\033[0m [ \e[1;32mVanilla\033[0m ]"
+ echo
+ echo
+ echo "Expansion-version:";
+ echo
+ read XPV;
+ echo
+printf "0 \e[1;32m<->\033[0m 3 [ \e[1;32mGMLevel\033[0m ]"
+ echo
+ echo
+ echo "Level:";
+ read LVL;
  echo "$user_nc
 $pass_nc
 .account create $USR $PWD
