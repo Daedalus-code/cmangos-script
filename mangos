@@ -14,13 +14,17 @@
 
 # By Rainman
 # V20201901
-# 1.1.8.1
+# 1.1.8.2
 
 # Config directory >
 
 source /scripts/server.txt # please edit if wrong.
 
 # Config directory done
+
+while :
+do
+clear
 
 # Codes >
 
@@ -65,9 +69,6 @@ out+="\n"
 
 # Menu >
 
-while :
-do
-clear
 printf "\e[31m ---------------------------------------------
     _____ _____     _____ _____ _____ _____
    |     |     |___|   | |   __|     |   __|
