@@ -331,9 +331,9 @@ libboost-all-dev
 sudo apt-get install ${packagelist[@]} -y 1> /dev/null
 fi
 
-# Reset origin/master ? >
+# reset --hard origin/master ? >
 
- read -p "Reset --hard? (y/n) " -n 1 -r
+ read -p "Reset --hard origin/master? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -341,7 +341,7 @@ cd $folder_core
 git reset --hard origin/master
 fi
 
-# Reset origin/master done
+# reset --hard origin/master done
 
 # Fresh install ? >
 
