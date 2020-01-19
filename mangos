@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202001
-# 1.2.1.0
+# 1.2.1.1
 
 # Config directory >
 
@@ -515,7 +515,8 @@ mkdir $folder_wow/backup/old &> /dev/null
 cp $folder_wow/backup/*.sql $folder_wow/backup/old &> /dev/null
 sudo apt-get install zip -y &> /dev/null
 zip $folder_wow/backup/old/backup.zip *.sql &> /dev/null
-sudo find $folder_wow/backup/old/*.sql -type d -ctime +10 -exec rm -rf {} \; &> /dev/null
+find $folder_wow/backup/*.sql -type d -ctime +10 -exec rm -rf {} \; &> /dev/null
+find $folder_wow/backup/old/*.sql -type d -ctime +10 -exec rm -rf {} \; &> /dev/null
  echo -ne '(100%)\r'
  sleep 1
  echo
