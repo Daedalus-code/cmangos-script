@@ -1,5 +1,5 @@
-# C(ontinued)-MaNGOS (Classic fork)  
-CMaNGOS - Helper  
+# C(ontinued)-MaNGOS - Helper (Classic fork)  
+  
 Admin Helper Tool in bash  
 ![alt text](https://i.imgur.com/8K0OkOO.png)
 
