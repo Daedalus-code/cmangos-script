@@ -175,10 +175,10 @@ $pass_nc
 .account set gmlevel $USR $LVL" > $folder_wow/tmp.txt
 nc -q 1 $host_nc $port_nc < $folder_wow/tmp.txt ; rm $folder_wow/tmp.txt
  echo
-printf "[\e[1;32mok\033[0m] Account $USR created."
+printf "[\e[1;32mok\033[0m] Account $USR ($XPV/$LVL) created."
  echo
  echo
- sleep 1
+ sleep 2
 fi
 
 # Create account done
