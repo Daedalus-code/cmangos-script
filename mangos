@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20201901
-# 1.1.7.7
+# 1.1.8.1
 
 # Config directory >
 
@@ -57,6 +57,12 @@ printf "
 
 # Menu >
 
+ban_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account_banned;"); &> /dev/null
+ch_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.characters;"); &> /dev/null
+ac_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account;"); &> /dev/null
+gu_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.guild;"); &> /dev/null
+on_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT SUM(online) FROM $db_characters.characters;"); &> /dev/null
+
 while :
 do
 clear
@@ -69,10 +75,8 @@ cat<<EOF
            C(ontinued)-MaNGOS Helper
              --------------------
 EOF
-id=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT SUM(online) FROM $db_characters.characters;"); &> /dev/null
- echo "               Online Players $id"
-guilds=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.guild;"); &> /dev/null
- echo "                   Guilds $guilds"
+ echo "               Online Players $on_count"
+ echo "                   Guilds $gu_count"
  echo
 cat<<EOF
                 $load
@@ -191,13 +195,13 @@ fi
 
  echo
 printf "\e[31m   ._________________.
-   |.---------------.|
-   || \033[0mmangos>\e[31m       ||
+   |.---------------.|   \033[0mAccounts \e[1;32m->\033[0m $ac_count\e[31m
+   || \033[0mmangos>\e[31m       ||   \033[0mOnline \e[1;32m->\033[0m $on_count\e[31m
    ||               ||
+   ||               ||   Banned \e[1;32m->\033[0m $ban_count\e[31m
    ||               ||
-   ||               ||
-   ||               ||
-   ||_______________||
+   ||               ||   \033[0mCharacters \e[1;32m->\033[0m $ch_count\e[31m
+   ||_______________||   \033[0mGuilds \e[1;32m->\033[0m $gu_count\e[31m
    /.-.-.-.-.-.-.-.-.\\
   /.-.-.-.-.-.-.-.-.-.\\
  /.-.-.-.-.-.-.-.-.-.-.\\
