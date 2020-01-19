@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20201901
-# 1.1.0.3
+# 1.1.0.5
 
 # Config directory >
 
@@ -161,8 +161,10 @@ $pass_nc
 nc -q 1 $host_nc $port_nc < $folder_wow/tmp.txt
 sudo chown -R $user:$group $folder_wow ; rm $folder_wow/tmp.txt
  echo
-printf "[\e[1;32mAccount Created\033[0m]"
+printf "[\e[1;32mok\033[0m] Account $USR created."
  echo
+ echo
+ sleep 1
 fi
 
 # Create account done
