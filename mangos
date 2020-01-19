@@ -166,7 +166,7 @@ printf "0 \e[1;32m<-\033[0m [ \e[1;32mVanilla\033[0m ]"
 printf "0 \e[1;32m<->\033[0m 3 [ \e[1;32mGMLevel\033[0m ]"
  echo
  echo
- echo "Level:";
+ echo "GMLevel:";
  read LVL;
  echo "$user_nc
 $pass_nc
