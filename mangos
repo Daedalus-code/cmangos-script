@@ -988,29 +988,33 @@ git diff > $patch
  sleep 1
 fi
 
-read -p "Download ARM patch (Pi2)? (y/n) " -n 1 -r
-echo
+ read -p "Download ARM patch (Pi2)? (y/n) " -n 1 -r
+ echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 cd $folder_core
 wget https://github.com/Daedalus-code/cmangos-arm/blob/master/arm_pi2.patch
 fi
 
-read -p "Download ARM patch (Pi4)? (y/n) " -n 1 -r
-echo
+ read -p "Download ARM patch (Pi4)? (y/n) " -n 1 -r
+ echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 cd $folder_core
 wget https://github.com/Daedalus-code/cmangos-arm/blob/master/arm_pi4.patch
 fi
 
-read -p "Apply ARM patch? (y/n) " -n 1 -r
-echo
+ read -p "Apply ARM patch? (y/n) " -n 1 -r
+ echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 cd $folder_core
-sudo patch < MangosPI.patch -p1
+sudo patch < *.patch -p1
 fi
+
+ echo
+ read -p "Press Enter to continue" </dev/tty
+ echo
 
 # Create .patch file done
 
