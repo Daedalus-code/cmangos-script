@@ -55,13 +55,48 @@ printf "
 
 # Easter egg done
 
-# Menu >
+# Codes >
 
+# Get database info
 ban_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account_banned;"); &> /dev/null
 ch_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.characters;"); &> /dev/null
 ac_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account;"); &> /dev/null
 gu_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.guild;"); &> /dev/null
 on_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT SUM(online) FROM $db_characters.characters;"); &> /dev/null
+
+# Set column width
+COLUMNS=3
+services=("mangosd" "realmd")
+
+# Sort services
+IFS=$'\n' services=($(sort <<<"${services[*]}"))
+unset IFS
+service_status=()
+
+# Get status of all services
+for service in "${services[@]}"; do
+service_status+=($(systemctl is-active "$service"))
+done >/dev/null 2>&1
+out="     "
+for i in ${!services[@]}; do
+
+# Color green if service is active, else red
+if [[ "${service_status[$i]}" == "active" ]]; then
+out+="${services[$i]}:,${color_green}${service_status[$i]}${color_no},"
+else
+out+="${services[$i]}:,${color_red}${service_status[$i]}${color_no},"
+fi
+
+# Insert \n every $COLUMNS column
+if [ $((($i+1) % $COLUMNS)) -eq 0 ]; then
+out+="\n"
+fi
+done
+out+="\n"
+
+# Codes done
+
+# Menu >
 
 while :
 do
@@ -84,41 +119,6 @@ cat<<EOF
 EOF
 
 # Service status >
-
-# Set column width
-
-COLUMNS=3
-services=("mangosd" "realmd")
-
-# Sort services
-
-IFS=$'\n' services=($(sort <<<"${services[*]}"))
-unset IFS
-service_status=()
-
-# Get status of all services
-
-for service in "${services[@]}"; do
-service_status+=($(systemctl is-active "$service"))
-done >/dev/null 2>&1
-out="     "
-for i in ${!services[@]}; do
-
-# Color green if service is active, else red
-
-if [[ "${service_status[$i]}" == "active" ]]; then
-out+="${services[$i]}:,${color_green}${service_status[$i]}${color_no},"
-else
-out+="${services[$i]}:,${color_red}${service_status[$i]}${color_no},"
-fi
-
-# Insert \n every $COLUMNS column
-
-if [ $((($i+1) % $COLUMNS)) -eq 0 ]; then
-out+="\n"
-fi
-done
-out+="\n"
 
 printf "$out" | column -ts $',' | sed -e 's/^/  /'
 
