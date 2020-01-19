@@ -171,8 +171,8 @@ printf "0 \e[1;32m<->\033[0m 3 [ \e[1;32mGMLevel\033[0m ]"
  echo "$user_nc
 $pass_nc
 .account create $USR $PWD
-.account set addon $USR 0
-.account set gmlevel $USR 0" > $folder_wow/tmp.txt
+.account set addon $USR $XPV
+.account set gmlevel $USR $LVL" > $folder_wow/tmp.txt
 nc -q 1 $host_nc $port_nc < $folder_wow/tmp.txt ; rm $folder_wow/tmp.txt
  echo
 printf "[\e[1;32mok\033[0m] Account $USR created."
