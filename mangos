@@ -35,7 +35,7 @@ NOW="$(date +"%m.%d.%Y")"
 load="$(cat /proc/loadavg 2> /dev/null | awk '{ print $1,$2,$3 }')"
 
 # Get database info
-ban_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account_banned;"); &> /dev/null
+bn_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account_banned;"); &> /dev/null
 ch_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.characters;"); &> /dev/null
 ac_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account;"); &> /dev/null
 gu_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.guild;"); &> /dev/null
@@ -196,7 +196,7 @@ printf "\e[31m
     ||               ||     \033[0mAccounts\e[1;32m......:\033[0m $ac_count\e[31m
     ||               ||     \033[0mOnline\e[1;32m........:\033[0m $on_count\e[31m
     ||               ||
-    || \033[0mmangos>\e[31m       ||     Banned........:\033[0m $ban_count\e[31m
+    || \033[0mmangos>\e[31m       ||     Banned........:\033[0m $bn_count\e[31m
     ||_______________||
     /.-.-.-.-.-.-.-.-.\\     \033[0mCharacters\e[1;32m....:\033[0m $ch_count\e[31m
    /.-.-.-.-.-.-.-.-.-.\\    \033[0mGuilds\e[1;32m........:\033[0m $gu_count\e[31m
