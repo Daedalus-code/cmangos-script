@@ -1,25 +1,25 @@
 # C(ontinued)-MaNGOS - Helper  
   
 Admin Helper Tool in bash  
-![alt text](https://i.imgur.com/8K0OkOO.png)
+![alt text](https://i.imgur.com/Jyq7Riq.png)
 
 #### Features
 
-* create account      -  Create User Account (0/0)
 * login (command)     -  Console, Remote Access.
-* check for updates   -  Checking for git updates. (core, database, helper)
-* update CMaNGOS      -  Updating/Upgrading Core.
-* update Database     -  Updating/Upgrading Database.
-* shutdown server     -  Shut down server. (realmd, mangosd)
-* restart server      -  Restart server. (realmd, mangosd)
-* config files        -  Edit config files (run/etc)
+* create account      -  Create User Account (0/0)
 * characters          -  Show characters on server.
 * accounts            -  Show accounts on server.
 * guilds              -  Show Guilds on server.
-* create .patch file  -  Create patch file. (classic-mangos dir)
-* update Helper       -  Updating/Upgrading Admin Helper
+* config              -  Edit config files (run/etc)
+* updates             -  Checking for git updates. (core, database, helper)
+* logs                -  Show logs. (Realmd.log, Server.log)
+* patch file          -  Create patch file. (classic-mangos dir)
 * online check        -  Ping server. (internet/intranet)
-* check logs          -  Show logs. (Realmd.log, Server.log)
+* restart server      -  Restart server. (realmd, mangosd)
+* shutdown server     -  Shut down server. (realmd, mangosd)
+* update CMaNGOS      -  Updating/Upgrading Core.
+* update Database     -  Updating/Upgrading Database.
+* update Helper       -  Updating/Upgrading Admin Helper
 * quit                -  Exit the script.
 
 #### What's the purpose of this tool?  
