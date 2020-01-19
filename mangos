@@ -60,7 +60,7 @@ printf "
 while :
 do
 clear
-printf "\e[31m-----------------------------------------------
+printf "\e[31m ---------------------------------------------
     _____ _____     _____ _____ _____ _____
    |     |     |___|   | |   __|     |   __|
    |   --| | | | .'| | | |  |  |  |  |__   |
@@ -124,14 +124,14 @@ cat<<EOF
 
        Start with checking for updates c)
 
-  A : create account      t : characters
-  a : login (command)     u : accounts
-  c : check for updates   g : guilds
-  m : update CMaNGOS      p : create .patch file
-  d : update Database     w : update Helper
-  s : shutdown server     o : online check
-  r : restart server      l : check logs
-  e : config files        Q : quit
+   A : login (command)      p : patch file
+   a : create account       o : online check
+   t : characters           r : restart server
+   u : accounts             s : shutdown server
+   g : guilds               m : update CMaNGOS
+   e : config               d : update Database
+   c : updates              w : update Helper
+   l : logs                 Q : quit
 
 EOF
  read -n1 -s
@@ -139,7 +139,7 @@ EOF
 
 # Menu done
 
-"A")
+"a")
 
 # Create account ? > - Holy Shit ! OO
 
@@ -171,7 +171,7 @@ fi
 
  ;;
 
-"a")
+"A")
 
 # Login (command) >
 
