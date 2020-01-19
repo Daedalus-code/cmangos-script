@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20201901
-# 1.1.1.7
+# 1.1.3.8
 
 # Config directory >
 
@@ -966,10 +966,7 @@ esac
 
 # Create .patch file ? >
 
- echo
- echo "Create patch?"
- echo
- read -p "Are you sure? (y/n) " -n 1 -r
+ read -p "Create patch? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -989,6 +986,30 @@ git diff > $patch
  sleep 1
  echo -ne '(100%)\r'
  sleep 1
+fi
+
+read -p "Download ARM patch (Pi2)? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+cd $folder_core
+wget https://github.com/Daedalus-code/cmangos-arm/blob/master/arm_pi2.patch
+fi
+
+read -p "Download ARM patch (Pi4)? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+cd $folder_core
+wget https://github.com/Daedalus-code/cmangos-arm/blob/master/arm_pi4.patch
+fi
+
+read -p "Apply ARM patch? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+cd $folder_core
+sudo patch < MangosPI.patch -p1
 fi
 
 # Create .patch file done
