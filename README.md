@@ -6,7 +6,7 @@ Admin Helper Tool in bash
 #### Features
 
 * login (command)     -  Console, Remote Access.
-* create account      -  Create User Account (0/0)
+* create account      -  Create Account
 * characters          -  Show characters on server.
 * accounts            -  Show accounts on server.
 * guilds              -  Show Guilds on server.
