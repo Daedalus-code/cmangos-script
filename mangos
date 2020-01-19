@@ -707,7 +707,7 @@ fi
 
 # IMPORT BACKUP done
 
-# convert_mysql_engine = myisam -> innodb >
+# convert_mysql_engine = myisam -> innodb ? >
 
  read -p "Converting myisam -> innodb? (MariaDB) (y/n) " -n 1 -r
  echo
