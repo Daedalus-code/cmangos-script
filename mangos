@@ -993,7 +993,7 @@ fi
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 cd $folder_core
-wget https://github.com/Daedalus-code/cmangos-arm/blob/master/arm_pi2.patch
+wget https://raw.githubusercontent.com/Daedalus-code/cmangos-arm/master/arm_pi2.patch
 fi
 
  read -p "Download ARM patch (Pi4)? (y/n) " -n 1 -r
@@ -1001,7 +1001,7 @@ fi
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 cd $folder_core
-wget https://github.com/Daedalus-code/cmangos-arm/blob/master/arm_pi4.patch
+wget https://raw.githubusercontent.com/Daedalus-code/cmangos-arm/master/arm_pi4.patch
 fi
 
  read -p "Apply ARM patch? (y/n) " -n 1 -r
