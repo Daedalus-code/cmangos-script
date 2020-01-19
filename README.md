@@ -13,7 +13,7 @@ Admin Helper Tool in bash
 * config              -  Edit config files (run/etc)
 * updates             -  Checking for git updates. (core, database, helper)
 * logs                -  Show logs. (Realmd.log, Server.log)
-* patch file          -  Create patch file. (classic-mangos dir)
+* patch file          -  Create/Apply patch file. (classic-mangos dir)
 * online check        -  Ping server. (internet/intranet)
 * restart server      -  Restart server. (realmd, mangosd)
 * shutdown server     -  Shut down server. (realmd, mangosd)
