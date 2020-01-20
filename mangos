@@ -247,7 +247,7 @@ printf "[ Checking for \e[1;32m+\033[1;31m-\033[0m Updates\033[0m ] .. "
  echo
 
  echo
-cd "$folder_core"
+cd "$folder_core" || exit
 if git checkout master &> /dev/null &&
 git fetch origin master &> /dev/null &&
 [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
@@ -262,7 +262,7 @@ fi
 
 # Classic Database (classic-db)
 
-cd "$folder_db"
+cd "$folder_db" || exit
 if git checkout master &> /dev/null &&
 git fetch origin master &> /dev/null &&
 [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
@@ -277,7 +277,7 @@ fi
 
 # MaNGOS Helper
 
-cd "$folder_helper"
+cd "$folder_helper" || exit
 if git checkout master &> /dev/null &&
 git fetch origin master &> /dev/null &&
 [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
@@ -356,7 +356,7 @@ fi
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-cd "$folder_core"
+cd "$folder_core" || exit
 git reset --hard origin/master
 fi
 
@@ -368,11 +368,11 @@ fi
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-cd
+cd || exit
 sudo mkdir wow &> /dev/null
 sudo chown -R "$user":"$group" "$folder_wow"
 sudo rm -r "$folder_core"/build/ &> /dev/null
-cd "$folder_wow"
+cd "$folder_wow" || exit
 git clone https://github.com/cmangos/mangos-classic.git 2> /dev/null
 sudo mkdir "$folder_core"/build &> /dev/null
 fi
@@ -380,9 +380,9 @@ fi
 # Build from scratch done
 
 sudo chown -R "$user":"$group" "$folder_wow"
-cd "$folder_build"
+cd "$folder_build" || exit
 cmake .. $cmake
-cd "$folder_build"
+cd "$folder_build" || exit
 make
  echo
 printf "Select install operation"
@@ -393,11 +393,11 @@ printf "Select install operation"
  read -r n
 case $n in
  1) echo "make install"
-cd "$folder_build"
+cd "$folder_build" || exit
 sudo make install
  ;;
  2) echo "checkinstall"
-cd "$folder_build"
+cd "$folder_build" || exit
 sudo checkinstall
  ;;
  *) echo "invalid option"
@@ -640,7 +640,7 @@ then
 sudo chown -R "$user":"$group" "$folder_wow"
 cp "$folder_db"/InstallFullDB.config "$folder_wow" &> /dev/null
 sudo rm -r "$folder_db" &> /dev/null
-cd "$folder_wow"
+cd "$folder_wow" || exit
 git clone https://github.com/cmangos/classic-db.git
 mv "$folder_wow"/*.config "$folder_db" &> /dev/null
 sudo chown -R "$user":"$group" "$folder_wow"
@@ -706,7 +706,7 @@ echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 sudo chown -R "$user":"$group" "$folder_wow"
-cd "$folder_db"
+cd "$folder_db" || exit
 ./InstallFullDB.sh
 fi
 
@@ -911,13 +911,13 @@ then
  echo "Checking your current release"
  echo
  sleep 1
-cd "$folder_helper"
+cd "$folder_helper" || exit
 if git checkout master &> /dev/null &&
 git fetch origin master &> /dev/null &&
 [ $(git rev-list HEAD...origin/master --count) != 0 ] &&
 git merge origin/master
 then
-cd "$folder_helper"
+cd "$folder_helper" || exit
  echo
  sleep 1
 printf "[\033[1;31mold\033[0m] -> old release installed!"
@@ -936,7 +936,7 @@ printf "[\e[1;32mok\033[0m] -> Stripping executable on 'mangos.old'"
  echo
 sudo chmod -x /usr/local/bin/mangos.old
 sudo chown -R "$user":"$group" "$folder_helper"
-cd "$folder_helper"
+cd "$folder_helper" || exit
 printf "[\e[1;32mok\033[0m] -> Installing new release"
  sleep 1
  echo
@@ -949,7 +949,7 @@ printf "[\e[1;32mok\033[0m] -> Installed."
  echo "Will exit now."
  sleep 2 && exit
 else
-cd "$folder_helper"
+cd "$folder_helper" || exit
 printf "[\e[1;32mok\033[0m] Helper - latest release - "
  git rev-parse --short HEAD
  sleep 1
@@ -972,7 +972,7 @@ printf "[\e[1;32mok\033[0m] -> Stripping executable on 'mangos.old'"
  echo
 sudo chmod -x /usr/local/bin/mangos.old
 sudo chown -R "$user":"$group" "$folder_helper"
-cd "$folder_helper"
+cd "$folder_helper" || exit
 printf "[\e[1;32mok\033[0m] -> Installing latest release"
  sleep 1
  echo
@@ -1039,7 +1039,7 @@ read -r -p "Download ARM patch (Pi2)? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-cd "$folder_core"
+cd "$folder_core" || exit
 wget https://raw.githubusercontent.com/Daedalus-code/cmangos-arm/master/arm_pi2.patch
 fi
 
@@ -1047,7 +1047,7 @@ read -r -p "Download ARM patch (Pi4)? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-cd "$folder_core"
+cd "$folder_core" || exit
 wget https://raw.githubusercontent.com/Daedalus-code/cmangos-arm/master/arm_pi4.patch
 fi
 
@@ -1065,11 +1065,11 @@ printf "Select patch"
 case $n in
  1) echo "Applying patch - (Pi2)"
 sudo chown -R "$user":"$group" "$folder_core"
-cd "$folder_core"
+cd "$folder_core" || exit
 sudo patch < arm_pi2.patch -p1
  ;;
  2) echo "Applying patch - (Pi4)"
-cd "$folder_core"
+cd "$folder_core" || exit
 sudo patch < arm_pi4.patch -p1
  ;;
  *) echo "invalid option"
@@ -1092,12 +1092,12 @@ printf "Select patch operation"
 case $n in
  1) echo "Create patch"
 sudo chown -R "$user":"$group" "$folder_core"
-cd "$folder_core"
+cd "$folder_core" || exit
 git checkout sql/create/db_create_mysql.sql 1> /dev/null
 git diff > "$patch"
  ;;
  2) echo "Apply patch"
-cd "$folder_core"
+cd "$folder_core" || exit
 sudo patch < "$patch" -p1
  ;;
  *) echo "invalid option"
