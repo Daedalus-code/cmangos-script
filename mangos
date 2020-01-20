@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202001
-# 1.2.1.1
+# 1.2.2.8
 
 # Config directory >
 
@@ -1022,12 +1022,55 @@ esac
 
 # Create/Apply .patch file ? >
 
-read -p "Create/Apply .patch file? (y/n) " -n 1 -r
+read -p "Download ARM patch (Pi2)? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+cd $folder_core
+wget https://raw.githubusercontent.com/Daedalus-code/cmangos-arm/master/arm_pi2.patch
+fi
+
+read -p "Download ARM patch (Pi4)? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+cd $folder_core
+wget https://raw.githubusercontent.com/Daedalus-code/cmangos-arm/master/arm_pi4.patch
+fi
+
+read -p "Apply .patch file? (ARM) (y/n) " -n 1 -r
+ echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+
+printf "Select patch"
+ echo
+ echo " 1) ARM patch (Pi2)"
+ echo " 2) ARM patch (Pi4)"
+ echo
+ read n
+case $n in
+ 1) echo "Applying patch - (Pi2)"
+sudo chown -R $user:$group $folder_core
+cd $folder_core
+sudo patch < arm_pi2.patch -p1
+ ;;
+ 2) echo "Applying patch - (Pi4)"
+cd $folder_core
+sudo patch < arm_pi4.patch -p1
+ ;;
+ *) echo "invalid option"
+ ;;
+esac
+fi
+
+read -p "Create/Apply new patch file now? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 
 printf "Select patch operation"
+ echo
  echo
  echo " 1) Create patch"
  echo " 2) Apply patch"
@@ -1042,37 +1085,11 @@ git diff > $patch
  ;;
  2) echo "Apply patch"
 cd $folder_core
-sudo patch < *.patch -p1
+sudo patch < $patch -p1
  ;;
  *) echo "invalid option"
  ;;
 esac
- echo
-
- read -p "Download ARM patch (Pi2)? (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-cd $folder_core
-wget https://raw.githubusercontent.com/Daedalus-code/cmangos-arm/master/arm_pi2.patch
-fi
-
- read -p "Download ARM patch (Pi4)? (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-cd $folder_core
-wget https://raw.githubusercontent.com/Daedalus-code/cmangos-arm/master/arm_pi4.patch
-fi
-
- read -p "Apply ARM patch? (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-cd $folder_core
-sudo patch < *.patch -p1
-fi
-
  echo
  read -p "Press Enter to continue" </dev/tty
  echo
