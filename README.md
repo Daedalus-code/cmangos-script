@@ -9,7 +9,7 @@ Admin Helper Tool in bash
 * create account      -  Create Account
 * characters          -  Show characters on server.
 * accounts            -  Show accounts on server.
-* guilds              -  Show Guilds on server.
+* guilds              -  Show guilds on server.
 * config              -  Edit config files (run/etc)
 * updates             -  Checking for git updates. (core, database, helper)
 * logs                -  Show logs. (Realmd.log, Server.log)
@@ -44,7 +44,7 @@ You need to copy config files from cmangos-script folder into /scripts/ folder.
 Edit config file 'config.cnf' with MySQL credentials.   
 Edit config file 'config.txt' with correct information.  
 #### Your own directory for configs?  
-Edit mangos script at line 21:    
+Edit mangos script at line 29:    
 ```source /scripts/server.txt # please edit if wrong.```  
 server.txt at line 39:  
 ```folder_helper="/scripts/cmangos-script" # please edit if wrong.```  
