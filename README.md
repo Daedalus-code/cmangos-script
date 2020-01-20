@@ -44,7 +44,7 @@ You need to copy config files from cmangos-script folder into /scripts/ folder.
 Edit config file 'config.cnf' with MySQL credentials.   
 Edit config file 'config.txt' with correct information.  
 #### Your own directory for configs?  
-Edit mangos script at line 29:    
+Edit mangos script at line 30:    
 ```source /scripts/server.txt # please edit if wrong.```  
 server.txt at line 39:  
 ```folder_helper="/scripts/cmangos-script" # please edit if wrong.```  
