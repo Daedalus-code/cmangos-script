@@ -107,13 +107,13 @@ cat<<EOF
 
        Start with checking for updates c)
 
-   A : login (command)    p : patch file
-   a : create account     o : online check
-   t : characters         r : restart server
-   u : accounts           s : shutdown server
-   g : guilds             m : update CMaNGOS
-   e : config             d : update Database
-   c : updates            w : update Helper
+   A : login (command)    p : patch
+   a : create account     c : updates
+   t : characters         r : restart
+   u : accounts           s : shutdown
+   g : guilds             m : update core
+   e : config             d : update database
+   o : ping               w : update Helper
    l : logs               Q : quit
 
 EOF
