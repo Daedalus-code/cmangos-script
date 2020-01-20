@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202001
-# 1.2.4.0
+# 1.2.4.1
 
 # Menusystem >
 
@@ -26,6 +26,7 @@ clear
 
 # Config directory >
 
+# shellcheck disable=SC1091
 source /scripts/server.txt # please edit if wrong.
 
 # Config directory done
@@ -36,7 +37,7 @@ source /scripts/server.txt # please edit if wrong.
 NOW="$(date +"%m.%d.%Y")"
 
 # Get load
-load="$(cat /proc/loadavg 2> /dev/null | awk '{ print $1,$2,$3 }')"
+load="$(while IFS= read -r i; do echo "${i%?}"; done < /proc/loadavg 2> /dev/null | awk '{ print $1,$2,$3 }')"
 
 # Get database info
 bn_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account_banned;"); &> /dev/null
@@ -116,7 +117,7 @@ cat<<EOF
    l : logs               Q : quit
 
 EOF
- read -n1 -s
+ read -r -n1 -s
  case "$REPLY" in
 
 # Menu done
@@ -126,13 +127,13 @@ EOF
 # Create account ? > - Holy Shit ! OO
 
  echo
- read -p "Create Account? (y/n) " -n 1 -r
+ read -r -p "Create Account? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
  echo
  echo "Username:";
- read USR;
+ read -r USR;
 if [[ -z "$USR" ]]; then
 printf '%s\n' "No input entered"
 exit 1
@@ -142,7 +143,7 @@ printf "[\e[1;32mok\033[0m] $USR"
  echo
 fi
  echo "Password"
- read -s PWD;
+ read -r -s PWD;
 if [[ -z "$PWD" ]]; then
 printf '%s\n' "No input entered"
 exit 1
@@ -152,7 +153,7 @@ printf "[\e[1;32mok\033[0m] Password"
  echo
 fi
  echo "Choose expansion-version - 0";
- read -s XPV;
+ read -r -s XPV;
 if [[ -z "$XPV" ]]; then
 printf '%s\n' "No input entered"
 exit 1
@@ -162,7 +163,7 @@ printf "[\e[1;32mok\033[0m] expansion-version ($XPV)"
  echo
 fi
  echo "GMLevel - 0-3";
- read -s LVL;
+ read -r -s LVL;
 if [[ -z "$LVL" ]]; then
 printf '%s\n' "No input entered"
 exit 1
@@ -174,8 +175,8 @@ fi
 $pass_nc
 .account create $USR $PWD
 .account set addon $USR $XPV
-.account set gmlevel $USR $LVL" > $folder_wow/tmp.txt
-nc -q 1 $host_nc $port_nc < $folder_wow/tmp.txt ; rm $folder_wow/tmp.txt
+.account set gmlevel $USR $LVL" > "$folder_wow"/tmp.txt
+nc -q 1 "$host_nc" "$port_nc" < "$folder_wow"/tmp.txt ; rm "$folder_wow"/tmp.txt
  echo
 printf "[\e[1;32mok\033[0m] Account $USR ($XPV/$LVL) created."
  echo
@@ -223,12 +224,12 @@ printf "
  "
  echo
  echo
-read -p "Want to login? (y/n) " -n 1 -r
+read -r -p "Want to login? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
  echo
-nc $host_nc $port_nc
+nc "$host_nc" "$port_nc"
  echo
 fi
 
@@ -246,10 +247,10 @@ printf "[ Checking for \e[1;32m+\033[1;31m-\033[0m Updates\033[0m ] .. "
  echo
 
  echo
-cd $folder_core
+cd "$folder_core"
 if git checkout master &> /dev/null &&
 git fetch origin master &> /dev/null &&
-[ `git rev-list HEAD...origin/master --count` != 0 ] &&
+[ $(git rev-list HEAD...origin/master --count) != 0 ] &&
 git merge origin/master
 then
 printf "[\033[1;31mold\033[0m] Core Not Updated - "
@@ -261,10 +262,10 @@ fi
 
 # Classic Database (classic-db)
 
-cd $folder_db
+cd "$folder_db"
 if git checkout master &> /dev/null &&
 git fetch origin master &> /dev/null &&
-[ `git rev-list HEAD...origin/master --count` != 0 ] &&
+[ $(git rev-list HEAD...origin/master --count) != 0 ] &&
 git merge origin/master
 then
 printf "[\033[1;31mold\033[0m] Database Not Updated - "
@@ -276,10 +277,10 @@ fi
 
 # MaNGOS Helper
 
-cd $folder_helper
+cd "$folder_helper"
 if git checkout master &> /dev/null &&
 git fetch origin master &> /dev/null &&
-[ `git rev-list HEAD...origin/master --count` != 0 ] &&
+[ $(git rev-list HEAD...origin/master --count) != 0 ] &&
 git merge origin/master
 then
 printf "[\033[1;31mold\033[0m] Helper Not Updated - "
@@ -289,7 +290,7 @@ printf "[\e[1;32mok\033[0m] Helper Updated - "
  git rev-parse --short HEAD
 fi
  echo
- read -p "Press Enter to continue" </dev/tty
+ read -r -p "Press Enter to continue" </dev/tty
  echo
 
 # Checking for updates done
@@ -304,7 +305,7 @@ fi
 printf "Update classic-mangos [\e[1;32mCore\033[0m] ?"
  echo
  echo
- read -p "Are you sure? (y/n) " -n 1 -r
+ read -r -p "Are you sure? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -319,7 +320,7 @@ sudo service mangosd stop &> /dev/null
  sleep 1
 printf "Updating mangos-classic (\e[1;32mworld\033[0m).."
  echo
- read -p "Install Software requirements? (y/n) " -n 1 -r
+ read -r -p "Install Software requirements? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -351,11 +352,11 @@ fi
 
 # reset --hard origin/master ? >
 
- read -p "Reset --hard origin/master? (y/n) " -n 1 -r
+ read -r -p "Reset --hard origin/master? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-cd $folder_core
+cd "$folder_core"
 git reset --hard origin/master
 fi
 
@@ -363,25 +364,25 @@ fi
 
 # Build from scratch ? >
 
- read -p "Build from scratch? (y/n) " -n 1 -r
+ read -r -p "Build from scratch? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 cd
 sudo mkdir wow &> /dev/null
-sudo chown -R $user:$group $folder_wow
-sudo rm -r $folder_core/build/ &> /dev/null
-cd $folder_wow
+sudo chown -R "$user":"$group" "$folder_wow"
+sudo rm -r "$folder_core"/build/ &> /dev/null
+cd "$folder_wow"
 git clone https://github.com/cmangos/mangos-classic.git 2> /dev/null
-sudo mkdir $folder_core/build &> /dev/null
+sudo mkdir "$folder_core"/build &> /dev/null
 fi
 
 # Build from scratch done
 
-sudo chown -R $user:$group $folder_wow
-cd $folder_build
-cmake .. $cmake
-cd $folder_build
+sudo chown -R "$user":"$group" "$folder_wow"
+cd "$folder_build"
+cmake .. "$cmake"
+cd "$folder_build"
 make
  echo
 printf "Select install operation"
@@ -389,14 +390,14 @@ printf "Select install operation"
  echo " 1) make install"
  echo " 2) checkinstall with backup"
  echo
- read n
+ read -r n
 case $n in
  1) echo "make install"
-cd $folder_build
+cd "$folder_build"
 sudo make install
  ;;
  2) echo "checkinstall"
-cd $folder_build
+cd "$folder_build"
 sudo checkinstall
  ;;
  *) echo "invalid option"
@@ -406,16 +407,16 @@ esac
 
 # Edit/Copy config files ? >
 
- read -p "Edit config files? (nano) (y/n) " -n 1 -r
+ read -r -p "Edit config files? (nano) (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 
- read -p "Copy 'ahbot.conf.dist.in' into run/etc ? (y/n) " -n 1 -r
+ read -r -p "Copy 'ahbot.conf.dist.in' into run/etc ? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-cp $folder_core/src/game/AuctionHouseBot/ahbot.conf.dist.in $folder_core/run/etc/ahbot.conf.dist &> /dev/null
+cp "$folder_core"/src/game/AuctionHouseBot/ahbot.conf.dist.in "$folder_core"/run/etc/ahbot.conf.dist &> /dev/null
  echo "run/etc/ahbot.conf.dist created."
 fi
 
@@ -457,22 +458,22 @@ select opt in "${options[@]}" "Quit"; do
 case "$REPLY" in
 
  1 ) echo "You picked $opt $REPLY"
-nano $folder_core/run/etc/mangosd.conf.dist;;
+nano "$folder_core"/run/etc/mangosd.conf.dist;;
  2 ) echo "You picked $opt $REPLY"
-nano $folder_core/run/etc/realmd.conf.dist;;
+nano "$folder_core"/run/etc/realmd.conf.dist;;
  3 ) echo "You picked $opt $REPLY"
-nano $folder_core/run/etc/playerbot.conf.dist;;
+nano "$folder_core"/run/etc/playerbot.conf.dist;;
  4 ) echo "You picked $opt $REPLY"
-nano $folder_core/run/etc/ahbot.conf.dist;;
+nano "$folder_core"/run/etc/ahbot.conf.dist;;
 
  5 ) echo "You picked $opt $REPLY"
-nano $folder_core/run/etc/mangosd.conf;;
+nano "$folder_core"/run/etc/mangosd.conf;;
  6 ) echo "You picked $opt $REPLY"
-nano $folder_core/run/etc/realmd.conf;;
+nano "$folder_core"/run/etc/realmd.conf;;
  7 ) echo "You picked $opt $REPLY"
-nano $folder_core/run/etc/playerbot.conf;;
+nano "$folder_core"/run/etc/playerbot.conf;;
  8 ) echo "You picked $opt $REPLY"
-nano $folder_core/run/etc/ahbot.conf;;
+nano "$folder_core"/run/etc/ahbot.conf;;
 
 $(( ${#options[@]}+1 )) ) echo "
 See you next time!
@@ -484,7 +485,7 @@ fi
 
 # Edit/Copy config files done
 
- read -p "Press Enter to continue" </dev/tty
+ read -r -p "Press Enter to continue" </dev/tty
 fi
 
 # Update CMaNGOS done
@@ -499,7 +500,7 @@ fi
 printf "Update classic-db [\e[1;32mDatabase\033[0m] ?"
  echo
  echo
- read -p "Are you sure? (y/n) " -n 1 -r
+ read -r -p "Are you sure? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -510,17 +511,17 @@ sudo service realmd stop &> /dev/null
  echo -ne '(50%)\r'
  sleep 1
 sudo service mangosd stop &> /dev/null
-sudo chown -R $user:$group $folder_wow
+sudo chown -R "$user":"$group" "$folder_wow"
 
 # BACKUP (regardless) >
 
-mkdir $folder_wow/backup &> /dev/null
-mkdir $folder_wow/backup/old &> /dev/null
-cp $folder_wow/backup/*.sql $folder_wow/backup/old &> /dev/null
+mkdir "$folder_wow"/backup &> /dev/null
+mkdir "$folder_wow"/backup/old &> /dev/null
+cp "$folder_wow"/backup/*.sql "$folder_wow"/backup/old &> /dev/null
 sudo apt-get install zip -y &> /dev/null
-zip $folder_wow/backup/old/backup.zip *.sql &> /dev/null
-find $folder_wow/backup/*.sql -type d -ctime +10 -exec rm -rf {} \; &> /dev/null
-find $folder_wow/backup/old/*.sql -type d -ctime +10 -exec rm -rf {} \; &> /dev/null
+zip "$folder_wow"/backup/old/backup.zip *.sql &> /dev/null
+find "$folder_wow"/backup/*.sql -type d -ctime +10 -exec rm -rf {} \; &> /dev/null
+find "$folder_wow"/backup/old/*.sql -type d -ctime +10 -exec rm -rf {} \; &> /dev/null
  echo -ne '(100%)\r'
  sleep 1
  echo
@@ -532,7 +533,7 @@ FILE="$folder_wow/backup/$db_characters-$NOW.sql"
 if [ ! -f "$FILE" ];
 then
 printf "[\033[1;31mempty\033[0m/old\033[0m] 'Characters' ! Creating backup.."
-mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/backup/$db_characters-$NOW.sql
+mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
  echo
 else
 printf "[\e[1;32mok\033[0m] 'Characters' backup existing."
@@ -545,7 +546,7 @@ FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
 if [ ! -f "$FILE" ];
 then
 printf "[\033[1;31mempty\033[0m/old\033[0m] 'Realmd' ! Creating backup.."
-mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/backup/$db_realmd-$NOW.sql
+mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
  echo
 else
 printf "[\e[1;32mok\033[0m] 'Realmd' backup existing."
@@ -565,7 +566,7 @@ sudo apt-get install ${packagelist[@]} -y 1> /dev/null
 
 # Delete and start over ? >
 
- read -p "Fresh install? (drop/import databases) (y/n) " -n 1 -r
+ read -r -p "Fresh install? (drop/import databases) (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -579,7 +580,7 @@ FILE="$folder_wow/backup/$db_characters-$NOW.sql"
 if [ ! -f "$FILE" ];
 then
 printf "[\033[1;31mempty\033[0m/old\033[0m] 'Characters' ! Creating backup.."
-mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_characters > $folder_wow/backup/$db_characters-$NOW.sql
+mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
  echo
 else
 printf "[\e[1;32mok\033[0m] 'Characters' backup existing."
@@ -592,7 +593,7 @@ FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
 if [ ! -f "$FILE" ];
 then
 printf "[\033[1;31mempty\033[0m/old\033[0m] 'Realmd' ! Creating backup.."
-mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 $db_realmd > $folder_wow/backup/$db_realmd-$NOW.sql
+mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
  echo
 else
 printf "[\e[1;32mok\033[0m] 'Realmd' backup existing"
@@ -606,23 +607,23 @@ fi
 # DROP Database 'characters'
 
 echo
-RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
+RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_characters")
 if [ "$RESULT" == "$db_characters" ]; then
-mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_characters;
+mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP "$db_characters";
 fi
 
 # DROP Database 'mangos'
 
-RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_mangos`
+RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_mangos")
 if [ "$RESULT" == "$db_mangos" ]; then
-mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_mangos;
+mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP "$db_mangos";
 fi
 
 # DROP Database 'realmd'
 
-RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_realmd`
+RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_realmd")
 if [ "$RESULT" == "$db_realmd" ]; then
-mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP $db_realmd;
+mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP "$db_realmd";
 fi
 
 # DROP Databases done
@@ -630,19 +631,19 @@ fi
 # Delete & git clone classic-db folder ? >
 
  echo
- read -p "Delete & git clone classic-db folder? (y/n) " -n 1 -r
+ read -r -p "Delete & git clone classic-db folder? (y/n) " -n 1 -r
  echo
 
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 
-sudo chown -R $user:$group $folder_wow
-cp $folder_db/InstallFullDB.config $folder_wow &> /dev/null
-sudo rm -r $folder_db &> /dev/null
-cd $folder_wow
+sudo chown -R "$user":"$group" "$folder_wow"
+cp "$folder_db"/InstallFullDB.config "$folder_wow" &> /dev/null
+sudo rm -r "$folder_db" &> /dev/null
+cd "$folder_wow"
 git clone https://github.com/cmangos/classic-db.git
-mv $folder_wow/*.config $folder_db &> /dev/null
-sudo chown -R $user:$group $folder_wow
+mv "$folder_wow"/*.config "$folder_db" &> /dev/null
+sudo chown -R "$user":"$group" "$folder_wow"
 fi
 
 # Delete & git clone classic-db folder done
@@ -653,7 +654,7 @@ fi
 # CREATE Database 'characters'
 
  echo
-RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_characters`
+RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_characters")
 if [ "$RESULT" == "$db_characters" ];
 then
 printf "[\e[1;32mok\033[0m] 'Characters' database installed."
@@ -662,12 +663,12 @@ else
 printf "[\033[1;31mempty\033[0m] 'Characters' importing.."
  echo
 mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHARACTER SET utf8 COLLATE utf8_general_ci";
-mysql --defaults-extra-file="$sql_mycnf" --database=$db_characters < $folder_sql/base/characters.sql
+mysql --defaults-extra-file="$sql_mycnf" --database="$db_characters" < "$folder_sql"/base/characters.sql
 fi
 
 # CREATE Database 'mangos'
 
-RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_mangos`
+RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_mangos")
 if [ "$RESULT" == "$db_mangos" ];
 then
 printf "[\e[1;32mok\033[0m] 'Mangos' database installed."
@@ -676,12 +677,12 @@ else
 printf "[\033[1;31mempty\033[0m] 'Mangos' importing.."
  echo
 mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTER SET utf8 COLLATE utf8_general_ci";
-mysql --defaults-extra-file="$sql_mycnf" --database=$db_mangos < $folder_sql/base/mangos.sql
+mysql --defaults-extra-file="$sql_mycnf" --database="$db_mangos" < "$folder_sql"/base/mangos.sql
 fi
 
 # CREATE Database 'realmd'
 
-RESULT=`mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep $db_realmd`
+RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_realmd")
 if [ "$RESULT" == "$db_realmd" ];
 then
 printf "[\e[1;32mok\033[0m] 'Realmd' database installed."
@@ -690,7 +691,7 @@ else
 printf "[\033[1;31mempty\033[0m] 'Realmd' importing.."
  echo
 mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTER SET utf8 COLLATE utf8_general_ci";
-mysql --defaults-extra-file="$sql_mycnf" --database=$db_realmd < $folder_sql/base/realmd.sql
+mysql --defaults-extra-file="$sql_mycnf" --database="$db_realmd" < "$folder_sql"/base/realmd.sql
 fi
  echo
 
@@ -700,12 +701,12 @@ fi
 
 # MaNGOS InstallFullDB ? >
 
-read -p "MaNGOS InstallFullDB? (y/n) " -n 1 -r
+read -r -p "MaNGOS InstallFullDB? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-sudo chown -R $user:$group $folder_wow
-cd $folder_db
+sudo chown -R "$user":"$group" "$folder_wow"
+cd "$folder_db"
 ./InstallFullDB.sh
 fi
 
@@ -714,18 +715,18 @@ fi
 # IMPORT BACKUP ? >
 
  echo
-ls -lQ $folder_wow/backup
+ls -lQ "$folder_wow"/backup
  echo
- read -p "Import latest backup? (y/n) " -n 1 -r
+ read -r -p "Import latest backup? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
  echo -ne '(0%)\r'
  sleep 1
-mysql --defaults-extra-file="$sql_mycnf" $db_characters < $folder_wow/backup/$db_characters-$NOW.sql;
+mysql --defaults-extra-file="$sql_mycnf" "$db_characters" < "$folder_wow"/backup/"$db_characters"-"$NOW".sql;
  echo -ne '(50%)\r'
  sleep 1
-mysql --defaults-extra-file="$sql_mycnf" $db_realmd < $folder_wow/backup/$db_realmd-$NOW.sql;
+mysql --defaults-extra-file="$sql_mycnf" "$db_realmd" < "$folder_wow"/backup/"$db_realmd"-"$NOW".sql;
  echo -ne '(100%)\r'
  sleep 1
 fi
@@ -734,30 +735,30 @@ fi
 
 # convert_mysql_engine = myisam -> innodb ? >
 
- read -p "Converting myisam -> innodb? (MariaDB) (y/n) " -n 1 -r
+ read -r -p "Converting myisam -> innodb? (MariaDB) (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
  echo -ne '(0%)\r'
  sleep 1
-TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_mangos -e 'show tables')
+TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D "$db_mangos" -e 'show tables')
 for T in $TABLES
 do
-sudo mysql --defaults-extra-file="$sql_mycnf" -D $db_mangos -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
+sudo mysql --defaults-extra-file="$sql_mycnf" -D "$db_mangos" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
 done
  echo -ne '(25%)\r'
  sleep 1
-TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_realmd -e 'show tables')
+TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D "$db_realmd" -e 'show tables')
 for T in $TABLES
 do
-sudo mysql --defaults-extra-file="$sql_mycnf" -D $db_realmd -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
+sudo mysql --defaults-extra-file="$sql_mycnf" -D "$db_realmd" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
 done
  echo -ne '(50%)\r'
  sleep 1
-TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D $db_characters -e 'show tables')
+TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D "$db_characters" -e 'show tables')
 for T in $TABLES
 do
-sudo mysql --defaults-extra-file="$sql_mycnf" -D $db_characters -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
+sudo mysql --defaults-extra-file="$sql_mycnf" -D "$db_characters" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
 done
  echo -ne '100%)\r'
  sleep 1
@@ -765,7 +766,7 @@ fi
 
 # convert_mysql_engine = myisam -> innodb done
 
- read -p "Press Enter to continue" </dev/tty
+ read -r -p "Press Enter to continue" </dev/tty
 fi
 
 # Update Database done
@@ -779,7 +780,7 @@ fi
  echo "User Accounts"
  echo
 mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, last_ip, DATE_FORMAT(last_login, '%Y-%m-%d') last_login, id FROM $db_realmd.account;"
- read -p "Press Enter to continue" </dev/tty
+ read -r -p "Press Enter to continue" </dev/tty
 
 # Accounts done
 
@@ -792,7 +793,7 @@ mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, la
  echo "Characters"
  echo
 mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, level, online, account FROM $db_characters.characters;"
- read -p "Press Enter to continue" </dev/tty
+ read -r -p "Press Enter to continue" </dev/tty
 
 # Characters done
 
@@ -805,7 +806,7 @@ mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, level, online, 
  echo "Guilds"
  echo
 mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, motd FROM $db_characters.guild;"
- read -p "Press Enter to continue" </dev/tty
+ read -r -p "Press Enter to continue" </dev/tty
 
 # Guilds done
 
@@ -818,7 +819,7 @@ mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, motd FROM $db_c
  echo
  echo "Shutdown Server?"
  echo
- read -p "Are you sure? (y/n) " -n 1 -r
+ read -r -p "Are you sure? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -845,7 +846,7 @@ fi
  echo
  echo "Restart Server?"
  echo
- read -p "Are you sure? (y/n) " -n 1 -r
+ read -r -p "Are you sure? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -863,28 +864,28 @@ printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
  echo "Realmd log -->"
  echo
-tail $folder_core/run/logs/Realmd.log
+tail "$folder_core"/run/logs/Realmd.log
  echo
 printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
- read -n 1 -p "Check server log? (world) (tail/follow/nano/exit) " ans;
+ read -r -n 1 -p "Check server log? (world) (tail/follow/nano/exit) " ans;
  echo
  echo
 case $ans in
  t|T)
-tail $folder_core/run/logs/Server.log
+tail "$folder_core"/run/logs/Server.log
  echo
 printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
- read -p "Press Enter to continue" </dev/tty
+ read -r -p "Press Enter to continue" </dev/tty
  ;;
  f|F)
  echo
-tail -f $folder_core/run/logs/Server.log
+tail -f "$folder_core"/run/logs/Server.log
  ;;
  n|N)
  echo
-nano $folder_core/run/logs/Server.log
+nano "$folder_core"/run/logs/Server.log
  ;;
  *)
  ;;
@@ -902,7 +903,7 @@ fi
 printf "Update cmangos-script [\e[1;32mHelper\033[0m] ?"
  echo
  echo
- read -p "Are you sure? (y/n) " -n 1 -r
+ read -r -p "Are you sure? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -910,13 +911,13 @@ then
  echo "Checking your current release"
  echo
  sleep 1
-cd $folder_helper
+cd "$folder_helper"
 if git checkout master &> /dev/null &&
 git fetch origin master &> /dev/null &&
-[ `git rev-list HEAD...origin/master --count` != 0 ] &&
+[ $(git rev-list HEAD...origin/master --count) != 0 ] &&
 git merge origin/master
 then
-cd $folder_helper
+cd "$folder_helper"
  echo
  sleep 1
 printf "[\033[1;31mold\033[0m] -> old release installed!"
@@ -934,8 +935,8 @@ printf "[\e[1;32mok\033[0m] -> Stripping executable on 'mangos.old'"
  sleep 1
  echo
 sudo chmod -x /usr/local/bin/mangos.old
-sudo chown -R $user:$group $folder_helper
-cd $folder_helper
+sudo chown -R "$user":"$group" "$folder_helper"
+cd "$folder_helper"
 printf "[\e[1;32mok\033[0m] -> Installing new release"
  sleep 1
  echo
@@ -948,12 +949,12 @@ printf "[\e[1;32mok\033[0m] -> Installed."
  echo "Will exit now."
  sleep 2 && exit
 else
-cd $folder_helper
+cd "$folder_helper"
 printf "[\e[1;32mok\033[0m] Helper - latest release - "
  git rev-parse --short HEAD
  sleep 1
  echo
- read -p "Install regardless? (y/n) " -n 1 -r
+ read -r -p "Install regardless? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -970,8 +971,8 @@ printf "[\e[1;32mok\033[0m] -> Stripping executable on 'mangos.old'"
  sleep 1
  echo
 sudo chmod -x /usr/local/bin/mangos.old
-sudo chown -R $user:$group $folder_helper
-cd $folder_helper
+sudo chown -R "$user":"$group" "$folder_helper"
+cd "$folder_helper"
 printf "[\e[1;32mok\033[0m] -> Installing latest release"
  sleep 1
  echo
@@ -994,33 +995,33 @@ fi
 
 # Check logs >
 
-mkdir $folder_core/run/logs &> /dev/null
+mkdir "$folder_core"/run/logs &> /dev/null
 printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
  echo "Realmd log -->"
  echo
-tail $folder_core/run/logs/Realmd.log
+tail "$folder_core"/run/logs/Realmd.log
  echo
 printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
- read -n 1 -p "Check server log? (world) (tail/follow/nano/exit) " ans;
+ read -r -n 1 -p "Check server log? (world) (tail/follow/nano/exit) " ans;
  echo
  echo
 case $ans in
  t|T)
-tail $folder_core/run/logs/Server.log
+tail "$folder_core"/run/logs/Server.log
  echo
 printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
- read -p "Press Enter to continue" </dev/tty
+ read -r -p "Press Enter to continue" </dev/tty
  ;;
  f|F)
  echo
-tail -f $folder_core/run/logs/Server.log
+tail -f "$folder_core"/run/logs/Server.log
  ;;
  n|N)
  echo
-nano $folder_core/run/logs/Server.log
+nano "$folder_core"/run/logs/Server.log
  ;;
  *)
  ;;
@@ -1034,23 +1035,23 @@ esac
 
 # Create/Apply .patch file ? >
 
-read -p "Download ARM patch (Pi2)? (y/n) " -n 1 -r
+read -r -p "Download ARM patch (Pi2)? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-cd $folder_core
+cd "$folder_core"
 wget https://raw.githubusercontent.com/Daedalus-code/cmangos-arm/master/arm_pi2.patch
 fi
 
-read -p "Download ARM patch (Pi4)? (y/n) " -n 1 -r
+read -r -p "Download ARM patch (Pi4)? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-cd $folder_core
+cd "$folder_core"
 wget https://raw.githubusercontent.com/Daedalus-code/cmangos-arm/master/arm_pi4.patch
 fi
 
-read -p "Apply .patch file? (ARM) (y/n) " -n 1 -r
+read -r -p "Apply .patch file? (ARM) (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -1060,15 +1061,15 @@ printf "Select patch"
  echo " 1) ARM patch (Pi2)"
  echo " 2) ARM patch (Pi4)"
  echo
- read n
+ read -r n
 case $n in
  1) echo "Applying patch - (Pi2)"
-sudo chown -R $user:$group $folder_core
-cd $folder_core
+sudo chown -R "$user":"$group" "$folder_core"
+cd "$folder_core"
 sudo patch < arm_pi2.patch -p1
  ;;
  2) echo "Applying patch - (Pi4)"
-cd $folder_core
+cd "$folder_core"
 sudo patch < arm_pi4.patch -p1
  ;;
  *) echo "invalid option"
@@ -1076,7 +1077,7 @@ sudo patch < arm_pi4.patch -p1
 esac
 fi
 
-read -p "Create/Apply new patch file now? (y/n) " -n 1 -r
+read -r -p "Create/Apply new patch file now? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -1087,23 +1088,23 @@ printf "Select patch operation"
  echo " 1) Create patch"
  echo " 2) Apply patch"
  echo
- read n
+ read -r n
 case $n in
  1) echo "Create patch"
-sudo chown -R $user:$group $folder_core
-cd $folder_core
+sudo chown -R "$user":"$group" "$folder_core"
+cd "$folder_core"
 git checkout sql/create/db_create_mysql.sql 1> /dev/null
-git diff > $patch
+git diff > "$patch"
  ;;
  2) echo "Apply patch"
-cd $folder_core
-sudo patch < $patch -p1
+cd "$folder_core"
+sudo patch < "$patch" -p1
  ;;
  *) echo "invalid option"
  ;;
 esac
  echo
- read -p "Press Enter to continue" </dev/tty
+ read -r -p "Press Enter to continue" </dev/tty
  echo
 fi
 
@@ -1122,9 +1123,9 @@ printf "\e[1;32mOnline check\033[0m -> \e[1;32minternet\033[0m/\e[1;32mintranet\
  echo
  echo "Checking.."
  echo
-if nc -z $internet $realm_port 2>/dev/null; then
+if nc -z "$internet" "$realm_port" 2>/dev/null; then
 printf "\e[1;32m✓\033[0m $server_name - [ $internet ]"
-ping -qc1 $internet 2>&1 | awk -F/ '/^rtt/ { printf " - OK %.2f ms\n", $5; ok = 1 } END { if (!ok) print " - FAIL" }'
+ping -qc1 "$internet" 2>&1 | awk -F/ '/^rtt/ { printf " - OK %.2f ms\n", $5; ok = 1 } END { if (!ok) print " - FAIL" }'
 else
 printf "\033[1;31m✗\033[0m $server_name - [ $internet ]"
  echo
@@ -1132,15 +1133,15 @@ fi
 
 # Intranet
 
-if nc -z $intranet $realm_port 2>/dev/null; then
+if nc -z "$intranet" "$realm_port" 2>/dev/null; then
 printf "\e[1;32m✓\033[0m $server_name_lan - [ $intranet ]"
-ping -qc1 $intranet 2>&1 | awk -F/ '/^rtt/ { printf " - OK %.2f ms\n", $5; ok = 1 } END { if (!ok) print " - FAIL" }'
+ping -qc1 "$intranet" 2>&1 | awk -F/ '/^rtt/ { printf " - OK %.2f ms\n", $5; ok = 1 } END { if (!ok) print " - FAIL" }'
 else
 printf "\033[1;31m✗\033[0m $server_name_lan - [ $intranet ]"
  echo
 fi
  echo
- read -p "Press Enter to continue" </dev/tty
+ read -r -p "Press Enter to continue" </dev/tty
 
 # Online check done
 
@@ -1150,16 +1151,16 @@ fi
 
 # Edit/Copy config files ? >
 
- read -p "Edit config files? (nano) (y/n) " -n 1 -r
+ read -r -p "Edit config files? (nano) (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 
- read -p "Copy 'ahbot.conf.dist.in' into run/etc ? (y/n) " -n 1 -r
+ read -r -p "Copy 'ahbot.conf.dist.in' into run/etc ? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-cp $folder_core/src/game/AuctionHouseBot/ahbot.conf.dist.in $folder_core/run/etc/ahbot.conf.dist &> /dev/null
+cp "$folder_core"/src/game/AuctionHouseBot/ahbot.conf.dist.in "$folder_core"/run/etc/ahbot.conf.dist &> /dev/null
  echo "run/etc/ahbot.conf.dist created."
 fi
 
@@ -1201,22 +1202,22 @@ select opt in "${options[@]}" "Quit"; do
 case "$REPLY" in
 
  1 ) echo "You picked $opt $REPLY"
-nano $folder_core/run/etc/mangosd.conf.dist;;
+nano "$folder_core"/run/etc/mangosd.conf.dist;;
  2 ) echo "You picked $opt $REPLY"
-nano $folder_core/run/etc/realmd.conf.dist;;
+nano "$folder_core"/run/etc/realmd.conf.dist;;
  3 ) echo "You picked $opt $REPLY"
-nano $folder_core/run/etc/playerbot.conf.dist;;
+nano "$folder_core"/run/etc/playerbot.conf.dist;;
  4 ) echo "You picked $opt $REPLY"
-nano $folder_core/run/etc/ahbot.conf.dist;;
+nano "$folder_core"/run/etc/ahbot.conf.dist;;
 
  5 ) echo "You picked $opt $REPLY"
-nano $folder_core/run/etc/mangosd.conf;;
+nano "$folder_core"/run/etc/mangosd.conf;;
  6 ) echo "You picked $opt $REPLY"
-nano $folder_core/run/etc/realmd.conf;;
+nano "$folder_core"/run/etc/realmd.conf;;
  7 ) echo "You picked $opt $REPLY"
-nano $folder_core/run/etc/playerbot.conf;;
+nano "$folder_core"/run/etc/playerbot.conf;;
  8 ) echo "You picked $opt $REPLY"
-nano $folder_core/run/etc/ahbot.conf;;
+nano "$folder_core"/run/etc/ahbot.conf;;
 
  $(( ${#options[@]}+1 )) ) echo "
  See you next time!
