@@ -60,7 +60,7 @@ for service in "${services[@]}"; do
 service_status+=($(systemctl is-active "$service"))
 done >/dev/null 2>&1
 out="     "
-for i in ${!services[@]}; do
+for i in "${!services[@]}"; do
 
 # Color green if service is active, else red
 if [[ "${service_status[$i]}" == "active" ]]; then
@@ -250,7 +250,7 @@ printf "[ Checking for \e[1;32m+\033[1;31m-\033[0m Updates\033[0m ] .. "
 cd "$folder_core"
 if git checkout master &> /dev/null &&
 git fetch origin master &> /dev/null &&
-[ $(git rev-list HEAD...origin/master --count) != 0 ] &&
+[ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
 git merge origin/master
 then
 printf "[\033[1;31mold\033[0m] Core Not Updated - "
@@ -265,7 +265,7 @@ fi
 cd "$folder_db"
 if git checkout master &> /dev/null &&
 git fetch origin master &> /dev/null &&
-[ $(git rev-list HEAD...origin/master --count) != 0 ] &&
+[ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
 git merge origin/master
 then
 printf "[\033[1;31mold\033[0m] Database Not Updated - "
@@ -280,7 +280,7 @@ fi
 cd "$folder_helper"
 if git checkout master &> /dev/null &&
 git fetch origin master &> /dev/null &&
-[ $(git rev-list HEAD...origin/master --count) != 0 ] &&
+[ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
 git merge origin/master
 then
 printf "[\033[1;31mold\033[0m] Helper Not Updated - "
@@ -347,7 +347,7 @@ cmake
 subversion
 libboost-all-dev
 )
-sudo apt-get install ${packagelist[@]} -y 1> /dev/null
+sudo apt-get install "${packagelist[@]}" -y 1> /dev/null
 fi
 
 # reset --hard origin/master ? >
@@ -562,7 +562,7 @@ packagelist=(
 mysql-server
 mysql-client
 )
-sudo apt-get install ${packagelist[@]} -y 1> /dev/null
+sudo apt-get install "${packagelist[@]}" -y 1> /dev/null
 
 # Delete and start over ? >
 
