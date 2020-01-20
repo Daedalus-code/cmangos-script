@@ -381,7 +381,7 @@ fi
 
 sudo chown -R "$user":"$group" "$folder_wow"
 cd "$folder_build"
-cmake .. "$cmake"
+cmake .. $cmake
 cd "$folder_build"
 make
  echo
