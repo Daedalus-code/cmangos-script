@@ -520,7 +520,7 @@ mkdir "$folder_wow"/backup &> /dev/null
 mkdir "$folder_wow"/backup/old &> /dev/null
 cp "$folder_wow"/backup/*.sql "$folder_wow"/backup/old &> /dev/null
 sudo apt-get install zip -y &> /dev/null
-zip -p "$server_name" -r "$folder_wow"/backup/old/backup.zip "$folder_wow"/backup/*.sql &> /dev/null
+cd "$folder_wow"/backup/old/ || exit ; zip -p "$server_name" backup.zip "$folder_wow"/backup/*.sql &> /dev/null
 find "$folder_wow"/backup/*.sql -type d -ctime +10 -exec rm -rf {} \; &> /dev/null
 find "$folder_wow"/backup/old/*.sql -type d -ctime +10 -exec rm -rf {} \; &> /dev/null
  echo -ne '(100%)\r'
