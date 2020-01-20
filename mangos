@@ -215,9 +215,9 @@ printf "\e[31m
  \_______________________/\033[0m"
  echo
 printf "
-  \033[0mUptime\e[1;32m........:\033[0m "$W"$(uptime -p)\033[0m
+  \033[0mUptime\e[1;32m........:\033[0m ""$W""$(uptime -p)\033[0m
 
-   CMaNGOS Command Center
+  CMaNGOS Command Center
 
 \e[1;32m<-------------------------------------------------->\033[0m
 
