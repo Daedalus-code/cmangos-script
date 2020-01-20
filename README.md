@@ -46,9 +46,9 @@ Edit config file 'config.txt' with correct information.
 #### Your own directory for configs?  
 Edit mangos script at line 30:    
 ```source /scripts/server.txt # please edit if wrong.```  
-server.txt at line 39:  
+server.txt at line 41:  
 ```folder_helper="/scripts/cmangos-script" # please edit if wrong.```  
-server.txt at line 50:  
+server.txt at line 52:  
 ```sql_mycnf="/scripts/server.cnf" # please edit if wrong.```  
 #### Updating/Upgrading Admin Helper  
 "update Helper" will "install" mangos into /usr/local/bin and chmod it.  
