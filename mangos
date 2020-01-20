@@ -14,17 +14,21 @@
 
 # By Rainman
 # V20202001
-# 1.2.2.8
+# 1.2.3.2
+
+# Menusystem >
+
+while :
+do
+clear
+
+# Menusystem done
 
 # Config directory >
 
 source /scripts/server.txt # please edit if wrong.
 
 # Config directory done
-
-while :
-do
-clear
 
 # Codes >
 
