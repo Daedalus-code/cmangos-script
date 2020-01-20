@@ -915,7 +915,7 @@ then
 cd "$folder_helper" || exit
 if git checkout master &> /dev/null &&
 git fetch origin master &> /dev/null &&
-[ $(git rev-list HEAD...origin/master --count) != 0 ] &&
+[ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
 git merge origin/master
 then
 cd "$folder_helper" || exit
