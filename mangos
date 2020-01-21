@@ -195,11 +195,11 @@ fi
 # codes >
 
 cm_real="\033[0mRealm \e[1;32m$server_name\e[31m"
-cm_acco="\033[0mAccounts......:\033[0m $ac_count\e[31m"
-cm_onli="\033[0mOnline........:\033[0m $on_count\e[31m"
-cm_bann="\033[0mBanned........:\033[0m $bn_count\e[31m"
-cm_char="\033[0mCharacters....:\033[0m $ch_count\e[31m"
-cm_guil="\033[0mGuilds........:\033[0m $gu_count\e[31m"
+cm_acco="\033[0mAccounts\e[0;32m......:\033[0m $ac_count\e[31m"
+cm_onli="\033[0mOnline\e[0;32m........:\033[0m $on_count\e[31m"
+cm_bann="\033[0mBanned\e[0;32m........:\033[0m $bn_count\e[31m"
+cm_char="\033[0mCharacters\e[0;32m....:\033[0m $ch_count\e[31m"
+cm_guil="\033[0mGuilds\e[0;32m........:\033[0m $gu_count\e[31m"
 cm_term="\033[0mmangos>\e[31m"
 cm_upti="\033[0mTime""$W""$(uptime)\033[0m"
 
