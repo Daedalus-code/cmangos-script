@@ -1067,11 +1067,11 @@ case $n in
  1) echo "Applying patch - (Pi2)"
 sudo chown -R "$user":"$group" "$folder_core"
 cd "$folder_core" || exit
-sudo patch < arm_pi2.patch -p1
+patch < arm_pi2.patch -p1
  ;;
  2) echo "Applying patch - (Pi4)"
 cd "$folder_core" || exit
-sudo patch < arm_pi4.patch -p1
+patch < arm_pi4.patch -p1
  ;;
  *) echo "invalid option"
  ;;
@@ -1099,7 +1099,7 @@ git diff > "$patch"
  ;;
  2) echo "Apply patch"
 cd "$folder_core" || exit
-sudo patch < "$patch" -p1
+patch < "$patch" -p1
  ;;
  *) echo "invalid option"
  ;;
