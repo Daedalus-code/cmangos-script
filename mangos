@@ -215,7 +215,7 @@ printf "
       \033[0m* This tool introduce helping functions and features for WoW Vanilla server.
       * This script was build on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
       * \e[0;35mInternet:\033[0m 'set realmlist $internet'
-      * \e[0;35mLanparty:\033[0m'set realmlist $intranet' - When internet drop out.
+      * \e[0;35mLanparty:\033[0m 'set realmlist $intranet' - When internet drop out.
       * $cm_upti
       * fuck blizzard.\e[31m
 
