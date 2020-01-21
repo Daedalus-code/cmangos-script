@@ -235,9 +235,9 @@ printf "
  read -r -p " Want to login? (y/n) " -n 1 -r
  echo
  echo
- echo "'quit' and then hit Enter two times to exit."
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+ echo "'quit' and then hit Enter two times to exit."
  echo
 nc "$host_nc" "$port_nc"
  echo
