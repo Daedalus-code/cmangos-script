@@ -201,7 +201,7 @@ cm_bann="Banned........:\033[0m $bn_count\e[31m"
 cm_char="\033[0mCharacters\e[1;32m....:\033[0m $ch_count\e[31m"
 cm_guil="\033[0mGuilds\e[1;32m........:\033[0m $gu_count\e[31m"
 cm_term="\033[0mmangos>\e[31m"
-cm_upti="\033[0mUptime""$W""$(uptime)\033[0m"
+cm_upti="\033[0mTime""$W""$(uptime)\033[0m"
 
 # codes done
 
