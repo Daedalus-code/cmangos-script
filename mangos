@@ -194,7 +194,7 @@ fi
 
 # codes >
 
-cm_real="\033[0mRealm \e[1;32m$server_name\e[31m"
+cm_real="\033[0mRealm \e[0;32m$server_name\e[31m"
 cm_acco="\033[0mAccounts\e[0;32m......:\033[0m $ac_count\e[31m"
 cm_onli="\033[0mOnline\e[0;32m........:\033[0m $on_count\e[31m"
 cm_bann="\033[0mBanned\e[0;32m........:\033[0m $bn_count\e[31m"
