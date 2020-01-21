@@ -234,7 +234,7 @@ printf "
   \_______________________/\033[0m"
  echo
 printf "
-      \e[0;33mFor more information:\033[0m https://github.com/Daedalus-code/cmangos-script
+      \e[0;33mFor more information:\033[0m \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
 <--------------------------------------------------------------------------------------->\033[0m
  'quit' and then hit Enter to exit"
  echo
