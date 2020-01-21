@@ -231,13 +231,13 @@ printf "
       * $cm_upti
       * fuck blizzard.\e[31m
 
-                $cm_real
+           $cm_real
 
-                $cm_acco       $cm_mail
-                $cm_bann       $cm_pets
-                $cm_onli       $cm_tick
-                $cm_guil       $cm_corp
-                $cm_memb       $cm_char       $cm_pvps
+           $cm_acco       $cm_mail
+           $cm_bann       $cm_pets
+           $cm_onli       $cm_tick
+           $cm_guil       $cm_corp
+           $cm_memb       $cm_char       $cm_pvps
            \033[0m"
        echo
       printf "
