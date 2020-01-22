@@ -237,7 +237,7 @@ printf "
                \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.2.7.6 ]\e[31m
 
       \033[0m* This tool introduce helping functions and features for WoW Vanilla server.
-      * This script was build on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
+      * Build on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
       * \e[0;35mInternet:\033[0m 'set realmlist \e[0;35m$internet\033[0m'
       * \e[0;35mLanparty:\033[0m 'set realmlist \e[0;35m$intranet\033[0m' - When internet drop out.
       * $cm_upti
@@ -253,7 +253,7 @@ printf "
            \033[0m"
 
       printf "
-        \e[0;33mFor more information:\033[0m \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
+          \e[0;33mFor more information:\033[0m \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
 <--------------------------------------------------------------------------------------->\033[0m"
  echo
  echo
