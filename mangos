@@ -121,7 +121,7 @@ EOF
 
 "a")
 
-# Create account ? > - Holy Shit ! OO
+# Create account ? >
 
  echo
  read -r -p "Create Account? (y/n) " -n 1 -r
@@ -256,7 +256,7 @@ printf "
            $cm_memb$line$cm_char$line$cm_gifts
            \033[0m"
 
-      printf "
+printf "
         \e[0;33mFor more information:\033[0m \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
 <--------------------------------------------------------------------------------------->\033[0m"
  echo
@@ -280,7 +280,7 @@ fi
 
 # Checking for updates >
 
-# MaNGOS Core (mangos-classic)
+# CMaNGOS Core (mangos-classic)
 
 printf "[ Checking for \e[1;32m+\033[1;31m-\033[0m Updates\033[0m ] .. "
  echo
@@ -314,7 +314,7 @@ printf "[\e[1;32mok\033[0m] Database Updated - "
  git rev-parse --short HEAD
 fi
 
-# MaNGOS Helper
+# CMaNGOS Helper
 
 cd "$folder_helper" || exit
 if git checkout master &> /dev/null &&
@@ -610,7 +610,7 @@ sudo apt-get install "${packagelist[@]}" -y 1> /dev/null
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 
-# Setting Up the cMaNGOS Database.
+# Setting Up the Database
 
 # Backup <- characters.sql
 
