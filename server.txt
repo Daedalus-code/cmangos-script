@@ -55,8 +55,8 @@ sql_mycnf="/scripts/server.cnf" # please edit if wrong.
 # color #
 #########
 
-color_green='\e[1;32m'
-color_no='\033[0m'
-color_red='\033[1;31m'
+color_green="\e[1;32m"
+color_no="\033[0m"
+color_red="\033[1;31m"
 
 # END
