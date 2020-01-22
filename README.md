@@ -109,7 +109,7 @@ sudo systemctl enable realmd
 sudo systemctl enable mangosd
 ```
 
-This script was build on a Ubuntu 19.10 - Linux 5.3.0-1014-raspi2 - (Raspberry Pi2/4)  
+This script was built on a Ubuntu 19.10 - Linux 5.3.0-1014-raspi2 - (Raspberry Pi2/4)  
 https://ubuntu.com/download/raspberry-pi  
 
 C(ontinued)-MaNGOS (Classic fork)
