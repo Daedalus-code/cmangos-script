@@ -403,7 +403,7 @@ fi
 
 # Build from scratch ? >
 
- read -r -p "Build from scratch? (delete /build)(y/n) " -n 1 -r
+ read -r -p "Fresh install? (delete /build) (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
