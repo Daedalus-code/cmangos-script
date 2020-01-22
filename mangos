@@ -341,7 +341,7 @@ fi
 # Update CMaNGOS ? >
 
  echo
-printf "Update classic-mangos [\e[1;32mCore\033[0m] ?"
+printf "Update classic-mangos [\e[1;32mcore\033[0m] ?"
  echo
  echo
  read -r -p "Are you sure? (y/n) " -n 1 -r
@@ -357,7 +357,7 @@ sudo service realmd stop &> /dev/null
 sudo service mangosd stop &> /dev/null
  echo -ne '(100%)\r'
  sleep 1
-printf "Updating mangos-classic (\e[1;32mworld\033[0m).."
+printf "Updating mangos-classic (\e[1;32mcore\033[0m).."
  echo
  read -r -p "Install Software requirements? (y/n) " -n 1 -r
  echo
@@ -403,7 +403,7 @@ fi
 
 # Build from scratch ? >
 
- read -r -p "Build from scratch? (y/n) " -n 1 -r
+ read -r -p "Build from scratch? (delete /build)(y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -536,7 +536,7 @@ fi
 # Update Database ? >
 
  echo
-printf "Update classic-db [\e[1;32mDatabase\033[0m] ?"
+printf "Update classic-db [\e[1;32mdatabase\033[0m] ?"
  echo
  echo
  read -r -p "Are you sure? (y/n) " -n 1 -r
@@ -618,7 +618,7 @@ then
 FILE="$folder_wow/backup/$db_characters-$NOW.sql"
 if [ ! -f "$FILE" ];
 then
-printf "[\033[1;31mempty\033[0m/old\033[0m] 'Characters' ! Creating backup.."
+printf "[\e[0;31mmempty\033[0m/\e[0;31mold\033[0m] 'Characters' ! Creating backup.."
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
  echo
 else
@@ -631,7 +631,7 @@ fi
 FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
 if [ ! -f "$FILE" ];
 then
-printf "[\033[1;31mempty\033[0m/old\033[0m] 'Realmd' ! Creating backup.."
+printf "[\e[0;31mmempty\033[0m/\e[0;31mold\033[0m] 'Realmd' ! Creating backup.."
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
  echo
 else
@@ -670,7 +670,7 @@ fi
 # Delete & git clone classic-db folder ? >
 
  echo
- read -r -p "Delete & git clone classic-db folder? (y/n) " -n 1 -r
+ read -r -p "Fresh install? (delete/git clone classic-db) (y/n) " -n 1 -r
  echo
 
 if [[ $REPLY =~ ^[Yy]$ ]]
@@ -774,7 +774,7 @@ fi
 
 # convert_mysql_engine = myisam -> innodb ? >
 
- read -r -p "Converting myisam -> innodb? (MariaDB) (y/n) " -n 1 -r
+ read -r -p "Converting? (myisam -> innodb) Works on MariaDB (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
