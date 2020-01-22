@@ -7,7 +7,7 @@
 #               Continued Massive Network Game Object Server               #
 ############################################################################
 
-# Build on a Ubuntu 19.10 - Linux 5.3.0-1014-raspi2 - (Raspberry Pi2/4)
+# Built on a Ubuntu 19.10 - Linux 5.3.0-1014-raspi2 - (Raspberry Pi2/4)
 # https://ubuntu.com/download/raspberry-pi
 
 # C(ontinued)-MaNGOS (Classic fork)
@@ -241,7 +241,7 @@ printf "
                \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.2.8.0 ]\e[31m
 
       \033[0m* This tool introduce helping functions and features for WoW Vanilla server.
-      * Build on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
+      * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
       * \e[0;35mInternet:\033[0m 'set realmlist \e[0;35m$internet\033[0m'
       * \e[0;35mLanparty:\033[0m 'set realmlist \e[0;35m$intranet\033[0m' - When internet drop out.
       * $cm_upti
