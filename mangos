@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202101
-# 1.2.6.5
+# 1.2.7.3
 
 # Menusystem >
 
@@ -192,29 +192,37 @@ fi
 # codes >
 
 # Get database info
-pv_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.pvpstats_players;"); &> /dev/null
-me_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.guild_member;"); &> /dev/null
-co_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.corpse;"); &> /dev/null
-ti_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_ticket;"); &> /dev/null
-pe_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_pet;"); &> /dev/null
-ma_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.mail;"); &> /dev/null
-bn_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account_banned;"); &> /dev/null
-ch_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.characters;"); &> /dev/null
 ac_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account;"); &> /dev/null
+bn_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account_banned;"); &> /dev/null
+# on_count &
+# gu_count at TOP ^
+me_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.guild_member;"); &> /dev/null
+
+ma_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.mail;"); &> /dev/null
+pe_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_pet;"); &> /dev/null
+ti_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_ticket;"); &> /dev/null
+co_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.corpse;"); &> /dev/null
+ch_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.characters;"); &> /dev/null
+
+pv_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.pvpstats_players;"); &> /dev/null
 
 # Fill out command center
-cm_real="\033[0mRealm \e[0;32m$server_name\e[31m"
-cm_acco="\033[0mAccounts\e[0;32m......:\033[0m $ac_count\e[31m"
-cm_onli="\033[0mOnline\e[0;32m........:\033[0m $on_count\e[31m"
-cm_bann="\033[0mBanned\e[0;32m........:\033[0m $bn_count\e[31m"
-cm_char="\033[0mCharacters\e[0;32m....:\033[0m $ch_count\e[31m"
-cm_guil="\033[0mGuilds\e[0;32m........:\033[0m $gu_count\e[31m"
 cm_upti="\033[0mTime""$W""$(uptime)\033[0m"
+
+cm_real="\033[0mRealm \e[0;32m$server_name\e[31m"
+
+cm_acco="\033[0mAccounts\e[0;32m......:\033[0m $ac_count\e[31m"
+cm_bann="\033[0mBanned\e[0;32m........:\033[0m $bn_count\e[31m"
+cm_onli="\033[0mOnline\e[0;32m........:\033[0m $on_count\e[31m"
+cm_guil="\033[0mGuilds\e[0;32m........:\033[0m $gu_count\e[31m"
+cm_memb="\033[0mMembers\e[0;32m.......:\033[0m $me_count\e[31m"
+
 cm_mail="\033[0mMail\e[0;32m..........:\033[0m $ma_count\e[31m"
 cm_pets="\033[0mPets\e[0;32m..........:\033[0m $pe_count\e[31m"
 cm_tick="\033[0mTickets\e[0;32m.......:\033[0m $ti_count\e[31m"
 cm_corp="\033[0mCorpses\e[0;32m.......:\033[0m $co_count\e[31m"
-cm_memb="\033[0mMembers\e[0;32m.......:\033[0m $me_count\e[31m"
+cm_char="\033[0mCharacters\e[0;32m....:\033[0m $ch_count\e[31m"
+
 cm_pvps="\033[0mPvP\e[0;32m.......:\033[0m $pv_count\e[31m"
 
 # codes done
@@ -241,7 +249,7 @@ printf "
            $cm_guil       $cm_corp
            $cm_memb       $cm_char       $cm_pvps
            \033[0m"
-       echo
+
       printf "
         \e[0;33mFor more information:\033[0m \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
 <--------------------------------------------------------------------------------------->\033[0m"
