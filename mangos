@@ -920,7 +920,7 @@ printf "\e[1;32m<------------------------------------------------------>\033[0m"
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 # wait for mangosd to fill up Server.log >
-tail -f $folder_core/run/logs/Server.log | while read LOGLINE
+tail -f "$folder_core"/run/logs/Server.log | while read LOGLINE
 do
 [[ "${LOGLINE}" == *"STARTUP"* ]] && pkill -P $$ tail
 done
