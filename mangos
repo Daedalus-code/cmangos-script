@@ -907,15 +907,14 @@ sudo service mangosd restart &> /dev/null
  sleep 1
 printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
+ echo "Realmd.log:"
 printf "\033[1;31mError\033[0m: "
 grep -E ".*ERROR.*\n" "$folder_core"/run/logs/Realmd.log | wc -l
  echo
- echo "Realmd log -->"
- echo
 tail "$folder_core"/run/logs/Realmd.log
- echo
 printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
+ echo "Server.log:"
 printf "\033[1;31mError\033[0m: "
 grep -E ".*ERROR.*\n" "$folder_core"/run/logs/Server.log | wc -l
 printf "\033[1;31mSerious\033[0m: "
@@ -1084,15 +1083,14 @@ fi
 mkdir "$folder_core"/run/logs &> /dev/null
 printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
+ echo "Realmd.log:"
 printf "\033[1;31mError\033[0m: "
 grep -E ".*ERROR.*\n" "$folder_core"/run/logs/Realmd.log | wc -l
  echo
- echo "Realmd log -->"
- echo
 tail "$folder_core"/run/logs/Realmd.log
- echo
 printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
+ echo "Server.log:"
 printf "\033[1;31mError\033[0m: "
 grep -E ".*ERROR.*\n" "$folder_core"/run/logs/Server.log | wc -l
 printf "\033[1;31mSerious\033[0m: "
