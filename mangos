@@ -249,10 +249,10 @@ printf "
                   \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
          \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.3.3.3 ]\033[0m
 
-     * Tools and features for admin running WoW Vanilla server.
-     * \e[0;35mInternet:\033[0m 'set realmlist \e[0;35m$internet\033[0m' - $cm_realm\033[0m
-     * \e[0;35mLanparty:\033[0m 'set realmlist \e[0;35m$intranet\033[0m' - $cm_realm_lan\033[0m
-     * $cm_uptime\033[0m"
+      * Tools and features for admin running WoW Vanilla server.
+      * \e[0;35mInternet:\033[0m 'set realmlist \e[0;35m$internet\033[0m' - $cm_realm\033[0m
+      * \e[0;35mLanparty:\033[0m 'set realmlist \e[0;35m$intranet\033[0m' - $cm_realm_lan\033[0m
+      * $cm_uptime\033[0m"
 
 # Rainman code done
 
