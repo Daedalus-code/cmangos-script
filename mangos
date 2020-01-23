@@ -221,7 +221,7 @@ printf "%-7.7s" "$1"
 
 # todo: add logic when only 4 parameters are given
 printline() {
- echo "       $(dot_field $1) $(space_number $2)$(dot_field $3) $(space_number $4)$(dot_field $5) $(space_number $6)"
+ echo "       $(dot_field "$1") $(space_number "$2")$(dot_field "$3") $(space_number "$4")$(dot_field "$5") $(space_number "$6")"
 }
 
 # Fill out command center
@@ -255,10 +255,10 @@ printf "
 
 # Walter A code >
 
-printline "Accounts" $ac_count "Guilds" $gu_count "Tickets" $ti_count
-printline "Banned" $bn_count "Members" $me_count "Corpses" $co_count
-printline "Online" $on_count "Mail" $ma_count "PvP" $pv_count
-printline "Characters" $ch_count "Pets" $pe_count "Gifts" $gi_count
+printline "Accounts" "$ac_count" "Guilds" "$gu_count" "Tickets" "$ti_count"
+printline "Banned" "$bn_count" "Members" "$me_count" "Corpses" "$co_count"
+printline "Online" "$on_count" "Mail" "$ma_count" "PvP" "$pv_count"
+printline "Characters" "$ch_count" "Pets" "$pe_count" "Gifts" "$gi_count"
 
 # Walter A code done
 
