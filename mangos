@@ -231,7 +231,7 @@ data=(
         "Gifts      $gi_count"
     )
 
-    . $folder_helper/color   # include color table
+    . "$folder_helper"/color   # include color table
     space_betwen=7  # space betwen columns
     X=$space_betwen # starting X(column) position
     Y=10            # starting Y(line) position
@@ -261,7 +261,7 @@ printf "
 for item in "${data[@]}"; {
     ((counter++)) # lets count items to know when start next column
 
-    read name value <<< $item # get name and value from current item
+    read name value <<< "$item" # get name and value from current item
 
     XY $X $Y "$dot_string$grn$value$DEF" # print dot string and red value
     XY $X $Y "$WHT$name$DEF" # name will be printed ower dots in yelow color
