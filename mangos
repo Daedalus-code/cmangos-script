@@ -960,7 +960,7 @@ ds=$(echo "$dt3-60*$dm" | bc)
 
 # codes done
 printf "[\e[1;32mok\033[0m] "
-printf "Total runtime: %d:%02d:%02d:%02.4f\n" "$dd" "$dh" "$dm" "$ds"
+printf "Total startup time: %d:%02d:%02d:%02.4f\n" "$dd" "$dh" "$dm" "$ds"
 # wait for mangosd to fill up Server.log done
 fi
 if grep -q ".*ERROR.*\n" "$folder_core"/run/logs/Server.log; then
