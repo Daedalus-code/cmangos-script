@@ -135,7 +135,7 @@ if [[ -z "$USR" ]]; then
 printf '%s\n' "No input entered"
 exit 1
 else
-printf "[\e[1;32mok\033[0m] $USR"
+printf "[\e[0;32mok\033[0m] $USR"
  echo
  echo
 fi
@@ -145,7 +145,7 @@ if [[ -z "$PWD" ]]; then
 printf '%s\n' "No input entered"
 exit 1
 else
-printf "[\e[1;32mok\033[0m] Password"
+printf "[\e[0;32mok\033[0m] Password"
  echo
  echo
 fi
@@ -155,7 +155,7 @@ if [[ -z "$XPV" ]]; then
 printf '%s\n' "No input entered"
 exit 1
 else
-printf "[\e[1;32mok\033[0m] expansion-version ($XPV)"
+printf "[\e[0;32mok\033[0m] expansion-version ($XPV)"
  echo
  echo
 fi
@@ -165,7 +165,7 @@ if [[ -z "$LVL" ]]; then
 printf '%s\n' "No input entered"
 exit 1
 else
-printf "[\e[1;32mok\033[0m] GMLevel ($LVL)"
+printf "[\e[0;32mok\033[0m] GMLevel ($LVL)"
  echo
 fi
  echo "$user_nc
@@ -175,7 +175,7 @@ $pass_nc
 .account set gmlevel $USR $LVL" > "$folder_wow"/tmp.txt
 nc -q 1 "$host_nc" "$port_nc" < "$folder_wow"/tmp.txt ; rm "$folder_wow"/tmp.txt
  echo
-printf "[\e[1;32mok\033[0m] Account $USR ($XPV/$LVL) created."
+printf "[\e[0;32mok\033[0m] Account $USR ($XPV/$LVL) created."
  echo
  echo
  sleep 2
@@ -278,7 +278,7 @@ cm_realm="\033[0mRealm \e[0;32m$server_name\e[31m"
 if grep -q ".*ERROR.*\n" "$folder_core"/run/logs/Realmd.log; then
 realmd_log="Realmd.log [\033[1;31mError\033[0m]"
 else
-realmd_log="Realmd.log [\e[1;32mok\033[0m]"
+realmd_log="Realmd.log [\e[0;32mok\033[0m]"
 fi
 # Realmd.log done
 
@@ -286,7 +286,7 @@ fi
 if grep -q ".*ERROR.*\n" "$folder_core"/run/logs/Server.log; then
 server_log="Server.log [\033[1;31mError\033[0m]"
 else
-server_log="Server.log [\e[1;32mok\033[0m]"
+server_log="Server.log [\e[0;32mok\033[0m]"
 fi
 # Server.log done
 
@@ -362,7 +362,7 @@ then
 printf "[\033[1;31mold\033[0m] Core Not Updated - "
  git rev-parse --short HEAD
 else
-printf "[\e[1;32mok\033[0m] Core Updated - "
+printf "[\e[0;32mok\033[0m] Core Updated - "
  git rev-parse --short HEAD
 fi
 
@@ -377,7 +377,7 @@ then
 printf "[\033[1;31mold\033[0m] Database Not Updated - "
  git rev-parse --short HEAD
 else
-printf "[\e[1;32mok\033[0m] Database Updated - "
+printf "[\e[0;32mok\033[0m] Database Updated - "
  git rev-parse --short HEAD
 fi
 
@@ -392,7 +392,7 @@ then
 printf "[\033[1;31mold\033[0m] Helper Not Updated - "
  git rev-parse --short HEAD
 else
-printf "[\e[1;32mok\033[0m] Helper Updated - "
+printf "[\e[0;32mok\033[0m] Helper Updated - "
  git rev-parse --short HEAD
 fi
  echo
@@ -642,7 +642,7 @@ printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Characters' ! Creating backup
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
  echo
 else
-printf "[\e[1;32mok\033[0m] 'Characters' backup existing."
+printf "[\e[0;32mok\033[0m] 'Characters' backup existing."
  echo
 fi
 
@@ -655,7 +655,7 @@ printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Realmd' ! Creating backup.."
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
  echo
 else
-printf "[\e[1;32mok\033[0m] 'Realmd' backup existing."
+printf "[\e[0;32mok\033[0m] 'Realmd' backup existing."
  echo
 fi
 
@@ -689,7 +689,7 @@ printf "[\e[0;31mmempty\033[0m/\e[0;31mold\033[0m] 'Characters' ! Creating backu
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
  echo
 else
-printf "[\e[1;32mok\033[0m] 'Characters' backup existing."
+printf "[\e[0;32mok\033[0m] 'Characters' backup existing."
  echo
 fi
 
@@ -702,7 +702,7 @@ printf "[\e[0;31mmempty\033[0m/\e[0;31mold\033[0m] 'Realmd' ! Creating backup.."
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
  echo
 else
-printf "[\e[1;32mok\033[0m] 'Realmd' backup existing"
+printf "[\e[0;32mok\033[0m] 'Realmd' backup existing"
  echo
 fi
 
@@ -763,7 +763,7 @@ fi
 RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_characters")
 if [ "$RESULT" == "$db_characters" ];
 then
-printf "[\e[1;32mok\033[0m] 'Characters' database installed."
+printf "[\e[0;32mok\033[0m] 'Characters' database installed."
  echo
 else
 printf "[\033[1;31mempty\033[0m] 'Characters' importing.."
@@ -777,7 +777,7 @@ fi
 RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_mangos")
 if [ "$RESULT" == "$db_mangos" ];
 then
-printf "[\e[1;32mok\033[0m] 'Mangos' database installed."
+printf "[\e[0;32mok\033[0m] 'Mangos' database installed."
  echo
 else
 printf "[\033[1;31mempty\033[0m] 'Mangos' importing.."
@@ -791,7 +791,7 @@ fi
 RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_realmd")
 if [ "$RESULT" == "$db_realmd" ];
 then
-printf "[\e[1;32mok\033[0m] 'Realmd' database installed."
+printf "[\e[0;32mok\033[0m] 'Realmd' database installed."
  echo
 else
 printf "[\033[1;31mempty\033[0m] 'Realmd' importing.."
@@ -975,7 +975,7 @@ printf "[\033[1;31mError\033[0m] > "
 grep -E ".*ERROR.*\n" "$folder_core"/run/logs/Realmd.log | wc -l
 else
 printf "Realmd.log "
-printf "[\e[1;32mok\033[0m]"
+printf "[\e[0;32mok\033[0m]"
  echo
 fi
  echo
@@ -1002,7 +1002,7 @@ dm=$(echo "$dt3/60" | bc)
 ds=$(echo "$dt3-60*$dm" | bc)
 
 # codes done
-printf "[\e[1;32mok\033[0m] "
+printf "[\e[0;32mok\033[0m] "
 printf "Total startup time: %d:%02d:%02d:%02.4f\n" "$dd" "$dh" "$dm" "$ds"
 # wait for mangosd to fill up Server.log done
 fi
@@ -1016,7 +1016,7 @@ grep -E "malformed" "$folder_core"/run/logs/Server.log | wc -l
 fi
 else
 printf "Server.log "
-printf "[\e[1;32mok\033[0m]"
+printf "[\e[0;32mok\033[0m]"
  echo
 fi
  echo
@@ -1076,20 +1076,20 @@ fi
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 sudo rm /usr/local/bin/mangos &> /dev/null
-printf "[\e[1;32mok\033[0m] -> installed mangos removed."
+printf "[\e[0;32mok\033[0m] -> installed mangos removed."
  echo
 sudo rm -r "$folder_helper"
-printf "[\e[1;32mok\033[0m] -> cmangos-script removed."
+printf "[\e[0;32mok\033[0m] -> cmangos-script removed."
  echo
 sudo mkdir /scripts/ &> /dev/null
-printf "[\e[1;32mok\033[0m] -> /scripts/> git clone.."
+printf "[\e[0;32mok\033[0m] -> /scripts/> git clone.."
  echo
 cd /scripts && git clone https://github.com/Daedalus-code/cmangos-script.git
 sudo cp /scripts/cmangos-scripts/mangos /usr/local/bin &> /dev/null
-printf "[\e[1;32mok\033[0m] -> Installing new release"
+printf "[\e[0;32mok\033[0m] -> Installing new release"
  echo
  sleep 1
-printf "[\e[1;32mok\033[0m] -> Installed."
+printf "[\e[0;32mok\033[0m] -> Installed."
 fi
  echo
  echo "Checking your current release"
@@ -1112,29 +1112,29 @@ printf "[\e[1;32mUpdating Helper\033[0m]"
  echo
  echo
  sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old &> /dev/null
-printf "[\e[1;32mok\033[0m] -> /usr/local/bin/mangos.old"
+printf "[\e[0;32mok\033[0m] -> /usr/local/bin/mangos.old"
  sleep 1
  echo
-printf "[\e[1;32mok\033[0m] -> Stripping executable on 'mangos.old'"
+printf "[\e[0;32mok\033[0m] -> Stripping executable on 'mangos.old'"
  sleep 1
  echo
 sudo chmod -x /usr/local/bin/mangos.old
 sudo chown -R "$user":"$group" "$folder_helper"
 cd "$folder_helper" || exit
-printf "[\e[1;32mok\033[0m] -> Installing new release"
+printf "[\e[0;32mok\033[0m] -> Installing new release"
  sleep 1
  echo
 sudo cp mangos /usr/local/bin
 sudo chmod +x /usr/local/bin/mangos
  sleep 1
-printf "[\e[1;32mok\033[0m] -> Installed."
+printf "[\e[0;32mok\033[0m] -> Installed."
  echo
  echo
  echo "Will exit now."
  sleep 2 && exit
 else
 cd "$folder_helper" || exit
-printf "[\e[1;32mok\033[0m] Helper - latest release - "
+printf "[\e[0;32mok\033[0m] Helper - latest release - "
 git rev-parse --short HEAD
  sleep 1
  echo
@@ -1147,22 +1147,22 @@ printf "[\e[1;32mUpdating Helper\033[0m]"
  sleep 1
  echo
  echo
-printf "[\e[1;32mok\033[0m] -> /usr/local/bin/mangos.old"
+printf "[\e[0;32mok\033[0m] -> /usr/local/bin/mangos.old"
  sleep 1
  echo
 sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old &> /dev/null
-printf "[\e[1;32mok\033[0m] -> Stripping executable on 'mangos.old'"
+printf "[\e[0;32mok\033[0m] -> Stripping executable on 'mangos.old'"
  sleep 1
  echo
 sudo chmod -x /usr/local/bin/mangos.old
 sudo chown -R "$user":"$group" "$folder_helper"
 cd "$folder_helper" || exit
-printf "[\e[1;32mok\033[0m] -> Installing latest release"
+printf "[\e[0;32mok\033[0m] -> Installing latest release"
  sleep 1
  echo
 sudo cp mangos /usr/local/bin
 sudo chmod +x /usr/local/bin/mangos
-printf "[\e[1;32mok\033[0m] -> Installed."
+printf "[\e[0;32mok\033[0m] -> Installed."
  echo
  echo
  echo "Will exit now."
@@ -1188,7 +1188,7 @@ printf "[\033[1;31mError\033[0m] > "
 grep -E ".*ERROR.*\n" "$folder_core"/run/logs/Realmd.log | wc -l
 else
 printf "Realmd.log "
-printf "[\e[1;32mok\033[0m]"
+printf "[\e[0;32mok\033[0m]"
  echo
 fi
  echo
@@ -1205,7 +1205,7 @@ grep -E "malformed" "$folder_core"/run/logs/Server.log | wc -l
 fi
 else
 printf "Server.log "
-printf "[\e[1;32mok\033[0m]"
+printf "[\e[0;32mok\033[0m]"
  echo
 fi
  echo
