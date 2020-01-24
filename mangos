@@ -359,7 +359,7 @@ git fetch origin master &> /dev/null &&
 [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
 git merge origin/master
 then
-printf "[\033[1;31mold\033[0m] Core Not Updated - "
+printf "[\033[0;31mold\033[0m] Core Not Updated - "
  git rev-parse --short HEAD
 else
 printf "[\e[0;32mok\033[0m] Core Updated - "
@@ -374,7 +374,7 @@ git fetch origin master &> /dev/null &&
 [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
 git merge origin/master
 then
-printf "[\033[1;31mold\033[0m] Database Not Updated - "
+printf "[\033[0;31mold\033[0m] Database Not Updated - "
  git rev-parse --short HEAD
 else
 printf "[\e[0;32mok\033[0m] Database Updated - "
@@ -389,7 +389,7 @@ git fetch origin master &> /dev/null &&
 [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
 git merge origin/master
 then
-printf "[\033[1;31mold\033[0m] Helper Not Updated - "
+printf "[\033[0;31mold\033[0m] Helper Not Updated - "
  git rev-parse --short HEAD
 else
 printf "[\e[0;32mok\033[0m] Helper Updated - "
@@ -1104,7 +1104,7 @@ then
 cd "$folder_helper" || exit
  echo
  sleep 1
-printf "[\033[1;31mold\033[0m] -> old release installed!"
+printf "[\033[0;31mold\033[0m] -> old release installed!"
  sleep 1
  echo
  echo
