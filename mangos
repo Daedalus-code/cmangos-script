@@ -986,7 +986,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
 # wait for mangosd to fill up Server.log >
 # after 90 seconds kill it
-timeout 90s tail -f "$folder_core"/run/logs/Server.log | while read -r LOGLINE
+timeout 1s 90s tail -f "$folder_core"/run/logs/Server.log | while read -r LOGLINE
 do
 [[ "${LOGLINE}" == *"STARTUP"* ]] && pkill -P $$ tail
 done
