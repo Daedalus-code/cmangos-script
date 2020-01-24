@@ -247,19 +247,19 @@ colorstring() {
 
 dot_field() {
    # todo: Change implementation when field can be 2 words with a space in between
-   printf "%-14.14s" "$1" | colorstring ${white} | tr ' ' '.'
+   printf "%-14.14s" "$1" | colorstring "${white}" | tr ' ' '.'
    # The : must be printed in a second statement when you don't want cyan dots.
    printf ':'
 }
 
 # todo: Change implementation when field can be 2 words with a space in between
 space_number() {
-   printf "%-7.7s" "$1" | colorstring ${green}
+   printf "%-7.7s" "$1" | colorstring "${green}"
 }
 
 # todo: add logic when only 4 parameters are given
 printline() {
-   echo "       $(dot_field $1) $(space_number $2)$(dot_field $3) $(space_number $4)$(dot_field $5) $(space_number $6)"
+   echo "       $(dot_field "$1") $(space_number "$2")$(dot_field "$3") $(space_number "$4")$(dot_field "$5") $(space_number "$6")"
 }
 
 # init the color variables
