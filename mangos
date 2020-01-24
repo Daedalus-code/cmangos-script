@@ -267,12 +267,12 @@ printf "[\033[1;31mError\033[0m] "
 fi
 if grep -q "malformed" "$folder_core"/run/logs/Server.log; then
 printf "+ [\033[1;31mSerious\033[0m]"
-fi
- echo
- echo
 else
 printf "       Server.log "
 printf "[\e[1;32mok\033[0m]"
+ echo
+fi
+ echo
  echo
 
 # Rainman text done
