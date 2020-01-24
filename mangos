@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202401
-# 1.3.8.9
+# 1.3.8.8
 
 # Menusystem >
 
@@ -121,7 +121,7 @@ EOF
 
 "a")
 
-# Create account ? > by Rainman.
+# Create account ? > By Rainman
 
  echo
  read -r -p "Create Account? (y/n) " -n 1 -r
@@ -207,7 +207,8 @@ ch_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*
 pv_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.pvpstats_players;"); &> /dev/null
 gi_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_gifts;"); &> /dev/null
 
-# Thank you Walter A -> https://stackoverflow.com/questions/59862020
+# Walter A code >
+# Thank you Walter A ! -> https://stackoverflow.com/questions/59862020
 
 # todo Change implementation when field can be 2 words with a space in between
 dot_field() {
@@ -238,7 +239,7 @@ clear
 printf "
 <----------------------------------------------------------------------------->\e[31m
                    \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.3.8.9 ]\e[31m
+           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.3.8.8 ]\e[31m
 
      \033[0m* Administrator functions and features for WoW Vanilla server.
      * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -252,8 +253,6 @@ printf "
  echo
 
 # Rainman text done
-
-# Walter A code >
 
 printline "Accounts" "$ac_count" "Guilds" "$gu_count" "Tickets" "$ti_count"
 printline "Banned" "$bn_count" "Members" "$me_count" "Corpses" "$co_count"
@@ -945,7 +944,7 @@ ds=$(echo "$dt3-60*$dm" | bc)
 
 # codes done
 printf "[\e[1;32mok\033[0m] "
-printf "Total runtime: %d:%02d:%02d:%02.4f\n" $dd $dh $dm $ds
+printf "Total runtime: %d:%02d:%02d:%02.4f\n" "$dd" "$dh" "$dm" "$ds"
 fi
  read -r -p "Press Enter to continue" </dev/tty
  echo
