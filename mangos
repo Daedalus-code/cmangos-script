@@ -950,8 +950,6 @@ tail -f "$folder_core"/run/logs/Server.log | while read LOGLINE
 do
 [[ "${LOGLINE}" == *"STARTUP"* ]] && pkill -P $$ tail
 res2=$(date +%s.%N)
-done
-# wait for mangosd to fill up Server.log done
 # codes >
 
 dt=$(echo "$res2 - $res1" | bc)
@@ -963,6 +961,8 @@ dm=$(echo "$dt3/60" | bc)
 ds=$(echo "$dt3-60*$dm" | bc)
 
 # codes done
+done
+# wait for mangosd to fill up Server.log done
 printf "[\e[1;32mok\033[0m] "
 printf "Total runtime: %d:%02d:%02d:%02.4f\n" "$dd" "$dh" "$dm" "$ds"
 fi
