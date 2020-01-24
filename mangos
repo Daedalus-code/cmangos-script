@@ -264,12 +264,12 @@ fi
 if grep -q ".*ERROR.*\n" "$folder_core"/run/logs/Server.log; then
 printf "       Server.log "
 printf "[\033[1;31mError\033[0m] "
-if grep -q "malformed" "$folder_core"/run/logs/Server.log; then
-printf "+ [\033[1;31mSerious\033[0m]"
 else
 printf "       Server.log "
 printf "[\e[1;32mok\033[0m]"
  echo
+if grep -q "malformed" "$folder_core"/run/logs/Server.log; then
+printf "+ [\033[1;31mSerious\033[0m]"
 fi
 fi
  echo
