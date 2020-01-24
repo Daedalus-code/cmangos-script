@@ -276,7 +276,7 @@ cm_realm="\033[0mRealm \e[0;32m$server_name\e[31m"
 
 # Realmd.log >
 if grep -q ".*ERROR.*\n" "$folder_core"/run/logs/Realmd.log; then
-realmd_log="Realmd.log [\033[1;31mError\033[0m]"
+realmd_log="Realmd.log [\033[0;31mError\033[0m]"
 else
 realmd_log="Realmd.log [\e[0;32mok\033[0m]"
 fi
@@ -284,7 +284,7 @@ fi
 
 # Server.log >
 if grep -q ".*ERROR.*\n" "$folder_core"/run/logs/Server.log; then
-server_log="Server.log [\033[1;31mError\033[0m]"
+server_log="Server.log [\033[0;31mError\033[0m]"
 else
 server_log="Server.log [\e[0;32mok\033[0m]"
 fi
@@ -971,7 +971,7 @@ printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
 if grep -q ".*ERROR.*\n" "$folder_core"/run/logs/Realmd.log; then
 printf "Realmd.log "
-printf "[\033[1;31mError\033[0m] > "
+printf "[\033[0;31mError\033[0m] > "
 grep -E ".*ERROR.*\n" "$folder_core"/run/logs/Realmd.log | wc -l
 else
 printf "Realmd.log "
@@ -1008,7 +1008,7 @@ printf "Total startup time: %d:%02d:%02d:%02.4f\n" "$dd" "$dh" "$dm" "$ds"
 fi
 if grep -q ".*ERROR.*\n" "$folder_core"/run/logs/Server.log; then
 printf "Server.log "
-printf "[\033[1;31mError\033[0m] > "
+printf "[\033[0;31mError\033[0m] > "
 grep -E ".*ERROR.*\n" "$folder_core"/run/logs/Server.log | wc -l
 if grep -q "malformed" "$folder_core"/run/logs/Server.log; then
 printf "           [\033[1;31mSerious\033[0m] > "
@@ -1184,7 +1184,7 @@ printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
 if grep -q ".*ERROR.*\n" "$folder_core"/run/logs/Realmd.log; then
 printf "Realmd.log "
-printf "[\033[1;31mError\033[0m] > "
+printf "[\033[0;31mError\033[0m] > "
 grep -E ".*ERROR.*\n" "$folder_core"/run/logs/Realmd.log | wc -l
 else
 printf "Realmd.log "
@@ -1197,7 +1197,7 @@ printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
 if grep -q ".*ERROR.*\n" "$folder_core"/run/logs/Server.log; then
 printf "Server.log "
-printf "[\033[1;31mError\033[0m] > "
+printf "[\033[0;31mError\033[0m] > "
 grep -E ".*ERROR.*\n" "$folder_core"/run/logs/Server.log | wc -l
 if grep -q "malformed" "$folder_core"/run/logs/Server.log; then
 printf "           [\033[1;31mSerious\033[0m] > "
