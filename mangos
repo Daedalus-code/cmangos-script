@@ -961,10 +961,10 @@ dm=$(echo "$dt3/60" | bc)
 ds=$(echo "$dt3-60*$dm" | bc)
 
 # codes done
-done
-# wait for mangosd to fill up Server.log done
 printf "[\e[1;32mok\033[0m] "
 printf "Total runtime: %d:%02d:%02d:%02.4f\n" "$dd" "$dh" "$dm" "$ds"
+done
+# wait for mangosd to fill up Server.log done
 fi
  read -r -p "Press Enter to continue" </dev/tty
  echo
