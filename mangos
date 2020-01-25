@@ -1065,7 +1065,7 @@ if grep -q ".*ERROR.*\n" "$folder_core"/run/logs/Server.log; then
 printf "Server.log "
 printf "$server_log_error"
 # count errors inside log
-egrep -E ".*ERROR.*\n|empty" "$folder_core"/run/logs/Server.log | wc -l
+egrep -E ".*ERROR.*\n" "$folder_core"/run/logs/Server.log | wc -l
 # look for serious error
 if egrep -q "malformed|fatal|critical" "$folder_core"/run/logs/Server.log; then
 # if any, print "serious"
@@ -1318,7 +1318,7 @@ if grep -q ".*ERROR.*\n" "$folder_core"/run/logs/Server.log; then
 printf "Server.log "
 printf "$server_log_error"
 # count errors inside log
-egrep -E ".*ERROR.*\n|empty" "$folder_core"/run/logs/Server.log | wc -l
+egrep -E ".*ERROR.*\n" "$folder_core"/run/logs/Server.log | wc -l
 # look for serious error
 if egrep -q "malformed|fatal|critical" "$folder_core"/run/logs/Server.log; then
 # if any, print "serious"
