@@ -1633,7 +1633,7 @@ nano "$folder_core"/run/etc/playerbot.conf;;
  8 ) echo "You picked $opt $REPLY"
 nano "$folder_core"/run/etc/ahbot.conf;;
  9 ) echo "You picked $opt $REPLY"
-nano "$folder_helper" ../server.txt;;
+nano "$folder_helper". ./server.txt;;
 
  $(( ${#options[@]}+1 )) ) echo "
  See you next time!
