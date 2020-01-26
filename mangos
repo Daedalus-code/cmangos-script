@@ -291,7 +291,7 @@ fi
 # Server.log >
 
 # look for error
-if grep -E -q "*ERROR*" "$folder_core"/run/logs/Server.log; then
+if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log; then
 # if any, print "error"
 cm_server_log="[\033[0;31mError\033[0m]"
 else
@@ -1041,12 +1041,12 @@ esac
 printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
 # look for error
-if grep -E -q "*ERROR*" "$folder_core"/run/logs/Realmd.log; then
+if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Realmd.log; then
 # if any, print "error"
 printf "Realmd.log "
 printf '%b' "$realmd_log_error"
 # count errors inside log
-grep -E "*ERROR*" "$folder_core"/run/logs/Realmd.log | wc -l
+grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log
 # if nothing, print "ok"
 else
 printf "Realmd.log "
@@ -1073,22 +1073,22 @@ if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!" "$folder_c
 printf "Server.log "
 printf '%b' "$server_log_empty"
 # count empty inside log
-grep -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!" "$folder_core"/run/logs/Server.log | wc -l
+grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!" "$folder_core"/run/logs/Server.log
 fi
 # look for error
-if grep -E -q "*ERROR*" "$folder_core"/run/logs/Server.log; then
+if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log; then
 # if any, print "error"
 printf "Server.log "
 printf '%b' "$server_log_error"
 # count errors inside log
-grep -E "*ERROR*" "$folder_core"/run/logs/Server.log | wc -l
+grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log
 # look for serious error
 if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log; then
 # if any, print "serious"
 printf "Server.log "
 printf '%b' "$server_log_serious"
 # count serious errors inside log
-grep -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log | wc -l
+grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log
 fi
 # if nothing, print "ok"
 else
@@ -1330,12 +1330,12 @@ esac
 printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
 # look for error
-if grep -E -q "*ERROR*" "$folder_core"/run/logs/Realmd.log; then
+if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Realmd.log; then
 # if any, print "error"
 printf "Realmd.log "
 printf '%b' "$realmd_log_error"
 # count errors inside log
-grep -E "*ERROR*" "$folder_core"/run/logs/Realmd.log | wc -l
+grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log
 # if nothing, print "ok"
 else
 printf "Realmd.log "
@@ -1354,22 +1354,22 @@ if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!" "$folder_c
 printf "Server.log "
 printf '%b' "$server_log_empty"
 # count empty inside log
-grep -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!" "$folder_core"/run/logs/Server.log | wc -l
+grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!" "$folder_core"/run/logs/Server.log
 fi
 # look for error
-if grep -E -q "*ERROR*" "$folder_core"/run/logs/Server.log; then
+if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log; then
 # if any, print "error"
 printf "Server.log "
 printf '%b' "$server_log_error"
 # count errors inside log
-grep -E "*ERROR*" "$folder_core"/run/logs/Server.log | wc -l
+grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log
 # look for serious error
 if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log; then
 # if any, print "serious"
 printf "Server.log "
 printf '%b' "$server_log_serious"
 # count serious errors inside log
-grep -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log | wc -l
+grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log
 fi
 # if nothing, print "ok"
 else
