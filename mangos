@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202601
-# 1.6.4.1 - (1339 sloc)
+# 1.6.4.2 - (1339 sloc)
 
 # Menusystem >
 
@@ -131,27 +131,28 @@ then
 
 clear
 
-printf "\e[0;32m                                    __
-.---.-.----.----.-----.--.--.-----.|  |_
-|  _  |  __|  __|  _  |  |  |     ||   _|
-|___._|____|____|_____|_____|__|__||____|
-\e[0;33mC(ontinued)-MaNGOS Helper\e[0;32m
+printf "\e[31m ---------------------------------------------
+                                       __
+   .---.-.----.----.-----.--.--.-----.|  |_
+   |  _  |  __|  __|  _  |  |  |     ||   _|
+   |___._|____|____|_____|_____|__|__||____|
+           \033[0mC(ontinued)-MaNGOS Helper
+             \033[0m--------------------
+               \033[0mCreating account
 
-\033[0mCreating account
+                    \e[0;35mInfo:
 
-\e[0;35mInfo:
+          \033[0m0: Vanilla\e[0;32m
+          1: The Burning Crusade
+          2: Wrath of the Lich King
 
-\033[0m0) Vanilla\e[0;32m
-1) The Burning Crusade
-2) Wrath of the Lich King
+          \033[0m0: Player\e[0;32m
+          1: Moderator
+          2: Game Master
+          3: Administrator\033[0m
 
-\033[0m0) Player\e[0;32m
-1) Moderator
-2) Game Master
-3) Administrator\033[0m
-
-Minimum 5 characters account name.
-\033[0m"
+      Minimum 5 characters account name.
+\033[0m ---------------------------------------------"
 
  echo
  echo "Username:";
@@ -342,7 +343,7 @@ fi
 printf '%b' "
 <----------------------------------------------------------------------------->\e[31m
                    \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.6.4.1 ]\e[31m
+           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.6.4.2 ]\e[31m
 
      \033[0m* Administrator functions and features for WoW Vanilla server.
      * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
