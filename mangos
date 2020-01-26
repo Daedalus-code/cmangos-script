@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202601
-# 1.6.1.5 - (1338 sloc)
+# 1.6.1.6 - (1338 sloc)
 
 # Menusystem >
 
@@ -316,7 +316,7 @@ clear
 printf "
 <----------------------------------------------------------------------------->\e[31m
                    \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.6.1.5 ]\e[31m
+           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.6.1.6 ]\e[31m
 
      \033[0m* Administrator functions and features for WoW Vanilla server.
      * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -1112,6 +1112,7 @@ if grep -E -q "malformed|fail|failed|fatal|critical|Segmentation\sfault|core\sdu
 printf "[CMANGOS]: "
 printf "$server_log_failed"
  echo
+fi
 fi
  echo
  read -r -n 1 -p "Check server log? (world) (tail/follow/nano/exit) " ans;
