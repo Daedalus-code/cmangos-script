@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202601
-# 1.6.2.4 - (1344 sloc)
+# 1.6.1.6 - (1344 sloc)
 
 # Menusystem >
 
@@ -316,7 +316,7 @@ clear
 printf "
 <----------------------------------------------------------------------------->\e[31m
                    \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.6.2.4 ]\e[31m
+           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.6.1.6 ]\e[31m
 
      \033[0m* Administrator functions and features for WoW Vanilla server.
      * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -976,6 +976,7 @@ realmd_log_ok="[\e[0;32mok\033[0m]"
 # server.log
 server_log_initialized="[\e[0;32mWorld initialized\033[0m]"
 server_log_serious="[\033[1;31mSerious\033[0m] -> "
+server_log_failed="[\033[0;31mWorld failed\033[0m]"
 server_log_error="[\033[0;31mError\033[0m] -> "
 server_log_empty="[\e[0;33mEmpty\033[0m] -> "
 server_log_ok="[\e[0;32mok\033[0m]"
@@ -1003,7 +1004,6 @@ sudo service realmd restart &> /dev/null
  echo -ne '(50%)\r'
  sleep 1
 sudo service mangosd restart &> /dev/null
-res1=$(date +%s.%N)
  echo -ne '(100%)\r'
  sleep 1
 
@@ -1064,24 +1064,8 @@ printf "\e[1;32m<------------------------------------------------------>\033[0m"
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 # wait for mangosd to fill up Server.log >
-tail -f "$folder_core"/run/logs/Server.log | while read -r LOGLINE
-do
-[[ "${LOGLINE}" == *"STARTUP"* ]] && pkill -P $$ tail
-done
-res2=$(date +%s.%N)
-# codes >
-
-dt=$(echo "$res2 - $res1" | bc)
-dd=$(echo "$dt/86400" | bc)
-dt2=$(echo "$dt-86400*$dd" | bc)
-dh=$(echo "$dt2/3600" | bc)
-dt3=$(echo "$dt2-3600*$dh" | bc)
-dm=$(echo "$dt3/60" | bc)
-ds=$(echo "$dt3-60*$dm" | bc)
-
-# codes done
-printf "[\e[0;32mok\033[0m] "
-printf "Total startup time: %d:%02d:%02d:%02.4f\n" "$dd" "$dh" "$dm" "$ds"
+( (sleep 1; exec tail -f "$folder_core"/run/logs/Server.log) & echo $! ; wait ) |
+(trap 'kill "$pid"' EXIT; pid="$(head -1)"; grep -E -m 1 "STARTUP|malformed|fail|failed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated")
  echo
 # wait for mangosd to fill up Server.log done
 fi
@@ -1120,6 +1104,14 @@ if grep -E -q "World\sinitialized" "$folder_core"/run/logs/Server.log; then
  echo
 printf "[CMANGOS]: "
 printf "$server_log_initialized"
+ echo
+fi
+# World failed
+if grep -E -q "malformed|fail|failed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log; then
+# if any, print "World failed"
+ echo
+printf "[CMANGOS]: "
+printf "$server_log_failed"
  echo
 fi
  echo
