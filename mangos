@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202601
-# 1.6.2.2 - (1341 sloc)
+# 1.6.2.4 - (1341 sloc)
 
 # Menusystem >
 
@@ -316,7 +316,7 @@ clear
 printf "
 <----------------------------------------------------------------------------->\e[31m
                    \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.6.2.2 ]\e[31m
+           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.6.2.4 ]\e[31m
 
      \033[0m* Administrator functions and features for WoW Vanilla server.
      * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -993,6 +993,8 @@ realm_service=realmd
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+cp "$folder_core"/run/logs/Server.log "$folder"/run/logs/Server.log.old
+touch "$folder_core"/run/logs/Server.log &> /dev/null
 printf "\e[1;32mRestarting server..\033[0m"
  echo
  echo -ne '(0%)\r'
