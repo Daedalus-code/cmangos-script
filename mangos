@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20202401
-# 1.5.7.0 - (1295 sloc)
+# V20202601
+# 1.5.7.9 - (1295 sloc)
 
 # Menusystem >
 
@@ -299,7 +299,7 @@ clear
 printf "
 <----------------------------------------------------------------------------->\e[31m
                    \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.5.7.0 ]\e[31m
+           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.5.7.9 ]\e[31m
 
      \033[0m* Administrator functions and features for WoW Vanilla server.
      * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -1250,6 +1250,7 @@ realmd_log_ok="[\e[0;32mok\033[0m]"
 # server.log
 server_log_serious="[\033[1;31mSerious\033[0m] -> "
 server_log_error="[\033[0;31mError\033[0m] -> "
+server_log_empty="[\e[0;33mEmpty\033[0m] -> "
 server_log_ok="[\e[0;32mok\033[0m]"
 
 # service status
@@ -1312,20 +1313,28 @@ tail "$folder_core"/run/logs/Realmd.log
 # server.log
 printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
+# look for empty tables
+if grep -E -q "table\sis\sempty!" "$folder_core"/run/logs/Server.log; then
+# if any, print "empty"
+printf "Server.log "
+printf "$server_log_empty"
+# count empty inside log
+grep -E "table\sis\sempty!" "$folder_core"/run/logs/Server.log | wc -l
+fi
 # look for error
-if grep -q ".*ERROR.*\n" "$folder_core"/run/logs/Server.log; then
+if grep -E -q "*ERROR*" "$folder_core"/run/logs/Server.log; then
 # if any, print "error"
 printf "Server.log "
 printf "$server_log_error"
 # count errors inside log
-egrep -E ".*ERROR.*\n" "$folder_core"/run/logs/Server.log | wc -l
+grep -E "*ERROR*" "$folder_core"/run/logs/Server.log | wc -l
 # look for serious error
-if egrep -q "malformed|fatal|critical" "$folder_core"/run/logs/Server.log; then
+if grep -E -q "malformed|fail|failed|fatal|critical" "$folder_core"/run/logs/Server.log; then
 # if any, print "serious"
 printf "Server.log "
 printf "$server_log_serious"
 # count serious errors inside log
-egrep -E "malformed|fatal|critical" "$folder_core"/run/logs/Server.log | wc -l
+grep -E "malformed|fail|failed|fatal|critical" "$folder_core"/run/logs/Server.log | wc -l
 fi
 # if nothing, print "ok"
 else
