@@ -1097,20 +1097,20 @@ printf "Server.log "
 printf "$server_log_ok"
  echo
 fi
-# World initialized
-if grep -E -q "World\sinitialized" "$folder_core"/run/logs/Server.log; then
-# if any, print "World initialized"
- echo
-printf "[CMANGOS]: "
-printf "$server_log_initialized"
- echo
-else
 # World failed
 if grep -E -q "malformed|fail|failed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log; then
 # if any, print "World failed"
  echo
 printf "[CMANGOS]: "
 printf "$server_log_failed"
+ echo
+else
+# World initialized
+if grep -E -q "World\sinitialized" "$folder_core"/run/logs/Server.log; then
+# if any, print "World initialized"
+ echo
+printf "[CMANGOS]: "
+printf "$server_log_initialized"
  echo
 fi
 fi
