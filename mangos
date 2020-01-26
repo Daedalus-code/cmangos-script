@@ -34,8 +34,8 @@ source /scripts/server.txt # please edit if wrong.
 # Codes >
 
 # Get database info
-on_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT SUM(online) FROM $db_characters.characters;") &> /dev/null;
-gu_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.guild;") &> /dev/null;
+on_count=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT SUM(online) FROM ${db_characters:?}.characters;") &> /dev/null;
+gu_count=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT count(*) FROM ${db_characters:?}.guild;") &> /dev/null;
 
 # Get date
 NOW="$(date +"%m.%d.%Y")"
