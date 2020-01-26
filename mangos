@@ -34,8 +34,8 @@ source /scripts/server.txt # please edit if wrong.
 # Codes >
 
 # Get database info
-on_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT SUM(online) FROM $db_characters.characters;"); &> /dev/null
-gu_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.guild;"); &> /dev/null
+on_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT SUM(online) FROM $db_characters.characters;") &> /dev/null;
+gu_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.guild;") &> /dev/null;
 
 # Get date
 NOW="$(date +"%m.%d.%Y")"
@@ -194,20 +194,20 @@ clear
 # codes >
 
 # Get database info
-ac_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account;"); &> /dev/null
-bn_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account_banned;"); &> /dev/null
+ac_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account;") &> /dev/null;
+bn_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account_banned;") &> /dev/null;
 # on_count &
 # gu_count at TOP ^
-me_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.guild_member;"); &> /dev/null
+me_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.guild_member;") &> /dev/null;
 
-ma_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.mail;"); &> /dev/null
-pe_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_pet;"); &> /dev/null
-ti_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_ticket;"); &> /dev/null
-co_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.corpse;"); &> /dev/null
-ch_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.characters;"); &> /dev/null
+ma_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.mail;") &> /dev/null;
+pe_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_pet;") &> /dev/null;
+ti_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_ticket;") &> /dev/null;
+co_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.corpse;") &> /dev/null;
+ch_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.characters;") &> /dev/null;
 
-pv_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.pvpstats_players;"); &> /dev/null
-gi_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_gifts;"); &> /dev/null
+pv_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.pvpstats_players;") &> /dev/null;
+gi_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_gifts;") &> /dev/null;
 
 # Walter A code >
 # Thank you Walter A ! -> https://stackoverflow.com/questions/59862020
