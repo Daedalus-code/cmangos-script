@@ -280,9 +280,9 @@ cm_realm="\033[0mRealm \e[0;32m$server_name\e[31m"
 
 # look for error
 if grep -E -q "*ERROR*" "$folder_core"/run/logs/Realmd.log; then
-cm_realmd_log="Realmd.log [\033[0;31mError\033[0m]"
+cm_realmd_log="[\033[0;31mError\033[0m]"
 else
-cm_realmd_log="Realmd.log [\e[0;32mok\033[0m]"
+cm_realmd_log="[\e[0;32mok\033[0m]"
 fi
 # Realmd.log done
 
@@ -291,10 +291,10 @@ fi
 # look for error
 if grep -E -q "*ERROR*" "$folder_core"/run/logs/Server.log; then
 # if any, print "error"
-cm_server_log="Server.log [\033[0;31mError\033[0m]"
+cm_server_log="[\033[0;31mError\033[0m]"
 else
 # if nothing, print "ok"
-cm_server_log="Server.log [\e[0;32mok\033[0m]"
+cm_server_log="[\e[0;32mok\033[0m]"
 fi
 # look for empty tables
 if grep -E -q "table\sis\sempty!" "$folder_core"/run/logs/Server.log; then
@@ -327,8 +327,8 @@ printf "
 
        $cm_realm\033[0m
 
-       $cm_realmd_log
-       $cm_server_log_empty$cm_server_log$cm_server_log_serious"
+       Realmd.log $cm_realmd_log
+       Server.log $cm_server_log_empty$cm_server_log$cm_server_log_serious"
  echo
  echo
 
