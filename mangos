@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202601
-# 1.6.1.2 - (1335 sloc)
+# 1.6.1.8 - (1335 sloc)
 
 # Menusystem >
 
@@ -277,19 +277,33 @@ cm_realm="\033[0mRealm \e[0;32m$server_name\e[31m"
 # log data >
 
 # Realmd.log >
-if grep -q ".*ERROR.*\n" "$folder_core"/run/logs/Realmd.log; then
-realmd_log="Realmd.log [\033[0;31mError\033[0m]"
+
+# look for error
+if grep -E -q "*ERROR*" "$folder_core"/run/logs/Realmd.log; then
+cm_realmd_log="Realmd.log [\033[0;31mError\033[0m]"
 else
-realmd_log="Realmd.log [\e[0;32mok\033[0m]"
+cm_realmd_log="Realmd.log [\e[0;32mok\033[0m]"
 fi
 # Realmd.log done
 
 # Server.log >
-if grep -q ".*ERROR.*\n" "$folder_core"/run/logs/Server.log; then
-server_log="Server.log [\033[0;31mError\033[0m]"
+
+# look for error
+if grep -E -q "*ERROR*" "$folder_core"/run/logs/Server.log; then
+cm_server_log="Server.log [\033[0;31mError\033[0m]"
 else
-server_log="Server.log [\e[0;32mok\033[0m]"
+cm_server_log="Server.log [\e[0;32mok\033[0m]"
 fi
+# look for empty tables
+if grep -E -q "table\sis\sempty!" "$folder_core"/run/logs/Server.log; then
+cm_server_log_empty="[\e[0;33mEmpty\033[0m]"
+fi
+# look for serious error
+if grep -E -q "malformed|fail|failed|fatal|critical" "$folder_core"/run/logs/Server.log; then
+# if any, print "serious"
+cm_server_log_serious="[\033[1;31mSerious\033[0m]"
+fi
+
 # Server.log done
 
 # codes done
@@ -299,7 +313,7 @@ clear
 printf "
 <----------------------------------------------------------------------------->\e[31m
                    \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.6.1.2 ]\e[31m
+           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.6.1.8 ]\e[31m
 
      \033[0m* Administrator functions and features for WoW Vanilla server.
      * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -310,8 +324,8 @@ printf "
 
        $cm_realm\033[0m
 
-       $realmd_log
-       $server_log"
+       $cm_realmd_log
+       $cm_server_log$cm_server_log_serious$cm_server_log_empty"
  echo
  echo
 
@@ -1364,14 +1378,6 @@ fi
 else
 printf "Server.log "
 printf "$server_log_ok"
- echo
-fi
-# World initialized
-if grep -E -q "World\sinitialized" "$folder_core"/run/logs/Server.log; then
-# if any, print "World initialized"
- echo
-printf "[CMANGOS]: "
-printf "$server_log_initialized"
  echo
 fi
  echo
