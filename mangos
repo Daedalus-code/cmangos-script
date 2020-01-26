@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202601
-# 1.6.1.6 - (1338 sloc)
+# 1.6.1.6 - (1339 sloc)
 
 # Menusystem >
 
@@ -67,7 +67,7 @@ out+="${services[$i]}:,${color_red}${service_status[$i]}${color_no},"
 fi
 
 # Insert \n every $COLUMNS column
-if [ $((($i+1) % $COLUMNS)) -eq 0 ]; then
+if [ $(((i+1) % COLUMNS)) -eq 0 ]; then
 out+="\n"
 fi
 done
