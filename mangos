@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202601
-# 1.6.2.4 - (1341 sloc)
+# 1.6.2.4 - (1344 sloc)
 
 # Menusystem >
 
@@ -328,7 +328,7 @@ printf "
        $cm_realm\033[0m
 
        $cm_realmd_log
-       $cm_server_log$cm_server_log_serious$cm_server_log_empty"
+       $cm_server_log_empty$cm_server_log$cm_server_log_serious"
  echo
  echo
 
