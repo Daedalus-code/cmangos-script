@@ -168,12 +168,12 @@ else
 printf '%b' "[\e[0;32mok\033[0m] GMLevel ($LVL)"
  echo
 fi
- echo "$user_nc
-$pass_nc
+ echo "${user_nc:?}
+${pass_nc:?}
 .account create $USR $PWD
 .account set addon $USR $XPV
-.account set gmlevel $USR $LVL" > "$folder_wow"/tmp.txt
-nc -q 1 "$host_nc" "$port_nc" < "$folder_wow"/tmp.txt ; rm "$folder_wow"/tmp.txt
+.account set gmlevel $USR $LVL" > "${folder_wow:?}"/tmp.txt
+nc -q 1 "${host_nc:?}" "${port_nc:?}" < "$folder_wow"/tmp.txt ; rm "$folder_wow"/tmp.txt
  echo
 printf '%b' "[\e[0;32mok\033[0m] Account $USR ($XPV/$LVL) created."
  echo
