@@ -61,9 +61,9 @@ for i in "${!services[@]}"; do
 
 # Color green if service is active, else red
 if [[ "${service_status[$i]}" == "active" ]]; then
-out+="${services[$i]}:,${color_green}${service_status[$i]}${color_no},"
+out+="${services[$i]}:,${color_green:?}${service_status[$i]:?}${color_no:?},"
 else
-out+="${services[$i]}:,${color_red}${service_status[$i]}${color_no},"
+out+="${services[$i]}:,${color_red:?}${service_status[$i]:?}${color_no:?},"
 fi
 
 # Insert \n every $COLUMNS column
