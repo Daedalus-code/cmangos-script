@@ -297,12 +297,12 @@ else
 cm_server_log="[\e[0;32mok\033[0m]"
 fi
 # look for empty tables
-if grep -E -q "table\sis\sempty!" "$folder_core"/run/logs/Server.log; then
+if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!" "$folder_core"/run/logs/Server.log; then
 # if any, print "empty"
 cm_server_log_empty="[\e[0;33mEmpty\033[0m]"
 fi
 # look for serious error
-if grep -E -q "malformed|fail|failed|fatal|critical" "$folder_core"/run/logs/Server.log; then
+if grep -E -q "malformed|fail|failed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log; then
 # if any, print "serious"
 cm_server_log_serious="[\033[1;31mSerious\033[0m]"
 fi
@@ -1101,12 +1101,12 @@ printf "$server_log_error"
 # count errors inside log
 grep -E "*ERROR*" "$folder_core"/run/logs/Server.log | wc -l
 # look for serious error
-if grep -E -q "malformed|fail|failed|fatal|critical" "$folder_core"/run/logs/Server.log; then
+if grep -E -q "malformed|fail|failed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log; then
 # if any, print "serious"
 printf "Server.log "
 printf "$server_log_serious"
 # count serious errors inside log
-grep -E "malformed|fail|failed|fatal|critical" "$folder_core"/run/logs/Server.log | wc -l
+grep -E "malformed|fail|failed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log | wc -l
 fi
 # if nothing, print "ok"
 else
@@ -1373,12 +1373,12 @@ printf "$server_log_error"
 # count errors inside log
 grep -E "*ERROR*" "$folder_core"/run/logs/Server.log | wc -l
 # look for serious error
-if grep -E -q "malformed|fail|failed|fatal|critical" "$folder_core"/run/logs/Server.log; then
+if grep -E -q "malformed|fail|failed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log; then
 # if any, print "serious"
 printf "Server.log "
 printf "$server_log_serious"
 # count serious errors inside log
-grep -E "malformed|fail|failed|fatal|critical" "$folder_core"/run/logs/Server.log | wc -l
+grep -E "malformed|fail|failed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log | wc -l
 fi
 # if nothing, print "ok"
 else
