@@ -1106,7 +1106,7 @@ printf "$server_log_initialized"
  echo
 else
 # World failed
-grep -E -q "malformed|fail|failed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log; then
+if grep -E -q "malformed|fail|failed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log; then
 # if any, print "World failed"
  echo
 printf "[CMANGOS]: "
