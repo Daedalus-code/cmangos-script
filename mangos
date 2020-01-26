@@ -993,7 +993,7 @@ realm_service=realmd
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-cp "$folder_core"/run/logs/Server.log "$folder"/run/logs/Server.log.old
+cp "$folder_core"/run/logs/Server.log "$folder"/run/logs/Server.log.old &> /dev/null
 touch "$folder_core"/run/logs/Server.log &> /dev/null
 printf "\e[1;32mRestarting server..\033[0m"
  echo
