@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202701
-# 1.7.0.9 - (1348 sloc)
+# 1.7.0.9
 
 # Menusystem >
 
@@ -467,7 +467,7 @@ grep -c -E "skipping" "$folder_core"/run/logs/EventAIErrors.log
  echo
  ;;
 
-"Q") exit ;;
+"Q") ;;
 "q") echo "case sensitive!!" ;;
  * ) echo "invalid option" ;;
 esac
