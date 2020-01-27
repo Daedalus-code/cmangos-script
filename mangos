@@ -378,7 +378,7 @@ printline "Characters" "$ch_count" "Pets" "$pe_count" "Gifts" "$gi_count"
 printf "
      \e[0;33mFor more information:\033[0m \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
 <----------------------------------------------------------------------------->\033[0m"
-read -n1 -s
+read -r -n1 -s
 case "$REPLY" in
 "1")
  echo
