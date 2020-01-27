@@ -405,63 +405,63 @@ fi
  echo
 printf "Server.log.old "
 printf "[\e[0;33mEmpty\033[0m] -> "
-grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!" "$folder_core"/run/logs/Server.log.old
+grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!" "$folder_core"/run/logs/Server.log.old 2> /dev/null
 printf "Server.log.old "
 printf "[\033[0;31mError\033[0m] -> "
-grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log.old
+grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log.old 2> /dev/null
 printf "Server.log.old "
 printf "[\033[1;31mSerious\033[0m] -> "
-grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log.old
+grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log.old 2> /dev/null
  echo
 printf "Server.log "
 printf "[\e[0;33mEmpty\033[0m] -> "
-grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!" "$folder_core"/run/logs/Server.log
+grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!" "$folder_core"/run/logs/Server.log 2> /dev/null
 printf "Server.log "
 printf "[\033[0;31mError\033[0m] -> "
-grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log
+grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log 2> /dev/null
 printf "Server.log "
 printf "[\033[1;31mSerious\033[0m] -> "
-grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log
+grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2> /dev/null
  echo
 printf "Realmd.log "
 printf "[\e[0;33mEmpty\033[0m] -> "
-grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!" "$folder_core"/run/logs/Realmd.log
+grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!" "$folder_core"/run/logs/Realmd.log 2> /dev/null
 printf "Realmd.log "
 printf "[\033[0;31mError\033[0m] -> "
-grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log
+grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2> /dev/null
 printf "Realmd.log "
 printf "[\033[1;31mSerious\033[0m] -> "
-grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Realmd.log
+grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Realmd.log 2> /dev/null
  echo
 printf "DBErrors.log "
 printf "[\033[0;31mNotCorresponding\033[0m] -> "
-grep -c -E "does\snot\shave\scorresponding" "$folder_core"/run/logs/DBErrors.log
+grep -c -E "does\snot\shave\scorresponding" "$folder_core"/run/logs/DBErrors.log 2> /dev/null
 printf "DBErrors.log "
 printf "[\033[0;31mDoesn'tExist\033[0m] -> "
-grep -c -E "doesn't\sexist" "$folder_core"/run/logs/DBErrors.log
+grep -c -E "doesn't\sexist" "$folder_core"/run/logs/DBErrors.log 2> /dev/null
 printf "DBErrors.log "
 printf "[\033[0;31mQueryERROR\033[0m] -> "
-grep -c -E "query\sERROR" "$folder_core"/run/logs/DBErrors.log
+grep -c -E "query\sERROR" "$folder_core"/run/logs/DBErrors.log 2> /dev/null
 printf "DBErrors.log "
 printf "[\033[0;31mIgnoring\033[0m] -> "
-grep -c -E "Option\swill\snever\sbe\sused" "$folder_core"/run/logs/DBErrors.log
+grep -c -E "Option\swill\snever\sbe\sused" "$folder_core"/run/logs/DBErrors.log 2> /dev/null
 printf "DBErrors.log "
 printf "[\033[1;31mCanCrash!\033[0m] -> "
-grep -c -E "can\scrash\sclient" "$folder_core"/run/logs/DBErrors.log
+grep -c -E "can\scrash\sclient" "$folder_core"/run/logs/DBErrors.log 2> /dev/null
  echo
 printf "Char.log "
 printf "[\e[0;32mCreated\033[0m] -> "
-grep -c -E "Create\sCharacter" "$folder_core"/run/logs/Char.log
+grep -c -E "Create\sCharacter" "$folder_core"/run/logs/Char.log 2> /dev/null
 printf "Char.log "
 printf "[\e[0;33mLogin\033[0m] -> "
-grep -c -E "Login" "$folder_core"/run/logs/Char.log
+grep -c -E "Login" "$folder_core"/run/logs/Char.log 2> /dev/null
 printf "Char.log "
 printf "[\e[0;33mLogout\033[0m] -> "
-grep -c -E "Logout" "$folder_core"/run/logs/Char.log
+grep -c -E "Logout" "$folder_core"/run/logs/Char.log 2> /dev/null
  echo
 printf "EventAIErrors.log "
 printf "[\033[0;31mskipping\033[0m] -> "
-grep -c -E "skipping" "$folder_core"/run/logs/EventAIErrors.log
+grep -c -E "skipping" "$folder_core"/run/logs/EventAIErrors.log 2> /dev/null
  echo
  read -r -p "Press Enter to continue" </dev/tty
  echo
