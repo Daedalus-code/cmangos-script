@@ -356,7 +356,7 @@ printf '%b' "
      * \e[0;35mInternet:\033[0m 'set realmlist \e[0;35m${internet:?}\033[0m'
      * \e[0;35mLanparty:\033[0m 'set realmlist \e[0;35m${intranet:?}\033[0m' - When internet drop out.
      * $cm_uptime
-     * 1) \e[0;35mLogin\033[0m: (remote access) * 2) \e[0;35mAnalyze logs\033[0m: (run/logs) * Q) : \e[0;35mquit\033[0m
+     * 1) \e[0;35mLogin\033[0m: (remote access) * 2) \e[0;35mAnalyze logs\033[0m: (run/logs) * Q) \e[0;35mquit\033[0m:
 
        $cm_realm\033[0m
 
