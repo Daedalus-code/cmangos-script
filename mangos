@@ -467,7 +467,7 @@ grep -c -E "skipping" "$folder_core"/run/logs/EventAIErrors.log
  echo
  ;;
 
-"Q") ;;
+"Q") break ;;
 "q") echo "case sensitive!!" ;;
  * ) echo "invalid option" ;;
 esac
