@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202801
-# 1.7.6.1
+# 1.7.6.4
 
 # Menusystem >
 
@@ -240,7 +240,10 @@ printf '%b' "
 mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, last_ip, DATE_FORMAT(last_login, '%Y-%m-%d') last_login, id FROM $db_realmd.account;"
 printf '%b' "This will delete directly from the '\e[0;35m$db_realmd\033[0m' database."
  echo
-printf "Select\e[0;32m account\033[0m (id) - Press Any Key To Exit
+printf "Select\e[0;32m account\033[0m (id) - Press Enter To Confirm
+
+            Press Any Key To Exit
+            
 >";
  read -r ID;
 if [[ -z "$ID" ]]; then
@@ -399,7 +402,7 @@ fi
 printf '%b' "
 <----------------------------------------------------------------------------->\e[31m
                    \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.7.6.1 ]\e[31m
+           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.7.6.4 ]\e[31m
 
      \033[0m* Administrator functions and features for WoW Vanilla server.
      * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
