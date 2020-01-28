@@ -437,7 +437,7 @@ printf "DBErrors.log "
 printf "[\033[0;31mQueryERROR\033[0m] -> "
 grep -c -E "query\sERROR" "$folder_core"/run/logs/DBErrors.log 2> /dev/null
 printf "DBErrors.log "
-printf "[\033[0;31mIgnoring\033[0m] -> "
+printf "[\033[0;31mWillNeverBeUsed\033[0m] -> "
 grep -c -E "Option\swill\snever\sbe\sused" "$folder_core"/run/logs/DBErrors.log 2> /dev/null
 printf "DBErrors.log "
 printf "[\033[1;31mCanCrashClient!\033[0m] -> "
