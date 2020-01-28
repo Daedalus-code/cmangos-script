@@ -440,7 +440,7 @@ printf "DBErrors.log "
 printf "[\033[0;31mIgnoring\033[0m] -> "
 grep -c -E "Option\swill\snever\sbe\sused" "$folder_core"/run/logs/DBErrors.log 2> /dev/null
 printf "DBErrors.log "
-printf "[\033[1;31mCanCrash!\033[0m] -> "
+printf "[\033[1;31mCanCrashClient!\033[0m] -> "
 grep -c -E "can\scrash\sclient" "$folder_core"/run/logs/DBErrors.log 2> /dev/null
  echo
 printf "Char.log "
