@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202801
-# 1.7.5.0
+# 1.7.6.1
 
 # Menusystem >
 
@@ -127,6 +127,8 @@ then
 
 clear
 
+# Account menu >
+
 printf '%b' "\e[31m ---------------------------------------------
 \033[0m                                       __
    .---.-.----.----.-----.--.--.-----.|  |_
@@ -167,6 +169,9 @@ printf "\033[0m ---------------------------------------------
       Minimum 5 characters account name.
 \033[0m ---------------------------------------------
             Press Any Key To Exit"
+
+# Account menu done
+
  echo
 printf "Username
 >"
@@ -220,8 +225,13 @@ nc -q 1 "${host_nc:?}" "${port_nc:?}" < "${folder_wow:?}"/tmp.txt; rm "${folder_
  echo
 printf '%b' "[\e[0;32mok\033[0m] Account '\e[0;35m$USR\033[0m' ($XPV/$LVL) created."
  echo
+ read -r -p "Press Enter to continue" </dev/tty
  echo
- sleep 2 ;;
+
+ ;;
+
+# Delete account >
+
  2)
 clear
 printf '%b' "
@@ -235,12 +245,13 @@ printf "Select\e[0;32m account\033[0m (id) - Press Any Key To Exit
  read -r ID;
 if [[ -z "$ID" ]]; then
 printf '%s\n' "empty"
-exit 1
 else
 mysql --defaults-extra-file="$sql_mycnf" --execute="DELETE FROM $db_realmd.account WHERE id = $ID;"
 printf '%b' "[\e[0;32mok\033[0m] Deleted! ($ID)"
  echo
 fi
+
+# Delete account done
 
  ;;
 
@@ -388,7 +399,7 @@ fi
 printf '%b' "
 <----------------------------------------------------------------------------->\e[31m
                    \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.7.5.0 ]\e[31m
+           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.7.6.1 ]\e[31m
 
      \033[0m* Administrator functions and features for WoW Vanilla server.
      * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
