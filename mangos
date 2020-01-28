@@ -326,7 +326,7 @@ else
 cm_server_log="[\e[0;32mok\033[0m]"
 fi
 # look for empty tables
-if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!" "$folder_core"/run/logs/Server.log; then
+if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log; then
 # if any, print "empty"
 cm_server_log_empty="[\e[0;33mEmpty\033[0m]"
 fi
@@ -399,7 +399,7 @@ fi
  echo
 printf "Server.log.old "
 printf "[\e[0;33mEmpty\033[0m] -> "
-grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!" "$folder_core"/run/logs/Server.log.old 2> /dev/null
+grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log.old 2> /dev/null
 printf "Server.log.old "
 printf "[\033[0;31mError\033[0m] -> "
 grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log.old 2> /dev/null
@@ -409,7 +409,7 @@ grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" 
  echo
 printf "Server.log "
 printf "[\e[0;33mEmpty\033[0m] -> "
-grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!" "$folder_core"/run/logs/Server.log 2> /dev/null
+grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2> /dev/null
 printf "Server.log "
 printf "[\033[0;31mError\033[0m] -> "
 grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log 2> /dev/null
@@ -419,7 +419,7 @@ grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" 
  echo
 printf "Realmd.log "
 printf "[\e[0;33mEmpty\033[0m] -> "
-grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!" "$folder_core"/run/logs/Realmd.log 2> /dev/null
+grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2> /dev/null
 printf "Realmd.log "
 printf "[\033[0;31mError\033[0m] -> "
 grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2> /dev/null
@@ -1172,12 +1172,12 @@ then
 # wait for mangosd to fill up Server.log done
 fi
 # look for empty tables
-if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!" "$folder_core"/run/logs/Server.log; then
+if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log; then
 # if any, print "empty"
 printf "Server.log "
 printf '%b' "$server_log_empty"
 # count empty inside log
-grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!" "$folder_core"/run/logs/Server.log
+grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log
 fi
 # look for error
 if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log; then
@@ -1440,12 +1440,12 @@ tail "$folder_core"/run/logs/Realmd.log
 printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
 # look for empty tables
-if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!" "$folder_core"/run/logs/Server.log; then
+if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log; then
 # if any, print "empty"
 printf "Server.log "
 printf '%b' "$server_log_empty"
 # count empty inside log
-grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!" "$folder_core"/run/logs/Server.log
+grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log
 fi
 # look for error
 if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log; then
