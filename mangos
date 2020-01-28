@@ -621,6 +621,8 @@ fi
 
 # Build from scratch done
 
+mkdir "$folder_core"/run/logs &> /dev/null
+touch "$folder_core"/run/logs/Server.log &> /dev/null
 # ahbot.conf
 cp "$folder_core"/run/etc/ahbot.conf.dist "$folder_core"/run/etc/ahbot.conf.dist &> /dev/null
 # new compile, new system logs >
@@ -1398,8 +1400,6 @@ realm_service=realmd
 
 # codes done
 
-mkdir "$folder_core"/run/logs &> /dev/null
-touch "$folder_core"/run/logs/Server.log &> /dev/null
  echo
 
 # realmd service
