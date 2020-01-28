@@ -156,7 +156,7 @@ printf '%b' "\e[31m ---------------------------------------------
  echo "Username:";
  read -r USR;
 if [[ -z "$USR" ]]; then
-printf '%s\n' "No input entered"
+printf '%s\n' "empty"
 exit 1
 else
 printf '%b' "[\e[0;32mok\033[0m] $USR"
@@ -166,30 +166,30 @@ fi
  echo "Password"
  read -r -s PWD;
 if [[ -z "$PWD" ]]; then
-printf '%s\n' "No input entered"
+printf '%s\n' "empty"
 exit 1
 else
 printf "[\e[0;32mok\033[0m] Password"
  echo
  echo
 fi
- echo "Choose expansion-version - 0";
+ echo "Expansion - 0";
  read -r -s XPV;
 if [[ -z "$XPV" ]]; then
-printf '%s\n' "No input entered"
+printf '%s\n' "empty"
 exit 1
 else
-printf '%b' "[\e[0;32mok\033[0m] expansion-version ($XPV)"
+printf '%b' "[\e[0;32mok\033[0m] Expansion ($XPV)"
  echo
  echo
 fi
- echo "GMLevel - 0-3";
+ echo "GMlevel - 0-3";
  read -r -s LVL;
 if [[ -z "$LVL" ]]; then
-printf '%s\n' "No input entered"
+printf '%s\n' "empty"
 exit 1
 else
-printf '%b' "[\e[0;32mok\033[0m] GMLevel ($LVL)"
+printf '%b' "[\e[0;32mok\033[0m] GMlevel ($LVL)"
  echo
 fi
  echo "${user_nc:?}
@@ -199,7 +199,7 @@ ${pass_nc:?}
 .account set gmlevel $USR $LVL" > "${folder_wow:?}"/tmp.txt;
 nc -q 1 "${host_nc:?}" "${port_nc:?}" < "${folder_wow:?}"/tmp.txt; rm "${folder_wow:?}"/tmp.txt
  echo
-printf '%b' "[\e[0;32mok\033[0m] Account $USR ($XPV/$LVL) created."
+printf '%b' "[\e[0;32mok\033[0m] Account '\e[0;35m$USR\033[0m' ($XPV/$LVL) created."
  echo
  echo
  sleep 2
