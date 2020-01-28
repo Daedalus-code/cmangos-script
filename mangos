@@ -624,7 +624,7 @@ fi
 sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
 mkdir "$folder_core"/run/logs; mkdir "$folder_core"/run/logs/old &> /dev/null
 touch "$folder_core"/run/logs/Server.log &> /dev/null
-cp "$folder_core/run/logs/*.log" "$folder_core"/run/logs/old
+cp "$folder_core"/run/logs/*.log "$folder_core"/run/logs/old
 # ahbot.conf
 cp "$folder_core"/run/etc/ahbot.conf.dist "$folder_core"/run/etc/ahbot.conf.dist &> /dev/null
 # new compile, new system logs >
