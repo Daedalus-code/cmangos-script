@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202801
-# 1.7.6.4
+# 1.7.7.2
 
 # Menusystem >
 
@@ -249,9 +249,16 @@ printf "Select\e[0;32m account\033[0m (id) - Press Enter To Confirm
 if [[ -z "$ID" ]]; then
 printf '%s\n' "empty"
 else
-mysql --defaults-extra-file="$sql_mycnf" --execute="DELETE FROM $db_realmd.account WHERE id = $ID;"
-printf '%b' "[\e[0;32mok\033[0m] Deleted! ($ID)"
  echo
+deleted=$(printf "\e[31mdelete\033[0m -> '\e[0;35m$ID\033[0m'?")
+ read -r -p "$deleted Are you sure? (y/n) " -n 1 -r
+ echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+mysql --defaults-extra-file="$sql_mycnf" --execute="DELETE FROM $db_realmd.account WHERE id = $ID;"
+printf '%b' "[\e[0;32mok\033[0m] /cast vanish '\e[0;35m$ID\033[0m' is gone!"
+ echo
+fi
 fi
 
 # Delete account done
@@ -274,26 +281,26 @@ while :
 do
 clear
 
-# Login (command) > * fuck blizz@rd > @ctivision && chin@.
+# Login (command) > * f00ck; bl1zz@rd > @ct1vis1on && ch1n@.
 
 # codes >
 
-# Get database info
+# Get database info (kinda heavy..) >
 ac_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account;") &> /dev/null;
 bn_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account_banned;") &> /dev/null;
-# on_count &
-# gu_count at TOP ^
-me_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.guild_member;") &> /dev/null;
-
-ma_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.mail;") &> /dev/null;
-pe_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_pet;") &> /dev/null;
-ti_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_ticket;") &> /dev/null;
-co_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.corpse;") &> /dev/null;
+# on_count ^
 ch_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.characters;") &> /dev/null;
 
+# gu_count at TOP ^
+me_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.guild_member;") &> /dev/null;
+ma_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.mail;") &> /dev/null;
+pe_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_pet;") &> /dev/null;
+
+ti_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_ticket;") &> /dev/null;
+co_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.corpse;") &> /dev/null;
 pv_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.pvpstats_players;") &> /dev/null;
 gi_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_gifts;") &> /dev/null;
-
+# Get database info done
 # Walter A code >
 # Thank you Walter A ! -> https://stackoverflow.com/questions/59862020
 
@@ -402,7 +409,7 @@ fi
 printf '%b' "
 <----------------------------------------------------------------------------->\e[31m
                    \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.7.6.4 ]\e[31m
+           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.7.7.2 ]\e[31m
 
      \033[0m* Administrator functions and features for WoW Vanilla server.
      * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -410,6 +417,7 @@ printf '%b' "
      * \e[0;35mLanparty:\033[0m 'set realmlist \e[0;35m${intranet:?}\033[0m' - When internet drop out.
      * $cm_uptime
      * 1) \e[0;35mLogin\033[0m: (remote access) * 2) \e[0;35mAnalyze logs\033[0m: (run/logs) * Q) \e[0;35mquit\033[0m:
+     * x) \e[0;35mExtra stats\033[0m:
 
        $cm_realm\033[0m
 
