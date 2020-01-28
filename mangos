@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20202701
-# 1.7.2.2
+# V20202801
+# 1.6.9.9
 
 # Menusystem >
 
@@ -349,7 +349,7 @@ fi
 printf '%b' "
 <----------------------------------------------------------------------------->\e[31m
                    \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.7.2.2 ]\e[31m
+           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.6.9.9 ]\e[31m
 
      \033[0m* Administrator functions and features for WoW Vanilla server.
      * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -477,7 +477,6 @@ grep -c -E "skipping" "$folder_core"/run/logs/EventAIErrors.log 2> /dev/null
  echo
  echo "invalid option" ;;
 esac
- sleep 1
 done
 
 # dive into logs done
@@ -572,29 +571,31 @@ printf "Updating mangos-classic (\e[1;32mcore\033[0m).."
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 packagelist=(
-checkinstall
-build-essential
-gcc
-g++
-automake
-git-core
 autoconf
-make
-patch
-libmysql++-dev
-mysql-server
-libtool
-libssl-dev
-grep
+automake
 binutils
-zlibc
-libc6
-libbz2-dev
+build-essential
+checkinstall
 cmake
-subversion
+g++
+gcc
+git-core
+grep
 libboost-all-dev
+libbz2-dev
+libc6
+libmysql++-dev
+libssl-dev
+libtool
+make
+mysql-client
+mysql-server
+patch
+subversion
+zip
+zlibc
 )
-sudo apt-get install "${packagelist[@]}" -y 1> /dev/null
+sudo apt-get install "${packagelist[@]}" -y &> /dev/null
 fi
 
 # reset --hard origin/master ? >
@@ -626,6 +627,11 @@ fi
 
 # Build from scratch done
 
+# ahbot.conf
+cp "$folder_core"/run/etc/ahbot.conf.dist "$folder_core"/run/etc/ahbot.conf.dist &> /dev/null
+# new compile, new system logs >
+rm -f "$folder_core"/run/logs/DBErrors.log "$folder_core"/run/logs/EventAIErrors.log &> /dev/null
+# done
 sudo chown -R "$user":"$group" "$folder_wow"
 cd "${folder_build:?}" || exit
 cmake .. ${cmake:?}
@@ -658,15 +664,6 @@ esac
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-
- read -r -p "Copy 'ahbot.conf.dist.in' into run/etc ? (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-cp "$folder_core"/src/game/AuctionHouseBot/ahbot.conf.dist.in "$folder_core"/run/etc/ahbot.conf.dist &> /dev/null
- echo "run/etc/ahbot.conf.dist created."
-fi
-
 title="       Save config without .dist
     ================================
           Server configuration
@@ -809,7 +806,7 @@ packagelist=(
 mysql-server
 mysql-client
 )
-sudo apt-get install "${packagelist[@]}" -y 1> /dev/null
+sudo apt-get install "${packagelist[@]}" -y &> /dev/null
 
 # Delete and start over ? >
 
@@ -962,7 +959,7 @@ fi
 # IMPORT BACKUP ? >
 
  echo
-ls -lQ "$folder_wow"/backup
+ls -lQS "$folder_wow"/backup
  echo
  read -r -p "Import latest backup? (y/n) " -n 1 -r
  echo
@@ -982,7 +979,7 @@ fi
 
 # convert_mysql_engine = myisam -> innodb ? >
 
- read -r -p "Converting? (myisam -> innodb) Works on MariaDB (y/n) " -n 1 -r
+ read -r -p "Converting myisam -> innodb? (Works on MariaDB) (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -1070,6 +1067,9 @@ mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, motd FROM $db_c
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+# keep old log >
+cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &> /dev/null
+# done
 printf "\033[1;31mShutting down server..\033[0m"
  echo
  echo -ne '(0%)\r'
@@ -1134,24 +1134,19 @@ clear
 
 # realmd service
 case  "$(pidof $realm_service | wc -w)" in
- 0) printf "Realm [\033[1;31mfailed\033[0m]"
- echo ;;
- 1) printf "Realm [\e[0;32mok\033[0m]"
- echo ;;
- *) printf "Realm [\e[0;33mok\033[0m]"
- echo ;;
+ 0) printf "Realm [\033[1;31minactive\033[0m] " ;;
+ 1) printf "Realm [\e[0;32mactive\033[0m] " ;;
+ *) printf "Realm [\e[0;33mok?\033[0m] " ;;
 esac
 
 # mangosd service
 case  "$(pidof $world_service | wc -w)" in
- 0) printf "World [\033[1;31mfailed\033[0m]"
- echo ;;
- 1) printf "World [\e[0;32mok\033[0m]"
- echo ;;
- *) printf "World [\e[0;33mok\033[0m]"
- echo ;;
+ 0) printf "World [\033[1;31minactive\033[0m] " ;;
+ 1) printf "World [\e[0;32mactive\033[0m] " ;;
+ *) printf "World [\e[0;33mok?\033[0m] " ;;
 esac
 
+ echo
 # realmd.log
 printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
@@ -1340,7 +1335,7 @@ printf "[\e[0;32mok\033[0m] -> Installed."
  echo
  echo
  echo "Will exit now."
- sleep 2 && exit
+ sleep 1 && exit
 else
 cd "$folder_helper" || exit
 printf "[\e[0;32mok\033[0m] Helper - latest release - "
@@ -1375,7 +1370,7 @@ printf "[\e[0;32mok\033[0m] -> Installed."
  echo
  echo
  echo "Will exit now."
- sleep 2 && exit
+ sleep 1 && exit
 fi
 fi
 fi
@@ -1415,24 +1410,19 @@ mkdir "$folder_core"/run/logs &> /dev/null
 
 # realmd service
 case  "$(pidof $realm_service | wc -w)" in
- 0) printf "Realm [\033[1;31mfailed\033[0m]"
- echo ;;
- 1) printf "Realm [\e[0;32mok\033[0m]"
- echo ;;
- *) printf "Realm [\e[0;33mok\033[0m]"
- echo ;;
+ 0) printf "Realm [\033[1;31minactive\033[0m] " ;;
+ 1) printf "Realm [\e[0;32mactive\033[0m] " ;;
+ *) printf "Realm [\e[0;33mok?\033[0m] " ;;
 esac
 
 # mangosd service
 case  "$(pidof $world_service | wc -w)" in
- 0) printf "World [\033[1;31mfailed\033[0m]"
- echo ;;
- 1) printf "World [\e[0;32mok\033[0m]"
- echo ;;
- *) printf "World [\e[0;33mok\033[0m]"
- echo ;;
+ 0) printf "World [\033[1;31minactive\033[0m] " ;;
+ 1) printf "World [\e[0;32mactive\033[0m] " ;;
+ *) printf "World [\e[0;33mok?\033[0m] " ;;
 esac
 
+ echo
 # realmd.log
 printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
@@ -1516,20 +1506,13 @@ esac
 
 # Create/Apply .patch file ? >
 
- read -r -p "Download ARM patch (Pi2)? (y/n) " -n 1 -r
+ read -r -p "Download ARM patch (Pi2/Pi4)? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 cd "$folder_core" || exit
-wget https://raw.githubusercontent.com/Daedalus-code/cmangos-arm/master/arm_pi2.patch
-fi
-
- read -r -p "Download ARM patch (Pi4)? (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-cd "$folder_core" || exit
-wget https://raw.githubusercontent.com/Daedalus-code/cmangos-arm/master/arm_pi4.patch
+git clone https://github.com/Daedalus-code/cmangos-arm.git &> /dev/null
+git pull
 fi
 
  read -r -p "Apply .patch file? (ARM) (y/n) " -n 1 -r
@@ -1546,10 +1529,13 @@ printf "Select patch"
 case $n in
  1) echo "Applying patch - (Pi2)"
 sudo chown -R "$user":"$group" "$folder_core"
+cp "$folder_core"/cmangos-arm/arm_pi2.patch "$folder_core"
 cd "$folder_core" || exit
 patch < arm_pi2.patch -p1
  ;;
  2) echo "Applying patch - (Pi4)"
+sudo chown -R "$user":"$group" "$folder_core"
+cp "$folder_core"/cmangos-arm/arm_pi4.patch "$folder_core"
 cd "$folder_core" || exit
 patch < arm_pi4.patch -p1
  ;;
@@ -1626,9 +1612,9 @@ fi
 
 # Online check done
 
-  ;;
+ ;;
 
-  "e")
+"e")
 
 # Edit/Copy config files ? >
 
@@ -1636,15 +1622,6 @@ fi
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-
- read -r -p "Copy 'ahbot.conf.dist.in' into run/etc ? (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-cp "$folder_core"/src/game/AuctionHouseBot/ahbot.conf.dist.in "$folder_core"/run/etc/ahbot.conf.dist &> /dev/null
- echo "run/etc/ahbot.conf.dist created."
-fi
-
 title="       Save config without .dist
     ================================
           Server configuration
