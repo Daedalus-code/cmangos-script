@@ -1453,14 +1453,14 @@ if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log; then
 printf "Server.log "
 printf '%b' "$server_log_error"
 # count errors inside log
-grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log
+grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log 2> /dev/null
 # look for serious error
 if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log; then
 # if any, print "serious"
 printf "Server.log "
 printf '%b' "$server_log_serious"
 # count serious errors inside log
-grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log
+grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2> /dev/null
 fi
 # if nothing, print "ok"
 else
