@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202801
-# 1.6.9.6
+# 1.7.0.4
 
 # Menusystem >
 
@@ -343,7 +343,7 @@ fi
 printf '%b' "
 <----------------------------------------------------------------------------->\e[31m
                    \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.6.9.6 ]\e[31m
+           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.7.0.4 ]\e[31m
 
      \033[0m* Administrator functions and features for WoW Vanilla server.
      * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -1116,7 +1116,9 @@ realm_service=realmd
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+# keep old log >
 cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &> /dev/null
+# done
 printf "\e[1;32mRestarting server..\033[0m"
  echo
  echo -ne '(0%)\r'
@@ -1314,7 +1316,9 @@ printf "[\033[0;31mold\033[0m] -> old release installed!"
 printf "[\e[1;32mUpdating Helper\033[0m]"
  echo
  echo
- sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old &> /dev/null
+# keep old mangos >
+sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old &> /dev/null
+# done
 printf "[\e[0;32mok\033[0m] -> /usr/local/bin/mangos.old"
  sleep 1
  echo
@@ -1353,7 +1357,9 @@ printf "[\e[1;32mUpdating Helper\033[0m]"
 printf "[\e[0;32mok\033[0m] -> /usr/local/bin/mangos.old"
  sleep 1
  echo
+# keep old mangos >
 sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old &> /dev/null
+# done
 printf "[\e[0;32mok\033[0m] -> Stripping executable on 'mangos.old'"
  sleep 1
  echo
@@ -1517,11 +1523,13 @@ fi
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 
-printf "Select patch"
+printf "\e[0;32mSelect patch\033[0m"
+ echo
  echo
  echo " 1) ARM patch (Pi2)"
  echo " 2) ARM patch (Pi4)"
  echo
+ echo "Press Any Key To Exit"
  read -r n
 case $n in
  1) echo "Applying patch - (Pi2)"
@@ -1536,22 +1544,23 @@ cp "$folder_core"/cmangos-arm/arm_pi4.patch "$folder_core"
 cd "$folder_core" || exit
 patch < arm_pi4.patch -p1
  ;;
- *) echo "invalid option"
+ *) echo "exit"
  ;;
 esac
 fi
 
- read -r -p "Create/Apply new patch file now? (y/n) " -n 1 -r
+ read -r -p "Create or apply a new patch file? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 
-printf "Select patch operation"
+printf "\e[0;32mSelect patch operation\033[0m"
  echo
  echo
  echo " 1) Create patch"
  echo " 2) Apply patch"
  echo
+ echo "Press Any Key To Exit"
  read -r n
 case $n in
  1) echo "Create patch"
@@ -1564,10 +1573,9 @@ git diff > "${patch:?}"
 cd "$folder_core" || exit
 patch < "$patch" -p1
  ;;
- *) echo "invalid option"
+ *) echo "exit"
  ;;
 esac
- echo
  read -r -p "Press Enter to continue" </dev/tty
  echo
 fi
@@ -1588,7 +1596,7 @@ printf "\e[1;32mOnline check\033[0m -> \e[1;32minternet\033[0m/\e[1;32mintranet\
  echo "Checking.."
  echo
 if nc -z "$internet" "${realm_port:?}" 2>/dev/null; then
-printf '%b' "\e[1;32m✓\033[0m $server_name - [ $internet ]"
+printf '%b' "\e[0;32m✓\033[0m $server_name - [ $internet ]"
 ping -qc1 "$internet" 2>&1 | awk -F/ '/^rtt/ { printf " - OK %.2f ms\n", $5; ok = 1 } END { if (!ok) print " - FAIL" }'
 else
 printf '%b' "\033[1;31m✗\033[0m $server_name - [ $internet ]"
@@ -1598,7 +1606,7 @@ fi
 # Intranet
 
 if nc -z "$intranet" "$realm_port" 2>/dev/null; then
-printf '%b' "\e[1;32m✓\033[0m ${server_name_lan:?} - [ $intranet ]"
+printf '%b' "\e[0;32m✓\033[0m ${server_name_lan:?} - [ $intranet ]"
 ping -qc1 "$intranet" 2>&1 | awk -F/ '/^rtt/ { printf " - OK %.2f ms\n", $5; ok = 1 } END { if (!ok) print " - FAIL" }'
 else
 printf '%b' "\033[1;31m✗\033[0m $server_name_lan - [ $intranet ]"
