@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20202801
-# 1.7.8.1
+# V20202901
+# 1.7.8.0
 
 # Menusystem >
 
@@ -395,7 +395,7 @@ fi
 printf '%b' "
 <----------------------------------------------------------------------------->\e[31m
                    \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.7.8.1 ]\e[31m
+           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.7.8.0 ]\e[31m
 
      \033[0m* Administrator functions and features for WoW Vanilla server.
      * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -444,10 +444,6 @@ printline "Characters" "$ch_count" "Pets" "$pe_count" "Gifts" "$gi_count"
 printf "
      \e[0;33mFor more information:\033[0m \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
 <----------------------------------------------------------------------------->\033[0m"
- ;;
-
-esac
-
 read -r -n1 -s
 case "$REPLY" in
 "1")
@@ -467,6 +463,9 @@ fi
  ;;
 
 # Login (command) done * Free Hong Kong.
+esac
+
+ ;;
 
 # dive into logs >
 
