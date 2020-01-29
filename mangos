@@ -265,7 +265,7 @@ then
 mysql --defaults-extra-file="$sql_mycnf" --execute="DELETE FROM $db_realmd.account WHERE id = $ID;" &> /dev/null
 mysql --defaults-extra-file="$sql_mycnf" --execute="DELETE FROM $db_realmd.account WHERE id IN ($ID);" &> /dev/null
 mysql --defaults-extra-file="$sql_mycnf" --execute="DELETE FROM $db_realmd.account WHERE id BETWEEN $ID;" &> /dev/null
-# delete by username -> ('username') (username1,username2)
+# delete by username -> ('username') (username1,username2,)
 mysql --defaults-extra-file="$sql_mycnf" --execute="DELETE FROM $db_realmd.account WHERE username='$ID';" &> /dev/null
 mysql --defaults-extra-file="$sql_mycnf" --execute="DELETE FROM $db_realmd.account WHERE username IN ($ID);" &> /dev/null
  sleep 1
