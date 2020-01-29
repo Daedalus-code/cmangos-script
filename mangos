@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202901
-# 1.7.9.6
+# 1.8.1.0
 
 # Menusystem >
 
@@ -395,7 +395,7 @@ fi
 printf '%b' "
 <----------------------------------------------------------------------------->\e[31m
                    \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.7.9.6 ]\e[31m
+           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.8.1.0 ]\e[31m
 
      \033[0m* Administrator functions and features for WoW Vanilla server.
      * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -848,6 +848,19 @@ sudo service realmd stop &> /dev/null
  sleep 1
 sudo service mangosd stop &> /dev/null
 sudo chown -R "$user":"$group" "$folder_wow"
+
+# reset --hard origin/master ? >
+
+ read -r -p "Reset --hard origin/master && git pull? (y/n) " -n 1 -r
+ echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+cd "$folder_db" || exit
+git reset --hard origin/master
+git pull
+fi
+
+# reset --hard origin/master done
 
 # BACKUP (regardless) >
 
@@ -1359,12 +1372,13 @@ then
 
 # reset --hard origin/master ? >
 
- read -r -p "Reset --hard origin/master? (y/n) " -n 1 -r
+ read -r -p "Reset --hard origin/master && git pull? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 cd "$folder_helper" || exit
 git reset --hard origin/master
+git pull
 fi
 
 # reset --hard origin/master done
