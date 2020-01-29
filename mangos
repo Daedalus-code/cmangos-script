@@ -238,7 +238,7 @@ printf '%b' "
 \033[0mSelect\e[0;32m account\033[0m -> \e[31mdelete\033[0m (id)"
  echo
 mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, last_ip, DATE_FORMAT(last_login, '%Y-%m-%d') last_login, id FROM $db_realmd.account;"
-printf '%b' "This will delete directly from the '\e[0;35m$db_realmd\033[0m' "
+printf '%b' "Delete directly from the '\e[0;35m$db_realmd.account\033[0m' table^ "
  echo
 printf "Select\e[0;32m account\033[0m (id) - Press Enter To Confirm
 
