@@ -450,13 +450,13 @@ printline "Characters" "$ch_count" "Pets" "$pe_count" "Gifts" "$gi_count"
  echo
 printf " \033[0m<----------------------------------------------------------------------------->\033[0m"
  echo
+ echo
 read -r -p "Press Enter to continue" </dev/tty
  echo
 
  ;;
 
 "l")
- echo
  echo
  read -r -p " Want to login? (y/n) " -n 1 -r
  echo
