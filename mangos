@@ -248,7 +248,7 @@ printf "
 if [[ -z "$ID" ]]; then
 printf '%s\n' "empty"
 else
-deleted=$(printf "\e[31m D E L E T E '\e[0;35m$ID\033[0m' \e[31m?!\033[0m")
+deleted=$(printf "\e[31mDELETE\033[0m '\e[0;35m$ID\033[0m' \e[31m?!\033[0m")
  echo
  read -r -p "$deleted
 
