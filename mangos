@@ -410,7 +410,7 @@ printf '%b' "
         Server.log $cm_server_log_empty$cm_server_log$cm_server_log_serious
 
         * l) \e[0;35mLogin\033[0m: (remote access)
-        * a) \e[0;35mAnalyze logs\033[0m: (run/logs)
+        * a) \e[0;35mLogs\033[0m: (analyze run/logs)
         * w) \e[0;35mStats\033[0m: (world stats)
         * Q) \e[0;35mquit\033[0m: (back to menu)
 
