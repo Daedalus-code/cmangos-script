@@ -505,7 +505,7 @@ printf "
   'commands' will list all of the available commands
   'quit' and then hit Enter two times to exit
 
-  tip: Set '\e[0;35mMessage of the Day\033[0m' inside mangos.conf"
+  tip: Set '\e[0;35mMessage of the Day\033[0m' inside mangosd.conf"
  echo
  echo
 nc "$host_nc" "$port_nc"
