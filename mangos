@@ -403,7 +403,7 @@ printf '%b' "
      * \e[0;35mLanparty:\033[0m 'set realmlist \e[0;35m${intranet:?}\033[0m' - When internet drop out.
      * $cm_uptime
      * 1) \e[0;35mLogin\033[0m: (remote access) * 2) \e[0;35mAnalyze logs\033[0m: (run/logs) * Q) \e[0;35mquit\033[0m:
-     * 0) \e[0;35mExtra stats\033[0m: (world stats)
+     * x) \e[0;35mStats\033[0m: (world stats)
 
        $cm_realm\033[0m
 
@@ -412,9 +412,9 @@ printf '%b' "
 
  echo
  echo
- read -r -n1 -s
+ read -r -s -n1
 case "$REPLY" in
-"0")
+"x")
 
 # Get database info (kinda heavy..) >
 ac_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account;") &> /dev/null;
