@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202901
-# 1.8.3.8
+# 1.8.4.7
 
 # Menusystem >
 
@@ -396,7 +396,7 @@ printf '%b' "
  <----------------------------------------------------------------------------->\e[31m
 
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.8.3.8 ]\e[31m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.8.4.7 ]\e[31m
 
       \033[0m* Administrator functions and features for WoW Vanilla server.
       * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -499,66 +499,75 @@ fi
 
 "a")
 
+clear
+# codes >
+
+# server.log.old >
+dive_server_old_empty=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log.old 2> /dev/null)
+dive_server_old_error=$(grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log.old 2> /dev/null)
+dive_server_old_serio=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log.old 2> /dev/null)
+# server.log >
+dive_server_empty=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2> /dev/null)
+dive_server_error=$(grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log 2> /dev/null)
+dive_server_serio=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2> /dev/null)
+# realmd.log >
+dive_realmd_empty=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2> /dev/null)
+dive_realmd_error=$(grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2> /dev/null)
+dive_realmd_serio=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Realmd.log 2> /dev/null)
+# DBErrors.log >
+dive_DBError_corr=$(grep -c -E "does\snot\shave\scorresponding" "$folder_core"/run/logs/DBErrors.log 2> /dev/null)
+dive_DBError_exis=$(grep -c -E "doesn't\sexist" "$folder_core"/run/logs/DBErrors.log 2> /dev/null)
+dive_DBError_quer=$(grep -c -E "query\sERROR" "$folder_core"/run/logs/DBErrors.log 2> /dev/null)
+dive_DBError_used=$(grep -c -E "Option\swill\snever\sbe\sused" "$folder_core"/run/logs/DBErrors.log 2> /dev/null)
+dive_DBError_cras=$(grep -c -E "can\scrash\sclient" "$folder_core"/run/logs/DBErrors.log 2> /dev/null)
+# char.log >
+dive_char_created=$(grep -c -E "Create\sCharacter" "$folder_core"/run/logs/Char.log 2> /dev/null)
+dive_char_login_c=$(grep -c -E "Login" "$folder_core"/run/logs/Char.log 2> /dev/null)
+dive_char_logouts=$(grep -c -E "Logout" "$folder_core"/run/logs/Char.log 2> /dev/null)
+# EventAIErrors.log >
+dive_EventAIError=$(grep -c -E "skipping" "$folder_core"/run/logs/EventAIErrors.log 2> /dev/null)
+# dive status >
+dive_empty="[\e[0;33mEmpty\033[0m] ->"
+dive_error="[\033[0;31mError\033[0m] ->"
+dive_serio="[\033[1;31mSerious\033[0m] ->"
+dive_corre="[\033[0;31mNotCorresponding\033[0m] -> "
+dive_exist="[\033[0;31mDoesn'tExist\033[0m] -> "
+dive_query="[\033[0;31mQueryERROR\033[0m] -> "
+dive_never="[\033[0;31mWillNeverBeUsed\033[0m] -> "
+dive_crash="[\033[1;31mCanCrashClient!\033[0m] -> "
+dive_creat="[\e[0;33mCreated\033[0m] -> "
+dive_login="[\e[0;33mLogin\033[0m] -> "
+dive_logou="[\e[0;33mLogout\033[0m] -> "
+dive_skipp="[\033[0;31mskipping\033[0m] -> "
+# codes done
+
+# server.log.old >
+printf "[\e[1;36mServer.log\033[0m]
+$dive_empty $dive_server_empty - Server.log.old $dive_empty $dive_server_old_empty
+$dive_error $dive_server_error - Server.log.old $dive_error $dive_server_old_error
+$dive_serio $dive_server_serio - Server.log.old $dive_serio $dive_server_old_serio
+ \033[0m<------------------------------------------>\033[0m
+[\e[1;36mRealmd.log\033[0m]
+$dive_empty $dive_realmd_empty
+$dive_error $dive_realmd_error
+$dive_serio $dive_realmd_serio
+ \033[0m<------------------------------------------>\033[0m
+[\e[1;36mDBErrors.log\033[0m]
+$dive_corre $dive_DBError_corr
+$dive_exist $dive_DBError_exis
+$dive_query $dive_DBError_quer
+$dive_never $dive_DBError_used
+$dive_crash $dive_DBError_cras
+ \033[0m<------------------------------------------>\033[0m
+[\e[1;36mChar.log\033[0m]
+$dive_creat $dive_char_created
+$dive_login $dive_char_login_c
+$dive_logou $dive_char_logouts
+ \033[0m<------------------------------------------>\033[0m
+[\e[1;36mEventAIErrors.log\033[0m]
+$dive_skipp $dive_EventAIError"
+# server.log.old done
  echo
-printf "Server.log.old "
-printf "[\e[0;33mEmpty\033[0m] -> "
-grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log.old 2> /dev/null
-printf "Server.log.old "
-printf "[\033[0;31mError\033[0m] -> "
-grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log.old 2> /dev/null
-printf "Server.log.old "
-printf "[\033[1;31mSerious\033[0m] -> "
-grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log.old 2> /dev/null
- echo
-printf "Server.log "
-printf "[\e[0;33mEmpty\033[0m] -> "
-grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2> /dev/null
-printf "Server.log "
-printf "[\033[0;31mError\033[0m] -> "
-grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log 2> /dev/null
-printf "Server.log "
-printf "[\033[1;31mSerious\033[0m] -> "
-grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2> /dev/null
- echo
-printf "Realmd.log "
-printf "[\e[0;33mEmpty\033[0m] -> "
-grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2> /dev/null
-printf "Realmd.log "
-printf "[\033[0;31mError\033[0m] -> "
-grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2> /dev/null
-printf "Realmd.log "
-printf "[\033[1;31mSerious\033[0m] -> "
-grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Realmd.log 2> /dev/null
- echo
-printf "DBErrors.log "
-printf "[\033[0;31mNotCorresponding\033[0m] -> "
-grep -c -E "does\snot\shave\scorresponding" "$folder_core"/run/logs/DBErrors.log 2> /dev/null
-printf "DBErrors.log "
-printf "[\033[0;31mDoesn'tExist\033[0m] -> "
-grep -c -E "doesn't\sexist" "$folder_core"/run/logs/DBErrors.log 2> /dev/null
-printf "DBErrors.log "
-printf "[\033[0;31mQueryERROR\033[0m] -> "
-grep -c -E "query\sERROR" "$folder_core"/run/logs/DBErrors.log 2> /dev/null
-printf "DBErrors.log "
-printf "[\033[0;31mWillNeverBeUsed\033[0m] -> "
-grep -c -E "Option\swill\snever\sbe\sused" "$folder_core"/run/logs/DBErrors.log 2> /dev/null
-printf "DBErrors.log "
-printf "[\033[1;31mCanCrashClient!\033[0m] -> "
-grep -c -E "can\scrash\sclient" "$folder_core"/run/logs/DBErrors.log 2> /dev/null
- echo
-printf "Char.log "
-printf "[\e[0;32mCreated\033[0m] -> "
-grep -c -E "Create\sCharacter" "$folder_core"/run/logs/Char.log 2> /dev/null
-printf "Char.log "
-printf "[\e[0;33mLogin\033[0m] -> "
-grep -c -E "Login" "$folder_core"/run/logs/Char.log 2> /dev/null
-printf "Char.log "
-printf "[\e[0;33mLogout\033[0m] -> "
-grep -c -E "Logout" "$folder_core"/run/logs/Char.log 2> /dev/null
- echo
-printf "EventAIErrors.log "
-printf "[\033[0;31mskipping\033[0m] -> "
-grep -c -E "skipping" "$folder_core"/run/logs/EventAIErrors.log 2> /dev/null
  echo
  read -r -p "Press Enter to continue" </dev/tty
  echo
