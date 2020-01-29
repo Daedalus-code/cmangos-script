@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202901
-# 1.8.1.0
+# 1.8.3.8
 
 # Menusystem >
 
@@ -393,24 +393,30 @@ fi
 # codes done
 
 printf '%b' "
-<----------------------------------------------------------------------------->\e[31m
-                   \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-           \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.8.1.0 ]\e[31m
+ <----------------------------------------------------------------------------->\e[31m
 
-     \033[0m* Administrator functions and features for WoW Vanilla server.
-     * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
-     * \e[0;35mInternet:\033[0m 'set realmlist \e[0;35m${internet:?}\033[0m'
-     * \e[0;35mLanparty:\033[0m 'set realmlist \e[0;35m${intranet:?}\033[0m' - When internet drop out.
-     * $cm_uptime
-     * 1) \e[0;35mLogin\033[0m: (remote access) * 2) \e[0;35mAnalyze logs\033[0m: (run/logs)
-     * x) \e[0;35mStats\033[0m: (world stats) * Q) \e[0;35mquit\033[0m:
+                    \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.8.3.8 ]\e[31m
 
-       $cm_realm\033[0m
+      \033[0m* Administrator functions and features for WoW Vanilla server.
+      * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
+      * \e[0;35mInternet:\033[0m 'set realmlist \e[0;35m${internet:?}\033[0m'
+      * \e[0;35mLanparty:\033[0m 'set realmlist \e[0;35m${intranet:?}\033[0m' - When internet drop out.
+      * $cm_uptime
 
-       Realmd.log $cm_realmd_log
-       Server.log $cm_server_log_empty$cm_server_log$cm_server_log_serious"
+        $cm_realm\033[0m
 
- echo
+        Realmd.log $cm_realmd_log
+        Server.log $cm_server_log_empty$cm_server_log$cm_server_log_serious
+
+        * l) \e[0;35mLogin\033[0m: (remote access)
+        * a) \e[0;35mAnalyze logs\033[0m: (run/logs)
+        * x) \e[0;35mStats\033[0m: (world stats)
+        * Q) \e[0;35mquit\033[0m: (back to menu)
+
+      \e[0;33mFor more information:\033[0m \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
+
+ <----------------------------------------------------------------------------->\033[0m"
  echo
  read -r -s -n1
 case "$REPLY" in
@@ -434,24 +440,22 @@ gi_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*
 # Get database info done
 
 # Walter A code >
-
+ echo
 printline "Accounts" "$ac_count" "Guilds" "$gu_count" "Tickets" "$ti_count"
 printline "Banned" "$bn_count" "Members" "$me_count" "Corpses" "$co_count"
 printline "Online" "$on_count" "Mail" "$ma_count" "PvP" "$pv_count"
 printline "Characters" "$ch_count" "Pets" "$pe_count" "Gifts" "$gi_count"
 
 # Walter A code done
-
-printf "
-     \e[0;33mFor more information:\033[0m \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
-<----------------------------------------------------------------------------->\033[0m"
-echo
+ echo
+printf " \033[0m<----------------------------------------------------------------------------->\033[0m"
+ echo
 read -r -p "Press Enter to continue" </dev/tty
-echo
+ echo
 
  ;;
 
-"1")
+"l")
  echo
  echo
  read -r -p " Want to login? (y/n) " -n 1 -r
@@ -459,7 +463,31 @@ echo
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
- echo "'quit' and then hit Enter two times to exit."
+clear
+printf "
+\e[31m      ._________________.
+      |.---------------.|
+      || \033[0mmangos>\e[31m       ||
+      ||               ||
+      ||               ||
+      ||               ||
+      ||               ||
+      ||_______________||
+      /.-.-.-.-.-.-.-.-.\\
+     /.-.-.-.-.-.-.-.-.-.\\
+    /.-.-.-.-.-.-.-.-.-.-.\\
+   /______/__________\___\e[1;32mo\033[1;31m_\\
+   \_______________________/\033[0m"
+ echo
+printf "
+     CMaNGOS Command Center
+   \e[1;32m>\033[0m hit Enter two times to go back.
+    ------------------------------------------------
+   'commands' will list all of the available commands
+    'quit' and then hit Enter two times to exit
+
+    tip: Set '\e[0;35mMessage of the Day\033[0m' inside mangos.conf"
+ echo
  echo
 nc "$host_nc" "$port_nc"
  echo
@@ -469,7 +497,7 @@ fi
 
 # dive into logs >
 
-"2")
+"a")
 
  echo
 printf "Server.log.old "
