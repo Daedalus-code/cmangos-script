@@ -409,7 +409,7 @@ printf '%b' "
         Realmd.log $cm_realmd_log
         Server.log $cm_server_log_empty$cm_server_log$cm_server_log_serious
 
-        * l) \e[0;35mLogin\033[0m: (remote access)
+        * r) \e[0;35mLogin\033[0m: (remote access)
         * a) \e[0;35mLogs\033[0m: (analyze run/logs)
         * w) \e[0;35mStats\033[0m: (world stats)
         * Q) \e[0;35mquit\033[0m: (back to menu)
@@ -456,7 +456,7 @@ read -r -p "Press Enter to continue" </dev/tty
 
  ;;
 
-"l")
+"r")
  echo
  read -r -p " Want to login? (y/n) " -n 1 -r
  echo
