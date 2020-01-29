@@ -561,29 +561,29 @@ dive_skipp="[\033[0;31mskipping\033[0m] -> "
 # codes done
 
 # server.log.old >
-printf "[\e[1;36mServer.log\033[0m]
+printf "[\e[4;32mServer.log\033[0m]
 $dive_empty $dive_server_empty - Server.log.old $dive_empty $dive_server_old_empty
 $dive_error $dive_server_error - Server.log.old $dive_error $dive_server_old_error
 $dive_serio $dive_server_serio - Server.log.old $dive_serio $dive_server_old_serio
  \033[0m<------------------------------------------>\033[0m
-[\e[1;36mRealmd.log\033[0m]
+[\e[4;32mRealmd.log\033[0m]
 $dive_empty $dive_realmd_empty
 $dive_error $dive_realmd_error
 $dive_serio $dive_realmd_serio
  \033[0m<------------------------------------------>\033[0m
-[\e[1;36mDBErrors.log\033[0m]
+[\e[4;32mDBErrors.log\033[0m]
 $dive_corre $dive_DBError_corr
 $dive_exist $dive_DBError_exis
 $dive_query $dive_DBError_quer
 $dive_never $dive_DBError_used
 $dive_crash $dive_DBError_cras
  \033[0m<------------------------------------------>\033[0m
-[\e[1;36mChar.log\033[0m]
+[\e[4;32mChar.log\033[0m]
 $dive_creat $dive_char_created
 $dive_login $dive_char_login_c
 $dive_logou $dive_char_logouts
  \033[0m<------------------------------------------>\033[0m
-[\e[1;36mEventAIErrors.log\033[0m]
+[\e[4;32mEventAIErrors.log\033[0m]
 $dive_skipp $dive_EventAIError"
 # server.log.old done
  echo
