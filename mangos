@@ -14,7 +14,7 @@
 
 # By Rainman ★
 # V20202901
-# 1.8.2.0
+# 1.8.6.5
 
 # Menusystem >
 
@@ -248,9 +248,10 @@ printf "
 if [[ -z "$ID" ]]; then
 printf '%s\n' "empty"
 else
-deleted=$(printf "\e[31mSYSTEM WILL DELETE!\033[0m --> '\e[0;35m$ID\033[0m'")
+deleted=$(printf "\e[31m D E L E T E '\e[0;35m$ID\033[0m' \e[31m?!\033[0m")
  echo
  read -r -p "$deleted
+
 ARE YOU SURE? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
@@ -408,13 +409,36 @@ fi
 
 # Server.log done
 
+# check for backup >
+
+# realmd backup >
+FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
+if [ ! -f "$FILE" ];
+then
+realmd_backup="[\e[0;31mempty\033[0m/\e[0;31mold\033[0m]"
+ echo
+else
+realmd_backup="[\e[0;32mok\033[0m]"
+ echo
+fi
+# characters backup >
+FILE="$folder_wow/backup/$db_characters-$NOW.sql"
+if [ ! -f "$FILE" ];
+then
+charac_backup="[\e[0;31mempty\033[0m/\e[0;31mold\033[0m]"
+ echo
+else
+charac_backup="[\e[0;32mok\033[0m]"
+ echo
+fi
+
 # codes done
 
 printf '%b' "
  <----------------------------------------------------------------------------->\e[31m
 
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.8.2.0 ]\e[31m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.8.6.5 ]\e[31m
 
       \033[0m* Administrator functions and features for WoW Vanilla server.
       * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -427,10 +451,11 @@ printf '%b' "
         Realmd.log $cm_realmd_log
         Server.log $cm_server_log_empty$cm_server_log$cm_server_log_serious
 
-        r) \e[0;35mLogin\033[0m : (remote access)
-        a) \e[0;35mLogs\033[0m  : (analyze run/logs)
-        w) \e[0;35mStats\033[0m : (world stats)
-        Q) \e[0;35mquit\033[0m  : (back to menu)
+        r) \e[0;35mLogin\033[0m  : (remote access)        \e[0;35mBackup\033[0m
+        a) \e[0;35mLogs\033[0m   : (analyze run/logs)     Realmd.sql......: $realmd_backup
+        w) \e[0;35mStats\033[0m  : (world stats)          Characters.sql..: $charac_backup
+        b) \e[0;35mBackup\033[0m : (new backup)
+        Q) \e[0;35mQuit\033[0m   : (back to menu)
 
       \e[0;33mFor more information:\033[0m \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
 
@@ -438,6 +463,7 @@ printf '%b' "
  echo
  read -r -s -n1
 case "$REPLY" in
+
 "w")
 
 # Get database info (kinda heavy..) >
@@ -474,7 +500,26 @@ read -r -p "Press Enter to continue" </dev/tty
 
  ;;
 
+"b")
+
+# backup realmd sql >
+printf "Backup.."
+ sleep 1
+mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
+printf "[\e[0;32mok\033[0m] realmd"
+ sleep 1
+ echo
+# backup characters sql >
+printf "Backup.."
+ sleep 1
+mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
+printf "[\e[0;32mok\033[0m] characters"
+ sleep 1
+
+ ;;
+
 "r")
+
  echo
  read -r -p " Want to login? (y/n) " -n 1 -r
  echo
