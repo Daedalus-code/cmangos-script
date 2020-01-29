@@ -409,10 +409,10 @@ printf '%b' "
         Realmd.log $cm_realmd_log
         Server.log $cm_server_log_empty$cm_server_log$cm_server_log_serious
 
-        * r) \e[0;35mLogin\033[0m: (remote access)
-        * a) \e[0;35mLogs\033[0m: (analyze run/logs)
-        * w) \e[0;35mStats\033[0m: (world stats)
-        * Q) \e[0;35mquit\033[0m: (back to menu)
+        * r) \e[0;35mLogin\033[0m : (remote access)
+        * a) \e[0;35mLogs\033[0m  : (analyze run/logs)
+        * w) \e[0;35mStats\033[0m : (world stats)
+        * Q) \e[0;35mquit\033[0m  : (back to menu)
 
       \e[0;33mFor more information:\033[0m \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
 
