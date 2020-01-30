@@ -698,7 +698,7 @@ printf "[ Checking for \e[1;32m+\033[1;31m-\033[0m Updates\033[0m ] .. "
 
  echo
 cd "$folder_core" || exit
-if git checkout master &> /dev/null &&
+if [[ `git status --porcelain` ]] &> /dev/null &&
 git fetch origin master &> /dev/null &&
 [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
 git merge origin/master
@@ -717,7 +717,7 @@ fi
 # Classic Database (classic-db)
 
 cd "${folder_db:?}" || exit
-if git checkout master &> /dev/null &&
+if [[ `git status --porcelain` ]] &> /dev/null &&
 git fetch origin master &> /dev/null &&
 [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
 git merge origin/master
@@ -736,7 +736,7 @@ fi
 # CMaNGOS Helper
 
 cd "${folder_helper:?}" || exit
-if git checkout master &> /dev/null &&
+if [[ `git status --porcelain` ]] &> /dev/null &&
 git fetch origin master &> /dev/null &&
 [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
 git merge origin/master
