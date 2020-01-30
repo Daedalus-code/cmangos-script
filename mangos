@@ -482,7 +482,7 @@ printf '%b' "
         Realmd.log $cm_realmd_log
         Server.log $cm_server_log_empty$cm_server_log$cm_server_log_serious
 
-        r : \e[0;35mLogin\033[0m (remote access)         x : ?
+        r : \e[0;35mLogin\033[0m (remote access)         x : \e[0;35m?\033[0m
         a : \e[0;35mLogs\033[0m  (analyze run/logs)      b : \e[0;35mBackup\033[0m
         w : \e[0;35mStats\033[0m (world stats)           Realmd.sql\e[0;32m......:\033[0m $realmd_backup
         Q : \e[0;35mQuit\033[0m  (back to menu)          Characters.sql\e[0;32m..:\033[0m $charac_backup
