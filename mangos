@@ -280,7 +280,7 @@ printf "
 if [[ -z "$ID" ]]; then
 printf '%s\n' "empty"
 else
-deleted=$(printf "\e[31mDELETE\033[0m '\e[0;35m$ID\033[0m' \e[31m?!\033[0m")
+deleted=$(printf %b "\e[31mDELETE\033[0m '\e[0;35m$ID\033[0m' \e[31m?!\033[0m")
  echo
  read -r -p "$deleted
 
@@ -306,7 +306,7 @@ printf ".\033[0m..poof!"
  sleep 1
  echo
  echo
-printf "$ID \033[0m｡.vanished!"
+printf %b "$ID \033[0m｡.vanished!"
  sleep 1
  echo
  echo
@@ -529,27 +529,27 @@ dive_EventAIError=$(grep -c -E "skipping" "$folder_core"/run/logs/EventAIErrors.
  echo
 printf "       [\e[0;33mEmpty\033[0m]                [\033[0;31mError\033[0m]                [\033[1;31mSerious\033[0m]"
  echo
-printline "Server.log.old" "$dive_server_old_empty" "Server.log.old" $dive_server_old_error "Server.log.old" $dive_server_old_serio
-printline "Server.log" "$dive_server_empty" "Server.log" $dive_server_error "Server.log" $dive_server_serio
-printline "Realmd.log" "$dive_realmd_empty" "Realmd.log" $dive_realmd_error "Realmd.log" $dive_realmd_serio
+printline "Server.log.old" "$dive_server_old_empty" "Server.log.old" "$dive_server_old_error" "Server.log.old" "$dive_server_old_serio"
+printline "Server.log" "$dive_server_empty" "Server.log" "$dive_server_error" "Server.log" "$dive_server_serio"
+printline "Realmd.log" "$dive_realmd_empty" "Realmd.log" "$dive_realmd_error" "Realmd.log" "$dive_realmd_serio"
  echo
 printf " \033[0m<----------------------------------------------------------------------------->\033[0m"
  echo
  echo
 printf "       [\033[0;31mNotCorresponding\033[0m]     [\033[0;31mDoesn'tExist\033[0m]         [\033[0;31mQueryERROR\033[0m]"
  echo
-printline "DBErrors.log" $dive_DBError_corr "DBErrors.log" $dive_DBError_exis "DBErrors.log" $dive_DBError_quer
+printline "DBErrors.log" "$dive_DBError_corr" "DBErrors.log" "$dive_DBError_exis" "DBErrors.log" "$dive_DBError_quer"
  echo
 printf "       [\033[0;31mWillNeverBeUsed\033[0m]      [\033[1;31mCanCrashClient!\033[0m]      [\033[0;31mskipping\033[0m]"
  echo
-printline "DBErrors.log" $dive_DBError_used "DBErrors.log" $dive_DBError_cras "E*AIErrors.log" $dive_EventAIError
+printline "DBErrors.log" "$dive_DBError_used" "DBErrors.log" "$dive_DBError_cras" "E*AIErrors.log" "$dive_EventAIError"
  echo
 printf " \033[0m<----------------------------------------------------------------------------->\033[0m"
  echo
  echo
 printf "       [\e[0;33mCreated\033[0m]              [\e[0;33mLogin\033[0m]                [\e[0;33mLogout\033[0m]"
  echo
-printline "Char.log" $dive_char_created "Char.log" $dive_char_login_c "Char.log" $dive_char_logouts
+printline "Char.log" "$dive_char_created" "Char.log" "$dive_char_login_c" "Char.log" "$dive_char_logouts"
  echo
 printf " \033[0m<----------------------------------------------------------------------------->\033[0m"
  echo
@@ -696,12 +696,12 @@ git merge origin/master
 then
 latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
 latest_head=$(git rev-parse --short HEAD)
-printf "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) Core Not Updated - $latest_date"
+printf %b "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) Core Not Updated - $latest_date"
  echo
 else
 latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
 latest_head=$(git rev-parse --short HEAD)
-printf "[\e[0;32mok\033[0m] (\e[4;32m$latest_head\033[0m) Core Updated - $latest_date"
+printf %b "[\e[0;32mok\033[0m] (\e[4;32m$latest_head\033[0m) Core Updated - $latest_date"
  echo
 fi
 
@@ -715,12 +715,12 @@ git merge origin/master
 then
 latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
 latest_head=$(git rev-parse --short HEAD)
-printf "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) Database Not Updated - $latest_date"
+printf %b "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) Database Not Updated - $latest_date"
  echo
 else
 latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
 latest_head=$(git rev-parse --short HEAD)
-printf "[\e[0;32mok\033[0m] (\e[4;32m$latest_head\033[0m) Database Updated - $latest_date"
+printf %b "[\e[0;32mok\033[0m] (\e[4;32m$latest_head\033[0m) Database Updated - $latest_date"
  echo
 fi
 
@@ -734,12 +734,12 @@ git merge origin/master
 then
 latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
 latest_head=$(git rev-parse --short HEAD)
-printf "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) Helper Not Updated - $latest_date"
+printf %b "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) Helper Not Updated - $latest_date"
  echo
 else
 latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
 latest_head=$(git rev-parse --short HEAD)
-printf "[\e[0;32mok\033[0m] (\e[4;32m$latest_head\033[0m) Helper Updated - $latest_date"
+printf %b "[\e[0;32mok\033[0m] (\e[4;32m$latest_head\033[0m) Helper Updated - $latest_date"
  echo
 fi
  echo
