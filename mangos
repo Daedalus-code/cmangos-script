@@ -1540,7 +1540,7 @@ fi
  echo
  sleep 1
 cd "$folder_helper" || exit
-if git checkout master &> /dev/null &&
+if [[ `git status --porcelain` ]] &> /dev/null &&
 git fetch origin master &> /dev/null &&
 [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
 git merge origin/master
