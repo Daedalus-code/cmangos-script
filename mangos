@@ -268,9 +268,9 @@ printf '%b' "
  $realmd_backup$charac_backup
 
  Delete by id ->
- \e[0;35mExamples\033[0m: ('id') (id1,id2,) & (id1 AND id5)
+ \e[0;35mExamples\033[0m: ('id') (id1,id2) & (id1 AND id5)
  Delete by username ->
- \e[0;35mExamples\033[0m: ('username') & (username1,username2,)
+ \e[0;35mExamples\033[0m: ('username') & (username1,username2)
  Select (\e[0;32musername\033[0m) or (\e[0;32mid\033[0m) - Press Enter To Confirm"
 printf "
 
