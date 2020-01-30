@@ -465,7 +465,7 @@ charac_backup="[\e[0;32mok\033[0m]"
 fi
 
 # core latest build >
-latest_core_built=$(grep -E -o "\sBuilt\son\s*.*" "$folder_core"/run/logs/Server.log)
+latest_core_built=$(grep -o -a "\sBuilt\son\s*.*" "$folder_core"/run/logs/Server.log) 2> /dev/null
 
 # codes done
 
@@ -482,7 +482,7 @@ printf '%b' "
 
       $cm_realm\033[0m
 
-      Core\e[0;32m......:\033[0m$latest_core_built
+      CMaNGOS\e[0;32m...:\033[0m$latest_core_built
 
       r : \e[0;35mlogin\033[0m   (remote access)   Realmd.sql\e[0;32m......:\033[0m $realmd_backup
       a : \e[0;35mlogs\033[0m    (analyze logs)    Characters.sql\e[0;32m..:\033[0m $charac_backup
