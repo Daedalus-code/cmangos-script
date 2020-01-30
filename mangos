@@ -12,9 +12,9 @@
 
 # C(ontinued)-MaNGOS (Classic fork)
 
-# By Rainman ★
+# By Rainman
 # V20203001
-# 1.8.9.4
+# 1.8.8.4
 
 # Menusystem >
 
@@ -332,7 +332,7 @@ while :
 do
 clear
 
-# Login (command) > * f00ck; bl1zz@rd > @ct1vis1on && ch1n@.
+# Login (command) > * f★★ck; bl1zz@rd > @ct1vis1★n && ch1n@.
 
 # codes >
 
@@ -469,7 +469,7 @@ fi
 printf '%b' "
  <----------------------------------------------------------------------------->\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.8.9.4 ]\e[31m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.8.8.4 ]\e[31m
 
       \033[0m* Administrator functions and features for WoW Vanilla server.
       * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -619,47 +619,37 @@ dive_char_login_c=$(grep -c -E "Login" "$folder_core"/run/logs/Char.log 2> /dev/
 dive_char_logouts=$(grep -c -E "Logout" "$folder_core"/run/logs/Char.log 2> /dev/null)
 # EventAIErrors.log >
 dive_EventAIError=$(grep -c -E "skipping" "$folder_core"/run/logs/EventAIErrors.log 2> /dev/null)
-# dive status >
-dive_empty="[\e[0;33mEmpty\033[0m] ->"
-dive_error="[\033[0;31mError\033[0m] ->"
-dive_serio="[\033[1;31mSerious\033[0m] ->"
-dive_corre="[\033[0;31mNotCorresponding\033[0m] -> "
-dive_exist="[\033[0;31mDoesn'tExist\033[0m] -> "
-dive_query="[\033[0;31mQueryERROR\033[0m] -> "
-dive_never="[\033[0;31mWillNeverBeUsed\033[0m] -> "
-dive_crash="[\033[1;31mCanCrashClient!\033[0m] -> "
-dive_creat="[\e[0;33mCreated\033[0m] -> "
-dive_login="[\e[0;33mLogin\033[0m] -> "
-dive_logou="[\e[0;33mLogout\033[0m] -> "
-dive_skipp="[\033[0;31mskipping\033[0m] -> "
+
 # codes done
 
-# server.log.old >
-printf "[\e[4;32mServer.log\033[0m]
-$dive_empty $dive_server_empty - Server.log.old $dive_empty $dive_server_old_empty
-$dive_error $dive_server_error - Server.log.old $dive_error $dive_server_old_error
-$dive_serio $dive_server_serio - Server.log.old $dive_serio $dive_server_old_serio
- \033[0m<------------------------------------------>\033[0m
-[\e[4;32mRealmd.log\033[0m]
-$dive_empty $dive_realmd_empty
-$dive_error $dive_realmd_error
-$dive_serio $dive_realmd_serio
- \033[0m<------------------------------------------>\033[0m
-[\e[4;32mDBErrors.log\033[0m]
-$dive_corre $dive_DBError_corr
-$dive_exist $dive_DBError_exis
-$dive_query $dive_DBError_quer
-$dive_never $dive_DBError_used
-$dive_crash $dive_DBError_cras
- \033[0m<------------------------------------------>\033[0m
-[\e[4;32mChar.log\033[0m]
-$dive_creat $dive_char_created
-$dive_login $dive_char_login_c
-$dive_logou $dive_char_logouts
- \033[0m<------------------------------------------>\033[0m
-[\e[4;32mEventAIErrors.log\033[0m]
-$dive_skipp $dive_EventAIError"
-# server.log.old done
+printf " \033[0m<----------------------------------------------------------------------------->\033[0m"
+ echo
+ echo
+printf "       [\e[0;33mEmpty\033[0m]                [\033[0;31mError\033[0m]                [\033[1;31mSerious\033[0m]"
+ echo
+printline "Server.log.old" "$dive_server_old_empty" "Server.log.old" $dive_server_old_error "Server.log.old" $dive_server_old_serio
+printline "Server.log" "$dive_server_empty" "Server.log" $dive_server_error "Server.log" $dive_server_serio
+printline "Realmd.log" "$dive_realmd_empty" "Realmd.log" $dive_realmd_error "Realmd.log" $dive_realmd_serio
+ echo
+printf " \033[0m<----------------------------------------------------------------------------->\033[0m"
+ echo
+ echo
+printf "       [\033[0;31mNotCorresponding\033[0m]     [\033[0;31mDoesn'tExist\033[0m]         [\033[0;31mQueryERROR\033[0m]"
+ echo
+printline "DBErrors.log" $dive_DBError_corr "DBErrors.log" $dive_DBError_exis "DBErrors.log" $dive_DBError_quer
+ echo
+printf "       [\033[0;31mWillNeverBeUsed\033[0m]      [\033[1;31mCanCrashClient!\033[0m]      [\033[0;31mskipping\033[0m]"
+ echo
+printline "DBErrors.log" $dive_DBError_used "DBErrors.log" $dive_DBError_cras "E*AIErrors.log" $dive_EventAIError
+ echo
+printf " \033[0m<----------------------------------------------------------------------------->\033[0m"
+ echo
+ echo
+printf "       [\e[0;33mCreated\033[0m]              [\e[0;33mLogin\033[0m]                [\e[0;33mLogout\033[0m]"
+ echo
+printline "Char.log" $dive_char_created "Char.log" $dive_char_login_c "Char.log" $dive_char_logouts
+ echo
+printf " \033[0m<----------------------------------------------------------------------------->\033[0m"
  echo
  echo
  read -r -p "Press Enter to continue" </dev/tty
