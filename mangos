@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20203001
-# 1.8.8.7
+# 1.8.9.2
 
 # Menusystem >
 
@@ -253,6 +253,10 @@ fi
 # codes done
 
 clear
+echo
+mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, last_ip, DATE_FORMAT(last_login, '%Y-%m-%d') last_login, id FROM $db_realmd.account;"
+printf '%b' " Delete directly from the '\e[0;35m$db_realmd.account\033[0m'"
+echo
 printf '%b' "
  @@@@@@@  @@@@@@@@ @@@      @@@@@@@@ @@@@@@@ @@@@@@@@
  @@!  @@@ @@!      @@!      @@.        @@!   @@!
@@ -268,10 +272,6 @@ printf '%b' "
  Delete by username ->
  \e[0;35mExamples\033[0m: ('username') & (username1,username2,)
  Select (\e[0;32musername\033[0m) or (\e[0;32mid\033[0m) - Press Enter To Confirm"
- echo
-mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, last_ip, DATE_FORMAT(last_login, '%Y-%m-%d') last_login, id FROM $db_realmd.account;"
-printf '%b' " Delete directly from the '\e[0;35m$db_realmd.account\033[0m'"
- echo
 printf "
 
                Press Any Key To Exit
@@ -464,28 +464,33 @@ charac_backup="[\e[0;32mok\033[0m]"
  echo
 fi
 
+# core latest build >
+latest_core_built=$(grep -E -o "\sBuilt\son\s*.*" "$folder_core"/run/logs/Server.log)
+latest_data_built=$(grep -E -o "\sBuilt\son\s*.*" "$folder_core"/run/logs/Realmd.log)
+
 # codes done
 
 printf '%b' "
  <----------------------------------------------------------------------------->\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.8.8.7 ]\e[31m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.8.9.2 ]\e[31m
 
-      \033[0m* Administrator functions and features for WoW Vanilla server.
-      * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
-      * \e[0;35mInternet:\033[0m 'set realmlist \e[0;35m${internet:?}\033[0m'
-      * \e[0;35mLanparty:\033[0m 'set realmlist \e[0;35m${intranet:?}\033[0m' - When internet drop out.
-      * $cm_uptime
+    \033[0m* Administrator functions and features for WoW Vanilla server.
+    * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
+    * \e[0;35mInternet:\033[0m 'set realmlist \e[0;35m${internet:?}\033[0m'
+    * \e[0;35mLanparty:\033[0m 'set realmlist \e[0;35m${intranet:?}\033[0m' - When internet drop out.
+    * $cm_uptime
 
-        $cm_realm\033[0m
+      $cm_realm\033[0m
 
-        Realmd.log $cm_realmd_log
-        Server.log $cm_server_log_empty$cm_server_log$cm_server_log_serious
+      Core\e[0;32m......:\033[0m$latest_core_built
+      Database\e[0;32m..:\033[0m$latest_data_built
 
-        r : \e[0;35mlogin\033[0m (remote access)         x : \e[0;35m?\033[0m
-        a : \e[0;35mlogs\033[0m  (analyze run/logs)      b : \e[0;35mbackup\033[0m
-        w : \e[0;35mstats\033[0m (world stats)           Realmd.sql\e[0;32m......:\033[0m $realmd_backup
-        Q : \e[0;35mquit\033[0m  (back to menu)          Characters.sql\e[0;32m..:\033[0m $charac_backup
+      r : \e[0;35mlogin\033[0m   (remote access)   Realmd.sql\e[0;32m......:\033[0m $realmd_backup
+      a : \e[0;35mlogs\033[0m    (analyze logs)    Characters.sql\e[0;32m..:\033[0m $charac_backup
+      w : \e[0;35mstats\033[0m   (world stats)
+      b : \e[0;35mbackup\033[0m  (new backup)      Realmd.log\e[0;32m......:\033[0m $cm_realmd_log
+      Q : \e[0;35mquit\033[0m    (back to menu)    Server.log\e[0;32m......:\033[0m $cm_server_log_empty$cm_server_log$cm_server_log_serious
 
       \e[0;33mFor more information:\033[0m \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
  <----------------------------------------------------------------------------->\033[0m"
