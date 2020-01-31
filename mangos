@@ -1429,7 +1429,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
 # wait for mangosd to fill up Server.log >
 ( (sleep 1; exec tail -f "$folder_core"/run/logs/Server.log) & echo $! ; wait ) |
-(trap 'kill "$pid"' EXIT; pid="$(head -1)"; grep -E -m 1 "STARTUP|malformed|fail|failed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess")
+(trap 'kill "$pid"' EXIT; pid="$(head -1)"; grep -E -m 1 "STARTUP|malformed|fail|failed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess|You\shave:\s-->")
  echo
 # wait for mangosd to fill up Server.log done
 fi
