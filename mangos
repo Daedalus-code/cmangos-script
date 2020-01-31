@@ -142,7 +142,7 @@ printf '%b' "\033[0m ---------------------------------------------
               2: Delete account
 
 \033[0m ---------------------------------------------
-            Press Any Key To Exit
+             Press Any Key To Exit
 >"
 
  read -r n
@@ -170,7 +170,7 @@ printf "\033[0m ---------------------------------------------
 
         \e[0;35mExample\033[0m: 'username' '0' '0'
 \033[0m ---------------------------------------------
-            Press Any Key To Exit"
+             Press Any Key To Exit"
 
 # Account menu done
 
@@ -289,7 +289,7 @@ printf '%b' " Delete directly from the '\e[0;35m$db_realmd.account\033[0m'"
 
 printf "
 \033[0m ---------------------------------------------
-            Press Any Key To Exit
+             Press Any Key To Exit
 >";
  read -r ID;
 if [[ -z "$ID" ]]; then
