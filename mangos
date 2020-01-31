@@ -717,7 +717,7 @@ git fetch origin master &> /dev/null &&
 [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
 git merge origin/master
 then
-latest_date=$(git log --pretty=format:"%h - %an, %ar : %s" -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
+latest_date=$(git log --pretty=format:"%h - %an, %ar : %s" -2 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
 latest_head=$(git rev-parse --short HEAD)
 printf '%b' "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) Core Not Updated - $latest_date"
  echo
@@ -736,7 +736,7 @@ git fetch origin master &> /dev/null &&
 [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
 git merge origin/master
 then
-latest_date=$(git log --pretty=format:"%h - %an, %ar : %s" -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
+latest_date=$(git log --pretty=format:"%h - %an, %ar : %s" -2 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
 latest_head=$(git rev-parse --short HEAD)
 printf '%b' "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) Database Not Updated - $latest_date"
  echo
@@ -755,7 +755,7 @@ git fetch origin master &> /dev/null &&
 [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
 git merge origin/master
 then
-latest_date=$(git log --pretty=format:"%h - %an, %ar : %s" -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
+latest_date=$(git log --pretty=format:"%h - %an, %ar : %s" -2 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
 latest_head=$(git rev-parse --short HEAD)
 printf '%b' "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) Helper Not Updated - $latest_date"
  echo
