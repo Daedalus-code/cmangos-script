@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20203101
-# 2.0.3.5
+# 2.0.5.4
 
 # Menusystem >
 
@@ -351,6 +351,25 @@ clear
 
 # codes >
 
+# service status
+
+world_service=mangosd
+realm_service=realmd
+
+# realmd service
+case  "$(pidof $realm_service | wc -w)" in
+ 0) command_realmd="[\033[1;31mno\033[0m]" ;;
+ 1) command_realmd="[\e[0;32mok\033[0m]" ;;
+ *) command_realmd="[\e[0;33mok\033[0m]" ;;
+esac
+
+# mangosd service
+case  "$(pidof $world_service | wc -w)" in
+ 0) command_mangosd="[\033[1;31mno\033[0m]" ;;
+ 1) command_mangosd="[\e[0;32mok\033[0m]" ;;
+ *) command_mangosd="[\e[0;33mok\033[0m]" ;;
+esac
+
 # Walter A code >
 # Thank you Walter A ! -> https://stackoverflow.com/questions/59862020
 
@@ -497,7 +516,7 @@ fi
 
 printf '%b' " <----------------------------------------------------------------------------->\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.0.3.5 ]\e[31m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.0.5.4 ]\e[31m
 
     \033[0m* Administrator functions and features for WoW Vanilla server.
     * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -509,12 +528,12 @@ printf '%b' " <-----------------------------------------------------------------
 
       CMaNGOS\e[0;32m...:\033[0m$latest_core_built
 
-      r : \e[0;35mlogin\033[0m   (remote access)
-      a : \e[0;35mlogs\033[0m    (analyze logs)    Realmd.sql\e[0;32m......:\033[0m $realmd_backup
-      w : \e[0;35mstats\033[0m   (world stats)     Characters.sql\e[0;32m..:\033[0m $charac_backup
-      b : \e[0;35mbackup\033[0m  (new backup)
-      h : \e[0;35mreset\033[0m   (reset --hard)    Realmd.log\e[0;32m......:\033[0m $cm_realmd_log_empty$cm_realmd_log
-      q : \e[0;35mquit\033[0m    (back to menu)    Server.log\e[0;32m......:\033[0m $cm_server_log_empty$cm_server_log$cm_server_log_serious
+      r : \e[0;35mlogin\033[0m  - remote access   service.mangosd\e[0;32m.:\033[0m $command_mangosd
+      a : \e[0;35mlogs\033[0m   - analyze logs    service.realmd\e[0;32m..:\033[0m $command_realmd
+      w : \e[0;35mstats\033[0m  - world stats     characters.sql\e[0;32m..:\033[0m $charac_backup
+      b : \e[0;35mbackup\033[0m - new backup      realmd.sql\e[0;32m......:\033[0m $realmd_backup
+      h : \e[0;35mreset\033[0m  - reset --hard    Realmd.log\e[0;32m......:\033[0m $cm_realmd_log_empty$cm_realmd_log
+      q : \e[0;35mquit\033[0m   - back to menu    Server.log\e[0;32m......:\033[0m $cm_server_log_empty$cm_server_log$cm_server_log_serious
 
       \e[0;33mFor more information:\033[0m \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
  <----------------------------------------------------------------------------->\033[0m"
