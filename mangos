@@ -104,7 +104,7 @@ cat<<EOF
 
 EOF
  read -r -n1 -s
- case "$REPLY" in
+case "$REPLY" in
 
 # Menu done
 
@@ -138,17 +138,17 @@ printf '%b' "\033[0m ---------------------------------------------
 
            \e[0;32mSelect account operation\033[0m
 
-              1: Create account
-              2: Delete account
+              c : Create account
+              d : Delete account
 
 \033[0m ---------------------------------------------
              Press Any Key To Exit
 >"
 
- read -r n
-case $n in
+ read -r -n1 -s
+case "$REPLY" in
 
- "1")
+ "c")
 
 clear
 printf "\033[0m ---------------------------------------------
@@ -231,7 +231,7 @@ printf '%b' "[\e[0;32mok\033[0m] Account '\e[0;35m$USR\033[0m' ($XPV/$LVL) creat
 
 # Delete account >
 
- "2")
+ "d")
 
 # codes >
 
@@ -508,7 +508,7 @@ printf '%b' " <-----------------------------------------------------------------
       a : \e[0;35mlogs\033[0m    (analyze logs)    Characters.sql\e[0;32m..:\033[0m $charac_backup
       w : \e[0;35mstats\033[0m   (world stats)
       b : \e[0;35mbackup\033[0m  (new backup)      Realmd.log\e[0;32m......:\033[0m $cm_realmd_log
-      Q : \e[0;35mquit\033[0m    (back to menu)    Server.log\e[0;32m......:\033[0m $cm_server_log_empty$cm_server_log$cm_server_log_serious
+      q : \e[0;35mquit\033[0m    (back to menu)    Server.log\e[0;32m......:\033[0m $cm_server_log_empty$cm_server_log$cm_server_log_serious
 
       \e[0;33mFor more information:\033[0m \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
  <----------------------------------------------------------------------------->\033[0m"
@@ -685,7 +685,7 @@ fi
 
  ;;
 
-"Q")
+"q")
  echo
  break ;;
 "q")
