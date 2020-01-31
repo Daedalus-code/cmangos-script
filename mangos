@@ -358,14 +358,14 @@ realm_service=realmd
 
 # realmd service
 case  "$(pidof $realm_service | wc -w)" in
- 0) command_realmd="[\033[1;31mno\033[0m]" ;;
+ 0) command_realmd="[\033[1;31moff\033[0m]" ;;
  1) command_realmd="[\e[0;32mok\033[0m]" ;;
  *) command_realmd="[\e[0;33mok\033[0m]" ;;
 esac
 
 # mangosd service
 case  "$(pidof $world_service | wc -w)" in
- 0) command_mangosd="[\033[1;31mno\033[0m]" ;;
+ 0) command_mangosd="[\033[1;31moff\033[0m]" ;;
  1) command_mangosd="[\e[0;32mok\033[0m]" ;;
  *) command_mangosd="[\e[0;33mok\033[0m]" ;;
 esac
