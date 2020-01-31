@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20203101
-# 1.9.1.3
+# 1.9.7.5
 
 # Menusystem >
 
@@ -431,6 +431,11 @@ else
 # if nothing, print "ok"
 cm_realmd_log="[\e[0;32mok\033[0m]"
 fi
+# look for empty tables
+if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log; then
+# if any, print "empty"
+cm_realmd_log_empty="[\e[0;33mEmpty\033[0m]"
+fi
 # Realmd.log done
 
 # Server.log >
@@ -492,7 +497,7 @@ fi
 
 printf '%b' " <----------------------------------------------------------------------------->\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.9.1.3 ]\e[31m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.9.7.5 ]\e[31m
 
     \033[0m* Administrator functions and features for WoW Vanilla server.
     * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -507,7 +512,7 @@ printf '%b' " <-----------------------------------------------------------------
       r : \e[0;35mlogin\033[0m   (remote access)   Realmd.sql\e[0;32m......:\033[0m $realmd_backup
       a : \e[0;35mlogs\033[0m    (analyze logs)    Characters.sql\e[0;32m..:\033[0m $charac_backup
       w : \e[0;35mstats\033[0m   (world stats)
-      b : \e[0;35mbackup\033[0m  (new backup)      Realmd.log\e[0;32m......:\033[0m $cm_realmd_log
+      b : \e[0;35mbackup\033[0m  (new backup)      Realmd.log\e[0;32m......:\033[0m $cm_realmd_log_empty$cm_realmd_log
       q : \e[0;35mquit\033[0m    (back to menu)    Server.log\e[0;32m......:\033[0m $cm_server_log_empty$cm_server_log$cm_server_log_serious
 
       \e[0;33mFor more information:\033[0m \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
@@ -1347,6 +1352,7 @@ fi
 # codes >
 
 # realmd.log
+realmd_log_empty="[\e[0;33mEmpty\033[0m] -> "
 realmd_log_error="[\033[0;31mError\033[0m] -> "
 realmd_log_ok="[\e[0;32mok\033[0m]"
 
@@ -1406,6 +1412,14 @@ esac
 # realmd.log
 printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
+# look for empty tables
+if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log; then
+# if any, print "empty"
+printf "Server.log "
+printf '%b' "$realmd_log_empty"
+# count empty inside log
+grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log
+fi
 # look for error
 if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Realmd.log; then
 # if any, print "error"
@@ -1419,7 +1433,6 @@ printf "Realmd.log "
 printf '%b' "$realmd_log_ok"
 fi
  echo
- echo
 tail "$folder_core"/run/logs/Realmd.log
 
 # server.log
@@ -1427,10 +1440,13 @@ printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-# wait for mangosd to fill up Server.log >
+# wait for realmd & mangosd to fill up logs >
+( (sleep 1; exec tail -f "$folder_core"/run/logs/Realmd.log) & echo $! ; wait ) |
+(trap 'kill "$pid"' EXIT; pid="$(head -1)";
+grep -E -q -m 1 "database\sis\smissing or\scorrupt.|You\shave:\s-->|reinstall\syour|cannot\sfind\sthe\sversion\sinfo")
 ( (sleep 1; exec tail -f "$folder_core"/run/logs/Server.log) & echo $! ; wait ) |
-(trap 'kill "$pid"' EXIT; pid="$(head -1)"; grep -E -m 1 "STARTUP|malformed|fail|failed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess|You\shave:\s-->")
- echo
+(trap 'kill "$pid"' EXIT; pid="$(head -1)";
+grep -E -q -m 1 "STARTUP|corrupt|malformed|fail|failed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess|You\shave:\s-->|reinstall\syour")
 # wait for mangosd to fill up Server.log done
 fi
 # look for empty tables
@@ -1462,7 +1478,7 @@ printf "Server.log "
 printf '%b' "$server_log_ok"
  echo
 fi
-# World failed
+# world failed
 if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log; then
 # if any, print "World failed"
  echo
@@ -1470,13 +1486,53 @@ printf "[CMaNGOS]: "
 printf '%b' "$server_log_failed"
  echo
 else
-# World initialized
+# databases is missing or corrupt.
+if grep -E -q "database\sis\smissing\sor\scorrupt." "$folder_core"/run/logs/*.log; then
+ echo
+printf "[\033[0;31mError\033[0m]: "
+printf '%b' "Database is missing or corrupt!"
+ echo
+else
+# this database (mangosd) is out of date!
+if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Server.log; then
+ echo
+printf "[CMaNGOS]: "
+printf '%b' "Database is out of date!"
+ echo
+else
+# reinstall your (mangosd) database
+if grep -E -q "reinstall\syour" "$folder_core"/run/logs/Server.log; then
+ echo
+printf "[CMaNGOS]: "
+printf '%b' "Reinstall your database!"
+ echo
+else
+# this database (realmd) is out of date!
+if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Realmd.log; then
+ echo
+printf "[Realmd]: "
+printf '%b' "Database is out of date!"
+ echo
+else
+# reinstall your (realmd) database
+if grep -E -q "reinstall\syour" "$folder_core"/run/logs/Realmd.log; then
+ echo
+printf "[Realmd]: "
+printf '%b' "Reinstall your database!"
+ echo
+else
+# world initialized
 if grep -E -q "World\sinitialized" "$folder_core"/run/logs/Server.log; then
 # if any, print "World initialized"
  echo
 printf "[CMaNGOS]: "
 printf '%b' "$server_log_initialized"
  echo
+fi
+fi
+fi
+fi
+fi
 fi
 fi
  echo
@@ -1650,6 +1706,7 @@ clear
 
 # realmd.log
 realmd_log_error="[\033[0;31mError\033[0m] -> "
+realmd_log_empty="[\e[0;33mEmpty\033[0m] -> "
 realmd_log_ok="[\e[0;32mok\033[0m]"
 
 # server.log
@@ -1664,8 +1721,6 @@ world_service=mangosd
 realm_service=realmd
 
 # codes done
-
- echo
 
 # realmd service
 case  "$(pidof $realm_service | wc -w)" in
@@ -1685,6 +1740,14 @@ esac
 # realmd.log
 printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
+# look for empty tables
+if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log; then
+# if any, print "empty"
+printf "Server.log "
+printf '%b' "$realmd_log_empty"
+# count empty inside log
+grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2> /dev/null
+fi
 # look for error
 if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Realmd.log; then
 # if any, print "error"
@@ -1697,7 +1760,6 @@ else
 printf "Realmd.log "
 printf '%b' "$realmd_log_ok"
 fi
- echo
  echo
 tail "$folder_core"/run/logs/Realmd.log
 
