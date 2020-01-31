@@ -795,8 +795,8 @@ sudo service mangosd stop &> /dev/null
  echo -ne '(100%)\r'
  sleep 1
 printf "Updating mangos-classic (\e[1;32mcore\033[0m).."
+ echo
 read -r -p "Install required packagelist? (y/n) " -n 1 -r
-echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 # required 'packagelist' to build CMaNGOS >
