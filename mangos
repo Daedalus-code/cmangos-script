@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20203101
-# 1.9.7.5
+# 1.9.7.7
 
 # Menusystem >
 
@@ -497,7 +497,7 @@ fi
 
 printf '%b' " <----------------------------------------------------------------------------->\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.9.7.5 ]\e[31m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.9.7.7 ]\e[31m
 
     \033[0m* Administrator functions and features for WoW Vanilla server.
     * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -1433,6 +1433,7 @@ printf "Realmd.log "
 printf '%b' "$realmd_log_ok"
 fi
  echo
+ echo
 tail "$folder_core"/run/logs/Realmd.log
 
 # server.log
@@ -1443,7 +1444,7 @@ then
 # wait for realmd & mangosd to fill up logs >
 ( (sleep 1; exec tail -f "$folder_core"/run/logs/Realmd.log) & echo $! ; wait ) |
 (trap 'kill "$pid"' EXIT; pid="$(head -1)";
-grep -E -q -m 1 "database\sis\smissing or\scorrupt.|You\shave:\s-->|reinstall\syour|cannot\sfind\sthe\sversion\sinfo")
+grep -E -q -m 1 "Added\srealm\sid|database\sis\smissing or\scorrupt.|You\shave:\s-->|reinstall\syour|cannot\sfind\sthe\sversion\sinfo")
 ( (sleep 1; exec tail -f "$folder_core"/run/logs/Server.log) & echo $! ; wait ) |
 (trap 'kill "$pid"' EXIT; pid="$(head -1)";
 grep -E -q -m 1 "STARTUP|corrupt|malformed|fail|failed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess|You\shave:\s-->|reinstall\syour")
@@ -1487,7 +1488,7 @@ printf '%b' "$server_log_failed"
  echo
 else
 # databases is missing or corrupt.
-if grep -E -q "database\sis\smissing\sor\scorrupt." "$folder_core"/run/logs/*.log; then
+if grep -E -q "database\sis\smissing\sor\scorrupt." "$folder_core"/run/logs/Realmd.log; then
  echo
 printf "[\033[0;31mError\033[0m]: "
 printf '%b' "Database is missing or corrupt!"
@@ -1760,6 +1761,7 @@ else
 printf "Realmd.log "
 printf '%b' "$realmd_log_ok"
 fi
+ echo
  echo
 tail "$folder_core"/run/logs/Realmd.log
 
