@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20203101
-# 1.9.7.5
+# 1.9.7.7
 
 # Menusystem >
 
@@ -497,7 +497,7 @@ fi
 
 printf '%b' " <----------------------------------------------------------------------------->\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.9.7.5 ]\e[31m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.9.7.7 ]\e[31m
 
     \033[0m* Administrator functions and features for WoW Vanilla server.
     * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -1431,6 +1431,7 @@ grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log
 else
 printf "Realmd.log "
 printf '%b' "$realmd_log_ok"
+ echo
 fi
  echo
 tail "$folder_core"/run/logs/Realmd.log
@@ -1759,6 +1760,7 @@ grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log
 else
 printf "Realmd.log "
 printf '%b' "$realmd_log_ok"
+ echo
 fi
  echo
 tail "$folder_core"/run/logs/Realmd.log
