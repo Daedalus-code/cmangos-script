@@ -1447,7 +1447,7 @@ then
 grep -E -q -m 1 "Added\srealm\sid|database\sis\smissing or\scorrupt.|You\shave:\s-->|reinstall\syour|cannot\sfind\sthe\sversion\sinfo")
 ( (sleep 1; exec tail -f "$folder_core"/run/logs/Server.log) & echo $! ; wait ) |
 (trap 'kill "$pid"' EXIT; pid="$(head -1)";
-grep -E -q -m 1 "STARTUP|corrupt|malformed|fail|failed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess|You\shave:\s-->|reinstall\syour")
+grep -E -m 1 "STARTUP|corrupt|malformed|fail|failed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess|You\shave:\s-->|reinstall\syour")
 # wait for realmd & mangosd to fill up logs done
 fi
 # look for empty tables
