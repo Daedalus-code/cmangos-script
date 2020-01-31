@@ -7,19 +7,19 @@ Admin Helper Tool in bash
 
 * login (command)     -  Console, Remote Access, Stats
 * create account      -  Create/Delete Account
+* check for updates   -  Checking for git updates. (core, database, helper)
+* update CMaNGOS      -  Updating/Upgrading Core.
+* update Database     -  Updating/Upgrading Database.
+* update Helper       -  Updating/Upgrading Admin Helper
+* shutdown server     -  Shut down server. (realmd, mangosd)
+* restart server      -  Restart server. (realmd, mangosd)
 * characters          -  Show characters on server.
 * accounts            -  Show accounts on server.
 * guilds              -  Show guilds on server.
 * config              -  Edit config files (run/etc)
+* patch               -  Create/Apply patch file. (classic-mangos dir)
 * ping                -  Ping server. (internet/intranet)
 * logs                -  Show logs. (Realmd.log, Server.log)
-* patch               -  Create/Apply patch file. (classic-mangos dir)
-* updates             -  Checking for git updates. (core, database, helper)
-* restart             -  Restart server. (realmd, mangosd)
-* shutdown            -  Shut down server. (realmd, mangosd)
-* update core         -  Updating/Upgrading Core.
-* update database     -  Updating/Upgrading Database.
-* update Helper       -  Updating/Upgrading Admin Helper
 * quit                -  Exit the script.  
 ##### Note  
 "Update Database" Converting myisam -> innodb? Works on MariaDB.  
