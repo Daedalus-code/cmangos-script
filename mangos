@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20203101
-# 1.9.0.8
+# 1.9.1.4
 
 # Menusystem >
 
@@ -492,7 +492,7 @@ fi
 
 printf '%b' " <----------------------------------------------------------------------------->\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.9.0.8 ]\e[31m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.9.1.4 ]\e[31m
 
     \033[0m* Administrator functions and features for WoW Vanilla server.
     * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -795,6 +795,12 @@ sudo service mangosd stop &> /dev/null
  echo -ne '(100%)\r'
  sleep 1
 printf "Updating mangos-classic (\e[1;32mcore\033[0m).."
+echo
+read -r -p "Install required packagelist? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+echo "Installing required packagelist.."
 # required 'packagelist' to build CMaNGOS >
 # Ubuntu Server 19.10
 packagelist=(
@@ -824,7 +830,7 @@ zlibc
 )
 # if installed, move on >
 sudo apt-get install "${packagelist[@]}" -y &> /dev/null
-
+fi
 # reset --hard origin/master ? >
 
  echo
