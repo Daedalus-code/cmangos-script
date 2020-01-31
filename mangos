@@ -485,7 +485,7 @@ if grep -q -o -a "\sBuilt\son\s*.*" "$folder_core"/run/logs/Server.log; then
 latest_core_built=$(grep -o -a "\sBuilt\son\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null)
 # if nothing, print "Restart server please.."
 else
-latest_core_built=" \e[0;35mServer.log\033[0m existing? Restart server please.."
+latest_core_built=" \e[0;35mBuilt date not found\033[0m Restart server please.."
 fi
 
 # codes done
