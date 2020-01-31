@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20203101
-# 1.9.7.7
+# 2.0.3.7
 
 # Menusystem >
 
@@ -497,7 +497,7 @@ fi
 
 printf '%b' " <----------------------------------------------------------------------------->\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v1.9.7.7 ]\e[31m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.0.3.7 ]\e[31m
 
     \033[0m* Administrator functions and features for WoW Vanilla server.
     * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -509,10 +509,11 @@ printf '%b' " <-----------------------------------------------------------------
 
       CMaNGOS\e[0;32m...:\033[0m$latest_core_built
 
-      r : \e[0;35mlogin\033[0m   (remote access)   Realmd.sql\e[0;32m......:\033[0m $realmd_backup
-      a : \e[0;35mlogs\033[0m    (analyze logs)    Characters.sql\e[0;32m..:\033[0m $charac_backup
-      w : \e[0;35mstats\033[0m   (world stats)
-      b : \e[0;35mbackup\033[0m  (new backup)      Realmd.log\e[0;32m......:\033[0m $cm_realmd_log_empty$cm_realmd_log
+      r : \e[0;35mlogin\033[0m   (remote access)
+      a : \e[0;35mlogs\033[0m    (analyze logs)    Realmd.sql\e[0;32m......:\033[0m $realmd_backup
+      w : \e[0;35mstats\033[0m   (world stats)     Characters.sql\e[0;32m..:\033[0m $charac_backup
+      b : \e[0;35mbackup\033[0m  (new backup)
+      h : \e[0;35mreset\033[0m   (reset --hard)    Realmd.log\e[0;32m......:\033[0m $cm_realmd_log_empty$cm_realmd_log
       q : \e[0;35mquit\033[0m    (back to menu)    Server.log\e[0;32m......:\033[0m $cm_server_log_empty$cm_server_log$cm_server_log_serious
 
       \e[0;33mFor more information:\033[0m \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
@@ -520,6 +521,31 @@ printf '%b' " <-----------------------------------------------------------------
  echo
  read -r -s -n1
 case "$REPLY" in
+
+# reset --hard (everything)
+
+"h")
+
+ echo "reset --hard (everything) Are You Sure? (y/n) "
+ read -n 1 -r
+ echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+ echo
+ echo
+printf "\e[0;35mmangos-classic\033[0m: "
+cd $folder_core || exit; git reset --hard;
+printf "\e[0;35mclassic-db\033[0m: "
+cd $folder_db || exit; git reset --hard;
+printf "\e[0;35mcmangos-script\033[0m: "
+cd $folder_helper || exit; git reset --hard;
+ echo
+ echo
+ read -r -p "Press Enter to continue" </dev/tty
+ echo
+fi
+
+ ;;
 
 # dive into logs >
 
@@ -588,12 +614,6 @@ printf " \033[0m<---------------------------------------------------------------
  ;;
 
 # dive into logs done
-
-"x")
-
-echo "?"
-
- ;;
 
 "w")
 
@@ -710,11 +730,21 @@ done
 
 # Checking for updates >
 
-# CMaNGOS Core (mangos-classic)
+# check if 'mangos-classic' exist >
+FILE="$folder_core/README.md"
+if [ ! -f "$FILE" ];
+then
+# fresh install ? >
+sudo mkdir $folder_wow &> /dev/null
+sudo chown -R "${user:?}":"${group:?}" $folder_wow
+cd $folder_wow || exit
+git clone https://github.com/cmangos/mangos-classic.git 2> /dev/null
+else
+# check for updates >
 
+# CMaNGOS Core (mangos-classic)
 printf "[ Checking for \e[1;32m+\033[1;31m-\033[0m Updates\033[0m ] .. "
  echo
-
  echo
 cd "$folder_core" || exit
 if git checkout master &> /dev/null &&
@@ -732,6 +762,20 @@ latest_head=$(git rev-parse --short HEAD)
 printf '%b' "[\e[0;32mok\033[0m] (\e[4;32m$latest_head\033[0m) Core Updated - $latest_date"
  echo
 fi
+# check if 'mangos-classic' exist done
+fi
+
+# check if 'classic-db' exist >
+FILE="$folder_db/README.md"
+if [ ! -f "$FILE" ];
+then
+# fresh install ? >
+sudo mkdir $folder_wow &> /dev/null
+sudo chown -R "${user:?}":"${group:?}" $folder_wow
+cd $folder_wow || exit
+git clone https://github.com/cmangos/classic-db.git 2> /dev/null
+else
+# check for updates >
 
 # Classic Database (classic-db)
 
@@ -751,6 +795,20 @@ latest_head=$(git rev-parse --short HEAD)
 printf '%b' "[\e[0;32mok\033[0m] (\e[4;32m$latest_head\033[0m) Database Updated - $latest_date"
  echo
 fi
+# check if 'classic-db' exist done
+fi
+
+# check if 'cmangos-script' exist >
+FILE="$folder_helper/README.md"
+if [ ! -f "$FILE" ];
+then
+# fresh install ? >
+sudo mkdir $folder_helper &> /dev/null
+sudo chown -R "${user:?}":"${group:?}" $folder_helper
+cd $folder_helper || exit
+git clone https://github.com/Daedalus-code/cmangos-script.git 2> /dev/null
+else
+# check for updates >
 
 # CMaNGOS Helper
 
@@ -769,6 +827,8 @@ latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%
 latest_head=$(git rev-parse --short HEAD)
 printf '%b' "[\e[0;32mok\033[0m] (\e[4;32m$latest_head\033[0m) Helper Updated - $latest_date"
  echo
+fi
+# check if 'cmangos-script' exist done
 fi
  echo
  read -r -p "Press Enter to continue" </dev/tty
