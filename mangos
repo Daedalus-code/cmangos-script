@@ -562,7 +562,7 @@ printf '%b' " <-----------------------------------------------------------------
       set realmlist \e[0;35m${internet:?}\033[0m
       set realmlist \e[0;35m${intranet:?}\033[0m
 
-      Create another \e[0;35m$db_realmd.realmlist\033[0m table, or just copy.
+      Create another \e[0;35m$db_realmd.realmlist\033[0m table row, or just copy.
       Set new 'id', 'name(lan)' and '\e[0;35m${intranet:?}\033[0m' as address.
 
       You can now choose 'Internet' or 'Lanparty' ingame from realm list.
