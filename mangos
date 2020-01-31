@@ -1447,7 +1447,7 @@ grep -E -q -m 1 "database\sis\smissing or\scorrupt.|You\shave:\s-->|reinstall\sy
 ( (sleep 1; exec tail -f "$folder_core"/run/logs/Server.log) & echo $! ; wait ) |
 (trap 'kill "$pid"' EXIT; pid="$(head -1)";
 grep -E -q -m 1 "STARTUP|corrupt|malformed|fail|failed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess|You\shave:\s-->|reinstall\syour")
-# wait for mangosd to fill up Server.log done
+# wait for realmd & mangosd to fill up logs done
 fi
 # look for empty tables
 if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log; then
