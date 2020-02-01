@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20203101
-# 2.1.0.4
+# V20200102
+# 2.1.7.1
 
 # Menusystem >
 
@@ -516,7 +516,7 @@ fi
 
 printf '%b' " <----------------------------------------------------------------------------->\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.1.0.4 ]\e[31m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.1.7.1 ]\e[31m
 
     \033[0m* Administrator functions and features for WoW Vanilla server.
     * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -554,8 +554,9 @@ printf '%b' " <-----------------------------------------------------------------
 
     * More commands that can be used in CC (command center)
 
-      i : \e[0;35minfo\033[0m - information :P
-      t : \e[0;35mhtop\033[0m - interactive process viewer
+      i : \e[0;35minfo\033[0m    - information
+      t : \e[0;35mhtop\033[0m    - interactive process viewer
+      S : \e[0;35msystemd\033[0m - setup systemd services
 
       Tip: Use both in realmlist.wtf
 
@@ -564,9 +565,7 @@ printf '%b' " <-----------------------------------------------------------------
 
       Create another \e[0;35m$db_realmd.realmlist\033[0m table row, or just copy.
       Set new 'id', 'name(lan)' and '\e[0;35m${intranet:?}\033[0m' as address.
-
       You can now choose 'Internet' or 'Lanparty' ingame from realm list.
-
 
       'Enter' to go back"
  echo
@@ -577,6 +576,74 @@ printf '%b' " <-----------------------------------------------------------------
  ;;
 
 # info done
+
+# install systemd Services >
+# Ubuntu 19.10
+
+"S")
+
+printf "Setup 'systemd Services', Are You Sure? (y/n)"
+ echo
+ read -n 1 -r
+ echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+# /etc/systemd/system/realmd.service
+echo "[Unit]
+Description=WoW Vanilla realmd service
+After=network.target mysql.service
+
+[Service]
+Type=simple
+User=$user
+ExecStart=$folder_core/run/bin/realmd -c $folder_core/run/etc/realmd.conf
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target" > $folder_wow/realmd.service 2> /dev/null
+# /etc/systemd/system/mangosd.service
+echo "[Unit]
+Description=WoW Vanilla mangosd service
+After=network.target mysql.service realmd.service getty@tty3.service
+
+[Service]
+Type=simple
+User=$user
+StandardInput=tty
+TTYPath=/dev/tty3
+TTYReset=yes
+TTYVHangup=yes
+WorkingDirectory=$folder_core/run/bin
+ExecStart=$folder_core/run/bin/mangosd -c $folder_core/run/etc/mangosd.conf -a $folder_core/run/etc/playerbot.conf
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target" > $folder_wow/mangosd.service 2> /dev/null
+# install services >
+sudo mv $folder_wow/*.service /etc/systemd/system/ &> /dev/null
+sudo systemctl daemon-reload
+sleep 1
+# enable services >
+sudo systemctl enable realmd
+sleep 1
+sudo systemctl enable mangosd
+ echo
+printf '%b' "\e[0;32mProfit?\033[0m
+Check:
+
+/etc/systemd/system/'\e[0;35mrealmd.service\033[0m'
+/etc/systemd/system/'\e[0;35mmangosd.service\033[0m'
+
+for correct information."
+ echo
+ echo
+ read -r -p "Press Enter to continue" </dev/tty
+ echo
+fi
+
+ ;;
+
+# install systemd Services done
 
 # htop >
 
@@ -771,7 +838,7 @@ printf "
   'commands' will list all of the available commands
   'quit' and then hit Enter two times to exit
 
-  tip: Set '\e[0;35mMessage of the Day\033[0m' inside mangosd.conf"
+  Tip: Set '\e[0;35mMessage of the Day\033[0m' inside mangosd.conf"
  echo
  echo
 nc "$host_nc" "$port_nc"
