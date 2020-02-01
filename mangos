@@ -556,7 +556,7 @@ printf '%b' " <-----------------------------------------------------------------
 
       i : \e[0;35minfo\033[0m    - information
       t : \e[0;35mhtop\033[0m    - interactive process viewer
-      x : \e[0;35m?\033[0m       - ?
+      
 
       Tip: Use both in realmlist.wtf
 
