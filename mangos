@@ -1124,7 +1124,7 @@ ExecStart=$folder_core/run/bin/realmd -c $folder_core/run/etc/realmd.conf
 Restart=on-abort
 
 [Install]
-WantedBy=multi-user.target" > $folder_wow/realmd.service 2> /dev/null
+WantedBy=multi-user.target" > "$folder_wow"/realmd.service 2> /dev/null
 # /etc/systemd/system/mangosd.service
  echo "[Unit]
 Description=WoW Vanilla mangosd service
@@ -1142,9 +1142,9 @@ ExecStart=$folder_core/run/bin/mangosd -c $folder_core/run/etc/mangosd.conf -a $
 Restart=on-abort
 
 [Install]
-WantedBy=multi-user.target" > $folder_wow/mangosd.service 2> /dev/null
+WantedBy=multi-user.target" > "$folder_wow"/mangosd.service 2> /dev/null
 # install services >
-sudo mv $folder_wow/*.service /etc/systemd/system/ &> /dev/null
+sudo mv "$folder_wow"/*.service /etc/systemd/system/ &> /dev/null
 sudo systemctl daemon-reload
 sleep 1
 # enable services >
