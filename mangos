@@ -556,7 +556,7 @@ printf '%b' " <-----------------------------------------------------------------
 
       i : \e[0;35minfo\033[0m    - information
       t : \e[0;35mhtop\033[0m    - interactive process viewer
-      s : \e[0;35mseedbox\033[0m - seedbox for 'world.maps.zip'
+      s : \e[0;35mseedbox\033[0m - seedbox for 'maps.zip'
 
       Tip: Use both in realmlist.wtf
 
