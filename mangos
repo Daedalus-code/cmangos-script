@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20200202
-# 2.3.4.9
+# 2.3.5.1
 
 # Menusystem >
 
@@ -516,7 +516,7 @@ fi
 
 printf '%b' " <----------------------------------------------------------------------------->\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.3.4.9 ]\e[31m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.3.5.1 ]\e[31m
 
     \033[0m* Administrator functions and features for WoW Vanilla server.
     * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -685,6 +685,7 @@ printf '%b' "[\e[0;32mok\033[0m]"
  echo
 # add .torrent (maps.zip.torrent) >
 transmission-remote -a "magnet:?xt=urn:btih:2a374866292eee4f76d5e26b5e7bec64191d11b0&dn=maps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &> /dev/null
+sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
  sleep 1
 fi
 printf "Shutdown seedbox? (y/n) "
@@ -713,6 +714,7 @@ sudo unzip -x maps.zip
 printf '%b' "[\e[0;32mok\033[0m]"
  sleep 1
 fi
+sudo chown "${user:?}":"${group:?}" "$folder_wow"/maps.zip
  clear
 
 # setup seedbox & download maps done
