@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20200102
-# 2.1.7.1
+# 2.1.6.4
 
 # Menusystem >
 
@@ -516,7 +516,7 @@ fi
 
 printf '%b' " <----------------------------------------------------------------------------->\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.1.7.1 ]\e[31m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.1.6.4 ]\e[31m
 
     \033[0m* Administrator functions and features for WoW Vanilla server.
     * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -556,7 +556,7 @@ printf '%b' " <-----------------------------------------------------------------
 
       i : \e[0;35minfo\033[0m    - information
       t : \e[0;35mhtop\033[0m    - interactive process viewer
-      S : \e[0;35msystemd\033[0m - setup systemd services
+      x : \e[0;35m?\033[0m       - ?
 
       Tip: Use both in realmlist.wtf
 
@@ -577,73 +577,9 @@ printf '%b' " <-----------------------------------------------------------------
 
 # info done
 
-# install systemd Services >
-# Ubuntu 19.10
-
-"S")
-
-printf "Setup 'systemd Services', Are You Sure? (y/n)"
- echo
- read -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-# /etc/systemd/system/realmd.service
-echo "[Unit]
-Description=WoW Vanilla realmd service
-After=network.target mysql.service
-
-[Service]
-Type=simple
-User=$user
-ExecStart=$folder_core/run/bin/realmd -c $folder_core/run/etc/realmd.conf
-Restart=on-abort
-
-[Install]
-WantedBy=multi-user.target" > $folder_wow/realmd.service 2> /dev/null
-# /etc/systemd/system/mangosd.service
-echo "[Unit]
-Description=WoW Vanilla mangosd service
-After=network.target mysql.service realmd.service getty@tty3.service
-
-[Service]
-Type=simple
-User=$user
-StandardInput=tty
-TTYPath=/dev/tty3
-TTYReset=yes
-TTYVHangup=yes
-WorkingDirectory=$folder_core/run/bin
-ExecStart=$folder_core/run/bin/mangosd -c $folder_core/run/etc/mangosd.conf -a $folder_core/run/etc/playerbot.conf
-Restart=on-abort
-
-[Install]
-WantedBy=multi-user.target" > $folder_wow/mangosd.service 2> /dev/null
-# install services >
-sudo mv $folder_wow/*.service /etc/systemd/system/ &> /dev/null
-sudo systemctl daemon-reload
-sleep 1
-# enable services >
-sudo systemctl enable realmd
-sleep 1
-sudo systemctl enable mangosd
- echo
-printf '%b' "\e[0;32mProfit?\033[0m
-Check:
-
-/etc/systemd/system/'\e[0;35mrealmd.service\033[0m'
-/etc/systemd/system/'\e[0;35mmangosd.service\033[0m'
-
-for correct information."
- echo
- echo
- read -r -p "Press Enter to continue" </dev/tty
- echo
-fi
+"x")
 
  ;;
-
-# install systemd Services done
 
 # htop >
 
@@ -1169,8 +1105,65 @@ fi
 
 # Edit/Copy config files done
 
+# install systemd Services >
+# Ubuntu 19.10
+
+ read -r -p "Setup 'systemd Services' ? (y/n) " -n 1 -r
+ echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+# /etc/systemd/system/realmd.service
+ echo "[Unit]
+Description=WoW Vanilla realmd service
+After=network.target mysql.service
+
+[Service]
+Type=simple
+User=$user
+ExecStart=$folder_core/run/bin/realmd -c $folder_core/run/etc/realmd.conf
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target" > $folder_wow/realmd.service 2> /dev/null
+# /etc/systemd/system/mangosd.service
+ echo "[Unit]
+Description=WoW Vanilla mangosd service
+After=network.target mysql.service realmd.service getty@tty3.service
+
+[Service]
+Type=simple
+User=$user
+StandardInput=tty
+TTYPath=/dev/tty3
+TTYReset=yes
+TTYVHangup=yes
+WorkingDirectory=$folder_core/run/bin
+ExecStart=$folder_core/run/bin/mangosd -c $folder_core/run/etc/mangosd.conf -a $folder_core/run/etc/playerbot.conf
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target" > $folder_wow/mangosd.service 2> /dev/null
+# install services >
+sudo mv $folder_wow/*.service /etc/systemd/system/ &> /dev/null
+sudo systemctl daemon-reload
+sleep 1
+# enable services >
+sudo systemctl enable realmd
+sleep 1
+sudo systemctl enable mangosd
+ echo
+printf '%b' "Check:
+/etc/systemd/system/'\e[0;35mrealmd.service\033[0m'
+/etc/systemd/system/'\e[0;35mmangosd.service\033[0m'
+for correct information, or just restart server."
+ echo
+ echo
+fi
+
  read -r -p "Press Enter to continue" </dev/tty
 fi
+
+# install systemd Services done
 
 # Update CMaNGOS done
 
