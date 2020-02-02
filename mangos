@@ -601,7 +601,7 @@ printf '%b' " <-----------------------------------------------------------------
                              Please scroll up ^
 
 
-         \e[1;32m>\033[0m hit Enter to go back.
+\e[1;32m>\033[0m hit Enter to go back.
  <------------------------------------------------------------------------------>\033[0m"
  echo
  read -r -p ">" </dev/tty
@@ -652,7 +652,7 @@ $transmission_list
      s : \e[0;35mStop seedbox\033[0m    - service transmission-daemon stop
      m : \e[0;35mInstall maps\033[0m    - install maps.zip
 
-         \e[1;32m>\033[0m hit Enter to go back.
+\e[1;32m>\033[0m hit Enter to go back.
  <------------------------------------------------------------------------------>\033[0m"
  echo
 printf '%b' ">"
