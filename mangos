@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20200202
-# 2.3.5.1
+# 2.3.4.9
 
 # Menusystem >
 
@@ -516,7 +516,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.3.5.1 ]\e[31m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.3.4.9 ]\e[31m
 
    \033[0m* Administrator functions and features for WoW Vanilla server.
    * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -724,8 +724,6 @@ sudo service transmission-daemon start &> /dev/null
 printf '%b' "[\e[0;32mok\033[0m] - transmission should be running now"
  echo
  sleep 1
-# remove old .torrent >
-transmission-remote -t 1 -r &> /dev/null; transmission-remote -t 2 -r &> /dev/null
 # add magnet link: maps.zip.torrent >
 transmission-remote -a "magnet:?xt=urn:btih:2a374866292eee4f76d5e26b5e7bec64191d11b0&dn=maps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &> /dev/null
  echo
