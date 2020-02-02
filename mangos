@@ -531,7 +531,7 @@ printf '%b' " <-----------------------------------------------------------------
      p : \e[0;35mhtop\033[0m    - process view
      a : \e[0;35mlogs\033[0m    - analyze logs   characters.sql\e[0;32m..:\033[0m $charac_backup
      w : \e[0;35mstats\033[0m   - world stats    realmd.sql\e[0;32m......:\033[0m $realmd_backup
-     s : \e[0;35mseedbox\033[0m - download maps
+     m : \e[0;35mmaps\033[0m    - download maps
      h : \e[0;35mreset\033[0m   - reset --hard   Realmd.log\e[0;32m......:\033[0m $cm_realmd_log_empty$cm_realmd_log
      q : \e[0;35mquit\033[0m    - back to menu   Server.log\e[0;32m......:\033[0m $cm_server_log_empty$cm_server_log$cm_server_log_serious
 
@@ -577,7 +577,7 @@ printf '%b' " <-----------------------------------------------------------------
 
 # seedbox menu >
 
-"s")
+"m")
 
 # codes >
 
