@@ -583,9 +583,9 @@ printf '%b' " <-----------------------------------------------------------------
 
          \033[0;31mImportant\033[0m: edit '\e[0;35mserver.txt\033[0m' & '\e[0;35mserver.cnf\033[0m' with correct info.
 
-         * '\e[0;35mlogin\033[0m' & '\e[0;35mcreate account\033[0m' edit 'RA/NETCAT' inside \e[0;35mserver.txt.\033[0m
-         * '\e[0;35mupdate Database\033[0m' edit 'MYSQL' inside \e[0;35mserver.txt\033[0m
-           & '[ALL]' inside \e[0;35mserver.cnf\033[0m
+         * 'login' & 'create account' Please edit 'RA/NETCAT' inside \e[0;35mserver.txt.\033[0m
+         * 'update Database' Please edit 'MYSQL' inside \e[0;35mserver.txt\033[0m & inside \e[0;35mserver.cnf\033[0m
+
 
          \033[0;31mStuff will break if not correct!\033[0m
 
