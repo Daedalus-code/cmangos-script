@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20200202
-# 2.4.4.2
+# 2.4.4.0
 
 # Menusystem >
 
@@ -516,7 +516,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.4.4.2 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.4.4.0 ]\033[0m
 
      $cm_uptime
 
@@ -556,8 +556,7 @@ printf '%b' " <-----------------------------------------------------------------
 
          Helping functions and features for admins running a WoW Vanilla server.
 
-         \e[0;33mPlanned Features\033[0m:
-         Time will tell.
+         \e[0;33mPlanned Features\033[0m: Time will tell.
 
          \e[0;32mC(ontinued)-MaNGOS (Classic fork)\033[0m
 
@@ -585,7 +584,6 @@ printf '%b' " <-----------------------------------------------------------------
 
        * 'login' & 'create account' Please edit 'RA/NETCAT' inside \e[0;35mserver.txt.\033[0m
        * 'update Database' Please edit 'MYSQL' inside \e[0;35mserver.txt\033[0m & inside \e[0;35mserver.cnf\033[0m
-
 
          \033[0;31mStuff will break if not correct!\033[0m
 
