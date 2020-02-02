@@ -557,7 +557,7 @@ printf '%b' " <-----------------------------------------------------------------
          Helping functions and features for admins running a WoW Vanilla server.
 
          \e[0;33mPlanned Features\033[0m:
-       * Time will tell.
+         Time will tell.
 
          \e[0;32mC(ontinued)-MaNGOS (Classic fork)\033[0m
 
