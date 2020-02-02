@@ -553,7 +553,7 @@ printf '%b' " <-----------------------------------------------------------------
     * More commands that can be used in CC (command center)
 
       i : \e[0;35minfo\033[0m    - information
-      t : \e[0;35mhtop\033[0m    - interactive process viewer
+      p : \e[0;35mhtop\033[0m    - interactive process viewer
       s : \e[0;35mseedbox\033[0m - seedbox for 'maps.zip'
 
       Tip: Use both in realmlist.wtf
@@ -769,7 +769,7 @@ esac
 
 # htop >
 
-"T")
+"p")
 
 sudo apt-get install htop -y &> /dev/null
 htop
