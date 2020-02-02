@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20200202
-# 2.3.4.9
+# 2.3.7.3
 
 # Menusystem >
 
@@ -516,7 +516,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.3.4.9 ]\e[31m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.3.7.3 ]\e[31m
 
    \033[0m* Administrator functions and features for WoW Vanilla server.
    * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -526,12 +526,14 @@ printf '%b' " <-----------------------------------------------------------------
 
      CMaNGOS\e[0;32m.....:\033[0m$latest_core_built
 
-     r : \e[0;35mlogin\033[0m  - remote access   service.mangosd\e[0;32m.:\033[0m $command_mangosd
-     a : \e[0;35mlogs\033[0m   - analyze logs    service.realmd\e[0;32m..:\033[0m $command_realmd
-     w : \e[0;35mstats\033[0m  - world stats     characters.sql\e[0;32m..:\033[0m $charac_backup
-     b : \e[0;35mbackup\033[0m - new backup      realmd.sql\e[0;32m......:\033[0m $realmd_backup
-     h : \e[0;35mreset\033[0m  - reset --hard    Realmd.log\e[0;32m......:\033[0m $cm_realmd_log_empty$cm_realmd_log
-     q : \e[0;35mquit\033[0m   - back to menu    Server.log\e[0;32m......:\033[0m $cm_server_log_empty$cm_server_log$cm_server_log_serious
+     r : \e[0;35mlogin\033[0m   - remote access
+     b : \e[0;35mbackup\033[0m  - new backup
+     p : \e[0;35mhtop\033[0m    - process view   service.mangosd\e[0;32m.:\033[0m $command_mangosd
+     a : \e[0;35mlogs\033[0m    - analyze logs   service.realmd\e[0;32m..:\033[0m $command_realmd
+     w : \e[0;35mstats\033[0m   - world stats    characters.sql\e[0;32m..:\033[0m $charac_backup
+     s : \e[0;35mseedbox\033[0m - download maps  realmd.sql\e[0;32m......:\033[0m $realmd_backup
+     h : \e[0;35mreset\033[0m   - reset --hard   Realmd.log\e[0;32m......:\033[0m $cm_realmd_log_empty$cm_realmd_log
+     q : \e[0;35mquit\033[0m    - back to menu   Server.log\e[0;32m......:\033[0m $cm_server_log_empty$cm_server_log$cm_server_log_serious
 
     \e[0;33mFor more information: \033[0mi\033[0m \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
  <------------------------------------------------------------------------------>\033[0m"
@@ -552,9 +554,7 @@ printf '%b' " <-----------------------------------------------------------------
 
     * More commands that can be used in CC (command center)
 
-      i : \e[0;35minfo\033[0m    - information
-      p : \e[0;35mhtop\033[0m    - interactive process viewer
-      s : \e[0;35mseedbox\033[0m - seedbox for 'maps.zip'
+      i : \e[0;35minfo\033[0m   - information
 
       Tip: Use both in realmlist.wtf
 
@@ -606,25 +606,29 @@ printf '%b' " <-----------------------------------------------------------------
          Transmission\e[0;32m....:\033[0m $seed_transmission
          Web access\e[0;32m......:\033[0m $intranet:9091
 
-         Shutdown transmission to stop the seedbox.
          Default: download '\e[0;35munlimited\033[0m' upload '\e[0;35m128kb/s\033[0m'
 
  \e[0;32m<----------------------------------------------------------------------------->\033[0m
 $transmission_list
  \e[0;32m<----------------------------------------------------------------------------->\033[0m
 
-         t : Install seedbox   (transmission-daemon)
-         s : Stop seedbox      (service transmission-daemon stop)
-         m : Install maps      (install maps.zip)
+         t : \e[0;35mInstall seedbox\033[0m   - transmission-daemon
+         r : \e[0;35mStart seedbox\033[0m     - service transmission-daemon start
+         s : \e[0;35mStop seedbox\033[0m      - service transmission-daemon stop
+         m : \e[0;35mInstall maps\033[0m      - install maps.zip
 
  <----------------------------------------------------------------------------->\033[0m"
-
  echo
+printf '%b' ">"
 read n
 case $n in
 
 "t")
 
+FILE="/seedbox/maps.zip"
+if [ ! -f "$FILE" ];
+then
+# fresh install ? >
 # setup seedbox (transmission) >
 # Ubuntu 19.10
 
@@ -732,8 +736,28 @@ printf '%b' "[\e[0;32mok\033[0m] - torrent added"
  sleep 1
 sudo systemctl daemon-reload
  sleep 1
+else
+ echo
+printf '%b' "Already installed."
+ echo
+ sleep 2
+fi
 
  ;;
+
+ "r")
+
+ sudo service transmission-daemon start &> /dev/null
+  sleep 1
+ # disable service >
+ sudo systemctl enable transmission-daemon &> /dev/null
+ sudo systemctl daemon-reload &> /dev/null
+  echo
+ printf '%b' "[\e[0;32mok\033[0m] - started."
+  echo
+  sleep 1
+
+  ;;
 
 "s")
 
