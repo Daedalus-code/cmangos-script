@@ -565,7 +565,7 @@ printf '%b' " <-----------------------------------------------------------------
       Set new 'id', 'name(lan)' and '\e[0;35m${intranet:?}\033[0m' as address.
       You can now choose 'Internet' or 'Lanparty' ingame from realm list.
 
-      'Enter' to go back"
+      \e[1;32m>\033[0m hit Enter to go back."
  echo
  echo
  read -r -p "" </dev/tty
