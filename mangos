@@ -597,7 +597,7 @@ esac
 echo
 echo
 printf '%b' " <----------------------------------------------------------------------------->\033[0m
-                   \e[0;32mCMaNGOS (Classic fork) - SeedBox for maps\e[31m
+                    \e[0;32mCMaNGOS (Classic fork) - SeedBox for maps\e[31m
 
        \033[0m* Download/Upload maps for WoW Vanilla server.
        * This is an attempt to make classic maps available through p2p.
@@ -659,7 +659,7 @@ echo "{
     "\"bind-address-ipv6"\": "\"::"\",
     "\"blocklist-enabled"\": true,
     "\"blocklist-url"\": "\"http://john.bitsurge.net/public/biglist.p2p.gz"\",
-    "\"cache-size-mb"\": 4,
+    "\"cache-size-mb"\": 16,
     "\"dht-enabled"\": true,
     "\"download-dir"\": "\"/seedbox"\",
     "\"download-queue-enabled"\": true,
