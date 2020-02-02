@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20200202
-# 2.3.7.3
+# 2.3.8.2
 
 # Menusystem >
 
@@ -516,7 +516,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.3.7.3 ]\e[31m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.3.8.2 ]\e[31m
 
    \033[0m* Administrator functions and features for WoW Vanilla server.
    * Built on a Ubuntu 19.10 Server - (Raspberry Pi2/4)
@@ -738,7 +738,7 @@ sudo systemctl daemon-reload
  sleep 1
 else
  echo
-printf '%b' "Already installed."
+printf '%b' "SeedBox already installed."
  echo
  sleep 2
 fi
@@ -775,6 +775,9 @@ printf '%b' "[\e[0;32mok\033[0m] - stopped."
 
 "m")
 
+FILE="$folder_core"/run/maps/5332742.map
+if [ ! -f "$FILE" ];
+then
 sudo cp /seedbox/maps.zip "$folder_core"/run
 cd "$folder_core"/run || exit
 sudo unzip -x maps.zip
@@ -782,6 +785,12 @@ sudo unzip -x maps.zip
 printf '%b' "[\e[0;32mok\033[0m] - maps installed."
  echo
  sleep 1
+else
+ echo
+printf '%b' "Maps already installed."
+ echo
+ sleep 2
+fi
 
 esac
 
