@@ -753,7 +753,7 @@ printf '%b' "[\e[0;32mok\033[0m] - stopped."
 
 "m")
 
-sudo cp "$folder_wow"/maps.zip "$folder_core"/run
+sudo cp /seedbox/maps.zip "$folder_core"/run
 cd "$folder_core"/run || exit
 sudo unzip -x maps.zip
  echo
