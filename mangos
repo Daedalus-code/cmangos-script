@@ -518,20 +518,20 @@ printf '%b' " <-----------------------------------------------------------------
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
             \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.4.3.6 ]\033[0m
 
-     $cm_uptime
+      $cm_uptime
 
-     $cm_realm\033[0m
+      $cm_realm\033[0m
 
-     CMaNGOS\e[0;32m.....:\033[0m$latest_core_built
+      CMaNGOS\e[0;32m.....:\033[0m$latest_core_built
 
-     r : \e[0;35mlogin\033[0m   - remote access  service.mangosd\e[0;32m.:\033[0m $command_mangosd
-     l : \e[0;35mlogs\033[0m    - analyze logs   service.realmd\e[0;32m..:\033[0m $command_realmd
-     b : \e[0;35mbackup\033[0m  - new backup
-     h : \e[0;35mreset\033[0m   - reset --hard   characters.sql\e[0;32m..:\033[0m $charac_backup
-     p : \e[0;35mhtop\033[0m    - process view   realmd.sql\e[0;32m......:\033[0m $realmd_backup
-     m : \e[0;35mmaps\033[0m    - download maps
-     w : \e[0;35mstats\033[0m   - world stats    Realmd.log\e[0;32m......:\033[0m $cm_realmd_log_empty$cm_realmd_log
-     q : \e[0;35mquit\033[0m    - back to menu   Server.log\e[0;32m......:\033[0m $cm_server_log_empty$cm_server_log$cm_server_log_serious
+      r : \e[0;35mlogin\033[0m   - remote access  service.mangosd\e[0;32m.:\033[0m $command_mangosd
+      l : \e[0;35mlogs\033[0m    - analyze logs   service.realmd\e[0;32m..:\033[0m $command_realmd
+      b : \e[0;35mbackup\033[0m  - new backup
+      h : \e[0;35mreset\033[0m   - reset --hard   characters.sql\e[0;32m..:\033[0m $charac_backup
+      p : \e[0;35mhtop\033[0m    - process view   realmd.sql\e[0;32m......:\033[0m $realmd_backup
+      m : \e[0;35mmaps\033[0m    - download maps
+      w : \e[0;35mstats\033[0m   - world stats    Realmd.log\e[0;32m......:\033[0m $cm_realmd_log_empty$cm_realmd_log
+      q : \e[0;35mquit\033[0m    - back to menu   Server.log\e[0;32m......:\033[0m $cm_server_log_empty$cm_server_log$cm_server_log_serious
 
     \e[0;33mFor more information: \033[0mi\033[0m \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
  <------------------------------------------------------------------------------>\033[0m"
@@ -583,7 +583,7 @@ printf '%b' " <-----------------------------------------------------------------
        \033[0;31mImportant\033[0m: edit '\e[0;35mserver.txt\033[0m' & '\e[0;35mserver.cnf\033[0m' with correct info.
 
      * 'login' & 'create account' edit 'RA/NETCAT' inside \e[0;35mserver.txt.\033[0m
-     * 'update Database' edit 'MYSQL' inside \e[0;35mserver.txt\033[0m & inside \e[0;35mserver.cnf\033[0m
+     * 'update Database' edit 'MYSQL' inside \e[0;35mserver.txt\033[0m, \e[0;35mserver.cnf\033[0m
 
  <------------------------------------------------------------------------------>\033[0m
 
@@ -645,10 +645,10 @@ printf '%b' " <-----------------------------------------------------------------
 $transmission_list
  \e[0;32m<------------------------------------------------------------------------------>\033[0m
 
-     t : \e[0;35mInstall seedbox\033[0m - transmission-daemon
-     r : \e[0;35mStart seedbox\033[0m   - service transmission-daemon start
-     s : \e[0;35mStop seedbox\033[0m    - service transmission-daemon stop
-     m : \e[0;35mInstall maps\033[0m    - install maps.zip
+      t : \e[0;35mInstall seedbox\033[0m - transmission-daemon
+      r : \e[0;35mStart seedbox\033[0m   - service transmission-daemon start
+      s : \e[0;35mStop seedbox\033[0m    - service transmission-daemon stop
+      m : \e[0;35mInstall maps\033[0m    - install maps.zip
 
 \e[1;32m>\033[0m hit Enter to go back.
  <------------------------------------------------------------------------------>\033[0m"
