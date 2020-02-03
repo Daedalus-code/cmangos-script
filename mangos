@@ -14,9 +14,7 @@
 
 # By Rainman
 # V20200302
-# 2.6.0.3
-
-# b9ea65cd1e2b40cfcbf777559ef0c9ca
+# 2.6.3.9
 
 # codes >
 
@@ -25,7 +23,6 @@ do
 clear
 
 # config directory >
-
 # shellcheck disable=SC1091
 source /scripts/server.txt # please edit if wrong.
 
@@ -527,7 +524,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.0.3 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.3.9 ]\033[0m
 
       $cm_uptime
 
@@ -1017,18 +1014,27 @@ read -r -p "Press Enter to continue" </dev/tty
 
 "b")
 
-printf "Backup.."
+# well (: backup probably hours old by now >
+ echo
+printf "Making fresh backup\e[0;32m.\033[0m"
  sleep 1
+printf "\e[0;32m.\033[0m"
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
+printf "\e[0;32m.\033[0m"
+ sleep 1
 printf "[\e[0;32mok\033[0m] realmd"
  sleep 1
  echo
 # backup characters sql >
-printf "Backup.."
+printf "Making fresh backup\e[0;32m.\033[0m"
  sleep 1
+printf "\e[0;32m.\033[0m"
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
-printf "[\e[0;32mok\033[0m] characters"
+printf "\e[0;32m.\033[0m"
  sleep 1
+printf "[\e[0;32mok\033[0m] characters"
+ sleep 2
+# well (: backup probably hours old by now done
 
  ;;
 
@@ -1241,6 +1247,34 @@ fi
 if ! [ -x "$(command -v dialog)" ]; then
 sudo apt-get install dialog -y
 fi
+# required 'packagelist' to build CMaNGOS >
+# Ubuntu Server 19.10
+packagelist=(
+autoconf
+automake
+binutils
+build-essential
+checkinstall
+cmake
+g++
+gcc
+git-core
+grep
+libboost-all-dev
+libbz2-dev
+libc6
+libmysql++-dev
+libssl-dev
+libtool
+make
+mysql-client
+mysql-server
+patch
+subversion
+unzip
+zip
+zlibc
+)
 # codes done
 HEIGHT=15
 WIDTH=50
@@ -1250,11 +1284,11 @@ TITLE="Update mangos-classic [core]"
 MENU="Choose one of the following options:"
 
 OPTIONS=(1 "Compile latest build"
-         2 "Fresh install (delete /build)"
+         2 "Reinstall (delete /build)"
          3 "Install required packagelist"
          4 "Reset --hard origin/master"
          5 "Edit config files (nano)"
-         6 "Setup 'systemd Services'")
+         6 "Install systemd unit files")
 
 CHOICE=$(dialog --clear \
                --backtitle "$BACKTITLE" \
@@ -1273,6 +1307,9 @@ case $CHOICE in
 
 printf "\e[0;31mShutting down Services..\033[0m"
  echo
+if ! [ -x "$(command -v ${packagelist[@]})" ]; then
+sudo apt-get install "${packagelist[@]}" -y &> /dev/null
+fi
 sudo service realmd stop &> /dev/null
 sudo service mangosd stop &> /dev/null
 sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
@@ -1323,6 +1360,9 @@ esac
 
 "2")
 
+if ! [ -x "$(command -v ${packagelist[@]})" ]; then
+sudo apt-get install "${packagelist[@]}" -y &> /dev/null
+fi
 printf "\e[0;31mShutting down Services..\033[0m"
  echo
 sudo service realmd stop &> /dev/null
@@ -1370,7 +1410,7 @@ sudo checkinstall
 *) echo "invalid option"
 ;;
 esac
- echo
+printf '%b' "[\e[0;32mok\033[0m] "
  read -r -p "Press Enter to continue" </dev/tty
  echo
 
@@ -1382,38 +1422,10 @@ esac
 
 "3")
 
-# required 'packagelist' to build CMaNGOS >
-# Ubuntu Server 19.10
-packagelist=(
-autoconf
-automake
-binutils
-build-essential
-checkinstall
-cmake
-g++
-gcc
-git-core
-grep
-libboost-all-dev
-libbz2-dev
-libc6
-libmysql++-dev
-libssl-dev
-libtool
-make
-mysql-client
-mysql-server
-patch
-subversion
-unzip
-zip
-zlibc
-)
 if ! [ -x "$(command -v ${packagelist[@]})" ]; then
 sudo apt-get install "${packagelist[@]}" -y &> /dev/null
 fi
- echo
+printf '%b' "[\e[0;32mok\033[0m] "
  read -r -p "Press Enter to continue" </dev/tty
  echo
 
@@ -1425,11 +1437,9 @@ fi
 
 "4")
 
- echo "checking.."
 cd "$folder_core" || exit
 git reset --hard origin/master
-printf '%b' "[\e[0;32mok\033[0m]"
- echo
+printf '%b' "[\e[0;32mok\033[0m] "
  read -r -p "Press Enter to continue" </dev/tty
  echo
 
@@ -1558,7 +1568,7 @@ printf '%b' "[\e[0;32mok\033[0m]
 
 Check if correct information, or just restart server."
  echo
- echo
+printf '%b' "[\e[0;32mok\033[0m] "
  read -r -p "Press Enter to continue" </dev/tty
  echo
 
@@ -1592,7 +1602,7 @@ OPTIONS=(1 "Update classic-db"
          2 "myisam -> innodb (MariaDB)"
          3 "Drop/Import databases"
          4 "Reset --hard origin/master"
-         5 "Delete & git clone classic-db")
+         5 "Reinstall classic-db folder")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
@@ -1644,7 +1654,7 @@ printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Characters' ! Creating backup
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
  echo
 else
-printf "[\e[0;32mok\033[0m] 'Characters' backup existing."
+printf "[\e[0;32mok\033[0m] 'Characters' backup exist"
  echo
 fi
 # backup <- realmd.sql
@@ -1655,14 +1665,36 @@ printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Realmd' ! Creating backup.."
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
  echo
 else
-printf "[\e[0;32mok\033[0m] 'Realmd' backup existing."
+printf "[\e[0;32mok\033[0m] 'Realmd' backup exist"
  echo
 fi
+# well (: backup probably hours old by now >
+ echo
+printf "Making fresh backup\e[0;32m.\033[0m"
+ sleep 1
+printf "\e[0;32m.\033[0m"
+mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
+printf "\e[0;32m.\033[0m"
+ sleep 1
+printf "[\e[0;32mok\033[0m] realmd"
+ sleep 1
+ echo
+# backup characters sql >
+printf "Making fresh backup\e[0;32m.\033[0m"
+ sleep 1
+printf "\e[0;32m.\033[0m"
+mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
+printf "\e[0;32m.\033[0m"
+ sleep 1
+printf "[\e[0;32mok\033[0m] characters"
+ sleep 1
+# well (: backup probably hours old by now done
+ sleep 1
 # InstallFullDB >
 sudo chown -R "$user":"$group" "$folder_wow"
 cd "$folder_db" || exit
 ./InstallFullDB.sh
- echo
+printf '%b' "[\e[0;32mok\033[0m] "
  read -r -p "Press Enter to continue" </dev/tty
  echo
 
@@ -1715,8 +1747,7 @@ done
  echo -ne '100%)\r'
  sleep 1
  echo
- printf '%b' "[\e[0;32mok\033[0m]"
- echo
+printf '%b' "[\e[0;32mok\033[0m] "
  read -r -p "Press Enter to continue" </dev/tty
  echo
 
@@ -1743,7 +1774,7 @@ printf "[\e[0;31mmempty\033[0m/\e[0;31mold\033[0m] 'Characters' ! Creating backu
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
  echo
 else
-printf "[\e[0;32mok\033[0m] 'Characters' backup existing."
+printf "[\e[0;32mok\033[0m] 'Characters' backup exist"
  echo
 fi
 # backup <- realmd.sql
@@ -1754,7 +1785,7 @@ printf "[\e[0;31mmempty\033[0m/\e[0;31mold\033[0m] 'Realmd' ! Creating backup.."
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
  echo
 else
-printf "[\e[0;32mok\033[0m] 'Realmd' backup existing"
+printf "[\e[0;32mok\033[0m] 'Realmd' backup exist"
  echo
 fi
 
@@ -1859,8 +1890,7 @@ mysql --defaults-extra-file="$sql_mycnf" "$db_realmd" < "$folder_wow"/backup/"$d
  sleep 1
 fi
  echo
-printf '%b' "[\e[0;32mok\033[0m]"
- echo
+printf '%b' "[\e[0;32mok\033[0m] "
  read -r -p "Press Enter to continue" </dev/tty
  echo
 
@@ -1868,7 +1898,7 @@ printf '%b' "[\e[0;32mok\033[0m]"
 
 # import backup done
 
-# update database done
+# update Database done
 
 # reset --hard origin/master >
 
@@ -1876,8 +1906,7 @@ printf '%b' "[\e[0;32mok\033[0m]"
 
 cd "$folder_db" || exit
 git reset --hard origin/master
-printf '%b' "[\e[0;32mok\033[0m]"
- echo
+printf '%b' "[\e[0;32mok\033[0m] "
  read -r -p "Press Enter to continue" </dev/tty
  echo
 
@@ -1885,7 +1914,7 @@ printf '%b' "[\e[0;32mok\033[0m]"
 
 # reset --hard origin/master done
 
-# delete & git clone classic-db folder >
+# reinstall classic-db folder >
 
 "5")
 
@@ -1896,8 +1925,7 @@ cd "$folder_wow" || exit
 git clone https://github.com/cmangos/classic-db.git
 mv "$folder_wow"/*.config "$folder_db" &> /dev/null
 sudo chown -R "$user":"$group" "$folder_wow"
-printf '%b' "[\e[0;32mok\033[0m]"
- echo
+printf '%b' "[\e[0;32mok\033[0m] "
  read -r -p "Press Enter to continue" </dev/tty
  echo
 
@@ -1907,7 +1935,7 @@ esac
 
  ;;
 
-# delete & git clone classic-db folder done
+# reinstall classic-db folder done
 
 # update database done
 
@@ -2289,6 +2317,9 @@ fi
 
 cd "$folder_helper" || exit
 git reset --hard origin/master
+printf '%b' "[\e[0;32mok\033[0m] "
+ read -r -p "Press Enter to continue" </dev/tty
+ echo
 
  ;;
 
@@ -2314,7 +2345,10 @@ sudo chmod +x /usr/local/bin/mangos
  echo
  sleep 1
 printf "[\e[0;32mok\033[0m] -> Installed."
- sleep 1
+ echo
+ echo
+ echo "Will exit now."
+ sleep 1 && exit
 
  ;;
 
@@ -2599,5 +2633,7 @@ esac
 done
 
 # edit/copy config files done
+
+# b9ea65cd1e2b40cfcbf777559ef0c9ca
 
 # script done
