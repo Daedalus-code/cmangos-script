@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20200402
-# 2.6.5.2
+# 2.6.5.0
 
 # codes >
 
@@ -524,7 +524,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.5.2 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.5.0 ]\033[0m
 
       $cm_uptime
 
@@ -2527,8 +2527,6 @@ patch < "$patch" -p1
  *) echo "exit"
  ;;
 esac
- read -r -p "Press Enter to continue" </dev/tty
- echo
 
  ;;
 
