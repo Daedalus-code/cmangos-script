@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20200402
-# 2.6.4.6
+# 2.6.5.2
 
 # codes >
 
@@ -524,7 +524,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.4.6 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.5.2 ]\033[0m
 
       $cm_uptime
 
@@ -1644,7 +1644,6 @@ cd "$folder_wow"/backup/old/ || exit ; zip "$server_name.zip" "$folder_wow"/back
 find "$folder_wow"/backup/*.sql -type d -ctime +10 -exec rm -rf {} \; &> /dev/null
 find "$folder_wow"/backup/old/*.sql -type d -ctime +10 -exec rm -rf {} \; &> /dev/null
  sleep 1
- echo
 # backup <- characters.sql
  echo
 FILE="$folder_wow/backup/$db_characters-$NOW.sql"
@@ -1697,10 +1696,17 @@ printf "[\e[0;32mok\033[0m] "$db_realmd"-"$NOW".sql"
  sleep 1
  echo
 fi
-# InstallFullDB >
+# InstallFullDB ? >
+ echo
+ read -r -p "InstallFullDB? (y/n) " -n 1 -r
+ echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
 sudo chown -R "$user":"$group" "$folder_wow"
 cd "$folder_db" || exit
 ./InstallFullDB.sh
+fi
+ echo
 printf '%b' "[\e[0;32mok\033[0m] "
  read -r -p "Press Enter to continue" </dev/tty
  echo
