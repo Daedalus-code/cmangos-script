@@ -1654,7 +1654,7 @@ printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Characters' ! Creating backup
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
  echo
 else
-printf "[\e[0;32mok\033[0m] 'Characters' backup exist"
+printf "[\e[0;32mok\033[0m] "$db_characters"-"$NOW".sql exist"
  echo
 fi
 # backup <- realmd.sql
@@ -1665,7 +1665,7 @@ printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Realmd' ! Creating backup.."
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
  echo
 else
-printf "[\e[0;32mok\033[0m] 'Realmd' backup exist"
+printf "[\e[0;32mok\033[0m] "$db_realmd"-"$NOW".sql exist"
  echo
 fi
  echo
@@ -1781,7 +1781,7 @@ printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Characters' ! Creating backup
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
  echo
 else
-printf "[\e[0;32mok\033[0m] 'Characters' backup exist"
+printf "[\e[0;32mok\033[0m] "$db_characters"-"$NOW".sql exist"
  echo
 fi
 # backup <- realmd.sql
@@ -1792,7 +1792,7 @@ printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Realmd' ! Creating backup.."
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
  echo
 else
-printf "[\e[0;32mok\033[0m] 'Realmd' backup exist"
+printf "[\e[0;32mok\033[0m] "$db_realmd"-"$NOW".sql exist"
  echo
 fi
 
