@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Script >
+# script >
 
 ############################################################################
 #                      C M a N G O S  -  H E L P E R                       #
@@ -14,37 +14,32 @@
 
 # By Rainman
 # V20200302
-# 2.6.1.6
+# 2.6.0.3
 
-# Menusystem >
+# b9ea65cd1e2b40cfcbf777559ef0c9ca
+
+# codes >
 
 while :
 do
 clear
 
-# Menusystem done
-
-# Config directory >
+# config directory >
 
 # shellcheck disable=SC1091
 source /scripts/server.txt # please edit if wrong.
 
-# Config directory done
-
-# Codes >
-
-# Get database info
+# get database info
 on_count=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT SUM(online) FROM ${db_characters:?}.characters;") &> /dev/null;
 gu_count=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT count(*) FROM ${db_characters:?}.guild;") &> /dev/null;
 
-# Get date
+# get date
 NOW="$(date +"%m.%d.%Y")"
 
-# Get load
+# get load
 load="$(while IFS= read -r i; do echo "${i%?}"; done < /proc/loadavg 2> /dev/null | awk '{ print $1,$2,$3 }')"
 
 # service status
-
 world_service=mangosd
 realm_service=realmd
 
@@ -62,9 +57,9 @@ case  "$(pidof $world_service | wc -w)" in
  *) menu_mangosd="mangosd: [\e[0;33mrunning\033[0m]" ;;
 esac
 
-# Codes done
+# codes done
 
-# Menu >
+# menu >
 
 printf "\033[0m ---------------------------------------------
     _____ _____     _____ _____ _____ _____
@@ -83,11 +78,12 @@ cat<<EOF
 
 EOF
 
-# Service status >
+# service status >
 
 printf '%b' "      $menu_mangosd $menu_realmd"
  echo
-# Service status done
+
+# service status done
 
 cat<<EOF
 
@@ -106,11 +102,9 @@ EOF
  read -r -n1 -s
 case "$REPLY" in
 
-# Menu done
+# menu done
 
 "a")
-
-# Create account ? > By Rainman
 
 # codes >
 
@@ -121,7 +115,7 @@ bn_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*
 
 clear
 
-# Account menu >
+# menu >
 
 printf '%b' "\033[0m ---------------------------------------------
 \033[0m                                       __
@@ -148,7 +142,9 @@ printf '%b' "\033[0m ---------------------------------------------
  read -r -n1 -s
 case "$REPLY" in
 
- "c")
+# create account >
+
+"c")
 
 clear
 printf "\033[0m ---------------------------------------------
@@ -172,7 +168,9 @@ printf "\033[0m ---------------------------------------------
 \033[0m ---------------------------------------------
              Press Any Key To Exit"
 
-# Account menu done
+# menu done
+
+# username, password, expansion, gmlevel >
 
  echo
  echo
@@ -229,9 +227,13 @@ printf '%b' "[\e[0;32mok\033[0m] Account '\e[0;35m$USR\033[0m' ($XPV/$LVL) creat
 
  ;;
 
-# Delete account >
+# username, password, expansion, gmlevel done
 
- "d")
+# create account done
+
+# delete account >
+
+"d")
 
 # codes >
 
@@ -259,6 +261,8 @@ charac_backup="[\e[0;32mok\033[0m]"
 fi
 
 # codes done
+
+# menu >
 
 clear
 
@@ -328,8 +332,6 @@ printf '%b' "$ID \033[0m..vanished!"
 fi
 fi
 
-# Delete account done
-
  ;;
 
  *) echo "exit" ;;
@@ -337,9 +339,15 @@ esac
  read -r -p "Press Enter to continue" </dev/tty
  echo
 
-# Create account done
-
  ;;
+
+# menu done
+
+# delete account done
+
+# Login (command) >
+
+# * f★★ck; b7122@rd >> @ct1vlz1★n && chln@.
 
 "A")
 
@@ -347,12 +355,9 @@ while :
 do
 clear
 
-# Login (command) > * f★★ck; bl1zz@rd > @ct1vis1★n && ch1n@.
-
 # codes >
 
 # service status
-
 world_service=mangosd
 realm_service=realmd
 
@@ -430,8 +435,6 @@ printline() {
 init_colors
 
 # Walter A code done
-
-# Fill out command center
 
 # mysql data >
 cm_uptime="\033[0mTime""$W""$(uptime)\033[0m"
@@ -524,7 +527,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.1.6 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.0.3 ]\033[0m
 
       $cm_uptime
 
@@ -548,7 +551,7 @@ printf '%b' " <-----------------------------------------------------------------
  read -r -s -n1
 case "$REPLY" in
 
-# info >
+# Information >
 
 "i")
 
@@ -615,7 +618,7 @@ printf '%b' " <-----------------------------------------------------------------
 
  ;;
 
-# info done
+# Information done
 
 # seedbox menu >
 
@@ -634,6 +637,8 @@ case  "$(pidof $transmission_service | wc -w)" in
 esac
 
 # codes done
+
+# menu >
 
  clear
 echo
@@ -671,7 +676,7 @@ case $n in
 
 "t")
 
-# fresh install ? >
+# already installed? >
 FILE="/seedbox/maps.zip"
 if [ ! -f "$FILE" ];
 then
@@ -970,12 +975,13 @@ printf " \033[0m<---------------------------------------------------------------
 
 # dive into logs done
 
+# Get database info (kinda heavy..) >
+
 "w")
 
-# Get database info (kinda heavy..) >
 ac_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account;") &> /dev/null;
 bn_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account_banned;") &> /dev/null;
-# on_count ^
+# on_count at TOP ^
 ch_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.characters;") &> /dev/null;
 
 # gu_count at TOP ^
@@ -987,7 +993,6 @@ ti_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*
 co_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.corpse;") &> /dev/null;
 pv_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.pvpstats_players;") &> /dev/null;
 gi_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_gifts;") &> /dev/null;
-# Get database info done
 
 # Walter A code >
  echo
@@ -1006,9 +1011,12 @@ read -r -p "Press Enter to continue" </dev/tty
 
  ;;
 
+# Get database info (kinda heavy..) done
+
+# backup sql >
+
 "b")
 
-# backup realmd sql >
 printf "Backup.."
  sleep 1
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
@@ -1023,6 +1031,10 @@ printf "[\e[0;32mok\033[0m] characters"
  sleep 1
 
  ;;
+
+# backup sql done
+
+# remote access >
 
 "r")
 
@@ -1065,6 +1077,8 @@ fi
 
  ;;
 
+# remote access done
+
 "q")
  echo
  break ;;
@@ -1078,9 +1092,9 @@ done
 
 # Login (command) done * Free Hong Kong.
 
-"c")
-
 # Checking for updates >
+
+"c")
 
 # check if 'mangos-classic' exist >
 FILE="$folder_core/README.md"
@@ -1215,13 +1229,13 @@ fi
  read -r -p "Press Enter to continue" </dev/tty
  echo
 
-# Checking for updates done
-
  ;;
 
-"m")
+# Checking for updates done
 
-# update CMaNGOS ? >
+# update CMaNGOS >
+
+"m")
 
 # codes >
 if ! [ -x "$(command -v dialog)" ]; then
@@ -1419,13 +1433,13 @@ printf '%b' "[\e[0;32mok\033[0m]"
  read -r -p "Press Enter to continue" </dev/tty
  echo
 
-# reset --hard origin/master done
-
  ;;
 
-"5")
+# reset --hard origin/master done
 
 # Edit/Copy config files >
+
+"5")
 
 title="       Save config without .dist
    ================================
@@ -1487,9 +1501,9 @@ See you next time!
 esac
 done
 
-# Edit/Copy config files done
-
  ;;
+
+# Edit/Copy config files done
 
 # install systemd Services >
 # Ubuntu 19.10
@@ -1539,22 +1553,20 @@ sudo systemctl enable mangosd
  echo
 printf '%b' "[\e[0;32mok\033[0m]
 
-Check:
-
 /etc/systemd/system/'\e[0;35mrealmd.service\033[0m'
 /etc/systemd/system/'\e[0;35mmangosd.service\033[0m'
 
-for correct information, or just restart server."
+Check if correct information, or just restart server."
  echo
  echo
  read -r -p "Press Enter to continue" </dev/tty
  echo
 
-# install systemd Services done
-
  ;;
 
 esac
+
+# install systemd Services done
 
 # update CMaNGOS done
 
@@ -1614,9 +1626,7 @@ zip
 if ! [ -x "$(command -v ${packagelist[@]})" ]; then
 sudo apt-get install "${packagelist[@]}" -y &> /dev/null
 fi
-
-# Backup >
-
+# backup >
 mkdir "$folder_wow"/backup &> /dev/null
 mkdir "$folder_wow"/backup/old &> /dev/null
 cp "$folder_wow"/backup/*.sql "$folder_wow"/backup/old &> /dev/null
@@ -1625,9 +1635,7 @@ find "$folder_wow"/backup/*.sql -type d -ctime +10 -exec rm -rf {} \; &> /dev/nu
 find "$folder_wow"/backup/old/*.sql -type d -ctime +10 -exec rm -rf {} \; &> /dev/null
  sleep 1
  echo
-
-# Backup <- characters.sql
-
+# backup <- characters.sql
  echo
 FILE="$folder_wow/backup/$db_characters-$NOW.sql"
 if [ ! -f "$FILE" ];
@@ -1639,9 +1647,7 @@ else
 printf "[\e[0;32mok\033[0m] 'Characters' backup existing."
  echo
 fi
-
-# Backup <- realmd.sql
-
+# backup <- realmd.sql
 FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
 if [ ! -f "$FILE" ];
 then
@@ -1652,9 +1658,7 @@ else
 printf "[\e[0;32mok\033[0m] 'Realmd' backup existing."
  echo
 fi
-
-# MaNGOS InstallFullDB >
-
+# InstallFullDB >
 sudo chown -R "$user":"$group" "$folder_wow"
 cd "$folder_db" || exit
 ./InstallFullDB.sh
@@ -1662,11 +1666,11 @@ cd "$folder_db" || exit
  read -r -p "Press Enter to continue" </dev/tty
  echo
 
-# MaNGOS InstallFullDB done
-
-# Backup done
-
  ;;
+
+# InstallFullDB done
+
+# backup done
 
 # update classic-db done
 
@@ -1716,15 +1720,11 @@ done
  read -r -p "Press Enter to continue" </dev/tty
  echo
 
-# convert_mysql_engine = myisam -> innodb done
-
  ;;
 
-# Delete and start over >
+# convert_mysql_engine = myisam -> innodb done
 
-# Setting Up the Database
-
-# Backup <- characters.sql
+# drop/import databases >
 
 "3")
 
@@ -1735,6 +1735,7 @@ sudo service mangosd stop &> /dev/null
 sudo chown -R "$user":"$group" "$folder_wow"
  sleep 1
  echo
+# backup <- characters.sql
 FILE="$folder_wow/backup/$db_characters-$NOW.sql"
 if [ ! -f "$FILE" ];
 then
@@ -1745,9 +1746,7 @@ else
 printf "[\e[0;32mok\033[0m] 'Characters' backup existing."
  echo
 fi
-
-# Backup <- realmd.sql
-
+# backup <- realmd.sql
 FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
 if [ ! -f "$FILE" ];
 then
@@ -1759,38 +1758,33 @@ printf "[\e[0;32mok\033[0m] 'Realmd' backup existing"
  echo
 fi
 
-# BACKUP done
+# backup done
 
-# DROP Databases >
+# drop databases >
 
-# DROP Database 'characters'
+# drop database 'characters'
 
  echo
 RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_characters")
 if [ "$RESULT" == "$db_characters" ]; then
 mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP "$db_characters";
 fi
-
-# DROP Database 'mangos'
-
+# drop database 'mangos'
 RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "${db_mangos:?}")
 if [ "$RESULT" == "$db_mangos" ]; then
 mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP "$db_mangos";
 fi
-
-# DROP Database 'realmd'
-
+# drop database 'realmd'
 RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_realmd")
 if [ "$RESULT" == "$db_realmd" ]; then
 mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP "$db_realmd";
 fi
 
-# DROP Databases done
+# drop databases done
 
-# CREATE Databases >
+# create databases >
 
-# CREATE Database 'characters'
-
+# create database 'characters'
  echo
 RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_characters")
 if [ "$RESULT" == "$db_characters" ];
@@ -1803,9 +1797,7 @@ printf "[\033[1;31mempty\033[0m] 'Characters' importing.."
 mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHARACTER SET utf8 COLLATE utf8_general_ci";
 mysql --defaults-extra-file="$sql_mycnf" --database="$db_characters" < "${folder_sql:?}"/base/characters.sql
 fi
-
-# CREATE Database 'mangos'
-
+# create database 'mangos'
 RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_mangos")
 if [ "$RESULT" == "$db_mangos" ];
 then
@@ -1817,9 +1809,7 @@ printf "[\033[1;31mempty\033[0m] 'Mangos' importing.."
 mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTER SET utf8 COLLATE utf8_general_ci";
 mysql --defaults-extra-file="$sql_mycnf" --database="$db_mangos" < "$folder_sql"/base/mangos.sql
 fi
-
-# CREATE Database 'realmd'
-
+# create database 'realmd'
 RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_realmd")
 if [ "$RESULT" == "$db_realmd" ];
 then
@@ -1833,13 +1823,13 @@ mysql --defaults-extra-file="$sql_mycnf" --database="$db_realmd" < "$folder_sql"
 fi
  echo
 
-# CREATE Databases done
+# create databases done
 
-# Delete and start over done
+# delete and start over done
 
-# MaNGOS InstallFullDB ? >
+# InstallFullDB ? >
 
- read -r -p "MaNGOS InstallFullDB? (y/n) " -n 1 -r
+ read -r -p "InstallFullDB? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -1848,9 +1838,9 @@ cd "$folder_db" || exit
 ./InstallFullDB.sh
 fi
 
-# MaNGOS InstallFullDB done
+# InstallFullDB done
 
-# IMPORT BACKUP ? >
+# import backup ? >
 
  echo
 ls -lQS "$folder_wow"/backup
@@ -1874,11 +1864,11 @@ printf '%b' "[\e[0;32mok\033[0m]"
  read -r -p "Press Enter to continue" </dev/tty
  echo
 
-# IMPORT BACKUP done
-
  ;;
 
-# update Database done
+# import backup done
+
+# update database done
 
 # reset --hard origin/master >
 
@@ -1895,7 +1885,7 @@ printf '%b' "[\e[0;32mok\033[0m]"
 
 # reset --hard origin/master done
 
-# Delete & git clone classic-db folder >
+# delete & git clone classic-db folder >
 
 "5")
 
@@ -1913,56 +1903,56 @@ printf '%b' "[\e[0;32mok\033[0m]"
 
  ;;
 
-# Delete & git clone classic-db folder done
-
 esac
-
-# update Database done
 
  ;;
 
-"u")
+# delete & git clone classic-db folder done
 
-# Accounts >
+# update database done
+
+# accounts >
+
+"u")
 
  echo "User Accounts"
  echo
 mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, last_ip, DATE_FORMAT(last_login, '%Y-%m-%d') last_login, id FROM $db_realmd.account;"
  read -r -p "Press Enter to continue" </dev/tty
 
-# Accounts done
-
  ;;
 
-"t")
+# accounts done
 
-# Characters >
+# characters >
+
+"t")
 
  echo "Characters"
  echo
 mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, level, online, account FROM $db_characters.characters;"
  read -r -p "Press Enter to continue" </dev/tty
 
-# Characters done
-
   ;;
 
-"g")
+# characters done
 
-# Guilds >
+# guilds >
+
+"g")
 
  echo "Guilds"
  echo
 mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, motd FROM $db_characters.guild;"
  read -r -p "Press Enter to continue" </dev/tty
 
-# Guilds done
-
    ;;
 
-"s")
+# guilds done
 
-# Shutdown server ? >> (ﾉ °益°)ﾉ 彡 ┻━┻ holy *@?!1kek .. need muh grindz x()<zz ! OO
+# shutdown server ? >> (ﾉ °益°)ﾉ 彡 ┻━┻ holy *@?!1kek .. need muh grindz x()<zz ! OO
+
+"s")
 
  echo
  echo "Shutdown Server?"
@@ -1986,13 +1976,13 @@ sudo service mangosd stop &> /dev/null
  sleep 1
 fi
 
-# Shutdown server done << it's over!!
-
  ;;
 
-"r")
+# shutdown server done << it's over!!
 
-# Restart server ? >
+# restart server ? >
+
+"r")
 
 # codes >
 
@@ -2205,13 +2195,13 @@ nano "$folder_core"/run/logs/Server.log
 esac
 fi
 
-# Restart server done
-
  ;;
 
-"w")
+# restart server done
 
 # update cmangos-script >
+
+"w")
 
 # codes >
 if ! [ -x "$(command -v dialog)" ]; then
@@ -2326,21 +2316,21 @@ sudo chmod +x /usr/local/bin/mangos
 printf "[\e[0;32mok\033[0m] -> Installed."
  sleep 1
 
-;;
-
-# fresh install (delete/git clone /scripts) done
+ ;;
 
 esac
 
+ ;;
+
+# fresh install (delete/git clone /scripts) done
+
 # update cmangos-script done
 
- ;;
+# Check logs >
 
 "l")
 
 clear
-
-# Check logs >
 
 # codes >
 
@@ -2460,13 +2450,13 @@ nano "$folder_core"/run/logs/Server.log
  ;;
 esac
 
-# Check logs done
+ ;;
 
-  ;;
+# check logs done
+
+# create/apply .patch file ? >
 
 "p")
-
-# Create/Apply .patch file ? >
 
 printf "\e[0;32mSelect patch operation\033[0m"
  echo
@@ -2493,16 +2483,15 @@ esac
  read -r -p "Press Enter to continue" </dev/tty
  echo
 
-# Create/Apply .patch file done
-
  ;;
+
+# create/apply .patch file done
+
+# online check >
 
 "o")
 
-# Online check >
-
-# Internet
-
+# internet >
  echo
 printf "\e[1;32mOnline check\033[0m -> \e[1;32minternet\033[0m/\e[1;32mintranet\033[0m"
  echo
@@ -2515,9 +2504,7 @@ else
 printf '%b' "\033[1;31m✗\033[0m $server_name - [ $internet ]"
  echo
 fi
-
-# Intranet
-
+# intranet >
 if nc -z "$intranet" "$realm_port" 2>/dev/null; then
 printf '%b' "\e[0;32m✓\033[0m ${server_name_lan:?} - [ $intranet ]"
 ping -qc1 "$intranet" 2>&1 | awk -F/ '/^rtt/ { printf " - OK %.2f ms\n", $5; ok = 1 } END { if (!ok) print " - FAIL" }'
@@ -2528,13 +2515,13 @@ fi
  echo
  read -r -p "Press Enter to continue" </dev/tty
 
-# Online check done
-
  ;;
 
-"e")
+# online check done
 
-# Edit/Copy config files ? >
+# edit/copy config files ? >
+
+"e")
 
  read -r -p "Edit config files? (nano) (y/n) " -n 1 -r
  echo
@@ -2603,8 +2590,6 @@ esac
 done
 fi
 
-# Edit/Copy config files done
-
  ;;
 
 "Q")  exit                    ;;
@@ -2613,4 +2598,6 @@ fi
 esac
 done
 
-# Script done
+# edit/copy config files done
+
+# script done
