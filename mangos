@@ -1771,7 +1771,7 @@ sudo chown -R "$user":"$group" "$folder_wow"
 FILE="$folder_wow/backup/$db_characters-$NOW.sql"
 if [ ! -f "$FILE" ];
 then
-printf "[\e[0;31mmempty\033[0m/\e[0;31mold\033[0m] 'Characters' ! Creating backup.."
+printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Characters' ! Creating backup.."
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
  echo
 else
@@ -1782,7 +1782,7 @@ fi
 FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
 if [ ! -f "$FILE" ];
 then
-printf "[\e[0;31mmempty\033[0m/\e[0;31mold\033[0m] 'Realmd' ! Creating backup.."
+printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Realmd' ! Creating backup.."
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
  echo
 else
