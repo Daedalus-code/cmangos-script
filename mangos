@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20200302
-# 2.6.0.1
+# 2.6.5.5
 
 # Menusystem >
 
@@ -516,7 +516,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.0.1 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.5.5 ]\033[0m
 
       $cm_uptime
 
@@ -1583,20 +1583,40 @@ esac
 
 # Update CMaNGOS done
 
+# Update Database >
+
  ;;
 
 "d")
 
-# Update Database ? >
+HEIGHT=15
+WIDTH=50
+CHOICE_HEIGHT=6
+BACKTITLE="update Database"
+TITLE="Update classic-db [database]"
+MENU="Choose one of the following options:"
 
- echo
-printf "Update classic-db [\e[1;32mdatabase\033[0m] ?"
- echo
- echo
- read -r -p "Are you sure? (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+OPTIONS=(1 "Update classic-db"
+         2 "myisam -> innodb (MariaDB)"
+         3 "Drop/Import databases"
+         4 "Reset --hard origin/master"
+         5 "Delete & git clone classic-db")
+
+CHOICE=$(dialog --clear \
+                --backtitle "$BACKTITLE" \
+                --title "$TITLE" \
+                --menu "$MENU" \
+                $HEIGHT $WIDTH $CHOICE_HEIGHT \
+                "${OPTIONS[@]}" \
+                2>&1 >/dev/tty)
+
+clear
+case $CHOICE in
+
+# update classic-db >
+
+"1")
+
  echo "Shutting down Services.."
  echo -ne '(0%)\r'
  sleep 1
@@ -1605,36 +1625,32 @@ sudo service realmd stop &> /dev/null
  sleep 1
 sudo service mangosd stop &> /dev/null
 sudo chown -R "$user":"$group" "$folder_wow"
-
-# reset --hard origin/master ? >
-
- read -r -p "Reset --hard origin/master && git pull? (y/n) " -n 1 -r
  echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-cd "$folder_db" || exit
-git reset --hard origin/master
-git pull
-fi
-
-# reset --hard origin/master done
-
-# BACKUP (regardless) >
-
-mkdir "$folder_wow"/backup &> /dev/null
-mkdir "$folder_wow"/backup/old &> /dev/null
-cp "$folder_wow"/backup/*.sql "$folder_wow"/backup/old &> /dev/null
-which zip 2>&1|tee 1> /dev/null
+printf "Updating classic-db [\e[1;32mdatabase\033[0m]"
+ echo
+packagelist=(
+mysql-client
+mysql-server
+unzip
+zip
+)
+which "${packagelist[@]}" 2>&1|tee 1> /dev/null
 if [[ "$?" == 0 ]]; then
 printf '%b' "[\e[0;32mok\033[0m]"
 else
-sudo apt-get install zip -y
+sudo apt-get install "${packagelist[@]}" -y &> /dev/null
 if [[ "$?" == 0 ]]; then
 printf '%b' "[\e[0;32mok\033[0m]"
 else
 echo -e "\e[42Installation failed\e[0m"
 fi
 fi
+
+# Backup >
+
+mkdir "$folder_wow"/backup &> /dev/null
+mkdir "$folder_wow"/backup/old &> /dev/null
+cp "$folder_wow"/backup/*.sql "$folder_wow"/backup/old &> /dev/null
 cd "$folder_wow"/backup/old/ || exit ; zip "$server_name.zip" "$folder_wow"/backup/*.sql &> /dev/null
 find "$folder_wow"/backup/*.sql -type d -ctime +10 -exec rm -rf {} \; &> /dev/null
 find "$folder_wow"/backup/old/*.sql -type d -ctime +10 -exec rm -rf {} \; &> /dev/null
@@ -1669,38 +1685,87 @@ printf "[\e[0;32mok\033[0m] 'Realmd' backup existing."
  echo
 fi
 
-# BACKUP done
+# MaNGOS InstallFullDB >
 
+sudo chown -R "$user":"$group" "$folder_wow"
+cd "$folder_db" || exit
+./InstallFullDB.sh
  echo
-printf "Updating classic-db [\e[1;32mdatabase\033[0m]"
+ read -r -p "Press Enter to continue" </dev/tty
  echo
-packagelist=(
-mysql-server
-mysql-client
-)
-which "${packagelist[@]}" 2>&1|tee 1> /dev/null
-if [[ "$?" == 0 ]]; then
-printf '%b' "[\e[0;32mok\033[0m]"
-else
-sudo apt-get install "${packagelist[@]}" -y &> /dev/null
-if [[ "$?" == 0 ]]; then
-printf '%b' "[\e[0;32mok\033[0m]"
-else
- echo -e "\e[42Installation failed\e[0m"
-fi
-fi
 
-# Delete and start over ? >
+# MaNGOS InstallFullDB done
 
- read -r -p "Fresh install? (drop/import databases) (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+# Backup done
+
+ ;;
+
+# update classic-db done
+
+# convert_mysql_engine = myisam -> innodb >
+
+"2")
+
+ echo "Shutting down Services.."
+ echo -ne '(0%)\r'
+ sleep 1
+sudo service realmd stop &> /dev/null
+ echo -ne '(50%)\r'
+ sleep 1
+sudo service mangosd stop &> /dev/null
+sudo chown -R "$user":"$group" "$folder_wow"
+ echo -ne '(0%)\r'
+ sleep 1
+TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D "$db_mangos" -e 'show tables')
+for T in $TABLES
+do
+sudo mysql --defaults-extra-file="$sql_mycnf" -D "$db_mangos" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
+done
+ echo -ne '(25%)\r'
+ sleep 1
+TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D "$db_realmd" -e 'show tables')
+for T in $TABLES
+do
+sudo mysql --defaults-extra-file="$sql_mycnf" -D "$db_realmd" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
+done
+ echo -ne '(50%)\r'
+ sleep 1
+TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D "$db_characters" -e 'show tables')
+for T in $TABLES
+do
+sudo mysql --defaults-extra-file="$sql_mycnf" -D "$db_characters" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
+done
+ echo -ne '100%)\r'
+ sleep 1
+  echo
+ printf '%b' "[\e[0;32mok\033[0m]"
+  echo
+  read -r -p "Press Enter to continue" </dev/tty
+  echo
+
+# convert_mysql_engine = myisam -> innodb done
+
+ ;;
+
+
+"3")
+
+# Delete and start over >
 
 # Setting Up the Database
 
 # Backup <- characters.sql
 
+ echo "Shutting down Services.."
+ echo -ne '(0%)\r'
+ sleep 1
+sudo service realmd stop &> /dev/null
+ echo -ne '(50%)\r'
+ sleep 1
+sudo service mangosd stop &> /dev/null
+sudo chown -R "$user":"$group" "$folder_wow"
+ echo -ne '(0%)\r'
+ sleep 1
  echo
 FILE="$folder_wow/backup/$db_characters-$NOW.sql"
 if [ ! -f "$FILE" ];
@@ -1753,27 +1818,6 @@ mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP "$db_realmd";
 fi
 
 # DROP Databases done
-
-# Delete & git clone classic-db folder ? >
-
- echo
- read -r -p "Fresh install? (delete/git clone classic-db) (y/n) " -n 1 -r
- echo
-
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-
-sudo chown -R "$user":"$group" "$folder_wow"
-cp "$folder_db"/InstallFullDB.config "$folder_wow" &> /dev/null
-sudo rm -r "$folder_db" &> /dev/null
-cd "$folder_wow" || exit
-git clone https://github.com/cmangos/classic-db.git
-mv "$folder_wow"/*.config "$folder_db" &> /dev/null
-sudo chown -R "$user":"$group" "$folder_wow"
-fi
-
-# Delete & git clone classic-db folder done
-fi
 
 # CREATE Databases >
 
@@ -1856,44 +1900,54 @@ mysql --defaults-extra-file="$sql_mycnf" "$db_realmd" < "$folder_wow"/backup/"$d
  echo -ne '(100%)\r'
  sleep 1
 fi
+ echo
+printf '%b' "[\e[0;32mok\033[0m]"
+ echo
+ read -r -p "Press Enter to continue" </dev/tty
+ echo
 
 # IMPORT BACKUP done
 
-# convert_mysql_engine = myisam -> innodb ? >
+ ;;
 
- read -r -p "Converting myisam -> innodb? (Works on MariaDB) (y/n) " -n 1 -r
+# Update Database done
+
+# reset --hard origin/master >
+
+"4")
+
+cd "$folder_db" || exit
+git reset --hard origin/master
+printf '%b' "[\e[0;32mok\033[0m]"
  echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
- echo -ne '(0%)\r'
- sleep 1
-TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D "$db_mangos" -e 'show tables')
-for T in $TABLES
-do
-sudo mysql --defaults-extra-file="$sql_mycnf" -D "$db_mangos" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
-done
- echo -ne '(25%)\r'
- sleep 1
-TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D "$db_realmd" -e 'show tables')
-for T in $TABLES
-do
-sudo mysql --defaults-extra-file="$sql_mycnf" -D "$db_realmd" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
-done
- echo -ne '(50%)\r'
- sleep 1
-TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D "$db_characters" -e 'show tables')
-for T in $TABLES
-do
-sudo mysql --defaults-extra-file="$sql_mycnf" -D "$db_characters" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
-done
- echo -ne '100%)\r'
- sleep 1
-fi
-
-# convert_mysql_engine = myisam -> innodb done
-
  read -r -p "Press Enter to continue" </dev/tty
-fi
+ echo
+
+ ;;
+
+# reset --hard origin/master done
+
+# Delete & git clone classic-db folder >
+
+"5")
+
+sudo chown -R "$user":"$group" "$folder_wow"
+cp "$folder_db"/InstallFullDB.config "$folder_wow" &> /dev/null
+sudo rm -r "$folder_db" &> /dev/null
+cd "$folder_wow" || exit
+git clone https://github.com/cmangos/classic-db.git
+mv "$folder_wow"/*.config "$folder_db" &> /dev/null
+sudo chown -R "$user":"$group" "$folder_wow"
+printf '%b' "[\e[0;32mok\033[0m]"
+ echo
+ read -r -p "Press Enter to continue" </dev/tty
+ echo
+
+ ;;
+
+# Delete & git clone classic-db folder done
+
+esac
 
 # Update Database done
 
