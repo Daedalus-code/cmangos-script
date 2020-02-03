@@ -547,55 +547,55 @@ case "$REPLY" in
  echo
  echo
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
-                    \e[0;32mCMaNGOS (Classic fork) - Information\033[0m
+                     \e[0;32mCMaNGOS (Classic fork) - Information\033[0m
 
-       \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
+        \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
 
-       This script was built on a Ubuntu 19.10 - (Raspberry Pi2/4)
-       https://ubuntu.com/download/raspberry-pi
+        This script was built on a Ubuntu 19.10 - (Raspberry Pi2/4)
+        https://ubuntu.com/download/raspberry-pi
 
-       Functions and features for admins running a WoW Vanilla server.
+        Functions and features for admins running a WoW Vanilla server.
 
-       \e[0;33mPlanned Features\033[0m: Time will tell.
+        \e[0;33mPlanned Features\033[0m: Time will tell.
 
-       \e[0;32mC(ontinued)-MaNGOS (Classic fork)\033[0m
+        \e[0;32mC(ontinued)-MaNGOS (Classic fork)\033[0m
 
-       https://github.com/cmangos/mangos-classic
-       https://github.com/cmangos/classic-db
-       https://github.com/cmangos
-       https://cmangos.net
+        https://github.com/cmangos/mangos-classic
+        https://github.com/cmangos/classic-db
+        https://github.com/cmangos
+        https://cmangos.net
 
-       ---What
-
- <------------------------------------------------------------------------------>\033[0m
-
-       \e[0;33mTip\033[0m: Use both in \e[0;35mrealmlist.wtf\033[0m
-
-     * \e[0;35mInternet\033[0m: 'set realmlist \e[0;35m${internet:?}\033[0m'
-     * \e[0;35mLanparty\033[0m: 'set realmlist \e[0;35m${intranet:?}\033[0m' - When internet drop out.
-
-       Create another \e[0;35m$db_realmd.realmlist\033[0m table row, or just copy.
-       Set new 'id', 'name(lan)' and '\e[0;35m${intranet:?}\033[0m' as address.
-       You can now choose 'Internet' or 'Lanparty' ingame from realm list.
+        ---What
 
  <------------------------------------------------------------------------------>\033[0m
 
-       \033[0;31mImportant\033[0m: edit '\e[0;35mserver.txt\033[0m' & '\e[0;35mserver.cnf\033[0m' with correct info.
+        \e[0;33mTip\033[0m: Use both in \e[0;35mrealmlist.wtf\033[0m
 
-     * 'login' & 'create account' edit 'RA/NETCAT' inside \e[0;35mserver.txt.\033[0m
-     * 'update Database' edit 'MYSQL' inside \e[0;35mserver.txt\033[0m, \e[0;35mserver.cnf\033[0m
+      * \e[0;35mInternet\033[0m: 'set realmlist \e[0;35m${internet:?}\033[0m'
+      * \e[0;35mLanparty\033[0m: 'set realmlist \e[0;35m${intranet:?}\033[0m' - When internet drop out.
+
+        Create another \e[0;35m$db_realmd.realmlist\033[0m table row, or just copy.
+        Set new 'id', 'name(lan)' and '\e[0;35m${intranet:?}\033[0m' as address.
+        You can now choose 'Internet' or 'Lanparty' ingame from realm list.
 
  <------------------------------------------------------------------------------>\033[0m
 
-       \e[0;32mC(ontinued)-MaNGOS - Helper\033[0m:
+        \033[0;31mImportant\033[0m: edit '\e[0;35mserver.txt\033[0m' & '\e[0;35mserver.cnf\033[0m' with correct info.
 
-     * Install this on a Ubuntu system to make everything more easy.
-     * Connect to a MySQL server outside or localhost
-     * Download latest core/database updates
-     * Upgrade Database with latest fixes
-     * Compile CMaNGOS with latest fixes
-     * Download classic maps
-     * Profit
+      * 'login' & 'create account' edit 'RA/NETCAT' inside \e[0;35mserver.txt.\033[0m
+      * 'update Database' edit 'MYSQL' inside \e[0;35mserver.txt\033[0m, \e[0;35mserver.cnf\033[0m
+
+ <------------------------------------------------------------------------------>\033[0m
+
+        \e[0;32mC(ontinued)-MaNGOS - Helper\033[0m:
+
+      * Install this on a Ubuntu system to make everything more easy.
+      * Connect to a MySQL server outside or localhost
+      * Download latest core/database updates
+      * Upgrade Database with latest fixes
+      * Compile CMaNGOS with latest fixes
+      * Download classic maps
+      * Profit
 
                              Please scroll up ^
 
