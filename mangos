@@ -1022,7 +1022,7 @@ printf "\e[0;32m.\033[0m"
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
 printf "\e[0;32m.\033[0m"
  sleep 1
-printf "[\e[0;32mok\033[0m] characters"
+printf "[\e[0;32mok\033[0m] "$db_characters"-"$NOW".sql"
  sleep 2
  echo
 # backup characters sql >
@@ -1032,7 +1032,7 @@ printf "\e[0;32m.\033[0m"
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
 printf "\e[0;32m.\033[0m"
  sleep 1
-printf "[\e[0;32mok\033[0m] realmd"
+printf "[\e[0;32mok\033[0m] "$db_realmd"-"$NOW".sql"
  sleep 1
 # well (: backup probably hours old by now done
 
@@ -1681,7 +1681,7 @@ printf "\e[0;32m.\033[0m"
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
 printf "\e[0;32m.\033[0m"
  sleep 1
-printf "[\e[0;32mok\033[0m] characters"
+printf "[\e[0;32mok\033[0m] "$db_characters"-"$NOW".sql"
  sleep 2
  echo
 # backup characters sql >
@@ -1691,7 +1691,7 @@ printf "\e[0;32m.\033[0m"
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
 printf "\e[0;32m.\033[0m"
  sleep 1
-printf "[\e[0;32mok\033[0m] realmd"
+printf "[\e[0;32mok\033[0m] "$db_realmd"-"$NOW".sql"
  sleep 1
 # well (: backup probably hours old by now done
  sleep 1
