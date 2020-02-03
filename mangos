@@ -13,7 +13,7 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20200302
+# V20200402
 # 2.6.4.6
 
 # codes >
@@ -1019,21 +1019,21 @@ read -r -p "Press Enter to continue" </dev/tty
 printf "Making fresh backup\e[0;32m.\033[0m"
  sleep 1
 printf "\e[0;32m.\033[0m"
-mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
-printf "\e[0;32m.\033[0m"
- sleep 1
-printf "[\e[0;32mok\033[0m] realmd"
- sleep 1
- echo
-# backup characters sql >
-printf "Making fresh backup\e[0;32m.\033[0m"
- sleep 1
-printf "\e[0;32m.\033[0m"
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
 printf "\e[0;32m.\033[0m"
  sleep 1
 printf "[\e[0;32mok\033[0m] characters"
  sleep 2
+ echo
+# backup characters sql >
+printf "Making fresh backup\e[0;32m.\033[0m"
+ sleep 1
+printf "\e[0;32m.\033[0m"
+mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
+printf "\e[0;32m.\033[0m"
+ sleep 1
+printf "[\e[0;32mok\033[0m] realmd"
+ sleep 1
 # well (: backup probably hours old by now done
 
  ;;
@@ -1678,24 +1678,24 @@ then
 printf "Making fresh backup\e[0;32m.\033[0m"
  sleep 1
 printf "\e[0;32m.\033[0m"
-mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
+mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
 printf "\e[0;32m.\033[0m"
  sleep 1
-printf "[\e[0;32mok\033[0m] realmd"
- sleep 1
+printf "[\e[0;32mok\033[0m] characters"
+ sleep 2
  echo
 # backup characters sql >
 printf "Making fresh backup\e[0;32m.\033[0m"
  sleep 1
 printf "\e[0;32m.\033[0m"
-mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
+mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
 printf "\e[0;32m.\033[0m"
  sleep 1
-printf "[\e[0;32mok\033[0m] characters"
+printf "[\e[0;32mok\033[0m] realmd"
  sleep 1
 # well (: backup probably hours old by now done
  sleep 1
-  echo
+ echo
 fi
 # InstallFullDB >
 sudo chown -R "$user":"$group" "$folder_wow"
