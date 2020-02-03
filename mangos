@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20200302
-# 2.6.4.4
+# 2.6.4.2
 
 # Menusystem >
 
@@ -516,7 +516,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.4.4 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.4.2 ]\033[0m
 
       $cm_uptime
 
@@ -1641,7 +1641,6 @@ cp "$folder_wow"/backup/*.sql "$folder_wow"/backup/old &> /dev/null
 cd "$folder_wow"/backup/old/ || exit ; zip "$server_name.zip" "$folder_wow"/backup/*.sql &> /dev/null
 find "$folder_wow"/backup/*.sql -type d -ctime +10 -exec rm -rf {} \; &> /dev/null
 find "$folder_wow"/backup/old/*.sql -type d -ctime +10 -exec rm -rf {} \; &> /dev/null
- echo -ne '(100%)\r'
  sleep 1
  echo
 
@@ -1753,7 +1752,6 @@ done
 sudo service realmd stop &> /dev/null
 sudo service mangosd stop &> /dev/null
 sudo chown -R "$user":"$group" "$folder_wow"
- echo -ne '(0%)\r'
  sleep 1
  echo
 FILE="$folder_wow/backup/$db_characters-$NOW.sql"
