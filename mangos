@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20200302
-# 2.6.4.2
+# 2.6.2.8
 
 # Menusystem >
 
@@ -516,7 +516,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.4.2 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.2.8 ]\033[0m
 
       $cm_uptime
 
@@ -1220,7 +1220,7 @@ fi
 
 "m")
 
-# Update CMaNGOS ? >
+# update CMaNGOS ? >
 
 # codes >
 which dialog 2>&1|tee 1> /dev/null
@@ -1239,7 +1239,7 @@ HEIGHT=15
 WIDTH=50
 CHOICE_HEIGHT=6
 BACKTITLE="update CMaNGOS"
-TITLE="Update classic-mangos [core]"
+TITLE="Update mangos-classic [core]"
 MENU="Choose one of the following options:"
 
 OPTIONS=(1 "Compile latest build"
@@ -1264,7 +1264,7 @@ case $CHOICE in
 
 "1")
 
- echo "Shutting down Services.."
+printf "\e[0;31mShutting down Services..\033[0m"
  echo
 sudo service realmd stop &> /dev/null
 sudo service mangosd stop &> /dev/null
@@ -1316,7 +1316,7 @@ esac
 
 "2")
 
- echo "Shutting down Services.."
+printf "\e[0;31mShutting down Services..\033[0m"
  echo
 sudo service realmd stop &> /dev/null
 sudo service mangosd stop &> /dev/null
@@ -1571,9 +1571,9 @@ for correct information, or just restart server."
 
 esac
 
-# Update CMaNGOS done
+# update CMaNGOS done
 
-# Update Database >
+# update Database >
 
  ;;
 
@@ -1581,7 +1581,7 @@ esac
 
 HEIGHT=15
 WIDTH=50
-CHOICE_HEIGHT=6
+CHOICE_HEIGHT=5
 BACKTITLE="update Database"
 TITLE="Update classic-db [database]"
 MENU="Choose one of the following options:"
@@ -1607,7 +1607,7 @@ case $CHOICE in
 
 "1")
 
- echo "Shutting down Services.."
+printf "\e[0;31mShutting down Services..\033[0m"
  echo
 sudo service realmd stop &> /dev/null
 sudo service mangosd stop &> /dev/null
@@ -1692,7 +1692,7 @@ cd "$folder_db" || exit
 
 "2")
 
- echo "Shutting down Services.."
+printf "\e[0;31mShutting down Services..\033[0m"
  echo
 sudo service realmd stop &> /dev/null
 sudo service mangosd stop &> /dev/null
@@ -1738,16 +1738,15 @@ done
 
  ;;
 
-
-"3")
-
 # Delete and start over >
 
 # Setting Up the Database
 
 # Backup <- characters.sql
 
- echo "Shutting down Services.."
+"3")
+
+printf "\e[0;31mShutting down Services..\033[0m"
  echo
 sudo service realmd stop &> /dev/null
 sudo service mangosd stop &> /dev/null
@@ -1897,7 +1896,7 @@ printf '%b' "[\e[0;32mok\033[0m]"
 
  ;;
 
-# Update Database done
+# update Database done
 
 # reset --hard origin/master >
 
@@ -1936,7 +1935,7 @@ printf '%b' "[\e[0;32mok\033[0m]"
 
 esac
 
-# Update Database done
+# update Database done
 
  ;;
 
@@ -2230,50 +2229,34 @@ fi
 
 "w")
 
-# Update Helper ? >
+# update Helper >
 
- echo
-printf "Update cmangos-script [\e[1;32mHelper\033[0m] ?"
- echo
- echo
- read -r -p "Are you sure? (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+HEIGHT=15
+WIDTH=50
+CHOICE_HEIGHT=3
+BACKTITLE="update Helper"
+TITLE="Update cmangos-script [Helper]"
+MENU="Choose one of the following options:"
 
-# reset --hard origin/master ? >
+OPTIONS=(1 "Update helper"
+         2 "Reset --hard origin/master"
+         3 "Fresh install (delete/git clone /scripts)")
 
- read -r -p "Reset --hard origin/master && git pull? (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-cd "$folder_helper" || exit
-git reset --hard origin/master
-git pull
-fi
+CHOICE=$(dialog --clear \
+                --backtitle "$BACKTITLE" \
+                --title "$TITLE" \
+                --menu "$MENU" \
+                $HEIGHT $WIDTH $CHOICE_HEIGHT \
+                "${OPTIONS[@]}" \
+                2>&1 >/dev/tty)
 
-# reset --hard origin/master done
+clear
+case $CHOICE in
 
- read -r -p "Fresh install? (delete/git clone /scripts/>) (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-sudo rm /usr/local/bin/mangos &> /dev/null
-printf "[\e[0;32mok\033[0m] -> installed mangos removed."
- echo
-sudo rm -r "$folder_helper"
-printf "[\e[0;32mok\033[0m] -> cmangos-script removed."
- echo
-sudo mkdir /scripts/ &> /dev/null
-printf "[\e[0;32mok\033[0m] -> /scripts/> git clone.."
- echo
-cd /scripts && git clone https://github.com/Daedalus-code/cmangos-script.git
-sudo cp /scripts/cmangos-scripts/mangos /usr/local/bin &> /dev/null
-printf "[\e[0;32mok\033[0m] -> Installing new release"
- echo
- sleep 1
-printf "[\e[0;32mok\033[0m] -> Installed."
-fi
+# update helper >
+
+"1")
+
  echo
  echo "Checking your current release"
  echo
@@ -2317,48 +2300,51 @@ printf "[\e[0;32mok\033[0m] -> Installed."
  echo
  echo "Will exit now."
  sleep 1 && exit
-else
-cd "$folder_helper" || exit
-printf "[\e[0;32mok\033[0m] Helper - latest release - "
-git rev-parse --short HEAD
- sleep 1
- echo
- read -r -p "Install regardless? (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
- echo
-printf "[\e[1;32mUpdating Helper\033[0m]"
- sleep 1
- echo
- echo
-printf "[\e[0;32mok\033[0m] -> /usr/local/bin/mangos.old"
- sleep 1
- echo
-# keep old mangos >
-sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old &> /dev/null
-# done
-printf "[\e[0;32mok\033[0m] -> Stripping executable on 'mangos.old'"
- sleep 1
- echo
-sudo chmod -x /usr/local/bin/mangos.old
-sudo chown -R "$user":"$group" "$folder_helper"
-cd "$folder_helper" || exit
-printf "[\e[0;32mok\033[0m] -> Installing latest release"
- sleep 1
- echo
-sudo cp mangos /usr/local/bin
-sudo chmod +x /usr/local/bin/mangos
-printf "[\e[0;32mok\033[0m] -> Installed."
- echo
- echo
- echo "Will exit now."
- sleep 1 && exit
-fi
-fi
 fi
 
-# Update Helper done
+ ;;
+
+# update helper done
+
+# reset --hard origin/master >
+
+"2")
+
+cd "$folder_helper" || exit
+git reset --hard origin/master
+
+ ;;
+
+# reset --hard origin/master done
+
+# fresh install (delete/git clone /scripts) >
+
+"3")
+
+sudo rm /usr/local/bin/mangos &> /dev/null
+printf "[\e[0;32mok\033[0m] -> installed mangos removed."
+ echo
+sudo rm -r "$folder_helper"
+printf "[\e[0;32mok\033[0m] -> cmangos-script removed."
+ echo
+sudo mkdir /scripts/ &> /dev/null
+printf "[\e[0;32mok\033[0m] -> /scripts/> git clone.."
+ echo
+cd /scripts && git clone https://github.com/Daedalus-code/cmangos-script.git
+sudo cp /scripts/cmangos-scripts/mangos /usr/local/bin &> /dev/null
+printf "[\e[0;32mok\033[0m] -> Installing new release"
+ echo
+ sleep 1
+printf "[\e[0;32mok\033[0m] -> Installed."
+ sleep 1
+
+;;
+
+# fresh install (delete/git clone /scripts) done
+
+esac
+
+# update Helper done
 
  ;;
 
