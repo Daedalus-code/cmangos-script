@@ -1668,8 +1668,8 @@ else
 printf "[\e[0;32mok\033[0m] 'Realmd' backup exist"
  echo
 fi
- read -r -p "New backup? (y/n) " -n 1 -r
  echo
+ read -r -p "New backup? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
