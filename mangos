@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20200302
-# 2.6.4.0
+# 2.6.4.6
 
 # codes >
 
@@ -524,7 +524,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.4.0 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.4.6 ]\033[0m
 
       $cm_uptime
 
@@ -1668,6 +1668,11 @@ else
 printf "[\e[0;32mok\033[0m] 'Realmd' backup exist"
  echo
 fi
+ read -r -p "New backup? (y/n) " -n 1 -r
+ echo
+ echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
 # well (: backup probably hours old by now >
  echo
 printf "Making fresh backup\e[0;32m.\033[0m"
@@ -1691,6 +1696,7 @@ printf "[\e[0;32mok\033[0m] characters"
 # well (: backup probably hours old by now done
  sleep 1
   echo
+fi
 # InstallFullDB >
 sudo chown -R "$user":"$group" "$folder_wow"
 cd "$folder_db" || exit
