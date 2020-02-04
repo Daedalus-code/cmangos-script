@@ -420,7 +420,7 @@ dot_field() {
 
 # todo: Change implementation when field can be 2 words with a space in between
 space_number() {
-   printf "%-7.7s" "$1" | colorstring "${green}"
+   printf "%-9.9s" "$1" | colorstring "${green}"
 }
 
 # todo: add logic when only 4 parameters are given
@@ -986,7 +986,7 @@ dive_log_zero=$(printf "0")
 # codes done
 
  echo
-printf "       Server.log      Server.old      Realmd.log"
+printf "       Server.log        Server.log.old    Realmd.log"
  echo
 printline "$dive_log_empty" "$dive_server_empty" "$dive_log_empty" "$dive_server_old_empty" "$dive_log_empty" "$dive_realmd_empty"
 printline "$dive_log_error" "$dive_server_error" "$dive_log_error" "$dive_server_old_error" "$dive_log_error" "$dive_realmd_error"
@@ -995,7 +995,7 @@ printline "$dive_log_serio" "$dive_server_serio" "$dive_log_serio" "$dive_server
 printf " \033[0m<------------------------------------------------------------------------------>\033[0m"
  echo
  echo
- printf "       DBErrors.log    Char.log        EventAIErrors.log"
+ printf "       DBErrors.log      Char.log          EventAIErrors.log"
  echo
 printline "$dive_log_corre" "$dive_DBError_corr" "$dive_log_creat" "$dive_char_created" "$dive_log_skipp" "$dive_EventAIError"
 printline "$dive_log_exist" "$dive_DBError_exis" "$dive_log_login" "$dive_char_login_c" "$dive_log_none" "$dive_log_zero"
