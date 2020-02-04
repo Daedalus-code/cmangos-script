@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20200402
-# 2.6.5.0
+# 2.6.4.9
 
 # codes >
 
@@ -524,7 +524,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.5.0 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.4.9 ]\033[0m
 
       $cm_uptime
 
@@ -1276,7 +1276,7 @@ zip
 zlibc
 )
 # codes done
-HEIGHT=15
+HEIGHT=13
 WIDTH=50
 CHOICE_HEIGHT=6
 BACKTITLE="update CMaNGOS"
@@ -1284,11 +1284,11 @@ TITLE="Update mangos-classic [core]"
 MENU="Choose one of the following options:"
 
 OPTIONS=(1 "Compile latest build"
-         2 "Reinstall (delete /build)"
+         2 "Edit config files (nano)"
          3 "Install required packagelist"
-         4 "Reset --hard origin/master"
-         5 "Edit config files (nano)"
-         6 "Install systemd unit files")
+         4 "Install systemd unit files"
+         5 "Reinstall (delete /build)"
+         6 "Reset --hard origin/master")
 
 CHOICE=$(dialog --clear \
                --backtitle "$BACKTITLE" \
@@ -1358,7 +1358,7 @@ esac
 
 # Build from scratch >
 
-"2")
+"5")
 
 if ! [ -x "$(command -v ${packagelist[@]})" ]; then
 sudo apt-get install "${packagelist[@]}" -y &> /dev/null
@@ -1435,7 +1435,7 @@ printf '%b' "[\e[0;32mok\033[0m] "
 
 # reset --hard origin/master ? >
 
-"4")
+"6")
 
 cd "$folder_core" || exit
 git reset --hard origin/master
@@ -1449,7 +1449,7 @@ printf '%b' "[\e[0;32mok\033[0m] "
 
 # Edit/Copy config files >
 
-"5")
+"2")
 
 title="       Save config without .dist
    ================================
@@ -1518,9 +1518,8 @@ done
 # install systemd Services >
 # Ubuntu 19.10
 
-"6")
+"4")
 
- echo "checking.."
 # /etc/systemd/system/realmd.service
  echo "[Unit]
 Description=WoW Vanilla realmd service
@@ -1591,7 +1590,7 @@ if ! [ -x "$(command -v dialog)" ]; then
 sudo apt-get install dialog -y
 fi
 # codes done
-HEIGHT=15
+HEIGHT=12
 WIDTH=50
 CHOICE_HEIGHT=5
 BACKTITLE="update Database"
@@ -1599,10 +1598,10 @@ TITLE="Update classic-db [database]"
 MENU="Choose one of the following options:"
 
 OPTIONS=(1 "Update classic-db"
-         2 "myisam -> innodb (MariaDB)"
-         3 "Drop/Import databases"
-         4 "Reset --hard origin/master"
-         5 "Reinstall classic-db folder")
+         2 "Drop/Import databases"
+         3 "myisam -> innodb (MariaDB)"
+         4 "Reinstall (delete /classic-db)"
+         5 "Reset --hard origin/master")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
@@ -1721,7 +1720,7 @@ printf '%b' "[\e[0;32mok\033[0m] "
 
 # convert_mysql_engine = myisam -> innodb >
 
-"2")
+"3")
 
 printf "\e[0;31mShutting down Services..\033[0m"
  echo
@@ -1770,7 +1769,7 @@ printf '%b' "[\e[0;32mok\033[0m] "
 
 # drop/import databases >
 
-"3")
+"2")
 
 printf "\e[0;31mShutting down Services..\033[0m"
  echo
@@ -1915,7 +1914,7 @@ printf '%b' "[\e[0;32mok\033[0m] "
 
 # reset --hard origin/master >
 
-"4")
+"5")
 
 cd "$folder_db" || exit
 git reset --hard origin/master
@@ -1927,9 +1926,9 @@ printf '%b' "[\e[0;32mok\033[0m] "
 
 # reset --hard origin/master done
 
-# reinstall classic-db folder >
+# reinstall (delete /classic-db) >
 
-"5")
+"4")
 
 sudo chown -R "$user":"$group" "$folder_wow"
 cp "$folder_db"/InstallFullDB.config "$folder_wow" &> /dev/null
@@ -1948,7 +1947,7 @@ esac
 
  ;;
 
-# reinstall classic-db folder done
+# reinstall (delete /classic-db) done
 
 # update database done
 
@@ -2249,7 +2248,7 @@ if ! [ -x "$(command -v dialog)" ]; then
 sudo apt-get install dialog -y
 fi
 # codes done
-HEIGHT=15
+HEIGHT=10
 WIDTH=50
 CHOICE_HEIGHT=3
 BACKTITLE="update Helper"
