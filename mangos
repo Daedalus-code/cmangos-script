@@ -841,7 +841,7 @@ VMAPS="$folder_core"/run/vmaps/Zulgurub_Ziggurat.wmo.vmo
 
 # codes done
 
-if [ -f "$MAPS" -a -f "$MMAPS" -a -f "$VMAPS" ];
+if [ -f "$MAPS" ] && [ -f "$MMAPS" ] && [ -f "$VMAPS" ];
 then
  echo
 printf '%b' "Maps already installed."
