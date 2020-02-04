@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20200402
-# 2.6.0.8
+# 2.6.2.3
 
 # codes >
 
@@ -540,7 +540,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.0.8 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.2.3 ]\033[0m
 
       $cm_uptime
 
@@ -961,32 +961,47 @@ dive_char_logouts=$(grep -c -E "Logout" "$folder_core"/run/logs/Char.log 2> /dev
 # EventAIErrors.log >
 dive_EventAIError=$(grep -c -E "skipping" "$folder_core"/run/logs/EventAIErrors.log 2> /dev/null)
 
+# log indication >
+
+dive_log_serio=$(printf "\033[1;31mSerious\033[0m")
+dive_log_error=$(printf "\033[0;31mError..\033[0m")
+dive_log_empty=$(printf "\e[0;33mEmpty....\033[0m")
+
+# DBErrors >
+dive_log_corre=$(printf "\033[0;31mNotCorresponding\033[0m")
+dive_log_exist=$(printf "\033[0;31mDoesn'tExist....\033[0m")
+dive_log_query=$(printf "\033[0;31mQueryERROR......\033[0m")
+dive_log_never=$(printf "\033[0;31mWillNeverBeUsed.\033[0m")
+dive_log_crash=$(printf "\033[1;31mCanCrashClient!.\033[0m")
+# AI
+dive_log_skipp=$(printf "\033[0;31mSkipping\033[0m")
+# Char.log
+dive_log_creat=$(printf "\e[0;33mCreated\033[0m")
+dive_log_login=$(printf "\e[0;33mLogin..\033[0m")
+dive_log_logou=$(printf "\e[0;33mLogout.\033[0m")
+
+dive_log_none=$(printf "\e[2mempty..\033[0m")
+dive_log_zero=$(printf "0")
+
 # codes done
 
  echo
-printf "       [\e[0;33mEmpty\033[0m]                [\033[0;31mError\033[0m]                [\033[1;31mSerious\033[0m]"
+printf "       Server.log      Server.old      Realmd.log"
  echo
-printline "Server.log.old" "$dive_server_old_empty" "Server.log.old" "$dive_server_old_error" "Server.log.old" "$dive_server_old_serio"
-printline "Server.log" "$dive_server_empty" "Server.log" "$dive_server_error" "Server.log" "$dive_server_serio"
-printline "Realmd.log" "$dive_realmd_empty" "Realmd.log" "$dive_realmd_error" "Realmd.log" "$dive_realmd_serio"
- echo
-printf " \033[0m<------------------------------------------------------------------------------>\033[0m"
- echo
- echo
-printf "       [\033[0;31mNotCorresponding\033[0m]     [\033[0;31mDoesn'tExist\033[0m]         [\033[0;31mQueryERROR\033[0m]"
- echo
-printline "DBErrors.log" "$dive_DBError_corr" "DBErrors.log" "$dive_DBError_exis" "DBErrors.log" "$dive_DBError_quer"
- echo
-printf "       [\033[0;31mWillNeverBeUsed\033[0m]      [\033[1;31mCanCrashClient!\033[0m]      [\033[0;31mskipping\033[0m]"
- echo
-printline "DBErrors.log" "$dive_DBError_used" "DBErrors.log" "$dive_DBError_cras" "E*AIErrors.log" "$dive_EventAIError"
+printline "$dive_log_empty" "$dive_server_empty" "$dive_log_empty" "$dive_server_old_empty" "$dive_log_empty" "$dive_realmd_empty"
+printline "$dive_log_error" "$dive_server_error" "$dive_log_error" "$dive_server_old_error" "$dive_log_error" "$dive_realmd_error"
+printline "$dive_log_serio" "$dive_server_serio" "$dive_log_serio" "$dive_server_old_serio" "$dive_log_serio" "$dive_realmd_serio"
  echo
 printf " \033[0m<------------------------------------------------------------------------------>\033[0m"
  echo
  echo
-printf "       [\e[0;33mCreated\033[0m]              [\e[0;33mLogin\033[0m]                [\e[0;33mLogout\033[0m]"
+ printf "       DBErrors.log    Char.log        EventAIErrors.log"
  echo
-printline "Char.log" "$dive_char_created" "Char.log" "$dive_char_login_c" "Char.log" "$dive_char_logouts"
+printline "$dive_log_corre" "$dive_DBError_corr" "$dive_log_creat" "$dive_char_created" "$dive_log_skipp" "$dive_EventAIError"
+printline "$dive_log_exist" "$dive_DBError_exis" "$dive_log_login" "$dive_char_login_c" "$dive_log_none" "$dive_log_zero"
+printline "$dive_log_query" "$dive_DBError_quer" "$dive_log_logou" "$dive_char_logouts" "$dive_log_none" "$dive_log_zero"
+printline "$dive_log_never" "$dive_DBError_used" "$dive_log_none" "$dive_log_zero" "$dive_log_none" "$dive_log_zero"
+printline "$dive_log_crash" "$dive_DBError_cras" "$dive_log_none" "$dive_log_zero" "$dive_log_none" "$dive_log_zero"
  echo
 printf " \033[0m<------------------------------------------------------------------------------>\033[0m"
  echo
