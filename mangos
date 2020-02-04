@@ -504,33 +504,33 @@ charac_backup="[\e[0;32mok\033[0m]"
 fi
 
 # world server latest build >
-if grep -q -o -a "\sBuilt\son\s*.*" "$folder_core"/run/logs/Server.log &> /dev/null; then
+if grep -q -o -a "\sBuilt\son\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null; then
 # if any, print "built date"
-latest_world_built=$(grep -o -a "\sBuilt\son\s*.*" "$folder_core"/run/logs/Server.log &> /dev/null)
+latest_world_built=$(grep -o -a "\sBuilt\son\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null)
 # if nothing, print "Restart server please.."
 else
 latest_world_built=" \e[0;35mBuilt date?\033[0m Restart server please"
 fi
 # built for >
-if grep -q -o -a "\sBuilt\sfor\s*.*" "$folder_core"/run/logs/Server.log &> /dev/null; then
+if grep -q -o -a "\sBuilt\sfor\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null; then
 # if any, print "built for"
-built_for=$(grep -o -a "\sBuilt\sfor\s*.*" "$folder_core"/run/logs/Server.log &> /dev/null)
+built_for=$(grep -o -a "\sBuilt\sfor\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null)
 # if nothing, print "Restart server please.."
 else
 built_for=" \e[0;35mBuilt for?\033[0m Restart server please"
 fi
 # EventAI >
-if grep -q -o -a "\sACID\s1.12.x\s*.*" "$folder_core"/run/logs/Server.log &> /dev/null; then
+if grep -q -o -a "\sACID\s1.12.x\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null; then
 # if any, print "EventAI"
-eventai=$(grep -o -a "\sACID\s1.12.x\s*.*" "$folder_core"/run/logs/Server.log &> /dev/null)
+eventai=$(grep -o -a "\sACID\s1.12.x\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null)
 # if nothing, print "Restart server please.."
 else
 eventai=" \e[0;35mEventAI?\033[0m Restart server please"
 fi
 # World DB >
-if grep -q -o -a "\s1.10.1\s*.*" "$folder_core"/run/logs/Server.log &> /dev/null; then
+if grep -q -o -a "\s1.10.1\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null; then
 # if any, print "World DB"
-world_db=$(grep -o -a "\s1.10.1\s*.*" "$folder_core"/run/logs/Server.log &> /dev/null)
+world_db=$(grep -o -a "\s1.10.1\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null)
 # if nothing, print "Restart server please.."
 else
 world_db=" \e[0;35mWorld DB?\033[0m Restart server please"
