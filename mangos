@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20200402
-# 2.6.4.9
+# 2.6.5.1
 
 # codes >
 
@@ -524,7 +524,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.4.9 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.5.1 ]\033[0m
 
       $cm_uptime
 
@@ -1356,97 +1356,6 @@ esac
 
 # compile latest build done
 
-# Build from scratch >
-
-"5")
-
-if ! [ -x "$(command -v ${packagelist[@]})" ]; then
-sudo apt-get install "${packagelist[@]}" -y &> /dev/null
-fi
-printf "\e[0;31mShutting down Services..\033[0m"
- echo
-sudo service realmd stop &> /dev/null
-sudo service mangosd stop &> /dev/null
-cd || exit
-sudo mkdir wow &> /dev/null
-sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
-sudo rm -r "$folder_core"/build/ &> /dev/null
-cd "$folder_wow" || exit
-git clone https://github.com/cmangos/mangos-classic.git 2> /dev/null
-sudo mkdir "$folder_core"/build &> /dev/null
-sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
-mkdir "$folder_core"/run/logs &> /dev/null
-mkdir "$folder_core"/run/logs/old &> /dev/null
-touch "$folder_core"/run/logs/Server.log &> /dev/null
-cp "$folder_core"/run/logs/*.log "$folder_core"/run/logs/old
-# ahbot.conf
-cp "$folder_core"/run/etc/ahbot.conf.dist "$folder_core"/run/etc/ahbot.conf.dist &> /dev/null
-# new compile, new system logs >
-rm -f "$folder_core"/run/logs/DBErrors.log "$folder_core"/run/logs/EventAIErrors.log &> /dev/null
-# done
-sudo chown -R "$user":"$group" "$folder_wow"
-cd "${folder_build:?}" || exit
-# double quotes ("") and single quotes ('') around > $cmake < will mess things up.
-# shellcheck disable=SC2086
-cmake .. ${cmake:?}
-cd "$folder_build" || exit
-make
- echo
-printf "Select install operation"
- echo
- echo " 1) make install"
- echo " 2) checkinstall with backup"
- echo
-read -r n
-case $n in
-1) echo "make install"
-cd "$folder_build" || exit
-sudo make install
-;;
-2) echo "checkinstall"
-cd "$folder_build" || exit
-sudo checkinstall
-;;
-*) echo "invalid option"
-;;
-esac
-printf '%b' "[\e[0;32mok\033[0m] "
- read -r -p "Press Enter to continue" </dev/tty
- echo
-
- ;;
-
-# Build from scratch done
-
-# install packagelist >
-
-"3")
-
-if ! [ -x "$(command -v ${packagelist[@]})" ]; then
-sudo apt-get install "${packagelist[@]}" -y &> /dev/null
-fi
-printf '%b' "[\e[0;32mok\033[0m] "
- read -r -p "Press Enter to continue" </dev/tty
- echo
-
- ;;
-
-# install packagelist done
-
-# reset --hard origin/master ? >
-
-"6")
-
-cd "$folder_core" || exit
-git reset --hard origin/master
-printf '%b' "[\e[0;32mok\033[0m] "
- read -r -p "Press Enter to continue" </dev/tty
- echo
-
- ;;
-
-# reset --hard origin/master done
-
 # Edit/Copy config files >
 
 "2")
@@ -1515,6 +1424,21 @@ done
 
 # Edit/Copy config files done
 
+# install packagelist >
+
+"3")
+
+if ! [ -x "$(command -v ${packagelist[@]})" ]; then
+sudo apt-get install "${packagelist[@]}" -y &> /dev/null
+fi
+printf '%b' "[\e[0;32mok\033[0m] "
+ read -r -p "Press Enter to continue" </dev/tty
+ echo
+
+ ;;
+
+# install packagelist done
+
 # install systemd Services >
 # Ubuntu 19.10
 
@@ -1573,9 +1497,85 @@ printf '%b' "[\e[0;32mok\033[0m] "
 
  ;;
 
+# install systemd Services done
+
+# Build from scratch >
+
+"5")
+
+if ! [ -x "$(command -v ${packagelist[@]})" ]; then
+sudo apt-get install "${packagelist[@]}" -y &> /dev/null
+fi
+printf "\e[0;31mShutting down Services..\033[0m"
+ echo
+sudo service realmd stop &> /dev/null
+sudo service mangosd stop &> /dev/null
+cd || exit
+sudo mkdir wow &> /dev/null
+sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
+sudo rm -r "$folder_core"/build/ &> /dev/null
+cd "$folder_wow" || exit
+git clone https://github.com/cmangos/mangos-classic.git 2> /dev/null
+sudo mkdir "$folder_core"/build &> /dev/null
+sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
+mkdir "$folder_core"/run/logs &> /dev/null
+mkdir "$folder_core"/run/logs/old &> /dev/null
+touch "$folder_core"/run/logs/Server.log &> /dev/null
+cp "$folder_core"/run/logs/*.log "$folder_core"/run/logs/old
+# ahbot.conf
+cp "$folder_core"/run/etc/ahbot.conf.dist "$folder_core"/run/etc/ahbot.conf.dist &> /dev/null
+# new compile, new system logs >
+rm -f "$folder_core"/run/logs/DBErrors.log "$folder_core"/run/logs/EventAIErrors.log &> /dev/null
+# done
+sudo chown -R "$user":"$group" "$folder_wow"
+cd "${folder_build:?}" || exit
+# double quotes ("") and single quotes ('') around > $cmake < will mess things up.
+# shellcheck disable=SC2086
+cmake .. ${cmake:?}
+cd "$folder_build" || exit
+make
+ echo
+printf "Select install operation"
+ echo
+ echo " 1) make install"
+ echo " 2) checkinstall with backup"
+ echo
+read -r n
+case $n in
+1) echo "make install"
+cd "$folder_build" || exit
+sudo make install
+;;
+2) echo "checkinstall"
+cd "$folder_build" || exit
+sudo checkinstall
+;;
+*) echo "invalid option"
+;;
+esac
+printf '%b' "[\e[0;32mok\033[0m] "
+ read -r -p "Press Enter to continue" </dev/tty
+ echo
+
+ ;;
+
+# Build from scratch done
+
+# reset --hard origin/master ? >
+
+"6")
+
+cd "$folder_core" || exit
+git reset --hard origin/master
+printf '%b' "[\e[0;32mok\033[0m] "
+ read -r -p "Press Enter to continue" </dev/tty
+ echo
+
+ ;;
+
 esac
 
-# install systemd Services done
+# reset --hard origin/master done
 
 # update CMaNGOS done
 
@@ -1718,55 +1718,6 @@ printf '%b' "[\e[0;32mok\033[0m] "
 
 # update classic-db done
 
-# convert_mysql_engine = myisam -> innodb >
-
-"3")
-
-printf "\e[0;31mShutting down Services..\033[0m"
- echo
-sudo service realmd stop &> /dev/null
-sudo service mangosd stop &> /dev/null
-sudo chown -R "$user":"$group" "$folder_wow"
- echo -ne '(0%)\r'
- sleep 1
- echo -ne '(10%)\r'
-TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D "$db_mangos" -e 'show tables')
-for T in $TABLES
-do
- echo -ne '(20%)\r'
-sudo mysql --defaults-extra-file="$sql_mycnf" -D "$db_mangos" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
- echo -ne '(30%)\r'
-done
- echo -ne '(40%)\r'
- sleep 1
- echo -ne '(50%)\r'
-TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D "$db_realmd" -e 'show tables')
-for T in $TABLES
-do
- echo -ne '(60%)\r'
-sudo mysql --defaults-extra-file="$sql_mycnf" -D "$db_realmd" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
-done
- echo -ne '(70%)\r'
- sleep 1
- echo -ne '(80%)\r'
-TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D "$db_characters" -e 'show tables')
-for T in $TABLES
-do
- echo -ne '(90%)\r'
-sudo mysql --defaults-extra-file="$sql_mycnf" -D "$db_characters" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
- echo -ne '(95%)\r'
-done
- echo -ne '100%)\r'
- sleep 1
- echo
-printf '%b' "[\e[0;32mok\033[0m] "
- read -r -p "Press Enter to continue" </dev/tty
- echo
-
- ;;
-
-# convert_mysql_engine = myisam -> innodb done
-
 # drop/import databases >
 
 "2")
@@ -1908,23 +1859,60 @@ printf '%b' "[\e[0;32mok\033[0m] "
 
  ;;
 
-# import backup done
+# drop/import databases done
 
 # update Database done
 
-# reset --hard origin/master >
+# import backup done
 
-"5")
+# convert_mysql_engine = myisam -> innodb >
 
-cd "$folder_db" || exit
-git reset --hard origin/master
+"3")
+
+printf "\e[0;31mShutting down Services..\033[0m"
+ echo
+sudo service realmd stop &> /dev/null
+sudo service mangosd stop &> /dev/null
+sudo chown -R "$user":"$group" "$folder_wow"
+ echo -ne '(0%)\r'
+ sleep 1
+ echo -ne '(10%)\r'
+TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D "$db_mangos" -e 'show tables')
+for T in $TABLES
+do
+ echo -ne '(20%)\r'
+sudo mysql --defaults-extra-file="$sql_mycnf" -D "$db_mangos" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
+ echo -ne '(30%)\r'
+done
+ echo -ne '(40%)\r'
+ sleep 1
+ echo -ne '(50%)\r'
+TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D "$db_realmd" -e 'show tables')
+for T in $TABLES
+do
+ echo -ne '(60%)\r'
+sudo mysql --defaults-extra-file="$sql_mycnf" -D "$db_realmd" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
+done
+ echo -ne '(70%)\r'
+ sleep 1
+ echo -ne '(80%)\r'
+TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D "$db_characters" -e 'show tables')
+for T in $TABLES
+do
+ echo -ne '(90%)\r'
+sudo mysql --defaults-extra-file="$sql_mycnf" -D "$db_characters" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
+ echo -ne '(95%)\r'
+done
+ echo -ne '100%)\r'
+ sleep 1
+ echo
 printf '%b' "[\e[0;32mok\033[0m] "
  read -r -p "Press Enter to continue" </dev/tty
  echo
 
  ;;
 
-# reset --hard origin/master done
+# convert_mysql_engine = myisam -> innodb done
 
 # reinstall (delete /classic-db) >
 
@@ -1943,11 +1931,25 @@ printf '%b' "[\e[0;32mok\033[0m] "
 
  ;;
 
+# reinstall (delete /classic-db) done
+
+# reset --hard origin/master >
+
+"5")
+
+cd "$folder_db" || exit
+git reset --hard origin/master
+printf '%b' "[\e[0;32mok\033[0m] "
+ read -r -p "Press Enter to continue" </dev/tty
+ echo
+
+ ;;
+
 esac
 
  ;;
 
-# reinstall (delete /classic-db) done
+# reset --hard origin/master done
 
 # update database done
 
