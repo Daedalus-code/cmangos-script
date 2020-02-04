@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20200402
-# 2.6.1.1
+# 2.6.1.4
 
 # codes >
 
@@ -540,7 +540,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.1.1 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.1.4 ]\033[0m
 
       $cm_uptime
 
@@ -2270,7 +2270,8 @@ sudo chmod +x /usr/local/bin/mangos
 printf "[\e[0;32mok\033[0m] -> Installed."
  echo
  echo
- sleep 2 && exit
+ sleep 2
+exit
 fi
 # install new upgrades >
 sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old &> /dev/null
@@ -2280,7 +2281,8 @@ sudo chmod +x /usr/local/bin/mangos
 printf "[\e[0;32mok\033[0m]"
  echo
  echo
- sleep 2 && exit
+ sleep 2
+exit
 
  ;;
 
@@ -2322,7 +2324,8 @@ sudo chmod +x /usr/local/bin/mangos
 printf "[\e[0;32mok\033[0m] -> Installed."
  echo
  echo
- sleep 1 && exit
+ sleep 2
+exit
 
  ;;
 
