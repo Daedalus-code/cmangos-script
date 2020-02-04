@@ -2270,7 +2270,7 @@ sudo chmod +x /usr/local/bin/mangos
 printf "[\e[0;32mok\033[0m] -> Installed."
  echo
  echo
- sleep 1 && return
+ sleep 1 && exit
 fi
 # install new upgrades >
 sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old &> /dev/null
@@ -2280,7 +2280,7 @@ sudo chmod +x /usr/local/bin/mangos
 printf "[\e[0;32mok\033[0m]"
  echo
  echo
- sleep 1 && return
+ sleep 1 && exit
 
  ;;
 
