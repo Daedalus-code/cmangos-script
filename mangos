@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20200402
-# 2.6.5.1
+# 2.6.5.3
 
 # codes >
 
@@ -524,7 +524,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.5.1 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.5.3 ]\033[0m
 
       $cm_uptime
 
@@ -694,74 +694,76 @@ sudo mkdir "/seedbox" &> /dev/null
 sudo chown -R debian-transmission:debian-transmission /seedbox/ &> /dev/null
 # setup transmission-daemon configuration file >
 # settings.json
-echo "{
-    "\"alt-speed-down"\": 50,
-    "\"alt-speed-enabled"\": false,
-    "\"alt-speed-time-begin"\": 540,
-    "\"alt-speed-time-day"\": 127,
-    "\"alt-speed-time-enabled"\": false,
-    "\"alt-speed-time-end"\": 1020,
-    "\"alt-speed-up"\": 50,
-    "\"bind-address-ipv4"\": "\"0.0.0.0"\",
-    "\"bind-address-ipv6"\": "\"::"\",
-    "\"blocklist-enabled"\": true,
-    "\"blocklist-url"\": "\"http://john.bitsurge.net/public/biglist.p2p.gz"\",
-    "\"cache-size-mb"\": 16,
-    "\"dht-enabled"\": true,
-    "\"download-dir"\": "\"/seedbox"\",
-    "\"download-queue-enabled"\": true,
-    "\"download-queue-size"\": 5,
-    "\"encryption"\": 1,
-    "\"idle-seeding-limit"\": 30,
-    "\"idle-seeding-limit-enabled"\": false,
-    "\"incomplete-dir"\": "\"/seedbox"\",
-    "\"incomplete-dir-enabled"\": false,
-    "\"lpd-enabled"\": true,
-    "\"message-level"\": 1,
-    "\"peer-congestion-algorithm"\": "\""\",
-    "\"peer-id-ttl-hours"\": 6,
-    "\"peer-limit-global"\": 100,
-    "\"peer-limit-per-torrent"\": 50,
-    "\"peer-port"\": 51413,
-    "\"peer-port-random-high"\": 65535,
-    "\"peer-port-random-low"\": 49152,
-    "\"peer-port-random-on-start"\": false,
-    "\"peer-socket-tos"\": "\"default"\",
-    "\"pex-enabled"\": true,
-    "\"port-forwarding-enabled"\": true,
-    "\"preallocation"\": 1,
-    "\"prefetch-enabled"\": true,
-    "\"queue-stalled-enabled"\": true,
-    "\"queue-stalled-minutes"\": 30,
-    "\"ratio-limit"\": 2,
-    "\"ratio-limit-enabled"\": false,
-    "\"rename-partial-files"\": true,
-    "\"rpc-authentication-required"\": false,
-    "\"rpc-bind-address"\": "\"0.0.0.0"\",
-    "\"rpc-enabled"\": true,
-    "\"rpc-host-whitelist"\": "\""\",
-    "\"rpc-host-whitelist-enabled"\": false,
-    "\"rpc-password"\": "\"CMaNGOS"\",
-    "\"rpc-port"\": 9091,
-    "\"rpc-url"\": "\"/transmission/"\",
-    "\"rpc-username"\": "\"mangos"\",
-    "\"rpc-whitelist"\": "\"*.*.*.*"\",
-    "\"rpc-whitelist-enabled"\": true,
-    "\"scrape-paused-torrents-enabled"\": true,
-    "\"script-torrent-done-enabled"\": false,
-    "\"script-torrent-done-filename"\": "\""\",
-    "\"seed-queue-enabled"\": false,
-    "\"seed-queue-size"\": 10,
-    "\"speed-limit-down"\": 100,
-    "\"speed-limit-down-enabled"\": false,
-    "\"speed-limit-up"\": 128,
-    "\"speed-limit-up-enabled"\": true,
-    "\"start-added-torrents"\": true,
-    "\"trash-original-torrent-files"\": false,
-    "\"umask"\": 2,
-    "\"upload-slots-per-torrent"\": 5,
-    "\"utp-enabled"\": true
-}" > "$folder_wow"/settings.json
+cat > "$folder_wow"/settings.json <<'EOF'
+{
+    "alt-speed-down": 50,
+    "alt-speed-enabled": false,
+    "alt-speed-time-begin": 540,
+    "alt-speed-time-day": 127,
+    "alt-speed-time-enabled": false,
+    "alt-speed-time-end": 1020,
+    "alt-speed-up": 50,
+    "bind-address-ipv4": "0.0.0.0",
+    "bind-address-ipv6": "::",
+    "blocklist-enabled": true,
+    "blocklist-url": "http://john.bitsurge.net/public/biglist.p2p.gz",
+    "cache-size-mb": 16,
+    "dht-enabled": true,
+    "download-dir": "/seedbox",
+    "download-queue-enabled": true,
+    "download-queue-size": 5,
+    "encryption": 1,
+    "idle-seeding-limit": 30,
+    "idle-seeding-limit-enabled": false,
+    "incomplete-dir": "/seedbox",
+    "incomplete-dir-enabled": false,
+    "lpd-enabled": true,
+    "message-level": 1,
+    "peer-congestion-algorithm": "",
+    "peer-id-ttl-hours": 6,
+    "peer-limit-global": 100,
+    "peer-limit-per-torrent": 50,
+    "peer-port": 51413,
+    "peer-port-random-high": 65535,
+    "peer-port-random-low": 49152,
+    "peer-port-random-on-start": false,
+    "peer-socket-tos": "default",
+    "pex-enabled": true,
+    "port-forwarding-enabled": true,
+    "preallocation": 1,
+    "prefetch-enabled": true,
+    "queue-stalled-enabled": true,
+    "queue-stalled-minutes": 30,
+    "ratio-limit": 2,
+    "ratio-limit-enabled": false,
+    "rename-partial-files": true,
+    "rpc-authentication-required": false,
+    "rpc-bind-address": "0.0.0.0",
+    "rpc-enabled": true,
+    "rpc-host-whitelist": "",
+    "rpc-host-whitelist-enabled": false,
+    "rpc-password": "{8cdc09d82992af11050cd6ca97c14f9117df07a1PiXvOluY",
+    "rpc-port": 9091,
+    "rpc-url": "/transmission/",
+    "rpc-username": "mangos",
+    "rpc-whitelist": "*.*.*.*",
+    "rpc-whitelist-enabled": true,
+    "scrape-paused-torrents-enabled": true,
+    "script-torrent-done-enabled": false,
+    "script-torrent-done-filename": "",
+    "seed-queue-enabled": false,
+    "seed-queue-size": 10,
+    "speed-limit-down": 100,
+    "speed-limit-down-enabled": false,
+    "speed-limit-up": 128,
+    "speed-limit-up-enabled": true,
+    "start-added-torrents": true,
+    "trash-original-torrent-files": false,
+    "umask": 2,
+    "upload-slots-per-torrent": 5,
+    "utp-enabled": true
+}
+EOF
 # install to correct folder >
 sudo mv "$folder_wow"/settings.json /var/lib/transmission-daemon/.config/transmission-daemon/settings.json &> /dev/null
  sleep 1
