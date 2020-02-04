@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20200402
-# 2.6.2.3
+# 2.6.0.1
 
 # codes >
 
@@ -540,7 +540,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.2.3 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.0.1 ]\033[0m
 
       $cm_uptime
 
@@ -1235,35 +1235,6 @@ latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%
 latest_head=$(git rev-parse --short HEAD)
 printf '%b' "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) Helper Not Updated - $latest_date"
  echo
-# upgrade mangos >
- echo
-printf "[\e[1;32mUpdating Helper\033[0m]"
- sleep 1
- echo
- echo
-printf "[\e[0;32mok\033[0m] -> /usr/local/bin/mangos.old"
- sleep 1
- echo
-# keep old mangos >
-sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old &> /dev/null
-printf "[\e[0;32mok\033[0m] -> Stripping executable on 'mangos.old'"
- sleep 1
- echo
-sudo chmod -x /usr/local/bin/mangos.old
-sudo chown -R "$user":"$group" "$folder_helper"
-cd "$folder_helper" || exit
-printf "[\e[0;32mok\033[0m] -> Installing latest release"
- sleep 1
- echo
-sudo cp mangos /usr/local/bin
-sudo chmod +x /usr/local/bin/mangos
-printf "[\e[0;32mok\033[0m] -> Installed."
- echo
- echo
- echo "Will exit now."
-# exit and restart >
- sleep 1 && exit
-# upgrade mangos done
 else
 latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
 latest_head=$(git rev-parse --short HEAD)
@@ -2289,9 +2260,17 @@ sudo chmod +x /usr/local/bin/mangos
 printf "[\e[0;32mok\033[0m] -> Installed."
  echo
  echo
- echo "Will exit now."
- sleep 1 && exit
+ sleep 1 && return
 fi
+# install new upgrades >
+sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old &> /dev/null
+sudo chmod -x /usr/local/bin/mangos.old
+sudo cp "$folder_helper"/mangos /usr/local/bin/mangos &> /dev/null
+sudo chmod +x /usr/local/bin/mangos
+printf "[\e[0;32mok\033[0m]"
+ echo
+ echo
+ sleep 1 && return
 
  ;;
 
@@ -2333,8 +2312,7 @@ sudo chmod +x /usr/local/bin/mangos
 printf "[\e[0;32mok\033[0m] -> Installed."
  echo
  echo
- echo "Will exit now."
- sleep 1 && exit
+ sleep 1 && return
 
  ;;
 
