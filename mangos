@@ -285,7 +285,7 @@ printf '%b' "\033[1;31m
  read -r -p " Show list" </dev/tty
  echo
 mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, last_ip, DATE_FORMAT(last_login, '%Y-%m-%d') last_login, id FROM $db_realmd.account;"
-printf '%b' " Delete directly from the '\e[0;35m$db_realmd.account\033[0m'"
+printf '%b' " Delete directly from '\e[0;35m$db_realmd.account\033[0m'"
  echo
 
 printf "
