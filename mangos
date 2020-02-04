@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20200402
-# 2.6.5.3
+# 2.6.0.2
 
 # codes >
 
@@ -443,7 +443,7 @@ cm_realm="\033[0mRealm \e[0;32m${server_name:?}\e[31m"
 # Realmd.log >
 
 # look for error
-if grep -E -q ".*ERROR*." "${folder_core:?}"/run/logs/Realmd.log; then
+if grep -E -q ".*ERROR*." "${folder_core:?}"/run/logs/Realmd.log &> /dev/null; then
 # if any, print "error"
 cm_realmd_log="[\033[0;31mError\033[0m]"
 else
@@ -451,7 +451,7 @@ else
 cm_realmd_log="[\e[0;32mok\033[0m]"
 fi
 # look for empty tables
-if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log; then
+if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log &> /dev/null; then
 # if any, print "empty"
 cm_realmd_log_empty="[\e[0;33mEmpty\033[0m]"
 fi
@@ -460,7 +460,7 @@ fi
 # Server.log >
 
 # look for error
-if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log; then
+if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log &> /dev/null; then
 # if any, print "error"
 cm_server_log="[\033[0;31mError\033[0m]"
 else
@@ -468,12 +468,12 @@ else
 cm_server_log="[\e[0;32mok\033[0m]"
 fi
 # look for empty tables
-if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log; then
+if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log &> /dev/null; then
 # if any, print "empty"
 cm_server_log_empty="[\e[0;33mEmpty\033[0m]"
 fi
 # look for serious error
-if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log; then
+if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log &> /dev/null; then
 # if any, print "serious"
 cm_server_log_serious="[\033[1;31mSerious\033[0m]"
 fi
@@ -504,27 +504,43 @@ charac_backup="[\e[0;32mok\033[0m]"
 fi
 
 # world server latest build >
-if grep -q -o -a "\sBuilt\son\s*.*" "$folder_core"/run/logs/Server.log; then
+if grep -q -o -a "\sBuilt\son\s*.*" "$folder_core"/run/logs/Server.log &> /dev/null; then
 # if any, print "built date"
-latest_world_built=$(grep -o -a "\sBuilt\son\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null)
+latest_world_built=$(grep -o -a "\sBuilt\son\s*.*" "$folder_core"/run/logs/Server.log &> /dev/null)
 # if nothing, print "Restart server please.."
 else
-latest_world_built=" \e[0;35mBuilt date not found\033[0m Restart server please.."
+latest_world_built=" \e[0;35mBuilt date?\033[0m Restart server please"
 fi
 # built for >
-if grep -q -o -a "\sBuilt\sfor\s*.*" "$folder_core"/run/logs/Server.log; then
+if grep -q -o -a "\sBuilt\sfor\s*.*" "$folder_core"/run/logs/Server.log &> /dev/null; then
 # if any, print "built for"
-built_for=$(grep -o -a "\sBuilt\sfor\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null)
+built_for=$(grep -o -a "\sBuilt\sfor\s*.*" "$folder_core"/run/logs/Server.log &> /dev/null)
 # if nothing, print "Restart server please.."
 else
-built_for=" \e[0;35mBuilt for?\033[0m Restart server please.."
+built_for=" \e[0;35mBuilt for?\033[0m Restart server please"
+fi
+# EventAI >
+if grep -q -o -a "\sACID\s1.12.x\s*.*" "$folder_core"/run/logs/Server.log &> /dev/null; then
+# if any, print "EventAI"
+eventai=$(grep -o -a "\sACID\s1.12.x\s*.*" "$folder_core"/run/logs/Server.log &> /dev/null)
+# if nothing, print "Restart server please.."
+else
+eventai=" \e[0;35mEventAI?\033[0m Restart server please"
+fi
+# World DB >
+if grep -q -o -a "\s1.10.1\s*.*" "$folder_core"/run/logs/Server.log &> /dev/null; then
+# if any, print "World DB"
+world_db=$(grep -o -a "\s1.10.1\s*.*" "$folder_core"/run/logs/Server.log &> /dev/null)
+# if nothing, print "Restart server please.."
+else
+world_db=" \e[0;35mWorld DB?\033[0m Restart server please"
 fi
 
 # codes done
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.5.3 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.0.2 ]\033[0m
 
       $cm_uptime
 
@@ -532,6 +548,8 @@ printf '%b' " <-----------------------------------------------------------------
 
       World\e[0;32m.......:\033[0m$latest_world_built
       System\e[0;32m......:\033[0m$built_for
+      EventAI\e[0;32m.....:\033[0m$eventai
+      World DB\e[0;32m....:\033[0m$world_db
 
       r : \e[0;35mlogin\033[0m   - remote access  service.mangosd\e[0;32m.:\033[0m $command_mangosd
       l : \e[0;35mlogs\033[0m    - analyze logs   service.realmd\e[0;32m..:\033[0m $command_realmd
@@ -1278,7 +1296,7 @@ zip
 zlibc
 )
 # codes done
-HEIGHT=13
+HEIGHT=12
 WIDTH=50
 CHOICE_HEIGHT=6
 BACKTITLE="update CMaNGOS"
@@ -1286,11 +1304,10 @@ TITLE="Update mangos-classic [core]"
 MENU="Choose one of the following options:"
 
 OPTIONS=(1 "Compile latest build"
-         2 "Edit config files (nano)"
-         3 "Install required packagelist"
-         4 "Install systemd unit files"
-         5 "Reinstall (delete /build)"
-         6 "Reset --hard origin/master")
+         2 "Install required packagelist"
+         3 "Install systemd unit files"
+         4 "Reinstall (delete /build)"
+         5 "Reset --hard origin/master")
 
 CHOICE=$(dialog --clear \
                --backtitle "$BACKTITLE" \
@@ -1358,77 +1375,9 @@ esac
 
 # compile latest build done
 
-# Edit/Copy config files >
-
-"2")
-
-title="       Save config without .dist
-   ================================
-         Server configuration
-"
- echo
-prompt="
-Choose number ->
->"
- echo
-options=(
-
-"mangos.conf.dist"
-
-"realmd.conf.dist"
-
-"playerbot.conf.dist"
-
-"ahbot.conf.dist"
-
-"mangos.conf"
-
-"realmd.conf"
-
-"playerbot.conf"
-
-"ahbot.conf"
-
-)
-
- echo "$title"
-PS3="$prompt "
-select opt in "${options[@]}" "Quit"; do
-
-case "$REPLY" in
-
- 1 ) echo "You picked $opt $REPLY"
-nano "$folder_core"/run/etc/mangosd.conf.dist;;
- 2 ) echo "You picked $opt $REPLY"
-nano "$folder_core"/run/etc/realmd.conf.dist;;
- 3 ) echo "You picked $opt $REPLY"
-nano "$folder_core"/run/etc/playerbot.conf.dist;;
- 4 ) echo "You picked $opt $REPLY"
-nano "$folder_core"/run/etc/ahbot.conf.dist;;
-
- 5 ) echo "You picked $opt $REPLY"
-nano "$folder_core"/run/etc/mangosd.conf;;
- 6 ) echo "You picked $opt $REPLY"
-nano "$folder_core"/run/etc/realmd.conf;;
- 7 ) echo "You picked $opt $REPLY"
-nano "$folder_core"/run/etc/playerbot.conf;;
- 8 ) echo "You picked $opt $REPLY"
-nano "$folder_core"/run/etc/ahbot.conf;;
-
-$(( ${#options[@]}+1 )) ) echo "
-See you next time!
- "; break;;
- *) echo "Invalid option. Try another one.";continue;;
-esac
-done
-
- ;;
-
-# Edit/Copy config files done
-
 # install packagelist >
 
-"3")
+"2")
 
 if ! [ -x "$(command -v "${packagelist[@]}")" ]; then
 sudo apt-get install "${packagelist[@]}" -y &> /dev/null
@@ -1444,7 +1393,7 @@ printf '%b' "[\e[0;32mok\033[0m] "
 # install systemd Services >
 # Ubuntu 19.10
 
-"4")
+"3")
 
 # /etc/systemd/system/realmd.service
  echo "[Unit]
@@ -1503,7 +1452,7 @@ printf '%b' "[\e[0;32mok\033[0m] "
 
 # Build from scratch >
 
-"5")
+"4")
 
 if ! [ -x "$(command -v "${packagelist[@]}")" ]; then
 sudo apt-get install "${packagelist[@]}" -y &> /dev/null
@@ -1565,7 +1514,7 @@ printf '%b' "[\e[0;32mok\033[0m] "
 
 # reset --hard origin/master ? >
 
-"6")
+"5")
 
 cd "$folder_core" || exit
 git reset --hard origin/master
