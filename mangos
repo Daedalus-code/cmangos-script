@@ -665,7 +665,7 @@ $transmission_list
  <------------------------------------------------------------------------------>\033[0m"
  echo
 printf '%b' ">"
-read n
+read -r n
 case $n in
 
 # setup seedbox (transmission) >
@@ -1022,7 +1022,7 @@ printf "\e[0;32m.\033[0m"
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
 printf "\e[0;32m.\033[0m"
  sleep 1
-printf "[\e[0;32mok\033[0m] "$db_characters"-"$NOW".sql"
+printf '%b' "[\e[0;32mok\033[0m] $db_characters-$NOW.sql"
  sleep 2
  echo
 # backup characters sql >
@@ -1032,7 +1032,7 @@ printf "\e[0;32m.\033[0m"
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
 printf "\e[0;32m.\033[0m"
  sleep 1
-printf "[\e[0;32mok\033[0m] "$db_realmd"-"$NOW".sql"
+printf '%b' "[\e[0;32mok\033[0m] $db_realmd-$NOW.sql"
  sleep 1
 # well (: backup probably hours old by now done
 
@@ -1307,7 +1307,7 @@ case $CHOICE in
 
 printf "\e[0;31mShutting down Services..\033[0m"
  echo
-if ! [ -x "$(command -v ${packagelist[@]})" ]; then
+if ! [ -x "$(command -v "${packagelist[@]}")" ]; then
 sudo apt-get install "${packagelist[@]}" -y &> /dev/null
 fi
 sudo service realmd stop &> /dev/null
@@ -1428,7 +1428,7 @@ done
 
 "3")
 
-if ! [ -x "$(command -v ${packagelist[@]})" ]; then
+if ! [ -x "$(command -v "${packagelist[@]}")" ]; then
 sudo apt-get install "${packagelist[@]}" -y &> /dev/null
 fi
 printf '%b' "[\e[0;32mok\033[0m] "
@@ -1503,7 +1503,7 @@ printf '%b' "[\e[0;32mok\033[0m] "
 
 "5")
 
-if ! [ -x "$(command -v ${packagelist[@]})" ]; then
+if ! [ -x "$(command -v "${packagelist[@]}")" ]; then
 sudo apt-get install "${packagelist[@]}" -y &> /dev/null
 fi
 printf "\e[0;31mShutting down Services..\033[0m"
@@ -1632,7 +1632,7 @@ mysql-server
 unzip
 zip
 )
-if ! [ -x "$(command -v ${packagelist[@]})" ]; then
+if ! [ -x "$(command -v "${packagelist[@]}")" ]; then
 sudo apt-get install "${packagelist[@]}" -y &> /dev/null
 fi
 # backup >
@@ -1652,7 +1652,7 @@ printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Characters' ! Creating backup
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
  echo
 else
-printf "[\e[0;32mok\033[0m] "$db_characters"-"$NOW".sql exist"
+printf '%b' "[\e[0;32mok\033[0m] $db_characters-$NOW.sql exist"
  echo
 fi
 # backup <- realmd.sql
@@ -1663,7 +1663,7 @@ printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Realmd' ! Creating backup.."
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
  echo
 else
-printf "[\e[0;32mok\033[0m] "$db_realmd"-"$NOW".sql exist"
+printf '%b' "[\e[0;32mok\033[0m] $db_realmd-$NOW.sql exist"
  echo
 fi
  echo
@@ -1679,7 +1679,7 @@ printf "\e[0;32m.\033[0m"
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
 printf "\e[0;32m.\033[0m"
  sleep 1
-printf "[\e[0;32mok\033[0m] "$db_characters"-"$NOW".sql"
+printf '%b' "[\e[0;32mok\033[0m] $db_characters-$NOW.sql"
  sleep 2
  echo
 # backup characters sql >
@@ -1689,7 +1689,7 @@ printf "\e[0;32m.\033[0m"
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
 printf "\e[0;32m.\033[0m"
  sleep 1
-printf "[\e[0;32mok\033[0m] "$db_realmd"-"$NOW".sql"
+printf '%b' "[\e[0;32mok\033[0m] $db_realmd-$NOW.sql"
  sleep 1
 # well (: backup probably hours old by now done
  sleep 1
@@ -1737,7 +1737,7 @@ printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Characters' ! Creating backup
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
  echo
 else
-printf "[\e[0;32mok\033[0m] "$db_characters"-"$NOW".sql exist"
+printf '%b' "[\e[0;32mok\033[0m] $db_characters-$NOW.sql exist"
  echo
 fi
 # backup <- realmd.sql
@@ -1748,7 +1748,7 @@ printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Realmd' ! Creating backup.."
 mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
  echo
 else
-printf "[\e[0;32mok\033[0m] "$db_realmd"-"$NOW".sql exist"
+printf '%b' "[\e[0;32mok\033[0m] $db_realmd-$NOW.sql exist"
  echo
 fi
 
