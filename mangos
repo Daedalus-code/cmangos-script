@@ -1800,14 +1800,14 @@ ls -lQS "$folder_wow"/backup
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+ sleep 1
  echo -ne '(0%)\r'
- sleep 1
 mysql --defaults-extra-file="$sql_mycnf" "$db_characters" < "$folder_wow"/backup/"$db_characters"-"$NOW".sql;
+ sleep 1
  echo -ne '(50%)\r'
- sleep 1
 mysql --defaults-extra-file="$sql_mycnf" "$db_realmd" < "$folder_wow"/backup/"$db_realmd"-"$NOW".sql;
- echo -ne '(100%)\r'
  sleep 1
+ echo -ne '(100%)\r'
 fi
  echo
 printf '%b' "[\e[0;32mok\033[0m] "
