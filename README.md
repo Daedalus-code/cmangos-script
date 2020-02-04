@@ -51,12 +51,7 @@ server.txt at line 41:
 ```folder_helper="/scripts/cmangos-script" # please edit if wrong.```  
 server.txt at line 52:  
 ```sql_mycnf="/scripts/server.cnf" # please edit if wrong.```  
-#### Updating/Upgrading Admin Helper  
-"update Helper" will "install" mangos into /usr/local/bin and chmod it.  
-There will be made a mangos.old version next to it. (non executable)  
-
-The updater will install automatically if any changes and then exit.  
-If there is no new changes you will be asked if you want to Install regardless.  
+  
 #### Planned Features  
 * Time will tell.  
 
