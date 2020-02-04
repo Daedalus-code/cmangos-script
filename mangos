@@ -1903,7 +1903,7 @@ do
 sudo mysql --defaults-extra-file="$sql_mycnf" -D "$db_characters" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
  echo -ne '(95%)\r'
 done
- echo -ne '100%)\r'
+ echo -ne '(100%)\r'
  sleep 1
  echo
 printf '%b' "[\e[0;32mok\033[0m] "
