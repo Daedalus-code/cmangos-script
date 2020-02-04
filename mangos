@@ -2264,7 +2264,7 @@ cd "$folder_helper" || exit
 printf "[\e[0;32mok\033[0m] -> Installing new release"
  sleep 1
  echo
-sudo cp mangos /usr/local/bin
+sudo cp "$folder_helper"/mangos /usr/local/bin &> /dev/null
 sudo chmod +x /usr/local/bin/mangos
  sleep 1
 printf "[\e[0;32mok\033[0m] -> Installed."
@@ -2304,7 +2304,7 @@ printf '%b' "[\e[0;32mok\033[0m] "
 
 "3")
 
-sudo rm /usr/local/bin/mangos &> /dev/null
+sudo mv /usr/local/bin/mangos /usr/local/bin/mangos.old &> /dev/null
 printf "[\e[0;32mok\033[0m] -> installed mangos removed."
  echo
 sudo rm -r "$folder_helper"
@@ -2314,7 +2314,7 @@ sudo mkdir /scripts/ &> /dev/null
 printf "[\e[0;32mok\033[0m] -> /scripts/> git clone.."
  echo
 cd /scripts && git clone https://github.com/Daedalus-code/cmangos-script.git
-sudo cp /scripts/cmangos-script/mangos /usr/local/bin &> /dev/null
+sudo cp "$folder_helper"/mangos /usr/local/bin &> /dev/null
 printf "[\e[0;32mok\033[0m] -> Installing new release"
 sudo chmod +x /usr/local/bin/mangos
  echo
@@ -2322,7 +2322,7 @@ sudo chmod +x /usr/local/bin/mangos
 printf "[\e[0;32mok\033[0m] -> Installed."
  echo
  echo
- sleep 1 && return
+ sleep 1 && exit
 
  ;;
 
