@@ -13,11 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20200502
-
-# version >
-
-V="2.6.2.0"
+# V20200602
+# 2.6.1.7
 
 # codes >
 
@@ -547,7 +544,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v$V ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.1.7 ]\033[0m
 
       $cm_uptime
 
