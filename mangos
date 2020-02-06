@@ -2143,10 +2143,10 @@ wordlist_mangosd=(".*STARTUP*.|.*TIME*.|.*corrupt*.|.*malformed*.|.*fail*.|.*fai
 # wait for realmd & mangosd to fill up logs >
 # Server.log >
 tail -f "$folder_core"/run/logs/Server.log |
-{ grep -E -m 1 "$wordlist_mangosd" && pkill -P $$ -x tail;}
+{ grep -E -m 1 "${wordlist_mangosd[@]}" && pkill -P $$ -x tail;}
 # Realmd.log >
 tail -f "$folder_core"/run/logs/Realmd.log |
-{ grep -E -q -m 1 "$wordlist_realmd" && pkill -P $$ -x tail;}
+{ grep -E -q -m 1 "${wordlist_realmd[@]}" && pkill -P $$ -x tail;}
 # wait for realmd & mangosd to fill up logs done
 # look for empty tables
 if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log; then
