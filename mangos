@@ -606,13 +606,13 @@ printf '%b' " <-----------------------------------------------------------------
 
  <------------------------------------------------------------------------------>\033[0m
 
-        Tip: Use both in \e[0;35mrealmlist.wtf\033[0m
+        Tip: Multiple Realms
 
-      * \e[0;35mInternet\033[0m: 'set realmlist \e[0;35m${internet:?}\033[0m'
-      * \e[0;35mLanparty\033[0m: 'set realmlist \e[0;35m${intranet:?}\033[0m' - When internet drop out.
+      * \e[0;35m${internet:?}\033[0m - Internet
+      * \e[0;35m${intranet:?}\033[0m - Home network
 
-        Create another \e[0;35m$db_realmd.realmlist\033[0m table row, or just copy.
-        Set new 'id', 'name(lan)' and '\e[0;35m${intranet:?}\033[0m' as address.
+        Create another '\e[0;35m$db_realmd.realmlist\033[0m'\e[0;35m table row\033[0m, or just copy.
+        Set new 'id', 'sameName (LAN)' and '\e[0;35m${intranet:?}\033[0m' as address.
         You can now choose 'Internet' or 'Lanparty' ingame from realm list.
 
  <------------------------------------------------------------------------------>\033[0m
