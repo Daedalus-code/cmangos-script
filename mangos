@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20200702
-# 2.7.3.1
+# 2.7.6.7
 
 # codes >
 
@@ -545,7 +545,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.7.3.1 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.7.6.7 ]\033[0m
 
       $cm_uptime
 
@@ -607,10 +607,9 @@ printf '%b' " <-----------------------------------------------------------------
 
  <------------------------------------------------------------------------------>\033[0m
 
-        Tip: Multiple Realms
-
-      * \e[0;35m${internet:?}\033[0m - Internet
-      * \e[0;35m${intranet:?}\033[0m - When internet drop out.
+        \e[0;33mTip\033[0m: Use both in \e[0;35mrealmlist.wtf\033[0m
+      * \e[0;35mInternet\033[0m: 'set realmlist \e[0;35m${internet:?}\033[0m'
+      * \e[0;35mLanparty\033[0m: 'set realmlist \e[0;35m${intranet:?}\033[0m' - When internet drop out.
 
         Create another '\e[0;35m$db_realmd.realmlist\033[0m'\e[0;35m table row\033[0m, or just copy.
         Set new 'id', 'sameName (LAN)' and '\e[0;35m${intranet:?}\033[0m' as address.
@@ -1302,7 +1301,7 @@ zip
 zlibc)
 # codes done
 HEIGHT=12
-WIDTH=50
+WIDTH=40
 CHOICE_HEIGHT=6
 BACKTITLE="update CMaNGOS"
 TITLE="Update mangos-classic [core]"
@@ -1547,7 +1546,7 @@ sudo apt-get install dialog -y
 fi
 # codes done
 HEIGHT=12
-WIDTH=50
+WIDTH=40
 CHOICE_HEIGHT=5
 BACKTITLE="update Database"
 TITLE="Update classic-db [database]"
@@ -2004,7 +2003,7 @@ realm_service=realmd
 # codes done
 
 HEIGHT=10
-WIDTH=50
+WIDTH=40
 CHOICE_HEIGHT=4
 BACKTITLE="restart server"
 TITLE="Service Control"
@@ -2297,7 +2296,7 @@ sudo apt-get install dialog -y
 fi
 # codes done
 HEIGHT=10
-WIDTH=50
+WIDTH=40
 CHOICE_HEIGHT=3
 BACKTITLE="update Helper"
 TITLE="Update cmangos-script [Helper]"
@@ -2582,34 +2581,71 @@ esac
 
 # check logs done
 
-# create/apply .patch file ? >
+# create/apply .patch file >
 
 "p")
 
-printf "\e[0;32mSelect patch operation\033[0m"
- echo
- echo
- echo " 1) Create patch"
- echo " 2) Apply patch"
- echo
- echo "Press Any Key To Exit"
- read -r n
-case $n in
- 1) echo "Create patch"
+HEIGHT=11
+WIDTH=40
+CHOICE_HEIGHT=3
+BACKTITLE="patch"
+TITLE="Patch operations"
+MENU="Choose one of the following options:"
+
+OPTIONS=(1 "Create new patch"
+         2 "Apply existing patch"
+         3 "Search for .patch files")
+
+CHOICE=$(dialog --clear \
+                --backtitle "$BACKTITLE" \
+                --title "$TITLE" \
+                --menu "$MENU" \
+                $HEIGHT $WIDTH $CHOICE_HEIGHT \
+                "${OPTIONS[@]}" \
+                2>&1 >/dev/tty)
+
+clear
+case $CHOICE in
+
+# create patch >
+
+"1")
+
 sudo chown -R "$user":"$group" "$folder_core"
 cd "$folder_core" || exit
 git checkout sql/create/db_create_mysql.sql 1> /dev/null
 git diff > "${patch:?}"
+
  ;;
- 2) echo "Apply patch"
+
+# create patch done
+
+# apply patch >
+
+"2")
+
 cd "$folder_core" || exit
 patch < "$patch" -p1
+
  ;;
- *) echo "exit"
- ;;
+
+# apply patch done
+
+# search for .patch files >
+
+"3")
+
+ echo "Searching for existing patches..($folder_wow)"
+ echo
+sudo find "$folder_wow" -name *.patch
+ echo
+ read -r -p "Press Enter to continue" </dev/tty
+ echo
 esac
 
  ;;
+
+# search for .patch files done
 
 # create/apply .patch file done
 
