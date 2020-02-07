@@ -1959,8 +1959,8 @@ mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, motd FROM $db_c
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-# keep old log >
-cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &> /dev/null
+# keep old logs >
+mv "$folder_core"/run/logs/*.log "$folder_core"/run/logs/old/ &> /dev/null
 # done
 printf "\033[1;31mShutting down server..\033[0m"
  echo
@@ -2029,8 +2029,8 @@ case $CHOICE in
 
 "1")
 
-# keep old log >
-cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &> /dev/null
+# keep old logs >
+mv "$folder_core"/run/logs/*.log "$folder_core"/run/logs/old/ &> /dev/null
 # done
 printf "\e[1;32mRestarting server..\033[0m"
  echo
@@ -2052,8 +2052,8 @@ sudo service mangosd restart &> /dev/null
 
 "2")
 
-# keep old log >
-cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &> /dev/null
+# keep old logs >
+mv "$folder_core"/run/logs/*.log "$folder_core"/run/logs/old/ &> /dev/null
 # done
 printf "\e[1;32mRestarting realmd..\033[0m"
  echo
@@ -2070,8 +2070,8 @@ sudo service realmd restart &> /dev/null
 
 "3")
 
-# keep old log >
-cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &> /dev/null
+# keep old logs >
+mv "$folder_core"/run/logs/*.log "$folder_core"/run/logs/old/ &> /dev/null
 # done
 printf "\e[1;32mRestarting mangosd..\033[0m"
  echo
