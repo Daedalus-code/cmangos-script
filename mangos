@@ -2234,7 +2234,7 @@ fi
 fi
 fi
  echo
-printf "\e[1;32m>\033[0m Any key to go back."
+printf "\e[1;32m>\033[0m hit Any key to go back."
  echo
  read -r -n 1 -p "Server.log (tail/follow/nano) / Realmd.log (Nano) / logs (lnav)" ans;
  echo
@@ -2529,7 +2529,7 @@ printf '%b' "$server_log_ok"
  echo
 fi
  echo
- printf "\e[1;32m>\033[0m Any key to go back."
+ printf "\e[1;32m>\033[0m hit Any key to go back."
  echo
  read -r -n 1 -p "Server.log (tail/follow/nano) / Realmd.log (Nano) / logs (lnav)" ans;
  echo
