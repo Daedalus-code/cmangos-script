@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20200702
-# 2.7.6.8
+# 2.7.8.9
 
 # codes >
 
@@ -545,7 +545,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.7.6.8 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.7.8.9 ]\033[0m
 
       $cm_uptime
 
@@ -1032,20 +1032,20 @@ printf " \033[0m<---------------------------------------------------------------
 
 "w")
 
-ac_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account;") &> /dev/null;
-bn_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account_banned;") &> /dev/null;
+ac_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account;" 2> /dev/null);
+bn_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account_banned;" 2> /dev/null);
 # on_count at TOP ^
-ch_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.characters;") &> /dev/null;
+ch_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.characters;" 2> /dev/null);
 
 # gu_count at TOP ^
-me_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.guild_member;") &> /dev/null;
-ma_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.mail;") &> /dev/null;
-pe_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_pet;") &> /dev/null;
+me_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.guild_member;" 2> /dev/null);
+ma_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.mail;" 2> /dev/null);
+pe_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_pet;" 2> /dev/null);
 
-ti_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_ticket;") &> /dev/null;
-co_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.corpse;") &> /dev/null;
-pv_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.pvpstats_players;") &> /dev/null;
-gi_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_gifts;") &> /dev/null;
+ti_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_ticket;" 2> /dev/null);
+co_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.corpse;" 2> /dev/null);
+pv_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.pvpstats_players;" 2> /dev/null);
+gi_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_gifts;" 2> /dev/null);
 
 # Walter A code >
  echo
@@ -1455,7 +1455,7 @@ printf '%b' "[\e[0;32mok\033[0m] "
 
 # install systemd Services done
 
-# Build from scratch >
+# build from scratch >
 
 "4")
 
@@ -1515,7 +1515,7 @@ printf '%b' "[\e[0;32mok\033[0m] "
 
  ;;
 
-# Build from scratch done
+# build from scratch done
 
 # reset --hard origin/master ? >
 
@@ -2133,19 +2133,44 @@ tail "$folder_core"/run/logs/Realmd.log
 # server.log
 printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
-# wordlist >
+
+# wait wordlist >
+
 # realmd >
-wordlist_realmd=(".*Added\srealm\sid*.|.*database\sis\smissing\sor\scorrupt.*.|.*You\shave:\s-->*.|.*reinstall\syour*.|.*cannot\sfind\sthe\sversion\sinfo*.")
+wordlist_realmd=(".*Added\srealm\sid*.
+.*database\sis\smissing\sor\scorrupt.*.
+.*You\shave:\s-->*.
+.*reinstall\syour*.
+.*cannot\sfind\sthe\sversion\sinfo*.")
 # mangosd >
-wordlist_mangosd=(".*STARTUP*.|.*TIME*.|.*corrupt*.|.*malformed*.|.*fail*.|.*failed*.|.*fatal*.|.*critical*.|.*Segmentation\sfault*.|.*core\sdumped*.|.*segfault*.|.*file\struncated*.|.*Halting\sprocess*.|.*You\shave:\s-->*.|.*reinstall\syour*.")
-# wordlist done
+wordlist_mangosd=(".*STARTUP*.
+.*TIME*.
+.*corrupt*.
+.*malformed*.
+.*fail*.
+.*failed*.
+.*fatal*.
+.*critical*.
+.*Segmentation\sfault*.
+.*core\sdumped*.
+.*segfault*.
+.*file\struncated*.
+.*Halting\sprocess*.
+.*You\shave:\s-->*.
+.*reinstall\syour*.")
+
+# wait wordlist done
+
 # wait for realmd & mangosd to fill up logs >
-# Server.log >
-tail -f "$folder_core"/run/logs/Server.log |
-{ grep -E -m 1 "${wordlist_mangosd[@]}" && pkill -P $$ -x tail;}
+
+# not sure why it hangs on <Cancel> ..waiting on Server.log.. on a Pi but not on a 64bit System.
+
 # Realmd.log >
 tail -f "$folder_core"/run/logs/Realmd.log |
 { grep -E -q -m 1 "${wordlist_realmd[@]}" && pkill -P $$ -x tail;}
+# Server.log >
+tail -f "$folder_core"/run/logs/Server.log |
+{ grep -E -m 1 "${wordlist_mangosd[@]}" && pkill -P $$ -x tail;}
 # wait for realmd & mangosd to fill up logs done
 # look for empty tables
 if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log; then
@@ -2275,15 +2300,11 @@ sudo apt install lnav -y &> /dev/null
 fi
 lnav "${logs[@]}"
 
- ;;
-
-# lnav - done
-
- *)
- ;;
 esac
 
  ;;
+
+# lnav - done
 
 # restart server done
 
