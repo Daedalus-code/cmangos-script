@@ -2305,7 +2305,7 @@ MENU="Choose one of the following options:"
 
 OPTIONS=(1 "Update helper"
          2 "Reset --hard origin/master"
-         3 "Fresh install (clone /scripts)")
+         3 "Reinstall (delete /scripts)")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
