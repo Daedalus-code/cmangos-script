@@ -2290,10 +2290,10 @@ nano "$folder_core"/run/logs/Realmd.log
 "l")
  echo
 # codes >
-logs=("$folder_core"/run/logs/Server.log
+logs=("$folder_core"/run/logs/EventAIErrors.log
+"$folder_core"/run/logs/DBErrors.log
 "$folder_core"/run/logs/Realmd.log
-"$folder_core"/run/logs/EventAIErrors.log
-"$folder_core"/run/logs/DBErrors.log)
+"$folder_core"/run/logs/Server.log)
 # codes done
 if ! [ -x "$(command -v lnav)" ]; then
 sudo apt install lnav -y &> /dev/null
