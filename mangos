@@ -2671,7 +2671,7 @@ patch < "$patch" -p1
 
  echo "Searching for existing patches..($folder_wow)"
  echo
-sudo find "$folder_wow" -name *.patch
+sudo find "$folder_wow" -name "*.patch"
  echo
  read -r -p "Press Enter to continue" </dev/tty
  echo
