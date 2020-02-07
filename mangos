@@ -2304,8 +2304,8 @@ TITLE="Update cmangos-script [Helper]"
 MENU="Choose one of the following options:"
 
 OPTIONS=(1 "Update helper"
-         2 "Reset --hard origin/master"
-         3 "Reinstall (delete /scripts)")
+         2 "Reinstall (delete /scripts)"
+         3 "Reset --hard origin/master")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
@@ -2380,23 +2380,9 @@ fi
 
 # update helper done
 
-# reset --hard origin/master >
-
-"2")
-
-cd "$folder_helper" || exit
-git reset --hard origin/master
-printf '%b' "[\e[0;32mok\033[0m] "
- read -r -p "Press Enter to continue" </dev/tty
- echo
-
- ;;
-
-# reset --hard origin/master done
-
 # fresh install (delete/git clone /scripts) >
 
-"3")
+"2")
 
 sudo mv /usr/local/bin/mangos /usr/local/bin/mangos.old &> /dev/null
 printf "[\e[0;32mok\033[0m] -> installed mangos removed."
@@ -2426,6 +2412,20 @@ esac
  ;;
 
 # fresh install (delete/git clone /scripts) done
+
+# reset --hard origin/master >
+
+"3")
+
+cd "$folder_helper" || exit
+git reset --hard origin/master
+printf '%b' "[\e[0;32mok\033[0m] "
+ read -r -p "Press Enter to continue" </dev/tty
+ echo
+
+ ;;
+
+# reset --hard origin/master done
 
 # update cmangos-script done
 
