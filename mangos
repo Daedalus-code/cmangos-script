@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20200702
-# 2.6.9.8
+# 2.7.3.1
 
 # codes >
 
@@ -545,7 +545,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.6.9.8 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.7.3.1 ]\033[0m
 
       $cm_uptime
 
@@ -1276,8 +1276,7 @@ sudo apt-get install dialog -y
 fi
 # required 'packagelist' to build CMaNGOS >
 # Ubuntu Server 19.10
-packagelist=(
-autoconf
+packagelist=(autoconf
 automake
 binutils
 build-essential
@@ -1300,8 +1299,7 @@ patch
 subversion
 unzip
 zip
-zlibc
-)
+zlibc)
 # codes done
 HEIGHT=12
 WIDTH=50
@@ -2236,24 +2234,51 @@ fi
 fi
 fi
  echo
- read -r -n 1 -p "Check server log? (world) (tail/follow/nano/exit) " ans;
+printf "\e[1;32m>\033[0m Any key to go back."
+ echo
+ read -r -n 1 -p "Server.log (tail/follow/nano) / Realmd.log (Nano) / logs (lnav)" ans;
  echo
  echo
 case $ans in
- t|T)
+"t")
 tail "$folder_core"/run/logs/Server.log
  echo
 printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
  read -r -p "Press Enter to continue" </dev/tty
  ;;
- f|F)
+"f")
+ echo
 tail -f "$folder_core"/run/logs/Server.log
  ;;
- n|N)
+"n")
  echo
 nano "$folder_core"/run/logs/Server.log
  ;;
+"N")
+ echo
+nano "$folder_core"/run/logs/Realmd.log
+ ;;
+
+# lnav >
+
+"l")
+ echo
+# codes >
+logs=("$folder_core"/run/logs/Server.log
+"$folder_core"/run/logs/Realmd.log
+"$folder_core"/run/logs/EventAIErrors.log
+"$folder_core"/run/logs/DBErrors.log)
+# codes done
+if ! [ -x "$(command -v lnav)" ]; then
+sudo apt install lnav -y &> /dev/null
+fi
+lnav "${logs[@]}"
+
+ ;;
+
+# lnav - done
+
  *)
  ;;
 esac
@@ -2504,7 +2529,9 @@ printf '%b' "$server_log_ok"
  echo
 fi
  echo
- read -r -n 1 -p "Check Server.log? (lnav/tail/follow/nano/exit) " ans;
+ printf "\e[1;32m>\033[0m Any key to go back."
+ echo
+ read -r -n 1 -p "Server.log (tail/follow/nano) / Realmd.log (Nano) / logs (lnav)" ans;
  echo
  echo
 case $ans in
@@ -2515,7 +2542,7 @@ printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
  read -r -p "Press Enter to continue" </dev/tty
  ;;
- "f"|"F")
+"f")
  echo
 tail -f "$folder_core"/run/logs/Server.log
  ;;
@@ -2530,12 +2557,18 @@ nano "$folder_core"/run/logs/Realmd.log
 
 # lnav >
 
-"l"|"L")
+"l")
  echo
+# codes >
+logs=("$folder_core"/run/logs/Server.log
+"$folder_core"/run/logs/Realmd.log
+"$folder_core"/run/logs/EventAIErrors.log
+"$folder_core"/run/logs/DBErrors.log)
+# codes done
 if ! [ -x "$(command -v lnav)" ]; then
 sudo apt install lnav -y &> /dev/null
 fi
-lnav "$folder_core"/run/logs/*.log
+lnav "${logs[@]}"
 
  ;;
 
