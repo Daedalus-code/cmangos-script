@@ -2010,7 +2010,7 @@ BACKTITLE="restart server"
 TITLE="Service Control"
 MENU="Choose one of the following options:"
 
-OPTIONS=(1 "Restart realmd, mangosd services"
+OPTIONS=(1 "Restart realmd, mangosd"
          2 "Restart realmd service"
          3 "Restart mangosd service")
 
