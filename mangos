@@ -1918,12 +1918,12 @@ esac
  echo "User Accounts"
  echo
 mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, last_ip, DATE_FORMAT(last_login, '%Y-%m-%d') last_login, id FROM $db_realmd.account;" 2> /dev/null
-read -r -p "Check database size? (y/n) " -n 1 -r
+ read -r -p "Check database size? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 mysql --defaults-extra-file="$sql_mycnf" <<<"SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in MB' FROM information_schema.TABLES WHERE table_schema = \"$db_realmd\" ORDER BY (data_length + index_length) DESC;" | head
-read -r -p "Press Enter to continue" </dev/tty
+ read -r -p "Press Enter to continue" </dev/tty
 fi
 
  ;;
@@ -1937,12 +1937,12 @@ fi
  echo "Characters"
  echo
 mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, level, online, account FROM $db_characters.characters;" 2> /dev/null
-read -r -p "Check database size? (y/n) " -n 1 -r
+ read -r -p "Check database size? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 mysql --defaults-extra-file="$sql_mycnf" <<<"SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in MB' FROM information_schema.TABLES WHERE table_schema = \"$db_characters\" ORDER BY (data_length + index_length) DESC;" | head
-read -r -p "Press Enter to continue" </dev/tty
+ read -r -p "Press Enter to continue" </dev/tty
 fi
 
   ;;
@@ -1956,7 +1956,7 @@ fi
  echo "Guilds"
  echo
 mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, motd FROM $db_characters.guild;" 2> /dev/null
-read -r -p "Press Enter to continue" </dev/tty
+ read -r -p "Press Enter to continue" </dev/tty
 
    ;;
 
@@ -2593,10 +2593,10 @@ nano "$folder_core"/run/logs/Realmd.log
 "l")
  echo
 # codes >
-logs=("$folder_core"/run/logs/Server.log
+logs=("$folder_core"/run/logs/EventAIErrors.log
+"$folder_core"/run/logs/DBErrors.log
 "$folder_core"/run/logs/Realmd.log
-"$folder_core"/run/logs/EventAIErrors.log
-"$folder_core"/run/logs/DBErrors.log)
+"$folder_core"/run/logs/Server.log)
 # codes done
 if ! [ -x "$(command -v lnav)" ]; then
 sudo apt install lnav -y &> /dev/null
