@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20200802
-# 2.8.0.1
+# 2.8.0.0
 
 # codes >
 
@@ -545,7 +545,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.8.0.1 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.8.0.0 ]\033[0m
 
       $cm_uptime
 
@@ -578,32 +578,21 @@ case "$REPLY" in
  echo
 printf '%b' " <------------------------------------------------------------------------------>\033[0m
 
-        EventAI\e[0;32m..:\033[0m$eventai
-        World DB\e[0;32m.:\033[0m$world_db
-
- <------------------------------------------------------------------------------>\033[0m
-
-        \e[0;32mC(ontinued)-MaNGOS - Helper\033[0m
-
-        Information\033[0m
-
-        \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
-
-        This script was built on a Ubuntu 19.10 - (Raspberry Pi2/4)
-        https://ubuntu.com/download/raspberry-pi
-
-        Functions and features for admins running a WoW Vanilla server.
-
-        Planned Features: Time will tell.
+         _____     __  __       _   _  _____  ____   _____
+        / ____|   |  \/  |     | \ | |/ ____|/ __ \ / ____|
+       | |        | \  / |     |  \| | |  __  |  | | (___
+       | |ontinued| |\/| | __ _| .   | | |_ | |  | |\___ \\
+       | |____    | |  | |/ _  | |\  | |__| | |__| |____) |
+        \_____|   |_|  |_| (_| |_| \_|\_____|\____/ \____/
+        http://cmangos.net\__,_|     Doing things right!
 
         \e[0;32mC(ontinued)-MaNGOS (Classic fork)\033[0m
 
-        https://github.com/cmangos/mangos-classic
-        https://github.com/cmangos/classic-db
-        https://github.com/cmangos
-        https://cmangos.net
+        EventAI\e[0;32m..:\033[0m$eventai
+        World DB\e[0;32m.:\033[0m$world_db
 
-        ---What
+        \e[0;35mhttps://github.com/cmangos/mangos-classic\033[0m
+        \e[0;35mhttps://github.com/cmangos/classic-db\033[0m
 
  <------------------------------------------------------------------------------>\033[0m
 
@@ -625,17 +614,27 @@ printf '%b' " <-----------------------------------------------------------------
 
  <------------------------------------------------------------------------------>\033[0m
 
-        \e[0;32mC(ontinued)-MaNGOS - Helper\033[0m:
+        \e[0;32mC(ontinued)-MaNGOS - Helper\033[0m
 
-      * Install this on a Ubuntu system to make everything more easy.
-      * Connect to a MySQL server outside or localhost
-      * Download latest core/database updates
-      * Upgrade Database with latest fixes
-      * Compile CMaNGOS with latest fixes
-      * Download classic maps
-      * Profit
+        \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
 
-                             Please scroll up ^
+        This script was built on a Ubuntu 19.10 - (Raspberry Pi2/4)
+        https://ubuntu.com/download/raspberry-pi
+
+        Functions and features for admins running a WoW Vanilla server.
+
+        Planned Features: Time will tell.
+
+        ---What
+
+        * Install this script on a Ubuntu system, make everything more easy.
+        * Connect to a MySQL server outside or localhost
+        * Download latest core/database updates
+        * Upgrade Database with latest fixes
+        * Compile CMaNGOS with latest fixes
+        * Download/Install classic maps
+        * Profit
+
 
 \e[1;32m>\033[0m hit Enter to go back.
  <------------------------------------------------------------------------------>\033[0m"
