@@ -514,7 +514,7 @@ if grep -q -o -a "\sBuilt\son\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/n
 latest_world_built=$(grep -o -a "\sBuilt\son\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null)
 # if nothing, print "Restart server please.."
 else
-latest_world_built=" \e[0;35mBuilt date?\033[0m Restart server please"
+latest_world_built=" \e[0;35mBuilt date?\033[0m - Restart server please"
 fi
 # built for >
 if grep -q -o -a "\sBuilt\sfor\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null; then
@@ -522,7 +522,7 @@ if grep -q -o -a "\sBuilt\sfor\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/
 built_for=$(grep -o -a "\sBuilt\sfor\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null)
 # if nothing, print "Restart server please.."
 else
-built_for=" \e[0;35mBuilt for?\033[0m Restart server please"
+built_for=" \e[0;35mBuilt for?\033[0m  - Restart server please"
 fi
 # EventAI >
 if grep -q -o -a "\sACID\s1.12.x\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null; then
@@ -530,7 +530,7 @@ if grep -q -o -a "\sACID\s1.12.x\s*.*" "$folder_core"/run/logs/Server.log 2> /de
 eventai=$(grep -o -a "\sACID\s1.12.x\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null)
 # if nothing, print "Restart server please.."
 else
-eventai=" \e[0;35mEventAI?\033[0m Restart server please"
+eventai=" \e[0;35mEventAI?\033[0m  - Restart server please"
 fi
 # World DB >
 if grep -q -o -a "\s1.10.1\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null; then
@@ -538,7 +538,7 @@ if grep -q -o -a "\s1.10.1\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null
 world_db=$(grep -o -a "\s1.10.1\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null)
 # if nothing, print "Restart server please.."
 else
-world_db=" \e[0;35mWorld DB?\033[0m Restart server please"
+world_db=" \e[0;35mWorld DB?\033[0m - Restart server please"
 fi
 
 # codes done
