@@ -945,7 +945,7 @@ fi
 dive_server_old_empty=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty.|.*empty*." "$folder_core"/run/logs/Server.log.old 2> /dev/null)
 dive_server_old_error=$(grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log.old 2> /dev/null)
 dive_server_old_serio=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log.old 2> /dev/null)
-dive_server_old_ignor=$(grep -c -E ".*ignoring*.|.*ignore*.|.*ignored*." "$folder_core"/run/logs/Server.log 2> /dev/null)
+dive_server_old_ignor=$(grep -c -E ".*ignoring*.|.*ignore*.|.*ignored*." "$folder_core"/run/logs/Server.log.old 2> /dev/null)
 # server.log >
 dive_server_empty=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty.|.*empty*." "$folder_core"/run/logs/Server.log 2> /dev/null)
 dive_server_error=$(grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log 2> /dev/null)
