@@ -2506,7 +2506,7 @@ esac
 printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
 # look for empty tables
-if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log; then
+if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2> /dev/null; then
 # if any, print "empty"
 printf "Server.log "
 printf '%b' "$realmd_log_empty"
@@ -2514,12 +2514,12 @@ printf '%b' "$realmd_log_empty"
 grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2> /dev/null
 fi
 # look for error
-if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Realmd.log; then
+if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2> /dev/null; then
 # if any, print "error"
 printf "Realmd.log "
 printf '%b' "$realmd_log_error"
 # count errors inside log
-grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log
+grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2> /dev/null
 # if nothing, print "ok"
 else
 printf "Realmd.log "
@@ -2527,12 +2527,12 @@ printf '%b' "$realmd_log_ok"
  echo
 fi
  echo
-tail "$folder_core"/run/logs/Realmd.log
+tail "$folder_core"/run/logs/Realmd.log 2> /dev/null
 # server.log
 printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
 # look for empty tables
-if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log; then
+if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2> /dev/null; then
 # if any, print "empty"
 printf "Server.log "
 printf '%b' "$server_log_empty"
@@ -2540,14 +2540,14 @@ printf '%b' "$server_log_empty"
 grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2> /dev/null
 fi
 # look for error
-if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log; then
+if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log 2> /dev/null; then
 # if any, print "error"
 printf "Server.log "
 printf '%b' "$server_log_error"
 # count errors inside log
 grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log 2> /dev/null
 # look for serious error
-if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log; then
+if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2> /dev/null; then
 # if any, print "serious"
 printf "Server.log "
 printf '%b' "$server_log_serious"
@@ -2568,7 +2568,7 @@ fi
  echo
 case $ans in
  t|T)
-tail "$folder_core"/run/logs/Server.log
+tail "$folder_core"/run/logs/Server.log 2> /dev/null
  echo
 printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
@@ -2576,15 +2576,15 @@ printf "\e[1;32m<------------------------------------------------------>\033[0m"
  ;;
 "f")
  echo
-tail -f "$folder_core"/run/logs/Server.log
+tail -f "$folder_core"/run/logs/Server.log 2> /dev/null
  ;;
 "n")
  echo
-nano "$folder_core"/run/logs/Server.log
+nano "$folder_core"/run/logs/Server.log 2> /dev/null
  ;;
 "N")
  echo
-nano "$folder_core"/run/logs/Realmd.log
+nano "$folder_core"/run/logs/Realmd.log 2> /dev/null
  ;;
 
 # lnav >
