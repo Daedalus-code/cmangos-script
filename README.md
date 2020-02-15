@@ -31,7 +31,7 @@ This tool introduce helping functions and features for admins running a WoW Vani
 ```mkdir /scripts/```  
 ```cd /scripts/```  
 ```git clone https://github.com/Daedalus-code/cmangos-script.git```  
-```cp /scripts/cmangos-script/mangos /usr/local/bin```  
+```sudo cp /scripts/cmangos-script/mangos /usr/local/bin```  
 ```sudo chmod +x /usr/local/bin/mangos```  
 
 You will be able to start 'mangos' from anywhere in terminal now.  
