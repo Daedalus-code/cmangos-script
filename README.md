@@ -30,7 +30,7 @@ This tool introduce helping functions and features for admins running a WoW Vani
 ##### First time install
 ```mkdir /scripts/```  
 ```cd /scripts/```  
-```git pull https://github.com/Daedalus-code/cmangos-script.git```  
+```git clone https://github.com/Daedalus-code/cmangos-script.git```  
 ```cp /scripts/cmangos-script/mangos /usr/local/bin```  
 ```sudo chmod +x /usr/local/bin/mangos```  
 
