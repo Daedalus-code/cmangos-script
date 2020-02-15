@@ -39,7 +39,7 @@ You will be able to start 'mangos' from anywhere in terminal now.
 mangos script will look for config files inside /scripts/  
 You need to copy config files from cmangos-script folder into /scripts/ folder.  
 
-```cp /scripts/cmangos-script/config.* /scripts/```  
+```cp /scripts/cmangos-script/server.* /scripts/```  
 
 Edit config file 'config.cnf' with MySQL credentials.   
 Edit config file 'config.txt' with correct information.  
