@@ -13,7 +13,7 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20200802
+# V20202702
 # 2.8.0.0
 
 # codes >
@@ -438,10 +438,10 @@ init_colors
 
 # Walter A code done
 
-# mysql data >
+# uptime >
 cm_uptime="\033[0mTime""$W""$(uptime)\033[0m"
+# realm name >
 cm_realm="\033[0mRealm \e[0;32m${server_name:?}\e[31m"
-# mysql data done
 
 # log data >
 
@@ -1074,7 +1074,7 @@ read -r -p "Press Enter to continue" </dev/tty
 printf "Making fresh backup\e[0;32m.\033[0m"
  sleep 1
 printf "\e[0;32m.\033[0m"
-mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
+mysqldump --defaults-extra-file="$sql_mycnf" "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
 printf "\e[0;32m.\033[0m"
  sleep 1
 printf '%b' "[\e[0;32mok\033[0m] $db_characters-$NOW.sql"
@@ -1084,7 +1084,7 @@ printf '%b' "[\e[0;32mok\033[0m] $db_characters-$NOW.sql"
 printf "Making fresh backup\e[0;32m.\033[0m"
  sleep 1
 printf "\e[0;32m.\033[0m"
-mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
+mysqldump --defaults-extra-file="$sql_mycnf" "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
 printf "\e[0;32m.\033[0m"
  sleep 1
 printf '%b' "[\e[0;32mok\033[0m] $db_realmd-$NOW.sql"
@@ -1597,8 +1597,8 @@ mkdir "$folder_wow"/backup &> /dev/null
 mkdir "$folder_wow"/backup/old &> /dev/null
 cp "$folder_wow"/backup/*.sql "$folder_wow"/backup/old &> /dev/null
 cd "$folder_wow"/backup/old/ || exit ; zip "$server_name.zip" "$folder_wow"/backup/*.sql &> /dev/null
-find "$folder_wow"/backup/*.sql -type d -ctime +10 -exec rm -rf {} \; &> /dev/null
-find "$folder_wow"/backup/old/*.sql -type d -ctime +10 -exec rm -rf {} \; &> /dev/null
+find "$folder_wow"/backup/*.sql -mtime +7 -exec rm {} \; &> /dev/null
+find "$folder_wow"/backup/old/*.sql -mtime +14 -exec rm {} \; &> /dev/null
  sleep 1
 # backup <- characters.sql
  echo
@@ -1606,7 +1606,7 @@ FILE="$folder_wow/backup/$db_characters-$NOW.sql"
 if [ ! -f "$FILE" ];
 then
 printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Characters' ! Creating backup.."
-mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
+mysqldump --defaults-extra-file="$sql_mycnf" "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
  echo
 else
 printf '%b' "[\e[0;32mok\033[0m] $db_characters-$NOW.sql exist"
@@ -1617,7 +1617,7 @@ FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
 if [ ! -f "$FILE" ];
 then
 printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Realmd' ! Creating backup.."
-mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
+mysqldump --defaults-extra-file="$sql_mycnf" "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
  echo
 else
 printf '%b' "[\e[0;32mok\033[0m] $db_realmd-$NOW.sql exist"
@@ -1633,7 +1633,7 @@ then
 printf "Making fresh backup\e[0;32m.\033[0m"
  sleep 1
 printf "\e[0;32m.\033[0m"
-mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
+mysqldump --defaults-extra-file="$sql_mycnf" "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
 printf "\e[0;32m.\033[0m"
  sleep 1
 printf '%b' "[\e[0;32mok\033[0m] $db_characters-$NOW.sql"
@@ -1643,7 +1643,7 @@ printf '%b' "[\e[0;32mok\033[0m] $db_characters-$NOW.sql"
 printf "Making fresh backup\e[0;32m.\033[0m"
  sleep 1
 printf "\e[0;32m.\033[0m"
-mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
+mysqldump --defaults-extra-file="$sql_mycnf" "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
 printf "\e[0;32m.\033[0m"
  sleep 1
 printf '%b' "[\e[0;32mok\033[0m] $db_realmd-$NOW.sql"
@@ -1691,7 +1691,7 @@ FILE="$folder_wow/backup/$db_characters-$NOW.sql"
 if [ ! -f "$FILE" ];
 then
 printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Characters' ! Creating backup.."
-mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
+mysqldump --defaults-extra-file="$sql_mycnf" "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
  echo
 else
 printf '%b' "[\e[0;32mok\033[0m] $db_characters-$NOW.sql exist"
@@ -1702,7 +1702,7 @@ FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
 if [ ! -f "$FILE" ];
 then
 printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Realmd' ! Creating backup.."
-mysqldump --defaults-extra-file="$sql_mycnf" --column-statistics=0 "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
+mysqldump --defaults-extra-file="$sql_mycnf" "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
  echo
 else
 printf '%b' "[\e[0;32mok\033[0m] $db_realmd-$NOW.sql exist"
