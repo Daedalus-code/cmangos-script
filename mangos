@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20202702
-# 2.8.0.0
+# V20202802
+# 2.8.2.4
 
 # codes >
 
@@ -545,7 +545,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.8.0.0 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.8.2.4 ]\033[0m
 
       $cm_uptime
 
@@ -1330,8 +1330,14 @@ case $CHOICE in
 
 printf "\e[0;31mShutting down Services..\033[0m"
  echo
+ echo
+ read -r -p "Install packagelist? (y/n) " -n 1 -r
+ echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
 if ! [ -x "$(command -v "${packagelist[@]}")" ]; then
 sudo apt-get install "${packagelist[@]}" -y &> /dev/null
+fi
 fi
 sudo service realmd stop &> /dev/null
 sudo service mangosd stop &> /dev/null
@@ -1384,12 +1390,18 @@ esac
 
 "2")
 
+ echo
+ read -r -p "Install packagelist? (y/n) " -n 1 -r
+ echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
 if ! [ -x "$(command -v "${packagelist[@]}")" ]; then
 sudo apt-get install "${packagelist[@]}" -y &> /dev/null
 fi
 printf '%b' "[\e[0;32mok\033[0m] "
  read -r -p "Press Enter to continue" </dev/tty
  echo
+fi
 
  ;;
 
@@ -1459,8 +1471,14 @@ printf '%b' "[\e[0;32mok\033[0m] "
 
 "4")
 
+ echo
+ read -r -p "Install packagelist? (y/n) " -n 1 -r
+ echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
 if ! [ -x "$(command -v "${packagelist[@]}")" ]; then
 sudo apt-get install "${packagelist[@]}" -y &> /dev/null
+fi
 fi
 printf "\e[0;31mShutting down Services..\033[0m"
  echo
@@ -1589,10 +1607,16 @@ mysql-server
 unzip
 zip
 )
+ echo
+ read -r -p "Install packagelist? (y/n) " -n 1 -r
+ echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
 if ! [ -x "$(command -v "${packagelist[@]}")" ]; then
 sudo apt-get install "${packagelist[@]}" -y &> /dev/null
 fi
 # backup >
+fi
 mkdir "$folder_wow"/backup &> /dev/null
 mkdir "$folder_wow"/backup/old &> /dev/null
 cp "$folder_wow"/backup/*.sql "$folder_wow"/backup/old &> /dev/null
