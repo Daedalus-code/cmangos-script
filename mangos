@@ -1400,12 +1400,12 @@ printf "MariaDB, MySQL - Database operation"
  echo
 read -r n
 case $n in
-1) echo "Installing MariaDB"
-# install mariadb >
+
+1) # install mariadb >
 sudo apt-get install "${packagelist_maria[@]}" -y &> /dev/null
 ;;
-2) echo "Installing MySQL.."
-# install mysql >
+
+2) # install mysql >
 sudo apt-get install "${packagelist_mysql[@]}" -y &> /dev/null
 ;;
 *) echo "invalid option"
@@ -1618,12 +1618,12 @@ printf "MariaDB, MySQL - Database operation"
  echo
 read -r n
 case $n in
-1) echo "Installing MariaDB"
-# install mariadb >
+
+1) # install mariadb >
 sudo apt-get install "${packagelist_maria[@]}" -y &> /dev/null
 ;;
-2) echo "Installing MySQL.."
-# install mysql >
+
+2) # install mysql >
 sudo apt-get install "${packagelist_mysql[@]}" -y &> /dev/null
 ;;
 *) echo "invalid option"
