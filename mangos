@@ -2379,7 +2379,7 @@ TITLE="Update cmangos-script [Helper]"
 MENU="Choose one of the following options:"
 
 OPTIONS=(1 "Update helper"
-         2 "Reinstall (delete /$folder_install)"
+         2 "Reinstall (delete $folder_install)"
          3 "Reset --hard origin/master")
 
 CHOICE=$(dialog --clear \
