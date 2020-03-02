@@ -2466,7 +2466,7 @@ sudo rm -r "$folder_helper"
 printf "[\e[0;32mok\033[0m] -> cmangos-script removed."
  echo
 sudo mkdir "$folder_install" &> /dev/null
-printf "[\e[0;32mok\033[0m] -> /$folder_install/> git clone.."
+printf "[\e[0;32mok\033[0m] -> $folder_install/> git clone.."
  echo
 cd "$folder_install" || exit
 git clone https://github.com/Daedalus-code/cmangos-script.git
