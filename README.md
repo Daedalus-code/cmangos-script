@@ -36,21 +36,23 @@ This tool introduce helping functions and features for admins running a WoW Vani
 
 You will be able to start 'mangos' from anywhere in terminal now.  
 
-mangos script will look for config files inside /scripts/  
-You need to copy config files from cmangos-script folder into /scripts/ folder.  
+mangos script will look for config files inside your "install folder" (default: /scripts)  
+You need to copy config files from cmangos-script folder into your "install folder".  
 
 ```cp /scripts/cmangos-script/server.* /scripts/```  
 
 Edit config file 'server.cnf' with MySQL credentials.   
 Edit config file 'server.txt' with correct information.  
-#### Your own directory for configs?
-###### sort out your own issues if you do:
+#### Your own directory for configs?  
+
 Edit mangos script at line 27:    
 ```source /scripts/server.txt # please edit if wrong.```  
-server.txt at line 41:  
+server.txt at line 42:  
 ```folder_helper="/scripts/cmangos-script" # please edit if wrong.```  
-server.txt at line 52:  
+server.txt at line 53:  
 ```sql_mycnf="/scripts/server.cnf" # please edit if wrong.```  
+server.txt at line 38:  
+```folder_install="/scripts" # please edit if wrong.```  
   
 #### Planned Features  
 * Time will tell.  
