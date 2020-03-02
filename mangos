@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20202902
-# 2.8.4.3
+# V20200203
+# 2.8.4.4
 
 # codes >
 
@@ -545,7 +545,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.8.4.3 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.8.4.4 ]\033[0m
 
       $cm_uptime
 
@@ -2379,7 +2379,7 @@ TITLE="Update cmangos-script [Helper]"
 MENU="Choose one of the following options:"
 
 OPTIONS=(1 "Update helper"
-         2 "Reinstall (delete /scripts)"
+         2 "Reinstall (delete /$folder_install)"
          3 "Reset --hard origin/master")
 
 CHOICE=$(dialog --clear \
@@ -2455,7 +2455,7 @@ fi
 
 # update helper done
 
-# fresh install (delete/git clone /scripts) >
+# fresh install (delete/git clone /folder_install) >
 
 "2")
 
@@ -2465,10 +2465,11 @@ printf "[\e[0;32mok\033[0m] -> installed mangos removed."
 sudo rm -r "$folder_helper"
 printf "[\e[0;32mok\033[0m] -> cmangos-script removed."
  echo
-sudo mkdir /scripts/ &> /dev/null
-printf "[\e[0;32mok\033[0m] -> /scripts/> git clone.."
+sudo mkdir "$folder_install" &> /dev/null
+printf "[\e[0;32mok\033[0m] -> /$folder_install/> git clone.."
  echo
-cd /scripts && git clone https://github.com/Daedalus-code/cmangos-script.git
+cd "$folder_install" || exit
+git clone https://github.com/Daedalus-code/cmangos-script.git
 sudo cp "$folder_helper"/mangos /usr/local/bin &> /dev/null
 printf "[\e[0;32mok\033[0m] -> Installing new release"
 sudo chmod +x /usr/local/bin/mangos
@@ -2486,7 +2487,7 @@ esac
 
  ;;
 
-# fresh install (delete/git clone /scripts) done
+# fresh install (delete/git clone /folder_install) done
 
 # reset --hard origin/master >
 
