@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20200203
-# 2.8.4.4
+# V20201303
+# 3.0.2.4
 
 # codes >
 
@@ -545,7 +545,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v2.8.4.4 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.0.2.4 ]\033[0m
 
       $cm_uptime
 
@@ -1574,9 +1574,9 @@ if ! [ -x "$(command -v dialog)" ]; then
 sudo apt-get install dialog -y
 fi
 # codes done
-HEIGHT=12
+HEIGHT=15
 WIDTH=40
-CHOICE_HEIGHT=5
+CHOICE_HEIGHT=8
 BACKTITLE="update Database"
 TITLE="Update classic-db [database]"
 MENU="Choose one of the following options:"
@@ -1585,7 +1585,10 @@ OPTIONS=(1 "Update classic-db"
          2 "Drop/Import databases"
          3 "myisam -> innodb (MariaDB)"
          4 "Reinstall (delete /classic-db)"
-         5 "Reset --hard origin/master")
+         5 "Reset --hard origin/master"
+         6 "Restart MySQL Server (service)"
+         7 "Stop MySQL Server (service)"
+         8 "Enable/Disable MySQL Server")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
@@ -1945,11 +1948,188 @@ printf '%b' "[\e[0;32mok\033[0m] "
 
  ;;
 
+# reset --hard origin/master done
+
+# restart mysql/mariadb server (service) >
+
+"6")
+
+clear
+cat<<EOF
+ Database system
+ (service)
+
+ 1 : Restart MySQL 
+ 2 : Restart MariaDB
+ q : Quit
+
+EOF
+ read -r -n1 -s
+case "$REPLY" in
+
+# restart mysql >
+
+"1")
+
+sudo service mysql restart &> /dev/null
+ sleep 1
+sudo service mysql status 2> /dev/null
+ echo
+ read -r -p "Press Enter to continue" </dev/tty
+ echo
+
+ ;;
+
+# restart mariadb >
+
+"2")
+
+sudo service mariadb restart &> /dev/null
+ sleep 1
+sudo service mariadb status 2> /dev/null
+ echo
+ read -r -p "Press Enter to continue" </dev/tty
+ echo
+
+ ;;
+
+"Q")  exit                      ;;
+"q")  echo "case sensitive!!"   ;; 
+ * )  echo "invalid option"     ;;
 esac
 
  ;;
 
-# reset --hard origin/master done
+# restart mysql/mariadb server (service) done
+
+# Stop mysql/mariadb server (service) >
+
+"7")
+
+clear
+cat<<EOF
+ Database system
+ (service)
+
+ 1 : Stop MySQL
+ 2 : Stop MariaDB
+ q : Quit
+
+EOF
+ read -r -n1 -s
+case "$REPLY" in
+
+# stop mysql >
+
+"1")
+
+sudo service mysql stop &> /dev/null
+ sleep 1
+sudo service mysql status 2> /dev/null
+ echo
+ read -r -p "Press Enter to continue" </dev/tty
+ echo
+
+ ;;
+
+# stop mariadb >
+
+"2")
+
+sudo service mariadb stop &> /dev/null
+ sleep 1
+sudo service mariadb status 2> /dev/null
+ echo
+ read -r -p "Press Enter to continue" </dev/tty
+ echo
+
+ ;;
+
+"q")  exit                      ;;
+"Q")  echo "case sensitive!!"   ;; 
+ * )  echo "invalid option"     ;;
+esac
+
+ ;;
+
+# Stop mysql/mariadb server (service) done
+
+# enable/disable mysql/mariadb server >
+
+"8")
+
+clear
+cat<<EOF
+ Enable/Disable MySQL
+ (systemctl)
+
+ 1 : Enable MySQL
+ 2 : Disable MySQL
+ 3 : Enable MariaDB
+ 4 : Disable MariaDB
+ q : Quit
+
+EOF
+ read -r -n1 -s
+case "$REPLY" in
+
+# enable mysql >
+
+"1")
+
+sudo systemctl enable mysql
+ echo
+ read -r -p "Press Enter to continue" </dev/tty
+ echo
+
+ ;;
+
+# disable mysql >
+
+"2")
+
+sudo systemctl disable mysql
+ echo
+ read -r -p "Press Enter to continue" </dev/tty
+ echo
+
+ ;;
+
+# enable mariadb >
+
+"3")
+
+sudo systemctl enable mariadb@
+ echo
+ read -r -p "Press Enter to continue" </dev/tty
+ echo
+
+ ;;
+
+# disable mariadb >
+
+"4")
+
+sudo systemctl disable mariadb@
+ echo
+ read -r -p "Press Enter to continue" </dev/tty
+ echo
+
+ ;;
+
+    "q")  return                    ;;
+    "Q")  echo "case sensitive!!"   ;; 
+     * )  echo "invalid option"     ;;
+
+esac
+
+ ;;
+
+# enable/disable mysql/mariadb server >
+
+esac
+
+ ;;
 
 # update database done
 
