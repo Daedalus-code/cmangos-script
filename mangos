@@ -2132,7 +2132,7 @@ esac
 
 "9")
 
-printf '%b' "\033[1;31mWarning\033[0m]: Only update whats missing.
+printf '%b' "[\033[1;31mWarning\033[0m]: Only update whats missing.
 Check log for which database needs applying updates"
  echo
 cat "${folder_core:?}"sql/updates/characters/*.sql  > "$folder_wow"/.all_characters.sql
