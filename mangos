@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20201603
-# 3.0.6.3
+# 3.1.0.2
 
 # codes >
 
@@ -545,7 +545,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.0.6.3 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.1.0.2 ]\033[0m
 
       $cm_uptime
 
@@ -2132,35 +2132,74 @@ esac
 
 "9")
 
+sudo chown -R "$user":"$group" "$folder_wow"
 printf '%b' "[\033[1;31mWarning\033[0m]: Only update whats missing.
-Check log for which database needs applying updates"
+Check log for which database needs 'applying updates'"
  echo
+# combine [A] to [B] updates individually > 
 cat "${folder_core:?}"sql/updates/characters/*.sql  > "$folder_wow"/.all_characters.sql
 cat "${folder_core:?}"sql/updates/mangos/*.sql  > "$folder_wow"/.all_mangos.sql
 cat "${folder_core:?}"sql/updates/realmd/*.sql  > "$folder_wow"/.all_realmd.sql
 
+# apply all updates [A] to [B] characters ? >
+ echo
  read -r -p "Characters? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+printf '%b' "Loading.."
+sudo service realmd stop 2> /dev/null
+sudo service mangosd stop 2> /dev/null
 mysql --defaults-extra-file="$sql_mycnf" -f --database="$db_characters" < "$folder_wow"/.all_characters.sql 2> /dev/null
+printf '%b' "[\e[0;32mok\033[0m]"
+ echo
 fi
+# apply all updates [A] to [B] mangos ? >
  read -r -p "Mangos? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+printf '%b' "Loading.."
+sudo service realmd stop 2> /dev/null
+sudo service mangosd stop 2> /dev/null
 mysql --defaults-extra-file="$sql_mycnf" -f --database="$db_mangos" < "$folder_wow"/.all_mangos.sql 2> /dev/null
+printf '%b' "[\e[0;32mok\033[0m]"
+ echo
 fi
+# apply all updates [A] to [B] realmd ? >
  read -r -p "Realmd? (y/n) " -n 1 -r
  echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+printf '%b' "Loading.."
+sudo service realmd stop 2> /dev/null
+sudo service mangosd stop 2> /dev/null
 mysql --defaults-extra-file="$sql_mycnf" -f --database="$db_realmd" < "$folder_wow"/.all_realmd.sql 2> /dev/null
+printf '%b' "[\e[0;32mok\033[0m]"
+ echo
 fi
-
-sudo rm "$folder_wow"/.*.sql 2> /dev/null
-
+# remove old 'combined updates' sql files >
+rm "$folder_wow"/.*.sql 2> /dev/null
+# InstallFullDB ? >
+ echo
+printf '%b' "\e[0;32mRecommended if you applied anything\033[0m"
+ echo
+ read -r -p "InstallFullDB? (y/n) " -n 1 -r
+ echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+printf '%b' "Loading.."
+sudo service realmd stop 2> /dev/null
+sudo service mangosd stop 2> /dev/null
+printf '%b' "[\e[0;32mok\033[0m]"
+ echo
+sudo chown -R "$user":"$group" "$folder_wow"
+cd "$folder_db" || exit
+./InstallFullDB.sh
+printf '%b' "[\e[0;32mok\033[0m] "
+fi
  read -r -p "Press Enter to continue" </dev/tty
+ echo
 
  ;;
 
