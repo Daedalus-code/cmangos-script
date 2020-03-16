@@ -2421,20 +2421,20 @@ esac
 printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
 # look for empty tables
-if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log; then
+if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2> /dev/null; then
 # if any, print "empty"
 printf "Server.log "
 printf '%b' "$realmd_log_empty"
 # count empty inside log
-grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log
+grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2> /dev/null
 fi
 # look for error
-if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Realmd.log; then
+if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2> /dev/null; then
 # if any, print "error"
 printf "Realmd.log "
 printf '%b' "$realmd_log_error"
 # count errors inside log
-grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log
+grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2> /dev/null
 # if nothing, print "ok"
 else
 printf "Realmd.log "
@@ -2442,7 +2442,7 @@ printf '%b' "$realmd_log_ok"
  echo
 fi
  echo
-tail "$folder_core"/run/logs/Realmd.log
+tail "$folder_core"/run/logs/Realmd.log 2> /dev/null
 
 # server.log
 printf "\e[1;32m<------------------------------------------------------>\033[0m"
@@ -2478,34 +2478,34 @@ wordlist_mangosd=(".*STARTUP*.
 # wait for realmd & mangosd to fill up logs >
 
 # Realmd.log >
-tail -f "$folder_core"/run/logs/Realmd.log |
-{ grep -E -q -m 1 "${wordlist_realmd[@]}" && pkill -P $$ -x tail;}
+tail -f "$folder_core"/run/logs/Realmd.log 2> /dev/null |
+{ grep -E -q -m 1 "${wordlist_realmd[@]}" && pkill -P $$ -x tail 2> /dev/null;}
 # Server.log >
-tail -f "$folder_core"/run/logs/Server.log |
-{ grep -E -m 1 "${wordlist_mangosd[@]}" && pkill -P $$ -x tail;}
+tail -f "$folder_core"/run/logs/Server.log 2> /dev/null |
+{ grep -E -m 1 "${wordlist_mangosd[@]}" && pkill -P $$ -x tail 2> /dev/null;}
 # wait for realmd & mangosd to fill up logs done
 # look for empty tables
-if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log; then
+if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2> /dev/null; then
 # if any, print "empty"
 printf "Server.log "
 printf '%b' "$server_log_empty"
 # count empty inside log
-grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log
+grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2> /dev/null
 fi
 # look for error
-if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log; then
+if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log 2> /dev/null; then
 # if any, print "error"
 printf "Server.log "
 printf '%b' "$server_log_error"
 # count errors inside log
-grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log
+grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log 2> /dev/null
 # look for serious error
-if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log; then
+if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2> /dev/null; then
 # if any, print "serious"
 printf "Server.log "
 printf '%b' "$server_log_serious"
 # count serious errors inside log
-grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log
+grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2> /dev/null
 fi
 # if nothing, print "ok"
 else
@@ -2514,7 +2514,7 @@ printf '%b' "$server_log_ok"
  echo
 fi
 # world failed
-if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log; then
+if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log 2> /dev/null; then
 # if any, print "World failed"
  echo
 printf "[CMaNGOS]: "
@@ -2522,42 +2522,42 @@ printf '%b' "$server_log_failed"
  echo
 else
 # databases is missing or corrupt.
-if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$folder_core"/run/logs/Realmd.log; then
+if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$folder_core"/run/logs/Realmd.log 2> /dev/null; then
  echo
 printf "[Realmd]: "
 printf '%b' "Database is missing or corrupt!"
  echo
 else
 # this database (mangosd) is out of date!
-if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Server.log; then
+if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Server.log 2> /dev/null; then
  echo
 printf "[CMaNGOS]: "
 printf '%b' "Database is out of date!"
  echo
 else
 # reinstall your (mangosd) database
-if grep -E -q "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$folder_core"/run/logs/Server.log; then
+if grep -E -q "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$folder_core"/run/logs/Server.log 2> /dev/null; then
  echo
 printf "[CMaNGOS]: "
 printf '%b' "Reinstall your database!"
  echo
 else
 # this database (realmd) is out of date!
-if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Realmd.log; then
+if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Realmd.log 2> /dev/null; then
  echo
 printf "[Realmd]: "
 printf '%b' "Database is out of date!"
  echo
 else
 # reinstall your (realmd) database
-if grep -E -q "reinstall\syour|.*ERROR*.|\sUnknown\sdatabase\s|Reinstall\syour\s[REALMD]\sdatabase\s" "$folder_core"/run/logs/Realmd.log; then
+if grep -E -q "reinstall\syour|.*ERROR*.|\sUnknown\sdatabase\s|Reinstall\syour\s[REALMD]\sdatabase\s" "$folder_core"/run/logs/Realmd.log 2> /dev/null; then
  echo
 printf "[Realmd]: "
 printf '%b' "Reinstall your database!"
  echo
 else
 # world initialized
-if grep -E -q "World\sinitialized" "$folder_core"/run/logs/Server.log; then
+if grep -E -q "World\sinitialized" "$folder_core"/run/logs/Server.log 2> /dev/null; then
 # if any, print "World initialized"
  echo
 printf "[CMaNGOS]: "
@@ -2578,7 +2578,7 @@ printf "\e[1;32m>\033[0m hit Any key to go back."
  echo
 case $ans in
 "t")
-tail "$folder_core"/run/logs/Server.log
+tail "$folder_core"/run/logs/Server.log 2> /dev/null
  echo
 printf "\e[1;32m<------------------------------------------------------>\033[0m"
  echo
@@ -2586,7 +2586,7 @@ printf "\e[1;32m<------------------------------------------------------>\033[0m"
  ;;
 "f")
  echo
-tail -f "$folder_core"/run/logs/Server.log
+tail -f "$folder_core"/run/logs/Server.log 2> /dev/null
  ;;
 "n")
  echo
@@ -2610,7 +2610,7 @@ logs=("$folder_core"/run/logs/EventAIErrors.log
 if ! [ -x "$(command -v lnav)" ]; then
 sudo apt install lnav -y &> /dev/null
 fi
-lnav "${logs[@]}"
+lnav "${logs[@]}" 2> /dev/null
 
 esac
 
