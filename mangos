@@ -31,8 +31,8 @@ source /scripts/server.txt # please edit if wrong.
 export NCURSES_NO_UTF8_ACS=1
 
 # get database info
-on_count=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT SUM(online) FROM ${db_characters:?}.characters;" &> /dev/null);
-gu_count=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT count(*) FROM ${db_characters:?}.guild;" &> /dev/null);
+on_count=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT SUM(online) FROM ${db_characters:?}.characters;" 2> /dev/null);
+gu_count=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT count(*) FROM ${db_characters:?}.guild;" 2> /dev/null);
 
 # get date
 NOW="$(date +"%m.%d.%Y")"
@@ -109,8 +109,8 @@ case "$REPLY" in
 
 # codes >
 
-ac_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM ${db_realmd:?}.account;" &> /dev/null);
-bn_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account_banned;" &> /dev/null);
+ac_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM ${db_realmd:?}.account;" 2> /dev/null);
+bn_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account_banned;" 2> /dev/null);
 
 # codes done
 
