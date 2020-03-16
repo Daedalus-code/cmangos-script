@@ -1041,7 +1041,7 @@ me_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*
 ma_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.mail;" 2> /dev/null);
 pe_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_pet;" 2> /dev/null);
 
-ti_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_ticket;" 2> /dev/null);
+ti_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.gm_tickets;" 2> /dev/null);
 co_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.corpse;" 2> /dev/null);
 pv_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.pvpstats_players;" 2> /dev/null);
 gi_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_gifts;" 2> /dev/null);
