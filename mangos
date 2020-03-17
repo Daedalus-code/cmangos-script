@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20201603
-# 3.1.0.2
+# V20201703
+# 3.1.1.2
 
 # codes >
 
@@ -545,7 +545,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.1.0.2 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.1.1.2 ]\033[0m
 
       $cm_uptime
 
@@ -2451,13 +2451,15 @@ printf "\e[1;32m<------------------------------------------------------>\033[0m"
 # wait wordlist >
 
 # realmd >
-wordlist_realmd=(".*Added\srealm\sid*.
+wordlist_realmd=(".*Can't\sconnect\sto\slocal\sMySQL*.
+.*Added\srealm\sid*.
 .*database\sis\smissing\sor\scorrupt.*.
 .*You\shave:\s-->*.
 .*reinstall\syour*.
 .*cannot\sfind\sthe\sversion\sinfo*.")
 # mangosd >
-wordlist_mangosd=(".*STARTUP*.
+wordlist_mangosd=(".*Can't\sconnect\sto\slocal\sMySQL*.
+.*STARTUP*.
 .*TIME*.
 .*corrupt*.
 .*malformed*.
@@ -2550,10 +2552,17 @@ printf '%b' "Database is out of date!"
  echo
 else
 # reinstall your (realmd) database
-if grep -E -q "reinstall\syour|.*ERROR*.|\sUnknown\sdatabase\s|Reinstall\syour\s[REALMD]\sdatabase\s" "$folder_core"/run/logs/Realmd.log 2> /dev/null; then
+if grep -E -q "reinstall\syour|\sUnknown\sdatabase\s|Reinstall\syour\s[REALMD]\sdatabase\s" "$folder_core"/run/logs/Realmd.log 2> /dev/null; then
  echo
 printf "[Realmd]: "
 printf '%b' "Reinstall your database!"
+ echo
+else
+# can't connect to local mysql through socket
+if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$folder_core"/run/logs/*.log 2> /dev/null; then
+ echo
+printf "[MySQL]: "
+printf '%b' "Can't connect to local MySQL!"
  echo
 else
 # world initialized
@@ -2563,6 +2572,7 @@ if grep -E -q "World\sinitialized" "$folder_core"/run/logs/Server.log 2> /dev/nu
 printf "[CMaNGOS]: "
 printf '%b' "$server_log_initialized"
  echo
+fi
 fi
 fi
 fi
