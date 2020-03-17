@@ -1994,8 +1994,8 @@ sudo service mariadb status 2> /dev/null
 
  ;;
 
-"Q")  return                    ;;
-"q")  echo "case sensitive!!"   ;; 
+"q")  return                    ;;
+"Q")  echo "case sensitive!!"   ;; 
  * )  echo "invalid option"     ;;
 
 esac
