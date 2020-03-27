@@ -802,7 +802,7 @@ printf '%b' "[\e[0;32mok\033[0m] - transmission should be running now"
  echo
  sleep 1
 # add magnet link: maps.zip.torrent >
-transmission-remote -a "magnet:?xt=urn:btih:2a374866292eee4f76d5e26b5e7bec64191d11b0&dn=maps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &> /dev/null
+transmission-remote -a "magnet:?xt=urn:btih:1cdcaa3d77a7f4df79935d885e639903e37dda24&dn=vanilla%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &> /dev/null
  echo
 printf '%b' "[\e[0;32mok\033[0m] - torrent added"
  echo
