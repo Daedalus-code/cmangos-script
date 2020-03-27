@@ -2091,7 +2091,7 @@ sudo systemctl enable mysql
 
 "2")
 
-sudo systemctl disable mysql
+sudo systemctl disable mysql; sudo systemctl disable mysql.service
  echo
  read -r -p "Press Enter to continue" </dev/tty
  echo
@@ -2102,7 +2102,7 @@ sudo systemctl disable mysql
 
 "3")
 
-sudo systemctl enable mariadb@
+sudo systemctl enable mariadb@.service; sudo systemctl disable mariadb.service
  echo
  read -r -p "Press Enter to continue" </dev/tty
  echo
