@@ -687,7 +687,7 @@ $transmission_list
       t : \e[0;35mInstall seedbox\033[0m - transmission-daemon
       r : \e[0;35mStart seedbox\033[0m   - service transmission-daemon start
       s : \e[0;35mStop seedbox\033[0m    - service transmission-daemon stop
-      m : \e[0;35mInstall maps\033[0m    - install maps.zip
+      m : \e[0;35mInstall maps\033[0m    - install vanilla.maps.zip
 
 \e[1;32m>\033[0m hit Enter to go back.
  <------------------------------------------------------------------------------>\033[0m"
@@ -801,7 +801,7 @@ sudo service transmission-daemon start &> /dev/null
 printf '%b' "[\e[0;32mok\033[0m] - transmission should be running now"
  echo
  sleep 1
-# add magnet link: maps.zip.torrent >
+# add magnet link: vanilla.maps.zip.torrent >
 transmission-remote -a "magnet:?xt=urn:btih:1cdcaa3d77a7f4df79935d885e639903e37dda24&dn=vanilla%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &> /dev/null
  echo
 printf '%b' "[\e[0;32mok\033[0m] - torrent added"
@@ -878,7 +878,7 @@ printf '%b' "Maps already installed."
  echo
 sleep 2
 else
-sudo unzip /seedbox/maps.zip -d "$folder_core"/run
+sudo unzip /seedbox/vanilla_maps.zip -d "$folder_core"/run
  echo
 printf '%b' "[\e[0;32mok\033[0m] - maps installed."
  echo
