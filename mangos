@@ -702,7 +702,7 @@ case $n in
 "t")
 
 # already installed? >
-FILE="/seedbox/maps.zip"
+FILE="/seedbox/vanilla_maps.zip"
 if [ ! -f "$FILE" ];
 then
 # check for updates regardless >
