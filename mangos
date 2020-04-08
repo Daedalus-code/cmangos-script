@@ -2080,7 +2080,7 @@ case "$REPLY" in
 
 "1")
 
-sudo systemctl enable mysql
+sudo systemctl enable mysql 2> /dev/null; sudo systemctl enable mysql.service 2> /dev/null
  echo
  read -r -p "Press Enter to continue" </dev/tty
  echo
@@ -2091,7 +2091,7 @@ sudo systemctl enable mysql
 
 "2")
 
-sudo systemctl disable mysql; sudo systemctl disable mysql.service
+sudo systemctl disable mysql 2> /dev/null; sudo systemctl disable mysql.service 2> /dev/null
  echo
  read -r -p "Press Enter to continue" </dev/tty
  echo
@@ -2102,7 +2102,7 @@ sudo systemctl disable mysql; sudo systemctl disable mysql.service
 
 "3")
 
-sudo systemctl enable mariadb@.service; sudo systemctl disable mariadb.service
+sudo systemctl enable mariadb@.service 2> /dev/null;sudo systemctl enable mariadb@ 2> /dev/null
  echo
  read -r -p "Press Enter to continue" </dev/tty
  echo
@@ -2113,7 +2113,7 @@ sudo systemctl enable mariadb@.service; sudo systemctl disable mariadb.service
 
 "4")
 
-sudo systemctl disable mariadb@
+sudo systemctl disable mariadb@ 2> /dev/null; sudo systemctl disable mariadb.service 2> /dev/null
  echo
  read -r -p "Press Enter to continue" </dev/tty
  echo
