@@ -533,9 +533,9 @@ else
 eventai=" \e[0;35mEventAI?\033[0m  - Restart server please"
 fi
 # World DB >
-if grep -q -o -a "\s1.10.1\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null; then
+if grep -q -o -a "\s1.11\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null; then
 # if any, print "World DB"
-world_db=$(grep -o -a "\s1.10.1\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null)
+world_db=$(grep -o -a "\s1.11\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null)
 # if nothing, print "Restart server please.."
 else
 world_db=" \e[0;35mWorld DB?\033[0m - Restart server please"
@@ -1983,34 +1983,34 @@ cat<<EOF
  Database system
  (service)
 
- 1 : Restart MySQL 
- 2 : Restart MariaDB
+ 1 : Restart MariaDB
+ 2 : Restart MySQL
  q : Quit
 
 EOF
  read -r -n1 -s
 case "$REPLY" in
 
-# restart mysql >
+# restart mariadb >
 
 "1")
 
-sudo service mysql restart &> /dev/null
+sudo service mariadb restart &> /dev/null
  sleep 1
-sudo service mysql status 2> /dev/null
+sudo service mariadb status 2> /dev/null
  echo
  read -r -p "Press Enter to continue" </dev/tty
  echo
 
  ;;
 
-# restart mariadb >
+# restart mysql >
 
 "2")
 
-sudo service mariadb restart &> /dev/null
+sudo service mysql restart &> /dev/null
  sleep 1
-sudo service mariadb status 2> /dev/null
+sudo service mysql status 2> /dev/null
  echo
  read -r -p "Press Enter to continue" </dev/tty
  echo
