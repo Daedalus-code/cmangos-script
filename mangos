@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20201804
-# 3.1.2.6
+# 3.1.2.8
 
 # codes >
 
@@ -545,7 +545,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.1.2.6 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.1.2.8 ]\033[0m
 
       $cm_uptime
 
@@ -1868,6 +1868,7 @@ mysql --defaults-extra-file="$sql_mycnf" "$db_realmd" < "$folder_wow"/backup/"$d
  sleep 1
  echo -ne '(100%)\r'
 fi
+sudo service mysql restart &> /dev/null; sudo service mariadb restart &> /dev/null
  echo
 printf '%b' "[\e[0;32mok\033[0m] "
  read -r -p "Press Enter to continue" </dev/tty
@@ -1921,6 +1922,7 @@ sudo mysql --defaults-extra-file="$sql_mycnf" -D "$db_characters" -e "ALTER TABL
 done
  echo -ne '(100%)\r'
  sleep 1
+sudo service mysql restart &> /dev/null; sudo service mariadb restart &> /dev/null
  echo
 printf '%b' "[\e[0;32mok\033[0m] "
  read -r -p "Press Enter to continue" </dev/tty
