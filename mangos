@@ -1453,7 +1453,7 @@ TTYPath=/dev/tty3
 TTYReset=yes
 TTYVHangup=yes
 WorkingDirectory=$folder_core/run/bin
-ExecStart=$folder_core/run/bin/mangosd -c $folder_core/run/etc/mangosd.conf -a $folder_core/run/etc/playerbot.conf
+ExecStart=$folder_core/run/bin/mangosd -c $folder_core/run/etc/mangosd.conf -a $folder_core/run/etc/ahbot.conf
 Restart=on-abort
 
 [Install]
