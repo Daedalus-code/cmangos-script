@@ -13,7 +13,7 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20202004
+# V20201804
 # 3.1.2.8
 
 # codes >
@@ -1720,7 +1720,7 @@ sudo chown -R "$user":"$group" "$folder_wow"
 cd "$folder_db" || exit
 ./InstallFullDB.sh
 fi
-sudo service mysql restart &> /dev/null; sudo service mariadb restart &> /dev/null
+sudo service mariadb restart &> /dev/null; sudo service mysql restart &> /dev/null
  echo
 printf '%b' "[\e[0;32mok\033[0m] "
  read -r -p "Press Enter to continue" </dev/tty
@@ -1868,7 +1868,7 @@ mysql --defaults-extra-file="$sql_mycnf" "$db_realmd" < "$folder_wow"/backup/"$d
  sleep 1
  echo -ne '(100%)\r'
 fi
-sudo service mysql restart &> /dev/null; sudo service mariadb restart &> /dev/null
+sudo service mariadb restart &> /dev/null; sudo service mysql restart &> /dev/null
  echo
 printf '%b' "[\e[0;32mok\033[0m] "
  read -r -p "Press Enter to continue" </dev/tty
@@ -1922,7 +1922,7 @@ sudo mysql --defaults-extra-file="$sql_mycnf" -D "$db_characters" -e "ALTER TABL
 done
  echo -ne '(100%)\r'
  sleep 1
-sudo service mysql restart &> /dev/null; sudo service mariadb restart &> /dev/null
+sudo service mariadb restart &> /dev/null; sudo service mysql restart &> /dev/null
  echo
 printf '%b' "[\e[0;32mok\033[0m] "
  read -r -p "Press Enter to continue" </dev/tty
