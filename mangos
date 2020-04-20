@@ -1633,14 +1633,14 @@ printf "MariaDB, MySQL - Database operation"
 read -r -n1 -s
 case $REPLY in
 
-"1") # install and start mariadb >
+"1") # install and restart mariadb >
 sudo apt-get install "${packagelist_maria[@]}" -y &> /dev/null
-sudo service mariadb start &> /dev/null
+sudo service mariadb restart &> /dev/null
 ;;
 
-"2") # install and start mysql >
+"2") # install and restart mysql >
 sudo apt-get install "${packagelist_mysql[@]}" -y &> /dev/null
-sudo service mariadb start &> /dev/null
+sudo service mysql restart &> /dev/null
 ;;
 *) echo "invalid option! Please start over!"
 exit
