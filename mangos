@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202104
-# 3.1.6.5
+# 3.1.7.8
 
 # codes >
 
@@ -545,7 +545,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.1.6.5 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.1.7.8 ]\033[0m
 
       $cm_uptime
 
@@ -1402,12 +1402,25 @@ read -r n
 case $n in
 
 1) # install mariadb >
+
+sudo service mariadb stop &> /dev/null; sudo service mysql stop &> /dev/null
+ sleep 1
 sudo apt-get install "${packagelist_maria[@]}" -y &> /dev/null
-;;
+ sleep 1
+sudo service mariadb restart &> /dev/null
+
+ ;;
 
 2) # install mysql >
+
+sudo service mariadb stop &> /dev/null; sudo service mysql stop &> /dev/null
+ sleep 1
 sudo apt-get install "${packagelist_mysql[@]}" -y &> /dev/null
-;;
+ sleep 1
+sudo service mysql restart &> /dev/null
+
+ ;;
+
 *) echo "invalid option"
 ;;
 esac
