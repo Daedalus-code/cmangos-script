@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202604
-# 3.1.8.7
+# 3.1.9.4
 
 # codes >
 
@@ -545,7 +545,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.1.8.7 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.1.9.4 ]\033[0m
 
       $cm_uptime
 
@@ -808,7 +808,7 @@ printf '%b' "[\e[0;32mok\033[0m] - torrent added"
  echo
  sleep 1
 # reload >
-sudo systemctl daemon-reload
+sudo systemctl daemon-reload 2> /dev/null
  sleep 1
 else
  echo
@@ -825,16 +825,16 @@ fi
 
  "r")
 
- sudo service transmission-daemon start &> /dev/null
-  sleep 1
- # enable service >
- sudo systemctl enable transmission-daemon &> /dev/null
- # reload >
- sudo systemctl daemon-reload &> /dev/null
-  echo
- printf '%b' "[\e[0;32mok\033[0m] - seedbox started."
-  echo
-  sleep 1
+sudo service transmission-daemon start &> /dev/null
+ sleep 1
+# enable service >
+sudo systemctl enable transmission-daemon &> /dev/null
+# reload >
+sudo systemctl daemon-reload &> /dev/null
+ echo
+printf '%b' "[\e[0;32mok\033[0m] - seedbox started."
+ echo
+ sleep 1
 
   ;;
 
@@ -1473,12 +1473,13 @@ Restart=on-abort
 WantedBy=multi-user.target" > "$folder_wow"/mangosd.service 2> /dev/null
 # install services >
 sudo mv "$folder_wow"/*.service /etc/systemd/system/ &> /dev/null
-sudo systemctl daemon-reload
- sleep 1
 # enable services >
 sudo systemctl enable realmd
  sleep 1
 sudo systemctl enable mangosd
+# reload >
+sudo systemctl daemon-reload 2> /dev/null
+ sleep 1
  echo
 printf '%b' "[\e[0;32mok\033[0m]
 
@@ -2140,6 +2141,8 @@ case "$REPLY" in
 "1")
 
 sudo systemctl enable mysql 2> /dev/null; sudo systemctl enable mysql.service 2> /dev/null
+# reload >
+sudo systemctl daemon-reload 2> /dev/null
  echo
  read -r -p "Press Enter to continue" </dev/tty
  echo
@@ -2151,6 +2154,7 @@ sudo systemctl enable mysql 2> /dev/null; sudo systemctl enable mysql.service 2>
 "2")
 
 sudo systemctl disable mysql 2> /dev/null; sudo systemctl disable mysql.service 2> /dev/null
+# reload >
 sudo systemctl daemon-reload 2> /dev/null
  echo
  read -r -p "Press Enter to continue" </dev/tty
@@ -2163,6 +2167,8 @@ sudo systemctl daemon-reload 2> /dev/null
 "3")
 
 sudo systemctl enable mariadb@.service 2> /dev/null;sudo systemctl enable mariadb@ 2> /dev/null
+# reload >
+sudo systemctl daemon-reload 2> /dev/null
  echo
  read -r -p "Press Enter to continue" </dev/tty
  echo
@@ -2174,6 +2180,7 @@ sudo systemctl enable mariadb@.service 2> /dev/null;sudo systemctl enable mariad
 "4")
 
 sudo systemctl disable mariadb@ 2> /dev/null; sudo systemctl disable mariadb.service 2> /dev/null
+# reload >
 sudo systemctl daemon-reload 2> /dev/null
  echo
  read -r -p "Press Enter to continue" </dev/tty
