@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20202104
-# 3.1.8.5
+# V20202604
+# 3.1.8.7
 
 # codes >
 
@@ -545,7 +545,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.1.8.5 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.1.8.7 ]\033[0m
 
       $cm_uptime
 
@@ -2151,6 +2151,7 @@ sudo systemctl enable mysql 2> /dev/null; sudo systemctl enable mysql.service 2>
 "2")
 
 sudo systemctl disable mysql 2> /dev/null; sudo systemctl disable mysql.service 2> /dev/null
+sudo systemctl daemon-reload 2> /dev/null
  echo
  read -r -p "Press Enter to continue" </dev/tty
  echo
@@ -2173,6 +2174,7 @@ sudo systemctl enable mariadb@.service 2> /dev/null;sudo systemctl enable mariad
 "4")
 
 sudo systemctl disable mariadb@ 2> /dev/null; sudo systemctl disable mariadb.service 2> /dev/null
+sudo systemctl daemon-reload 2> /dev/null
  echo
  read -r -p "Press Enter to continue" </dev/tty
  echo
