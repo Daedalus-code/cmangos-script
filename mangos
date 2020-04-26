@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202604
-# 3.2.0.6
+# 3.2.5.2
 
 # codes >
 
@@ -545,7 +545,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.2.0.6 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.2.5.2 ]\033[0m
 
       $cm_uptime
 
@@ -1207,6 +1207,7 @@ sudo mkdir "$folder_wow" &> /dev/null
 sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
 cd "$folder_wow" || exit
 git clone https://github.com/cmangos/classic-db.git 2> /dev/null
+cd "$folder_wow" || exit; ./InstallFullDB.sh; nano InstallFullDB.config
  echo "Done"
  sleep 1
 else
@@ -1615,7 +1616,8 @@ OPTIONS=(1 "Update classic-db"
          6 "Restart MySQL Server (service)"
          7 "Stop MySQL Server (service)"
          8 "Enable/Disable MySQL Server"
-         9 "Apply all updates [A] to [B]")
+         9 "Apply all updates [A] to [B]"
+         10 "Install database client")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
@@ -1627,6 +1629,50 @@ CHOICE=$(dialog --clear \
 
 clear
 case $CHOICE in
+
+# install database client >
+
+"10")
+
+# codes >
+
+# mariadb-client >
+packagelist_client_maria=(mariadb-client)
+# mysql-client >
+packagelist_client_mysql=(mysql-client)
+
+# codes done
+
+ echo
+printf "MariaDB, MySQL - Database Client
+This is needed to operate local/remote database"
+ echo
+ echo " 1) MariaDB-Client"
+ echo " 2) MySQL-Client"
+ echo
+ read -r -n1 -s
+case $REPLY in
+
+"1") # install mariadb-client >
+
+sudo apt-get install "${packagelist_client_maria[@]}" -y &> /dev/null
+
+;;
+
+"2") # install mysql-client >
+
+sudo apt-get install "${packagelist_client_mysql[@]}" -y &> /dev/null
+
+ ;;
+
+*) echo "invalid option! Please start over!"
+exit
+
+ ;;
+
+ ;;
+
+# install database client done
 
 # update classic-db >
 
