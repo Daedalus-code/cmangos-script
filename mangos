@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202604
-# 3.1.9.4
+# 3.1.9.7
 
 # codes >
 
@@ -545,7 +545,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.1.9.4 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.1.9.7 ]\033[0m
 
       $cm_uptime
 
@@ -1162,6 +1162,7 @@ FILE="$folder_core/README.md"
 if [ ! -f "$FILE" ];
 then
 # fresh install ? >
+ echo "Please wait this might take a while (downloading mangos-classic)"
 sudo mkdir "$folder_wow" &> /dev/null
 sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
 cd "$folder_wow" || exit
@@ -1197,6 +1198,7 @@ FILE="$folder_db/README.md"
 if [ ! -f "$FILE" ];
 then
 # fresh install ? >
+ echo "Please wait this might take a while (downloading classic-db)"
 sudo mkdir "$folder_wow" &> /dev/null
 sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
 cd "$folder_wow" || exit
@@ -1230,6 +1232,7 @@ FILE="$folder_helper/README.md"
 if [ ! -f "$FILE" ];
 then
 # fresh install ? >
+ echo "Please wait (downloading cmangos-script)"
 sudo mkdir "$folder_helper" &> /dev/null
 sudo chown -R "${user:?}":"${group:?}" "$folder_helper"
 cd "$folder_helper" || exit
