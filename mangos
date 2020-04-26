@@ -1162,7 +1162,7 @@ FILE="$folder_core/README.md"
 if [ ! -f "$FILE" ];
 then
 # fresh install ? >
- echo "Please wait this might take a while (Cloning repository mangos-classic)"
+ echo "Please wait this might take a while (Cloning repository 'mangos-classic')"
 sudo mkdir "$folder_wow" &> /dev/null
 sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
 cd "$folder_wow" || exit
@@ -1198,7 +1198,7 @@ FILE="$folder_db/README.md"
 if [ ! -f "$FILE" ];
 then
 # fresh install ? >
- echo "Please wait this might take a while (Cloning repository classic-db)"
+ echo "Please wait this might take a while (Cloning repository 'classic-db')"
 sudo mkdir "$folder_wow" &> /dev/null
 sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
 cd "$folder_wow" || exit
@@ -1232,7 +1232,7 @@ FILE="$folder_helper/README.md"
 if [ ! -f "$FILE" ];
 then
 # fresh install ? >
- echo "Please wait (Cloning repository cmangos-script)"
+ echo "Please wait (Cloning repository 'cmangos-script')"
 sudo mkdir "$folder_helper" &> /dev/null
 sudo chown -R "${user:?}":"${group:?}" "$folder_helper"
 cd "$folder_helper" || exit
