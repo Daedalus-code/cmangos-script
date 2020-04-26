@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202604
-# 3.2.0.0
+# 3.2.0.6
 
 # codes >
 
@@ -545,7 +545,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.2.0.0 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.2.0.6 ]\033[0m
 
       $cm_uptime
 
@@ -1168,6 +1168,8 @@ sudo mkdir "$folder_wow" &> /dev/null
 sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
 cd "$folder_wow" || exit
 git clone https://github.com/cmangos/mangos-classic.git 2> /dev/null
+ echo "Done"
+ sleep 1
 else
 # check for updates >
 
@@ -1205,6 +1207,8 @@ sudo mkdir "$folder_wow" &> /dev/null
 sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
 cd "$folder_wow" || exit
 git clone https://github.com/cmangos/classic-db.git 2> /dev/null
+ echo "Done"
+ sleep 1
 else
 # check for updates >
 
@@ -1240,6 +1244,8 @@ sudo mkdir "$folder_helper" &> /dev/null
 sudo chown -R "${user:?}":"${group:?}" "$folder_helper"
 cd "$folder_helper" || exit
 git clone https://github.com/Daedalus-code/cmangos-script.git 2> /dev/null
+ echo "Done"
+ sleep 1
 else
 # check for updates >
 
