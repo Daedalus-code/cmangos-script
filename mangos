@@ -1706,10 +1706,10 @@ esac
 # checking depends >
 
 # mysql >
-if sudo dpkg -s mysql &> /dev/null; then
-mysql_installed=$(printf '%b' "[\e[1;32mok\033[0m]")
+if sudo dpkg -s mysql-server &> /dev/null; then
+mysql_server_installed=$(printf '%b' "[\e[1;32mok\033[0m]")
 else
-mysql_installed=$(printf '%b' "[\e[1;90mno\033[0m]")
+mysql_server_installed=$(printf '%b' "[\e[1;90mno\033[0m]")
 fi
 
 # mysql-client >
@@ -1720,10 +1720,10 @@ mysql_client_installed=$(printf '%b' "[\e[1;90mno\033[0m]")
 fi
 
 # mariadb >
-if sudo dpkg -s mariadb &> /dev/null; then
-mariadb_installed=$(printf '%b' "[\e[1;32mok\033[0m]")
+if sudo dpkg -s mariadb-server &> /dev/null; then
+mariadb_server_installed=$(printf '%b' "[\e[1;32mok\033[0m]")
 else
-mariadb_installed=$(printf '%b' "[\e[1;90mno\033[0m]")
+mariadb_server_installed=$(printf '%b' "[\e[1;90mno\033[0m]")
 fi
 
 # mariadb-client >
@@ -1740,9 +1740,9 @@ mysql_user=$(printf '%b' "[\e[1;90mno\033[0m]")
 fi
 
  echo
- echo "$mysql_installed - mysql
+ echo "$mysql_server_installed - mysql-server
 $mysql_client_installed - mysql-client
-$mariadb_installed - mariadb
+$mariadb_server_installed - mariadb-server
 $mariadb_client_installed - mariadb-client
 $mysql_user - database user 'mangos'
 
