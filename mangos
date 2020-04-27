@@ -1748,8 +1748,6 @@ $mysql_user - database user"
  echo
 
 # checking depends done
-
-#mariadb_installed=$(sudo dpkg -s mysql &> /dev/null)
   
 # restart mysql service, if it exists >
 if sudo service mysql status &> /dev/null | grep -E 'mysql'; then
