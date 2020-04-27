@@ -1733,7 +1733,7 @@ else
 mariadb_client_installed=$(printf '%b' "[\e[1;90mno\033[0m]")
 fi
 
-mysql_user=$(sudo mysql --defaults-extra-file="$sql_mycnf" -sse "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = 'mangos')")
+mysql_user=$(sudo mysql --defaults-extra-file="$sql_mycnf" -sse "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = 'mangos')" 2> /dev/null)
 if [ "$mysql_user" = 1 ]; then
 mysql_user=$(printf '%b' "[\e[1;32mok\033[0m]")
 else
