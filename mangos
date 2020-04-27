@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202704
-# 3.2.5.5
+# 3.3.0.0
 
 # codes >
 
@@ -545,7 +545,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.2.5.5 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.3.0.0 ]\033[0m
 
       $cm_uptime
 
@@ -1654,9 +1654,9 @@ esac
 # codes >
 
 # mariadb-client >
-packagelist_client_maria=(mariadb-client)
+packagelist_client_maria=(mariadb-client*)
 # mysql-client >
-packagelist_client_mysql=(mysql-client)
+packagelist_client_mysql=(mysql-client*)
 
 # codes done
 
@@ -1671,7 +1671,7 @@ This is needed to operate local/remote database"
  echo
  read -r -n1 -s n
  echo "Please wait.."
-case $REPLY in
+case $n in
 
 "1") # install mariadb-client >
 
@@ -1703,10 +1703,54 @@ esac
 
 "1")
 
- echo "Make sure database 'user' is set!
-Make sure 'mysql_secure_installation' is done!
-Make sure 'Drop/Import databases' is done!"
- 
+# checking depends >
+
+# mysql >
+if sudo dpkg -s mysql &> /dev/null; then
+mysql_installed=$(printf '%b' "[\e[1;32mok\033[0m]")
+else
+mysql_installed=$(printf '%b' "[\e[1;90mno\033[0m]")
+fi
+
+# mysql-client >
+if sudo dpkg -s mysql-client &> /dev/null; then
+mysql_client_installed=$(printf '%b' "[\e[1;32mok\033[0m]")
+else
+mysql_client_installed=$(printf '%b' "[\e[1;90mno\033[0m]")
+fi
+
+# mariadb >
+if sudo dpkg -s mariadb &> /dev/null; then
+mariadb_installed=$(printf '%b' "[\e[1;32mok\033[0m]")
+else
+mariadb_installed=$(printf '%b' "[\e[1;90mno\033[0m]")
+fi
+
+# mariadb-client >
+if sudo dpkg -s mariadb-client &> /dev/null; then
+mariadb_client_installed=$(printf '%b' "[\e[1;32mok\033[0m]")
+else
+mariadb_client_installed=$(printf '%b' "[\e[1;90mno\033[0m]")
+fi
+
+if sudo mysql --defaults-extra-file="$sql_mycnf" "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = 'mangos')" &> /dev/null; then
+mysql_user=$(printf '%b' "[\e[1;32mok\033[0m]")
+else
+mysql_user=$(printf '%b' "[\e[1;90mno\033[0m]")
+fi
+
+ echo
+ echo "$mysql_installed - mysql
+$mysql_client_installed - mysql-client
+$mariadb_installed - mariadb
+$mariadb_client_installed - mariadb-client
+$mysql_user - database user"
+ echo
+
+# checking depends done
+
+#mariadb_installed=$(sudo dpkg -s mysql &> /dev/null)
+  
 # restart mysql service, if it exists >
 if sudo service mysql status &> /dev/null | grep -E 'mysql'; then
  echo "No database system found
@@ -1716,6 +1760,7 @@ Please install mysql or mariadb database/client"
 else
 sudo service mysql stop &> /dev/null; sudo service mysql restart &> /dev/null
 fi
+
 # restart mariadb service, if it exists >
 if sudo service mariadb status &> /dev/null | grep -E 'mariadb'; then
  echo "No database system found
