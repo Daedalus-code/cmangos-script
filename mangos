@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20202704
-# 3.3.0.7
+# V20202804
+# 3.3.1.1
 
 # codes >
 
@@ -545,7 +545,7 @@ fi
 
 printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.3.0.7 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.3.1.1 ]\033[0m
 
       $cm_uptime
 
@@ -1394,6 +1394,8 @@ sudo checkinstall
 
 esac
 
+sudo chown -R "$user":"$group" "$folder_wow"
+
  echo
  read -r -p "Press Enter to continue" </dev/tty
  echo
@@ -1529,6 +1531,8 @@ sudo checkinstall
  ;;
 
 esac
+
+sudo chown -R "$user":"$group" "$folder_wow"
 
 printf '%b' "[\e[0;32mok\033[0m] "
  read -r -p "Press Enter to continue" </dev/tty
