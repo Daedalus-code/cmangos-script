@@ -2324,9 +2324,9 @@ printf '%b' "[\033[1;31mWarning\033[0m]: Only update whats missing.
 Check log for which database needs 'applying updates'"
  echo
 # combine [A] to [B] updates individually > 
-cat "${folder_core:?}"sql/updates/characters/*.sql  > "$folder_wow"/.all_characters.sql
-cat "${folder_core:?}"sql/updates/mangos/*.sql  > "$folder_wow"/.all_mangos.sql
-cat "${folder_core:?}"sql/updates/realmd/*.sql  > "$folder_wow"/.all_realmd.sql
+cat "${folder_core:?}"/sql/updates/characters/*.sql  > "$folder_wow"/.all_characters.sql
+cat "${folder_core:?}"/sql/updates/mangos/*.sql  > "$folder_wow"/.all_mangos.sql
+cat "${folder_core:?}"/sql/updates/realmd/*.sql  > "$folder_wow"/.all_realmd.sql
 
 # apply all updates [A] to [B] characters ? >
  echo
