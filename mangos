@@ -1417,7 +1417,7 @@ make -j3 # 3 cores
 
  ;;
 
-"3")
+"4")
 
 make -j4 # 4 cores
 
@@ -1620,7 +1620,7 @@ make -j3 # 3 cores
 
  ;;
 
-"3")
+"4")
 
 make -j4 # 4 cores
 
