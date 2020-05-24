@@ -13,7 +13,7 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20202904
+# V20202405
 # 3.5.7.5
 
 # codes >
@@ -1369,7 +1369,7 @@ mkdir "$folder_core"/run/logs/old &> /dev/null
 touch "$folder_core"/run/logs/Server.log &> /dev/null
 cp "$folder_core"/run/logs/*.log "$folder_core"/run/logs/old
 # ahbot.conf
-cp "$folder_core"/run/etc/ahbot.conf.dist "$folder_core"/run/etc/ahbot.conf.dist &> /dev/null
+cp "$folder_core"/src/game/AuctionHouseBot/ahbot.conf.dist.in "$folder_core"/run/etc/ahbot.conf.dist &> /dev/null
 # new compile, new system logs >
 cd "$folder_core"/run/logs || exit &> /dev/null
 mv -t "$folder_core"/run/logs/old/ Realmd.log Server.log Server.log.old DBErrors.log EventAIErrors.log &> /dev/null
@@ -1572,7 +1572,7 @@ mkdir "$folder_core"/run/logs/old &> /dev/null
 touch "$folder_core"/run/logs/Server.log &> /dev/null
 cp "$folder_core"/run/logs/*.log "$folder_core"/run/logs/old
 # ahbot.conf
-cp "$folder_core"/run/etc/ahbot.conf.dist "$folder_core"/run/etc/ahbot.conf.dist &> /dev/null
+cp "$folder_core"/src/game/AuctionHouseBot/ahbot.conf.dist.in "$folder_core"/run/etc/ahbot.conf.dist &> /dev/null
 # new compile, new system logs >
 cd "$folder_core"/run/logs || exit &> /dev/null
 mv -t "$folder_core"/run/logs/old/ Realmd.log Server.log Server.log.old DBErrors.log EventAIErrors.log &> /dev/null
