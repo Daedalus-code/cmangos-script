@@ -13,80 +13,79 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20202405
-# 3.5.7.5
+# V20202505
+# 3.6.0.5
 
 # codes >
 
-while :
-do
-clear
+while :; do
+  clear
 
-# config directory >
-# shellcheck disable=SC1091
-source /scripts/server.txt # please edit if wrong.
+  # config directory >
+  # shellcheck disable=SC1091
+  source /scripts/server.txt # please edit if wrong.
 
-# dialog, ncurses no utf8 acs >
-# ! -> https://github.com/scarygliders/X11RDP-o-Matic/issues/45
-export NCURSES_NO_UTF8_ACS=1
+  # dialog, ncurses no utf8 acs >
+  # ! -> https://github.com/scarygliders/X11RDP-o-Matic/issues/45
+  export NCURSES_NO_UTF8_ACS=1
 
-# get database info
-on_count=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT SUM(online) FROM ${db_characters:?}.characters;" 2> /dev/null);
-gu_count=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT count(*) FROM ${db_characters:?}.guild;" 2> /dev/null);
+  # get database info
+  on_count=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT SUM(online) FROM ${db_characters:?}.characters;" 2>/dev/null)
+  gu_count=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT count(*) FROM ${db_characters:?}.guild;" 2>/dev/null)
 
-# get date
-NOW="$(date +"%m.%d.%Y")"
+  # get date
+  NOW="$(date +"%m.%d.%Y")"
 
-# get load
-load="$(while IFS= read -r i; do echo "${i%?}"; done < /proc/loadavg 2> /dev/null | awk '{ print $1,$2,$3 }')"
+  # get load
+  load="$(while IFS= read -r i; do echo "${i%?}"; done </proc/loadavg 2>/dev/null | awk '{ print $1,$2,$3 }')"
 
-# service status
-world_service=mangosd
-realm_service=realmd
+  # service status
+  world_service=mangosd
+  realm_service=realmd
 
-# realmd service
-case  "$(pidof $realm_service | wc -w)" in
- 0) menu_realmd="realmd: [\033[1;31minactive\033[0m]" ;;
- 1) menu_realmd="realmd: [\e[0;32mactive\033[0m]" ;;
- *) menu_realmd="realmd: [\e[0;33mrunning\033[0m]" ;;
-esac
+  # realmd service
+  case "$(pidof $realm_service | wc -w)" in
+  0) menu_realmd="realmd: [\033[1;31minactive\033[0m]" ;;
+  1) menu_realmd="realmd: [\e[0;32mactive\033[0m]" ;;
+  *) menu_realmd="realmd: [\e[0;33mrunning\033[0m]" ;;
+  esac
 
-# mangosd service
-case  "$(pidof $world_service | wc -w)" in
- 0) menu_mangosd="mangosd: [\033[1;31minactive\033[0m]" ;;
- 1) menu_mangosd="mangosd: [\e[0;32mactive\033[0m]" ;;
- *) menu_mangosd="mangosd: [\e[0;33mrunning\033[0m]" ;;
-esac
+  # mangosd service
+  case "$(pidof $world_service | wc -w)" in
+  0) menu_mangosd="mangosd: [\033[1;31minactive\033[0m]" ;;
+  1) menu_mangosd="mangosd: [\e[0;32mactive\033[0m]" ;;
+  *) menu_mangosd="mangosd: [\e[0;33mrunning\033[0m]" ;;
+  esac
 
-# codes done
+  # codes done
 
-# menu >
+  # menu >
 
-printf "\033[0m ---------------------------------------------
+  printf "\033[0m ---------------------------------------------
     _____ _____     _____ _____ _____ _____
    |     |     |___|   | |   __|     |   __|
    |   --| | | | .'| | | |  |  |  |  |__   |\e[0;35m
    |_____|_|_|_|__,|_|___|_____|_____|_____|\n\e[0m"
-cat<<EOF
+  cat <<EOF
            C(ontinued)-MaNGOS Helper
              --------------------
 EOF
- echo "               Online Players $on_count"
- echo "                   Guilds $gu_count"
- echo
-cat<<EOF
+  echo "               Online Players $on_count"
+  echo "                   Guilds $gu_count"
+  echo
+  cat <<EOF
                 $load
 
 EOF
 
-# service status >
+  # service status >
 
-printf '%b' "      $menu_mangosd $menu_realmd"
- echo
+  printf '%b' "      $menu_mangosd $menu_realmd"
+  echo
 
-# service status done
+  # service status done
 
-cat<<EOF
+  cat <<EOF
 
        Start with checking for updates c)
 
@@ -100,25 +99,25 @@ cat<<EOF
    r : restart server       Q : quit
 
 EOF
- read -r -n1 -s
-case "$REPLY" in
+  read -r -n1 -s
+  case "$REPLY" in
 
-# menu done
+  # menu done
 
-"a")
+  "a")
 
-# codes >
+    # codes >
 
-ac_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM ${db_realmd:?}.account;" 2> /dev/null);
-bn_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account_banned;" 2> /dev/null);
+    ac_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM ${db_realmd:?}.account;" 2>/dev/null)
+    bn_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account_banned;" 2>/dev/null)
 
-# codes done
+    # codes done
 
-clear
+    clear
 
-# menu >
+    # menu >
 
-printf '%b' "\033[0m ---------------------------------------------
+    printf '%b' "\033[0m ---------------------------------------------
 \033[0m                                       __
    .---.-.----.----.-----.--.--.-----.|  |_
    |  _  |  __|  __|  _  |  |  |     ||   _|\e[0;35m
@@ -140,15 +139,15 @@ printf '%b' "\033[0m ---------------------------------------------
              Press Any Key To Exit
 >"
 
- read -r -n1 -s
-case "$REPLY" in
+    read -r -n1 -s
+    case "$REPLY" in
 
-# create account >
+    # create account >
 
-"c")
+    "c")
 
-clear
-printf "\033[0m ---------------------------------------------
+      clear
+      printf "\033[0m ---------------------------------------------
 
            \033[0m0: Vanilla\e[0;32m
            1: The Burning Crusade
@@ -169,103 +168,102 @@ printf "\033[0m ---------------------------------------------
 \033[0m ---------------------------------------------
              Press Any Key To Exit"
 
-# menu done
+      # menu done
 
-# username, password, expansion, gmlevel >
+      # username, password, expansion, gmlevel >
 
- echo
- echo
- echo "Username"
- read -r USR;
-if [[ -z "$USR" ]]; then
-printf "empty"
- echo
-else
-printf '%b' "[\e[0;32mok\033[0m] $USR"
- echo
- echo "Password"
- read -r -s PWD;
-if [[ -z "$PWD" ]]; then
-printf "empty"
- echo
-else
-printf "[\e[0;32mok\033[0m] Password"
- echo
- echo "Expansion - 0"
- read -r -s XPV;
-if [[ -z "$XPV" ]]; then
-printf "empty"
- echo
-else
-printf '%b' "[\e[0;32mok\033[0m] Expansion ($XPV)"
- echo
- echo "GMlevel - 0-3"
- read -r -s LVL;
-if [[ -z "$LVL" ]]; then
-printf "empty"
- echo
-else
-printf '%b' "[\e[0;32mok\033[0m] GMlevel ($LVL)"
- echo "${user_nc:?}
+      echo
+      echo
+      echo "Username"
+      read -r USR
+      if [[ -z "$USR" ]]; then
+        printf "empty"
+        echo
+      else
+        printf '%b' "[\e[0;32mok\033[0m] $USR"
+        echo
+        echo "Password"
+        read -r -s PWD
+        if [[ -z "$PWD" ]]; then
+          printf "empty"
+          echo
+        else
+          printf "[\e[0;32mok\033[0m] Password"
+          echo
+          echo "Expansion - 0"
+          read -r -s XPV
+          if [[ -z "$XPV" ]]; then
+            printf "empty"
+            echo
+          else
+            printf '%b' "[\e[0;32mok\033[0m] Expansion ($XPV)"
+            echo
+            echo "GMlevel - 0-3"
+            read -r -s LVL
+            if [[ -z "$LVL" ]]; then
+              printf "empty"
+              echo
+            else
+              printf '%b' "[\e[0;32mok\033[0m] GMlevel ($LVL)"
+              echo "${user_nc:?}
 ${pass_nc:?}
 .account create $USR $PWD
 .account set addon $USR $XPV
-.account set gmlevel $USR $LVL" > "${folder_wow:?}"/tmp.txt;
-nc -q 1 "${host_nc:?}" "${port_nc:?}" < "${folder_wow:?}"/tmp.txt; rm "${folder_wow:?}"/tmp.txt
- echo
- echo
-printf '%b' "[\e[0;32mok\033[0m] Account '\e[0;35m$USR\033[0m' ($XPV/$LVL) created."
- echo
- echo
-fi
-fi
-fi
-fi
- echo
+.account set gmlevel $USR $LVL" >"${folder_wow:?}"/tmp.txt
+              nc -q 1 "${host_nc:?}" "${port_nc:?}" <"${folder_wow:?}"/tmp.txt
+              rm "${folder_wow:?}"/tmp.txt
+              echo
+              echo
+              printf '%b' "[\e[0;32mok\033[0m] Account '\e[0;35m$USR\033[0m' ($XPV/$LVL) created."
+              echo
+              echo
+            fi
+          fi
+        fi
+      fi
+      echo
 
- ;;
+      ;;
 
-# username, password, expansion, gmlevel done
+      # username, password, expansion, gmlevel done
 
-# create account done
+      # create account done
 
-# delete account >
+      # delete account >
 
-"d")
+    "d")
 
-# codes >
+      # codes >
 
-# check for backup >
+      # check for backup >
 
-# realmd backup >
-FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
-if [ ! -f "$FILE" ];
-then
-realmd_backup="[\e[0;31mold\033[0m]"
- echo
-else
-realmd_backup="[\e[0;32mok\033[0m]"
- echo
-fi
-# characters backup >
-FILE="$folder_wow/backup/$db_characters-$NOW.sql"
-if [ ! -f "$FILE" ];
-then
-charac_backup="[\e[0;31mold\033[0m]"
- echo
-else
-charac_backup="[\e[0;32mok\033[0m]"
- echo
-fi
+      # realmd backup >
+      FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
+      if [ ! -f "$FILE" ]; then
+        realmd_backup="[\e[0;31mold\033[0m]"
+        echo
+      else
+        realmd_backup="[\e[0;32mok\033[0m]"
+        echo
+      fi
+      # characters backup >
+      FILE="$folder_wow/backup/$db_characters-$NOW.sql"
+      if [ ! -f "$FILE" ]; then
+        charac_backup="[\e[0;31mold\033[0m]"
+        echo
+      else
+        charac_backup="[\e[0;32mok\033[0m]"
+        echo
+      fi
 
-# codes done
+      # codes done
 
-# menu >
+      # menu >
 
-clear
+      clear
 
-echo
-printf '%b' "\033[1;31m
+      echo
+      printf '%b' "\033[1;31m
  @@@@@@@  @@@@@@@@ @@@      @@@@@@@@ @@@@@@@ @@@@@@@@
  @@!  @@@ @@!      @@!      @@.        @@!   @@!
  @!@  !@! @!!!.:   @!!      @!!.:!     @!!   @!!!:.
@@ -281,271 +279,268 @@ printf '%b' "\033[1;31m
  \e[0;35mExamples\033[0m: 'username' - 'username1,username2'
  Select (\e[0;32musername\033[0m) or (\e[0;32mid\033[0m) - Press Enter To Confirm"
 
- echo
- echo
- read -r -p " Show list" </dev/tty
- echo
-mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, last_ip, DATE_FORMAT(last_login, '%Y-%m-%d') last_login, id FROM $db_realmd.account;"
-printf '%b' " Delete directly from '\e[0;35m$db_realmd.account\033[0m'"
- echo
+      echo
+      echo
+      read -r -p " Show list" </dev/tty
+      echo
+      mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, last_ip, DATE_FORMAT(last_login, '%Y-%m-%d') last_login, id FROM $db_realmd.account;"
+      printf '%b' " Delete directly from '\e[0;35m$db_realmd.account\033[0m'"
+      echo
 
-printf "
+      printf "
 \033[0m ---------------------------------------------
              Press Any Key To Exit
->";
- read -r ID;
- echo
-if [[ -z "$ID" ]]; then
-printf '%s\n' "empty"
-else
-deleted=$(printf '%b' "\e[31mDELETE\033[0m '\e[0;35m$ID\033[0m' \e[31m?!\033[0m")
- echo
- read -r -p "$deleted
+>"
+      read -r ID
+      echo
+      if [[ -z "$ID" ]]; then
+        printf '%s\n' "empty"
+      else
+        deleted=$(printf '%b' "\e[31mDELETE\033[0m '\e[0;35m$ID\033[0m' \e[31m?!\033[0m")
+        echo
+        read -r -p "$deleted
 
 ARE YOU SURE? (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-# delete by id -> examples: ('id') (id1,id2,) & (id1 AND id5)
-mysql --defaults-extra-file="$sql_mycnf" --execute="DELETE FROM $db_realmd.account WHERE id = $ID;" &> /dev/null
-mysql --defaults-extra-file="$sql_mycnf" --execute="DELETE FROM $db_realmd.account WHERE id IN ($ID);" &> /dev/null
-mysql --defaults-extra-file="$sql_mycnf" --execute="DELETE FROM $db_realmd.account WHERE id BETWEEN $ID;" &> /dev/null
-# delete by username -> examples: ('username') & (username1,username2,)
-mysql --defaults-extra-file="$sql_mycnf" --execute="DELETE FROM $db_realmd.account WHERE username='$ID';" &> /dev/null
-mysql --defaults-extra-file="$sql_mycnf" --execute="DELETE FROM $db_realmd.account WHERE username IN ($ID);" &> /dev/null
- sleep 1
- echo
- echo " kek!"
-printf "(∩ ᐛ )⊃━━ "
- sleep 1
-printf "^\e[0;33m｡·.·\033[0mﾟ\e[0;33m★☆ﾟ.｡*\033[0m(つ﹏⊂)\e[0;33m?･ ｡★·"
- sleep 1
-printf ".\033[0m..poof!"
- sleep 1
- echo
- echo
-printf '%b' "$ID \033[0m..vanished!"
- sleep 1
- echo
- echo
-fi
-fi
- echo
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+          # delete by id -> examples: ('id') (id1,id2,) & (id1 AND id5)
+          mysql --defaults-extra-file="$sql_mycnf" --execute="DELETE FROM $db_realmd.account WHERE id = $ID;" &>/dev/null
+          mysql --defaults-extra-file="$sql_mycnf" --execute="DELETE FROM $db_realmd.account WHERE id IN ($ID);" &>/dev/null
+          mysql --defaults-extra-file="$sql_mycnf" --execute="DELETE FROM $db_realmd.account WHERE id BETWEEN $ID;" &>/dev/null
+          # delete by username -> examples: ('username') & (username1,username2,)
+          mysql --defaults-extra-file="$sql_mycnf" --execute="DELETE FROM $db_realmd.account WHERE username='$ID';" &>/dev/null
+          mysql --defaults-extra-file="$sql_mycnf" --execute="DELETE FROM $db_realmd.account WHERE username IN ($ID);" &>/dev/null
+          sleep 1
+          echo
+          echo " kek!"
+          printf "(∩ ᐛ )⊃━━ "
+          sleep 1
+          printf "^\e[0;33m｡·.·\033[0mﾟ\e[0;33m★☆ﾟ.｡*\033[0m(つ﹏⊂)\e[0;33m?･ ｡★·"
+          sleep 1
+          printf ".\033[0m..poof!"
+          sleep 1
+          echo
+          echo
+          printf '%b' "$ID \033[0m..vanished!"
+          sleep 1
+          echo
+          echo
+        fi
+      fi
+      echo
 
- ;;
-
- *) echo "empty"
- echo
- ;;
-esac
- read -r -p "Press Enter to continue" </dev/tty
- echo
-
- ;;
-
-# menu done
-
-# delete account done
-
-# Login (command) >
-
-# * f★★ck; b7122@rd >> @ct1vlz1★n && chln@.
-
-"A")
-
-while :
-do
-clear
-
-# codes >
-
-# service status
-world_service=mangosd
-realm_service=realmd
-
-# realmd service
-case  "$(pidof $realm_service | wc -w)" in
- 0) command_realmd="[\033[1;31moff\033[0m]" ;;
- 1) command_realmd="[\e[0;32mok\033[0m]" ;;
- *) command_realmd="[\e[0;33mok\033[0m]" ;;
-esac
-
-# mangosd service
-case  "$(pidof $world_service | wc -w)" in
- 0) command_mangosd="[\033[1;31moff\033[0m]" ;;
- 1) command_mangosd="[\e[0;32mok\033[0m]" ;;
- *) command_mangosd="[\e[0;33mok\033[0m]" ;;
-esac
-
-# Walter A code >
-# Thank you Walter A ! -> https://stackoverflow.com/questions/59862020
-
-# shellcheck disable=SC2034  # Unused variables left for readability
-# init_colors
-init_colors() {
-    reset=$(tput sgr0)
-    bold=$(tput bold)
-    black=$(tput setaf 0)
-    red=$(tput setaf 1)
-    green=$(tput setaf 2)
-    yellow=$(tput setaf 3)
-    blue=$(tput setaf 4)
-    magenta=$(tput setaf 5)
-    cyan=$(tput setaf 6)
-    white=$(tput setaf 7)
-    user_color=$bold
-}
-
-# colorstring reads from stdin and uses parameter 1 as an escape sequence
-# with more parameters the first is used as a color, the other as the string to be modified
-# It will set colors until the last space sqquence
-colorstring() {
-   case $# in
-   0) # invalid
-      echo "colorstring called without parameters"
-   ;;
-   1)
-      sed -r "s/^.*[^ ]/$1&${reset}/"
       ;;
-   *)
-      color="$1"
-      shift
-      sed -r "s/^.*[^ ]/${color}&${reset}/" <<< "$@"
-   ;;
-   esac
 
-}
+    *)
+      echo "empty"
+      echo
+      ;;
+    esac
+    read -r -p "Press Enter to continue" </dev/tty
+    echo
 
-dot_field() {
-   # todo: Change implementation when field can be 2 words with a space in between
-   printf "%-14.14s" "$1" | colorstring "${white}" | tr ' ' '.'
-   # The : must be printed in a second statement when you don't want cyan dots.
-   printf ':'
-}
+    ;;
 
-# todo: Change implementation when field can be 2 words with a space in between
-space_number() {
-   printf "%-9.9s" "$1" | colorstring "${green}"
-}
+    # menu done
 
-# todo: add logic when only 4 parameters are given
-printline() {
-   echo "       $(dot_field "$1") $(space_number "$2")$(dot_field "$3") $(space_number "$4")$(dot_field "$5") $(space_number "$6")"
-}
+    # delete account done
 
-# init the color variables
-init_colors
+    # Login (command) >
 
-# Walter A code done
+    # * f★★ck; b7122@rd >> @ct1vlz1★n && chln@.
 
-# uptime >
-cm_uptime="\033[0mTime""$W""$(uptime)\033[0m"
-# realm name >
-cm_realm="\033[0mRealm \e[0;32m${server_name:?}\e[31m"
+  "A")
 
-# log data >
+    while :; do
+      clear
 
-# Realmd.log >
+      # codes >
 
-# look for error
-if grep -E -q ".*ERROR*." "${folder_core:?}"/run/logs/Realmd.log &> /dev/null; then
-# if any, print "error"
-cm_realmd_log="[\033[0;31mError\033[0m]"
-else
-# if nothing, print "ok"
-cm_realmd_log="[\e[0;32mok\033[0m]"
-fi
-# look for empty tables
-if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log &> /dev/null; then
-# if any, print "empty"
-cm_realmd_log_empty="[\e[0;33mEmpty\033[0m]"
-fi
-# Realmd.log done
+      # service status
+      world_service=mangosd
+      realm_service=realmd
 
-# Server.log >
+      # realmd service
+      case "$(pidof $realm_service | wc -w)" in
+      0) command_realmd="[\033[1;31moff\033[0m]" ;;
+      1) command_realmd="[\e[0;32mok\033[0m]" ;;
+      *) command_realmd="[\e[0;33mok\033[0m]" ;;
+      esac
 
-# look for error
-if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log &> /dev/null; then
-# if any, print "error"
-cm_server_log="[\033[0;31mError\033[0m]"
-else
-# if nothing, print "ok"
-cm_server_log="[\e[0;32mok\033[0m]"
-fi
-# look for empty tables
-if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log &> /dev/null; then
-# if any, print "empty"
-cm_server_log_empty="[\e[0;33mEmpty\033[0m]"
-fi
-# look for serious error
-if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log &> /dev/null; then
-# if any, print "serious"
-cm_server_log_serious="[\033[1;31mSerious\033[0m]"
-fi
+      # mangosd service
+      case "$(pidof $world_service | wc -w)" in
+      0) command_mangosd="[\033[1;31moff\033[0m]" ;;
+      1) command_mangosd="[\e[0;32mok\033[0m]" ;;
+      *) command_mangosd="[\e[0;33mok\033[0m]" ;;
+      esac
 
-# Server.log done
+      # Walter A code >
+      # Thank you Walter A ! -> https://stackoverflow.com/questions/59862020
 
-# check for backup >
+      # shellcheck disable=SC2034  # Unused variables left for readability
+      # init_colors
+      init_colors() {
+        reset=$(tput sgr0)
+        bold=$(tput bold)
+        black=$(tput setaf 0)
+        red=$(tput setaf 1)
+        green=$(tput setaf 2)
+        yellow=$(tput setaf 3)
+        blue=$(tput setaf 4)
+        magenta=$(tput setaf 5)
+        cyan=$(tput setaf 6)
+        white=$(tput setaf 7)
+        user_color=$bold
+      }
 
-# realmd backup >
-FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
-if [ ! -f "$FILE" ];
-then
-realmd_backup="[\e[0;31mold\033[0m]"
- echo
-else
-realmd_backup="[\e[0;32mok\033[0m]"
- echo
-fi
-# characters backup >
-FILE="$folder_wow/backup/$db_characters-$NOW.sql"
-if [ ! -f "$FILE" ];
-then
-charac_backup="[\e[0;31mold\033[0m]"
- echo
-else
-charac_backup="[\e[0;32mok\033[0m]"
- echo
-fi
+      # colorstring reads from stdin and uses parameter 1 as an escape sequence
+      # with more parameters the first is used as a color, the other as the string to be modified
+      # It will set colors until the last space sqquence
+      colorstring() {
+        case $# in
+        0) # invalid
+          echo "colorstring called without parameters"
+          ;;
+        1)
+          sed -r "s/^.*[^ ]/$1&${reset}/"
+          ;;
+        *)
+          color="$1"
+          shift
+          sed -r "s/^.*[^ ]/${color}&${reset}/" <<<"$@"
+          ;;
+        esac
 
-# world server latest build >
-if grep -q -o -a "\sBuilt\son\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null; then
-# if any, print "built date"
-latest_world_built=$(grep -o -a "\sBuilt\son\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null)
-# if nothing, print "Restart server please.."
-else
-latest_world_built=" \e[0;35mBuilt date?\033[0m - Restart server please"
-fi
-# built for >
-if grep -q -o -a "\sBuilt\sfor\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null; then
-# if any, print "built for"
-built_for=$(grep -o -a "\sBuilt\sfor\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null)
-# if nothing, print "Restart server please.."
-else
-built_for=" \e[0;35mBuilt for?\033[0m  - Restart server please"
-fi
-# EventAI >
-if grep -q -o -a "\sACID\s1.12.x\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null; then
-# if any, print "EventAI"
-eventai=$(grep -o -a "\sACID\s1.12.x\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null)
-# if nothing, print "Restart server please.."
-else
-eventai=" \e[0;35mEventAI?\033[0m  - Restart server please"
-fi
-# World DB >
-if grep -q -o -a "\s1.11\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null; then
-# if any, print "World DB"
-world_db=$(grep -o -a "\s1.11\s*.*" "$folder_core"/run/logs/Server.log 2> /dev/null)
-# if nothing, print "Restart server please.."
-else
-world_db=" \e[0;35mWorld DB?\033[0m - Restart server please"
-fi
+      }
 
-# codes done
+      dot_field() {
+        # todo: Change implementation when field can be 2 words with a space in between
+        printf "%-14.14s" "$1" | colorstring "${white}" | tr ' ' '.'
+        # The : must be printed in a second statement when you don't want cyan dots.
+        printf ':'
+      }
 
-printf '%b' " <------------------------------------------------------------------------------>\e[31m
+      # todo: Change implementation when field can be 2 words with a space in between
+      space_number() {
+        printf "%-9.9s" "$1" | colorstring "${green}"
+      }
+
+      # todo: add logic when only 4 parameters are given
+      printline() {
+        echo "       $(dot_field "$1") $(space_number "$2")$(dot_field "$3") $(space_number "$4")$(dot_field "$5") $(space_number "$6")"
+      }
+
+      # init the color variables
+      init_colors
+
+      # Walter A code done
+
+      # uptime >
+      cm_uptime="\033[0mTime""$W""$(uptime)\033[0m"
+      # realm name >
+      cm_realm="\033[0mRealm \e[0;32m${server_name:?}\e[31m"
+
+      # log data >
+
+      # Realmd.log >
+
+      # look for error
+      if grep -E -q ".*ERROR*." "${folder_core:?}"/run/logs/Realmd.log &>/dev/null; then
+        # if any, print "error"
+        cm_realmd_log="[\033[0;31mError\033[0m]"
+      else
+        # if nothing, print "ok"
+        cm_realmd_log="[\e[0;32mok\033[0m]"
+      fi
+      # look for empty tables
+      if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log &>/dev/null; then
+        # if any, print "empty"
+        cm_realmd_log_empty="[\e[0;33mEmpty\033[0m]"
+      fi
+      # Realmd.log done
+
+      # Server.log >
+
+      # look for error
+      if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log &>/dev/null; then
+        # if any, print "error"
+        cm_server_log="[\033[0;31mError\033[0m]"
+      else
+        # if nothing, print "ok"
+        cm_server_log="[\e[0;32mok\033[0m]"
+      fi
+      # look for empty tables
+      if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log &>/dev/null; then
+        # if any, print "empty"
+        cm_server_log_empty="[\e[0;33mEmpty\033[0m]"
+      fi
+      # look for serious error
+      if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log &>/dev/null; then
+        # if any, print "serious"
+        cm_server_log_serious="[\033[1;31mSerious\033[0m]"
+      fi
+
+      # Server.log done
+
+      # check for backup >
+
+      # realmd backup >
+      FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
+      if [ ! -f "$FILE" ]; then
+        realmd_backup="[\e[0;31mold\033[0m]"
+        echo
+      else
+        realmd_backup="[\e[0;32mok\033[0m]"
+        echo
+      fi
+      # characters backup >
+      FILE="$folder_wow/backup/$db_characters-$NOW.sql"
+      if [ ! -f "$FILE" ]; then
+        charac_backup="[\e[0;31mold\033[0m]"
+        echo
+      else
+        charac_backup="[\e[0;32mok\033[0m]"
+        echo
+      fi
+
+      # world server latest build >
+      if grep -q -o -a "\sBuilt\son\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+        # if any, print "built date"
+        latest_world_built=$(grep -o -a "\sBuilt\son\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null)
+      # if nothing, print "Restart server please.."
+      else
+        latest_world_built=" \e[0;35mBuilt date?\033[0m - Restart server please"
+      fi
+      # built for >
+      if grep -q -o -a "\sBuilt\sfor\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+        # if any, print "built for"
+        built_for=$(grep -o -a "\sBuilt\sfor\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null)
+      # if nothing, print "Restart server please.."
+      else
+        built_for=" \e[0;35mBuilt for?\033[0m  - Restart server please"
+      fi
+      # EventAI >
+      if grep -q -o -a "\sACID\s1.12.x\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+        # if any, print "EventAI"
+        eventai=$(grep -o -a "\sACID\s1.12.x\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null)
+      # if nothing, print "Restart server please.."
+      else
+        eventai=" \e[0;35mEventAI?\033[0m  - Restart server please"
+      fi
+      # World DB >
+      if grep -q -o -a "\s1.11\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+        # if any, print "World DB"
+        world_db=$(grep -o -a "\s1.11\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null)
+      # if nothing, print "Restart server please.."
+      else
+        world_db=" \e[0;35mWorld DB?\033[0m - Restart server please"
+      fi
+
+      # codes done
+
+      printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.5.7.5 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.6.0.5 ]\033[0m
 
       $cm_uptime
 
@@ -565,18 +560,18 @@ printf '%b' " <-----------------------------------------------------------------
 
     \e[0;33mFor more information: \033[0mi\033[0m \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
  <------------------------------------------------------------------------------>\033[0m"
- echo
- read -r -s -n1
-case "$REPLY" in
+      echo
+      read -r -s -n1
+      case "$REPLY" in
 
-# Information >
+      # Information >
 
-"i")
+      "i")
 
- clear
- echo
- echo
-printf '%b' " <------------------------------------------------------------------------------>\033[0m
+        clear
+        echo
+        echo
+        printf '%b' " <------------------------------------------------------------------------------>\033[0m
 
          _____     __  __       _   _  _____  ____   _____
         / ____|   |  \/  |     | \ | |/ ____|/ __ \ / ____|
@@ -638,37 +633,37 @@ printf '%b' " <-----------------------------------------------------------------
 
 \e[1;32m>\033[0m hit Enter to go back.
  <------------------------------------------------------------------------------>\033[0m"
- echo
- read -r -p ">" </dev/tty
+        echo
+        read -r -p ">" </dev/tty
 
- ;;
+        ;;
 
-# Information done
+        # Information done
 
-# seedbox menu >
+        # seedbox menu >
 
-"m")
+      "m")
 
-# codes >
+        # codes >
 
-transmission_list=$(transmission-remote -l 2> /dev/null)
-# transmission-daemon service >
-transmission_service=transmission-daemon
-# transmission-daemon status >
-case  "$(pidof $transmission_service | wc -w)" in
- 0) seed_transmission="[\033[1;31moff\033[0m]" ;;
- 1) seed_transmission="[\e[0;32mok\033[0m]" ;;
- *) seed_transmission="[\e[0;33mok\033[0m]" ;;
-esac
+        transmission_list=$(transmission-remote -l 2>/dev/null)
+        # transmission-daemon service >
+        transmission_service=transmission-daemon
+        # transmission-daemon status >
+        case "$(pidof $transmission_service | wc -w)" in
+        0) seed_transmission="[\033[1;31moff\033[0m]" ;;
+        1) seed_transmission="[\e[0;32mok\033[0m]" ;;
+        *) seed_transmission="[\e[0;33mok\033[0m]" ;;
+        esac
 
-# codes done
+        # codes done
 
-# menu >
+        # menu >
 
- clear
-echo
-echo
-printf '%b' " <------------------------------------------------------------------------------>\033[0m
+        clear
+        echo
+        echo
+        printf '%b' " <------------------------------------------------------------------------------>\033[0m
                     \e[0;32mCMaNGOS (Classic fork) - SeedBox for maps\e[31m
 
      \033[0m* Download/Upload maps for WoW Vanilla server.
@@ -691,38 +686,37 @@ $transmission_list
 
 \e[1;32m>\033[0m hit Enter to go back.
  <------------------------------------------------------------------------------>\033[0m"
- echo
-printf '%b' ">"
-read -r n
-case $n in
+        echo
+        printf '%b' ">"
+        read -r n
+        case $n in
 
-# setup seedbox (transmission) >
-# ubuntu
+        # setup seedbox (transmission) >
+        # ubuntu
 
-"t")
+        "t")
 
-# already installed? >
-FILE="/seedbox/vanilla_maps.zip"
-if [ ! -f "$FILE" ];
-then
-# check for updates regardless >
-sudo apt-get update &> /dev/null && apt-get upgrade -y &> /dev/null
-# make sure unzip exist >
-sudo apt-get install unzip -y &> /dev/null
-# install transmission-daemon >
-sudo apt-get install transmission-daemon -y &> /dev/null
-# temporary stop ^ >
-sudo service transmission-daemon stop &> /dev/null
-# remove old config >
-sudo rm /var/lib/transmission-daemon/.config/transmission-daemon/settings.json &> /dev/null
-# create 'seedbox' directory >
-cd || exit
-sudo mkdir "/seedbox" &> /dev/null
-# fix folder owner >
-sudo chown -R debian-transmission:debian-transmission /seedbox/ &> /dev/null
-# setup transmission-daemon configuration file >
-# settings.json
-cat > "$folder_wow"/settings.json <<'EOF'
+          # already installed? >
+          FILE="/seedbox/vanilla_maps.zip"
+          if [ ! -f "$FILE" ]; then
+            # check for updates regardless >
+            sudo apt-get update &>/dev/null && apt-get upgrade -y &>/dev/null
+            # make sure unzip exist >
+            sudo apt-get install unzip -y &>/dev/null
+            # install transmission-daemon >
+            sudo apt-get install transmission-daemon -y &>/dev/null
+            # temporary stop ^ >
+            sudo service transmission-daemon stop &>/dev/null
+            # remove old config >
+            sudo rm /var/lib/transmission-daemon/.config/transmission-daemon/settings.json &>/dev/null
+            # create 'seedbox' directory >
+            cd || exit
+            sudo mkdir "/seedbox" &>/dev/null
+            # fix folder owner >
+            sudo chown -R debian-transmission:debian-transmission /seedbox/ &>/dev/null
+            # setup transmission-daemon configuration file >
+            # settings.json
+            cat >"$folder_wow"/settings.json <<'EOF'
 {
     "alt-speed-down": 50,
     "alt-speed-enabled": false,
@@ -792,321 +786,322 @@ cat > "$folder_wow"/settings.json <<'EOF'
     "utp-enabled": true
 }
 EOF
-# install to correct folder >
-sudo mv "$folder_wow"/settings.json /var/lib/transmission-daemon/.config/transmission-daemon/settings.json &> /dev/null
- sleep 1
-# start transmission-daemon >
-sudo service transmission-daemon start &> /dev/null
- echo
-printf '%b' "[\e[0;32mok\033[0m] - transmission should be running now"
- echo
- sleep 1
-# add magnet link: vanilla.maps.zip.torrent >
-transmission-remote -a "magnet:?xt=urn:btih:1cdcaa3d77a7f4df79935d885e639903e37dda24&dn=vanilla%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &> /dev/null
- echo
-printf '%b' "[\e[0;32mok\033[0m] - torrent added"
- echo
- sleep 1
-# reload >
-sudo systemctl daemon-reload 2> /dev/null
- sleep 1
-else
- echo
-printf '%b' "SeedBox already installed."
- echo
- sleep 2
-fi
+            # install to correct folder >
+            sudo mv "$folder_wow"/settings.json /var/lib/transmission-daemon/.config/transmission-daemon/settings.json &>/dev/null
+            sleep 1
+            # start transmission-daemon >
+            sudo service transmission-daemon start &>/dev/null
+            echo
+            printf '%b' "[\e[0;32mok\033[0m] - transmission should be running now"
+            echo
+            sleep 1
+            # add magnet link: vanilla.maps.zip.torrent >
+            transmission-remote -a "magnet:?xt=urn:btih:1cdcaa3d77a7f4df79935d885e639903e37dda24&dn=vanilla%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
+            echo
+            printf '%b' "[\e[0;32mok\033[0m] - torrent added"
+            echo
+            sleep 1
+            # reload >
+            sudo systemctl daemon-reload 2>/dev/null
+            sleep 1
+          else
+            echo
+            printf '%b' "SeedBox already installed."
+            echo
+            sleep 2
+          fi
 
- ;;
+          ;;
 
-# setup seedbox (transmission) done
+          # setup seedbox (transmission) done
 
-# start seedbox (transmission) >
+          # start seedbox (transmission) >
 
- "r")
+        "r")
 
-sudo service transmission-daemon start &> /dev/null
- sleep 1
-# enable service >
-sudo systemctl enable transmission-daemon &> /dev/null
-# reload >
-sudo systemctl daemon-reload &> /dev/null
- echo
-printf '%b' "[\e[0;32mok\033[0m] - seedbox started."
- echo
- sleep 1
+          sudo service transmission-daemon start &>/dev/null
+          sleep 1
+          # enable service >
+          sudo systemctl enable transmission-daemon &>/dev/null
+          # reload >
+          sudo systemctl daemon-reload &>/dev/null
+          echo
+          printf '%b' "[\e[0;32mok\033[0m] - seedbox started."
+          echo
+          sleep 1
 
-  ;;
+          ;;
 
-# start seedbox (transmission) done
+          # start seedbox (transmission) done
 
-# stop seedbox (transmission) >
+          # stop seedbox (transmission) >
 
-"s")
+        "s")
 
-sudo service transmission-daemon stop &> /dev/null
- sleep 1
-# disable service >
-sudo systemctl disable transmission-daemon &> /dev/null
-# reload >
-sudo systemctl daemon-reload &> /dev/null
- echo
-printf '%b' "[\033[1;31moff\033[0m] - seedbox stopped."
- echo
- sleep 1
+          sudo service transmission-daemon stop &>/dev/null
+          sleep 1
+          # disable service >
+          sudo systemctl disable transmission-daemon &>/dev/null
+          # reload >
+          sudo systemctl daemon-reload &>/dev/null
+          echo
+          printf '%b' "[\033[1;31moff\033[0m] - seedbox stopped."
+          echo
+          sleep 1
 
- ;;
+          ;;
 
-# stop seedbox (transmission) done
+          # stop seedbox (transmission) done
 
-# install maps >
+          # install maps >
 
-"m")
+        "m")
 
-# codes >
+          # codes >
 
-MAPS="$folder_core"/run/maps/5332742.map
-MMAPS="$folder_core"/run/mmaps/5332742.mmtile
-VMAPS="$folder_core"/run/vmaps/Zulgurub_Ziggurat.wmo.vmo
+          MAPS="$folder_core"/run/maps/5332742.map
+          MMAPS="$folder_core"/run/mmaps/5332742.mmtile
+          VMAPS="$folder_core"/run/vmaps/Zulgurub_Ziggurat.wmo.vmo
 
-# codes done
+          # codes done
 
-if [ -f "$MAPS" ] && [ -f "$MMAPS" ] && [ -f "$VMAPS" ];
-then
- echo
-printf '%b' "Maps already installed."
- echo
-sleep 2
-else
-sudo unzip /seedbox/vanilla_maps.zip -d "$folder_core"/run
- echo
-printf '%b' "[\e[0;32mok\033[0m] - maps installed."
- echo
- sleep 1
-fi
+          if [ -f "$MAPS" ] && [ -f "$MMAPS" ] && [ -f "$VMAPS" ]; then
+            echo
+            printf '%b' "Maps already installed."
+            echo
+            sleep 2
+          else
+            sudo unzip /seedbox/vanilla_maps.zip -d "$folder_core"/run
+            echo
+            printf '%b' "[\e[0;32mok\033[0m] - maps installed."
+            echo
+            sleep 1
+          fi
+          ;;
 
-esac
+        esac
 
- ;;
+        ;;
 
-# install maps done
+        # install maps done
 
-# seedbox menu done
+        # seedbox menu done
 
-# htop >
+        # htop >
 
-"p")
+      "p")
 
-if ! [ -x "$(command -v htop)" ]; then
-sudo apt-get install htop -y &> /dev/null
-fi
-htop
+        if ! [ -x "$(command -v htop)" ]; then
+          sudo apt-get install htop -y &>/dev/null
+        fi
+        htop
 
- ;;
+        ;;
 
-# htop done
+        # htop done
 
-# reset --hard (everything) >
+        # reset --hard (everything) >
 
-"h")
+      "h")
 
-printf " \033[0;31mWARNING\033[0m: 'reset --hard' (\e[0;35meverything\033[0m) Are You Sure? (y/n)"
- echo
- read -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
- echo
- echo
-printf "\e[0;35mmangos-classic\033[0m: "
-cd "$folder_core" || exit; git reset --hard;
-printf "\e[0;35mclassic-db\033[0m: "
-cd "${folder_db:?}" || exit; git reset --hard;
-printf "\e[0;35mcmangos-script\033[0m: "
-cd "${folder_helper:?}" || exit; git reset --hard;
- echo
- echo
- read -r -p "Press Enter to continue" </dev/tty
- echo
-fi
+        printf " \033[0;31mWARNING\033[0m: 'reset --hard' (\e[0;35meverything\033[0m) Are You Sure? (y/n)"
+        echo
+        read -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+          echo
+          echo
+          printf "\e[0;35mmangos-classic\033[0m: "
+          cd "$folder_core" || exit
+          git reset --hard
+          printf "\e[0;35mclassic-db\033[0m: "
+          cd "${folder_db:?}" || exit
+          git reset --hard
+          printf "\e[0;35mcmangos-script\033[0m: "
+          cd "${folder_helper:?}" || exit
+          git reset --hard
+          echo
+          echo
+          read -r -p "Press Enter to continue" </dev/tty
+          echo
+        fi
 
- ;;
+        ;;
 
-# reset --hard (everything) done
+        # reset --hard (everything) done
 
-# dive into logs >
+        # dive into logs >
 
-"l")
+      "l")
 
-# codes >
+        # codes >
 
-# server.log.old >
-dive_server_old_empty=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty.|.*empty*." "$folder_core"/run/logs/Server.log.old 2> /dev/null)
-dive_server_old_error=$(grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log.old 2> /dev/null)
-dive_server_old_serio=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log.old 2> /dev/null)
-dive_server_old_ignor=$(grep -c -E ".*ignoring*.|.*ignore*.|.*ignored*." "$folder_core"/run/logs/Server.log.old 2> /dev/null)
-# server.log >
-dive_server_empty=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty.|.*empty*." "$folder_core"/run/logs/Server.log 2> /dev/null)
-dive_server_error=$(grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log 2> /dev/null)
-dive_server_serio=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2> /dev/null)
-dive_server_ignor=$(grep -c -E ".*ignoring*.|.*ignore*.|.*ignored*." "$folder_core"/run/logs/Server.log 2> /dev/null)
-# realmd.log >
-dive_realmd_empty=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2> /dev/null)
-dive_realmd_error=$(grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2> /dev/null)
-dive_realmd_serio=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Realmd.log 2> /dev/null)
-# DBErrors.log >
-dive_DBError_corr=$(grep -c -E "does\snot\shave\scorresponding" "$folder_core"/run/logs/DBErrors.log 2> /dev/null)
-dive_DBError_exis=$(grep -c -E "doesn't\sexist" "$folder_core"/run/logs/DBErrors.log 2> /dev/null)
-dive_DBError_quer=$(grep -c -E "query\sERROR" "$folder_core"/run/logs/DBErrors.log 2> /dev/null)
-dive_DBError_used=$(grep -c -E "Option\swill\snever\sbe\sused" "$folder_core"/run/logs/DBErrors.log 2> /dev/null)
-dive_DBError_cras=$(grep -c -E "can\scrash\sclient" "$folder_core"/run/logs/DBErrors.log 2> /dev/null)
-# char.log >
-dive_char_created=$(grep -c -E "Create\sCharacter" "$folder_core"/run/logs/Char.log 2> /dev/null)
-dive_char_login_c=$(grep -c -E "Login" "$folder_core"/run/logs/Char.log 2> /dev/null)
-dive_char_logouts=$(grep -c -E "Logout" "$folder_core"/run/logs/Char.log 2> /dev/null)
-# EventAIErrors.log >
-dive_EventAIError=$(grep -c -E "skipping" "$folder_core"/run/logs/EventAIErrors.log 2> /dev/null)
-dive_EventAInoeff=$(grep -c -E "Action\swill\snot\shave\sany\seffect." "$folder_core"/run/logs/EventAIErrors.log 2> /dev/null)
-dive_EventAInonex=$(grep -c -E "nonexistent|non-existing" "$folder_core"/run/logs/EventAIErrors.log 2> /dev/null)
-dive_EventAI_NULL=$(grep -c -E ".*NULL*." "$folder_core"/run/logs/EventAIErrors.log 2> /dev/null)
-dive_EventAINotUs=$(grep -c -E "but\snot\sused" "$folder_core"/run/logs/EventAIErrors.log 2> /dev/null)
+        # server.log.old >
+        dive_server_old_empty=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty.|.*empty*." "$folder_core"/run/logs/Server.log.old 2>/dev/null)
+        dive_server_old_error=$(grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log.old 2>/dev/null)
+        dive_server_old_serio=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log.old 2>/dev/null)
+        dive_server_old_ignor=$(grep -c -E ".*ignoring*.|.*ignore*.|.*ignored*." "$folder_core"/run/logs/Server.log.old 2>/dev/null)
+        # server.log >
+        dive_server_empty=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty.|.*empty*." "$folder_core"/run/logs/Server.log 2>/dev/null)
+        dive_server_error=$(grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log 2>/dev/null)
+        dive_server_serio=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2>/dev/null)
+        dive_server_ignor=$(grep -c -E ".*ignoring*.|.*ignore*.|.*ignored*." "$folder_core"/run/logs/Server.log 2>/dev/null)
+        # realmd.log >
+        dive_realmd_empty=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2>/dev/null)
+        dive_realmd_error=$(grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2>/dev/null)
+        dive_realmd_serio=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Realmd.log 2>/dev/null)
+        # DBErrors.log >
+        dive_DBError_corr=$(grep -c -E "does\snot\shave\scorresponding" "$folder_core"/run/logs/DBErrors.log 2>/dev/null)
+        dive_DBError_exis=$(grep -c -E "doesn't\sexist" "$folder_core"/run/logs/DBErrors.log 2>/dev/null)
+        dive_DBError_quer=$(grep -c -E "query\sERROR" "$folder_core"/run/logs/DBErrors.log 2>/dev/null)
+        dive_DBError_used=$(grep -c -E "Option\swill\snever\sbe\sused" "$folder_core"/run/logs/DBErrors.log 2>/dev/null)
+        dive_DBError_cras=$(grep -c -E "can\scrash\sclient" "$folder_core"/run/logs/DBErrors.log 2>/dev/null)
+        # char.log >
+        dive_char_created=$(grep -c -E "Create\sCharacter" "$folder_core"/run/logs/Char.log 2>/dev/null)
+        dive_char_login_c=$(grep -c -E "Login" "$folder_core"/run/logs/Char.log 2>/dev/null)
+        dive_char_logouts=$(grep -c -E "Logout" "$folder_core"/run/logs/Char.log 2>/dev/null)
+        # EventAIErrors.log >
+        dive_EventAIError=$(grep -c -E "skipping" "$folder_core"/run/logs/EventAIErrors.log 2>/dev/null)
+        dive_EventAInoeff=$(grep -c -E "Action\swill\snot\shave\sany\seffect." "$folder_core"/run/logs/EventAIErrors.log 2>/dev/null)
+        dive_EventAInonex=$(grep -c -E "nonexistent|non-existing" "$folder_core"/run/logs/EventAIErrors.log 2>/dev/null)
+        dive_EventAI_NULL=$(grep -c -E ".*NULL*." "$folder_core"/run/logs/EventAIErrors.log 2>/dev/null)
+        dive_EventAINotUs=$(grep -c -E "but\snot\sused" "$folder_core"/run/logs/EventAIErrors.log 2>/dev/null)
 
-# Server.log, .old, Realmd.log >
-dive_log_empty=$(printf "\e[0;33mEmpty....\033[0m")
-dive_log_error=$(printf "\033[0;31mError..\033[0m")
-dive_log_ignor=$(printf "\033[0;31mIgnore.\033[0m")
-dive_log_serio=$(printf "\033[1;31mSerious\033[0m")
-# DBErrors.log >
-dive_log_corre=$(printf "\033[0;31mNotCorresponding\033[0m")
-dive_log_exist=$(printf "\033[0;31mDoesn'tExist....\033[0m")
-dive_log_query=$(printf "\033[0;31mQueryERROR......\033[0m")
-dive_log_never=$(printf "\033[0;31mWillNeverBeUsed.\033[0m")
-dive_log_crash=$(printf "\033[1;31mCanCrashClient!.\033[0m")
-# EventAIErrors.log >
-dive_log_skipp=$(printf "\033[0;31mSkipping\033[0m")
-dive_log_noeff=$(printf "\033[0;31mNoEffect\033[0m")
-dive_log_nonex=$(printf "\033[0;31mNonExist\033[0m")
-dive_log_NULL0=$(printf "\033[0;31mNULL....\033[0m")
-dive_log_NotUs=$(printf "\033[0;31mNotUsed.\033[0m")
-# Char.log >
-dive_log_creat=$(printf "\e[0;33mCreated\033[0m")
-dive_log_login=$(printf "\e[0;33mLogin..\033[0m")
-dive_log_logou=$(printf "\e[0;33mLogout.\033[0m")
-# empty table >
-dive_log_none=$(printf "\e[2mempty..\033[0m")
-dive_log_zero=$(printf "0")
+        # Server.log, .old, Realmd.log >
+        dive_log_empty=$(printf "\e[0;33mEmpty....\033[0m")
+        dive_log_error=$(printf "\033[0;31mError..\033[0m")
+        dive_log_ignor=$(printf "\033[0;31mIgnore.\033[0m")
+        dive_log_serio=$(printf "\033[1;31mSerious\033[0m")
+        # DBErrors.log >
+        dive_log_corre=$(printf "\033[0;31mNotCorresponding\033[0m")
+        dive_log_exist=$(printf "\033[0;31mDoesn'tExist....\033[0m")
+        dive_log_query=$(printf "\033[0;31mQueryERROR......\033[0m")
+        dive_log_never=$(printf "\033[0;31mWillNeverBeUsed.\033[0m")
+        dive_log_crash=$(printf "\033[1;31mCanCrashClient!.\033[0m")
+        # EventAIErrors.log >
+        dive_log_skipp=$(printf "\033[0;31mSkipping\033[0m")
+        dive_log_noeff=$(printf "\033[0;31mNoEffect\033[0m")
+        dive_log_nonex=$(printf "\033[0;31mNonExist\033[0m")
+        dive_log_NULL0=$(printf "\033[0;31mNULL....\033[0m")
+        dive_log_NotUs=$(printf "\033[0;31mNotUsed.\033[0m")
+        # Char.log >
+        dive_log_creat=$(printf "\e[0;33mCreated\033[0m")
+        dive_log_login=$(printf "\e[0;33mLogin..\033[0m")
+        dive_log_logou=$(printf "\e[0;33mLogout.\033[0m")
+        # empty table >
+        dive_log_none=$(printf "\e[2mempty..\033[0m")
+        dive_log_zero=$(printf "0")
 
-# codes done
+        # codes done
 
- echo
-printf "       Server.log        Server.log.old    Realmd.log"
- echo
-printline "$dive_log_empty" "$dive_server_empty" "$dive_log_empty" "$dive_server_old_empty" "$dive_log_empty" "$dive_realmd_empty"
-printline "$dive_log_error" "$dive_server_error" "$dive_log_error" "$dive_server_old_error" "$dive_log_error" "$dive_realmd_error"
-printline "$dive_log_ignor" "$dive_server_ignor" "$dive_log_ignor" "$dive_server_old_ignor" "$dive_log_ignor" "$dive_realmd_serio"
-printline "$dive_log_serio" "$dive_server_serio" "$dive_log_serio" "$dive_server_old_serio" "$dive_log_serio" "$dive_realmd_serio"
- echo
-printf " \033[0m<------------------------------------------------------------------------------>\033[0m"
- echo
- echo
- printf "       DBErrors.log      Char.log          EventAIErrors.log"
- echo
-printline "$dive_log_corre" "$dive_DBError_corr" "$dive_log_creat" "$dive_char_created" "$dive_log_skipp" "$dive_EventAIError"
-printline "$dive_log_exist" "$dive_DBError_exis" "$dive_log_login" "$dive_char_login_c" "$dive_log_noeff" "$dive_EventAInoeff"
-printline "$dive_log_query" "$dive_DBError_quer" "$dive_log_logou" "$dive_char_logouts" "$dive_log_nonex" "$dive_EventAInonex"
-printline "$dive_log_never" "$dive_DBError_used" "$dive_log_none" "$dive_log_zero" "$dive_log_NULL0" "$dive_EventAI_NULL"
-printline "$dive_log_crash" "$dive_DBError_cras" "$dive_log_none" "$dive_log_zero" "$dive_log_NotUs" "$dive_EventAINotUs"
- echo
-printf " \033[0m<------------------------------------------------------------------------------>\033[0m"
- echo
- echo
- read -r -p "Press Enter to continue" </dev/tty
- echo
+        echo
+        printf "       Server.log        Server.log.old    Realmd.log"
+        echo
+        printline "$dive_log_empty" "$dive_server_empty" "$dive_log_empty" "$dive_server_old_empty" "$dive_log_empty" "$dive_realmd_empty"
+        printline "$dive_log_error" "$dive_server_error" "$dive_log_error" "$dive_server_old_error" "$dive_log_error" "$dive_realmd_error"
+        printline "$dive_log_ignor" "$dive_server_ignor" "$dive_log_ignor" "$dive_server_old_ignor" "$dive_log_ignor" "$dive_realmd_serio"
+        printline "$dive_log_serio" "$dive_server_serio" "$dive_log_serio" "$dive_server_old_serio" "$dive_log_serio" "$dive_realmd_serio"
+        echo
+        printf " \033[0m<------------------------------------------------------------------------------>\033[0m"
+        echo
+        echo
+        printf "       DBErrors.log      Char.log          EventAIErrors.log"
+        echo
+        printline "$dive_log_corre" "$dive_DBError_corr" "$dive_log_creat" "$dive_char_created" "$dive_log_skipp" "$dive_EventAIError"
+        printline "$dive_log_exist" "$dive_DBError_exis" "$dive_log_login" "$dive_char_login_c" "$dive_log_noeff" "$dive_EventAInoeff"
+        printline "$dive_log_query" "$dive_DBError_quer" "$dive_log_logou" "$dive_char_logouts" "$dive_log_nonex" "$dive_EventAInonex"
+        printline "$dive_log_never" "$dive_DBError_used" "$dive_log_none" "$dive_log_zero" "$dive_log_NULL0" "$dive_EventAI_NULL"
+        printline "$dive_log_crash" "$dive_DBError_cras" "$dive_log_none" "$dive_log_zero" "$dive_log_NotUs" "$dive_EventAINotUs"
+        echo
+        printf " \033[0m<------------------------------------------------------------------------------>\033[0m"
+        echo
+        echo
+        read -r -p "Press Enter to continue" </dev/tty
+        echo
 
- ;;
+        ;;
 
-# dive into logs done
+        # dive into logs done
 
-# Get database info (kinda heavy..) >
+        # Get database info (kinda heavy..) >
 
-"w")
+      "w")
 
-ac_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account;" 2> /dev/null);
-bn_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account_banned;" 2> /dev/null);
-# on_count at TOP ^
-ch_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.characters;" 2> /dev/null);
+        ac_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account;" 2>/dev/null)
+        bn_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account_banned;" 2>/dev/null)
+        # on_count at TOP ^
+        ch_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.characters;" 2>/dev/null)
 
-# gu_count at TOP ^
-me_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.guild_member;" 2> /dev/null);
-ma_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.mail;" 2> /dev/null);
-pe_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_pet;" 2> /dev/null);
+        # gu_count at TOP ^
+        me_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.guild_member;" 2>/dev/null)
+        ma_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.mail;" 2>/dev/null)
+        pe_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_pet;" 2>/dev/null)
 
-ti_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.gm_tickets;" 2> /dev/null);
-co_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.corpse;" 2> /dev/null);
-pv_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.pvpstats_players;" 2> /dev/null);
-gi_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_gifts;" 2> /dev/null);
+        ti_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.gm_tickets;" 2>/dev/null)
+        co_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.corpse;" 2>/dev/null)
+        pv_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.pvpstats_players;" 2>/dev/null)
+        gi_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_characters.character_gifts;" 2>/dev/null)
 
-# Walter A code >
- echo
-printline "Accounts" "$ac_count" "Guilds" "$gu_count" "Tickets" "$ti_count"
-printline "Banned" "$bn_count" "Members" "$me_count" "Corpses" "$co_count"
-printline "Online" "$on_count" "Mail" "$ma_count" "PvP" "$pv_count"
-printline "Characters" "$ch_count" "Pets" "$pe_count" "Gifts" "$gi_count"
+        # Walter A code >
+        echo
+        printline "Accounts" "$ac_count" "Guilds" "$gu_count" "Tickets" "$ti_count"
+        printline "Banned" "$bn_count" "Members" "$me_count" "Corpses" "$co_count"
+        printline "Online" "$on_count" "Mail" "$ma_count" "PvP" "$pv_count"
+        printline "Characters" "$ch_count" "Pets" "$pe_count" "Gifts" "$gi_count"
 
-# Walter A code done
- echo
-printf " \033[0m<------------------------------------------------------------------------------>\033[0m"
- echo
- echo
-read -r -p "Press Enter to continue" </dev/tty
- echo
+        # Walter A code done
+        echo
+        printf " \033[0m<------------------------------------------------------------------------------>\033[0m"
+        echo
+        echo
+        read -r -p "Press Enter to continue" </dev/tty
+        echo
 
- ;;
+        ;;
 
-# Get database info (kinda heavy..) done
+        # Get database info (kinda heavy..) done
 
-# backup sql >
+        # backup sql >
 
-"b")
+      "b")
 
-# well (: backup probably hours old by now >
- echo
-printf "Making fresh backup\e[0;32m.\033[0m"
- sleep 1
-printf "\e[0;32m.\033[0m"
-mysqldump --defaults-extra-file="$sql_mycnf" "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
-printf "\e[0;32m.\033[0m"
- sleep 1
-printf '%b' "[\e[0;32mok\033[0m] $db_characters-$NOW.sql"
- sleep 2
- echo
-# backup characters sql >
-printf "Making fresh backup\e[0;32m.\033[0m"
- sleep 1
-printf "\e[0;32m.\033[0m"
-mysqldump --defaults-extra-file="$sql_mycnf" "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
-printf "\e[0;32m.\033[0m"
- sleep 1
-printf '%b' "[\e[0;32mok\033[0m] $db_realmd-$NOW.sql"
- sleep 1
-# well (: backup probably hours old by now done
+        # well (: backup probably hours old by now >
+        echo
+        printf "Making fresh backup\e[0;32m.\033[0m"
+        sleep 1
+        printf "\e[0;32m.\033[0m"
+        mysqldump --defaults-extra-file="$sql_mycnf" "$db_characters" >"$folder_wow"/backup/"$db_characters"-"$NOW".sql
+        printf "\e[0;32m.\033[0m"
+        sleep 1
+        printf '%b' "[\e[0;32mok\033[0m] $db_characters-$NOW.sql"
+        sleep 2
+        echo
+        # backup characters sql >
+        printf "Making fresh backup\e[0;32m.\033[0m"
+        sleep 1
+        printf "\e[0;32m.\033[0m"
+        mysqldump --defaults-extra-file="$sql_mycnf" "$db_realmd" >"$folder_wow"/backup/"$db_realmd"-"$NOW".sql
+        printf "\e[0;32m.\033[0m"
+        sleep 1
+        printf '%b' "[\e[0;32mok\033[0m] $db_realmd-$NOW.sql"
+        sleep 1
+        # well (: backup probably hours old by now done
 
- ;;
+        ;;
 
-# backup sql done
+        # backup sql done
 
-# remote access >
+        # remote access >
 
-"r")
+      "r")
 
- echo
- read -r -p " Want to login? (y/n) " -n 1 -r
- echo
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-clear
-printf "
+        echo
+        read -r -p " Want to login? (y/n) " -n 1 -r
+        echo
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+          clear
+          printf "
 \e[31m      ._________________.
       |.---------------.|
       || \033[0mmangos>\e[31m       ||
@@ -1120,8 +1115,8 @@ printf "
     /.-.-.-.-.-.-.-.-.-.-.\\
    /______/__________\___\e[1;32mo\033[1;31m_\\
    \_______________________/\033[0m"
- echo
-printf "
+          echo
+          printf "
      CMaNGOS Command Center
 
   \e[1;32m>\033[0m hit Enter two times to go back.
@@ -1130,261 +1125,259 @@ printf "
   'quit' and then hit Enter two times to exit
 
   Tip: Set '\e[0;35mMessage of the Day\033[0m' inside mangosd.conf"
- echo
- echo
-nc "$host_nc" "$port_nc"
- echo
-fi
+          echo
+          echo
+          nc "$host_nc" "$port_nc"
+          echo
+        fi
 
- ;;
+        ;;
 
-# remote access done
+        # remote access done
 
-"q")
- echo
- break ;;
-* )
- echo
- echo "empty" ;;
-esac
-done
+      "q")
+        echo
+        break
+        ;;
+      *)
+        echo
+        echo "empty"
+        ;;
+      esac
+    done
 
- ;;
+    ;;
 
-# Login (command) done * Free Hong Kong.
+    # Login (command) done * Free Hong Kong.
 
-# Checking for updates >
+    # Checking for updates >
 
-"c")
+  "c")
 
-# check if 'mangos-classic' exist >
-FILE="$folder_core/README.md"
-if [ ! -f "$FILE" ];
-then
-# fresh install ? >
- echo "Cloning repository 'mangos-classic' Please wait this might take a while
+    # check if 'mangos-classic' exist >
+    FILE="$folder_core/README.md"
+    if [ ! -f "$FILE" ]; then
+      # fresh install ? >
+      echo "Cloning repository 'mangos-classic' Please wait this might take a while
 (https://github.com/cmangos/mangos-classic)"
-sudo mkdir "$folder_wow" &> /dev/null
-sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
-cd "$folder_wow" || exit
-git clone https://github.com/cmangos/mangos-classic.git 2> /dev/null
- echo "Done"
- sleep 1
-else
-# check for updates >
+      sudo mkdir "$folder_wow" &>/dev/null
+      sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
+      cd "$folder_wow" || exit
+      git clone https://github.com/cmangos/mangos-classic.git 2>/dev/null
+      echo "Done"
+      sleep 1
+    else
+      # check for updates >
 
-# CMaNGOS Core (mangos-classic)
-printf "[ Checking for \e[1;32m+\033[1;31m-\033[0m Updates\033[0m ] .. "
- echo
- echo
-cd "$folder_core" || exit
-if git checkout master &> /dev/null &&
-git fetch origin master &> /dev/null &&
-[ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
-git merge origin/master
-then
-latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
-latest_head=$(git rev-parse --short HEAD)
-printf '%b' "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) \e[4;32mNew Updates For Core\033[0m! - $latest_date"
- echo
-else
-latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
-latest_head=$(git rev-parse --short HEAD)
-printf '%b' "[\e[0;32mok\033[0m] (\e[4;32m$latest_head\033[0m) Core Updated - $latest_date"
- echo
-fi
-# check if 'mangos-classic' exist done
-fi
+      # CMaNGOS Core (mangos-classic)
+      printf "[ Checking for \e[1;32m+\033[1;31m-\033[0m Updates\033[0m ] .. "
+      echo
+      echo
+      cd "$folder_core" || exit
+      if git checkout master &>/dev/null &&
+        git fetch origin master &>/dev/null &&
+        [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
+        git merge origin/master; then
+        latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
+        latest_head=$(git rev-parse --short HEAD)
+        printf '%b' "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) \e[4;32mNew Updates For Core\033[0m! - $latest_date"
+        echo
+      else
+        latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
+        latest_head=$(git rev-parse --short HEAD)
+        printf '%b' "[\e[0;32mok\033[0m] (\e[4;32m$latest_head\033[0m) Core Updated - $latest_date"
+        echo
+      fi
+    # check if 'mangos-classic' exist done
+    fi
 
-# check if 'classic-db' exist >
-FILE="$folder_db/README.md"
-if [ ! -f "$FILE" ];
-then
-# fresh install ? >
- echo "Cloning repository 'classic-db' Please wait this might take a while
+    # check if 'classic-db' exist >
+    FILE="$folder_db/README.md"
+    if [ ! -f "$FILE" ]; then
+      # fresh install ? >
+      echo "Cloning repository 'classic-db' Please wait this might take a while
 (https://github.com/cmangos/classic-db)"
-sudo mkdir "$folder_wow" &> /dev/null
-sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
-cd "$folder_wow" || exit
-git clone https://github.com/cmangos/classic-db.git 2> /dev/null
-cd "$folder_wow" || exit; ./InstallFullDB.sh; nano InstallFullDB.config
- echo "Done"
- sleep 1
-else
-# check for updates >
+      sudo mkdir "$folder_wow" &>/dev/null
+      sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
+      cd "$folder_wow" || exit
+      git clone https://github.com/cmangos/classic-db.git 2>/dev/null
+      cd "$folder_wow" || exit
+      ./InstallFullDB.sh
+      nano InstallFullDB.config
+      echo "Done"
+      sleep 1
+    else
+      # check for updates >
 
-# Classic Database (classic-db)
+      # Classic Database (classic-db)
 
-cd "${folder_db:?}" || exit
-if git checkout master &> /dev/null &&
-git fetch origin master &> /dev/null &&
-[ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
-git merge origin/master
-then
-latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
-latest_head=$(git rev-parse --short HEAD)
-printf '%b' "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) \e[4;32mNew Updates For Database\033[0m! - $latest_date"
- echo
-else
-latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
-latest_head=$(git rev-parse --short HEAD)
-printf '%b' "[\e[0;32mok\033[0m] (\e[4;32m$latest_head\033[0m) Database Updated - $latest_date"
- echo
-fi
-# check if 'classic-db' exist done
-fi
+      cd "${folder_db:?}" || exit
+      if git checkout master &>/dev/null &&
+        git fetch origin master &>/dev/null &&
+        [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
+        git merge origin/master; then
+        latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
+        latest_head=$(git rev-parse --short HEAD)
+        printf '%b' "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) \e[4;32mNew Updates For Database\033[0m! - $latest_date"
+        echo
+      else
+        latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
+        latest_head=$(git rev-parse --short HEAD)
+        printf '%b' "[\e[0;32mok\033[0m] (\e[4;32m$latest_head\033[0m) Database Updated - $latest_date"
+        echo
+      fi
+    # check if 'classic-db' exist done
+    fi
 
-# check if 'cmangos-script' exist >
-FILE="$folder_helper/README.md"
-if [ ! -f "$FILE" ];
-then
-# fresh install ? >
- echo "Cloning repository 'cmangos-script' Please wait
+    # check if 'cmangos-script' exist >
+    FILE="$folder_helper/README.md"
+    if [ ! -f "$FILE" ]; then
+      # fresh install ? >
+      echo "Cloning repository 'cmangos-script' Please wait
 (https://github.com/Daedalus-code/cmangos-script)"
-sudo mkdir "$folder_helper" &> /dev/null
-sudo chown -R "${user:?}":"${group:?}" "$folder_helper"
-cd "$folder_helper" || exit
-git clone https://github.com/Daedalus-code/cmangos-script.git 2> /dev/null
- echo "Done"
- sleep 1
-else
-# check for updates >
+      sudo mkdir "$folder_helper" &>/dev/null
+      sudo chown -R "${user:?}":"${group:?}" "$folder_helper"
+      cd "$folder_helper" || exit
+      git clone https://github.com/Daedalus-code/cmangos-script.git 2>/dev/null
+      echo "Done"
+      sleep 1
+    else
+      # check for updates >
 
-# CMaNGOS Helper
+      # CMaNGOS Helper
 
-cd "${folder_helper:?}" || exit
-if git checkout master &> /dev/null &&
-git fetch origin master &> /dev/null &&
-[ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
-git merge origin/master
-then
-latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
-latest_head=$(git rev-parse --short HEAD)
-printf '%b' "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) \e[4;32mNew Updates For Helper\033[0m! - $latest_date"
- echo
-else
-latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
-latest_head=$(git rev-parse --short HEAD)
-printf '%b' "[\e[0;32mok\033[0m] (\e[4;32m$latest_head\033[0m) Helper Updated - $latest_date"
- echo
-fi
-# check if 'cmangos-script' exist done
-fi
- echo
- read -r -p "Press Enter to continue" </dev/tty
- echo
+      cd "${folder_helper:?}" || exit
+      if git checkout master &>/dev/null &&
+        git fetch origin master &>/dev/null &&
+        [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
+        git merge origin/master; then
+        latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
+        latest_head=$(git rev-parse --short HEAD)
+        printf '%b' "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) \e[4;32mNew Updates For Helper\033[0m! - $latest_date"
+        echo
+      else
+        latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
+        latest_head=$(git rev-parse --short HEAD)
+        printf '%b' "[\e[0;32mok\033[0m] (\e[4;32m$latest_head\033[0m) Helper Updated - $latest_date"
+        echo
+      fi
+    # check if 'cmangos-script' exist done
+    fi
+    echo
+    read -r -p "Press Enter to continue" </dev/tty
+    echo
 
- ;;
+    ;;
 
-# Checking for updates done
+    # Checking for updates done
 
-# update CMaNGOS >
+    # update CMaNGOS >
 
-"m")
+  "m")
 
-# codes >
-if ! [ -x "$(command -v dialog)" ]; then
-sudo apt-get install dialog -y
-fi
-# required 'packagelist' to build CMaNGOS >
-# ubuntu server 
-packagelist=(autoconf
-automake
-binutils
-build-essential
-checkinstall
-cmake
-g++
-gcc
-git
-git-core
-grep
-libboost-all-dev
-libbz2-dev
-libc6
-libmysql++-dev
-libssl-dev
-libtool
-make
-patch
-subversion
-unzip
-zip
-zlibc)
-# codes done
-HEIGHT=12
-WIDTH=40
-CHOICE_HEIGHT=4
-BACKTITLE="update CMaNGOS"
-TITLE="Update mangos-classic [core]"
-MENU="Choose one of the following options:"
+    # codes >
+    if ! [ -x "$(command -v dialog)" ]; then
+      sudo apt-get install dialog -y
+    fi
+    # required 'packagelist' to build CMaNGOS >
+    # ubuntu server
+    packagelist=(autoconf
+      automake
+      binutils
+      build-essential
+      checkinstall
+      cmake
+      g++
+      gcc
+      git
+      git-core
+      grep
+      libboost-all-dev
+      libbz2-dev
+      libc6
+      libmysql++-dev
+      libssl-dev
+      libtool
+      make
+      patch
+      subversion
+      unzip
+      zip
+      zlibc)
+    # codes done
+    HEIGHT=12
+    WIDTH=40
+    CHOICE_HEIGHT=4
+    BACKTITLE="update CMaNGOS"
+    TITLE="Update mangos-classic [core]"
+    MENU="Choose one of the following options:"
 
-OPTIONS=(1 "Compile latest build"
-         2 "Install systemd unit files"
-         3 "Reinstall (delete /build)"
-         4 "Reset --hard origin/master")
+    OPTIONS=(1 "Compile latest build"
+      2 "Install systemd unit files"
+      3 "Reinstall (delete /build)"
+      4 "Reset --hard origin/master")
 
-CHOICE=$(dialog --clear \
-               --backtitle "$BACKTITLE" \
-               --title "$TITLE" \
-               --menu "$MENU" \
-               $HEIGHT $WIDTH $CHOICE_HEIGHT \
-               "${OPTIONS[@]}" \
-               2>&1 >/dev/tty)
+    CHOICE=$(dialog --clear \
+      --backtitle "$BACKTITLE" \
+      --title "$TITLE" \
+      --menu "$MENU" \
+      $HEIGHT $WIDTH $CHOICE_HEIGHT \
+      "${OPTIONS[@]}" \
+      2>&1 >/dev/tty)
 
-clear
-case $CHOICE in
+    clear
+    case $CHOICE in
 
-# compile latest build >
+    # compile latest build >
 
-"1")
+    "1")
 
-if ! [ -x "$(command -v "${packagelist[@]}")" ]; then
-sudo apt-get install "${packagelist[@]}" -y &> /dev/null
-fi
-printf "\e[0;31mShutting down\033[0m realmd/mangosd service"
- echo
- sleep 1
+      if ! [ -x "$(command -v "${packagelist[@]}")" ]; then
+        sudo apt-get install "${packagelist[@]}" -y &>/dev/null
+      fi
+      printf "\e[0;31mShutting down\033[0m realmd/mangosd service"
+      echo
+      sleep 1
 
-# service status
-realm_service=realmd
-world_service=mangosd
+      # service status
+      realm_service=realmd
+      world_service=mangosd
 
-# realmd service
-case  "$(pidof $realm_service | wc -w)" in
- 0) ;;
- *) sudo service realmd stop ;;
-esac
+      # realmd service
+      case "$(pidof $realm_service | wc -w)" in
+      0) ;;
+      *) sudo service realmd stop ;;
+      esac
 
-# mangosd service
-case  "$(pidof $world_service | wc -w)" in
- 0) ;;
- *) sudo service mangosd stop ;;
-esac
+      # mangosd service
+      case "$(pidof $world_service | wc -w)" in
+      0) ;;
+      *) sudo service mangosd stop ;;
+      esac
 
-sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
-mkdir "$folder_core"/run &> /dev/null
-mkdir "$folder_core"/run/logs &> /dev/null
-mkdir "$folder_core"/run/logs/old &> /dev/null
-touch "$folder_core"/run/logs/Server.log &> /dev/null
-cp "$folder_core"/run/logs/*.log "$folder_core"/run/logs/old
-# ahbot.conf
-cp "$folder_core"/src/game/AuctionHouseBot/ahbot.conf.dist.in "$folder_core"/run/etc/ahbot.conf.dist &> /dev/null
-# new compile, new system logs >
-cd "$folder_core"/run/logs || exit &> /dev/null
-mv -t "$folder_core"/run/logs/old/ Realmd.log Server.log Server.log.old DBErrors.log EventAIErrors.log &> /dev/null
-# done
-sudo chown -R "$user":"$group" "$folder_wow"
-mkdir "$folder_core"/build &> /dev/null
-cd "${folder_build:?}" || exit
-# double quotes ("") and single quotes ('') around > $cmake < will mess things up.
-# shellcheck disable=SC2086
-cmake .. ${cmake:?}
-cd "$folder_build" || exit
+      sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
+      mkdir "$folder_core"/run &>/dev/null
+      mkdir "$folder_core"/run/logs &>/dev/null
+      mkdir "$folder_core"/run/logs/old &>/dev/null
+      touch "$folder_core"/run/logs/Server.log &>/dev/null
+      cp "$folder_core"/run/logs/*.log "$folder_core"/run/logs/old
+      # ahbot.conf
+      cp "$folder_core"/src/game/AuctionHouseBot/ahbot.conf.dist.in "$folder_core"/run/etc/ahbot.conf.dist &>/dev/null
+      # new compile, new system logs >
+      cd "$folder_core"/run/logs || exit &>/dev/null
+      mv -t "$folder_core"/run/logs/old/ Realmd.log Server.log Server.log.old DBErrors.log EventAIErrors.log &>/dev/null
+      # done
+      sudo chown -R "$user":"$group" "$folder_wow"
+      mkdir "$folder_core"/build &>/dev/null
+      cd "${folder_build:?}" || exit
+      # double quotes ("") and single quotes ('') around > $cmake < will mess things up.
+      # shellcheck disable=SC2086
+      cmake .. ${cmake:?}
+      cd "$folder_build" || exit
 
-# compiling using multiple cores >
+      # compiling using multiple cores >
 
-cat<<EOF
+      cat <<EOF
 
 Compiling using multiple cores:
 
@@ -1392,91 +1385,97 @@ Compiling using multiple cores:
  2 : 2 cores
  3 : 3 cores
  4 : 4 cores
- 
+
  Q : (Q)uit
 
 EOF
-read -n1 -s
-case "$REPLY" in
+      read -n1 -s
+      case "$REPLY" in
 
-"1")
+      "1")
 
-make # 1 core
+        make # 1 core
 
- ;;
+        ;;
 
-"2")
+      "2")
 
-make -j2 # 2 cores
+        make -j2 # 2 cores
 
- ;;
+        ;;
 
-"3")
+      "3")
 
-make -j3 # 3 cores
+        make -j3 # 3 cores
 
- ;;
+        ;;
 
-"4")
+      "4")
 
-make -j4 # 4 cores
+        make -j4 # 4 cores
 
- ;;
+        ;;
 
-"Q")  exit ;;
-"q")  echo "case sensitive!!" ;; 
- * )  echo "Invalid option. Restart please..";exit ;;
+      "Q") exit ;;
+      "q") echo "case sensitive!!" ;;
+      *)
+        echo "Invalid option. Restart please.."
+        exit
+        ;;
 
-esac
+      esac
 
-# compiling using multiple cores done
+      # compiling using multiple cores done
 
- echo
-printf "Select install operation"
- echo
- echo " 1) make install"
- echo " 2) checkinstall with backup"
- echo
-read -r n
-case $n in
+      echo
+      printf "Select install operation"
+      echo
+      echo " 1) make install"
+      echo " 2) checkinstall with backup"
+      echo
+      read -r n
+      case $n in
 
-"1") echo "make install"
+      "1")
+        echo "make install"
 
-cd "$folder_build" || exit
-sudo make install
+        cd "$folder_build" || exit
+        sudo make install
 
- ;;
+        ;;
 
-"2") echo "checkinstall"
+      "2")
+        echo "checkinstall"
 
-cd "$folder_build" || exit
-sudo checkinstall
+        cd "$folder_build" || exit
+        sudo checkinstall
 
- ;;
+        ;;
 
-*) echo "invalid option"
+      *)
+        echo "invalid option"
 
- ;;
+        ;;
 
-esac
+      esac
 
-sudo chown -R "$user":"$group" "$folder_wow"
+      sudo chown -R "$user":"$group" "$folder_wow"
 
- echo
- read -r -p "Press Enter to continue" </dev/tty
- echo
+      echo
+      read -r -p "Press Enter to continue" </dev/tty
+      echo
 
- ;;
+      ;;
 
-# compile latest build done
+      # compile latest build done
 
-# install systemd Services >
-# ubuntu
+      # install systemd Services >
+      # ubuntu
 
-"2")
+    "2")
 
-# /etc/systemd/system/realmd.service
- echo "[Unit]
+      # /etc/systemd/system/realmd.service
+      echo "[Unit]
 Description=WoW Vanilla realmd service
 After=network.target mysql.service
 
@@ -1487,9 +1486,9 @@ ExecStart=$folder_core/run/bin/realmd -c $folder_core/run/etc/realmd.conf
 Restart=on-abort
 
 [Install]
-WantedBy=multi-user.target" > "$folder_wow"/realmd.service 2> /dev/null
-# /etc/systemd/system/mangosd.service
- echo "[Unit]
+WantedBy=multi-user.target" >"$folder_wow"/realmd.service 2>/dev/null
+      # /etc/systemd/system/mangosd.service
+      echo "[Unit]
 Description=WoW Vanilla mangosd service
 After=network.target mysql.service realmd.service getty@tty3.service
 
@@ -1505,89 +1504,89 @@ ExecStart=$folder_core/run/bin/mangosd -c $folder_core/run/etc/mangosd.conf -a $
 Restart=on-abort
 
 [Install]
-WantedBy=multi-user.target" > "$folder_wow"/mangosd.service 2> /dev/null
-# install services >
-sudo mv "$folder_wow"/*.service /etc/systemd/system/ &> /dev/null
-# enable services >
-sudo systemctl enable realmd
- sleep 1
-sudo systemctl enable mangosd
-# reload >
-sudo systemctl daemon-reload 2> /dev/null
- sleep 1
- echo
-printf '%b' "[\e[0;32mok\033[0m]
+WantedBy=multi-user.target" >"$folder_wow"/mangosd.service 2>/dev/null
+      # install services >
+      sudo mv "$folder_wow"/*.service /etc/systemd/system/ &>/dev/null
+      # enable services >
+      sudo systemctl enable realmd
+      sleep 1
+      sudo systemctl enable mangosd
+      # reload >
+      sudo systemctl daemon-reload 2>/dev/null
+      sleep 1
+      echo
+      printf '%b' "[\e[0;32mok\033[0m]
 
 /etc/systemd/system/'\e[0;35mrealmd.service\033[0m'
 /etc/systemd/system/'\e[0;35mmangosd.service\033[0m'
 
 Check if correct information, or just restart server."
- echo
-printf '%b' "[\e[0;32mok\033[0m] "
- read -r -p "Press Enter to continue" </dev/tty
- echo
+      echo
+      printf '%b' "[\e[0;32mok\033[0m] "
+      read -r -p "Press Enter to continue" </dev/tty
+      echo
 
- ;;
+      ;;
 
-# install systemd Services done
+      # install systemd Services done
 
-# reinstall (delete /build) >
+      # reinstall (delete /build) >
 
-"3")
+    "3")
 
-if ! [ -x "$(command -v "${packagelist[@]}")" ]; then
-sudo apt-get install "${packagelist[@]}" -y &> /dev/null
-fi
-printf "\e[0;31mShutting down\033[0m realmd/mangosd service"
- echo
- sleep 1
+      if ! [ -x "$(command -v "${packagelist[@]}")" ]; then
+        sudo apt-get install "${packagelist[@]}" -y &>/dev/null
+      fi
+      printf "\e[0;31mShutting down\033[0m realmd/mangosd service"
+      echo
+      sleep 1
 
-# service status
-realm_service=realmd
-world_service=mangosd
+      # service status
+      realm_service=realmd
+      world_service=mangosd
 
-# realmd service
-case  "$(pidof $realm_service | wc -w)" in
- 0) ;;
- *) sudo service realmd stop ;;
-esac
+      # realmd service
+      case "$(pidof $realm_service | wc -w)" in
+      0) ;;
+      *) sudo service realmd stop ;;
+      esac
 
-# mangosd service
-case  "$(pidof $world_service | wc -w)" in
- 0) ;;
- *) sudo service mangosd stop ;;
-esac
+      # mangosd service
+      case "$(pidof $world_service | wc -w)" in
+      0) ;;
+      *) sudo service mangosd stop ;;
+      esac
 
-cd || exit
-sudo mkdir wow &> /dev/null
-sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
-sudo rm -r "$folder_core"/build/ &> /dev/null
-cd "$folder_wow" || exit
-git clone https://github.com/cmangos/mangos-classic.git 2> /dev/null
-sudo mkdir "$folder_core"/build &> /dev/null
-sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
-mkdir "$folder_core"/run &> /dev/null
-mkdir "$folder_core"/run/logs &> /dev/null
-mkdir "$folder_core"/run/logs/old &> /dev/null
-touch "$folder_core"/run/logs/Server.log &> /dev/null
-cp "$folder_core"/run/logs/*.log "$folder_core"/run/logs/old
-# ahbot.conf
-cp "$folder_core"/src/game/AuctionHouseBot/ahbot.conf.dist.in "$folder_core"/run/etc/ahbot.conf.dist &> /dev/null
-# new compile, new system logs >
-cd "$folder_core"/run/logs || exit &> /dev/null
-mv -t "$folder_core"/run/logs/old/ Realmd.log Server.log Server.log.old DBErrors.log EventAIErrors.log &> /dev/null
-# done
-sudo chown -R "$user":"$group" "$folder_wow"
-mkdir "$folder_core"/build &> /dev/null
-cd "${folder_build:?}" || exit
-# double quotes ("") and single quotes ('') around > $cmake < will mess things up.
-# shellcheck disable=SC2086
-cmake .. ${cmake:?}
-cd "$folder_build" || exit
+      cd || exit
+      sudo mkdir wow &>/dev/null
+      sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
+      sudo rm -r "$folder_core"/build/ &>/dev/null
+      cd "$folder_wow" || exit
+      git clone https://github.com/cmangos/mangos-classic.git 2>/dev/null
+      sudo mkdir "$folder_core"/build &>/dev/null
+      sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
+      mkdir "$folder_core"/run &>/dev/null
+      mkdir "$folder_core"/run/logs &>/dev/null
+      mkdir "$folder_core"/run/logs/old &>/dev/null
+      touch "$folder_core"/run/logs/Server.log &>/dev/null
+      cp "$folder_core"/run/logs/*.log "$folder_core"/run/logs/old
+      # ahbot.conf
+      cp "$folder_core"/src/game/AuctionHouseBot/ahbot.conf.dist.in "$folder_core"/run/etc/ahbot.conf.dist &>/dev/null
+      # new compile, new system logs >
+      cd "$folder_core"/run/logs || exit &>/dev/null
+      mv -t "$folder_core"/run/logs/old/ Realmd.log Server.log Server.log.old DBErrors.log EventAIErrors.log &>/dev/null
+      # done
+      sudo chown -R "$user":"$group" "$folder_wow"
+      mkdir "$folder_core"/build &>/dev/null
+      cd "${folder_build:?}" || exit
+      # double quotes ("") and single quotes ('') around > $cmake < will mess things up.
+      # shellcheck disable=SC2086
+      cmake .. ${cmake:?}
+      cd "$folder_build" || exit
 
-# compiling using multiple cores >
+      # compiling using multiple cores >
 
-cat<<EOF
+      cat <<EOF
 
 Compiling using multiple cores:
 
@@ -1595,718 +1594,719 @@ Compiling using multiple cores:
  2 : 2 cores
  3 : 3 cores
  4 : 4 cores
- 
+
  Q : (Q)uit
 
 EOF
-read -n1 -s
-case "$REPLY" in
+      read -n1 -s
+      case "$REPLY" in
 
-"1")
+      "1")
 
-make # 1 core
+        make # 1 core
 
- ;;
+        ;;
 
-"2")
+      "2")
 
-make -j2 # 2 cores
+        make -j2 # 2 cores
 
- ;;
+        ;;
 
-"3")
+      "3")
 
-make -j3 # 3 cores
+        make -j3 # 3 cores
 
- ;;
+        ;;
 
-"4")
+      "4")
 
-make -j4 # 4 cores
+        make -j4 # 4 cores
 
- ;;
+        ;;
 
-"Q")  exit ;;
-"q")  echo "case sensitive!!" ;; 
- * )  echo "Invalid option. Restart please..";exit ;;
+      "Q") exit ;;
+      "q") echo "case sensitive!!" ;;
+      *)
+        echo "Invalid option. Restart please.."
+        exit
+        ;;
 
-esac
+      esac
 
-# compiling using multiple cores done
+      # compiling using multiple cores done
 
- echo
-printf "Select install operation"
- echo
- echo " 1) make install"
- echo " 2) checkinstall with backup"
- echo
-read -r n
-case $n in
+      echo
+      printf "Select install operation"
+      echo
+      echo " 1) make install"
+      echo " 2) checkinstall with backup"
+      echo
+      read -r n
+      case $n in
 
-"1") echo "make install"
+      "1")
+        echo "make install"
 
-cd "$folder_build" || exit
-sudo make install
+        cd "$folder_build" || exit
+        sudo make install
 
- ;;
+        ;;
 
-"2") echo "checkinstall"
+      "2")
+        echo "checkinstall"
 
-cd "$folder_build" || exit
-sudo checkinstall
+        cd "$folder_build" || exit
+        sudo checkinstall
 
- ;;
+        ;;
 
-*) echo "invalid option"
+      *)
+        echo "invalid option"
 
- ;;
+        ;;
 
-esac
+      esac
 
-sudo chown -R "$user":"$group" "$folder_wow"
+      sudo chown -R "$user":"$group" "$folder_wow"
 
-printf '%b' "[\e[0;32mok\033[0m] "
- read -r -p "Press Enter to continue" </dev/tty
- echo
+      printf '%b' "[\e[0;32mok\033[0m] "
+      read -r -p "Press Enter to continue" </dev/tty
+      echo
 
- ;;
+      ;;
 
-# reinstall (delete /build) done
+      # reinstall (delete /build) done
 
-# reset --hard origin/master ? >
+      # reset --hard origin/master ? >
 
-"4")
+    "4")
 
-cd "$folder_core" || exit
-git reset --hard origin/master
-printf '%b' "[\e[0;32mok\033[0m] "
- read -r -p "Press Enter to continue" </dev/tty
- echo
+      cd "$folder_core" || exit
+      git reset --hard origin/master
+      printf '%b' "[\e[0;32mok\033[0m] "
+      read -r -p "Press Enter to continue" </dev/tty
+      echo
 
- ;;
+      ;;
 
-esac
+    esac
 
-# reset --hard origin/master done
+    # reset --hard origin/master done
 
-# update CMaNGOS done
+    # update CMaNGOS done
 
-# update Database >
+    # update Database >
 
- ;;
+    ;;
 
-"d")
+  "d")
 
-# codes >
-if ! [ -x "$(command -v dialog)" ]; then
-sudo apt-get install dialog -y
-fi
-# codes done
-HEIGHT=18
-WIDTH=40
-CHOICE_HEIGHT=11
-BACKTITLE="update Database"
-TITLE="Update classic-db [database]"
-MENU="Choose one of the following options:"
+    # codes >
+    if ! [ -x "$(command -v dialog)" ]; then
+      sudo apt-get install dialog -y
+    fi
+    # codes done
+    HEIGHT=18
+    WIDTH=40
+    CHOICE_HEIGHT=11
+    BACKTITLE="update Database"
+    TITLE="Update classic-db [database]"
+    MENU="Choose one of the following options:"
 
-OPTIONS=(1 "Update classic-db"
-         2 "Drop/Import databases"
-         3 "myisam -> innodb (MariaDB)"
-         4 "Reinstall (delete /classic-db)"
-         5 "Reset --hard origin/master"
-         6 "Restart MySQL Server (service)"
-         7 "Stop MySQL Server (service)"
-         8 "Enable/Disable MySQL Server"
-         9 "Apply all updates [A]-[B]"
-         10 "Install database client"
-         11 "Install database system")
+    OPTIONS=(1 "Update classic-db"
+      2 "Drop/Import databases"
+      3 "myisam -> innodb (MariaDB)"
+      4 "Reinstall (delete /classic-db)"
+      5 "Reset --hard origin/master"
+      6 "Restart MySQL Server (service)"
+      7 "Stop MySQL Server (service)"
+      8 "Enable/Disable MySQL Server"
+      9 "Apply all updates [A]-[B]"
+      10 "Install database client"
+      11 "Install database system")
 
-CHOICE=$(dialog --clear \
-                --backtitle "$BACKTITLE" \
-                --title "$TITLE" \
-                --menu "$MENU" \
-                $HEIGHT $WIDTH $CHOICE_HEIGHT \
-                "${OPTIONS[@]}" \
-                2>&1 >/dev/tty)
+    CHOICE=$(dialog --clear \
+      --backtitle "$BACKTITLE" \
+      --title "$TITLE" \
+      --menu "$MENU" \
+      $HEIGHT $WIDTH $CHOICE_HEIGHT \
+      "${OPTIONS[@]}" \
+      2>&1 >/dev/tty)
 
-clear
-case $CHOICE in
+    clear
+    case $CHOICE in
 
-# install database system >
+    # install database system >
 
-"11")
+    "11")
 
-# codes >
+      # codes >
 
-# check if 'mangos' user exist >
+      # check if 'mangos' user exist >
 
-# mariadb >
-packagelist_maria=(mariadb-client
-mariadb-server)
-# mysql >
-packagelist_mysql=(mysql-client
-mysql-server)
+      # mariadb >
+      packagelist_maria=(mariadb-client
+        mariadb-server)
+      # mysql >
+      packagelist_mysql=(mysql-client
+        mysql-server)
 
-# codes done
- echo
-printf "MariaDB, MySQL - Database system"
- echo
- echo " 1) MariaDB"
- echo " 2) MySQL"
- echo
- read -r -n1 -s n
- echo "Please wait.."
-case $n in
+      # codes done
+      echo
+      printf "MariaDB, MySQL - Database system"
+      echo
+      echo " 1) MariaDB"
+      echo " 2) MySQL"
+      echo
+      read -r -n1 -s n
+      echo "Please wait.."
+      case $n in
 
-"1") # install mariadb >
+      "1") # install mariadb >
 
-sudo apt-get install "${packagelist_maria[@]}" -y &> /dev/null
-sudo service mariadb stop &> /dev/null; sudo service mariadb start &> /dev/null
+        sudo apt-get install "${packagelist_maria[@]}" -y &>/dev/null
+        sudo service mariadb stop &>/dev/null
+        sudo service mariadb start &>/dev/null
 
- ;;
+        ;;
 
-"2") # install mysql >
+      "2") # install mysql >
 
-sudo apt-get install "${packagelist_mysql[@]}" -y &> /dev/null
-sudo service mysql stop &> /dev/null; sudo service mysql start &> /dev/null
+        sudo apt-get install "${packagelist_mysql[@]}" -y &>/dev/null
+        sudo service mysql stop &>/dev/null
+        sudo service mysql start &>/dev/null
 
- ;;
+        ;;
 
-"*")
+      "*") ;;
 
- ;;
+      esac
 
-esac
+      ;;
 
- ;;
+      # install database system done
 
-# install database system done
+      # install database client >
 
-# install database client >
+    "10")
 
-"10")
+      # codes >
 
-# codes >
+      # mariadb-client >
+      packagelist_client_maria=(mariadb-client*)
+      # mysql-client >
+      packagelist_client_mysql=(mysql-client*)
 
-# mariadb-client >
-packagelist_client_maria=(mariadb-client*)
-# mysql-client >
-packagelist_client_mysql=(mysql-client*)
+      # codes done
 
-# codes done
-
- echo
-printf "MariaDB, MySQL - Database Client
+      echo
+      printf "MariaDB, MySQL - Database Client
 This is needed to operate local/remote database"
- echo
- echo
- echo " 1 : MariaDB-Client"
- echo " 2 : MySQL-Client"
- echo " q : Quit"
- echo
- read -r -n1 -s n
- echo "Please wait.."
-case $n in
+      echo
+      echo
+      echo " 1 : MariaDB-Client"
+      echo " 2 : MySQL-Client"
+      echo " q : Quit"
+      echo
+      read -r -n1 -s n
+      echo "Please wait.."
+      case $n in
 
-"1") # install mariadb-client >
+      "1") # install mariadb-client >
 
-sudo apt-get install "${packagelist_client_maria[@]}" -y &> /dev/null
+        sudo apt-get install "${packagelist_client_maria[@]}" -y &>/dev/null
 
-;;
+        ;;
 
-"2") # install mysql-client >
+      "2") # install mysql-client >
 
-sudo apt-get install "${packagelist_client_mysql[@]}" -y &> /dev/null
+        sudo apt-get install "${packagelist_client_mysql[@]}" -y &>/dev/null
 
- ;;
+        ;;
 
-"q") return
+      "q")
+        return
 
- ;;
+        ;;
 
-"*") exit
+      "*")
+        exit
 
- ;;
+        ;;
 
-esac
+      esac
 
- ;;
+      ;;
 
-# install database client done
+      # install database client done
 
-# update classic-db >
+      # update classic-db >
 
-"1")
+    "1")
 
-# checking depends >
+      # checking depends >
 
-# mysql >
-if sudo dpkg -s mysql-server &> /dev/null; then
-mysql_server_installed=$(printf '%b' "[\e[1;32mok\033[0m]")
-else
-mysql_server_installed=$(printf '%b' "[\e[1;90mno\033[0m]")
-fi
+      # mysql >
+      if sudo dpkg -s mysql-server &>/dev/null; then
+        mysql_server_installed=$(printf '%b' "[\e[1;32mok\033[0m]")
+      else
+        mysql_server_installed=$(printf '%b' "[\e[1;90mno\033[0m]")
+      fi
 
-# mysql-client >
-if sudo dpkg -s mysql-client &> /dev/null; then
-mysql_client_installed=$(printf '%b' "[\e[1;32mok\033[0m]")
-else
-mysql_client_installed=$(printf '%b' "[\e[1;90mno\033[0m]")
-fi
+      # mysql-client >
+      if sudo dpkg -s mysql-client &>/dev/null; then
+        mysql_client_installed=$(printf '%b' "[\e[1;32mok\033[0m]")
+      else
+        mysql_client_installed=$(printf '%b' "[\e[1;90mno\033[0m]")
+      fi
 
-# mariadb >
-if sudo dpkg -s mariadb-server &> /dev/null; then
-mariadb_server_installed=$(printf '%b' "[\e[1;32mok\033[0m]")
-else
-mariadb_server_installed=$(printf '%b' "[\e[1;90mno\033[0m]")
-fi
+      # mariadb >
+      if sudo dpkg -s mariadb-server &>/dev/null; then
+        mariadb_server_installed=$(printf '%b' "[\e[1;32mok\033[0m]")
+      else
+        mariadb_server_installed=$(printf '%b' "[\e[1;90mno\033[0m]")
+      fi
 
-# mariadb-client >
-if sudo dpkg -s mariadb-client &> /dev/null; then
-mariadb_client_installed=$(printf '%b' "[\e[1;32mok\033[0m]")
-else
-mariadb_client_installed=$(printf '%b' "[\e[1;90mno\033[0m]")
-fi
+      # mariadb-client >
+      if sudo dpkg -s mariadb-client &>/dev/null; then
+        mariadb_client_installed=$(printf '%b' "[\e[1;32mok\033[0m]")
+      else
+        mariadb_client_installed=$(printf '%b' "[\e[1;90mno\033[0m]")
+      fi
 
-mysql_user=$(sudo mysql --defaults-extra-file="$sql_mycnf" -sse "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = 'mangos')" 2> /dev/null)
-if [ "$mysql_user" = 1 ]; then
-mysql_user=$(printf '%b' "[\e[1;32mok\033[0m]")
-else
-mysql_user=$(printf '%b' "[\e[1;90mno\033[0m]")
-fi
+      mysql_user=$(sudo mysql --defaults-extra-file="$sql_mycnf" -sse "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = 'mangos')" 2>/dev/null)
+      if [ "$mysql_user" = 1 ]; then
+        mysql_user=$(printf '%b' "[\e[1;32mok\033[0m]")
+      else
+        mysql_user=$(printf '%b' "[\e[1;90mno\033[0m]")
+      fi
 
- echo
- echo "$mysql_server_installed - mysql-server
+      echo
+      echo "$mysql_server_installed - mysql-server
 $mysql_client_installed - mysql-client
 $mariadb_server_installed - mariadb-server
 $mariadb_client_installed - mariadb-client
 $mysql_user - database user 'mangos'
 
 database user, client/server is needed."
- echo
+      echo
 
-# checking depends done
+      # checking depends done
 
-read -r -p "Continue? (y/n) " -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+      read -r -p "Continue? (y/n) " -n 1 -r
+      echo
+      if [[ $REPLY =~ ^[Yy]$ ]]; then
 
-# restart mysql service, if it exists >
-if sudo service mysql status &> /dev/null | grep -E 'mysql'; then
- echo "No database system found
+        # restart mysql service, if it exists >
+        if sudo service mysql status &>/dev/null | grep -E 'mysql'; then
+          echo "No database system found
 Please install mysql or mariadb database/client"
- echo
- exit
-else
-sudo service mysql stop &> /dev/null; sudo service mysql restart &> /dev/null
-fi
+          echo
+          exit
+        else
+          sudo service mysql stop &>/dev/null
+          sudo service mysql restart &>/dev/null
+        fi
 
-# restart mariadb service, if it exists >
-if sudo service mariadb status &> /dev/null | grep -E 'mariadb'; then
- echo "No database system found
+        # restart mariadb service, if it exists >
+        if sudo service mariadb status &>/dev/null | grep -E 'mariadb'; then
+          echo "No database system found
 Please install mysql or mariadb database/client"
- echo
- exit
-else
-sudo service mariadb stop &> /dev/null; sudo service mariadb restart &> /dev/null
-fi
+          echo
+          exit
+        else
+          sudo service mariadb stop &>/dev/null
+          sudo service mariadb restart &>/dev/null
+        fi
 
-printf "\e[0;31mShutting down\033[0m realmd/mangosd service"
- echo
- sleep 1
+        printf "\e[0;31mShutting down\033[0m realmd/mangosd service"
+        echo
+        sleep 1
 
-# service status
-realm_service=realmd
-world_service=mangosd
+        # service status
+        realm_service=realmd
+        world_service=mangosd
 
-# realmd service
-case  "$(pidof $realm_service | wc -w)" in
- 0) ;;
- *) sudo service realmd stop ;;
-esac
+        # realmd service
+        case "$(pidof $realm_service | wc -w)" in
+        0) ;;
+        *) sudo service realmd stop ;;
+        esac
 
-# mangosd service
-case  "$(pidof $world_service | wc -w)" in
- 0) ;;
- *) sudo service mangosd stop ;;
-esac
+        # mangosd service
+        case "$(pidof $world_service | wc -w)" in
+        0) ;;
+        *) sudo service mangosd stop ;;
+        esac
 
-sudo chown -R "$user":"$group" "$folder_wow"
- echo
-printf "Updating classic-db [\e[1;32mdatabase\033[0m]"
- echo
+        sudo chown -R "$user":"$group" "$folder_wow"
+        echo
+        printf "Updating classic-db [\e[1;32mdatabase\033[0m]"
+        echo
 
-# backup >
-mkdir "$folder_wow"/backup &> /dev/null
-mkdir "$folder_wow"/backup/old &> /dev/null
-cp "$folder_wow"/backup/*.sql "$folder_wow"/backup/old &> /dev/null
-cd "$folder_wow"/backup/old/ || exit ; zip "$server_name.zip" "$folder_wow"/backup/*.sql &> /dev/null
-find "$folder_wow"/backup/*.sql -mtime +7 -exec rm {} \; &> /dev/null
-find "$folder_wow"/backup/old/*.sql -mtime +14 -exec rm {} \; &> /dev/null
- sleep 1
-# backup <- characters.sql
- echo
-FILE="$folder_wow/backup/$db_characters-$NOW.sql"
-if [ ! -f "$FILE" ];
-then
-printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Characters' ! Creating backup.."
-mysqldump --defaults-extra-file="$sql_mycnf" "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
- echo
-else
-printf '%b' "[\e[0;32mok\033[0m] $db_characters-$NOW.sql exist"
- echo
- read -r -p "New backup? ($db_characters) (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
- echo
-printf "Making fresh backup\e[0;32m.\033[0m"
- sleep 1
-printf "\e[0;32m.\033[0m"
-mysqldump --defaults-extra-file="$sql_mycnf" "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
-printf "\e[0;32m.\033[0m"
- sleep 1
-printf '%b' "[\e[0;32mok\033[0m] $db_characters-$NOW.sql"
- sleep 2
- echo
-fi
-fi
- echo
-# backup <- realmd.sql
-FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
-if [ ! -f "$FILE" ];
-then
-printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Realmd' ! Creating backup.."
-mysqldump --defaults-extra-file="$sql_mycnf" "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
- echo
-else
-printf '%b' "[\e[0;32mok\033[0m] $db_realmd-$NOW.sql exist"
- echo
- read -r -p "New backup? ($db_realmd) (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-# backup characters sql >
- echo
-printf "Making fresh backup\e[0;32m.\033[0m"
- sleep 1
-printf "\e[0;32m.\033[0m"
-mysqldump --defaults-extra-file="$sql_mycnf" "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
-printf "\e[0;32m.\033[0m"
- sleep 1
-printf '%b' "[\e[0;32mok\033[0m] $db_realmd-$NOW.sql"
- sleep 1
- echo
-fi
-fi
-# InstallFullDB ? >
- echo
- read -r -p "InstallFullDB? (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-sudo chown -R "$user":"$group" "$folder_wow"
-cd "$folder_db" || exit
-./InstallFullDB.sh
-sudo service mariadb stop &> /dev/null; sudo service mysql stop &> /dev/null
- sleep 1
-sudo service mariadb restart &> /dev/null; sudo service mysql restart &> /dev/null
-fi
- echo
-printf '%b' "[\e[0;32mok\033[0m] "
- read -r -p "Press Enter to continue" </dev/tty
- echo
-fi
+        # backup >
+        mkdir "$folder_wow"/backup &>/dev/null
+        mkdir "$folder_wow"/backup/old &>/dev/null
+        cp "$folder_wow"/backup/*.sql "$folder_wow"/backup/old &>/dev/null
+        cd "$folder_wow"/backup/old/ || exit
+        zip "$server_name.zip" "$folder_wow"/backup/*.sql &>/dev/null
+        find "$folder_wow"/backup/*.sql -mtime +7 -exec rm {} \; &>/dev/null
+        find "$folder_wow"/backup/old/*.sql -mtime +14 -exec rm {} \; &>/dev/null
+        sleep 1
+        # backup <- characters.sql
+        echo
+        FILE="$folder_wow/backup/$db_characters-$NOW.sql"
+        if [ ! -f "$FILE" ]; then
+          printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Characters' ! Creating backup.."
+          mysqldump --defaults-extra-file="$sql_mycnf" "$db_characters" >"$folder_wow"/backup/"$db_characters"-"$NOW".sql
+          echo
+        else
+          printf '%b' "[\e[0;32mok\033[0m] $db_characters-$NOW.sql exist"
+          echo
+          read -r -p "New backup? ($db_characters) (y/n) " -n 1 -r
+          echo
+          if [[ $REPLY =~ ^[Yy]$ ]]; then
+            echo
+            printf "Making fresh backup\e[0;32m.\033[0m"
+            sleep 1
+            printf "\e[0;32m.\033[0m"
+            mysqldump --defaults-extra-file="$sql_mycnf" "$db_characters" >"$folder_wow"/backup/"$db_characters"-"$NOW".sql
+            printf "\e[0;32m.\033[0m"
+            sleep 1
+            printf '%b' "[\e[0;32mok\033[0m] $db_characters-$NOW.sql"
+            sleep 2
+            echo
+          fi
+        fi
+        echo
+        # backup <- realmd.sql
+        FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
+        if [ ! -f "$FILE" ]; then
+          printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Realmd' ! Creating backup.."
+          mysqldump --defaults-extra-file="$sql_mycnf" "$db_realmd" >"$folder_wow"/backup/"$db_realmd"-"$NOW".sql
+          echo
+        else
+          printf '%b' "[\e[0;32mok\033[0m] $db_realmd-$NOW.sql exist"
+          echo
+          read -r -p "New backup? ($db_realmd) (y/n) " -n 1 -r
+          echo
+          if [[ $REPLY =~ ^[Yy]$ ]]; then
+            # backup characters sql >
+            echo
+            printf "Making fresh backup\e[0;32m.\033[0m"
+            sleep 1
+            printf "\e[0;32m.\033[0m"
+            mysqldump --defaults-extra-file="$sql_mycnf" "$db_realmd" >"$folder_wow"/backup/"$db_realmd"-"$NOW".sql
+            printf "\e[0;32m.\033[0m"
+            sleep 1
+            printf '%b' "[\e[0;32mok\033[0m] $db_realmd-$NOW.sql"
+            sleep 1
+            echo
+          fi
+        fi
+        # InstallFullDB ? >
+        echo
+        read -r -p "InstallFullDB? (y/n) " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+          sudo chown -R "$user":"$group" "$folder_wow"
+          cd "$folder_db" || exit
+          ./InstallFullDB.sh
+          sudo service mariadb stop &>/dev/null
+          sudo service mysql stop &>/dev/null
+          sleep 1
+          sudo service mariadb restart &>/dev/null
+          sudo service mysql restart &>/dev/null
+        fi
+        echo
+        printf '%b' "[\e[0;32mok\033[0m] "
+        read -r -p "Press Enter to continue" </dev/tty
+        echo
+      fi
 
- ;;
+      ;;
 
-# InstallFullDB done
+      # InstallFullDB done
 
-# backup done
+      # backup done
 
-# update classic-db done
+      # update classic-db done
 
-# drop/import databases >
+      # drop/import databases >
 
-"2")
+    "2")
 
-printf "\e[0;31mShutting down\033[0m realmd/mangosd service"
- echo
- sleep 1
+      printf "\e[0;31mShutting down\033[0m realmd/mangosd service"
+      echo
+      sleep 1
 
-# service status
-realm_service=realmd
-world_service=mangosd
+      # service status
+      realm_service=realmd
+      world_service=mangosd
 
-# realmd service
-case  "$(pidof $realm_service | wc -w)" in
- 0) ;;
- *) sudo service realmd stop ;;
-esac
+      # realmd service
+      case "$(pidof $realm_service | wc -w)" in
+      0) ;;
+      *) sudo service realmd stop ;;
+      esac
 
-# mangosd service
-case  "$(pidof $world_service | wc -w)" in
- 0) ;;
- *) sudo service mangosd stop ;;
-esac
+      # mangosd service
+      case "$(pidof $world_service | wc -w)" in
+      0) ;;
+      *) sudo service mangosd stop ;;
+      esac
 
-sudo chown -R "$user":"$group" "$folder_wow"
- sleep 1
- echo
-# backup <- characters.sql
-FILE="$folder_wow/backup/$db_characters-$NOW.sql"
-if [ ! -f "$FILE" ];
-then
-printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Characters' ! Creating backup.."
-mysqldump --defaults-extra-file="$sql_mycnf" "$db_characters" > "$folder_wow"/backup/"$db_characters"-"$NOW".sql
- echo
-else
-printf '%b' "[\e[0;32mok\033[0m] $db_characters-$NOW.sql exist"
- echo
-fi
-# backup <- realmd.sql
-FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
-if [ ! -f "$FILE" ];
-then
-printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Realmd' ! Creating backup.."
-mysqldump --defaults-extra-file="$sql_mycnf" "$db_realmd" > "$folder_wow"/backup/"$db_realmd"-"$NOW".sql
- echo
-else
-printf '%b' "[\e[0;32mok\033[0m] $db_realmd-$NOW.sql exist"
- echo
-fi
+      sudo chown -R "$user":"$group" "$folder_wow"
+      sleep 1
+      echo
+      # backup <- characters.sql
+      FILE="$folder_wow/backup/$db_characters-$NOW.sql"
+      if [ ! -f "$FILE" ]; then
+        printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Characters' ! Creating backup.."
+        mysqldump --defaults-extra-file="$sql_mycnf" "$db_characters" >"$folder_wow"/backup/"$db_characters"-"$NOW".sql
+        echo
+      else
+        printf '%b' "[\e[0;32mok\033[0m] $db_characters-$NOW.sql exist"
+        echo
+      fi
+      # backup <- realmd.sql
+      FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
+      if [ ! -f "$FILE" ]; then
+        printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Realmd' ! Creating backup.."
+        mysqldump --defaults-extra-file="$sql_mycnf" "$db_realmd" >"$folder_wow"/backup/"$db_realmd"-"$NOW".sql
+        echo
+      else
+        printf '%b' "[\e[0;32mok\033[0m] $db_realmd-$NOW.sql exist"
+        echo
+      fi
 
-# backup done
+      # backup done
 
-# drop databases >
+      # drop databases >
 
-# drop database 'characters'
+      # drop database 'characters'
 
- echo
-RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_characters")
-if [ "$RESULT" == "$db_characters" ]; then
-mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP "$db_characters";
-fi
-# drop database 'mangos'
-RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "${db_mangos:?}")
-if [ "$RESULT" == "$db_mangos" ]; then
-mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP "$db_mangos";
-fi
-# drop database 'realmd'
-RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_realmd")
-if [ "$RESULT" == "$db_realmd" ]; then
-mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP "$db_realmd";
-fi
+      echo
+      RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_characters")
+      if [ "$RESULT" == "$db_characters" ]; then
+        mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP "$db_characters"
+      fi
+      # drop database 'mangos'
+      RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "${db_mangos:?}")
+      if [ "$RESULT" == "$db_mangos" ]; then
+        mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP "$db_mangos"
+      fi
+      # drop database 'realmd'
+      RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_realmd")
+      if [ "$RESULT" == "$db_realmd" ]; then
+        mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP "$db_realmd"
+      fi
 
-# drop databases done
+      # drop databases done
 
-# create databases >
+      # create databases >
 
-# create database 'characters'
- echo
-RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_characters")
-if [ "$RESULT" == "$db_characters" ];
-then
-printf "[\e[0;32mok\033[0m] 'Characters' database installed."
- echo
-else
-printf "[\033[1;31mempty\033[0m] 'Characters' importing.."
- echo
-mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHARACTER SET utf8 COLLATE utf8_general_ci";
-mysql --defaults-extra-file="$sql_mycnf" --database="$db_characters" < "${folder_sql:?}"/base/characters.sql
-fi
-# create database 'mangos'
-RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_mangos")
-if [ "$RESULT" == "$db_mangos" ];
-then
-printf "[\e[0;32mok\033[0m] 'Mangos' database installed."
- echo
-else
-printf "[\033[1;31mempty\033[0m] 'Mangos' importing.."
- echo
-mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTER SET utf8 COLLATE utf8_general_ci";
-mysql --defaults-extra-file="$sql_mycnf" --database="$db_mangos" < "$folder_sql"/base/mangos.sql
-fi
-# create database 'realmd'
-RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_realmd")
-if [ "$RESULT" == "$db_realmd" ];
-then
-printf "[\e[0;32mok\033[0m] 'Realmd' database installed."
- echo
-else
-printf "[\033[1;31mempty\033[0m] 'Realmd' importing.."
- echo
-mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTER SET utf8 COLLATE utf8_general_ci";
-mysql --defaults-extra-file="$sql_mycnf" --database="$db_realmd" < "$folder_sql"/base/realmd.sql
-fi
- echo
+      # create database 'characters'
+      echo
+      RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_characters")
+      if [ "$RESULT" == "$db_characters" ]; then
+        printf "[\e[0;32mok\033[0m] 'Characters' database installed."
+        echo
+      else
+        printf "[\033[1;31mempty\033[0m] 'Characters' importing.."
+        echo
+        mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHARACTER SET utf8 COLLATE utf8_general_ci"
+        mysql --defaults-extra-file="$sql_mycnf" --database="$db_characters" <"${folder_sql:?}"/base/characters.sql
+      fi
+      # create database 'mangos'
+      RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_mangos")
+      if [ "$RESULT" == "$db_mangos" ]; then
+        printf "[\e[0;32mok\033[0m] 'Mangos' database installed."
+        echo
+      else
+        printf "[\033[1;31mempty\033[0m] 'Mangos' importing.."
+        echo
+        mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTER SET utf8 COLLATE utf8_general_ci"
+        mysql --defaults-extra-file="$sql_mycnf" --database="$db_mangos" <"$folder_sql"/base/mangos.sql
+      fi
+      # create database 'realmd'
+      RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_realmd")
+      if [ "$RESULT" == "$db_realmd" ]; then
+        printf "[\e[0;32mok\033[0m] 'Realmd' database installed."
+        echo
+      else
+        printf "[\033[1;31mempty\033[0m] 'Realmd' importing.."
+        echo
+        mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTER SET utf8 COLLATE utf8_general_ci"
+        mysql --defaults-extra-file="$sql_mycnf" --database="$db_realmd" <"$folder_sql"/base/realmd.sql
+      fi
+      echo
 
-# create databases done
+      # create databases done
 
-# delete and start over done
+      # delete and start over done
 
-# InstallFullDB ? >
+      # InstallFullDB ? >
 
- read -r -p "InstallFullDB? (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-sudo chown -R "$user":"$group" "$folder_wow"
-cd "$folder_db" || exit
-./InstallFullDB.sh
-fi
+      read -r -p "InstallFullDB? (y/n) " -n 1 -r
+      echo
+      if [[ $REPLY =~ ^[Yy]$ ]]; then
+        sudo chown -R "$user":"$group" "$folder_wow"
+        cd "$folder_db" || exit
+        ./InstallFullDB.sh
+      fi
 
-# InstallFullDB done
+      # InstallFullDB done
 
-# import backup ? >
+      # import backup ? >
 
- echo
-ls -lQS "$folder_wow"/backup
- echo
- read -r -p "Import latest backup? (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
- sleep 1
- echo -ne '(0%)\r'
-mysql --defaults-extra-file="$sql_mycnf" "$db_characters" < "$folder_wow"/backup/"$db_characters"-"$NOW".sql;
- sleep 1
- echo -ne '(25%)\r'
-mysql --defaults-extra-file="$sql_mycnf" "$db_realmd" < "$folder_wow"/backup/"$db_realmd"-"$NOW".sql;
- sleep 1
- echo -ne '(50%)\r'
-sudo service mariadb stop &> /dev/null; sudo service mysql stop &> /dev/null
- echo -ne '(75%)\r'
- sleep 1
- echo -ne '(90%)\r'
-sudo service mariadb restart &> /dev/null; sudo service mysql restart &> /dev/null
- echo -ne '(100%)\r'
-fi
- echo
-printf '%b' "[\e[0;32mok\033[0m] "
- read -r -p "Press Enter to continue" </dev/tty
- echo
+      echo
+      ls -lQS "$folder_wow"/backup
+      echo
+      read -r -p "Import latest backup? (y/n) " -n 1 -r
+      echo
+      if [[ $REPLY =~ ^[Yy]$ ]]; then
+        sleep 1
+        echo -ne '(0%)\r'
+        mysql --defaults-extra-file="$sql_mycnf" "$db_characters" <"$folder_wow"/backup/"$db_characters"-"$NOW".sql
+        sleep 1
+        echo -ne '(25%)\r'
+        mysql --defaults-extra-file="$sql_mycnf" "$db_realmd" <"$folder_wow"/backup/"$db_realmd"-"$NOW".sql
+        sleep 1
+        echo -ne '(50%)\r'
+        sudo service mariadb stop &>/dev/null
+        sudo service mysql stop &>/dev/null
+        echo -ne '(75%)\r'
+        sleep 1
+        echo -ne '(90%)\r'
+        sudo service mariadb restart &>/dev/null
+        sudo service mysql restart &>/dev/null
+        echo -ne '(100%)\r'
+      fi
+      echo
+      printf '%b' "[\e[0;32mok\033[0m] "
+      read -r -p "Press Enter to continue" </dev/tty
+      echo
 
- ;;
+      ;;
 
-# drop/import databases done
+      # drop/import databases done
 
-# update Database done
+      # update Database done
 
-# import backup done
+      # import backup done
 
-# convert_mysql_engine = myisam -> innodb >
+      # convert_mysql_engine = myisam -> innodb >
 
-"3")
+    "3")
 
-printf "\e[0;31mShutting down\033[0m realmd/mangosd service"
- echo
- sleep 1
+      printf "\e[0;31mShutting down\033[0m realmd/mangosd service"
+      echo
+      sleep 1
 
-# service status
-realm_service=realmd
-world_service=mangosd
+      # service status
+      realm_service=realmd
+      world_service=mangosd
 
-# realmd service
-case  "$(pidof $realm_service | wc -w)" in
- 0) ;;
- *) sudo service realmd stop ;;
-esac
+      # realmd service
+      case "$(pidof $realm_service | wc -w)" in
+      0) ;;
+      *) sudo service realmd stop ;;
+      esac
 
-# mangosd service
-case  "$(pidof $world_service | wc -w)" in
- 0) ;;
- *) sudo service mangosd stop ;;
-esac
+      # mangosd service
+      case "$(pidof $world_service | wc -w)" in
+      0) ;;
+      *) sudo service mangosd stop ;;
+      esac
 
-sudo chown -R "$user":"$group" "$folder_wow"
- echo -ne '(0%)\r'
- sleep 1
- echo -ne '(10%)\r'
-TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D "$db_mangos" -e 'show tables')
-for T in $TABLES
-do
- echo -ne '(20%)\r'
-sudo mysql --defaults-extra-file="$sql_mycnf" -D "$db_mangos" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
- echo -ne '(30%)\r'
-done
- echo -ne '(40%)\r'
- sleep 1
- echo -ne '(50%)\r'
-TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D "$db_realmd" -e 'show tables')
-for T in $TABLES
-do
- echo -ne '(60%)\r'
-sudo mysql --defaults-extra-file="$sql_mycnf" -D "$db_realmd" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
-done
- echo -ne '(70%)\r'
- sleep 1
- echo -ne '(80%)\r'
-TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D "$db_characters" -e 'show tables')
-for T in $TABLES
-do
- echo -ne '(90%)\r'
-sudo mysql --defaults-extra-file="$sql_mycnf" -D "$db_characters" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
- echo -ne '(95%)\r'
-done
- echo -ne '(96%)\r'
-sudo service mariadb stop &> /dev/null; sudo service mysql stop &> /dev/null
- echo -ne '(97%)\r'
- sleep 1
- echo -ne '(98%)\r'
-sudo service mariadb restart &> /dev/null; sudo service mysql restart &> /dev/null
- echo -ne '(99%)\r'
- sleep 1
- echo -ne '(100%)\r'
- echo
-printf '%b' "[\e[0;32mok\033[0m] "
- read -r -p "Press Enter to continue" </dev/tty
- echo
+      sudo chown -R "$user":"$group" "$folder_wow"
+      echo -ne '(0%)\r'
+      sleep 1
+      echo -ne '(10%)\r'
+      TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D "$db_mangos" -e 'show tables')
+      for T in $TABLES; do
+        echo -ne '(20%)\r'
+        sudo mysql --defaults-extra-file="$sql_mycnf" -D "$db_mangos" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
+        echo -ne '(30%)\r'
+      done
+      echo -ne '(40%)\r'
+      sleep 1
+      echo -ne '(50%)\r'
+      TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D "$db_realmd" -e 'show tables')
+      for T in $TABLES; do
+        echo -ne '(60%)\r'
+        sudo mysql --defaults-extra-file="$sql_mycnf" -D "$db_realmd" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
+      done
+      echo -ne '(70%)\r'
+      sleep 1
+      echo -ne '(80%)\r'
+      TABLES=$(sudo mysql --defaults-extra-file="$sql_mycnf" --skip-column-names -B -D "$db_characters" -e 'show tables')
+      for T in $TABLES; do
+        echo -ne '(90%)\r'
+        sudo mysql --defaults-extra-file="$sql_mycnf" -D "$db_characters" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
+        echo -ne '(95%)\r'
+      done
+      echo -ne '(96%)\r'
+      sudo service mariadb stop &>/dev/null
+      sudo service mysql stop &>/dev/null
+      echo -ne '(97%)\r'
+      sleep 1
+      echo -ne '(98%)\r'
+      sudo service mariadb restart &>/dev/null
+      sudo service mysql restart &>/dev/null
+      echo -ne '(99%)\r'
+      sleep 1
+      echo -ne '(100%)\r'
+      echo
+      printf '%b' "[\e[0;32mok\033[0m] "
+      read -r -p "Press Enter to continue" </dev/tty
+      echo
 
- ;;
+      ;;
 
-# convert_mysql_engine = myisam -> innodb done
+      # convert_mysql_engine = myisam -> innodb done
 
-# reinstall (delete /classic-db) >
+      # reinstall (delete /classic-db) >
 
-"4")
+    "4")
 
-sudo chown -R "$user":"$group" "$folder_wow"
-cp "$folder_db"/InstallFullDB.config "$folder_wow" &> /dev/null
-sudo rm -r "$folder_db" &> /dev/null
-cd "$folder_wow" || exit
-git clone https://github.com/cmangos/classic-db.git
-mv "$folder_wow"/*.config "$folder_db" &> /dev/null
-sudo chown -R "$user":"$group" "$folder_wow"
-printf '%b' "[\e[0;32mok\033[0m] "
- read -r -p "Press Enter to continue" </dev/tty
- echo
+      sudo chown -R "$user":"$group" "$folder_wow"
+      cp "$folder_db"/InstallFullDB.config "$folder_wow" &>/dev/null
+      sudo rm -r "$folder_db" &>/dev/null
+      cd "$folder_wow" || exit
+      git clone https://github.com/cmangos/classic-db.git
+      mv "$folder_wow"/*.config "$folder_db" &>/dev/null
+      sudo chown -R "$user":"$group" "$folder_wow"
+      printf '%b' "[\e[0;32mok\033[0m] "
+      read -r -p "Press Enter to continue" </dev/tty
+      echo
 
- ;;
+      ;;
 
-# reinstall (delete /classic-db) done
+      # reinstall (delete /classic-db) done
 
-# reset --hard origin/master >
+      # reset --hard origin/master >
 
-"5")
+    "5")
 
-cd "$folder_db" || exit
-git reset --hard origin/master
-printf '%b' "[\e[0;32mok\033[0m] "
- read -r -p "Press Enter to continue" </dev/tty
- echo
+      cd "$folder_db" || exit
+      git reset --hard origin/master
+      printf '%b' "[\e[0;32mok\033[0m] "
+      read -r -p "Press Enter to continue" </dev/tty
+      echo
 
- ;;
+      ;;
 
-# reset --hard origin/master done
+      # reset --hard origin/master done
 
-# restart mysql/mariadb server (service) >
+      # restart mysql/mariadb server (service) >
 
-"6")
+    "6")
 
-clear
-cat<<EOF
+      clear
+      cat <<EOF
  Database system
  (service)
 
@@ -2315,55 +2315,57 @@ cat<<EOF
  q : Quit
 
 EOF
- read -r -n1 -s
-case "$REPLY" in
+      read -r -n1 -s
+      case "$REPLY" in
 
-# restart mariadb >
+      # restart mariadb >
 
-"1")
+      "1")
 
-sudo service mariadb stop &> /dev/null; sudo service mysql stop &> /dev/null
- sleep 1
-sudo service mariadb restart &> /dev/null
- sleep 1
-sudo service mariadb status 2> /dev/null
- echo
- read -r -p "Press Enter to continue" </dev/tty
- echo
+        sudo service mariadb stop &>/dev/null
+        sudo service mysql stop &>/dev/null
+        sleep 1
+        sudo service mariadb restart &>/dev/null
+        sleep 1
+        sudo service mariadb status 2>/dev/null
+        echo
+        read -r -p "Press Enter to continue" </dev/tty
+        echo
 
- ;;
+        ;;
 
-# restart mysql >
+        # restart mysql >
 
-"2")
+      "2")
 
-sudo service mariadb stop &> /dev/null; sudo service mysql stop &> /dev/null
- sleep 1
-sudo service mysql restart &> /dev/null
- sleep 1
-sudo service mysql status 2> /dev/null
- echo
- read -r -p "Press Enter to continue" </dev/tty
- echo
+        sudo service mariadb stop &>/dev/null
+        sudo service mysql stop &>/dev/null
+        sleep 1
+        sudo service mysql restart &>/dev/null
+        sleep 1
+        sudo service mysql status 2>/dev/null
+        echo
+        read -r -p "Press Enter to continue" </dev/tty
+        echo
 
- ;;
+        ;;
 
-"q")  return                    ;;
-"Q")  echo "case sensitive!!"   ;; 
- * )  echo "invalid option"     ;;
+      "q") return ;;
+      "Q") echo "case sensitive!!" ;;
+      *) echo "invalid option" ;;
 
-esac
+      esac
 
- ;;
+      ;;
 
-# restart mysql/mariadb server (service) done
+      # restart mysql/mariadb server (service) done
 
-# Stop mysql/mariadb server (service) >
+      # Stop mysql/mariadb server (service) >
 
-"7")
+    "7")
 
-clear
-cat<<EOF
+      clear
+      cat <<EOF
  Database system
  (service)
 
@@ -2372,53 +2374,54 @@ cat<<EOF
  q : Quit
 
 EOF
- read -r -n1 -s
-case "$REPLY" in
+      read -r -n1 -s
+      case "$REPLY" in
 
-# stop mysql >
+      # stop mysql >
 
-"1")
+      "1")
 
-sudo service mariadb stop &> /dev/null; sudo service mysql stop &> /dev/null
- sleep 1
-sudo service mysql stop &> /dev/null
- sleep 1
-sudo service mysql status 2> /dev/null
- echo
- read -r -p "Press Enter to continue" </dev/tty
- echo
+        sudo service mariadb stop &>/dev/null
+        sudo service mysql stop &>/dev/null
+        sleep 1
+        sudo service mysql stop &>/dev/null
+        sleep 1
+        sudo service mysql status 2>/dev/null
+        echo
+        read -r -p "Press Enter to continue" </dev/tty
+        echo
 
- ;;
+        ;;
 
-# stop mariadb >
+        # stop mariadb >
 
-"2")
+      "2")
 
-sudo service mariadb stop &> /dev/null
- sleep 1
-sudo service mariadb status 2> /dev/null
- echo
- read -r -p "Press Enter to continue" </dev/tty
- echo
+        sudo service mariadb stop &>/dev/null
+        sleep 1
+        sudo service mariadb status 2>/dev/null
+        echo
+        read -r -p "Press Enter to continue" </dev/tty
+        echo
 
- ;;
+        ;;
 
-"q")  return                    ;;
-"Q")  echo "case sensitive!!"   ;; 
- * )  echo "invalid option"     ;;
+      "q") return ;;
+      "Q") echo "case sensitive!!" ;;
+      *) echo "invalid option" ;;
 
-esac
+      esac
 
- ;;
+      ;;
 
-# Stop mysql/mariadb server (service) done
+      # Stop mysql/mariadb server (service) done
 
-# enable/disable mysql/mariadb server >
+      # enable/disable mysql/mariadb server >
 
-"8")
+    "8")
 
-clear
-cat<<EOF
+      clear
+      cat <<EOF
  Enable/Disable MySQL
  (systemctl)
 
@@ -2429,499 +2432,504 @@ cat<<EOF
  q : Quit
 
 EOF
- read -r -n1 -s
-case "$REPLY" in
+      read -r -n1 -s
+      case "$REPLY" in
 
-# enable mysql >
+      # enable mysql >
 
-"1")
+      "1")
 
-sudo systemctl enable mysql 2> /dev/null; sudo systemctl enable mysql.service 2> /dev/null
-# reload >
-sudo systemctl daemon-reload 2> /dev/null
- echo
- read -r -p "Press Enter to continue" </dev/tty
- echo
+        sudo systemctl enable mysql 2>/dev/null
+        sudo systemctl enable mysql.service 2>/dev/null
+        # reload >
+        sudo systemctl daemon-reload 2>/dev/null
+        echo
+        read -r -p "Press Enter to continue" </dev/tty
+        echo
 
- ;;
+        ;;
 
-# disable mysql >
+        # disable mysql >
 
-"2")
+      "2")
 
-sudo systemctl disable mysql 2> /dev/null; sudo systemctl disable mysql.service 2> /dev/null
-# reload >
-sudo systemctl daemon-reload 2> /dev/null
- echo
- read -r -p "Press Enter to continue" </dev/tty
- echo
+        sudo systemctl disable mysql 2>/dev/null
+        sudo systemctl disable mysql.service 2>/dev/null
+        # reload >
+        sudo systemctl daemon-reload 2>/dev/null
+        echo
+        read -r -p "Press Enter to continue" </dev/tty
+        echo
 
- ;;
+        ;;
 
-# enable mariadb >
+        # enable mariadb >
 
-"3")
+      "3")
 
-sudo systemctl enable mariadb@.service 2> /dev/null;sudo systemctl enable mariadb@ 2> /dev/null
-# reload >
-sudo systemctl daemon-reload 2> /dev/null
- echo
- read -r -p "Press Enter to continue" </dev/tty
- echo
+        sudo systemctl enable mariadb@.service 2>/dev/null
+        sudo systemctl enable mariadb@ 2>/dev/null
+        # reload >
+        sudo systemctl daemon-reload 2>/dev/null
+        echo
+        read -r -p "Press Enter to continue" </dev/tty
+        echo
 
- ;;
+        ;;
 
-# disable mariadb >
+        # disable mariadb >
 
-"4")
+      "4")
 
-sudo systemctl disable mariadb@ 2> /dev/null; sudo systemctl disable mariadb.service 2> /dev/null
-# reload >
-sudo systemctl daemon-reload 2> /dev/null
- echo
- read -r -p "Press Enter to continue" </dev/tty
- echo
+        sudo systemctl disable mariadb@ 2>/dev/null
+        sudo systemctl disable mariadb.service 2>/dev/null
+        # reload >
+        sudo systemctl daemon-reload 2>/dev/null
+        echo
+        read -r -p "Press Enter to continue" </dev/tty
+        echo
 
- ;;
+        ;;
 
-"q")  return                    ;;
-"Q")  echo "case sensitive!!"   ;; 
- * )  echo "invalid option"     ;;
+      "q") return ;;
+      "Q") echo "case sensitive!!" ;;
+      *) echo "invalid option" ;;
 
-esac
+      esac
 
- ;;
+      ;;
 
-# enable/disable mysql/mariadb server >
+      # enable/disable mysql/mariadb server >
 
-# apply all updates [A] to [B] >
+      # apply all updates [A] to [B] >
 
-"9")
+    "9")
 
-sudo chown -R "$user":"$group" "$folder_wow"
-printf '%b' "[\033[1;31mWarning\033[0m]: Only update whats missing.
+      sudo chown -R "$user":"$group" "$folder_wow"
+      printf '%b' "[\033[1;31mWarning\033[0m]: Only update whats missing.
 Check log for which database needs 'applying updates'"
- echo
-# combine [A] to [B] updates individually > 
-cat "${folder_core:?}"/sql/updates/characters/*.sql  > "$folder_wow"/.all_characters.sql
-cat "${folder_core:?}"/sql/updates/mangos/*.sql  > "$folder_wow"/.all_mangos.sql
-cat "${folder_core:?}"/sql/updates/realmd/*.sql  > "$folder_wow"/.all_realmd.sql
-
-# apply all updates [A] to [B] characters ? >
- echo
- read -r -p "Characters? (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-printf '%b' "Loading.."
- echo
- sleep 1
-
-# service status
-realm_service=realmd
-world_service=mangosd
-
-# realmd service
-case  "$(pidof $realm_service | wc -w)" in
- 0) ;;
- *) sudo service realmd stop ;;
-esac
-
-# mangosd service
-case  "$(pidof $world_service | wc -w)" in
- 0) ;;
- *) sudo service mangosd stop ;;
-esac
-
-mysql --defaults-extra-file="$sql_mycnf" -f --database="$db_characters" < "$folder_wow"/.all_characters.sql 2> /dev/null
-sudo service mariadb stop &> /dev/null; sudo service mysql stop &> /dev/null
- sleep 1
-sudo service mariadb restart &> /dev/null; sudo service mysql restart &> /dev/null
-printf '%b' "[\e[0;32mok\033[0m]"
- echo
-fi
-# apply all updates [A] to [B] mangos ? >
- read -r -p "Mangos? (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-printf '%b' "Loading.."
- echo
- sleep 1
-
-# service status
-realm_service=realmd
-world_service=mangosd
-
-# realmd service
-case  "$(pidof $realm_service | wc -w)" in
- 0) ;;
- *) sudo service realmd stop ;;
-esac
-
-# mangosd service
-case  "$(pidof $world_service | wc -w)" in
- 0) ;;
- *) sudo service mangosd stop ;;
-esac
-
-mysql --defaults-extra-file="$sql_mycnf" -f --database="$db_mangos" < "$folder_wow"/.all_mangos.sql 2> /dev/null
-sudo service mariadb stop &> /dev/null; sudo service mysql stop &> /dev/null
- sleep 1
-sudo service mariadb restart &> /dev/null; sudo service mysql restart &> /dev/null
-printf '%b' "[\e[0;32mok\033[0m]"
- echo
-fi
-# apply all updates [A] to [B] realmd ? >
- read -r -p "Realmd? (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-printf '%b' "Loading.."
- echo
- sleep 1
-
-# service status
-realm_service=realmd
-world_service=mangosd
-
-# realmd service
-case  "$(pidof $realm_service | wc -w)" in
- 0) ;;
- *) sudo service realmd stop ;;
-esac
-
-# mangosd service
-case  "$(pidof $world_service | wc -w)" in
- 0) ;;
- *) sudo service mangosd stop ;;
-esac
-
-mysql --defaults-extra-file="$sql_mycnf" -f --database="$db_realmd" < "$folder_wow"/.all_realmd.sql 2> /dev/null
-sudo service mariadb stop &> /dev/null; sudo service mysql stop &> /dev/null
- sleep 1
-sudo service mariadb restart &> /dev/null; sudo service mysql restart &> /dev/null
-printf '%b' "[\e[0;32mok\033[0m]"
- echo
-fi
-# remove old 'combined updates' sql files >
-rm "$folder_wow"/.*.sql 2> /dev/null
-# InstallFullDB ? >
- echo
-printf '%b' "\e[0;32mRecommended if you applied anything\033[0m"
- echo
- read -r -p "InstallFullDB? (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-printf '%b' "Loading.."
- echo
- sleep 1
-
-# service status
-realm_service=realmd
-world_service=mangosd
-
-# realmd service
-case  "$(pidof $realm_service | wc -w)" in
- 0) ;;
- *) sudo service realmd stop ;;
-esac
-
-# mangosd service
-case  "$(pidof $world_service | wc -w)" in
- 0) ;;
- *) sudo service mangosd stop ;;
-esac
-
-printf '%b' "[\e[0;32mok\033[0m]"
- echo
-sudo chown -R "$user":"$group" "$folder_wow"
-cd "$folder_db" || exit
-./InstallFullDB.sh
-sudo service mariadb stop &> /dev/null; sudo service mysql stop &> /dev/null
- sleep 1
-sudo service mariadb restart &> /dev/null; sudo service mysql restart &> /dev/null
-printf '%b' "[\e[0;32mok\033[0m] "
-fi
- read -r -p "Press Enter to continue" </dev/tty
- echo
-
- ;;
-
-# apply all updates [A] to [B] done
-
-esac
-
- ;;
-
-# update database done
-
-# accounts >
-
-"u")
-
- echo "User Accounts"
- echo
-mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, last_ip, DATE_FORMAT(last_login, '%Y-%m-%d') last_login, id FROM $db_realmd.account;" 2> /dev/null
- read -r -p "Check database size? (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-mysql --defaults-extra-file="$sql_mycnf" <<<"SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in MB' FROM information_schema.TABLES WHERE table_schema = \"$db_realmd\" ORDER BY (data_length + index_length) DESC;" | head
- read -r -p "Press Enter to continue" </dev/tty
-fi
-
- ;;
-
-# accounts done
-
-# characters >
-
-"t")
-
- echo "Characters"
- echo
-mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, level, online, account FROM $db_characters.characters;" 2> /dev/null
- read -r -p "Check database size? (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-mysql --defaults-extra-file="$sql_mycnf" <<<"SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in MB' FROM information_schema.TABLES WHERE table_schema = \"$db_characters\" ORDER BY (data_length + index_length) DESC;" | head
- read -r -p "Press Enter to continue" </dev/tty
-fi
-
-  ;;
-
-# characters done
-
-# guilds >
-
-"g")
-
- echo "Guilds"
- echo
-mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, motd FROM $db_characters.guild;" 2> /dev/null
- read -r -p "Press Enter to continue" </dev/tty
-
-   ;;
-
-# guilds done
-
-# shutdown server ? >> (ﾉ °益°)ﾉ 彡 ┻━┻ holy *@?!1kek .. need muh grindz x()<zz ! OO
-
-"s")
-
- echo
- echo "Shutdown Server?"
- echo
- read -r -p "Are you sure? (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-# keep old logs >
-cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &> /dev/null
-# done
-printf "\e[0;31mShutting down\033[0m realmd/mangosd service"
- echo
- sleep 1
- echo -ne '(0%)\r'
- sleep 1
-
-# service status
-realm_service=realmd
-world_service=mangosd
-
-# realmd service
-case  "$(pidof $realm_service | wc -w)" in
- 0) ;;
- *) sudo service realmd stop ;;
-esac
-
-echo -ne '(50%)\r'
-sleep 1
-
-# mangosd service
-case  "$(pidof $world_service | wc -w)" in
- 0) ;;
- *) sudo service mangosd stop ;;
-esac
-
- echo -ne '(100%)\r'
- sleep 1
-fi
-
- ;;
-
-# shutdown server done << it's over!!
-
-# restart server >
-
-"r")
-
-# codes >
-
-# realmd.log
-realmd_log_empty="[\e[0;33mEmpty\033[0m] -> "
-realmd_log_error="[\033[0;31mError\033[0m] -> "
-realmd_log_ok="[\e[0;32mok\033[0m]"
-
-# server.log
-server_log_initialized="[\e[0;32mWorld initialized\033[0m]"
-server_log_serious="[\033[1;31mSerious\033[0m] -> "
-server_log_failed="[\033[0;31mWorld failed\033[0m]"
-server_log_error="[\033[0;31mError\033[0m] -> "
-server_log_empty="[\e[0;33mEmpty\033[0m] -> "
-server_log_ok="[\e[0;32mok\033[0m]"
-
-# service status
-world_service=mangosd
-realm_service=realmd
-
-# codes done
-
-HEIGHT=10
-WIDTH=40
-CHOICE_HEIGHT=4
-BACKTITLE="restart server"
-TITLE="Service Control"
-MENU="Choose one of the following options:"
-
-OPTIONS=(1 "Restart realmd, mangosd"
-         2 "Restart realmd service"
-         3 "Restart mangosd service")
-
-CHOICE=$(dialog --clear \
-                --backtitle "$BACKTITLE" \
-                --title "$TITLE" \
-                --menu "$MENU" \
-                $HEIGHT $WIDTH $CHOICE_HEIGHT \
-                "${OPTIONS[@]}" \
-                2>&1 >/dev/tty)
-
-clear
-case $CHOICE in
-
-# restart realmd,mangos >
-
-"1")
-
-# keep old logs >
-cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &> /dev/null
-# done
-printf "\e[1;32mRestarting server..\033[0m"
- echo
- echo -ne '(0%)\r'
- sleep 1
-sudo service realmd restart &> /dev/null
- echo -ne '(50%)\r'
- sleep 1
-sudo service mangosd restart &> /dev/null
- echo -ne '(100%)\r'
- sleep 1
- echo
-
- ;;
-
-# restart realmd,mangos done
-
-# restart realmd >
-
-"2")
-
-# keep old logs >
-cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &> /dev/null
-# done
-printf "\e[1;32mRestarting realmd..\033[0m"
- echo
- sleep 1
-sudo service realmd restart &> /dev/null
- sleep 1
- echo
-
- ;;
-
-# restart realmd done
-
-# restart mangosd >
-
-"3")
-
-# keep old logs >
-cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &> /dev/null
-# done
-printf "\e[1;32mRestarting mangosd..\033[0m"
- echo
- sleep 1
-sudo service mangosd restart &> /dev/null
- sleep 1
- echo
-
- ;;
-
-# restart mangosd done
-
-esac
-
-clear
-
-# realmd service
-case  "$(pidof $realm_service | wc -w)" in
- 0) printf "Realm [\033[1;31minactive\033[0m] " ;;
- 1) printf "Realm [\e[0;32mactive\033[0m] " ;;
- *) printf "Realm [\e[0;33mok?\033[0m] " ;;
-esac
-
-# mangosd service
-case  "$(pidof $world_service | wc -w)" in
- 0) printf "World [\033[1;31minactive\033[0m] " ;;
- 1) printf "World [\e[0;32mactive\033[0m] " ;;
- *) printf "World [\e[0;33mok?\033[0m] " ;;
-esac
-
- echo
-# realmd.log
-printf "\e[1;32m<------------------------------------------------------>\033[0m"
- echo
-# look for empty tables
-if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2> /dev/null; then
-# if any, print "empty"
-printf "Server.log "
-printf '%b' "$realmd_log_empty"
-# count empty inside log
-grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2> /dev/null
-fi
-# look for error
-if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2> /dev/null; then
-# if any, print "error"
-printf "Realmd.log "
-printf '%b' "$realmd_log_error"
-# count errors inside log
-grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2> /dev/null
-# if nothing, print "ok"
-else
-printf "Realmd.log "
-printf '%b' "$realmd_log_ok"
- echo
-fi
- echo
-tail "$folder_core"/run/logs/Realmd.log 2> /dev/null
-
-# server.log
-printf "\e[1;32m<------------------------------------------------------>\033[0m"
- echo
-
-# wait wordlist >
-
-# realmd >
-wordlist_realmd=(".*Can't\sconnect\sto\slocal\sMySQL*.
+      echo
+      # combine [A] to [B] updates individually >
+      cat "${folder_core:?}"/sql/updates/characters/*.sql >"$folder_wow"/.all_characters.sql
+      cat "${folder_core:?}"/sql/updates/mangos/*.sql >"$folder_wow"/.all_mangos.sql
+      cat "${folder_core:?}"/sql/updates/realmd/*.sql >"$folder_wow"/.all_realmd.sql
+
+      # apply all updates [A] to [B] characters ? >
+      echo
+      read -r -p "Characters? (y/n) " -n 1 -r
+      echo
+      if [[ $REPLY =~ ^[Yy]$ ]]; then
+        printf '%b' "Loading.."
+        echo
+        sleep 1
+
+        # service status
+        realm_service=realmd
+        world_service=mangosd
+
+        # realmd service
+        case "$(pidof $realm_service | wc -w)" in
+        0) ;;
+        *) sudo service realmd stop ;;
+        esac
+
+        # mangosd service
+        case "$(pidof $world_service | wc -w)" in
+        0) ;;
+        *) sudo service mangosd stop ;;
+        esac
+
+        mysql --defaults-extra-file="$sql_mycnf" -f --database="$db_characters" <"$folder_wow"/.all_characters.sql 2>/dev/null
+        sudo service mariadb stop &>/dev/null
+        sudo service mysql stop &>/dev/null
+        sleep 1
+        sudo service mariadb restart &>/dev/null
+        sudo service mysql restart &>/dev/null
+        printf '%b' "[\e[0;32mok\033[0m]"
+        echo
+      fi
+      # apply all updates [A] to [B] mangos ? >
+      read -r -p "Mangos? (y/n) " -n 1 -r
+      echo
+      if [[ $REPLY =~ ^[Yy]$ ]]; then
+        printf '%b' "Loading.."
+        echo
+        sleep 1
+
+        # service status
+        realm_service=realmd
+        world_service=mangosd
+
+        # realmd service
+        case "$(pidof $realm_service | wc -w)" in
+        0) ;;
+        *) sudo service realmd stop ;;
+        esac
+
+        # mangosd service
+        case "$(pidof $world_service | wc -w)" in
+        0) ;;
+        *) sudo service mangosd stop ;;
+        esac
+
+        mysql --defaults-extra-file="$sql_mycnf" -f --database="$db_mangos" <"$folder_wow"/.all_mangos.sql 2>/dev/null
+        sudo service mariadb stop &>/dev/null
+        sudo service mysql stop &>/dev/null
+        sleep 1
+        sudo service mariadb restart &>/dev/null
+        sudo service mysql restart &>/dev/null
+        printf '%b' "[\e[0;32mok\033[0m]"
+        echo
+      fi
+      # apply all updates [A] to [B] realmd ? >
+      read -r -p "Realmd? (y/n) " -n 1 -r
+      echo
+      if [[ $REPLY =~ ^[Yy]$ ]]; then
+        printf '%b' "Loading.."
+        echo
+        sleep 1
+
+        # service status
+        realm_service=realmd
+        world_service=mangosd
+
+        # realmd service
+        case "$(pidof $realm_service | wc -w)" in
+        0) ;;
+        *) sudo service realmd stop ;;
+        esac
+
+        # mangosd service
+        case "$(pidof $world_service | wc -w)" in
+        0) ;;
+        *) sudo service mangosd stop ;;
+        esac
+
+        mysql --defaults-extra-file="$sql_mycnf" -f --database="$db_realmd" <"$folder_wow"/.all_realmd.sql 2>/dev/null
+        sudo service mariadb stop &>/dev/null
+        sudo service mysql stop &>/dev/null
+        sleep 1
+        sudo service mariadb restart &>/dev/null
+        sudo service mysql restart &>/dev/null
+        printf '%b' "[\e[0;32mok\033[0m]"
+        echo
+      fi
+      # remove old 'combined updates' sql files >
+      rm "$folder_wow"/.*.sql 2>/dev/null
+      # InstallFullDB ? >
+      echo
+      printf '%b' "\e[0;32mRecommended if you applied anything\033[0m"
+      echo
+      read -r -p "InstallFullDB? (y/n) " -n 1 -r
+      echo
+      if [[ $REPLY =~ ^[Yy]$ ]]; then
+        printf '%b' "Loading.."
+        echo
+        sleep 1
+
+        # service status
+        realm_service=realmd
+        world_service=mangosd
+
+        # realmd service
+        case "$(pidof $realm_service | wc -w)" in
+        0) ;;
+        *) sudo service realmd stop ;;
+        esac
+
+        # mangosd service
+        case "$(pidof $world_service | wc -w)" in
+        0) ;;
+        *) sudo service mangosd stop ;;
+        esac
+
+        printf '%b' "[\e[0;32mok\033[0m]"
+        echo
+        sudo chown -R "$user":"$group" "$folder_wow"
+        cd "$folder_db" || exit
+        ./InstallFullDB.sh
+        sudo service mariadb stop &>/dev/null
+        sudo service mysql stop &>/dev/null
+        sleep 1
+        sudo service mariadb restart &>/dev/null
+        sudo service mysql restart &>/dev/null
+        printf '%b' "[\e[0;32mok\033[0m] "
+      fi
+      read -r -p "Press Enter to continue" </dev/tty
+      echo
+
+      ;;
+
+      # apply all updates [A] to [B] done
+
+    esac
+
+    ;;
+
+    # update database done
+
+    # accounts >
+
+  "u")
+
+    echo "User Accounts"
+    echo
+    mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, last_ip, DATE_FORMAT(last_login, '%Y-%m-%d') last_login, id FROM $db_realmd.account;" 2>/dev/null
+    read -r -p "Check database size? (y/n) " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+      mysql --defaults-extra-file="$sql_mycnf" <<<"SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in MB' FROM information_schema.TABLES WHERE table_schema = \"$db_realmd\" ORDER BY (data_length + index_length) DESC;" | head
+      read -r -p "Press Enter to continue" </dev/tty
+    fi
+
+    ;;
+
+    # accounts done
+
+    # characters >
+
+  "t")
+
+    echo "Characters"
+    echo
+    mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, level, online, account FROM $db_characters.characters;" 2>/dev/null
+    read -r -p "Check database size? (y/n) " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+      mysql --defaults-extra-file="$sql_mycnf" <<<"SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in MB' FROM information_schema.TABLES WHERE table_schema = \"$db_characters\" ORDER BY (data_length + index_length) DESC;" | head
+      read -r -p "Press Enter to continue" </dev/tty
+    fi
+
+    ;;
+
+    # characters done
+
+    # guilds >
+
+  "g")
+
+    echo "Guilds"
+    echo
+    mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, motd FROM $db_characters.guild;" 2>/dev/null
+    read -r -p "Press Enter to continue" </dev/tty
+
+    ;;
+
+    # guilds done
+
+    # shutdown server ? >> (ﾉ °益°)ﾉ 彡 ┻━┻ holy *@?!1kek .. need muh grindz x()<zz ! OO
+
+  "s")
+
+    echo
+    echo "Shutdown Server?"
+    echo
+    read -r -p "Are you sure? (y/n) " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+      # keep old logs >
+      cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
+      # done
+      printf "\e[0;31mShutting down\033[0m realmd/mangosd service"
+      echo
+      sleep 1
+      echo -ne '(0%)\r'
+      sleep 1
+
+      # service status
+      realm_service=realmd
+      world_service=mangosd
+
+      # realmd service
+      case "$(pidof $realm_service | wc -w)" in
+      0) ;;
+      *) sudo service realmd stop ;;
+      esac
+
+      echo -ne '(50%)\r'
+      sleep 1
+
+      # mangosd service
+      case "$(pidof $world_service | wc -w)" in
+      0) ;;
+      *) sudo service mangosd stop ;;
+      esac
+
+      echo -ne '(100%)\r'
+      sleep 1
+    fi
+
+    ;;
+
+    # shutdown server done << it's over!!
+
+    # restart server >
+
+  "r")
+
+    # codes >
+
+    # realmd.log
+    realmd_log_empty="[\e[0;33mEmpty\033[0m] -> "
+    realmd_log_error="[\033[0;31mError\033[0m] -> "
+    realmd_log_ok="[\e[0;32mok\033[0m]"
+
+    # server.log
+    server_log_initialized="[\e[0;32mWorld initialized\033[0m]"
+    server_log_serious="[\033[1;31mSerious\033[0m] -> "
+    server_log_failed="[\033[0;31mWorld failed\033[0m]"
+    server_log_error="[\033[0;31mError\033[0m] -> "
+    server_log_empty="[\e[0;33mEmpty\033[0m] -> "
+    server_log_ok="[\e[0;32mok\033[0m]"
+
+    # service status
+    world_service=mangosd
+    realm_service=realmd
+
+    # codes done
+
+    HEIGHT=10
+    WIDTH=40
+    CHOICE_HEIGHT=4
+    BACKTITLE="restart server"
+    TITLE="Service Control"
+    MENU="Choose one of the following options:"
+
+    OPTIONS=(1 "Restart realmd, mangosd"
+      2 "Restart realmd service"
+      3 "Restart mangosd service")
+
+    CHOICE=$(dialog --clear \
+      --backtitle "$BACKTITLE" \
+      --title "$TITLE" \
+      --menu "$MENU" \
+      $HEIGHT $WIDTH $CHOICE_HEIGHT \
+      "${OPTIONS[@]}" \
+      2>&1 >/dev/tty)
+
+    clear
+    case $CHOICE in
+
+    # restart realmd,mangos >
+
+    "1")
+
+      # keep old logs >
+      cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
+      # done
+      printf "\e[1;32mRestarting server..\033[0m"
+      echo
+      echo -ne '(0%)\r'
+      sleep 1
+      sudo service realmd restart &>/dev/null
+      echo -ne '(50%)\r'
+      sleep 1
+      sudo service mangosd restart &>/dev/null
+      echo -ne '(100%)\r'
+      sleep 1
+      echo
+
+      ;;
+
+      # restart realmd,mangos done
+
+      # restart realmd >
+
+    "2")
+
+      # keep old logs >
+      cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
+      # done
+      printf "\e[1;32mRestarting realmd..\033[0m"
+      echo
+      sleep 1
+      sudo service realmd restart &>/dev/null
+      sleep 1
+      echo
+
+      ;;
+
+      # restart realmd done
+
+      # restart mangosd >
+
+    "3")
+
+      # keep old logs >
+      cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
+      # done
+      printf "\e[1;32mRestarting mangosd..\033[0m"
+      echo
+      sleep 1
+      sudo service mangosd restart &>/dev/null
+      sleep 1
+      echo
+
+      ;;
+
+      # restart mangosd done
+
+    esac
+
+    clear
+
+    # realmd service
+    case "$(pidof $realm_service | wc -w)" in
+    0) printf "Realm [\033[1;31minactive\033[0m] " ;;
+    1) printf "Realm [\e[0;32mactive\033[0m] " ;;
+    *) printf "Realm [\e[0;33mok?\033[0m] " ;;
+    esac
+
+    # mangosd service
+    case "$(pidof $world_service | wc -w)" in
+    0) printf "World [\033[1;31minactive\033[0m] " ;;
+    1) printf "World [\e[0;32mactive\033[0m] " ;;
+    *) printf "World [\e[0;33mok?\033[0m] " ;;
+    esac
+
+    echo
+    # realmd.log
+    printf "\e[1;32m<------------------------------------------------------>\033[0m"
+    echo
+    # look for empty tables
+    if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
+      # if any, print "empty"
+      printf "Server.log "
+      printf '%b' "$realmd_log_empty"
+      # count empty inside log
+      grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2>/dev/null
+    fi
+    # look for error
+    if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
+      # if any, print "error"
+      printf "Realmd.log "
+      printf '%b' "$realmd_log_error"
+      # count errors inside log
+      grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2>/dev/null
+    # if nothing, print "ok"
+    else
+      printf "Realmd.log "
+      printf '%b' "$realmd_log_ok"
+      echo
+    fi
+    echo
+    tail "$folder_core"/run/logs/Realmd.log 2>/dev/null
+
+    # server.log
+    printf "\e[1;32m<------------------------------------------------------>\033[0m"
+    echo
+
+    # wait wordlist >
+
+    # realmd >
+    wordlist_realmd=(".*Can't\sconnect\sto\slocal\sMySQL*.
 .*Added\srealm\sid*.
 .*database\sis\smissing\sor\scorrupt.*.
 .*You\shave:\s-->*.
 .*reinstall\syour*.
 .*cannot\sfind\sthe\sversion\sinfo*.")
-# mangosd >
-wordlist_mangosd=(".*Can't\sconnect\sto\slocal\sMySQL*.
+    # mangosd >
+    wordlist_mangosd=(".*Can't\sconnect\sto\slocal\sMySQL*.
 .*STARTUP*.
 .*TIME*.
 .*corrupt*.
@@ -2938,634 +2946,656 @@ wordlist_mangosd=(".*Can't\sconnect\sto\slocal\sMySQL*.
 .*You\shave:\s-->*.
 .*reinstall\syour*.")
 
-# wait wordlist done
-
-# wait for realmd & mangosd to fill up logs >
-
-# Realmd.log >
-tail -f "$folder_core"/run/logs/Realmd.log 2> /dev/null |
-{ grep -E -q -m 1 "${wordlist_realmd[@]}" && pkill -P $$ -x tail 2> /dev/null;}
-# Server.log >
-tail -f "$folder_core"/run/logs/Server.log 2> /dev/null |
-{ grep -E -m 1 "${wordlist_mangosd[@]}" && pkill -P $$ -x tail 2> /dev/null;}
-# wait for realmd & mangosd to fill up logs done
-# look for empty tables
-if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2> /dev/null; then
-# if any, print "empty"
-printf "Server.log "
-printf '%b' "$server_log_empty"
-# count empty inside log
-grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2> /dev/null
-fi
-# look for error
-if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log 2> /dev/null; then
-# if any, print "error"
-printf "Server.log "
-printf '%b' "$server_log_error"
-# count errors inside log
-grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log 2> /dev/null
-# look for serious error
-if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2> /dev/null; then
-# if any, print "serious"
-printf "Server.log "
-printf '%b' "$server_log_serious"
-# count serious errors inside log
-grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2> /dev/null
-fi
-# if nothing, print "ok"
-else
-printf "Server.log "
-printf '%b' "$server_log_ok"
- echo
-fi
-# world failed
-if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log 2> /dev/null; then
-# if any, print "World failed"
- echo
-printf "[CMaNGOS]: "
-printf '%b' "$server_log_failed"
- echo
-else
-# databases is missing or corrupt.
-if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$folder_core"/run/logs/Realmd.log 2> /dev/null; then
- echo
-printf "[Realmd]: "
-printf '%b' "Database is missing or corrupt!"
- echo
-else
-# this database (mangosd) is out of date!
-if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Server.log 2> /dev/null; then
- echo
-printf "[CMaNGOS]: "
-printf '%b' "Database is out of date!"
- echo
-else
-# reinstall your (mangosd) database
-if grep -E -q "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$folder_core"/run/logs/Server.log 2> /dev/null; then
- echo
-printf "[CMaNGOS]: "
-printf '%b' "Reinstall your database!"
- echo
-else
-# this database (realmd) is out of date!
-if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Realmd.log 2> /dev/null; then
- echo
-printf "[Realmd]: "
-printf '%b' "Database is out of date!"
- echo
-else
-# reinstall your (realmd) database
-if grep -E -q "reinstall\syour|\sUnknown\sdatabase\s|Reinstall\syour\s[REALMD]\sdatabase\s" "$folder_core"/run/logs/Realmd.log 2> /dev/null; then
- echo
-printf "[Realmd]: "
-printf '%b' "Reinstall your database!"
- echo
-else
-# can't connect to local mysql through socket
-if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$folder_core"/run/logs/*.log 2> /dev/null; then
- echo
-printf "[MySQL]: "
-printf '%b' "Can't connect to local MySQL!"
- echo
-else
-# world initialized
-if grep -E -q "World\sinitialized" "$folder_core"/run/logs/Server.log 2> /dev/null; then
-# if any, print "World initialized"
- echo
-printf "[CMaNGOS]: "
-printf '%b' "$server_log_initialized"
- echo
-fi
-fi
-fi
-fi
-fi
-fi
-fi
-fi
- echo
-printf "\e[1;32m>\033[0m hit Any key to go back."
- echo
- read -r -n 1 -p "Server.log (tail/follow/nano) / Realmd.log (Nano) / logs (lnav)" ans;
- echo
- echo
-case $ans in
-"t")
-tail "$folder_core"/run/logs/Server.log 2> /dev/null
- echo
-printf "\e[1;32m<------------------------------------------------------>\033[0m"
- echo
- read -r -p "Press Enter to continue" </dev/tty
- ;;
-"f")
- echo
-tail -f "$folder_core"/run/logs/Server.log 2> /dev/null
- ;;
-"n")
- echo
-nano "$folder_core"/run/logs/Server.log
- ;;
-"N")
- echo
-nano "$folder_core"/run/logs/Realmd.log
- ;;
-
-# lnav >
-
-"l")
- echo
-# codes >
-logs=("$folder_core"/run/logs/EventAIErrors.log
-"$folder_core"/run/logs/DBErrors.log
-"$folder_core"/run/logs/Realmd.log
-"$folder_core"/run/logs/Server.log)
-# codes done
-if ! [ -x "$(command -v lnav)" ]; then
-sudo apt install lnav -y &> /dev/null
-fi
-lnav "${logs[@]}" 2> /dev/null
-
-esac
-
- ;;
-
-# lnav - done
-
-# restart server done
-
-# update cmangos-script >
-
-"w")
-
-# codes >
-if ! [ -x "$(command -v dialog)" ]; then
-sudo apt-get install dialog -y
-fi
-# codes done
-HEIGHT=10
-WIDTH=40
-CHOICE_HEIGHT=3
-BACKTITLE="update Helper"
-TITLE="Update cmangos-script [Helper]"
-MENU="Choose one of the following options:"
-
-OPTIONS=(1 "Update helper"
-         2 "Reinstall (delete $folder_install)"
-         3 "Reset --hard origin/master")
-
-CHOICE=$(dialog --clear \
-                --backtitle "$BACKTITLE" \
-                --title "$TITLE" \
-                --menu "$MENU" \
-                $HEIGHT $WIDTH $CHOICE_HEIGHT \
-                "${OPTIONS[@]}" \
-                2>&1 >/dev/tty)
-
-clear
-case $CHOICE in
-
-# update helper >
-
-"1")
-
- echo
- echo "Checking your current release"
- echo
- sleep 1
-cd "$folder_helper" || exit
-if git checkout master &> /dev/null &&
-git fetch origin master &> /dev/null &&
-[ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
-git merge origin/master
-then
-cd "$folder_helper" || exit
- echo
- sleep 1
-printf "[\033[0;31mold\033[0m] -> old release installed!"
- sleep 1
- echo
- echo
-printf "[\e[1;32mUpdating Helper\033[0m]"
- echo
- echo
-# keep old mangos >
-sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old &> /dev/null
-# done
-printf "[\e[0;32mok\033[0m] -> /usr/local/bin/mangos.old"
- sleep 1
- echo
-printf "[\e[0;32mok\033[0m] -> Stripping executable on 'mangos.old'"
- sleep 1
- echo
-sudo chmod -x /usr/local/bin/mangos.old
-sudo chown -R "$user":"$group" "$folder_helper"
-cd "$folder_helper" || exit
-printf "[\e[0;32mok\033[0m] -> Installing new release"
- sleep 1
- echo
-sudo cp "$folder_helper"/mangos /usr/local/bin &> /dev/null
-sudo chmod +x /usr/local/bin/mangos
- sleep 1
-printf "[\e[0;32mok\033[0m] -> Installed."
- echo
- echo
- sleep 1 && exit
-else
-# install new upgrades >
-sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old &> /dev/null
-sudo chmod -x /usr/local/bin/mangos.old
-sudo cp "$folder_helper"/mangos /usr/local/bin/mangos &> /dev/null
-sudo chmod +x /usr/local/bin/mangos
-printf "[\e[0;32mok\033[0m]"
- echo
- echo
-fi
- sleep 1 && exit
-
- ;;
-
-# update helper done
-
-# fresh install (delete/git clone /folder_install) >
-
-"2")
-
-sudo mv /usr/local/bin/mangos /usr/local/bin/mangos.old &> /dev/null
-printf "[\e[0;32mok\033[0m] -> installed mangos removed."
- echo
-sudo rm -r "$folder_helper"
-printf "[\e[0;32mok\033[0m] -> cmangos-script removed."
- echo
-sudo mkdir "$folder_install" &> /dev/null
-printf '%b' "[\e[0;32mok\033[0m] -> $folder_install/> git clone.."
- echo
-cd "$folder_install" || exit
-git clone https://github.com/Daedalus-code/cmangos-script.git
-sudo cp "$folder_helper"/mangos /usr/local/bin &> /dev/null
-printf "[\e[0;32mok\033[0m] -> Installing new release"
-sudo chmod +x /usr/local/bin/mangos
- echo
- sleep 1
-printf "[\e[0;32mok\033[0m] -> Installed."
- echo
- echo
- sleep 2
-exit
-
- ;;
-
-esac
-
- ;;
-
-# fresh install (delete/git clone /folder_install) done
-
-# reset --hard origin/master >
-
-"3")
-
-cd "$folder_helper" || exit
-git reset --hard origin/master
-printf '%b' "[\e[0;32mok\033[0m] "
- read -r -p "Press Enter to continue" </dev/tty
- echo
-
- ;;
-
-# reset --hard origin/master done
-
-# update cmangos-script done
-
-# Check logs >
-
-"l")
-
-clear
-
-# codes >
-
-# realmd.log
-realmd_log_error="[\033[0;31mError\033[0m] -> "
-realmd_log_empty="[\e[0;33mEmpty\033[0m] -> "
-realmd_log_ok="[\e[0;32mok\033[0m]"
-
-# server.log
-server_log_initialized="[\e[0;32mWorld initialized\033[0m]"
-server_log_serious="[\033[1;31mSerious\033[0m] -> "
-server_log_error="[\033[0;31mError\033[0m] -> "
-server_log_empty="[\e[0;33mEmpty\033[0m] -> "
-server_log_ok="[\e[0;32mok\033[0m]"
-
-# service status
-world_service=mangosd
-realm_service=realmd
-
-# codes done
-
-# realmd service
-case  "$(pidof $realm_service | wc -w)" in
- 0) printf "Realm [\033[1;31minactive\033[0m] " ;;
- 1) printf "Realm [\e[0;32mactive\033[0m] " ;;
- *) printf "Realm [\e[0;33mok?\033[0m] " ;;
-esac
-
-# mangosd service
-case  "$(pidof $world_service | wc -w)" in
- 0) printf "World [\033[1;31minactive\033[0m] " ;;
- 1) printf "World [\e[0;32mactive\033[0m] " ;;
- *) printf "World [\e[0;33mok?\033[0m] " ;;
-esac
-
- echo
-# realmd.log
-printf "\e[1;32m<------------------------------------------------------>\033[0m"
- echo
-# look for empty tables
-if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2> /dev/null; then
-# if any, print "empty"
-printf "Server.log "
-printf '%b' "$realmd_log_empty"
-# count empty inside log
-grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2> /dev/null
-fi
-# look for error
-if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2> /dev/null; then
-# if any, print "error"
-printf "Realmd.log "
-printf '%b' "$realmd_log_error"
-# count errors inside log
-grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2> /dev/null
-# if nothing, print "ok"
-else
-printf "Realmd.log "
-printf '%b' "$realmd_log_ok"
- echo
-fi
- echo
-tail "$folder_core"/run/logs/Realmd.log 2> /dev/null
-# server.log
-printf "\e[1;32m<------------------------------------------------------>\033[0m"
- echo
-# look for empty tables
-if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2> /dev/null; then
-# if any, print "empty"
-printf "Server.log "
-printf '%b' "$server_log_empty"
-# count empty inside log
-grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2> /dev/null
-fi
-# look for error
-if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log 2> /dev/null; then
-# if any, print "error"
-printf "Server.log "
-printf '%b' "$server_log_error"
-# count errors inside log
-grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log 2> /dev/null
-# look for serious error
-if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2> /dev/null; then
-# if any, print "serious"
-printf "Server.log "
-printf '%b' "$server_log_serious"
-# count serious errors inside log
-grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2> /dev/null
-fi
-# if nothing, print "ok"
-else
-printf "Server.log "
-printf '%b' "$server_log_ok"
- echo
-fi
- echo
- printf "\e[1;32m>\033[0m hit Any key to go back."
- echo
- read -r -n 1 -p "Server.log (tail/follow/nano) / Realmd.log (Nano) / logs (lnav)" ans;
- echo
- echo
-case $ans in
- t|T)
-tail "$folder_core"/run/logs/Server.log 2> /dev/null
- echo
-printf "\e[1;32m<------------------------------------------------------>\033[0m"
- echo
- read -r -p "Press Enter to continue" </dev/tty
- ;;
-"f")
- echo
-tail -f "$folder_core"/run/logs/Server.log 2> /dev/null
- ;;
-"n")
- echo
-nano "$folder_core"/run/logs/Server.log 2> /dev/null
- ;;
-"N")
- echo
-nano "$folder_core"/run/logs/Realmd.log 2> /dev/null
- ;;
-
-# lnav >
-
-"l")
- echo
-# codes >
-logs=("$folder_core"/run/logs/EventAIErrors.log
-"$folder_core"/run/logs/DBErrors.log
-"$folder_core"/run/logs/Realmd.log
-"$folder_core"/run/logs/Server.log)
-# codes done
-if ! [ -x "$(command -v lnav)" ]; then
-sudo apt install lnav -y &> /dev/null
-fi
-lnav "${logs[@]}"
-
- ;;
-
-# lnav - done
-
- *)
- ;;
-esac
-
- ;;
-
-# check logs done
-
-# create/apply .patch file >
-
-"p")
-
-HEIGHT=11
-WIDTH=40
-CHOICE_HEIGHT=3
-BACKTITLE="patch"
-TITLE="Patch operations"
-MENU="Choose one of the following options:"
-
-OPTIONS=(1 "Create new patch"
-         2 "Apply existing patch"
-         3 "Search for .patch files")
-
-CHOICE=$(dialog --clear \
-                --backtitle "$BACKTITLE" \
-                --title "$TITLE" \
-                --menu "$MENU" \
-                $HEIGHT $WIDTH $CHOICE_HEIGHT \
-                "${OPTIONS[@]}" \
-                2>&1 >/dev/tty)
-
-clear
-case $CHOICE in
-
-# create patch >
-
-"1")
-
-sudo chown -R "$user":"$group" "$folder_core"
-cd "$folder_core" || exit
-git checkout sql/create/db_create_mysql.sql 1> /dev/null
-git diff > "${patch:?}"
-
- ;;
-
-# create patch done
-
-# apply patch >
-
-"2")
-
-cd "$folder_core" || exit
-patch < "$patch" -p1
-
- ;;
-
-# apply patch done
-
-# search for .patch files >
-
-"3")
-
- echo "Searching for existing patches..($folder_wow)"
- echo
-sudo find "$folder_wow" -name "*.patch"
- echo
- read -r -p "Press Enter to continue" </dev/tty
- echo
-esac
-
- ;;
-
-# search for .patch files done
-
-# create/apply .patch file done
-
-# online check >
-
-"o")
-
-# internet >
- echo
-printf "\e[1;32mOnline check\033[0m -> \e[1;32minternet\033[0m/\e[1;32mintranet\033[0m"
- echo
- echo "Checking.."
- echo
-if nc -z "$internet" "${realm_port:?}" 2>/dev/null; then
-printf '%b' "\e[0;32m✓\033[0m $server_name - [ $internet ]"
-ping -qc1 "$internet" 2>&1 | awk -F/ '/^rtt/ { printf " - OK %.2f ms\n", $5; ok = 1 } END { if (!ok) print " - FAIL" }'
-else
-printf '%b' "\033[1;31m✗\033[0m $server_name - [ $internet ]"
- echo
-fi
-# intranet >
-if nc -z "$intranet" "$realm_port" 2>/dev/null; then
-printf '%b' "\e[0;32m✓\033[0m ${server_name_lan:?} - [ $intranet ]"
-ping -qc1 "$intranet" 2>&1 | awk -F/ '/^rtt/ { printf " - OK %.2f ms\n", $5; ok = 1 } END { if (!ok) print " - FAIL" }'
-else
-printf '%b' "\033[1;31m✗\033[0m $server_name_lan - [ $intranet ]"
- echo
-fi
- echo
- read -r -p "Press Enter to continue" </dev/tty
-
- ;;
-
-# online check done
-
-# edit/copy config files ? >
-
-"e")
-
- read -r -p "Edit config files? (nano) (y/n) " -n 1 -r
- echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-title="       Save config without .dist
+    # wait wordlist done
+
+    # wait for realmd & mangosd to fill up logs >
+
+    # Realmd.log >
+    tail -f "$folder_core"/run/logs/Realmd.log 2>/dev/null |
+      { grep -E -q -m 1 "${wordlist_realmd[@]}" && pkill -P $$ -x tail 2>/dev/null; }
+    # Server.log >
+    tail -f "$folder_core"/run/logs/Server.log 2>/dev/null |
+      { grep -E -m 1 "${wordlist_mangosd[@]}" && pkill -P $$ -x tail 2>/dev/null; }
+    # wait for realmd & mangosd to fill up logs done
+    # look for empty tables
+    if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2>/dev/null; then
+      # if any, print "empty"
+      printf "Server.log "
+      printf '%b' "$server_log_empty"
+      # count empty inside log
+      grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2>/dev/null
+    fi
+    # look for error
+    if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log 2>/dev/null; then
+      # if any, print "error"
+      printf "Server.log "
+      printf '%b' "$server_log_error"
+      # count errors inside log
+      grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log 2>/dev/null
+      # look for serious error
+      if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+        # if any, print "serious"
+        printf "Server.log "
+        printf '%b' "$server_log_serious"
+        # count serious errors inside log
+        grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2>/dev/null
+      fi
+    # if nothing, print "ok"
+    else
+      printf "Server.log "
+      printf '%b' "$server_log_ok"
+      echo
+    fi
+    # world failed
+    if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+      # if any, print "World failed"
+      echo
+      printf "[CMaNGOS]: "
+      printf '%b' "$server_log_failed"
+      echo
+    else
+      # databases is missing or corrupt.
+      if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
+        echo
+        printf "[Realmd]: "
+        printf '%b' "Database is missing or corrupt!"
+        echo
+      else
+        # this database (mangosd) is out of date!
+        if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+          echo
+          printf "[CMaNGOS]: "
+          printf '%b' "Database is out of date!"
+          echo
+        else
+          # reinstall your (mangosd) database
+          if grep -E -q "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+            echo
+            printf "[CMaNGOS]: "
+            printf '%b' "Reinstall your database!"
+            echo
+          else
+            # this database (realmd) is out of date!
+            if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
+              echo
+              printf "[Realmd]: "
+              printf '%b' "Database is out of date!"
+              echo
+            else
+              # reinstall your (realmd) database
+              if grep -E -q "reinstall\syour|\sUnknown\sdatabase\s|Reinstall\syour\s[REALMD]\sdatabase\s" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
+                echo
+                printf "[Realmd]: "
+                printf '%b' "Reinstall your database!"
+                echo
+              else
+                # can't connect to local mysql through socket
+                if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$folder_core"/run/logs/*.log 2>/dev/null; then
+                  echo
+                  printf "[MySQL]: "
+                  printf '%b' "Can't connect to local MySQL!"
+                  echo
+                else
+                  # world initialized
+                  if grep -E -q "World\sinitialized" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+                    # if any, print "World initialized"
+                    echo
+                    printf "[CMaNGOS]: "
+                    printf '%b' "$server_log_initialized"
+                    echo
+                  fi
+                fi
+              fi
+            fi
+          fi
+        fi
+      fi
+    fi
+    echo
+    printf "\e[1;32m>\033[0m hit Any key to go back."
+    echo
+    read -r -n 1 -p "Server.log (tail/follow/nano) / Realmd.log (Nano) / logs (lnav)" ans
+    echo
+    echo
+    case $ans in
+    "t")
+      tail "$folder_core"/run/logs/Server.log 2>/dev/null
+      echo
+      printf "\e[1;32m<------------------------------------------------------>\033[0m"
+      echo
+      read -r -p "Press Enter to continue" </dev/tty
+      ;;
+    "f")
+      echo
+      tail -f "$folder_core"/run/logs/Server.log 2>/dev/null
+      ;;
+    "n")
+      echo
+      nano "$folder_core"/run/logs/Server.log
+      ;;
+    "N")
+      echo
+      nano "$folder_core"/run/logs/Realmd.log
+      ;;
+
+      # lnav >
+
+    "l")
+      echo
+      # codes >
+      logs=("$folder_core"/run/logs/EventAIErrors.log
+        "$folder_core"/run/logs/DBErrors.log
+        "$folder_core"/run/logs/Realmd.log
+        "$folder_core"/run/logs/Server.log)
+      # codes done
+      if ! [ -x "$(command -v lnav)" ]; then
+        sudo apt install lnav -y &>/dev/null
+      fi
+      lnav "${logs[@]}" 2>/dev/null
+      ;;
+
+    esac
+
+    ;;
+
+    # lnav - done
+
+    # restart server done
+
+    # update cmangos-script >
+
+  "w")
+
+    # codes >
+    if ! [ -x "$(command -v dialog)" ]; then
+      sudo apt-get install dialog -y
+    fi
+    # codes done
+    HEIGHT=10
+    WIDTH=40
+    CHOICE_HEIGHT=3
+    BACKTITLE="update Helper"
+    TITLE="Update cmangos-script [Helper]"
+    MENU="Choose one of the following options:"
+
+    OPTIONS=(1 "Update helper"
+      2 "Reinstall (delete $folder_install)"
+      3 "Reset --hard origin/master")
+
+    CHOICE=$(dialog --clear \
+      --backtitle "$BACKTITLE" \
+      --title "$TITLE" \
+      --menu "$MENU" \
+      $HEIGHT $WIDTH $CHOICE_HEIGHT \
+      "${OPTIONS[@]}" \
+      2>&1 >/dev/tty)
+
+    clear
+    case $CHOICE in
+
+    # update helper >
+
+    "1")
+
+      echo
+      echo "Checking your current release"
+      echo
+      sleep 1
+      cd "$folder_helper" || exit
+      if git checkout master &>/dev/null &&
+        git fetch origin master &>/dev/null &&
+        [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
+        git merge origin/master; then
+        cd "$folder_helper" || exit
+        echo
+        sleep 1
+        printf "[\033[0;31mold\033[0m] -> old release installed!"
+        sleep 1
+        echo
+        echo
+        printf "[\e[1;32mUpdating Helper\033[0m]"
+        echo
+        echo
+        # keep old mangos >
+        sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old &>/dev/null
+        # done
+        printf "[\e[0;32mok\033[0m] -> /usr/local/bin/mangos.old"
+        sleep 1
+        echo
+        printf "[\e[0;32mok\033[0m] -> Stripping executable on 'mangos.old'"
+        sleep 1
+        echo
+        sudo chmod -x /usr/local/bin/mangos.old
+        sudo chown -R "$user":"$group" "$folder_helper"
+        cd "$folder_helper" || exit
+        printf "[\e[0;32mok\033[0m] -> Installing new release"
+        sleep 1
+        echo
+        sudo cp "$folder_helper"/mangos /usr/local/bin &>/dev/null
+        sudo chmod +x /usr/local/bin/mangos
+        sleep 1
+        printf "[\e[0;32mok\033[0m] -> Installed."
+        echo
+        echo
+        sleep 1 && exit
+      else
+        # install new upgrades >
+        sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old &>/dev/null
+        sudo chmod -x /usr/local/bin/mangos.old
+        sudo cp "$folder_helper"/mangos /usr/local/bin/mangos &>/dev/null
+        sudo chmod +x /usr/local/bin/mangos
+        printf "[\e[0;32mok\033[0m]"
+        echo
+        echo
+      fi
+      sleep 1 && exit
+
+      ;;
+
+      # update helper done
+
+      # fresh install (delete/git clone /folder_install) >
+
+    "2")
+
+      sudo mv /usr/local/bin/mangos /usr/local/bin/mangos.old &>/dev/null
+      printf "[\e[0;32mok\033[0m] -> installed mangos removed."
+      echo
+      sudo rm -r "$folder_helper"
+      printf "[\e[0;32mok\033[0m] -> cmangos-script removed."
+      echo
+      sudo mkdir "$folder_install" &>/dev/null
+      printf '%b' "[\e[0;32mok\033[0m] -> $folder_install/> git clone.."
+      echo
+      cd "$folder_install" || exit
+      git clone https://github.com/Daedalus-code/cmangos-script.git
+      sudo cp "$folder_helper"/mangos /usr/local/bin &>/dev/null
+      printf "[\e[0;32mok\033[0m] -> Installing new release"
+      sudo chmod +x /usr/local/bin/mangos
+      echo
+      sleep 1
+      printf "[\e[0;32mok\033[0m] -> Installed."
+      echo
+      echo
+      sleep 2
+      exit
+
+      ;;
+
+    esac
+
+    ;;
+
+    # fresh install (delete/git clone /folder_install) done
+
+    # reset --hard origin/master >
+
+  "3")
+
+    cd "$folder_helper" || exit
+    git reset --hard origin/master
+    printf '%b' "[\e[0;32mok\033[0m] "
+    read -r -p "Press Enter to continue" </dev/tty
+    echo
+
+    ;;
+
+    # reset --hard origin/master done
+
+    # update cmangos-script done
+
+    # Check logs >
+
+  "l")
+
+    clear
+
+    # codes >
+
+    # realmd.log
+    realmd_log_error="[\033[0;31mError\033[0m] -> "
+    realmd_log_empty="[\e[0;33mEmpty\033[0m] -> "
+    realmd_log_ok="[\e[0;32mok\033[0m]"
+
+    # server.log
+    server_log_initialized="[\e[0;32mWorld initialized\033[0m]"
+    server_log_serious="[\033[1;31mSerious\033[0m] -> "
+    server_log_error="[\033[0;31mError\033[0m] -> "
+    server_log_empty="[\e[0;33mEmpty\033[0m] -> "
+    server_log_ok="[\e[0;32mok\033[0m]"
+
+    # service status
+    world_service=mangosd
+    realm_service=realmd
+
+    # codes done
+
+    # realmd service
+    case "$(pidof $realm_service | wc -w)" in
+    0) printf "Realm [\033[1;31minactive\033[0m] " ;;
+    1) printf "Realm [\e[0;32mactive\033[0m] " ;;
+    *) printf "Realm [\e[0;33mok?\033[0m] " ;;
+    esac
+
+    # mangosd service
+    case "$(pidof $world_service | wc -w)" in
+    0) printf "World [\033[1;31minactive\033[0m] " ;;
+    1) printf "World [\e[0;32mactive\033[0m] " ;;
+    *) printf "World [\e[0;33mok?\033[0m] " ;;
+    esac
+
+    echo
+    # realmd.log
+    printf "\e[1;32m<------------------------------------------------------>\033[0m"
+    echo
+    # look for empty tables
+    if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
+      # if any, print "empty"
+      printf "Server.log "
+      printf '%b' "$realmd_log_empty"
+      # count empty inside log
+      grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2>/dev/null
+    fi
+    # look for error
+    if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
+      # if any, print "error"
+      printf "Realmd.log "
+      printf '%b' "$realmd_log_error"
+      # count errors inside log
+      grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2>/dev/null
+    # if nothing, print "ok"
+    else
+      printf "Realmd.log "
+      printf '%b' "$realmd_log_ok"
+      echo
+    fi
+    echo
+    tail "$folder_core"/run/logs/Realmd.log 2>/dev/null
+    # server.log
+    printf "\e[1;32m<------------------------------------------------------>\033[0m"
+    echo
+    # look for empty tables
+    if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2>/dev/null; then
+      # if any, print "empty"
+      printf "Server.log "
+      printf '%b' "$server_log_empty"
+      # count empty inside log
+      grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2>/dev/null
+    fi
+    # look for error
+    if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log 2>/dev/null; then
+      # if any, print "error"
+      printf "Server.log "
+      printf '%b' "$server_log_error"
+      # count errors inside log
+      grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log 2>/dev/null
+      # look for serious error
+      if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+        # if any, print "serious"
+        printf "Server.log "
+        printf '%b' "$server_log_serious"
+        # count serious errors inside log
+        grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2>/dev/null
+      fi
+    # if nothing, print "ok"
+    else
+      printf "Server.log "
+      printf '%b' "$server_log_ok"
+      echo
+    fi
+    echo
+    printf "\e[1;32m>\033[0m hit Any key to go back."
+    echo
+    read -r -n 1 -p "Server.log (tail/follow/nano) / Realmd.log (Nano) / logs (lnav)" ans
+    echo
+    echo
+    case $ans in
+    t | T)
+      tail "$folder_core"/run/logs/Server.log 2>/dev/null
+      echo
+      printf "\e[1;32m<------------------------------------------------------>\033[0m"
+      echo
+      read -r -p "Press Enter to continue" </dev/tty
+      ;;
+    "f")
+      echo
+      tail -f "$folder_core"/run/logs/Server.log 2>/dev/null
+      ;;
+    "n")
+      echo
+      nano "$folder_core"/run/logs/Server.log 2>/dev/null
+      ;;
+    "N")
+      echo
+      nano "$folder_core"/run/logs/Realmd.log 2>/dev/null
+      ;;
+
+      # lnav >
+
+    "l")
+      echo
+      # codes >
+      logs=("$folder_core"/run/logs/EventAIErrors.log
+        "$folder_core"/run/logs/DBErrors.log
+        "$folder_core"/run/logs/Realmd.log
+        "$folder_core"/run/logs/Server.log)
+      # codes done
+      if ! [ -x "$(command -v lnav)" ]; then
+        sudo apt install lnav -y &>/dev/null
+      fi
+      lnav "${logs[@]}"
+
+      ;;
+
+      # lnav - done
+
+    *) ;;
+
+    esac
+
+    ;;
+
+    # check logs done
+
+    # create/apply .patch file >
+
+  "p")
+
+    HEIGHT=11
+    WIDTH=40
+    CHOICE_HEIGHT=3
+    BACKTITLE="patch"
+    TITLE="Patch operations"
+    MENU="Choose one of the following options:"
+
+    OPTIONS=(1 "Create new patch"
+      2 "Apply existing patch"
+      3 "Search for .patch files")
+
+    CHOICE=$(dialog --clear \
+      --backtitle "$BACKTITLE" \
+      --title "$TITLE" \
+      --menu "$MENU" \
+      $HEIGHT $WIDTH $CHOICE_HEIGHT \
+      "${OPTIONS[@]}" \
+      2>&1 >/dev/tty)
+
+    clear
+    case $CHOICE in
+
+    # create patch >
+
+    "1")
+
+      sudo chown -R "$user":"$group" "$folder_core"
+      cd "$folder_core" || exit
+      git checkout sql/create/db_create_mysql.sql 1>/dev/null
+      git diff >"${patch:?}"
+
+      ;;
+
+      # create patch done
+
+      # apply patch >
+
+    "2")
+
+      cd "$folder_core" || exit
+      patch <"$patch" -p1
+
+      ;;
+
+      # apply patch done
+
+      # search for .patch files >
+
+    "3")
+
+      echo "Searching for existing patches..($folder_wow)"
+      echo
+      sudo find "$folder_wow" -name "*.patch"
+      echo
+      read -r -p "Press Enter to continue" </dev/tty
+      echo
+      ;;
+    esac
+
+    ;;
+
+    # search for .patch files done
+
+    # create/apply .patch file done
+
+    # online check >
+
+  "o")
+
+    # internet >
+    echo
+    printf "\e[1;32mOnline check\033[0m -> \e[1;32minternet\033[0m/\e[1;32mintranet\033[0m"
+    echo
+    echo "Checking.."
+    echo
+    if nc -z "$internet" "${realm_port:?}" 2>/dev/null; then
+      printf '%b' "\e[0;32m✓\033[0m $server_name - [ $internet ]"
+      ping -qc1 "$internet" 2>&1 | awk -F/ '/^rtt/ { printf " - OK %.2f ms\n", $5; ok = 1 } END { if (!ok) print " - FAIL" }'
+    else
+      printf '%b' "\033[1;31m✗\033[0m $server_name - [ $internet ]"
+      echo
+    fi
+    # intranet >
+    if nc -z "$intranet" "$realm_port" 2>/dev/null; then
+      printf '%b' "\e[0;32m✓\033[0m ${server_name_lan:?} - [ $intranet ]"
+      ping -qc1 "$intranet" 2>&1 | awk -F/ '/^rtt/ { printf " - OK %.2f ms\n", $5; ok = 1 } END { if (!ok) print " - FAIL" }'
+    else
+      printf '%b' "\033[1;31m✗\033[0m $server_name_lan - [ $intranet ]"
+      echo
+    fi
+    echo
+    read -r -p "Press Enter to continue" </dev/tty
+
+    ;;
+
+    # online check done
+
+    # edit/copy config files ? >
+
+  "e")
+
+    read -r -p "Edit config files? (nano) (y/n) " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+      title="       Save config without .dist
     ================================
           Server configuration
 "
- echo
-prompt="
+      echo
+      prompt="
 
 Choose number ->
 
 >"
- echo
-options=(
+      echo
+      options=(
 
- "mangos.conf.dist"
+        "mangos.conf.dist"
 
- "realmd.conf.dist"
+        "realmd.conf.dist"
 
- "playerbot.conf.dist"
+        "playerbot.conf.dist"
 
- "ahbot.conf.dist"
+        "ahbot.conf.dist"
 
- "mangos.conf"
+        "mangos.conf"
 
- "realmd.conf"
+        "realmd.conf"
 
- "playerbot.conf"
+        "playerbot.conf"
 
- "ahbot.conf"
+        "ahbot.conf"
 
-)
+      )
 
- echo "$title"
-PS3="$prompt "
-select opt in "${options[@]}" "Quit"; do
+      echo "$title"
+      PS3="$prompt "
+      select opt in "${options[@]}" "Quit"; do
 
-case "$REPLY" in
+        case "$REPLY" in
 
- 1 ) echo "You picked $opt $REPLY"
-nano "$folder_core"/run/etc/mangosd.conf.dist;;
- 2 ) echo "You picked $opt $REPLY"
-nano "$folder_core"/run/etc/realmd.conf.dist;;
- 3 ) echo "You picked $opt $REPLY"
-nano "$folder_core"/run/etc/playerbot.conf.dist;;
- 4 ) echo "You picked $opt $REPLY"
-nano "$folder_core"/run/etc/ahbot.conf.dist;;
+        1)
+          echo "You picked $opt $REPLY"
+          nano "$folder_core"/run/etc/mangosd.conf.dist
+          ;;
+        2)
+          echo "You picked $opt $REPLY"
+          nano "$folder_core"/run/etc/realmd.conf.dist
+          ;;
+        3)
+          echo "You picked $opt $REPLY"
+          nano "$folder_core"/run/etc/playerbot.conf.dist
+          ;;
+        4)
+          echo "You picked $opt $REPLY"
+          nano "$folder_core"/run/etc/ahbot.conf.dist
+          ;;
 
- 5 ) echo "You picked $opt $REPLY"
-nano "$folder_core"/run/etc/mangosd.conf;;
- 6 ) echo "You picked $opt $REPLY"
-nano "$folder_core"/run/etc/realmd.conf;;
- 7 ) echo "You picked $opt $REPLY"
-nano "$folder_core"/run/etc/playerbot.conf;;
- 8 ) echo "You picked $opt $REPLY"
-nano "$folder_core"/run/etc/ahbot.conf;;
+        5)
+          echo "You picked $opt $REPLY"
+          nano "$folder_core"/run/etc/mangosd.conf
+          ;;
+        6)
+          echo "You picked $opt $REPLY"
+          nano "$folder_core"/run/etc/realmd.conf
+          ;;
+        7)
+          echo "You picked $opt $REPLY"
+          nano "$folder_core"/run/etc/playerbot.conf
+          ;;
+        8)
+          echo "You picked $opt $REPLY"
+          nano "$folder_core"/run/etc/ahbot.conf
+          ;;
 
- $(( ${#options[@]}+1 )) ) echo "
+        $((${#options[@]} + 1)))
+          echo "
  See you next time!
- "; break;;
- *) echo "Invalid option. Try another one.";continue ;;
-esac
-done
-fi
+ "
+          break
+          ;;
+        *)
+          echo "Invalid option. Try another one."
+          continue
+          ;;
+        esac
+      done
+    fi
 
- ;;
+    ;;
 
-"Q")  exit                    ;;
-"q")  echo "case sensitive!!" ;;
- * )  echo "empty" ;;
-esac
+  "Q") exit ;;
+  "q") echo "case sensitive!!" ;;
+  *) echo "empty" ;;
+  esac
 done
 
 # edit/copy config files done
