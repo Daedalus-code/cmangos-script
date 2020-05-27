@@ -14,10 +14,9 @@
 
 # By Rainman
 # V20202705
-# 3.7.3.8
+# 3.7.6.8
 
 # codes >
-
 while :; do
   clear
 
@@ -56,7 +55,6 @@ while :; do
   1) menu_mangosd="mangosd: [\e[0;32mactive\033[0m]" ;;
   *) menu_mangosd="mangosd: [\e[0;33mrunning\033[0m]" ;;
   esac
-
   # codes done
 
   # menu >
@@ -107,10 +105,8 @@ EOF
   "a")
 
     # codes >
-
     ac_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM ${db_realmd:?}.account;" 2>/dev/null)
     bn_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account_banned;" 2>/dev/null)
-
     # codes done
 
     clear
@@ -234,9 +230,7 @@ ${pass_nc:?}
     "d")
 
       # codes >
-
       # check for backup >
-
       # realmd backup >
       FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
       if [ ! -f "$FILE" ]; then
@@ -255,7 +249,6 @@ ${pass_nc:?}
         charac_backup="[\e[0;32mok\033[0m]"
         echo
       fi
-
       # codes done
 
       # menu >
@@ -355,7 +348,6 @@ ARE YOU SURE? (y/n) " -n 1 -r
       clear
 
       # codes >
-
       # service status
       world_service=mangosd
       realm_service=realmd
@@ -535,12 +527,11 @@ ARE YOU SURE? (y/n) " -n 1 -r
       else
         world_db=" \e[0;35mWorld DB?\033[0m - Restart server please"
       fi
-
       # codes done
 
       printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.7.3.8 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.7.6.8 ]\033[0m
 
       $cm_uptime
 
@@ -645,17 +636,24 @@ ARE YOU SURE? (y/n) " -n 1 -r
       "m")
 
         # codes >
-
-        transmission_list=$(transmission-remote -l 2>/dev/null)
-        # transmission-daemon service >
-        transmission_service=transmission-daemon
-        # transmission-daemon status >
-        case "$(pidof $transmission_service | wc -w)" in
-        0) seed_transmission="[\033[1;31moff\033[0m]" ;;
-        1) seed_transmission="[\e[0;32mok\033[0m]" ;;
-        *) seed_transmission="[\e[0;33mok\033[0m]" ;;
-        esac
-
+        if ! [ -x "$(command -v transmission-cli)" ]; then
+          seed_transmission="[\e[0;33mnot installed\033[0m]"
+        else
+          transmission_list=$(transmission-remote -l 2>/dev/null)
+          # transmission-daemon service >
+          transmission_service=transmission-daemon
+          # transmission-daemon status >
+          case "$(pidof $transmission_service | wc -w)" in
+          0) seed_transmission="[\033[1;31moff\033[0m]" ;;
+          1) seed_transmission="[\e[0;32mok\033[0m]" ;;
+          *) seed_transmission="[\e[0;33mok\033[0m]" ;;
+          esac
+        fi
+        if ! [ -x "$(command -v transmission-cli)" ]; then
+          intranet_seed=$(printf '%b' "[\e[0;33mnot installed\033[0m]" 2>/dev/null)
+        else
+          intranet_seed=$(printf '%b' "$intranet:9091" 2>/dev/null)
+        fi
         # codes done
 
         # menu >
@@ -671,7 +669,7 @@ ARE YOU SURE? (y/n) " -n 1 -r
      * You can decide if you only want to download and stop transmission.
 
        Transmission\e[0;32m....:\033[0m $seed_transmission
-       Web access\e[0;32m......:\033[0m $intranet:9091
+       Web access\e[0;32m......:\033[0m $intranet_seed
 
        Default: download '\e[0;35munlimited\033[0m' upload '\e[0;35m128kb/s\033[0m'
 
@@ -679,7 +677,8 @@ ARE YOU SURE? (y/n) " -n 1 -r
 $transmission_list
  \e[0;32m<------------------------------------------------------------------------------>\033[0m
 
-      t : \e[0;35mInstall seedbox\033[0m - transmission-daemon
+      t : \e[0;35mInstall seedbox\033[0m - install transmission-daemon
+      u : \e[0;35mRemove seedbox\033[0m  - remove transmission-daemon
       r : \e[0;35mStart seedbox\033[0m   - service transmission-daemon start
       s : \e[0;35mStop seedbox\033[0m    - service transmission-daemon stop
       m : \e[0;35mInstall maps\033[0m    - install vanilla.maps.zip
@@ -688,35 +687,57 @@ $transmission_list
  <------------------------------------------------------------------------------>\033[0m"
         echo
         printf '%b' ">"
-        read -r n
-        case $n in
+        read -r -s -n1
+        case "$REPLY" in
 
-        # setup seedbox (transmission) >
-        # ubuntu
+        # remove transmission-daemon >
+
+        "u")
+
+          echo
+          read -r -p "Remove seedbox? (transmission-daemon) (y/n) " -n 1 -r
+          echo
+          echo
+          if [[ $REPLY =~ ^[Yy]$ ]]; then
+            echo "Please wait"
+            sudo apt-get remove transmission-daemon --purge -y &>/dev/null
+          fi
+
+          ;;
+
+          # remove transmission-daemon done
+
+          # setup seedbox (transmission) >
+          # ubuntu
 
         "t")
 
-          # already installed? >
-          FILE="/seedbox/vanilla_maps.zip"
-          if [ ! -f "$FILE" ]; then
-            # check for updates regardless >
-            sudo apt-get update &>/dev/null && apt-get upgrade -y &>/dev/null
-            # make sure unzip exist >
-            sudo apt-get install unzip -y &>/dev/null
-            # install transmission-daemon >
-            sudo apt-get install transmission-daemon -y &>/dev/null
-            # temporary stop ^ >
-            sudo service transmission-daemon stop &>/dev/null
-            # remove old config >
-            sudo rm /var/lib/transmission-daemon/.config/transmission-daemon/settings.json &>/dev/null
-            # create 'seedbox' directory >
-            cd || exit
-            sudo mkdir "/seedbox" &>/dev/null
-            # fix folder owner >
-            sudo chown -R debian-transmission:debian-transmission /seedbox/ &>/dev/null
-            # setup transmission-daemon configuration file >
-            # settings.json
-            cat >"$folder_wow"/settings.json <<'EOF'
+          echo
+          read -r -p "Setup seedbox? (transmission-daemon) (y/n) " -n 1 -r
+          echo
+          echo
+          if [[ $REPLY =~ ^[Yy]$ ]]; then
+            # already installed? >
+            if ! [ -x "$(command -v transmission-daemon)" ]; then
+              # check for updates regardless >
+              echo "Please wait"
+              sudo apt-get update &>/dev/null
+              # make sure unzip exist >
+              sudo apt-get install unzip -y &>/dev/null
+              # install transmission-daemon >
+              sudo apt-get install transmission-daemon -y &>/dev/null
+              # temporary stop ^ >
+              sudo service transmission-daemon stop &>/dev/null
+              # remove old config >
+              sudo rm /var/lib/transmission-daemon/.config/transmission-daemon/settings.json &>/dev/null
+              # create 'seedbox' directory >
+              cd || exit
+              sudo mkdir "/seedbox" &>/dev/null
+              # fix folder owner >
+              sudo chown -R debian-transmission:debian-transmission /seedbox/ &>/dev/null
+              # setup transmission-daemon configuration file >
+              # settings.json
+              cat >"$folder_wow"/settings.json <<'EOF'
 {
     "alt-speed-down": 50,
     "alt-speed-enabled": false,
@@ -786,29 +807,29 @@ $transmission_list
     "utp-enabled": true
 }
 EOF
-            # install to correct folder >
-            sudo mv "$folder_wow"/settings.json /var/lib/transmission-daemon/.config/transmission-daemon/settings.json &>/dev/null
-            sleep 1
-            # start transmission-daemon >
-            sudo service transmission-daemon start &>/dev/null
-            echo
-            printf '%b' "[\e[0;32mok\033[0m] - transmission should be running now"
-            echo
-            sleep 1
-            # add magnet link: vanilla.maps.zip.torrent >
-            transmission-remote -a "magnet:?xt=urn:btih:1cdcaa3d77a7f4df79935d885e639903e37dda24&dn=vanilla%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
-            echo
-            printf '%b' "[\e[0;32mok\033[0m] - torrent added"
-            echo
-            sleep 1
-            # reload >
-            sudo systemctl daemon-reload 2>/dev/null
-            sleep 1
-          else
-            echo
-            printf '%b' "SeedBox already installed."
-            echo
-            sleep 2
+              # install to correct folder >
+              sudo mv "$folder_wow"/settings.json /var/lib/transmission-daemon/.config/transmission-daemon/settings.json &>/dev/null
+              sleep 1
+              # start transmission-daemon >
+              sudo service transmission-daemon start &>/dev/null
+              echo
+              printf '%b' "[\e[0;32mok\033[0m] - transmission should be running now"
+              echo
+              sleep 1
+              # add magnet link: vanilla.maps.zip.torrent >
+              transmission-remote -a "magnet:?xt=urn:btih:1cdcaa3d77a7f4df79935d885e639903e37dda24&dn=vanilla%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
+              echo
+              printf '%b' "[\e[0;32mok\033[0m] - torrent added"
+              echo
+              sleep 1
+              # reload >
+              sudo systemctl daemon-reload 2>/dev/null
+              sleep 1
+            else
+              printf '%b' "SeedBox already installed."
+              echo
+              sleep 2
+            fi
           fi
 
           ;;
@@ -819,16 +840,23 @@ EOF
 
         "r")
 
-          sudo service transmission-daemon start &>/dev/null
-          sleep 1
-          # enable service >
-          sudo systemctl enable transmission-daemon &>/dev/null
-          # reload >
-          sudo systemctl daemon-reload &>/dev/null
           echo
-          printf '%b' "[\e[0;32mok\033[0m] - seedbox started."
+          read -r -p "Re/start seedbox? (transmission-daemon) (y/n) " -n 1 -r
           echo
-          sleep 1
+          echo
+          if [[ $REPLY =~ ^[Yy]$ ]]; then
+            echo "Please wait"
+            sudo service transmission-daemon start &>/dev/null
+            sleep 1
+            # enable service >
+            sudo systemctl enable transmission-daemon &>/dev/null
+            # reload >
+            sudo systemctl daemon-reload &>/dev/null
+            echo
+            printf '%b' "[\e[0;32mok\033[0m] - seedbox started."
+            echo
+            sleep 1
+          fi
 
           ;;
 
@@ -838,16 +866,23 @@ EOF
 
         "s")
 
-          sudo service transmission-daemon stop &>/dev/null
-          sleep 1
-          # disable service >
-          sudo systemctl disable transmission-daemon &>/dev/null
-          # reload >
-          sudo systemctl daemon-reload &>/dev/null
           echo
-          printf '%b' "[\033[1;31moff\033[0m] - seedbox stopped."
+          read -r -p "Stop seedbox? (transmission-daemon) (y/n) " -n 1 -r
           echo
-          sleep 1
+          echo
+          if [[ $REPLY =~ ^[Yy]$ ]]; then
+            echo "Please wait"
+            sudo service transmission-daemon stop &>/dev/null
+            sleep 1
+            # disable service >
+            sudo systemctl disable transmission-daemon &>/dev/null
+            # reload >
+            sudo systemctl daemon-reload &>/dev/null
+            echo
+            printf '%b' "[\033[1;31moff\033[0m] - seedbox stopped."
+            echo
+            sleep 1
+          fi
 
           ;;
 
@@ -857,26 +892,31 @@ EOF
 
         "m")
 
-          # codes >
+          echo
+          read -r -p "Install maps? (vanilla_maps.zip) (y/n) " -n 1 -r
+          echo
+          echo
+          if [[ $REPLY =~ ^[Yy]$ ]]; then
 
-          MAPS="$folder_core"/run/maps/5332742.map
-          MMAPS="$folder_core"/run/mmaps/5332742.mmtile
-          VMAPS="$folder_core"/run/vmaps/Zulgurub_Ziggurat.wmo.vmo
+            # codes >
+            MAPS="$folder_core"/run/maps/5332742.map
+            MMAPS="$folder_core"/run/mmaps/5332742.mmtile
+            VMAPS="$folder_core"/run/vmaps/Zulgurub_Ziggurat.wmo.vmo
+            # codes done
 
-          # codes done
-
-          if [ -f "$MAPS" ] && [ -f "$MMAPS" ] && [ -f "$VMAPS" ]; then
-            echo
-            printf '%b' "Maps already installed."
-            echo
-            sleep 2
-          else
-            sudo unzip /seedbox/vanilla_maps.zip -d "$folder_core"/run
-            echo
-            printf '%b' "[\e[0;32mok\033[0m] - maps installed."
-            echo
-            sleep 1
+            if [ -f "$MAPS" ] && [ -f "$MMAPS" ] && [ -f "$VMAPS" ]; then
+              printf '%b' "Maps already installed."
+              echo
+              sleep 2
+            else
+              sudo unzip /seedbox/vanilla_maps.zip -d "$folder_core"/run
+              echo
+              printf '%b' "[\e[0;32mok\033[0m] - maps installed."
+              echo
+              sleep 1
+            fi
           fi
+
           ;;
 
         esac
@@ -892,6 +932,7 @@ EOF
       "p")
 
         if ! [ -x "$(command -v htop)" ]; then
+          echo "Please wait"
           sudo apt-get install htop -y &>/dev/null
         fi
         htop
@@ -935,7 +976,6 @@ EOF
       "l")
 
         # codes >
-
         # server.log.old >
         dive_server_old_empty=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty.|.*empty*." "$folder_core"/run/logs/Server.log.old 2>/dev/null)
         dive_server_old_error=$(grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log.old 2>/dev/null)
@@ -991,7 +1031,6 @@ EOF
         # empty table >
         dive_log_none=$(printf "\e[2mempty..\033[0m")
         dive_log_zero=$(printf "0")
-
         # codes done
 
         echo
@@ -1742,16 +1781,13 @@ EOF
     "11")
 
       # codes >
-
       # check if 'mangos' user exist >
-
       # mariadb >
       packagelist_maria=(mariadb-client
         mariadb-server)
       # mysql >
       packagelist_mysql=(mysql-client
         mysql-server)
-
       # codes done
       echo
       printf "MariaDB, MySQL - Database system"
@@ -1792,12 +1828,10 @@ EOF
     "10")
 
       # codes >
-
       # mariadb-client >
       packagelist_client_maria=(mariadb-client*)
       # mysql-client >
       packagelist_client_mysql=(mysql-client*)
-
       # codes done
 
       echo
@@ -2768,7 +2802,6 @@ Check log for which database needs 'applying updates'"
   "r")
 
     # codes >
-
     # realmd.log
     realmd_log_empty="[\e[0;33mEmpty\033[0m] -> "
     realmd_log_error="[\033[0;31mError\033[0m] -> "
@@ -2785,7 +2818,6 @@ Check log for which database needs 'applying updates'"
     # service status
     world_service=mangosd
     realm_service=realmd
-
     # codes done
 
     HEIGHT=10
@@ -3285,7 +3317,6 @@ Check log for which database needs 'applying updates'"
     clear
 
     # codes >
-
     # realmd.log
     realmd_log_error="[\033[0;31mError\033[0m] -> "
     realmd_log_empty="[\e[0;33mEmpty\033[0m] -> "
@@ -3301,7 +3332,6 @@ Check log for which database needs 'applying updates'"
     # service status
     world_service=mangosd
     realm_service=realmd
-
     # codes done
 
     # realmd service
