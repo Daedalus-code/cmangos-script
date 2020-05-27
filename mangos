@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20202505
-# 3.6.0.5
+# V20202705
+# 3.6.9.0
 
 # codes >
 
@@ -540,7 +540,7 @@ ARE YOU SURE? (y/n) " -n 1 -r
 
       printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.6.0.5 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.6.9.0 ]\033[0m
 
       $cm_uptime
 
@@ -2789,15 +2789,15 @@ Check log for which database needs 'applying updates'"
     # codes done
 
     HEIGHT=10
-    WIDTH=40
+    WIDTH=30
     CHOICE_HEIGHT=4
     BACKTITLE="restart server"
     TITLE="Service Control"
-    MENU="Choose one of the following options:"
+    MENU="Choose one option:"
 
-    OPTIONS=(1 "Restart realmd, mangosd"
-      2 "Restart realmd service"
-      3 "Restart mangosd service")
+    OPTIONS=(1 "Restart server"
+      2 "Restart realmd"
+      3 "Restart mangosd")
 
     CHOICE=$(dialog --clear \
       --backtitle "$BACKTITLE" \
@@ -2912,6 +2912,34 @@ Check log for which database needs 'applying updates'"
       printf '%b' "$realmd_log_ok"
       echo
     fi
+    # this database (realmd) is out of date!
+    if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
+      echo
+      printf "[Realmd]: "
+      printf '%b' "Database is out of date!"
+      echo
+    fi
+    # databases is missing or corrupt.
+    if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
+      echo
+      printf "[Realmd]: "
+      printf '%b' "Database is missing or corrupt!"
+      echo
+    fi
+    # reinstall your (realmd) database
+    if grep -E -q "reinstall\syour|\sUnknown\sdatabase\s|Reinstall\syour\s[REALMD]\sdatabase\s" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
+      echo
+      printf "[Realmd]: "
+      printf '%b' "Reinstall your database!"
+      echo
+    fi
+    # your realmd.conf version indicates your conf file is out of date
+    if grep -E -q ".*Your\srealmd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$folder_core"/run/logs/*.log 2>/dev/null; then
+      echo
+      printf "\033[1;31mWARNING\033[0m "
+      printf '%b' "realmd.conf is out of date!"
+      echo
+    fi
     echo
     tail "$folder_core"/run/logs/Realmd.log 2>/dev/null
 
@@ -2924,7 +2952,7 @@ Check log for which database needs 'applying updates'"
     # realmd >
     wordlist_realmd=(".*Can't\sconnect\sto\slocal\sMySQL*.
 .*Added\srealm\sid*.
-.*database\sis\smissing\sor\scorrupt.*.
+.*database\sis\smissing\sor\scorrupt.*
 .*You\shave:\s-->*.
 .*reinstall\syour*.
 .*cannot\sfind\sthe\sversion\sinfo*.")
@@ -2955,7 +2983,7 @@ Check log for which database needs 'applying updates'"
       { grep -E -q -m 1 "${wordlist_realmd[@]}" && pkill -P $$ -x tail 2>/dev/null; }
     # Server.log >
     tail -f "$folder_core"/run/logs/Server.log 2>/dev/null |
-      { grep -E -m 1 "${wordlist_mangosd[@]}" && pkill -P $$ -x tail 2>/dev/null; }
+      { grep -E -q -m 1 "${wordlist_mangosd[@]}" && pkill -P $$ -x tail 2>/dev/null; }
     # wait for realmd & mangosd to fill up logs done
     # look for empty tables
     if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2>/dev/null; then
@@ -2993,63 +3021,45 @@ Check log for which database needs 'applying updates'"
       printf "[CMaNGOS]: "
       printf '%b' "$server_log_failed"
       echo
-    else
-      # databases is missing or corrupt.
-      if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
-        echo
-        printf "[Realmd]: "
-        printf '%b' "Database is missing or corrupt!"
-        echo
-      else
-        # this database (mangosd) is out of date!
-        if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Server.log 2>/dev/null; then
-          echo
-          printf "[CMaNGOS]: "
-          printf '%b' "Database is out of date!"
-          echo
-        else
-          # reinstall your (mangosd) database
-          if grep -E -q "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$folder_core"/run/logs/Server.log 2>/dev/null; then
-            echo
-            printf "[CMaNGOS]: "
-            printf '%b' "Reinstall your database!"
-            echo
-          else
-            # this database (realmd) is out of date!
-            if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
-              echo
-              printf "[Realmd]: "
-              printf '%b' "Database is out of date!"
-              echo
-            else
-              # reinstall your (realmd) database
-              if grep -E -q "reinstall\syour|\sUnknown\sdatabase\s|Reinstall\syour\s[REALMD]\sdatabase\s" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
-                echo
-                printf "[Realmd]: "
-                printf '%b' "Reinstall your database!"
-                echo
-              else
-                # can't connect to local mysql through socket
-                if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$folder_core"/run/logs/*.log 2>/dev/null; then
-                  echo
-                  printf "[MySQL]: "
-                  printf '%b' "Can't connect to local MySQL!"
-                  echo
-                else
-                  # world initialized
-                  if grep -E -q "World\sinitialized" "$folder_core"/run/logs/Server.log 2>/dev/null; then
-                    # if any, print "World initialized"
-                    echo
-                    printf "[CMaNGOS]: "
-                    printf '%b' "$server_log_initialized"
-                    echo
-                  fi
-                fi
-              fi
-            fi
-          fi
-        fi
-      fi
+    fi
+    # this database (mangosd) is out of date!
+    if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+      echo
+      printf "[CMaNGOS]: "
+      printf '%b' "Database is out of date!"
+      echo
+    fi
+    # reinstall your (mangosd) database
+    if grep -E -q "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+      echo
+      printf "[CMaNGOS]: "
+      printf '%b' "Reinstall your database!"
+      echo
+    fi
+    # can't connect to local mysql through socket
+    if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$folder_core"/run/logs/*.log 2>/dev/null; then
+      echo
+      printf "[MySQL]: "
+      printf '%b' "Can't connect to local MySQL!"
+      echo
+    fi
+    # your mangosd.conf version indicates your conf file is out of date
+    if grep -E -q ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$folder_core"/run/logs/*.log 2>/dev/null; then
+      echo
+      printf "\033[1;31mWARNING\033[0m "
+      printf '%b' "mangosd.conf is out of date!"
+      echo
+    fi
+    # get startup time >
+    startup_time=$(grep -E "SERVER\sSTARTUP\sTIME*." wow/mangos-classic/run/logs/Server.log 2>/dev/null |
+      cut -c42- 2>/dev/null)
+    # world initialized
+    if grep -E -q "World\sinitialized" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+      # if any, print "World initialized"
+      echo
+      printf "[CMaNGOS]: "
+      printf '%b' "$server_log_initialized $startup_time"
+      echo
     fi
     echo
     printf "\e[1;32m>\033[0m hit Any key to go back."
@@ -3309,6 +3319,34 @@ Check log for which database needs 'applying updates'"
       printf '%b' "$realmd_log_ok"
       echo
     fi
+    # this database (realmd) is out of date!
+    if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
+      echo
+      printf "[Realmd]: "
+      printf '%b' "Database is out of date!"
+      echo
+    fi
+    # databases is missing or corrupt.
+    if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
+      echo
+      printf "[Realmd]: "
+      printf '%b' "Database is missing or corrupt!"
+      echo
+    fi
+    # reinstall your (realmd) database
+    if grep -E -q "reinstall\syour|\sUnknown\sdatabase\s|Reinstall\syour\s[REALMD]\sdatabase\s" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
+      echo
+      printf "[Realmd]: "
+      printf '%b' "Reinstall your database!"
+      echo
+    fi
+    # your realmd.conf version indicates your conf file is out of date
+    if grep -E -q ".*Your\srealmd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$folder_core"/run/logs/*.log 2>/dev/null; then
+      echo
+      printf "\033[1;31mWARNING\033[0m "
+      printf '%b' "realmd.conf is out of date!"
+      echo
+    fi
     echo
     tail "$folder_core"/run/logs/Realmd.log 2>/dev/null
     # server.log
@@ -3341,6 +3379,53 @@ Check log for which database needs 'applying updates'"
     else
       printf "Server.log "
       printf '%b' "$server_log_ok"
+      echo
+    fi
+    # world failed
+    if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+      # if any, print "World failed"
+      echo
+      printf "[CMaNGOS]: "
+      printf '%b' "$server_log_failed"
+      echo
+    fi
+    # this database (mangosd) is out of date!
+    if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+      echo
+      printf "[CMaNGOS]: "
+      printf '%b' "Database is out of date!"
+      echo
+    fi
+    # reinstall your (mangosd) database
+    if grep -E -q "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+      echo
+      printf "[CMaNGOS]: "
+      printf '%b' "Reinstall your database!"
+      echo
+    fi
+    # can't connect to local mysql through socket
+    if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$folder_core"/run/logs/*.log 2>/dev/null; then
+      echo
+      printf "[MySQL]: "
+      printf '%b' "Can't connect to local MySQL!"
+      echo
+    fi
+    # your mangosd.conf version indicates your conf file is out of date
+    if grep -E -q ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$folder_core"/run/logs/*.log 2>/dev/null; then
+      echo
+      printf "\033[1;31mWARNING\033[0m "
+      printf '%b' "mangosd.conf is out of date!"
+      echo
+    fi
+    # get startup time >
+    startup_time=$(grep -E "SERVER\sSTARTUP\sTIME*." wow/mangos-classic/run/logs/Server.log 2>/dev/null |
+      cut -c42- 2>/dev/null)
+    # world initialized
+    if grep -E -q "World\sinitialized" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+      # if any, print "World initialized"
+      echo
+      printf "[CMaNGOS]: "
+      printf '%b' "$server_log_initialized $startup_time"
       echo
     fi
     echo
