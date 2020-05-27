@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202705
-# 3.6.9.0
+# 3.7.3.8
 
 # codes >
 
@@ -540,7 +540,7 @@ ARE YOU SURE? (y/n) " -n 1 -r
 
       printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.6.9.0 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.7.3.8 ]\033[0m
 
       $cm_uptime
 
@@ -3051,14 +3051,38 @@ Check log for which database needs 'applying updates'"
       echo
     fi
     # get startup time >
-    startup_time=$(grep -E "SERVER\sSTARTUP\sTIME*." wow/mangos-classic/run/logs/Server.log 2>/dev/null |
-      cut -c42- 2>/dev/null)
+    startup_time=$(grep "SERVER\sSTARTUP\sTIME*." wow/mangos-classic/run/logs/Server.log 2>/dev/null |
+      cut -d\  -f6-9 2>/dev/null)
     # world initialized
     if grep -E -q "World\sinitialized" "$folder_core"/run/logs/Server.log 2>/dev/null; then
       # if any, print "World initialized"
       echo
       printf "[CMaNGOS]: "
       printf '%b' "$server_log_initialized $startup_time"
+      echo
+    fi
+    # Playerbot loaded >
+    if grep -E -q "Playerbot: Using configuration file" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+      # if any, print "Playerbot ok"
+      printf "[CMaNGOS]: "
+      printf '%b' "[\e[0;32mPlayerbot\033[0m]"
+      echo
+    else
+      # off >
+      printf "[CMaNGOS]: "
+      printf '%b' "[\e[90mPlayerbot\033[0m]"
+      echo
+    fi
+    # ahbot loaded and initialized >
+    if grep -E -q "AHBot seller configuration data loaded and" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+      # if any, print "AHbot ok"
+      printf "[CMaNGOS]: "
+      printf '%b' "[\e[0;32mAHbot\033[0m]"
+      echo
+    else
+      # off >
+      printf "[CMaNGOS]: "
+      printf '%b' "[\e[90mAHbot\033[0m]"
       echo
     fi
     echo
@@ -3418,14 +3442,38 @@ Check log for which database needs 'applying updates'"
       echo
     fi
     # get startup time >
-    startup_time=$(grep -E "SERVER\sSTARTUP\sTIME*." wow/mangos-classic/run/logs/Server.log 2>/dev/null |
-      cut -c42- 2>/dev/null)
+    startup_time=$(grep "SERVER\sSTARTUP\sTIME*." wow/mangos-classic/run/logs/Server.log 2>/dev/null |
+      cut -d\  -f6-9 2>/dev/null)
     # world initialized
     if grep -E -q "World\sinitialized" "$folder_core"/run/logs/Server.log 2>/dev/null; then
       # if any, print "World initialized"
       echo
       printf "[CMaNGOS]: "
       printf '%b' "$server_log_initialized $startup_time"
+      echo
+    fi
+    # Playerbot loaded >
+    if grep -E -q "Playerbot: Using configuration file" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+      # if any, print "Playerbot ok"
+      printf "[CMaNGOS]: "
+      printf '%b' "[\e[0;32mPlayerbot\033[0m]"
+      echo
+    else
+      # off >
+      printf "[CMaNGOS]: "
+      printf '%b' "[\e[90mPlayerbot\033[0m]"
+      echo
+    fi
+    # ahbot loaded and initialized >
+    if grep -E -q "AHBot seller configuration data loaded and" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+      # if any, print "AHbot ok"
+      printf "[CMaNGOS]: "
+      printf '%b' "[\e[0;32mAHbot\033[0m]"
+      echo
+    else
+      # off >
+      printf "[CMaNGOS]: "
+      printf '%b' "[\e[90mAHbot\033[0m]"
       echo
     fi
     echo
