@@ -2817,7 +2817,7 @@ Check log for which database needs 'applying updates'"
       # keep old logs >
       cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
       # done
-      printf "\e[1;32mRestarting server..\033[0m"
+      printf "\e[1;32mRestarting\033[0m server"
       echo
       echo -ne '(0%)\r'
       sleep 1
@@ -2840,7 +2840,7 @@ Check log for which database needs 'applying updates'"
       # keep old logs >
       cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
       # done
-      printf "\e[1;32mRestarting realmd..\033[0m"
+      printf "\e[1;32mRestarting\033[0m realmd"
       echo
       sleep 1
       sudo service realmd restart &>/dev/null
@@ -2858,7 +2858,7 @@ Check log for which database needs 'applying updates'"
       # keep old logs >
       cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
       # done
-      printf "\e[1;32mRestarting mangosd..\033[0m"
+      printf "\e[1;32mRestarting\033[0m mangosd"
       echo
       sleep 1
       sudo service mangosd restart &>/dev/null
