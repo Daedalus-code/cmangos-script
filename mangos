@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202705
-# 3.7.6.9
+# 3.7.7.0
 
 # codes >
 while :; do
@@ -531,7 +531,7 @@ ARE YOU SURE? (y/n) " -n 1 -r
 
       printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.7.6.9 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.7.7.0 ]\033[0m
 
       $cm_uptime
 
@@ -2982,29 +2982,30 @@ Check log for which database needs 'applying updates'"
     # wait wordlist >
 
     # realmd >
-    wordlist_realmd=(".*Can't\sconnect\sto\slocal\sMySQL*.
-.*Added\srealm\sid*.
-.*database\sis\smissing\sor\scorrupt.*
-.*You\shave:\s-->*.
-.*reinstall\syour*.
-.*cannot\sfind\sthe\sversion\sinfo*.")
+    wordlist_realmd=(".*Added\srealm\sid*.
+    .*Can't\sconnect\sto\slocal\sMySQL*.
+    .*cannot\sfind\sthe\sversion\sinfo*.
+    .*database\sis\smissing\sor\scorrupt*.
+    .*reinstall\syour*.
+    .*You\shave:\s-->*.")
     # mangosd >
     wordlist_mangosd=(".*Can't\sconnect\sto\slocal\sMySQL*.
-.*STARTUP*.
-.*TIME*.
-.*corrupt*.
-.*malformed*.
-.*fail*.
-.*failed*.
-.*fatal*.
-.*critical*.
-.*Segmentation\sfault*.
-.*core\sdumped*.
-.*segfault*.
-.*file\struncated*.
-.*Halting\sprocess*.
-.*You\shave:\s-->*.
-.*reinstall\syour*.")
+    .*core\sdumped*.
+    .*corrupt*.
+    .*critical*.
+    .*fail*.
+    .*failed*.
+    .*fatal*.
+    .*file\struncated*.
+    .*Halting\sprocess*.
+    .*initialized*.
+    .*malformed*.
+    .*reinstall\syour*.
+    .*segfault*.
+    .*Segmentation\sfault*.
+    .*STARTUP*.
+    .*TIME*.
+    .*You\shave:\s-->*.")
 
     # wait wordlist done
 
@@ -3012,10 +3013,10 @@ Check log for which database needs 'applying updates'"
 
     # Realmd.log >
     tail -f "$folder_core"/run/logs/Realmd.log 2>/dev/null |
-      { grep -E -q -m 1 "${wordlist_realmd[@]}" && pkill -P $$ -x tail 2>/dev/null; }
+      { grep -q -m 1 "${wordlist_realmd[@]}" && pkill -P $$ -x tail 2>/dev/null; }
     # Server.log >
     tail -f "$folder_core"/run/logs/Server.log 2>/dev/null |
-      { grep -E -q -m 1 "${wordlist_mangosd[@]}" && pkill -P $$ -x tail 2>/dev/null; }
+      { grep -q -m 1 "${wordlist_mangosd[@]}" && pkill -P $$ -x tail 2>/dev/null; }
     # wait for realmd & mangosd to fill up logs done
     # look for empty tables
     if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2>/dev/null; then
