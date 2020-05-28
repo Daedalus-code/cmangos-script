@@ -1135,13 +1135,13 @@ EOF
       "r")
 
         # codes >
-        # arm/aarch64 temp >
+        # cpu temp >
         if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
-          arm_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
+          cpu_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
             cut -c -4 2>/dev/null)
-          print_arm_temp=$(printf '%b' "$arm_temp c\e[31m        ||")
+          print_cpu_temp=$(printf '%b' "$cpu_temp c\e[31m        ||")
         else
-          print_arm_temp=$(printf '%b' "\e[31m              ||")
+          print_cpu_temp=$(printf '%b' "\e[31m              ||")
         fi
         # codes done
         echo
@@ -1157,7 +1157,7 @@ EOF
       ||               ||
       ||               ||
       ||               ||
-      || \033[0m$print_arm_temp\e[31m
+      || \033[0m$print_cpu_temp\e[31m
       ||_______________||
       /.-.-.-.-.-.-.-.-.\\
      /.-.-.-.-.-.-.-.-.-.\\
@@ -1426,18 +1426,18 @@ EOF
 
       # compiling using multiple cores >
 
-      # arm/aarch64 temp >
+      # cpu temp >
       if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
-        arm_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
+        cpu_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
           cut -c -4 2>/dev/null)
-        cmake_arm_temp=$(printf '%b' "CPU: \e[1;32m$arm_temp\033[0m°")
+        cmake_temp=$(printf '%b' "CPU: \e[1;32m$cpu_temp\033[0m°")
       else
-        cmake_arm_temp=$(printf '%b' "")
+        cmake_temp=$(printf '%b' "")
       fi
 
       cat <<EOF
 
-$cmake_arm_temp
+$cmake_temp
 
 Compiling using multiple cores:
 
@@ -1455,7 +1455,7 @@ EOF
       "1")
 
         cores=$(echo "1")
-        echo "Compiling with $cores core(s)"
+        printf '%b' "[  0%] \e[0;32mBuilding with \e[1;32m$cores\033[0m core(s)"
         echo
         make # 1 core
 
@@ -1464,7 +1464,7 @@ EOF
       "2")
 
         cores=$(echo "2")
-        echo "Compiling with $cores core(s)"
+        printf '%b' "[  0%] \e[0;32mBuilding with \e[1;32m$cores\033[0m core(s)"
         echo
         make -j2 # 2 cores
 
@@ -1473,7 +1473,7 @@ EOF
       "3")
 
         cores=$(echo "3")
-        echo "Compiling with $cores core(s)"
+        printf '%b' "[  0%] \e[0;32mBuilding with \e[1;32m$cores\033[0m core(s)"
         echo
         make -j3 # 3 cores
 
@@ -1482,7 +1482,7 @@ EOF
       "4")
 
         cores=$(echo "4")
-        echo "Compiling with $cores core(s)"
+        printf '%b' "[  0%] \e[0;32mBuilding with \e[1;32m$cores\033[0m core(s)"
         echo
         make -j4 # 4 cores
 
@@ -1499,16 +1499,16 @@ EOF
 
       # compiling using multiple cores done
 
-      # arm/aarch64 temp >
+      # cpu temp >
       if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
-        arm_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
+        cpu_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
           cut -c -4 2>/dev/null)
-        cmake_arm_temp=$(printf '%b' "CPU: \e[1;32m$arm_temp\033[0m°")
+        cmake_temp=$(printf '%b' "CPU: \e[1;32m$cpu_temp\033[0m° with $cores core(s).")
       else
-        cmake_arm_temp=$(printf '%b' "")
+        cmake_temp=$(printf '%b' "")
       fi
       echo
-      printf "$cmake_arm_temp with $cores core(s) compiling.
+      printf "$cmake_temp
 
 Select install operation"
       echo
@@ -1668,18 +1668,18 @@ Check if correct information, or just restart server."
 
       # compiling using multiple cores >
 
-      # arm/aarch64 temp >
+      # cpu temp >
       if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
-        arm_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
+        cpu_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
           cut -c -4 2>/dev/null)
-        cmake_arm_temp=$(printf '%b' "CPU: \e[1;32m$arm_temp\033[0m°")
+        cmake_temp=$(printf '%b' "CPU: \e[1;32m$cpu_temp\033[0m°")
       else
-        cmake_arm_temp=$(printf '%b' "")
+        cmake_temp=$(printf '%b' "")
       fi
 
       cat <<EOF
 
-$cmake_arm_temp
+$cmake_temp
 
 Compiling using multiple cores:
 
@@ -1697,7 +1697,7 @@ EOF
       "1")
 
         cores=$(echo "1")
-        echo "Compiling with $cores core(s)"
+        printf '%b' "[  0%] \e[0;32mBuilding with \e[1;32m$cores\033[0m core(s)"
         echo
         make # 1 core
 
@@ -1706,7 +1706,7 @@ EOF
       "2")
 
         cores=$(echo "2")
-        echo "Compiling with $cores core(s)"
+        printf '%b' "[  0%] \e[0;32mBuilding with \e[1;32m$cores\033[0m core(s)"
         echo
         make -j2 # 2 cores
 
@@ -1715,7 +1715,7 @@ EOF
       "3")
 
         cores=$(echo "3")
-        echo "Compiling with $cores core(s)"
+        printf '%b' "[  0%] \e[0;32mBuilding with \e[1;32m$cores\033[0m core(s)"
         echo
         make -j3 # 3 cores
 
@@ -1724,7 +1724,7 @@ EOF
       "4")
 
         cores=$(echo "4")
-        echo "Compiling with $cores core(s)"
+        printf '%b' "[  0%] \e[0;32mBuilding with \e[1;32m$cores\033[0m core(s)"
         echo
         make -j4 # 4 cores
 
@@ -1741,16 +1741,16 @@ EOF
 
       # compiling using multiple cores done
 
-      # arm/aarch64 temp >
+      # cpu temp >
       if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
-        arm_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
+        cpu_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
           cut -c -4 2>/dev/null)
-        cmake_arm_temp=$(printf '%b' "CPU: \e[1;32m$arm_temp\033[0m°")
+        cmake_temp=$(printf '%b' "CPU: \e[1;32m$cpu_temp\033[0m° with $cores core(s).")
       else
-        cmake_arm_temp=$(printf '%b' "")
+        cmake_temp=$(printf '%b' "")
       fi
       echo
-      printf "$cmake_arm_temp with $cores core(s) compiling.
+      printf "$cmake_temp
 
 Select install operation"
       echo
