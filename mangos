@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202805
-# 3.8.7.7
+# 3.8.8.1
 
 # codes >
 while :; do
@@ -531,7 +531,7 @@ ARE YOU SURE? (y/n) " -n 1 -r
 
       printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.8.7.7 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.8.8.1 ]\033[0m
 
       $cm_uptime
 
@@ -3320,6 +3320,10 @@ Check log for which database needs 'applying updates'"
         git fetch origin master &>/dev/null &&
         [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
         git merge origin/master; then
+        latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
+        latest_head=$(git rev-parse --short HEAD)
+        printf '%b' "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) \e[4;32mNew Updates For Helper\033[0m! - $latest_date"
+        echo
         cd "$folder_helper" || exit
         echo
         sleep 1
