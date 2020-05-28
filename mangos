@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202805
-# 3.9.5.1
+# 4.0.4.5
 
 # codes >
 while :; do
@@ -293,9 +293,10 @@ ${pass_nc:?}
         echo
         read -r -p "$deleted
 
-ARE YOU SURE? (y/n) " -n 1 -r
+Are You Sure? (y/n) " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
+
           # delete by id -> examples: ('id') (id1,id2,) & (id1 AND id5)
           mysql --defaults-extra-file="$sql_mycnf" --execute="DELETE FROM $db_realmd.account WHERE id = $ID;" &>/dev/null
           mysql --defaults-extra-file="$sql_mycnf" --execute="DELETE FROM $db_realmd.account WHERE id IN ($ID);" &>/dev/null
@@ -531,7 +532,7 @@ ARE YOU SURE? (y/n) " -n 1 -r
 
       printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v3.9.5.1 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.0.4.5 ]\033[0m
 
       $cm_uptime
 
@@ -699,6 +700,7 @@ $transmission_list
           echo
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
+
             echo "Please wait"
             sudo apt-get remove transmission-daemon --purge -y &>/dev/null
           fi
@@ -717,6 +719,7 @@ $transmission_list
           echo
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
+
             # already installed? >
             if ! [ -x "$(command -v transmission-daemon)" ]; then
               # check for updates regardless >
@@ -845,6 +848,7 @@ EOF
           echo
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
+
             echo "Please wait"
             sudo service transmission-daemon start &>/dev/null
             sleep 1
@@ -871,6 +875,7 @@ EOF
           echo
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
+
             echo "Please wait"
             sudo service transmission-daemon stop &>/dev/null
             sleep 1
@@ -950,6 +955,7 @@ EOF
         read -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
+
           echo
           echo
           printf "\e[0;35mmangos-classic\033[0m: "
@@ -1149,6 +1155,7 @@ EOF
         echo
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
+
           clear
           printf "
 \e[31m      ._________________.
@@ -2097,6 +2104,7 @@ Please install mysql or mariadb database/client"
           read -r -p "New backup? ($db_characters) (y/n) " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
+            # backup characters sql >
             echo
             printf "Making fresh backup\e[0;32m.\033[0m"
             sleep 1
@@ -2871,43 +2879,128 @@ Check log for which database needs 'applying updates'"
 
   "s")
 
-    echo
-    echo "Shutdown Server?"
-    echo
-    read -r -p "Are you sure? (y/n) " -n 1 -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-      # keep old logs >
-      cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
-      # done
-      printf "\e[0;31mShutting down\033[0m realmd/mangosd service"
+    HEIGHT=10
+    WIDTH=30
+    CHOICE_HEIGHT=4
+    BACKTITLE="shutdown server"
+    TITLE="Service Control"
+    MENU="Choose one option:"
+
+    OPTIONS=(1 "Shutdown Server"
+      2 "Shutdown realmd"
+      3 "Shutdown mangosd")
+
+    CHOICE=$(dialog --clear \
+      --backtitle "$BACKTITLE" \
+      --title "$TITLE" \
+      --menu "$MENU" \
+      $HEIGHT $WIDTH $CHOICE_HEIGHT \
+      "${OPTIONS[@]}" \
+      2>&1 >/dev/tty)
+
+    clear
+    case $CHOICE in
+
+    # shutdown realmd, mangosd >
+
+    "1")
+
+      read -r -p "Shutdown realmd, mangosd? (y/n) " -n 1 -r
       echo
-      sleep 1
-      echo -ne '(0%)\r'
-      sleep 1
+      if [[ $REPLY =~ ^[Yy]$ ]]; then
 
-      # service status
-      realm_service=realmd
-      world_service=mangosd
+        # keep old logs >
+        cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
+        cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
+        # done
+        printf "\e[0;31mShutting down\033[0m realmd/mangosd service"
+        echo
+        sleep 1
+        echo -ne '(0%)\r'
+        sleep 1
 
-      # realmd service
-      case "$(pidof $realm_service | wc -w)" in
-      0) ;;
-      *) sudo service realmd stop ;;
-      esac
+        # service status
+        realm_service=realmd
+        world_service=mangosd
 
-      echo -ne '(50%)\r'
-      sleep 1
+        # realmd service
+        case "$(pidof $realm_service | wc -w)" in
+        0) ;;
+        *) sudo service realmd stop ;;
+        esac
 
-      # mangosd service
-      case "$(pidof $world_service | wc -w)" in
-      0) ;;
-      *) sudo service mangosd stop ;;
-      esac
+        echo -ne '(50%)\r'
+        sleep 1
 
-      echo -ne '(100%)\r'
-      sleep 1
-    fi
+        # mangosd service
+        case "$(pidof $world_service | wc -w)" in
+        0) ;;
+        *) sudo service mangosd stop ;;
+        esac
+
+        echo -ne '(100%)\r'
+        sleep 1
+      fi
+
+      ;;
+
+      # shutdown realmd, mangosd done
+
+      # shutdown realmd >
+
+    "2")
+
+      read -r -p "Shutdown realmd? (y/n) " -n 1 -r
+      echo
+      if [[ $REPLY =~ ^[Yy]$ ]]; then
+
+        # keep old logs >
+        cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
+        # done
+        printf "\e[0;31mShutting down\033[0m realmd service"
+
+        # service status
+        realm_service=realmd
+
+        # realmd service
+        case "$(pidof $realm_service | wc -w)" in
+        0) ;;
+        *) sudo service realmd stop ;;
+        esac
+      fi
+
+      ;;
+
+      # shutdown realmd done
+
+      # shutdown mangosd >
+
+    "3")
+
+      read -r -p "Shutdown mangosd? (y/n) " -n 1 -r
+      echo
+      if [[ $REPLY =~ ^[Yy]$ ]]; then
+
+        # keep old logs >
+        cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
+        # done
+        printf "\e[0;31mShutting down\033[0m mangosd service"
+
+        # service status
+        world_service=mangosd
+
+        # mangosd service
+        case "$(pidof $world_service | wc -w)" in
+        0) ;;
+        *) sudo service mangosd stop ;;
+        esac
+      fi
+
+      ;;
+
+      # shutdown mangosd done
+
+    esac
 
     ;;
 
@@ -3851,6 +3944,7 @@ Check log for which database needs 'applying updates'"
     read -r -p "Edit config files? (nano) (y/n) " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
+
       title="       Save config without .dist
     ================================
           Server configuration
