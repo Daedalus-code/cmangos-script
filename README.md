@@ -45,7 +45,7 @@ Edit config file 'server.cnf' with MySQL credentials.
 Edit config file 'server.txt' with correct information.  
 #### Your own directory for configs?  
 
-Edit mangos script at line 27:    
+Edit mangos script at line 25:    
 ```source /scripts/server.txt # please edit if wrong.```  
 server.txt at line 42:  
 ```folder_helper="/scripts/cmangos-script" # please edit if wrong.```  
@@ -57,7 +57,7 @@ server.txt at line 38:
 #### Planned Features  
 * Time will tell.  
 
-This script was built on a Ubuntu Linux System (Raspberry Pi2/4)  
+This script was built on a Ubuntu Linux System (Raspberry Pi4)  
 https://ubuntu.com/download/raspberry-pi  
 
 C(ontinued)-MaNGOS (Classic fork)
