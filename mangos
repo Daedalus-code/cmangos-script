@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20203005
-# 4.0.7.7
+# 4.0.7.5
 
 # codes >
 while :; do
@@ -532,7 +532,7 @@ Are You Sure? (y/n) " -n 1 -r
 
       printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.0.7.7 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.0.7.5 ]\033[0m
 
       $cm_uptime
 
@@ -3136,27 +3136,6 @@ Check log for which database needs 'applying updates'"
         # realmd.log
         printf "\e[1;32m<------------------------------------------------------>\033[0m"
         echo
-        # look for empty tables
-        if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
-          # if any, print "empty"
-          printf "Server.log "
-          printf '%b' "$realmd_log_empty"
-          # count empty inside log
-          grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2>/dev/null
-        fi
-        # look for error
-        if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
-          # if any, print "error"
-          printf "Realmd.log "
-          printf '%b' "$realmd_log_error"
-          # count errors inside log
-          grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2>/dev/null
-        # if nothing, print "ok"
-        else
-          printf "Realmd.log "
-          printf '%b' "$realmd_log_ok"
-          echo
-        fi
         # if realm failed
         if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log 2>/dev/null; then
           # if any, print "Realm failed or halted"
@@ -3165,6 +3144,27 @@ Check log for which database needs 'applying updates'"
           printf '%b' "$realmd_log_failed"
           echo
         else
+          # look for empty tables
+          if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
+            # if any, print "empty"
+            printf "Server.log "
+            printf '%b' "$realmd_log_empty"
+            # count empty inside log
+            grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2>/dev/null
+          fi
+          # look for error
+          if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
+            # if any, print "error"
+            printf "Realmd.log "
+            printf '%b' "$realmd_log_error"
+            # count errors inside log
+            grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2>/dev/null
+          # if nothing, print "ok"
+          else
+            printf "Realmd.log "
+            printf '%b' "$realmd_log_ok"
+            echo
+          fi
           # this database (realmd) is out of date!
           if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
             echo
@@ -3196,84 +3196,82 @@ Check log for which database needs 'applying updates'"
         fi
         echo
         tail "$folder_core"/run/logs/Realmd.log 2>/dev/null
-
         # server.log
         printf "\e[1;32m<------------------------------------------------------>\033[0m"
         echo
-
-        # look for empty tables
-        if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2>/dev/null; then
-          # if any, print "empty"
-          printf "Server.log "
-          printf '%b' "$server_log_empty"
-          # count empty inside log
-          grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2>/dev/null
-        fi
-        # look for error
-        if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log 2>/dev/null; then
-          # if any, print "error"
-          printf "Server.log "
-          printf '%b' "$server_log_error"
-          # count errors inside log
-          grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log 2>/dev/null
-          # look for serious error
-          if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2>/dev/null; then
-            # if any, print "serious"
-            printf "Server.log "
-            printf '%b' "$server_log_serious"
-            # count serious errors inside log
-            grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2>/dev/null
-          fi
-        # if nothing, print "ok"
-        else
-          printf "Server.log "
-          printf '%b' "$server_log_ok"
-          echo
-        fi
-        # world failed
-        if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log 2>/dev/null; then
-          # if any, print "World failed"
-          echo
-          printf "[CMaNGOS]: "
-          printf '%b' "$server_log_failed"
-          echo
-        fi
-        # this database (mangosd) is out of date!
-        if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Server.log 2>/dev/null; then
-          echo
-          printf "[CMaNGOS]: "
-          printf '%b' "Database is out of date!"
-          echo
-        fi
-        # reinstall your (mangosd) database
-        if grep -E -q "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$folder_core"/run/logs/Server.log 2>/dev/null; then
-          echo
-          printf "[CMaNGOS]: "
-          printf '%b' "Reinstall your database!"
-          echo
-        fi
-        # can't connect to local mysql through socket
-        if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$folder_core"/run/logs/*.log 2>/dev/null; then
-          echo
-          printf "[MySQL]: "
-          printf '%b' "Can't connect to local MySQL!"
-          echo
-        fi
-        # your mangosd.conf version indicates your conf file is out of date
-        if grep -E -q ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$folder_core"/run/logs/*.log 2>/dev/null; then
-          echo
-          printf "\033[1;31mWARNING\033[0m "
-          printf '%b' "mangosd.conf is out of date!"
-          echo
-        fi
         # if world failed
         if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log 2>/dev/null; then
-          # if any, print "World failed"
+          # if any, print "World failed or halted"
           echo
           printf "[CMaNGOS]: "
           printf '%b' "$server_log_failed"
           echo
         else
+          # look for empty tables
+          if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2>/dev/null; then
+            # if any, print "empty"
+            printf "Server.log "
+            printf '%b' "$server_log_empty"
+            # count empty inside log
+            grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2>/dev/null
+          fi
+          # look for error
+          if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log 2>/dev/null; then
+            # if any, print "error"
+            printf "Server.log "
+            printf '%b' "$server_log_error"
+            # count errors inside log
+            grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log 2>/dev/null
+            # look for serious error
+            if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+              # if any, print "serious"
+              printf "Server.log "
+              printf '%b' "$server_log_serious"
+              # count serious errors inside log
+              grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2>/dev/null
+            fi
+          # if nothing, print "ok"
+          else
+            printf "Server.log "
+            printf '%b' "$server_log_ok"
+            echo
+          fi
+          # world failed
+          if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+            # if any, print "World failed"
+            echo
+            printf "[CMaNGOS]: "
+            printf '%b' "$server_log_failed"
+            echo
+          fi
+          # this database (mangosd) is out of date!
+          if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+            echo
+            printf "[CMaNGOS]: "
+            printf '%b' "Database is out of date!"
+            echo
+          fi
+          # reinstall your (mangosd) database
+          if grep -E -q "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+            echo
+            printf "[CMaNGOS]: "
+            printf '%b' "Reinstall your database!"
+            echo
+          fi
+          # can't connect to local mysql through socket
+          if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$folder_core"/run/logs/*.log 2>/dev/null; then
+            echo
+            printf "[MySQL]: "
+            printf '%b' "Can't connect to local MySQL!"
+            echo
+          fi
+          # your mangosd.conf version indicates your conf file is out of date
+          if grep -E -q ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$folder_core"/run/logs/*.log 2>/dev/null; then
+            echo
+            printf "\033[1;31mWARNING\033[0m "
+            printf '%b' "mangosd.conf is out of date!"
+            echo
+          fi
           # get startup time >
           startup_time=$(grep "SERVER\sSTARTUP\sTIME*." wow/mangos-classic/run/logs/Server.log 2>/dev/null |
             cut -d\  -f6-9 2>/dev/null)
@@ -3650,27 +3648,6 @@ Check log for which database needs 'applying updates'"
     # realmd.log
     printf "\e[1;32m<------------------------------------------------------>\033[0m"
     echo
-    # look for empty tables
-    if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
-      # if any, print "empty"
-      printf "Server.log "
-      printf '%b' "$realmd_log_empty"
-      # count empty inside log
-      grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2>/dev/null
-    fi
-    # look for error
-    if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
-      # if any, print "error"
-      printf "Realmd.log "
-      printf '%b' "$realmd_log_error"
-      # count errors inside log
-      grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2>/dev/null
-    # if nothing, print "ok"
-    else
-      printf "Realmd.log "
-      printf '%b' "$realmd_log_ok"
-      echo
-    fi
     # if realm failed
     if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log 2>/dev/null; then
       # if any, print "Realm failed or halted"
@@ -3679,6 +3656,27 @@ Check log for which database needs 'applying updates'"
       printf '%b' "$realmd_log_failed"
       echo
     else
+      # look for empty tables
+      if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
+        # if any, print "empty"
+        printf "Server.log "
+        printf '%b' "$realmd_log_empty"
+        # count empty inside log
+        grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2>/dev/null
+      fi
+      # look for error
+      if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
+        # if any, print "error"
+        printf "Realmd.log "
+        printf '%b' "$realmd_log_error"
+        # count errors inside log
+        grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2>/dev/null
+      # if nothing, print "ok"
+      else
+        printf "Realmd.log "
+        printf '%b' "$realmd_log_ok"
+        echo
+      fi
       # this database (realmd) is out of date!
       if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
         echo
@@ -3713,71 +3711,71 @@ Check log for which database needs 'applying updates'"
     # server.log
     printf "\e[1;32m<------------------------------------------------------>\033[0m"
     echo
-    # look for empty tables
-    if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2>/dev/null; then
-      # if any, print "empty"
-      printf "Server.log "
-      printf '%b' "$server_log_empty"
-      # count empty inside log
-      grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2>/dev/null
-    fi
-    # look for error
-    if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log 2>/dev/null; then
-      # if any, print "error"
-      printf "Server.log "
-      printf '%b' "$server_log_error"
-      # count errors inside log
-      grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log 2>/dev/null
-      # look for serious error
-      if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2>/dev/null; then
-        # if any, print "serious"
-        printf "Server.log "
-        printf '%b' "$server_log_serious"
-        # count serious errors inside log
-        grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2>/dev/null
-      fi
-    # if nothing, print "ok"
-    else
-      printf "Server.log "
-      printf '%b' "$server_log_ok"
-      echo
-    fi
-    # this database (mangosd) is out of date!
-    if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Server.log 2>/dev/null; then
-      echo
-      printf "[CMaNGOS]: "
-      printf '%b' "Database is out of date!"
-      echo
-    fi
-    # reinstall your (mangosd) database
-    if grep -E -q "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$folder_core"/run/logs/Server.log 2>/dev/null; then
-      echo
-      printf "[CMaNGOS]: "
-      printf '%b' "Reinstall your database!"
-      echo
-    fi
-    # can't connect to local mysql through socket
-    if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$folder_core"/run/logs/*.log 2>/dev/null; then
-      echo
-      printf "[MySQL]: "
-      printf '%b' "Can't connect to local MySQL!"
-      echo
-    fi
-    # your mangosd.conf version indicates your conf file is out of date
-    if grep -E -q ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$folder_core"/run/logs/*.log 2>/dev/null; then
-      echo
-      printf "\033[1;31mWARNING\033[0m "
-      printf '%b' "mangosd.conf is out of date!"
-      echo
-    fi
     # if world failed
     if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log 2>/dev/null; then
-      # if any, print "World failed"
+      # if any, print "World failed or halted"
       echo
       printf "[CMaNGOS]: "
       printf '%b' "$server_log_failed"
       echo
     else
+      # look for empty tables
+      if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2>/dev/null; then
+        # if any, print "empty"
+        printf "Server.log "
+        printf '%b' "$server_log_empty"
+        # count empty inside log
+        grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2>/dev/null
+      fi
+      # look for error
+      if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log 2>/dev/null; then
+        # if any, print "error"
+        printf "Server.log "
+        printf '%b' "$server_log_error"
+        # count errors inside log
+        grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log 2>/dev/null
+        # look for serious error
+        if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+          # if any, print "serious"
+          printf "Server.log "
+          printf '%b' "$server_log_serious"
+          # count serious errors inside log
+          grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2>/dev/null
+        fi
+      # if nothing, print "ok"
+      else
+        printf "Server.log "
+        printf '%b' "$server_log_ok"
+        echo
+      fi
+      # this database (mangosd) is out of date!
+      if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+        echo
+        printf "[CMaNGOS]: "
+        printf '%b' "Database is out of date!"
+        echo
+      fi
+      # reinstall your (mangosd) database
+      if grep -E -q "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+        echo
+        printf "[CMaNGOS]: "
+        printf '%b' "Reinstall your database!"
+        echo
+      fi
+      # can't connect to local mysql through socket
+      if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$folder_core"/run/logs/*.log 2>/dev/null; then
+        echo
+        printf "[MySQL]: "
+        printf '%b' "Can't connect to local MySQL!"
+        echo
+      fi
+      # your mangosd.conf version indicates your conf file is out of date
+      if grep -E -q ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$folder_core"/run/logs/*.log 2>/dev/null; then
+        echo
+        printf "\033[1;31mWARNING\033[0m "
+        printf '%b' "mangosd.conf is out of date!"
+        echo
+      fi
       # get startup time >
       startup_time=$(grep "SERVER\sSTARTUP\sTIME*." wow/mangos-classic/run/logs/Server.log 2>/dev/null |
         cut -d\  -f6-9 2>/dev/null)
