@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20200706
-# 4.0.6.1
+# 4.0.6.0
 
 # codes >
 while :; do
@@ -532,7 +532,7 @@ Are You Sure? (y/n) " -n 1 -r
 
       printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.0.6.1 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.0.6.0 ]\033[0m
 
       $cm_uptime
 
@@ -1466,7 +1466,7 @@ EOF
         "1")
 
           cores=$(echo "1")
-          printf '%b' "[  0%] \e[0;32mBuilding with \e[1;32m$cores\033[0m core(s)"
+          printf '%b' "[  0%] \e[0;32mBuilding with $cores core(s)"
           echo
           make # 1 core
 
@@ -1475,7 +1475,7 @@ EOF
         "2")
 
           cores=$(echo "2")
-          printf '%b' "[  0%] \e[0;32mBuilding with \e[1;32m$cores\033[0m core(s)"
+          printf '%b' "[  0%] \e[0;32mBuilding with $cores core(s)"
           echo
           make -j2 # 2 cores
 
@@ -1484,7 +1484,7 @@ EOF
         "3")
 
           cores=$(echo "3")
-          printf '%b' "[  0%] \e[0;32mBuilding with \e[1;32m$cores\033[0m core(s)"
+          printf '%b' "[  0%] \e[0;32mBuilding with $cores core(s)"
           echo
           make -j3 # 3 cores
 
@@ -1493,7 +1493,7 @@ EOF
         "4")
 
           cores=$(echo "4")
-          printf '%b' "[  0%] \e[0;32mBuilding with \e[1;32m$cores\033[0m core(s)"
+          printf '%b' "[  0%] \e[0;32mBuilding with $cores core(s)"
           echo
           make -j4 # 4 cores
 
@@ -1718,7 +1718,7 @@ EOF
         "1")
 
           cores=$(echo "1")
-          printf '%b' "[  0%] \e[0;32mBuilding with \e[1;32m$cores\033[0m core(s)"
+          printf '%b' "[  0%] \e[0;32mBuilding with $cores core(s)"
           echo
           make # 1 core
 
@@ -1727,7 +1727,7 @@ EOF
         "2")
 
           cores=$(echo "2")
-          printf '%b' "[  0%] \e[0;32mBuilding with \e[1;32m$cores\033[0m core(s)"
+          printf '%b' "[  0%] \e[0;32mBuilding with $cores core(s)"
           echo
           make -j2 # 2 cores
 
@@ -1736,7 +1736,7 @@ EOF
         "3")
 
           cores=$(echo "3")
-          printf '%b' "[  0%] \e[0;32mBuilding with \e[1;32m$cores\033[0m core(s)"
+          printf '%b' "[  0%] \e[0;32mBuilding with $cores core(s)"
           echo
           make -j3 # 3 cores
 
@@ -1745,7 +1745,7 @@ EOF
         "4")
 
           cores=$(echo "4")
-          printf '%b' "[  0%] \e[0;32mBuilding with \e[1;32m$cores\033[0m core(s)"
+          printf '%b' "[  0%] \e[0;32mBuilding with $cores core(s)"
           echo
           make -j4 # 4 cores
 
@@ -3076,41 +3076,40 @@ Check log for which database needs 'applying updates'"
         sleep 1
         echo
         echo "Please wait"
+
         # wait wordlist >
+        # note - don't put any space(s) between keywords.
 
         # realmd >
-        wordlist_realmd=("
-        .*[A]\sYou\shave:\s-->*.
-        .*[B]\sYou\sneed:\s-->*.
-        .*Added\srealm\sid*.
-        .*Can't\sconnect\sto\slocal\sMySQL*.
-        .*cannot\sfind\sthe\sversion\sinfo*.
-        .*database\sis\smissing\sor\scorrupt*.
-        .*reinstall\syour*."
-        )
+        wordlist_realmd=(".*[A]\sYou\shave:\s-->*.
+.*[B]\sYou\sneed:\s-->*.
+.*Added\srealm\sid*.
+.*Can't\sconnect\sto\slocal\sMySQL*.
+.*cannot\sfind\sthe\sversion\sinfo*.
+.*database\sis\smissing\sor\scorrupt*.
+.*reinstall\syour*.")
         # mangosd >
-        wordlist_mangosd=("
-        .*[A]\sYou\shave:\s-->*.
-        .*[B]\sYou\sneed:\s-->*.
-        .*Can't\sconnect\sto\slocal\sMySQL*.
-        .*core\sdumped*.
-        .*corrupt*.
-        .*critical*.
-        .*fail*.
-        .*failed*.
-        .*fatal*.
-        .*file\struncated*.
-        .*Halting\sprocess*.
-        .*initialized*.
-        .*malformed*.
-        .*out\sof\sdate!*.
-        .*reinstall\syour*.
-        .*segfault*.
-        .*Segmentation\sfault*.
-        .*STARTUP*.
-        .*TIME*.
-        .*You\smust\sapply\sall\supdates\safter\s[A]\sto\s[B]*."
-        )
+
+        wordlist_mangosd=(".*[A]\sYou\shave:\s-->*.
+.*[B]\sYou\sneed:\s-->*.
+.*Can't\sconnect\sto\slocal\sMySQL*.
+.*core\sdumped*.
+.*corrupt*.
+.*critical*.
+.*fail*.
+.*failed*.
+.*fatal*.
+.*file\struncated*.
+.*Halting\sprocess*.
+.*initialized*.
+.*malformed*.
+.*out\sof\sdate!*.
+.*reinstall\syour*.
+.*segfault*.
+.*Segmentation\sfault*.
+.*STARTUP*.
+.*TIME*.
+.*You\smust\sapply\sall\supdates\safter\s[A]\sto\s[B]*.")
 
         # wait wordlist done
 
@@ -3393,31 +3392,31 @@ Check log for which database needs 'applying updates'"
         sudo service mangosd restart &>/dev/null
         sleep 1
         echo "Please wait"
+
         # wait wordlist >
+        # note - don't put any space(s) between keywords.
 
         # mangosd >
-        wordlist_mangosd=("
-        .*[A]\sYou\shave:\s-->*.
-        .*[B]\sYou\sneed:\s-->*.
-        .*Can't\sconnect\sto\slocal\sMySQL*.
-        .*core\sdumped*.
-        .*corrupt*.
-        .*critical*.
-        .*fail*.
-        .*failed*.
-        .*fatal*.
-        .*file\struncated*.
-        .*Halting\sprocess*.
-        .*initialized*.
-        .*malformed*.
-        .*out\sof\sdate!*.
-        .*reinstall\syour*.
-        .*segfault*.
-        .*Segmentation\sfault*.
-        .*STARTUP*.
-        .*TIME*.
-        .*You\smust\sapply\sall\supdates\safter\s[A]\sto\s[B]*."
-        )
+        wordlist_mangosd=(".*[A]\sYou\shave:\s-->*.
+.*[B]\sYou\sneed:\s-->*.
+.*Can't\sconnect\sto\slocal\sMySQL*.
+.*core\sdumped*.
+.*corrupt*.
+.*critical*.
+.*fail*.
+.*failed*.
+.*fatal*.
+.*file\struncated*.
+.*Halting\sprocess*.
+.*initialized*.
+.*malformed*.
+.*out\sof\sdate!*.
+.*reinstall\syour*.
+.*segfault*.
+.*Segmentation\sfault*.
+.*STARTUP*.
+.*TIME*.
+.*You\smust\sapply\sall\supdates\safter\s[A]\sto\s[B]*.")
 
         # wait wordlist done
 
