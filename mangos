@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20200706
-# 4.0.6.0
+# 4.0.7.2
 
 # codes >
 while :; do
@@ -532,7 +532,7 @@ Are You Sure? (y/n) " -n 1 -r
 
       printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.0.6.0 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.0.7.2 ]\033[0m
 
       $cm_uptime
 
@@ -3144,7 +3144,7 @@ Check log for which database needs 'applying updates'"
         printf "\e[1;32m<------------------------------------------------------>\033[0m"
         echo
         # if realm failed
-        if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+        if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
           # if any, print "Realm failed or halted"
           echo
           printf '%b' "$realmd_log_failed"
@@ -3190,7 +3190,7 @@ Check log for which database needs 'applying updates'"
             echo
           fi
           # your realmd.conf version indicates your conf file is out of date
-          if grep -E -q ".*Your\srealmd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$folder_core"/run/logs/*.log 2>/dev/null; then
+          if grep -E -q ".*Your\srealmd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
             echo
             printf "\033[1;31mWARNING\033[0m "
             printf '%b' "realmd.conf is out of date!"
@@ -3251,6 +3251,12 @@ Check log for which database needs 'applying updates'"
             printf '%b' "Database is out of date!"
             echo
           fi
+          # databases is missing or corrupt.
+          if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$folder_core"/run/logs/Server.log 2>/dev/null; then
+            echo
+            printf '%b' "Database is missing or corrupt!"
+            echo
+          fi
           # reinstall your (mangosd) database
           if grep -E -q "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$folder_core"/run/logs/Server.log 2>/dev/null; then
             echo
@@ -3258,13 +3264,13 @@ Check log for which database needs 'applying updates'"
             echo
           fi
           # can't connect to local mysql through socket
-          if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$folder_core"/run/logs/*.log 2>/dev/null; then
+          if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$folder_core"/run/logs/Server.log 2>/dev/null; then
             echo
             printf '%b' "Can't connect to local MySQL!"
             echo
           fi
           # your mangosd.conf version indicates your conf file is out of date
-          if grep -E -q ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$folder_core"/run/logs/*.log 2>/dev/null; then
+          if grep -E -q ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$folder_core"/run/logs/Server.log 2>/dev/null; then
             echo
             printf "\033[1;31mWARNING\033[0m "
             printf '%b' "mangosd.conf is out of date!"
@@ -3647,7 +3653,7 @@ Check log for which database needs 'applying updates'"
     printf "\e[1;32m<------------------------------------------------------>\033[0m"
     echo
     # if realm failed
-    if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+    if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
       # if any, print "Realm failed or halted"
       echo
       printf '%b' "$realmd_log_failed"
@@ -3693,7 +3699,7 @@ Check log for which database needs 'applying updates'"
         echo
       fi
       # your realmd.conf version indicates your conf file is out of date
-      if grep -E -q ".*Your\srealmd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$folder_core"/run/logs/*.log 2>/dev/null; then
+      if grep -E -q ".*Your\srealmd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
         echo
         printf "\033[1;31mWARNING\033[0m "
         printf '%b' "realmd.conf is out of date!"
@@ -3747,6 +3753,12 @@ Check log for which database needs 'applying updates'"
         printf '%b' "Database is out of date!"
         echo
       fi
+      # databases is missing or corrupt.
+      if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$folder_core"/run/logs/Server.log 2>/dev/null; then
+        echo
+        printf '%b' "Database is missing or corrupt!"
+        echo
+      fi
       # reinstall your (mangosd) database
       if grep -E -q "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$folder_core"/run/logs/Server.log 2>/dev/null; then
         echo
@@ -3754,13 +3766,13 @@ Check log for which database needs 'applying updates'"
         echo
       fi
       # can't connect to local mysql through socket
-      if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$folder_core"/run/logs/*.log 2>/dev/null; then
+      if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$folder_core"/run/logs/Server.log 2>/dev/null; then
         echo
         printf '%b' "Can't connect to local MySQL!"
         echo
       fi
       # your mangosd.conf version indicates your conf file is out of date
-      if grep -E -q ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$folder_core"/run/logs/*.log 2>/dev/null; then
+      if grep -E -q ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$folder_core"/run/logs/Server.log 2>/dev/null; then
         echo
         printf "\033[1;31mWARNING\033[0m "
         printf '%b' "mangosd.conf is out of date!"
