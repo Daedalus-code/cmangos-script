@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20203005
-# 4.0.7.5
+# V20200706
+# 4.0.6.1
 
 # codes >
 while :; do
@@ -532,7 +532,7 @@ Are You Sure? (y/n) " -n 1 -r
 
       printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.0.7.5 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.0.6.1 ]\033[0m
 
       $cm_uptime
 
@@ -3079,30 +3079,38 @@ Check log for which database needs 'applying updates'"
         # wait wordlist >
 
         # realmd >
-        wordlist_realmd=(".*Added\srealm\sid*.
-      .*Can't\sconnect\sto\slocal\sMySQL*.
-      .*cannot\sfind\sthe\sversion\sinfo*.
-      .*database\sis\smissing\sor\scorrupt*.
-      .*reinstall\syour*.
-      .*You\shave:\s-->*.")
+        wordlist_realmd=("
+        .*[A]\sYou\shave:\s-->*.
+        .*[B]\sYou\sneed:\s-->*.
+        .*Added\srealm\sid*.
+        .*Can't\sconnect\sto\slocal\sMySQL*.
+        .*cannot\sfind\sthe\sversion\sinfo*.
+        .*database\sis\smissing\sor\scorrupt*.
+        .*reinstall\syour*."
+        )
         # mangosd >
-        wordlist_mangosd=(".*Can't\sconnect\sto\slocal\sMySQL*.
-      .*core\sdumped*.
-      .*corrupt*.
-      .*critical*.
-      .*fail*.
-      .*failed*.
-      .*fatal*.
-      .*file\struncated*.
-      .*Halting\sprocess*.
-      .*initialized*.
-      .*malformed*.
-      .*reinstall\syour*.
-      .*segfault*.
-      .*Segmentation\sfault*.
-      .*STARTUP*.
-      .*TIME*.
-      .*You\shave:\s-->*.")
+        wordlist_mangosd=("
+        .*[A]\sYou\shave:\s-->*.
+        .*[B]\sYou\sneed:\s-->*.
+        .*Can't\sconnect\sto\slocal\sMySQL*.
+        .*core\sdumped*.
+        .*corrupt*.
+        .*critical*.
+        .*fail*.
+        .*failed*.
+        .*fatal*.
+        .*file\struncated*.
+        .*Halting\sprocess*.
+        .*initialized*.
+        .*malformed*.
+        .*out\sof\sdate!*.
+        .*reinstall\syour*.
+        .*segfault*.
+        .*Segmentation\sfault*.
+        .*STARTUP*.
+        .*TIME*.
+        .*You\smust\sapply\sall\supdates\safter\s[A]\sto\s[B]*."
+        )
 
         # wait wordlist done
 
@@ -3140,7 +3148,6 @@ Check log for which database needs 'applying updates'"
         if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log 2>/dev/null; then
           # if any, print "Realm failed or halted"
           echo
-          printf "[Realmd]: "
           printf '%b' "$realmd_log_failed"
           echo
         else
@@ -3168,21 +3175,18 @@ Check log for which database needs 'applying updates'"
           # this database (realmd) is out of date!
           if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
             echo
-            printf "[Realmd]: "
             printf '%b' "Database is out of date!"
             echo
           fi
           # databases is missing or corrupt.
           if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
             echo
-            printf "[Realmd]: "
             printf '%b' "Database is missing or corrupt!"
             echo
           fi
           # reinstall your (realmd) database
           if grep -E -q "reinstall\syour|\sUnknown\sdatabase\s|Reinstall\syour\s[REALMD]\sdatabase\s" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
             echo
-            printf "[Realmd]: "
             printf '%b' "Reinstall your database!"
             echo
           fi
@@ -3203,7 +3207,6 @@ Check log for which database needs 'applying updates'"
         if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log 2>/dev/null; then
           # if any, print "World failed or halted"
           echo
-          printf "[CMaNGOS]: "
           printf '%b' "$server_log_failed"
           echo
         else
@@ -3240,28 +3243,24 @@ Check log for which database needs 'applying updates'"
           if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log 2>/dev/null; then
             # if any, print "World failed"
             echo
-            printf "[CMaNGOS]: "
             printf '%b' "$server_log_failed"
             echo
           fi
           # this database (mangosd) is out of date!
           if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Server.log 2>/dev/null; then
             echo
-            printf "[CMaNGOS]: "
             printf '%b' "Database is out of date!"
             echo
           fi
           # reinstall your (mangosd) database
           if grep -E -q "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$folder_core"/run/logs/Server.log 2>/dev/null; then
             echo
-            printf "[CMaNGOS]: "
             printf '%b' "Reinstall your database!"
             echo
           fi
           # can't connect to local mysql through socket
           if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$folder_core"/run/logs/*.log 2>/dev/null; then
             echo
-            printf "[MySQL]: "
             printf '%b' "Can't connect to local MySQL!"
             echo
           fi
@@ -3279,31 +3278,26 @@ Check log for which database needs 'applying updates'"
           if grep -E -q "World\sinitialized" "$folder_core"/run/logs/Server.log 2>/dev/null; then
             # if any, print "World initialized"
             echo
-            printf "[CMaNGOS]: "
             printf '%b' "$server_log_initialized $startup_time"
             echo
           fi
           # Playerbot loaded >
           if grep -E -q "Playerbot: Using configuration file" "$folder_core"/run/logs/Server.log 2>/dev/null; then
             # if any, print "Playerbot ok"
-            printf "[CMaNGOS]: "
             printf '%b' "\e[0;32mPlayerbot\033[0m"
             echo
           else
             # off >
-            printf "[CMaNGOS]: "
             printf '%b' "\e[90mPlayerbot\033[0m"
             echo
           fi
           # ahbot loaded and initialized >
           if grep -E -q "AHBot seller configuration data loaded and" "$folder_core"/run/logs/Server.log 2>/dev/null; then
             # if any, print "AHbot ok"
-            printf "[CMaNGOS]: "
             printf '%b' "\e[0;32mAHbot\033[0m"
             echo
           else
             # off >
-            printf "[CMaNGOS]: "
             printf '%b' "\e[90mAHbot\033[0m"
             echo
           fi
@@ -3402,23 +3396,28 @@ Check log for which database needs 'applying updates'"
         # wait wordlist >
 
         # mangosd >
-        wordlist_mangosd=(".*Can't\sconnect\sto\slocal\sMySQL*.
-      .*core\sdumped*.
-      .*corrupt*.
-      .*critical*.
-      .*fail*.
-      .*failed*.
-      .*fatal*.
-      .*file\struncated*.
-      .*Halting\sprocess*.
-      .*initialized*.
-      .*malformed*.
-      .*reinstall\syour*.
-      .*segfault*.
-      .*Segmentation\sfault*.
-      .*STARTUP*.
-      .*TIME*.
-      .*You\shave:\s-->*.")
+        wordlist_mangosd=("
+        .*[A]\sYou\shave:\s-->*.
+        .*[B]\sYou\sneed:\s-->*.
+        .*Can't\sconnect\sto\slocal\sMySQL*.
+        .*core\sdumped*.
+        .*corrupt*.
+        .*critical*.
+        .*fail*.
+        .*failed*.
+        .*fatal*.
+        .*file\struncated*.
+        .*Halting\sprocess*.
+        .*initialized*.
+        .*malformed*.
+        .*out\sof\sdate!*.
+        .*reinstall\syour*.
+        .*segfault*.
+        .*Segmentation\sfault*.
+        .*STARTUP*.
+        .*TIME*.
+        .*You\smust\sapply\sall\supdates\safter\s[A]\sto\s[B]*."
+        )
 
         # wait wordlist done
 
@@ -3652,7 +3651,6 @@ Check log for which database needs 'applying updates'"
     if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log 2>/dev/null; then
       # if any, print "Realm failed or halted"
       echo
-      printf "[Realmd]: "
       printf '%b' "$realmd_log_failed"
       echo
     else
@@ -3680,21 +3678,18 @@ Check log for which database needs 'applying updates'"
       # this database (realmd) is out of date!
       if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
         echo
-        printf "[Realmd]: "
         printf '%b' "Database is out of date!"
         echo
       fi
       # databases is missing or corrupt.
       if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
         echo
-        printf "[Realmd]: "
         printf '%b' "Database is missing or corrupt!"
         echo
       fi
       # reinstall your (realmd) database
       if grep -E -q "reinstall\syour|\sUnknown\sdatabase\s|Reinstall\syour\s[REALMD]\sdatabase\s" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
         echo
-        printf "[Realmd]: "
         printf '%b' "Reinstall your database!"
         echo
       fi
@@ -3715,7 +3710,6 @@ Check log for which database needs 'applying updates'"
     if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log 2>/dev/null; then
       # if any, print "World failed or halted"
       echo
-      printf "[CMaNGOS]: "
       printf '%b' "$server_log_failed"
       echo
     else
@@ -3751,21 +3745,18 @@ Check log for which database needs 'applying updates'"
       # this database (mangosd) is out of date!
       if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Server.log 2>/dev/null; then
         echo
-        printf "[CMaNGOS]: "
         printf '%b' "Database is out of date!"
         echo
       fi
       # reinstall your (mangosd) database
       if grep -E -q "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$folder_core"/run/logs/Server.log 2>/dev/null; then
         echo
-        printf "[CMaNGOS]: "
         printf '%b' "Reinstall your database!"
         echo
       fi
       # can't connect to local mysql through socket
       if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$folder_core"/run/logs/*.log 2>/dev/null; then
         echo
-        printf "[MySQL]: "
         printf '%b' "Can't connect to local MySQL!"
         echo
       fi
@@ -3783,31 +3774,26 @@ Check log for which database needs 'applying updates'"
       if grep -E -q "World\sinitialized" "$folder_core"/run/logs/Server.log 2>/dev/null; then
         # if any, print "World initialized"
         echo
-        printf "[CMaNGOS]: "
         printf '%b' "$server_log_initialized $startup_time"
         echo
       fi
       # Playerbot loaded >
       if grep -E -q "Playerbot: Using configuration file" "$folder_core"/run/logs/Server.log 2>/dev/null; then
         # if any, print "Playerbot ok"
-        printf "[CMaNGOS]: "
         printf '%b' "\e[0;32mPlayerbot\033[0m"
         echo
       else
         # off >
-        printf "[CMaNGOS]: "
         printf '%b' "\e[90mPlayerbot\033[0m"
         echo
       fi
       # ahbot loaded and initialized >
       if grep -E -q "AHBot seller configuration data loaded and" "$folder_core"/run/logs/Server.log 2>/dev/null; then
         # if any, print "AHbot ok"
-        printf "[CMaNGOS]: "
         printf '%b' "\e[0;32mAHbot\033[0m"
         echo
       else
         # off >
-        printf "[CMaNGOS]: "
         printf '%b' "\e[90mAHbot\033[0m"
         echo
       fi
