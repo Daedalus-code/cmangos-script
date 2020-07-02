@@ -13,7 +13,7 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20200706
+# V20200207
 # 4.0.7.2
 
 # codes >
@@ -1466,7 +1466,7 @@ EOF
         "1")
 
           cores=$(echo "1")
-          printf '%b' "[  0%] \e[0;32mBuilding with $cores core(s)"
+          printf '%b' "\e[0;32m[  0%] Building with $cores core(s)"
           echo
           make # 1 core
 
@@ -1475,7 +1475,7 @@ EOF
         "2")
 
           cores=$(echo "2")
-          printf '%b' "[  0%] \e[0;32mBuilding with $cores core(s)"
+          printf '%b' "\e[0;32m[  0%] Building with $cores core(s)"
           echo
           make -j2 # 2 cores
 
@@ -1484,7 +1484,7 @@ EOF
         "3")
 
           cores=$(echo "3")
-          printf '%b' "[  0%] \e[0;32mBuilding with $cores core(s)"
+          printf '%b' "\e[0;32m[  0%] Building with $cores core(s)"
           echo
           make -j3 # 3 cores
 
@@ -1493,7 +1493,7 @@ EOF
         "4")
 
           cores=$(echo "4")
-          printf '%b' "[  0%] \e[0;32mBuilding with $cores core(s)"
+          printf '%b' "\e[0;32m[  0%] Building with $cores core(s)"
           echo
           make -j4 # 4 cores
 
@@ -1718,7 +1718,7 @@ EOF
         "1")
 
           cores=$(echo "1")
-          printf '%b' "[  0%] \e[0;32mBuilding with $cores core(s)"
+          printf '%b' "\e[0;32m[  0%] Building with $cores core(s)"
           echo
           make # 1 core
 
@@ -1727,7 +1727,7 @@ EOF
         "2")
 
           cores=$(echo "2")
-          printf '%b' "[  0%] \e[0;32mBuilding with $cores core(s)"
+          printf '%b' "\e[0;32m[  0%] Building with $cores core(s)"
           echo
           make -j2 # 2 cores
 
@@ -1736,7 +1736,7 @@ EOF
         "3")
 
           cores=$(echo "3")
-          printf '%b' "[  0%] \e[0;32mBuilding with $cores core(s)"
+          printf '%b' "\e[0;32m[  0%] Building with $cores core(s)"
           echo
           make -j3 # 3 cores
 
@@ -1745,7 +1745,7 @@ EOF
         "4")
 
           cores=$(echo "4")
-          printf '%b' "[  0%] \e[0;32mBuilding with $cores core(s)"
+          printf '%b' "\e[0;32m[  0%] Building with $cores core(s)"
           echo
           make -j4 # 4 cores
 
