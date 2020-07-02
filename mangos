@@ -1157,7 +1157,7 @@ EOF
         if [[ $REPLY =~ ^[Yy]$ ]]; then
 
           clear
-          printf "
+          printf '%b' "
 \e[31m      ._________________.
       |.---------------.|
       || \033[0mmangos>\e[31m       ||
@@ -1460,13 +1460,13 @@ Compiling using multiple cores:
  Q : (Q)uit
 
 EOF
-        read -n1 -s
+        read -r -n1 -s
         case "$REPLY" in
 
         "1")
 
-          cores=$(echo "1")
-          printf '%b' "\e[0;32m[  0%] Building with $cores core(s)"
+          cores=("1")
+          printf '%b' "\e[0;32m[  0%] Building with ${cores[0]} core(s)"
           echo
           make # 1 core
 
@@ -1474,8 +1474,8 @@ EOF
 
         "2")
 
-          cores=$(echo "2")
-          printf '%b' "\e[0;32m[  0%] Building with $cores core(s)"
+          cores=("2")
+          printf '%b' "\e[0;32m[  0%] Building with ${cores[0]} core(s)"
           echo
           make -j2 # 2 cores
 
@@ -1483,8 +1483,8 @@ EOF
 
         "3")
 
-          cores=$(echo "3")
-          printf '%b' "\e[0;32m[  0%] Building with $cores core(s)"
+          cores=("3")
+          printf '%b' "\e[0;32m[  0%] Building with ${cores[0]} core(s)"
           echo
           make -j3 # 3 cores
 
@@ -1492,8 +1492,8 @@ EOF
 
         "4")
 
-          cores=$(echo "4")
-          printf '%b' "\e[0;32m[  0%] Building with $cores core(s)"
+          cores=("4")
+          printf '%b' "\e[0;32m[  0%] Building with ${cores[0]} core(s)"
           echo
           make -j4 # 4 cores
 
@@ -1514,12 +1514,12 @@ EOF
         if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
           cpu_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
             cut -c -4 2>/dev/null)
-          cmake_temp=$(printf '%b' "CPU: \e[1;32m$cpu_temp\033[0m° with $cores core(s).")
+          cmake_temp=$(printf '%b' "CPU: \e[1;32m$cpu_temp\033[0m° with ${cores[0]} core(s).")
         else
           cmake_temp=$(printf '%b' "")
         fi
         echo
-        printf "$cmake_temp
+        printf '%b' "$cmake_temp
 
 Select install operation"
         echo
@@ -1712,13 +1712,13 @@ Compiling using multiple cores:
  Q : (Q)uit
 
 EOF
-        read -n1 -s
+        read -r -n1 -s
         case "$REPLY" in
 
         "1")
 
-          cores=$(echo "1")
-          printf '%b' "\e[0;32m[  0%] Building with $cores core(s)"
+          cores=("1")
+          printf '%b' "\e[0;32m[  0%] Building with ${cores[0]} core(s)"
           echo
           make # 1 core
 
@@ -1726,8 +1726,8 @@ EOF
 
         "2")
 
-          cores=$(echo "2")
-          printf '%b' "\e[0;32m[  0%] Building with $cores core(s)"
+          cores=("2")
+          printf '%b' "\e[0;32m[  0%] Building with ${cores[0]} core(s)"
           echo
           make -j2 # 2 cores
 
@@ -1735,8 +1735,8 @@ EOF
 
         "3")
 
-          cores=$(echo "3")
-          printf '%b' "\e[0;32m[  0%] Building with $cores core(s)"
+          cores=("3")
+          printf '%b' "\e[0;32m[  0%] Building with ${cores[0]} core(s)"
           echo
           make -j3 # 3 cores
 
@@ -1744,8 +1744,8 @@ EOF
 
         "4")
 
-          cores=$(echo "4")
-          printf '%b' "\e[0;32m[  0%] Building with $cores core(s)"
+          cores=("4")
+          printf '%b' "\e[0;32m[  0%] Building with ${cores[0]} core(s)"
           echo
           make -j4 # 4 cores
 
@@ -1766,12 +1766,12 @@ EOF
         if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
           cpu_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
             cut -c -4 2>/dev/null)
-          cmake_temp=$(printf '%b' "CPU: \e[1;32m$cpu_temp\033[0m° with $cores core(s).")
+          cmake_temp=$(printf '%b' "CPU: \e[1;32m$cpu_temp\033[0m° with ${cores[0]} core(s).")
         else
           cmake_temp=$(printf '%b' "")
         fi
         echo
-        printf "$cmake_temp
+        printf '%b' "$cmake_temp
 
 Select install operation"
         echo
@@ -2036,7 +2036,7 @@ database user, client/server is needed."
       if [[ $REPLY =~ ^[Yy]$ ]]; then
 
         # restart mysql service, if it exists >
-        if sudo service mysql status &>/dev/null | grep -E 'mysql'; then
+        if sudo service mysql status 2>/dev/null | grep -E 'mysql'; then
           echo "No database system found
 Please install mysql or mariadb database/client"
           echo
@@ -2047,7 +2047,7 @@ Please install mysql or mariadb database/client"
         fi
 
         # restart mariadb service, if it exists >
-        if sudo service mariadb status &>/dev/null | grep -E 'mariadb'; then
+        if sudo service mariadb status 2>/dev/null | grep -E 'mariadb'; then
           echo "No database system found
 Please install mysql or mariadb database/client"
           echo
@@ -3562,7 +3562,7 @@ Check log for which database needs 'applying updates'"
         sudo rm -r "$folder_helper"
         printf "[\e[0;32mok\033[0m] -> cmangos-script removed."
         echo
-        sudo mkdir "$folder_install" &>/dev/null
+        sudo mkdir "${folder_install:?}" &>/dev/null
         printf '%b' "[\e[0;32mok\033[0m] -> $folder_install/> git clone.."
         echo
         cd "$folder_install" || exit
