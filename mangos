@@ -1757,8 +1757,8 @@ EOF
 
           ;;
 
-        "Q") exit ;;
-        "q") echo "case sensitive!!" ;;
+        "q") exit ;;
+        "Q") echo "case sensitive!!" ;;
         *)
           echo "Invalid option. Restart please.."
           exit
