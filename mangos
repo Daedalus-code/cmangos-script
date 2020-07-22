@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202207
-# 4.0.9.1
+# 4.1.1.3
 
 # codes >
 while :; do
@@ -532,7 +532,7 @@ Are You Sure? (y/n) " -n 1 -r
 
       printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.0.9.1 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.1.1.3 ]\033[0m
 
       $cm_uptime
 
@@ -3020,87 +3020,107 @@ Check log for which database needs 'applying updates'"
 
   "r")
 
-    # codes >
-    # realmd.log
-    realmd_log_empty="\e[0;33mEmpty\033[0m -> "
-    realmd_log_error="\033[0;31mError\033[0m -> "
-    realmd_log_failed="\033[0;31mRealm halted or failed\033[0m"
-    realmd_log_ok="\e[0;32mok\033[0m"
-
-    # server.log
-    server_log_initialized="\e[0;32mWorld initialized\033[0m"
-    server_log_serious="\033[1;31mSerious\033[0m -> "
-    server_log_failed="\033[0;31mWorld halted or failed\033[0m"
-    server_log_error="\033[0;31mError\033[0m -> "
-    server_log_empty="\e[0;33mEmpty\033[0m -> "
-    server_log_ok="\e[0;32mok\033[0m"
-
-    # service status
-    world_service=mangosd
-    realm_service=realmd
-    # codes done
-
-    HEIGHT=10
-    WIDTH=30
-    CHOICE_HEIGHT=4
-    BACKTITLE="restart server"
-    TITLE="Service Control"
-    MENU="Choose one option:"
-
-    OPTIONS=(1 "Restart server"
-      2 "Restart realmd"
-      3 "Restart mangosd")
-
-    CHOICE=$(dialog --clear \
-      --backtitle "$BACKTITLE" \
-      --title "$TITLE" \
-      --menu "$MENU" \
-      $HEIGHT $WIDTH $CHOICE_HEIGHT \
-      "${OPTIONS[@]}" \
-      2>&1 >/dev/tty)
-
-    clear
-    case $CHOICE in
-
-    # restart realmd,mangos >
-
-    "1")
-
-      read -r -p "Restart realmd,mangos? (y/n) " -n 1 -r
-      echo
-      if [[ $REPLY =~ ^[Yy]$ ]]; then
-
-        # keep old logs >
-        cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
-        cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
-        # done
-        printf "\e[1;32mRestarting\033[0m server"
+    # check if 'mangosd.conf' are installed >
+    FILE="$folder_core/run/etc/mangosd.conf"
+    if [ ! -f "$FILE" ]; then
+      # check if 'realmd.conf' are installed >
+      FILE="$folder_core/run/etc/realmd.conf"
+      if [ ! -f "$FILE" ]; then
+        echo "Please edit realmd.conf.dist into realmd.conf"
+        printf '%b' "\e[90mrealmd.conf\033[0m not found."
         echo
-        echo -ne '(0%)\r'
-        sleep 1
-        sudo service realmd restart &>/dev/null
-        echo -ne '(50%)\r'
-        sleep 1
-        sudo service mangosd restart &>/dev/null
-        echo -ne '(100%)\r'
-        sleep 1
         echo
-        echo "Please wait"
+        read -r -p "hit Enter to go back." </dev/tty
+        echo
+      else
+        echo "Please edit mangosd.conf.dist into mangosd.conf"
+        printf '%b' "\e[90mmangosd.conf\033[0m not found."
+        echo
+        echo
+        read -r -p "hit Enter to go back." </dev/tty
+        echo
+        else
+        # codes >
+        # realmd.log
+        realmd_log_empty="\e[0;33mEmpty\033[0m -> "
+        realmd_log_error="\033[0;31mError\033[0m -> "
+        realmd_log_failed="\033[0;31mRealm halted or failed\033[0m"
+        realmd_log_ok="\e[0;32mok\033[0m"
 
-        # wait wordlist >
-        # note - don't put any space(s) between keywords.
+        # server.log
+        server_log_initialized="\e[0;32mWorld initialized\033[0m"
+        server_log_serious="\033[1;31mSerious\033[0m -> "
+        server_log_failed="\033[0;31mWorld halted or failed\033[0m"
+        server_log_error="\033[0;31mError\033[0m -> "
+        server_log_empty="\e[0;33mEmpty\033[0m -> "
+        server_log_ok="\e[0;32mok\033[0m"
 
-        # realmd >
-        wordlist_realmd=(".*[A]\sYou\shave:\s-->*.
+        # service status
+        world_service=mangosd
+        realm_service=realmd
+        # codes done
+
+        HEIGHT=10
+        WIDTH=30
+        CHOICE_HEIGHT=4
+        BACKTITLE="restart server"
+        TITLE="Service Control"
+        MENU="Choose one option:"
+
+        OPTIONS=(1 "Restart server"
+          2 "Restart realmd"
+          3 "Restart mangosd")
+
+        CHOICE=$(dialog --clear \
+          --backtitle "$BACKTITLE" \
+          --title "$TITLE" \
+          --menu "$MENU" \
+          $HEIGHT $WIDTH $CHOICE_HEIGHT \
+          "${OPTIONS[@]}" \
+          2>&1 >/dev/tty)
+
+        clear
+        case $CHOICE in
+
+        # restart realmd,mangos >
+
+        "1")
+
+          read -r -p "Restart realmd,mangos? (y/n) " -n 1 -r
+          echo
+          if [[ $REPLY =~ ^[Yy]$ ]]; then
+
+            # keep old logs >
+            cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
+            cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
+            # done
+            printf "\e[1;32mRestarting\033[0m server"
+            echo
+            echo -ne '(0%)\r'
+            sleep 1
+            sudo service realmd restart &>/dev/null
+            echo -ne '(50%)\r'
+            sleep 1
+            sudo service mangosd restart &>/dev/null
+            echo -ne '(100%)\r'
+            sleep 1
+            echo
+            echo "Please wait"
+
+            # wait wordlist >
+            # note - don't put any space(s) between keywords.
+
+            # realmd >
+            wordlist_realmd=(".*[A]\sYou\shave:\s-->*.
 .*[B]\sYou\sneed:\s-->*.
 .*Added\srealm\sid*.
 .*Can't\sconnect\sto\slocal\sMySQL*.
 .*cannot\sfind\sthe\sversion\sinfo*.
 .*database\sis\smissing\sor\scorrupt*.
 .*reinstall\syour*.")
-        # mangosd >
+            # mangosd >
 
-        wordlist_mangosd=(".*[A]\sYou\shave:\s-->*.
+            wordlist_mangosd=(".*[A]\sYou\shave:\s-->*.
 .*[B]\sYou\sneed:\s-->*.
 .*Can't\sconnect\sto\slocal\sMySQL*.
 .*core\sdumped*.
@@ -3121,299 +3141,299 @@ Check log for which database needs 'applying updates'"
 .*TIME*.
 .*You\smust\sapply\sall\supdates\safter\s[A]\sto\s[B]*.")
 
-        # wait wordlist done
+            # wait wordlist done
 
-        # wait for realmd & mangosd to fill up logs >
+            # wait for realmd & mangosd to fill up logs >
 
-        # Realmd.log >
-        tail -f "$folder_core"/run/logs/Realmd.log 2>/dev/null |
-          { grep -q -m 1 "${wordlist_realmd[@]}" && pkill -P $$ -x tail 2>/dev/null; }
-        # Server.log >
-        tail -f "$folder_core"/run/logs/Server.log 2>/dev/null |
-          { grep -q -m 1 "${wordlist_mangosd[@]}" && pkill -P $$ -x tail 2>/dev/null; }
-        # wait for realmd & mangosd to fill up logs done
+            # Realmd.log >
+            tail -f "$folder_core"/run/logs/Realmd.log 2>/dev/null |
+              { grep -q -m 1 "${wordlist_realmd[@]}" && pkill -P $$ -x tail 2>/dev/null; }
+            # Server.log >
+            tail -f "$folder_core"/run/logs/Server.log 2>/dev/null |
+              { grep -q -m 1 "${wordlist_mangosd[@]}" && pkill -P $$ -x tail 2>/dev/null; }
+            # wait for realmd & mangosd to fill up logs done
 
-        clear
+            clear
 
-        # realmd service
-        case "$(pidof $realm_service | wc -w)" in
-        0) printf "Realm [\033[1;31minactive\033[0m] " ;;
-        1) printf "Realm [\e[0;32mactive\033[0m] " ;;
-        *) printf "Realm [\e[0;33mok?\033[0m] " ;;
-        esac
+            # realmd service
+            case "$(pidof $realm_service | wc -w)" in
+            0) printf "Realm [\033[1;31minactive\033[0m] " ;;
+            1) printf "Realm [\e[0;32mactive\033[0m] " ;;
+            *) printf "Realm [\e[0;33mok?\033[0m] " ;;
+            esac
 
-        # mangosd service
-        case "$(pidof $world_service | wc -w)" in
-        0) printf "World [\033[1;31minactive\033[0m] " ;;
-        1) printf "World [\e[0;32mactive\033[0m] " ;;
-        *) printf "World [\e[0;33mok?\033[0m] " ;;
-        esac
+            # mangosd service
+            case "$(pidof $world_service | wc -w)" in
+            0) printf "World [\033[1;31minactive\033[0m] " ;;
+            1) printf "World [\e[0;32mactive\033[0m] " ;;
+            *) printf "World [\e[0;33mok?\033[0m] " ;;
+            esac
 
-        echo
-        # realmd.log
-        printf "\e[1;32m<------------------------------------------------------>\033[0m"
-        echo
-        # if realm failed
-        if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
-          # if any, print "Realm failed or halted"
-          echo
-          printf '%b' "$realmd_log_failed"
-          echo
-        else
-          # look for empty tables
-          if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
-            # if any, print "empty"
-            printf "Server.log "
-            printf '%b' "$realmd_log_empty"
-            # count empty inside log
-            grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2>/dev/null
-          fi
-          # look for error
-          if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
-            # if any, print "error"
-            printf "Realmd.log "
-            printf '%b' "$realmd_log_error"
-            # count errors inside log
-            grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2>/dev/null
-          # if nothing, print "ok"
-          else
-            printf "Realmd.log "
-            printf '%b' "$realmd_log_ok"
             echo
-          fi
-          # this database (realmd) is out of date!
-          if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
+            # realmd.log
+            printf "\e[1;32m<------------------------------------------------------>\033[0m"
             echo
-            printf '%b' "Database is out of date!"
-            echo
-          fi
-          # databases is missing or corrupt.
-          if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
-            echo
-            printf '%b' "Database is missing or corrupt!"
-            echo
-          fi
-          # reinstall your (realmd) database
-          if grep -E -q "reinstall\syour|\sUnknown\sdatabase\s|Reinstall\syour\s[REALMD]\sdatabase\s" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
-            echo
-            printf '%b' "Reinstall your database!"
-            echo
-          fi
-          # your realmd.conf version indicates your conf file is out of date
-          if grep -E -q ".*Your\srealmd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
-            echo
-            printf "\033[1;31mWARNING\033[0m "
-            printf '%b' "realmd.conf is out of date!"
-            echo
-          fi
-        fi
-        echo
-        tail "$folder_core"/run/logs/Realmd.log 2>/dev/null
-        # server.log
-        printf "\e[1;32m<------------------------------------------------------>\033[0m"
-        echo
-        # if world failed
-        if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log 2>/dev/null; then
-          # if any, print "World failed or halted"
-          echo
-          printf '%b' "$server_log_failed"
-          echo
-        else
-          # look for empty tables
-          if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2>/dev/null; then
-            # if any, print "empty"
-            printf "Server.log "
-            printf '%b' "$server_log_empty"
-            # count empty inside log
-            grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2>/dev/null
-          fi
-          # look for error
-          if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log 2>/dev/null; then
-            # if any, print "error"
-            printf "Server.log "
-            printf '%b' "$server_log_error"
-            # count errors inside log
-            grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log 2>/dev/null
-            # look for serious error
-            if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2>/dev/null; then
-              # if any, print "serious"
-              printf "Server.log "
-              printf '%b' "$server_log_serious"
-              # count serious errors inside log
-              grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2>/dev/null
+            # if realm failed
+            if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
+              # if any, print "Realm failed or halted"
+              echo
+              printf '%b' "$realmd_log_failed"
+              echo
+            else
+              # look for empty tables
+              if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
+                # if any, print "empty"
+                printf "Server.log "
+                printf '%b' "$realmd_log_empty"
+                # count empty inside log
+                grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2>/dev/null
+              fi
+              # look for error
+              if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
+                # if any, print "error"
+                printf "Realmd.log "
+                printf '%b' "$realmd_log_error"
+                # count errors inside log
+                grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2>/dev/null
+              # if nothing, print "ok"
+              else
+                printf "Realmd.log "
+                printf '%b' "$realmd_log_ok"
+                echo
+              fi
+              # this database (realmd) is out of date!
+              if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
+                echo
+                printf '%b' "Database is out of date!"
+                echo
+              fi
+              # databases is missing or corrupt.
+              if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
+                echo
+                printf '%b' "Database is missing or corrupt!"
+                echo
+              fi
+              # reinstall your (realmd) database
+              if grep -E -q "reinstall\syour|\sUnknown\sdatabase\s|Reinstall\syour\s[REALMD]\sdatabase\s" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
+                echo
+                printf '%b' "Reinstall your database!"
+                echo
+              fi
+              # your realmd.conf version indicates your conf file is out of date
+              if grep -E -q ".*Your\srealmd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
+                echo
+                printf "\033[1;31mWARNING\033[0m "
+                printf '%b' "realmd.conf is out of date!"
+                echo
+              fi
             fi
-          # if nothing, print "ok"
-          else
-            printf "Server.log "
-            printf '%b' "$server_log_ok"
             echo
+            tail "$folder_core"/run/logs/Realmd.log 2>/dev/null
+            # server.log
+            printf "\e[1;32m<------------------------------------------------------>\033[0m"
+            echo
+            # if world failed
+            if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+              # if any, print "World failed or halted"
+              echo
+              printf '%b' "$server_log_failed"
+              echo
+            else
+              # look for empty tables
+              if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2>/dev/null; then
+                # if any, print "empty"
+                printf "Server.log "
+                printf '%b' "$server_log_empty"
+                # count empty inside log
+                grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log 2>/dev/null
+              fi
+              # look for error
+              if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log 2>/dev/null; then
+                # if any, print "error"
+                printf "Server.log "
+                printf '%b' "$server_log_error"
+                # count errors inside log
+                grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log 2>/dev/null
+                # look for serious error
+                if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+                  # if any, print "serious"
+                  printf "Server.log "
+                  printf '%b' "$server_log_serious"
+                  # count serious errors inside log
+                  grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2>/dev/null
+                fi
+              # if nothing, print "ok"
+              else
+                printf "Server.log "
+                printf '%b' "$server_log_ok"
+                echo
+              fi
+              # world failed
+              if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+                # if any, print "World failed"
+                echo
+                printf '%b' "$server_log_failed"
+                echo
+              fi
+              # this database (mangosd) is out of date!
+              if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+                echo
+                printf '%b' "Database is out of date!"
+                echo
+              fi
+              # databases is missing or corrupt.
+              if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$folder_core"/run/logs/Server.log 2>/dev/null; then
+                echo
+                printf '%b' "Database is missing or corrupt!"
+                echo
+              fi
+              # reinstall your (mangosd) database
+              if grep -E -q "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+                echo
+                printf '%b' "Reinstall your database!"
+                echo
+              fi
+              # can't connect to local mysql through socket
+              if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$folder_core"/run/logs/Server.log 2>/dev/null; then
+                echo
+                printf '%b' "Can't connect to local MySQL!"
+                echo
+              fi
+              # your mangosd.conf version indicates your conf file is out of date
+              if grep -E -q ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$folder_core"/run/logs/Server.log 2>/dev/null; then
+                echo
+                printf "\033[1;31mWARNING\033[0m "
+                printf '%b' "mangosd.conf is out of date!"
+                echo
+              fi
+              # get startup time >
+              startup_time=$(grep "SERVER\sSTARTUP\sTIME*." wow/mangos-classic/run/logs/Server.log 2>/dev/null |
+                cut -d\  -f6-9 2>/dev/null)
+              # world initialized
+              if grep -E -q "World\sinitialized" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+                # if any, print "World initialized"
+                echo
+                printf '%b' "$server_log_initialized $startup_time"
+                echo
+              fi
+              # Playerbot loaded >
+              if grep -E -q "Playerbot: Using configuration file" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+                # if any, print "Playerbot ok"
+                printf '%b' "\e[0;32mPlayerbot\033[0m"
+                echo
+              else
+                # off >
+                printf '%b' "\e[90mPlayerbot\033[0m"
+                echo
+              fi
+              # ahbot loaded and initialized >
+              if grep -E -q "AHBot seller configuration data loaded and" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+                # if any, print "AHbot ok"
+                printf '%b' "\e[0;32mAHbot\033[0m"
+                echo
+              else
+                # off >
+                printf '%b' "\e[90mAHbot\033[0m"
+                echo
+              fi
+            fi
+            echo
+            printf "\e[1;32m>\033[0m hit Any key to go back."
+            echo
+            read -r -n 1 -p "Server.log (tail/follow/nano) / Realmd.log (Nano) / logs (lnav)" ans
+            echo
+            echo
+            case $ans in
+            "t")
+              tail "$folder_core"/run/logs/Server.log 2>/dev/null
+              echo
+              printf "\e[1;32m<------------------------------------------------------>\033[0m"
+              echo
+              read -r -p "Press Enter to continue" </dev/tty
+              ;;
+            "f")
+              echo
+              tail -f "$folder_core"/run/logs/Server.log 2>/dev/null
+              ;;
+            "n")
+              echo
+              nano "$folder_core"/run/logs/Server.log
+              ;;
+            "N")
+              echo
+              nano "$folder_core"/run/logs/Realmd.log
+              ;;
+
+              # lnav >
+
+            "l")
+              echo
+              # codes >
+              logs=("$folder_core"/run/logs/EventAIErrors.log
+                "$folder_core"/run/logs/DBErrors.log
+                "$folder_core"/run/logs/Realmd.log
+                "$folder_core"/run/logs/Server.log)
+              # codes done
+              if ! [ -x "$(command -v lnav)" ]; then
+                sudo apt install lnav -y &>/dev/null
+              fi
+              lnav "${logs[@]}" 2>/dev/null
+              ;;
+
+            esac
           fi
-          # world failed
-          if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log 2>/dev/null; then
-            # if any, print "World failed"
-            echo
-            printf '%b' "$server_log_failed"
-            echo
-          fi
-          # this database (mangosd) is out of date!
-          if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Server.log 2>/dev/null; then
-            echo
-            printf '%b' "Database is out of date!"
-            echo
-          fi
-          # databases is missing or corrupt.
-          if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$folder_core"/run/logs/Server.log 2>/dev/null; then
-            echo
-            printf '%b' "Database is missing or corrupt!"
-            echo
-          fi
-          # reinstall your (mangosd) database
-          if grep -E -q "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$folder_core"/run/logs/Server.log 2>/dev/null; then
-            echo
-            printf '%b' "Reinstall your database!"
-            echo
-          fi
-          # can't connect to local mysql through socket
-          if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$folder_core"/run/logs/Server.log 2>/dev/null; then
-            echo
-            printf '%b' "Can't connect to local MySQL!"
-            echo
-          fi
-          # your mangosd.conf version indicates your conf file is out of date
-          if grep -E -q ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$folder_core"/run/logs/Server.log 2>/dev/null; then
-            echo
-            printf "\033[1;31mWARNING\033[0m "
-            printf '%b' "mangosd.conf is out of date!"
-            echo
-          fi
-          # get startup time >
-          startup_time=$(grep "SERVER\sSTARTUP\sTIME*." wow/mangos-classic/run/logs/Server.log 2>/dev/null |
-            cut -d\  -f6-9 2>/dev/null)
-          # world initialized
-          if grep -E -q "World\sinitialized" "$folder_core"/run/logs/Server.log 2>/dev/null; then
-            # if any, print "World initialized"
-            echo
-            printf '%b' "$server_log_initialized $startup_time"
-            echo
-          fi
-          # Playerbot loaded >
-          if grep -E -q "Playerbot: Using configuration file" "$folder_core"/run/logs/Server.log 2>/dev/null; then
-            # if any, print "Playerbot ok"
-            printf '%b' "\e[0;32mPlayerbot\033[0m"
-            echo
-          else
-            # off >
-            printf '%b' "\e[90mPlayerbot\033[0m"
-            echo
-          fi
-          # ahbot loaded and initialized >
-          if grep -E -q "AHBot seller configuration data loaded and" "$folder_core"/run/logs/Server.log 2>/dev/null; then
-            # if any, print "AHbot ok"
-            printf '%b' "\e[0;32mAHbot\033[0m"
-            echo
-          else
-            # off >
-            printf '%b' "\e[90mAHbot\033[0m"
-            echo
-          fi
-        fi
-        echo
-        printf "\e[1;32m>\033[0m hit Any key to go back."
-        echo
-        read -r -n 1 -p "Server.log (tail/follow/nano) / Realmd.log (Nano) / logs (lnav)" ans
-        echo
-        echo
-        case $ans in
-        "t")
-          tail "$folder_core"/run/logs/Server.log 2>/dev/null
-          echo
-          printf "\e[1;32m<------------------------------------------------------>\033[0m"
-          echo
-          read -r -p "Press Enter to continue" </dev/tty
+
           ;;
-        "f")
-          echo
-          tail -f "$folder_core"/run/logs/Server.log 2>/dev/null
-          ;;
-        "n")
-          echo
-          nano "$folder_core"/run/logs/Server.log
-          ;;
-        "N")
-          echo
-          nano "$folder_core"/run/logs/Realmd.log
-          ;;
 
-          # lnav >
+          # restart realmd,mangos done
 
-        "l")
+          # restart realmd >
+
+        "2")
+
+          read -r -p "Restart realmd? (y/n) " -n 1 -r
           echo
-          # codes >
-          logs=("$folder_core"/run/logs/EventAIErrors.log
-            "$folder_core"/run/logs/DBErrors.log
-            "$folder_core"/run/logs/Realmd.log
-            "$folder_core"/run/logs/Server.log)
-          # codes done
-          if ! [ -x "$(command -v lnav)" ]; then
-            sudo apt install lnav -y &>/dev/null
+          if [[ $REPLY =~ ^[Yy]$ ]]; then
+
+            # keep old logs >
+            cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
+            # done
+            printf "\e[1;32mRestarting\033[0m realmd"
+            echo
+            echo "Please wait"
+            sleep 1
+            sudo service realmd restart &>/dev/null
+            sleep 1
+            echo
           fi
-          lnav "${logs[@]}" 2>/dev/null
+
           ;;
 
-        esac
-      fi
+          # restart realmd done
 
-      ;;
+          # restart mangosd >
 
-      # restart realmd,mangos done
+        "3")
 
-      # restart realmd >
+          read -r -p "Restart mangosd? (y/n) " -n 1 -r
+          echo
+          if [[ $REPLY =~ ^[Yy]$ ]]; then
 
-    "2")
+            # keep old logs >
+            cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
+            # done
+            printf "\e[1;32mRestarting\033[0m mangosd"
+            echo
+            sleep 1
+            sudo service mangosd restart &>/dev/null
+            sleep 1
+            echo "Please wait"
 
-      read -r -p "Restart realmd? (y/n) " -n 1 -r
-      echo
-      if [[ $REPLY =~ ^[Yy]$ ]]; then
+            # wait wordlist >
+            # note - don't put any space(s) between keywords.
 
-        # keep old logs >
-        cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
-        # done
-        printf "\e[1;32mRestarting\033[0m realmd"
-        echo
-        echo "Please wait"
-        sleep 1
-        sudo service realmd restart &>/dev/null
-        sleep 1
-        echo
-      fi
-
-      ;;
-
-      # restart realmd done
-
-      # restart mangosd >
-
-    "3")
-
-      read -r -p "Restart mangosd? (y/n) " -n 1 -r
-      echo
-      if [[ $REPLY =~ ^[Yy]$ ]]; then
-
-        # keep old logs >
-        cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
-        # done
-        printf "\e[1;32mRestarting\033[0m mangosd"
-        echo
-        sleep 1
-        sudo service mangosd restart &>/dev/null
-        sleep 1
-        echo "Please wait"
-
-        # wait wordlist >
-        # note - don't put any space(s) between keywords.
-
-        # mangosd >
-        wordlist_mangosd=(".*[A]\sYou\shave:\s-->*.
+            # mangosd >
+            wordlist_mangosd=(".*[A]\sYou\shave:\s-->*.
 .*[B]\sYou\sneed:\s-->*.
 .*Can't\sconnect\sto\slocal\sMySQL*.
 .*core\sdumped*.
@@ -3434,21 +3454,23 @@ Check log for which database needs 'applying updates'"
 .*TIME*.
 .*You\smust\sapply\sall\supdates\safter\s[A]\sto\s[B]*.")
 
-        # wait wordlist done
+            # wait wordlist done
 
-        # wait for mangosd to fill up logs >
+            # wait for mangosd to fill up logs >
 
-        # Server.log >
-        tail -f "$folder_core"/run/logs/Server.log 2>/dev/null |
-          { grep -q -m 1 "${wordlist_mangosd[@]}" && pkill -P $$ -x tail 2>/dev/null; }
-        # wait for mangosd to fill up logs done
+            # Server.log >
+            tail -f "$folder_core"/run/logs/Server.log 2>/dev/null |
+              { grep -q -m 1 "${wordlist_mangosd[@]}" && pkill -P $$ -x tail 2>/dev/null; }
+            # wait for mangosd to fill up logs done
+          fi
+
+          ;;
+
+          # restart mangosd done
+
+        esac
       fi
-
-      ;;
-
-      # restart mangosd done
-
-    esac
+    fi
 
     ;;
 
