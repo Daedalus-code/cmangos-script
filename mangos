@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202207
-# 4.0.9.3
+# 4.0.9.1
 
 # codes >
 while :; do
@@ -532,7 +532,7 @@ Are You Sure? (y/n) " -n 1 -r
 
       printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.0.9.3 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.0.9.1 ]\033[0m
 
       $cm_uptime
 
@@ -1464,8 +1464,7 @@ Compiling using multiple cores:
  2 : 2 cores
  3 : 3 cores
  4 : 4 cores
-
- Q : (Q)uit
+ q : quit
 
 EOF
         read -r -n1 -s
@@ -1507,8 +1506,8 @@ EOF
 
           ;;
 
-        "Q") exit ;;
-        "q") echo "case sensitive!!" ;;
+        "q") exit ;;
+        "Q") echo "case sensitive!!" ;;
         *)
           echo "Invalid option. Restart please.."
           exit
@@ -1716,8 +1715,7 @@ Compiling using multiple cores:
  2 : 2 cores
  3 : 3 cores
  4 : 4 cores
-
- Q : (Q)uit
+ q : quit
 
 EOF
         read -r -n1 -s
