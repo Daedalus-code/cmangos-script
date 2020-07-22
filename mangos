@@ -3348,7 +3348,7 @@ Check log for which database needs 'applying updates'"
               echo
             fi
             # ahbot loaded and initialized >
-            if grep -E -q "AHBot seller configuration data loaded and" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+            if grep -E -q "Initialize AuctionHouseBot..." "$folder_core"/run/logs/Server.log 2>/dev/null; then
               # if any, print "AHbot ok"
               printf '%b' "\e[0;32mAHbot\033[0m"
               echo
@@ -3851,7 +3851,7 @@ Check log for which database needs 'applying updates'"
         echo
       fi
       # ahbot loaded and initialized >
-      if grep -E -q "AHBot seller configuration data loaded and" "$folder_core"/run/logs/Server.log 2>/dev/null; then
+      if grep -E -q "Initialize AuctionHouseBot..." "$folder_core"/run/logs/Server.log 2>/dev/null; then
         # if any, print "AHbot ok"
         printf '%b' "\e[0;32mAHbot\033[0m"
         echo
