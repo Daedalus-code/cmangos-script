@@ -1401,7 +1401,7 @@ EOF
       if [[ $REPLY =~ ^[Yy]$ ]]; then
 
         if ! [ -x "$(command -v "${packagelist[@]}")" ]; then
-          sudo apt-get install "${packagelist[@]}" -y &>/dev/null
+          sudo apt-get install "${packagelist[@]}" -y
         fi
         printf "\e[0;31mShutting down\033[0m realmd/mangosd service"
         echo
@@ -1645,7 +1645,7 @@ Check if correct information, or just restart server."
       if [[ $REPLY =~ ^[Yy]$ ]]; then
 
         if ! [ -x "$(command -v "${packagelist[@]}")" ]; then
-          sudo apt-get install "${packagelist[@]}" -y &>/dev/null
+          sudo apt-get install "${packagelist[@]}" -y
         fi
         printf "\e[0;31mShutting down\033[0m realmd/mangosd service"
         echo
@@ -1910,7 +1910,7 @@ Select install operation"
 
       "1") # install mariadb >
 
-        sudo apt-get install "${packagelist_maria[@]}" -y &>/dev/null
+        sudo apt-get install "${packagelist_maria[@]}" -y
         sudo service mariadb stop &>/dev/null
         sudo service mariadb start &>/dev/null
 
@@ -1918,7 +1918,7 @@ Select install operation"
 
       "2") # install mysql >
 
-        sudo apt-get install "${packagelist_mysql[@]}" -y &>/dev/null
+        sudo apt-get install "${packagelist_mysql[@]}" -y
         sudo service mysql stop &>/dev/null
         sudo service mysql start &>/dev/null
 
@@ -1958,13 +1958,13 @@ This is needed to operate local/remote database"
 
       "1") # install mariadb-client >
 
-        sudo apt-get install "${packagelist_client_maria[@]}" -y &>/dev/null
+        sudo apt-get install "${packagelist_client_maria[@]}" -y
 
         ;;
 
       "2") # install mysql-client >
 
-        sudo apt-get install "${packagelist_client_mysql[@]}" -y &>/dev/null
+        sudo apt-get install "${packagelist_client_mysql[@]}" -y
 
         ;;
 
