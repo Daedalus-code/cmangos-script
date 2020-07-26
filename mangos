@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202707
-# 4.1.6.3
+# 4.1.5.3
 
 # codes >
 while :; do
@@ -548,7 +548,7 @@ Are You Sure? (y/n) " -n 1 -r
 
       printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.1.6.3 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.1.5.3 ]\033[0m
 
       $cm_uptime
 
@@ -1156,16 +1156,6 @@ EOF
 
       "r")
 
-        # codes >
-        # cpu temp >
-        if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
-          cpu_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
-            cut -c -4 2>/dev/null)
-          print_cpu_temp=$(printf '%b' "$cpu_temp c\e[31m        ||")
-        else
-          print_cpu_temp=$(printf '%b' "\e[31m              ||")
-        fi
-        # codes done
         echo
         read -r -p " Want to login? (y/n) " -n 1 -r
         echo
@@ -1180,7 +1170,7 @@ EOF
       ||               ||
       ||               ||
       ||               ||
-      || \033[0m$print_cpu_temp\e[31m
+      ||               ||
       ||_______________||
       /.-.-.-.-.-.-.-.-.\\
      /.-.-.-.-.-.-.-.-.-.\\
