@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20202407
-# 4.1.4.7
+# V20202607
+# 4.1.5.4
 
 # codes >
 while :; do
@@ -29,8 +29,15 @@ while :; do
   export NCURSES_NO_UTF8_ACS=1
 
   # get database info
-  on_count=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT SUM(online) FROM ${db_characters:?}.characters;" 2>/dev/null)
-  gu_count=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT count(*) FROM ${db_characters:?}.guild;" 2>/dev/null)
+  # check for connection >
+  FILE=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT SUM(online) FROM ${db_characters:?}.characters;" 2>/dev/null)
+  if [ ! -f "$FILE" ]; then
+    on_count=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT SUM(online) FROM ${db_characters:?}.characters;" 2>/dev/null)
+  fi
+  FILE=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT count(*) FROM ${db_characters:?}.guild;" 2>/dev/null)
+  if [ ! -f "$FILE" ]; then
+    gu_count=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT count(*) FROM ${db_characters:?}.guild;" 2>/dev/null)
+  fi
 
   # get date
   NOW="$(date +"%m.%d.%Y")"
@@ -532,7 +539,7 @@ Are You Sure? (y/n) " -n 1 -r
 
       printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.1.4.7 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.1.5.4 ]\033[0m
 
       $cm_uptime
 
