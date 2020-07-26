@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202707
-# 4.1.5.6
+# 4.1.6.3
 
 # codes >
 while :; do
@@ -29,9 +29,16 @@ while :; do
   export NCURSES_NO_UTF8_ACS=1
 
   # get database info
-  on_count=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT SUM(online) FROM ${db_characters:?}.characters;" 2>/dev/null)
-
-  gu_count=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT count(*) FROM ${db_characters:?}.guild;" 2>/dev/null)
+  if mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT SUM(online) FROM ${db_characters:?}.characters;" &>/dev/null; then
+    menu_on_count=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT SUM(online) FROM ${db_characters:?}.characters;" 2>/dev/null)
+  else
+    menu_on_count=$(printf '%b' "\033[1;31m0\033[0m")
+  fi
+  if mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT count(*) FROM ${db_characters:?}.guild;" &>/dev/null; then
+    menu_gu_count=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT count(*) FROM ${db_characters:?}.guild;" 2>/dev/null)
+  else
+    menu_gu_count=$(printf '%b' "\033[1;31m0\033[0m")
+  fi
 
   # get date
   NOW="$(date +"%m.%d.%Y")"
@@ -69,8 +76,8 @@ while :; do
            C(ontinued)-MaNGOS Helper
              --------------------
 EOF
-  echo "               Online Players $on_count"
-  echo "                   Guilds $gu_count"
+  echo "               Online Players $menu_on_count"
+  echo "                   Guilds $menu_gu_count"
   echo
   cat <<EOF
                 $load
@@ -541,7 +548,7 @@ Are You Sure? (y/n) " -n 1 -r
 
       printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.1.5.6 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.1.6.3 ]\033[0m
 
       $cm_uptime
 
