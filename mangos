@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20202707
-# 4.1.5.5
+# V20202907
+# 4.1.5.4
 
 # codes >
 while :; do
@@ -548,7 +548,7 @@ Are You Sure? (y/n) " -n 1 -r
 
       printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.1.5.5 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.1.5.4 ]\033[0m
 
       $cm_uptime
 
@@ -1227,7 +1227,7 @@ EOF
       sudo mkdir "$folder_wow" &>/dev/null
       sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
       cd "$folder_wow" || exit
-      git clone https://github.com/cmangos/mangos-classic.git
+      git clone "${github_cmangos:?}"
       echo "Done"
       sleep 1
     else
@@ -1264,7 +1264,7 @@ EOF
       sudo mkdir "$folder_wow" &>/dev/null
       sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
       cd "$folder_wow" || exit
-      git clone https://github.com/cmangos/classic-db.git
+      git clone "${github_database:?}"
       cd "$folder_db" || exit
       ./InstallFullDB.sh
       echo "Done"
@@ -1298,12 +1298,11 @@ EOF
     FILE="$folder_helper/README.md"
     if [ ! -f "$FILE" ]; then
       # fresh install ? >
-      echo "Cloning repository 'cmangos-script' Please wait
-(https://github.com/Daedalus-code/cmangos-script)"
+      echo "Cloning repository 'cmangos-script' Please wait"
       sudo mkdir "$folder_helper" &>/dev/null
       sudo chown -R "${user:?}":"${group:?}" "$folder_helper"
       cd "$folder_helper" || exit
-      git clone https://github.com/Daedalus-code/cmangos-script.git
+      git clone "${github_helper:?}"
       echo "Done"
       sleep 1
     else
@@ -1680,7 +1679,7 @@ Check if correct information, or just restart server."
         sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
         sudo rm -r "$folder_core"/build/ &>/dev/null
         cd "$folder_wow" || exit
-        git clone https://github.com/cmangos/mangos-classic.git 2>/dev/null
+        git clone "$github_cmangos" 2>/dev/null
         sudo mkdir "$folder_core"/build &>/dev/null
         sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
         mkdir "$folder_core"/run &>/dev/null
@@ -2446,7 +2445,7 @@ Please install mysql or mariadb database/client"
         cp "$folder_db"/InstallFullDB.config "$folder_wow" &>/dev/null
         sudo rm -r "$folder_db" &>/dev/null
         cd "$folder_wow" || exit
-        git clone https://github.com/cmangos/classic-db.git
+        git clone "$github_database"
         mv "$folder_wow"/*.config "$folder_db" &>/dev/null
         sudo chown -R "$user":"$group" "$folder_wow"
         printf '%b' "[\e[0;32mok\033[0m] "
@@ -3546,7 +3545,7 @@ Check log for which database needs 'applying updates'"
         # not installed
         sudo chown -R "$user":"$group" "$folder_install"
         cd "$folder_install" || exit
-        git clone https://github.com/Daedalus-code/cmangos-script.git
+        git clone "${github_helper:?}"
       else
         # installed
         read -r -p "Update/Install Helper? (y/n) " -n 1 -r
@@ -3635,7 +3634,7 @@ Check log for which database needs 'applying updates'"
         printf '%b' "[\e[0;32mok\033[0m] -> $folder_install/> git clone.."
         echo
         cd "$folder_install" || exit
-        git clone https://github.com/Daedalus-code/cmangos-script.git
+        git clone "$github_helper"
         sudo cp "$folder_helper"/mangos /usr/local/bin &>/dev/null
         printf "[\e[0;32mok\033[0m] -> Installing new release"
         sudo chmod +x /usr/local/bin/mangos
