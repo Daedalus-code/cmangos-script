@@ -12,7 +12,12 @@ realm_port="8085" # please edit if wrong.
 # cmake #
 #########
 
-cmake="-DCMAKE_INSTALL_PREFIX=/home/ubuntu/wow/mangos-classic/run -DBUILD_EXTRACTORS=ON -DPCH=1 -DDEBUG=0 -DBUILD_PLAYERBOT=OFF" # please edit if wrong.
+cmake="-DCMAKE_INSTALL_PREFIX=/home/ubuntu/wow/mangos-classic/run
+-DBUILD_EXTRACTORS=ON
+-DPCH=1
+-DDEBUG=0
+-DBUILD_PLAYERBOT=OFF
+-DBUILD_AHBOT=OFF" # please edit if wrong.
 
 ##########
 # SYSTEM #
@@ -21,6 +26,14 @@ cmake="-DCMAKE_INSTALL_PREFIX=/home/ubuntu/wow/mangos-classic/run -DBUILD_EXTRAC
 group="ubuntu" # please edit if wrong.
 user="ubuntu" # please edit if wrong.
 patch="CMaNGOS.patch" # please edit if wrong name.
+
+#######
+# GIT #
+#######
+
+github_helper="https://github.com/Daedalus-code/cmangos-script.git" # please edit if wrong.
+github_cmangos="https://github.com/cmangos/mangos-classic.git" # please edit if wrong.
+github_database="https://github.com/cmangos/classic-db.git" # please edit if wrong.
 
 #############
 # RA/NETCAT #
