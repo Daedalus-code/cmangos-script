@@ -47,11 +47,11 @@ Edit config file 'server.txt' with correct information.
 
 Edit mangos script at line 25:    
 ```source /scripts/server.txt # please edit if wrong.```  
-server.txt at line 42:  
+server.txt at line 55:  
 ```folder_helper="/scripts/cmangos-script" # please edit if wrong.```  
-server.txt at line 53:  
+server.txt at line 66:  
 ```sql_mycnf="/scripts/server.cnf" # please edit if wrong.```  
-server.txt at line 38:  
+server.txt at line 51:  
 ```folder_install="/scripts" # please edit if wrong.```  
   
 #### Planned Features  
