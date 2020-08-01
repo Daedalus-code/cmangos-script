@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20203107
-# 4.1.5.8
+# V20200108
+# 4.1.6.0
 
 # codes >
 while :; do
@@ -548,7 +548,7 @@ Are You Sure? (y/n) " -n 1 -r
 
       printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.1.5.8 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.1.6.0 ]\033[0m
 
       $cm_uptime
 
@@ -4009,25 +4009,27 @@ Check log for which database needs 'applying updates'"
       sudo apt-get install fping
     fi
     echo
-    printf "\e[1;32mOnline check\033[0m -> \e[1;32minternet\033[0m/\e[1;32mintranet\033[0m"
-    echo
-    echo "Checking.."
+    printf '%b' "Online check -> \e[92minternet\033[0m/\e[92mintranet\033[0m\n"
     echo
     # internet >
     if nc -z "$internet" "${realm_port:?}" 2>/dev/null; then
-      if fping -q -c 1 "$internet" &>/dev/null; then
-        printf '%b' "\e[0;32m✓\033[0m \e[1;90m$internet\033[0m $server_name\n"
-      else
-        printf '%b' "\033[1;31m✗\033[0m $internet - [ $server_name ]\n"
-      fi
+      PING_MS=$(fping -c 1 "$internet" 2>/dev/null |
+        grep -o '[0-9].[0-9][0-9] ms' 2>/dev/null)
+      PING_LOSS=$(fping -c 1 "$internet" 2>/dev/null |
+        grep -o '[0-100]% loss' 2>/dev/null)
+      printf '%b' "\e[0;32m✓\033[0m $internet - \e[96m$server_name\033[0m - $PING_MS - $PING_LOSS\n"
+    else
+      printf '%b' "\033[1;31m✗ \e[1;90m$internet - $server_name - \e[1;90m? ms - 100% loss\033[0m\n"
     fi
     # intranet >
     if nc -z "$intranet" "${realm_port:?}" 2>/dev/null; then
-      if fping -q -c 1 "$intranet" &>/dev/null; then
-        printf '%b' "\e[0;32m✓\033[0m \e[1;90m$intranet\033[0m $server_name_lan\n"
-      else
-        printf '%b' "\033[1;31m✗\033[0m $intranet - [ $server_name_lan ]\n"
-      fi
+      PING_MS=$(fping -c 1 "$intranet" 2>/dev/null |
+        grep -o '[0-9].[0-9][0-9] ms' 2>/dev/null)
+      PING_LOSS=$(fping -c 1 "$intranet" 2>/dev/null |
+        grep -o '[0-100]% loss' 2>/dev/null)
+      printf '%b' "\e[0;32m✓\033[0m $intranet - \e[96m$server_name_lan\033[0m - $PING_MS - $PING_LOSS\n"
+    else
+      printf '%b' "\033[1;31m✗ \e[1;90m$intranet - $server_name_lan - \e[1;90m? ms - 100% loss\033[0m\n"
     fi
     echo
     read -r -p "Press Enter to continue" </dev/tty
