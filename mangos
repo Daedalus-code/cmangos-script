@@ -13,7 +13,7 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20200108
+# V20200408
 # 4.1.6.0
 
 # codes >
@@ -95,14 +95,14 @@ EOF
 
        Start with checking for updates c)
 
-   A : login (command)      t : characters
-   a : create account       u : accounts
-   c : check for updates    g : guilds
-   m : update CMaNGOS       e : config
-   d : update Database      p : patch
-   w : update Helper        o : ping
-   s : shutdown server      l : logs
-   r : restart server       Q : quit
+   A : Login (command)      t : Characters
+   a : Create account       u : Accounts
+   c : Check for updates    g : Guilds
+   m : Update CMaNGOS       e : Config
+   d : Update Database      p : Patch
+   w : Update Helper        o : Ping
+   s : Shutdown server      l : Logs
+   r : Restart server       Q : Quit
 
 EOF
   read -r -n1 -s
@@ -557,14 +557,14 @@ Are You Sure? (y/n) " -n 1 -r
       World\e[0;32m.......:\033[0m$latest_world_built
       System\e[0;32m......:\033[0m$built_for
 
-      r : \e[0;35mlogin\033[0m   - remote access  service.mangosd\e[0;32m.:\033[0m $command_mangosd
-      l : \e[0;35mlogs\033[0m    - analyze logs   service.realmd\e[0;32m..:\033[0m $command_realmd
-      b : \e[0;35mbackup\033[0m  - new backup
-      h : \e[0;35mreset\033[0m   - reset --hard   characters.sql\e[0;32m..:\033[0m $charac_backup
-      p : \e[0;35mhtop\033[0m    - process view   realmd.sql\e[0;32m......:\033[0m $realmd_backup
-      m : \e[0;35mmaps\033[0m    - download maps
-      w : \e[0;35mstats\033[0m   - world stats    Realmd.log\e[0;32m......:\033[0m $cm_realmd_log_empty$cm_realmd_log
-      q : \e[0;35mquit\033[0m    - back to menu   Server.log\e[0;32m......:\033[0m $cm_server_log_empty$cm_server_log$cm_server_log_serious
+      r : \e[0;35mLogin\033[0m   - Remote access  service.mangosd\e[0;32m.:\033[0m $command_mangosd
+      l : \e[0;35mLogs\033[0m    - Analyze logs   service.realmd\e[0;32m..:\033[0m $command_realmd
+      b : \e[0;35mBackup\033[0m  - New backup
+      h : \e[0;35mReset\033[0m   - Reset --hard   characters.sql\e[0;32m..:\033[0m $charac_backup
+      p : \e[0;35mhtop\033[0m    - Process view   realmd.sql\e[0;32m......:\033[0m $realmd_backup
+      m : \e[0;35mMaps\033[0m    - Download maps
+      w : \e[0;35mStats\033[0m   - World stats    Realmd.log\e[0;32m......:\033[0m $cm_realmd_log_empty$cm_realmd_log
+      q : \e[0;35mQuit\033[0m    - Back to menu   Server.log\e[0;32m......:\033[0m $cm_server_log_empty$cm_server_log$cm_server_log_serious
 
     \e[0;33mFor more information: \033[0mi\033[0m \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
  <------------------------------------------------------------------------------>\033[0m"
@@ -694,11 +694,11 @@ Are You Sure? (y/n) " -n 1 -r
 $transmission_list
  \e[0;32m<------------------------------------------------------------------------------>\033[0m
 
-      t : \e[0;35mInstall seedbox\033[0m - install transmission-daemon
-      u : \e[0;35mRemove seedbox\033[0m  - remove transmission-daemon
-      r : \e[0;35mStart seedbox\033[0m   - service transmission-daemon start
-      s : \e[0;35mStop seedbox\033[0m    - service transmission-daemon stop
-      m : \e[0;35mInstall maps\033[0m    - install vanilla.maps.zip
+      t : \e[0;35mInstall seedbox\033[0m - Install transmission-daemon
+      u : \e[0;35mRemove seedbox\033[0m  - Remove transmission-daemon
+      r : \e[0;35mStart seedbox\033[0m   - Service transmission-daemon start
+      s : \e[0;35mStop seedbox\033[0m    - Service transmission-daemon stop
+      m : \e[0;35mInstall maps\033[0m    - Install vanilla.maps.zip
 
 \e[1;32m>\033[0m hit Enter to go back.
  <------------------------------------------------------------------------------>\033[0m"
