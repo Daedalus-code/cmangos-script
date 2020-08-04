@@ -1,7 +1,7 @@
 # C(ontinued)-MaNGOS - Helper  
   
 Admin Helper Tool in bash  
-![alt text](https://i.imgur.com/zTuvVnz.png)
+![alt text](https://i.imgur.com/xavEs5q.png)
 
 #### Features
 
