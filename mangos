@@ -13,7 +13,7 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20200408
+# V20201010
 # 4.1.6.0
 
 # codes >
@@ -540,7 +540,7 @@ Are You Sure? (y/n) " -n 1 -r
       if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
         menu_cpu_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
           cut -c -4 2>/dev/null)
-        menu_print_cpu_temp=$(printf '%b' "Temp\e[0;32m........:\033[0m "$menu_cpu_temp"c")
+        menu_print_cpu_temp=$(printf '%b' "Temp\e[0;32m........:\033[0m ${menu_cpu_temp:?}c")
       else
         menu_print_cpu_temp=$("")
       fi
@@ -4027,7 +4027,7 @@ Check log for which database needs 'applying updates'"
         grep -o '[0-9].[0-9][0-9] ms' 2>/dev/null)
       PING_LOSS=$(fping -c 1 "$intranet" 2>/dev/null |
         grep -o '[0-100]% loss' 2>/dev/null)
-      printf '%b' "\e[0;32m✓\033[0m $intranet - \e[96m$server_name_lan\033[0m - $PING_MS - $PING_LOSS\n"
+      printf '%b' "\e[0;32m✓\033[0m $intranet - \e[96m${server_name_lan:?}\033[0m - $PING_MS - $PING_LOSS\n"
     else
       printf '%b' "\033[1;31m✗ \e[1;90m$intranet - $server_name_lan - \e[1;90m? ms - 100% loss\033[0m\n"
     fi
