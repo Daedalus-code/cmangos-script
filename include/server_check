@@ -1,0 +1,273 @@
+#!/bin/bash
+
+source /scripts/server.txt
+
+# get date
+NOW="$(date +"%m.%d.%Y")"
+
+# are we locked out?
+FILE="${folder_wow:?}/lock"
+if [ ! -f "$FILE" ]; then
+
+  # running latest? NOTE: makes more sense for a PTR Server (Public Test Realm)
+  # CMaNGOS Core #################### mangos-classic updates ###################
+
+  ###########################
+  # Checking latest release #
+  ###########################
+  cd "${folder_core:?}" || exit
+  if git checkout master &>/dev/null &&
+    git fetch origin master &>/dev/null &&
+    [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
+    git merge origin/master; then
+    # create a lock file
+    touch "$folder_wow"/lock &>/dev/null
+    # update system
+    sudo apt-get update &>/dev/null
+    #####################
+    # Stopping services #
+    #####################
+    # service status
+    realm_service=realmd
+    world_service=mangosd
+    # realmd service
+    case "$(pidof $realm_service |
+      wc -w)" in
+    # not running, do nothing
+    0) ;;
+    # running, do shutdown
+    *) sudo service realmd stop ;;
+    esac
+    # mangosd service
+    case "$(pidof $world_service |
+      wc -w)" in
+    # not running, do nothing
+    0) ;;
+    # running, do shutdown
+    *) sudo service mangosd stop ;;
+    esac
+    ########################
+    # moving logs, configs #
+    ########################
+    # fix directory permissions
+    sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
+    # create new server.log
+    touch "$folder_core"/run/logs/Server.log &>/dev/null
+    # copy all logs into 'old' folder
+    cp "$folder_core"/run/logs/*.log "$folder_core"/run/logs/old
+    # ahbot.conf
+    cp "$folder_core"/src/game/AuctionHouseBot/ahbot.conf.dist.in "$folder_core"/run/etc/ahbot.conf.dist &>/dev/null
+    # new compile, new system logs
+    cd "$folder_core"/run/logs || exit &>/dev/null
+    mv -t "$folder_core"/run/logs/old/ Realmd.log Server.log Server.log.old DBErrors.log EventAIErrors.log &>/dev/null
+    # fix directory permissions
+    sudo chown -R "$user":"$group" "$folder_wow"
+    ###################
+    # Building server #
+    ###################
+    # make sure 'build' folder exist
+    mkdir "$folder_core"/build &>/dev/null
+    cd "${folder_build:?}" || exit
+    # double quotes ("") and single quotes ('') around > $cmake < will mess things up.
+    # shellcheck disable=SC2086
+    cmake .. ${cmake:?}
+    cd "$folder_build" || exit
+    make -j3 # WARNING USING 3 CORES SETTING ! (raspberry pi4 setting)
+    sudo make install &>/dev/null
+    sudo chown -R "$user":"$group" "$folder_wow"
+    # delete lock file
+    sudo rm "$folder_wow"/lock &>/dev/null
+  else
+    # already updated
+    echo "OK"
+  fi
+
+  # CMaNGOS Database #################### classic-db updates ###################
+
+  ###########################
+  # Checking latest release #
+  ###########################
+  # CMaNGOS Core (mangos-classic)
+  cd "${folder_db:?}" || exit
+  if git checkout master &>/dev/null &&
+    git fetch origin master &>/dev/null &&
+    [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
+    git merge origin/master; then
+    # create a lock file
+    touch "$folder_wow"/lock &>/dev/null
+    # update system
+    sudo apt-get update &>/dev/null
+    #####################
+    # Stopping services #
+    #####################
+    # service status
+    realm_service=realmd
+    world_service=mangosd
+    # realmd service
+    case "$(pidof $realm_service |
+      wc -w)" in
+    # not running, do nothing
+    0) ;;
+    # running, do shutdown
+    *) sudo service realmd stop ;;
+    esac
+    # mangosd service
+    case "$(pidof $world_service |
+      wc -w)" in
+    # not running, do nothing
+    0) ;;
+    # running, do shutdown
+    *) sudo service mangosd stop ;;
+    esac
+    ########################
+    # Moving logs, configs #
+    ########################
+    # fix directory permissions
+    sudo chown -R "$user":"$group" "$folder_wow"
+    # backup
+    # make sure 'backup' folder exist
+    mkdir "$folder_wow"/backup &>/dev/null
+    # make sure 'old' folder exist
+    mkdir "$folder_wow"/backup/old &>/dev/null
+    # move all sql files inside backup into 'old' folder
+    cp "$folder_wow"/backup/*.sql "$folder_wow"/backup/old &>/dev/null
+    cd "$folder_wow"/backup/old/ || exit
+    # zip all sql files inside backup
+    zip "${server_name:?}.zip" "$folder_wow"/backup/*.sql &>/dev/null
+    # remove old backup inside 'backup' folder (older than 7 days)
+    find "$folder_wow"/backup/*.sql -mtime +7 -exec rm {} \; &>/dev/null
+    # remove old backup inside 'old' folder (older than 14 days)
+    find "$folder_wow"/backup/old/*.sql -mtime +14 -exec rm {} \; &>/dev/null
+    ################
+    # MySQL backup #
+    ################
+    # backup <- characters.sql
+    mysqldump --defaults-extra-file="${sql_mycnf:?}" "$db_characters" >"$folder_wow"/backup/"${db_characters:?}"-"$NOW".sql
+    # backup <- realmd.sql
+    mysqldump --defaults-extra-file="$sql_mycnf" "$db_realmd" >"$folder_wow"/backup/"${db_realmd:?}"-"$NOW".sql
+    #############
+    # sql fixes #
+    #############
+    # fix directory permissions
+    sudo chown -R "$user":"$group" "$folder_wow"
+    # combine [A] to [B] updates individually
+    # combine all characters updates
+    cat "${folder_core:?}"/sql/updates/characters/*.sql >"$folder_wow"/.all_characters.sql
+    # combine all mangos updates
+    cat "${folder_core:?}"/sql/updates/mangos/*.sql >"$folder_wow"/.all_mangos.sql
+    # combine all realmd updates
+    cat "${folder_core:?}"/sql/updates/realmd/*.sql >"$folder_wow"/.all_realmd.sql
+    # do the actual fixes to the database server
+    # update characters database
+    mysql --defaults-extra-file="$sql_mycnf" -f --database="$db_characters" <"$folder_wow"/.all_characters.sql 2>/dev/null
+    # update mangos database
+    mysql --defaults-extra-file="$sql_mycnf" -f --database="${db_mangos:?}" <"$folder_wow"/.all_mangos.sql 2>/dev/null
+    # update realmd database
+    mysql --defaults-extra-file="$sql_mycnf" -f --database="$db_realmd" <"$folder_wow"/.all_realmd.sql 2>/dev/null
+    # remove old combined updates sql files
+    rm "$folder_wow"/.*.sql 2>/dev/null
+    #########################
+    # Install full database #
+    #########################
+    # InstallFullDB
+    cd "$folder_db" || exit
+    ./InstallFullDB.sh
+    # delete lock file
+    sudo rm "$folder_wow"/lock &>/dev/null
+  else
+    # already updated
+    echo "OK"
+  fi
+
+  # is it running? ################## realmd ###################################
+
+  # service running? >
+  if sudo service realmd status &>/dev/null; then
+    # running
+    echo "OK"
+  else
+    # offline
+    sudo service realmd restart &>/dev/null
+  fi
+
+  # is it connected? ################ realmd ###################################
+
+  # realmd mysql gone away >
+  if tail "$folder_core"/run/logs/Realmd.log 2>/dev/null |
+    grep -m 1 "gone away" 2>/dev/null; then
+    # it's gone..
+    sudo service realmd restart
+  else
+    # running
+    echo "OK"
+  fi
+  # realmd mysql connection was killed >
+  if tail "$folder_core"/run/logs/Realmd.log 2>/dev/null |
+    grep -m 1 "Connection was killed" 2>/dev/null; then
+    # it's gone..
+    sudo service realmd restart
+  else
+    # running
+    echo "OK"
+  fi
+
+  # is it running? ################## mangosd ##################################
+
+  # service running? >
+  if sudo service mangosd status &>/dev/null; then
+    # running
+    echo "OK"
+  else
+    # offline
+    sudo service mangosd restart &>/dev/null
+  fi
+
+  # is it connected? ################ mangosd ##################################
+
+  # mangosd mysql gone away >
+  if tail "$folder_core"/run/logs/Server.log 2>/dev/null |
+    grep -m 1 "gone away" 2>/dev/null; then
+    # it's gone..
+    sudo service mangosd restart
+  else
+    # running
+    echo "OK"
+  fi
+  # mangosd mysql connection was killed >
+  if tail "$folder_core"/run/logs/Server.log 2>/dev/null |
+    grep -m 1 "Connection was killed" 2>/dev/null; then
+    # it's gone..
+    sudo service mangosd restart
+  else
+    # running
+    echo "OK"
+  fi
+  # try to backup regardless ######## characters & realmd ######################
+
+  # backup <- characters.sql
+  FILE="$folder_wow/backup/$db_characters-$NOW.sql"
+  if [ ! -f "$FILE" ]; then
+    # make new characters backup >
+    mysqldump --defaults-extra-file="$sql_mycnf" "$db_characters" >"$folder_wow"/backup/"$db_characters"-"$NOW".sql
+    # remove old backup (sql older than 3 days) >
+    find "$folder_wow"/backup/classiccharacters*-*.*.*.sql -mtime +3 -exec rm {} \; &>/dev/null
+    # remove old backup inside 'old' directory (sql older than 3 days) >
+    find "$folder_wow"/backup/old/classiccharacters*-*.*.*.sql -mtime +3 -exec rm {} \; &>/dev/null
+  else
+    echo "OK"
+  fi
+  # backup <- realmd.sql
+  FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
+  if [ ! -f "$FILE" ]; then
+    # make new realmd backup >
+    mysqldump --defaults-extra-file="$sql_mycnf" "$db_realmd" >"$folder_wow"/backup/"$db_realmd"-"$NOW".sql
+    # remove old backup (sql older than 3 days) >
+    find "$folder_wow"/backup/classicrealmd*-*.*.*.sql -mtime +3 -exec rm {} \; &>/dev/null
+    # remove old backup inside 'old' directory (sql older than 3 days) >
+    find "$folder_wow"/backup/old/classicrealmd*-*.*.*.sql -mtime +3 -exec rm {} \; &>/dev/null
+  else
+    echo "OK"
+  fi
+else
+  echo "OK"
+fi

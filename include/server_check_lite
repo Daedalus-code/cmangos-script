@@ -1,0 +1,67 @@
+#!/bin/bash
+
+source /scripts/server.txt
+
+# is it running ?? >
+
+################################### realmd ###################################
+
+# service check
+
+if sudo service realmd status &>/dev/null; then
+  # running
+  echo "OK"
+else
+  # offline
+  sudo service realmd restart &>/dev/null
+fi
+
+# mysql check
+
+# realmd mysql gone away >
+if tail "$folder_core"/run/logs/Realmd.log | grep -m 1 "gone away"; then
+  # it's gone..
+  sudo service realmd restart
+else
+  # running
+  echo "OK"
+fi
+# realmd mysql connection was killed >
+if tail "$folder_core"/run/logs/Realmd.log | grep -m 1 "Connection was killed"; then
+  # it's gone..
+  sudo service realmd restart
+else
+  # running
+  echo "OK"
+fi
+
+################################### mangosd ##################################
+
+# service check
+
+if sudo service mangosd status &>/dev/null; then
+  # running
+  echo "OK"
+else
+  # offline
+  sudo service mangosd restart &>/dev/null
+fi
+
+# mysql check
+
+# mangosd mysql gone away >
+if tail "$folder_core"/run/logs/Server.log | grep -m 1 "gone away"; then
+  # it's gone..
+  sudo service mangosd restart
+else
+  # running
+  echo "OK"
+fi
+# mangosd mysql connection was killed >
+if tail "$folder_core"/run/logs/Server.log | grep -m 1 "Connection was killed"; then
+  # it's gone..
+  sudo service mangosd restart
+else
+  # running
+  echo "OK"
+fi
