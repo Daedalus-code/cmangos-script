@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20201010
-# 4.1.6.0
+# V20202411
+# 4.1.6.1
 
 # codes >
 while :; do
@@ -548,7 +548,7 @@ Are You Sure? (y/n) " -n 1 -r
 
       printf '%b' " <------------------------------------------------------------------------------>\e[31m
                     \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.1.6.0 ]\033[0m
+            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.1.6.1 ]\033[0m
 
       $cm_uptime
 
@@ -2849,7 +2849,8 @@ Check log for which database needs 'applying updates'"
 
     echo "User Accounts"
     echo
-    mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, last_ip, DATE_FORMAT(last_login, '%Y-%m-%d') last_login, id FROM $db_realmd.account;" 2>/dev/null
+    mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, lockedIp, id FROM $db_realmd.account;" 2>/dev/null
+    mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT id, accountId, ip, loginTime, loginSource, id FROM $db_realmd.account_logons;" 2>/dev/null
     read -r -p "Check database size? (y/n) " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
