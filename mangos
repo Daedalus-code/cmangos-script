@@ -543,7 +543,7 @@ Are You Sure? (y/n) " -n 1 -r
         menu_print_cpu_temp=$("")
       fi
       # commit
-      commit_hash=$(grep "Using commit hash" wow/mangos-classic/run/logs/Server.log 2>/dev/null |
+      commit_hash=$(grep "Using commit hash" "${folder_core:?}"/run/logs/Server.log 2>/dev/null |
         awk '{ print $5 }' 2>/dev/null | tr -d 'hash|()' 2>/dev/null)
       # codes done
 
