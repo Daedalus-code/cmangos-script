@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202411
-# 4.1.5.7
+# 4.1.6.1
 
 # codes >
 while :; do
@@ -2846,7 +2846,11 @@ Check log for which database needs 'applying updates'"
     echo "User Accounts"
     echo
     mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, lockedIp, active_realm_id, id FROM $db_realmd.account;" 2>/dev/null
-    mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT id, accountId, ip, loginTime, loginSource, id FROM $db_realmd.account_logons;" 2>/dev/null
+    read -r -p "Last Logins? (y/n) " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+      mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT id, accountId, ip, loginTime, loginSource, id FROM $db_realmd.account_logons;" 2>/dev/null
+    fi
     read -r -p "Check database size? (y/n) " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
