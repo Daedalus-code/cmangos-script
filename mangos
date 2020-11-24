@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20202411
-# 4.1.6.1
+# 4.1.5.7
 
 # codes >
 while :; do
@@ -438,8 +438,6 @@ Are You Sure? (y/n) " -n 1 -r
 
       # uptime >
       cm_uptime="\033[0mTime""$W""$(uptime)\033[0m"
-      # realm name >
-      cm_realm="\033[0mRealm \e[0;32m${server_name:?}\e[31m"
 
       # log data >
 
@@ -544,18 +542,18 @@ Are You Sure? (y/n) " -n 1 -r
       else
         menu_print_cpu_temp=$("")
       fi
+      # commit
+      commit_hash=$(grep "Using commit hash" wow/mangos-classic/run/logs/Server.log 2>/dev/null |
+        awk '{ print $5 }' 2>/dev/null | tr -d 'hash|()' 2>/dev/null)
       # codes done
 
-      printf '%b' " <------------------------------------------------------------------------------>\e[31m
-                    \e[0;32mCMaNGOS (Classic fork) - Command Center\e[31m
-            \e[0;33m[ C(ontinued)-MaNGOS Helper, admin helper tool v4.1.6.1 ]\033[0m
+      printf '%b' "      $cm_uptime
 
-      $cm_uptime
-
-      $cm_realm\033[0m
+      Realm\e[0;32m.......:\e[92m ${server_name:?}\033[0m
       $menu_print_cpu_temp
       World\e[0;32m.......:\033[0m$latest_world_built
       System\e[0;32m......:\033[0m$built_for
+      Commit Hash\e[0;32m.:\033[0m\e[90m $commit_hash\033[0m
 
       r : \e[0;35mLogin\033[0m   - Remote access  service.mangosd\e[0;32m.:\033[0m $command_mangosd
       l : \e[0;35mLogs\033[0m    - Analyze logs   service.realmd\e[0;32m..:\033[0m $command_realmd
@@ -565,9 +563,7 @@ Are You Sure? (y/n) " -n 1 -r
       m : \e[0;35mMaps\033[0m    - Download maps
       w : \e[0;35mStats\033[0m   - World stats    Realmd.log\e[0;32m......:\033[0m $cm_realmd_log_empty$cm_realmd_log
       q : \e[0;35mQuit\033[0m    - Back to menu   Server.log\e[0;32m......:\033[0m $cm_server_log_empty$cm_server_log$cm_server_log_serious
-
-    \e[0;33mFor more information: \033[0mi\033[0m \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
- <------------------------------------------------------------------------------>\033[0m"
+"
       echo
       read -r -s -n1
       case "$REPLY" in
