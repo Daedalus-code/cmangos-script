@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20201112
-# 4.1.6.1
+# V20202411
+# 4.1.8.2
 
 # codes >
 while :; do
@@ -2710,7 +2710,14 @@ Check log for which database needs 'applying updates'"
         *) sudo service mangosd stop ;;
         esac
 
-        mysql --defaults-extra-file="$sql_mycnf" -f --database="$db_characters" <"$folder_wow"/.all_characters.sql
+        echo
+        read -r -p "Without error output? (y/n) " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+          mysql --defaults-extra-file="$sql_mycnf" -f --database="$db_characters" <"$folder_wow"/.all_characters.sql 2>/dev/null
+        else
+          mysql --defaults-extra-file="$sql_mycnf" -f --database="$db_characters" <"$folder_wow"/.all_characters.sql
+        fi
         sudo service mariadb stop &>/dev/null
         sudo service mysql stop &>/dev/null
         sleep 1
@@ -2743,7 +2750,14 @@ Check log for which database needs 'applying updates'"
         *) sudo service mangosd stop ;;
         esac
 
-        mysql --defaults-extra-file="$sql_mycnf" -f --database="$db_mangos" <"$folder_wow"/.all_mangos.sql
+        echo
+        read -r -p "Without error output? (y/n) " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+          mysql --defaults-extra-file="$sql_mycnf" -f --database="$db_mangos" <"$folder_wow"/.all_mangos.sql 2>/dev/null
+        else
+          mysql --defaults-extra-file="$sql_mycnf" -f --database="$db_mangos" <"$folder_wow"/.all_mangos.sql
+        fi
         sudo service mariadb stop &>/dev/null
         sudo service mysql stop &>/dev/null
         sleep 1
@@ -2776,7 +2790,14 @@ Check log for which database needs 'applying updates'"
         *) sudo service mangosd stop ;;
         esac
 
-        mysql --defaults-extra-file="$sql_mycnf" -f --database="$db_realmd" <"$folder_wow"/.all_realmd.sql
+        echo
+        read -r -p "Without error output? (y/n) " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+          mysql --defaults-extra-file="$sql_mycnf" -f --database="$db_realmd" <"$folder_wow"/.all_realmd.sql 2>/dev/null
+        else
+          mysql --defaults-extra-file="$sql_mycnf" -f --database="$db_realmd" <"$folder_wow"/.all_realmd.sql
+        fi
         sudo service mariadb stop &>/dev/null
         sudo service mysql stop &>/dev/null
         sleep 1
