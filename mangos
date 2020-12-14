@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20202411
-# 4.1.8.2
+# V20201412
+# 4.1.8.3
 
 # codes >
 while :; do
@@ -284,7 +284,8 @@ ${pass_nc:?}
       echo
       read -r -p " Show list" </dev/tty
       echo
-      mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, last_ip, DATE_FORMAT(last_login, '%Y-%m-%d') last_login, id FROM $db_realmd.account;"
+      mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, id FROM $db_realmd.account;"
+      echo
       printf '%b' " Delete directly from '\e[0;35m$db_realmd.account\033[0m'"
       echo
 
@@ -297,7 +298,7 @@ ${pass_nc:?}
       if [[ -z "$ID" ]]; then
         printf '%s\n' "empty"
       else
-        deleted=$(printf '%b' "\e[31mDELETE\033[0m '\e[0;35m$ID\033[0m' \e[31m?!\033[0m")
+        deleted=$(printf '%b' "\e[91mDELETE\033[0m '$ID' \e[91m?!\033[0m")
         echo
         read -r -p "$deleted
 
@@ -316,9 +317,9 @@ Are You Sure? (y/n) " -n 1 -r
           echo
           echo " kek!"
           printf "(∩ ᐛ )⊃━━ "
-          sleep 1
+          sleep 3
           printf "^\e[0;33m｡·.·\033[0mﾟ\e[0;33m★☆ﾟ.｡*\033[0m(つ﹏⊂)\e[0;33m?･ ｡★·"
-          sleep 1
+          sleep 2
           printf ".\033[0m..poof!"
           sleep 1
           echo
