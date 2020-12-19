@@ -13,7 +13,7 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20201412
+# V20201912
 # 4.1.8.3
 
 # codes >
@@ -544,8 +544,8 @@ Are You Sure? (y/n) " -n 1 -r
         menu_print_cpu_temp=$("")
       fi
       # commit
-      commit_hash=$(grep "Using commit hash" "${folder_core:?}"/run/logs/Server.log 2>/dev/null |
-        awk '{ print $5 }' 2>/dev/null | tr -d 'hash|()' 2>/dev/null)
+      commit_hash=$(grep -E "Using commit.*(.*)" "${folder_core:?}"/run/logs/Server.log 2>/dev/null |
+        grep -o "(.*)" 2>/dev/null | tr -d '()' 2>/dev/null)
       # codes done
 
       printf '%b' "      $cm_uptime
