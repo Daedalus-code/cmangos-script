@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20201912
-# 4.1.8.3
+# V20210601
+# 4.1.8.7
 
 # codes >
 while :; do
@@ -509,7 +509,7 @@ Are You Sure? (y/n) " -n 1 -r
         latest_world_built=$(grep -o -a "\sBuilt\son\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null)
       # if nothing, print "Restart server please.."
       else
-        latest_world_built=" \e[0;35mBuilt date?\033[0m - Restart server please"
+        latest_world_built="\e[90mBuilt on Nov 23 2004 at 10:00:01\033[0m"
       fi
       # built for >
       if grep -q -o -a "\sBuilt\sfor\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null; then
@@ -517,7 +517,7 @@ Are You Sure? (y/n) " -n 1 -r
         built_for=$(grep -o -a "\sBuilt\sfor\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null)
       # if nothing, print "Restart server please.."
       else
-        built_for=" \e[0;35mBuilt for?\033[0m  - Restart server please"
+        built_for="\e[90mBuilt for Linux_x00 (next-to-nothing)\033[0m"
       fi
       # EventAI >
       if grep -q -o -a "\sACID\s1.12.x\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null; then
@@ -525,15 +525,15 @@ Are You Sure? (y/n) " -n 1 -r
         eventai=$(grep -o -a "\sACID\s1.12.x\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null)
       # if nothing, print "Restart server please.."
       else
-        eventai=" \e[0;35mEventAI?\033[0m  - Restart server please"
+        eventai="\e[90mACID 0.00.x (Classic) for CMaNGOS-CLASSIC (0.00.X Client)\033[0m"
       fi
       # World DB >
       if grep -q -o -a "\s1.11\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null; then
         # if any, print "World DB"
-        world_db=$(grep -o -a "\s1.11\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null)
+        world_db=$(grep -o -a "\s1.11\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null | tail -1 2>/dev/null)
       # if nothing, print "Restart server please.."
       else
-        world_db=" \e[0;35mWorld DB?\033[0m - Restart server please"
+        world_db="\e[90m0.00 'Into the Abyss of nothing.' For Classic core z0000.\033[0m"
       fi
       # cpu temp >
       if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
@@ -544,17 +544,21 @@ Are You Sure? (y/n) " -n 1 -r
         menu_print_cpu_temp=$("")
       fi
       # commit
-      commit_hash=$(grep -E "Using commit.*(.*)" "${folder_core:?}"/run/logs/Server.log 2>/dev/null |
-        grep -o "(.*)" 2>/dev/null | tr -d '()' 2>/dev/null)
+      if grep -E "Using commit.*(.*)" "${folder_core:?}"/run/logs/Server.log &>/dev/null; then
+        commit_hash=$(grep -E "Using commit.*(.*)" "${folder_core:?}"/run/logs/Server.log 2>/dev/null |
+          grep -o "(.*)" 2>/dev/null | tr -d '()' 2>/dev/null)
+      else
+        commit_hash="\e[90m000000000000000000000000000000000000\033[0m"
+      fi
       # codes done
 
       printf '%b' "      $cm_uptime
 
       Realm\e[0;32m.......:\e[92m ${server_name:?}\033[0m
       $menu_print_cpu_temp
-      World\e[0;32m.......:\033[0m$latest_world_built
-      System\e[0;32m......:\033[0m$built_for
-      Commit Hash\e[0;32m.:\033[0m\e[90m $commit_hash\033[0m
+      World\e[0;32m.......:\033[0m $latest_world_built
+      System\e[0;32m......:\033[0m $built_for
+      Commit Hash\e[0;32m.:\033[0m $commit_hash\033[0m
 
       r : \e[0;35mLogin\033[0m   - Remote access  service.mangosd\e[0;32m.:\033[0m $command_mangosd
       l : \e[0;35mLogs\033[0m    - Analyze logs   service.realmd\e[0;32m..:\033[0m $command_realmd
@@ -588,8 +592,8 @@ Are You Sure? (y/n) " -n 1 -r
 
         \e[0;32mC(ontinued)-MaNGOS (Classic fork)\033[0m
 
-        EventAI\e[0;32m..:\033[0m$eventai
-        World DB\e[0;32m.:\033[0m$world_db
+        EventAI\e[0;32m..:\033[0m $eventai
+        World DB\e[0;32m.:\033[0m $world_db
 
         \e[0;35mhttps://github.com/cmangos/mangos-classic\033[0m
         \e[0;35mhttps://github.com/cmangos/classic-db\033[0m
