@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20211901
-# 4.1.9.2
+# 4.2.0.2
 
 # codes >
 while :; do
@@ -1251,10 +1251,20 @@ EOF
         latest_head=$(git rev-parse --short HEAD)
         printf '%b' "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) \e[4;32mNew Updates For Core\033[0m! - $latest_date
 \e[90m(m) Update CMaNGOS > Compile latest\033[0m\n"
-      else
+      else # get commit_hash with max 9 letters
+        commit_hash=$(grep -E "Using commit.*(.*)" "${folder_core:?}"/run/logs/Server.log 2>/dev/null |
+          grep -o "(.*)" 2>/dev/null | tr -d '()' 2>/dev/null | sed 's/^ *//' 2>/dev/null |
+          colrm 9 2>/dev/null)
+        # if values are equal
+        if [[ "$latest_head" -eq "$commit_hash" ]]; then
+          # updated but installed
+          ok="[\e[0;32mok\033[0m]"
+        else # updated and installed
+          ok="[\e[93mok\033[0m]"
+        fi
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
-        printf '%b' "[\e[0;32mok\033[0m] (\e[4;32m$latest_head\033[0m) Core Updated - $latest_date"
+        printf '%b' "$ok (\e[4;32m$latest_head\033[0m) Core Updated - $latest_date"
         echo
       fi
     # check if 'mangos-classic' exist done
