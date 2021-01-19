@@ -1250,7 +1250,7 @@ EOF
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
         printf '%b' "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) \e[4;32mNew Updates For Core\033[0m! - $latest_date
-(m) Update CMaNGOS > Compile latest\n"
+\e[90m(m) Update CMaNGOS > Compile latest\033[0m\n"
       else
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
@@ -1289,7 +1289,7 @@ EOF
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
         printf '%b' "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) \e[4;32mNew Updates For Database\033[0m! - $latest_date
-(d) Update Database > Update classic-db\n"
+\e[90m(d) Update Database > Update classic-db\033[0m\n"
       else
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
@@ -1323,7 +1323,7 @@ EOF
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
         printf '%b' "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) \e[4;32mNew Updates For Helper\033[0m! - $latest_date
-(w) Update Helper > Update Helper\n"
+\e[90m(w) Update Helper > Update Helper\033[0m\n"
       else
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
@@ -1340,7 +1340,7 @@ EOF
     fi
 
     # check if 'InstallFullDB.config' exist done
-    printf '%b' "\e[90m$NEW_UP_TIP\033[0m\n"
+    echo
     read -r -p "Press Enter to continue" </dev/tty
     echo
 
