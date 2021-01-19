@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20211901
-# 4.2.0.2
+# 4.2.0.6
 
 # codes >
 while :; do
@@ -3274,7 +3274,8 @@ Check log for which database needs 'applying updates'"
             # this database (realmd) is out of date!
             if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
               echo
-              printf '%b' "Database is out of date!"
+              printf '%b' "Database is out of date!
+\e[90m(d) Update Database > Apply all updates [A]-[B]\033[0m"
               echo
             fi
             # databases is missing or corrupt.
@@ -3348,7 +3349,8 @@ Check log for which database needs 'applying updates'"
             # this database (mangosd) is out of date!
             if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Server.log 2>/dev/null; then
               echo
-              printf '%b' "Database is out of date!"
+              printf '%b' "Database is out of date!
+\e[90m(d) Update Database > Apply all updates [A]-[B]\033[0m"
               echo
             fi
             # databases is missing or corrupt.
@@ -3793,7 +3795,8 @@ Check log for which database needs 'applying updates'"
       # this database (realmd) is out of date!
       if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
         echo
-        printf '%b' "Database is out of date!"
+        printf '%b' "Database is out of date!
+\e[90m(d) Update Database > Apply all updates [A]-[B]\033[0m"
         echo
       fi
       # databases is missing or corrupt.
@@ -3860,7 +3863,8 @@ Check log for which database needs 'applying updates'"
       # this database (mangosd) is out of date!
       if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Server.log 2>/dev/null; then
         echo
-        printf '%b' "Database is out of date!"
+        printf '%b' "Database is out of date!
+\e[90m(d) Update Database > Apply all updates [A]-[B]\033[0m"
         echo
       fi
       # databases is missing or corrupt.
