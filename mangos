@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20211901
-# 4.2.0.6
+# V20212001
+# 4.2.6.3
 
 # codes >
 while :; do
@@ -1223,9 +1223,37 @@ EOF
 
   "c")
 
+    # updated and installed
+    FILE_CORE="/var/log/ms/installed_core"
+    if [ -f "$FILE_CORE" ]; then
+      ok_core="[\e[0;32mok\033[0m]"
+    fi
+    FILE_CORE="/var/log/ms/installed_core"
+    if [ ! -f "$FILE_CORE" ]; then
+      ok_core="[\e[93mok\033[0m]"
+    fi
+    FILE_DB="/var/log/ms/installed_db"
+    if [ -f "$FILE_DB" ]; then
+      ok_db="[\e[0;32mok\033[0m]"
+    fi
+    FILE_DB="/var/log/ms/installed_db"
+    if [ ! -f "$FILE_DB" ]; then
+      ok_db="[\e[93mok\033[0m]"
+    fi
+    FILE_MS="/var/log/ms/installed_ms"
+    if [ -f "$FILE_MS" ]; then
+      ok_ms="[\e[0;32mok\033[0m]"
+    fi
+    FILE_MS="/var/log/ms/installed_ms"
+    if [ ! -f "$FILE_MS" ]; then
+      ok_ms="[\e[93mok\033[0m]"
+    fi
+
     # check if 'mangos-classic' exist >
     FILE="$folder_core/README.md"
     if [ ! -f "$FILE" ]; then
+      # remove old file
+      rm /var/log/ms/installed_core &>/dev/null
       # fresh install ? >
       echo "Cloning repository 'mangos-classic' Please wait this might take a while
 (https://github.com/cmangos/mangos-classic)"
@@ -1247,24 +1275,16 @@ EOF
         git fetch origin master &>/dev/null &&
         [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
         git merge origin/master; then
+        # remove old file
+        rm /var/log/ms/installed_core &>/dev/null
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
         printf '%b' "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) \e[4;32mNew Updates For Core\033[0m! - $latest_date
 \e[90m(m) Update CMaNGOS > Compile latest\033[0m\n"
-      else # get commit_hash with max 9 letters
-        commit_hash=$(grep -E "Using commit.*(.*)" "${folder_core:?}"/run/logs/Server.log 2>/dev/null |
-          grep -o "(.*)" 2>/dev/null | tr -d '()' 2>/dev/null | sed 's/^ *//' 2>/dev/null |
-          colrm 9 2>/dev/null)
-        # if values are equal
-        if [[ "${latest_head#0}" -eq "${commit_hash#0}" ]]; then
-          # updated, compiled -> green
-          ok="[\e[0;32mok\033[0m]"
-        else # updated, not compiled -> yellow
-          ok="[\e[93mok\033[0m]"
-        fi
+      else
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
-        printf '%b' "$ok (\e[4;32m$latest_head\033[0m) Core Updated - $latest_date"
+        printf '%b' "$ok_core (\e[4;32m$latest_head\033[0m) Core Updated - $latest_date"
         echo
       fi
     # check if 'mangos-classic' exist done
@@ -1273,6 +1293,8 @@ EOF
     # check if 'classic-db' exist >
     FILE="$folder_db/README.md"
     if [ ! -f "$FILE" ]; then
+      # remove old file
+      rm /var/log/ms/installed_db &>/dev/null
       # fresh install ? >
       echo "Cloning repository 'classic-db' Please wait this might take a while
 (https://github.com/cmangos/classic-db)"
@@ -1285,6 +1307,7 @@ EOF
       echo "Done"
       sleep 1
     else
+
       # check for updates >
 
       # check if 'classic-db' exist >
@@ -1296,6 +1319,8 @@ EOF
         git fetch origin master &>/dev/null &&
         [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
         git merge origin/master; then
+        # remove old file
+        rm /var/log/ms/installed_db &>/dev/null
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
         printf '%b' "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) \e[4;32mNew Updates For Database\033[0m! - $latest_date
@@ -1303,7 +1328,7 @@ EOF
       else
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
-        printf '%b' "[\e[0;32mok\033[0m] (\e[4;32m$latest_head\033[0m) Database Updated - $latest_date"
+        printf '%b' "$ok_db (\e[4;32m$latest_head\033[0m) Database Updated - $latest_date"
         echo
       fi
     # check if 'classic-db' exist done
@@ -1312,6 +1337,8 @@ EOF
     # check if 'cmangos-script' exist >
     FILE="$folder_helper/README.md"
     if [ ! -f "$FILE" ]; then
+      # remove old file
+      rm /var/log/ms/installed_ms &>/dev/null
       # fresh install ? >
       echo "Cloning repository 'cmangos-script' Please wait"
       sudo mkdir "$folder_helper" &>/dev/null
@@ -1330,6 +1357,8 @@ EOF
         git fetch origin master &>/dev/null &&
         [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
         git merge origin/master; then
+        # remove old file
+        rm /var/log/ms/installed_ms &>/dev/null
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
         printf '%b' "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) \e[4;32mNew Updates For Helper\033[0m! - $latest_date
@@ -1337,7 +1366,7 @@ EOF
       else
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
-        printf '%b' "[\e[0;32mok\033[0m] (\e[4;32m$latest_head\033[0m) Helper Updated - $latest_date"
+        printf '%b' "$ok_ms (\e[4;32m$latest_head\033[0m) Helper Updated - $latest_date"
         echo
       fi
     # check if 'cmangos-script' exist done
@@ -1560,6 +1589,14 @@ Select install operation"
         case $n in
 
         "1")
+
+          # create ms folder
+          sudo mkdir /var/log/ms/ 2>/dev/null
+          # fix ownership
+          sudo chown -R "${user:?}":"${group:?}" /var/log/ms
+          # create installed mark
+          echo "Core was installed at ${NOW:?}" >/var/log/ms/installed_core
+
           echo "make install"
 
           cd "$folder_build" || exit
@@ -1568,6 +1605,14 @@ Select install operation"
           ;;
 
         "2")
+
+          # create ms folder
+          sudo mkdir /var/log/ms/ 2>/dev/null
+          # fix ownership
+          sudo chown -R "${user:?}":"${group:?}" /var/log/ms
+          # create installed mark
+          echo "Core was installed at ${NOW:?} with backup" >/var/log/ms/installed_core
+
           echo "checkinstall"
 
           cd "$folder_build" || exit
@@ -2063,7 +2108,7 @@ database user, client/server is needed."
       read -r -p "Continue? (y/n) " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
-        read -r -p "Restart local database services? (y/n) " -n 1 -r
+        read -r -p "Restart localhost database service? (SQL SERVER) (y/n) " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -2190,6 +2235,12 @@ Please install mysql or mariadb database/client"
           sudo service mariadb restart &>/dev/null
           sudo service mysql restart &>/dev/null
         fi
+        # create ms folder
+        sudo mkdir /var/log/ms/ 2>/dev/null
+        # fix ownership
+        sudo chown -R "${user:?}":"${group:?}" /var/log/ms
+        # create installed mark
+        echo "Database was installed at ${NOW:?}" >/var/log/ms/installed_db
         echo
         printf '%b' "[\e[0;32mok\033[0m] "
         read -r -p "Press Enter to continue" </dev/tty
@@ -3652,6 +3703,12 @@ Check log for which database needs 'applying updates'"
             echo
             echo
           fi
+          # create ms folder
+          sudo mkdir /var/log/ms/ 2>/dev/null
+          # fix ownership
+          sudo chown -R "${user:?}":"${group:?}" /var/log/ms
+          # create installed mark
+          echo "CMaNGOS Script was installed at ${NOW:?}" >/var/log/ms/installed_ms
           sleep 1 && exit
         fi
       fi
