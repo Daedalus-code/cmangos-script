@@ -1256,7 +1256,7 @@ EOF
           grep -o "(.*)" 2>/dev/null | tr -d '()' 2>/dev/null | sed 's/^ *//' 2>/dev/null |
           colrm 9 2>/dev/null)
         # if values are equal
-        if [[ "$latest_head" -eq "$commit_hash" ]]; then
+        if [[ "${latest_head#0}" -eq "${commit_hash#0}" ]]; then
           # updated, compiled -> green
           ok="[\e[0;32mok\033[0m]"
         else # updated, not compiled -> yellow
