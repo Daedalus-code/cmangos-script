@@ -1257,9 +1257,9 @@ EOF
           colrm 9 2>/dev/null)
         # if values are equal
         if [[ "$latest_head" -eq "$commit_hash" ]]; then
-          # updated and installed, green
+          # updated, compiled -> green
           ok="[\e[0;32mok\033[0m]"
-        else # updated but installed, yellow
+        else # updated, not compiled -> yellow
           ok="[\e[93mok\033[0m]"
         fi
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
