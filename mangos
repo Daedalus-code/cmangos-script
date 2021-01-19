@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20211901
-# 4.2.0.1
+# 4.1.9.2
 
 # codes >
 while :; do
@@ -1249,11 +1249,8 @@ EOF
         git merge origin/master; then
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
-        printf '%b' "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) \e[4;32mNew Updates For Core\033[0m! - $latest_date"
-        echo
-        # print tip if any new updates
-        NEW_UP_TIP=$(echo "
-(m) Update CMaNGOS > Compile latest")
+        printf '%b' "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) \e[4;32mNew Updates For Core\033[0m! - $latest_date
+(m) Update CMaNGOS > Compile latest\n"
       else
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
@@ -1291,11 +1288,8 @@ EOF
         git merge origin/master; then
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
-        printf '%b' "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) \e[4;32mNew Updates For Database\033[0m! - $latest_date"
-        echo
-        # print tip if any new updates
-        NEW_UP_TIP=$(echo "
-(d) Update Database > Update classic-db")
+        printf '%b' "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) \e[4;32mNew Updates For Database\033[0m! - $latest_date
+(d) Update Database > Update classic-db\n"
       else
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
@@ -1328,11 +1322,8 @@ EOF
         git merge origin/master; then
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
-        printf '%b' "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) \e[4;32mNew Updates For Helper\033[0m! - $latest_date"
-        echo
-        # print tip if any new updates
-        NEW_UP_TIP=$(echo "
-(w) Update Helper > Update Helper")
+        printf '%b' "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) \e[4;32mNew Updates For Helper\033[0m! - $latest_date
+(w) Update Helper > Update Helper\n"
       else
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
