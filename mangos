@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20212001
-# 4.2.6.3
+# 4.2.6.6
 
 # codes >
 while :; do
@@ -376,8 +376,7 @@ Are You Sure? (y/n) " -n 1 -r
       *) command_mangosd="[\e[0;33mok\033[0m]" ;;
       esac
 
-      # Walter A code >
-      # Thank you Walter A ! -> https://stackoverflow.com/questions/59862020
+      # Thank you! -> https://stackoverflow.com/questions/59862020
 
       # shellcheck disable=SC2034  # Unused variables left for readability
       # init_colors
@@ -412,30 +411,23 @@ Are You Sure? (y/n) " -n 1 -r
           sed -r "s/^.*[^ ]/${color}&${reset}/" <<<"$@"
           ;;
         esac
-
       }
-
       dot_field() {
         # todo: Change implementation when field can be 2 words with a space in between
         printf "%-14.14s" "$1" | colorstring "${white}" | tr ' ' '.'
         # The : must be printed in a second statement when you don't want cyan dots.
         printf ':'
       }
-
       # todo: Change implementation when field can be 2 words with a space in between
       space_number() {
         printf "%-9.9s" "$1" | colorstring "${green}"
       }
-
       # todo: add logic when only 4 parameters are given
       printline() {
-        echo "       $(dot_field "$1") $(space_number "$2")$(dot_field "$3") $(space_number "$4")$(dot_field "$5") $(space_number "$6")"
+        echo "      $(dot_field "$1") $(space_number "$2")$(dot_field "$3") $(space_number "$4")$(dot_field "$5") $(space_number "$6")"
       }
-
       # init the color variables
       init_colors
-
-      # Walter A code done
 
       # uptime >
       cm_uptime="\033[0mTime""$W""$(uptime)\033[0m"
@@ -570,8 +562,9 @@ Are You Sure? (y/n) " -n 1 -r
       h : \e[0;35mReset\033[0m   - Reset --hard   characters.sql\e[0;32m..:\033[0m $charac_backup
       p : \e[0;35mhtop\033[0m    - Process view   realmd.sql\e[0;32m......:\033[0m $realmd_backup
       m : \e[0;35mMaps\033[0m    - Download maps
-      w : \e[0;35mStats\033[0m   - World stats    Realmd.log\e[0;32m......:\033[0m $cm_realmd_log_empty$cm_realmd_log
-      q : \e[0;35mQuit\033[0m    - Back to menu   Server.log\e[0;32m......:\033[0m $cm_server_log_empty$cm_server_log$cm_server_log_serious
+      w : \e[0;35mStats\033[0m   - World stats
+      q : \e[0;35mQuit\033[0m    - Back to menu   Realmd.log\e[0;32m......:\033[0m $cm_realmd_log_empty$cm_realmd_log
+      i : \e[0;35mInfo\033[0m    - Helper info    Server.log\e[0;32m......:\033[0m $cm_server_log_empty$cm_server_log$cm_server_log_serious
 "
       echo
       read -r -s -n1
@@ -582,70 +575,60 @@ Are You Sure? (y/n) " -n 1 -r
       "i")
 
         clear
-        echo
-        echo
-        printf '%b' " <------------------------------------------------------------------------------>\033[0m
+        printf '%b' "\033[0m
+       _____     __  __       _   _  _____  ____   _____
+      / ____|   |  \/  |     | \ | |/ ____|/ __ \ / ____|
+     | |        | \  / |     |  \| | |  __  |  | | (___
+     | |ontinued| |\/| | __ _| .   | | |_ | |  | |\___ \\
+     | |____    | |  | |/ _  | |\  | |__| | |__| |____) |
+      \_____|   |_|  |_| (_| |_| \_|\_____|\____/ \____/
+      http://cmangos.net\__,_|     Doing things right!
 
-         _____     __  __       _   _  _____  ____   _____
-        / ____|   |  \/  |     | \ | |/ ____|/ __ \ / ____|
-       | |        | \  / |     |  \| | |  __  |  | | (___
-       | |ontinued| |\/| | __ _| .   | | |_ | |  | |\___ \\
-       | |____    | |  | |/ _  | |\  | |__| | |__| |____) |
-        \_____|   |_|  |_| (_| |_| \_|\_____|\____/ \____/
-        http://cmangos.net\__,_|     Doing things right!
+      \e[0;32mC(ontinued)-MaNGOS (Classic fork)\033[0m
 
-        \e[0;32mC(ontinued)-MaNGOS (Classic fork)\033[0m
+      EventAI\e[0;32m..:\033[0m $eventai
+      World DB\e[0;32m.:\033[0m $world_db
 
-        EventAI\e[0;32m..:\033[0m $eventai
-        World DB\e[0;32m.:\033[0m $world_db
+      \e[0;35mhttps://github.com/cmangos/mangos-classic\033[0m
+      \e[0;35mhttps://github.com/cmangos/classic-db\033[0m
 
-        \e[0;35mhttps://github.com/cmangos/mangos-classic\033[0m
-        \e[0;35mhttps://github.com/cmangos/classic-db\033[0m
+      Tip: Use both in \e[0;35mrealmlist.wtf\033[0m
 
- <------------------------------------------------------------------------------>\033[0m
+      \e[0;35mInternet\033[0m: 'set realmlist \e[0;90m${internet:?}\033[0m'
+      \e[0;35mLanparty\033[0m: 'set realmlist \e[0;90m${intranet:?}\033[0m' - When internet drop out.
 
-        Tip: Use both in \e[0;35mrealmlist.wtf\033[0m
+      Create another '\e[0;35m$db_realmd.realmlist\033[0m'\e[0;35m table row\033[0m, or just copy.
+      Set new 'id', 'sameName (LAN)' and '\e[0;90m${intranet:?}\033[0m' as address.
+      You can now choose 'Internet' or 'Lanparty' ingame from realm list.
 
-        \e[0;35mInternet\033[0m: 'set realmlist \e[0;35m${internet:?}\033[0m'
-        \e[0;35mLanparty\033[0m: 'set realmlist \e[0;35m${intranet:?}\033[0m' - When internet drop out.
+      \033[0mIMPORTANT ! edit '\e[0;35mserver.txt\033[0m' & '\e[0;35mserver.cnf\033[0m' with correct info.
 
-        Create another '\e[0;35m$db_realmd.realmlist\033[0m'\e[0;35m table row\033[0m, or just copy.
-        Set new 'id', 'sameName (LAN)' and '\e[0;35m${intranet:?}\033[0m' as address.
-        You can now choose 'Internet' or 'Lanparty' ingame from realm list.
+      'login' & 'create account' edit 'RA/NETCAT' inside \e[0;35mserver.txt.\033[0m
+      'update Database' edit 'MYSQL' inside \e[0;35mserver.txt\033[0m, \e[0;35mserver.cnf\033[0m
 
- <------------------------------------------------------------------------------>\033[0m
+      \e[0;32mC(ontinued)-MaNGOS - Helper\033[0m
 
-        \033[0;31mImportant\033[0m: edit '\e[0;35mserver.txt\033[0m' & '\e[0;35mserver.cnf\033[0m' with correct info.
+      \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
 
-        'login' & 'create account' edit 'RA/NETCAT' inside \e[0;35mserver.txt.\033[0m
-        'update Database' edit 'MYSQL' inside \e[0;35mserver.txt\033[0m, \e[0;35mserver.cnf\033[0m
+      This script was built on a ubuntu system - (Raspberry Pi4)
+      https://ubuntu.com/download/raspberry-pi
 
- <------------------------------------------------------------------------------>\033[0m
+      Functions and features for admins running a WoW Vanilla server.
 
-        \e[0;32mC(ontinued)-MaNGOS - Helper\033[0m
+      Planned Features: Time will tell.
 
-        \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
+      ---What
 
-        This script was built on a ubuntu system - (Raspberry Pi4)
-        https://ubuntu.com/download/raspberry-pi
-
-        Functions and features for admins running a WoW Vanilla server.
-
-        Planned Features: Time will tell.
-
-        ---What
-
-        * Install this script on a ubuntu system, make everything more easy.
-        * Connect to a MySQL server outside or localhost
-        * Download latest core/database updates
-        * Upgrade Database with latest fixes
-        * Compile CMaNGOS with latest fixes
-        * Download/Install classic maps
-        * Profit
-
+      * Install this script on a ubuntu system, make everything more easy.
+      * Connect to a MySQL server outside or localhost
+      * Download latest core/database updates
+      * Upgrade Database with latest fixes
+      * Compile CMaNGOS with latest fixes
+      * Download/Install classic maps
+      * Profit
 
 \e[1;32m>\033[0m hit Enter to go back.
- <------------------------------------------------------------------------------>\033[0m"
+\033[0m"
         echo
         read -r -p ">" </dev/tty
 
@@ -683,8 +666,7 @@ Are You Sure? (y/n) " -n 1 -r
         clear
         echo
         echo
-        printf '%b' " <------------------------------------------------------------------------------>\033[0m
-                    \e[0;32mCMaNGOS (Classic fork) - SeedBox for maps\e[31m
+        printf '%b' "                    \e[0;32mCMaNGOS (Classic fork) - SeedBox for maps\e[31m
 
      \033[0m* Download/Upload maps for WoW Vanilla server.
      * This is an attempt to make classic maps available through p2p.
@@ -706,7 +688,7 @@ $transmission_list
       m : \e[0;35mInstall maps\033[0m    - Install vanilla.maps.zip
 
 \e[1;32m>\033[0m hit Enter to go back.
- <------------------------------------------------------------------------------>\033[0m"
+\033[0m"
         echo
         printf '%b' ">"
         read -r -s -n1
@@ -1060,27 +1042,20 @@ EOF
         dive_log_zero=$(printf "0")
         # codes done
 
-        echo
-        printf "       Server.log        Server.log.old    Realmd.log"
+        printf "      Server.log        Server.log.old    Realmd.log"
         echo
         printline "$dive_log_empty" "$dive_server_empty" "$dive_log_empty" "$dive_server_old_empty" "$dive_log_empty" "$dive_realmd_empty"
         printline "$dive_log_error" "$dive_server_error" "$dive_log_error" "$dive_server_old_error" "$dive_log_error" "$dive_realmd_error"
         printline "$dive_log_ignor" "$dive_server_ignor" "$dive_log_ignor" "$dive_server_old_ignor" "$dive_log_ignor" "$dive_realmd_serio"
         printline "$dive_log_serio" "$dive_server_serio" "$dive_log_serio" "$dive_server_old_serio" "$dive_log_serio" "$dive_realmd_serio"
         echo
-        printf " \033[0m<------------------------------------------------------------------------------>\033[0m"
-        echo
-        echo
-        printf "       DBErrors.log      Char.log          EventAIErrors.log"
+        printf "      DBErrors.log      Char.log          EventAIErrors.log"
         echo
         printline "$dive_log_corre" "$dive_DBError_corr" "$dive_log_creat" "$dive_char_created" "$dive_log_skipp" "$dive_EventAIError"
         printline "$dive_log_exist" "$dive_DBError_exis" "$dive_log_login" "$dive_char_login_c" "$dive_log_noeff" "$dive_EventAInoeff"
         printline "$dive_log_query" "$dive_DBError_quer" "$dive_log_logou" "$dive_char_logouts" "$dive_log_nonex" "$dive_EventAInonex"
         printline "$dive_log_never" "$dive_DBError_used" "$dive_log_none" "$dive_log_zero" "$dive_log_NULL0" "$dive_EventAI_NULL"
         printline "$dive_log_crash" "$dive_DBError_cras" "$dive_log_none" "$dive_log_zero" "$dive_log_NotUs" "$dive_EventAINotUs"
-        echo
-        printf " \033[0m<------------------------------------------------------------------------------>\033[0m"
-        echo
         echo
         read -r -p "Press Enter to continue" </dev/tty
         echo
@@ -1110,17 +1085,11 @@ EOF
         pv_count=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT count(*) FROM $db_characters.pvpstats_players;" 2>/dev/null)
         gi_count=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT count(*) FROM $db_characters.character_gifts;" 2>/dev/null)
 
-        # Walter A code >
-        echo
         printline "Accounts" "$ac_count" "Guilds" "$gu_count" "Tickets" "$ti_count"
         printline "Banned" "$bn_count" "Members" "$me_count" "Corpses" "$co_count"
         printline "Online" "$on_count" "Mail" "$ma_count" "PvP" "$pv_count"
         printline "Characters" "$ch_count" "Pets" "$pe_count" "Gifts" "$gi_count"
 
-        # Walter A code done
-        echo
-        printf " \033[0m<------------------------------------------------------------------------------>\033[0m"
-        echo
         echo
         read -r -p "Press Enter to continue" </dev/tty
         echo
@@ -2958,9 +2927,43 @@ Check log for which database needs 'applying updates'"
 
   "t")
 
+    # get class count
+    FILE_CLASSES="/var/log/ms/classes.$NOW"
+    if [ ! -f $FILE_CLASSES ]; then
+      # remove old file
+      rm /var/log/ms/classes.* &>/dev/null
+      # get classes from table characters
+      mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT class FROM $db_characters.characters;" 2>/dev/null |
+        tr -d 'class' >/var/log/ms/classes."$NOW" # update this everyday
+    fi
+
+    # index class, count each one
+    WARRIOR=$(cat /var/log/ms/classes."$NOW" 2>/dev/null | egrep -x '.{1}' 2>/dev/null | grep "1" 2>/dev/null | wc -l 2>/dev/null)
+    PALADIN=$(cat /var/log/ms/classes."$NOW" 2>/dev/null | grep "2" 2>/dev/null | wc -l 2>/dev/null)
+    HUNTER=$(cat /var/log/ms/classes."$NOW" 2>/dev/null | grep "3" 2>/dev/null | wc -l 2>/dev/null)
+    ROGUE=$(cat /var/log/ms/classes."$NOW" 2>/dev/null | grep "4" 2>/dev/null | wc -l 2>/dev/null)
+    PRIEST=$(cat /var/log/ms/classes."$NOW" 2>/dev/null | grep "5" 2>/dev/null | wc -l 2>/dev/null)
+    SHAMAN=$(cat /var/log/ms/classes."$NOW" 2>/dev/null | grep "7" 2>/dev/null | wc -l 2>/dev/null)
+    MAGE=$(cat /var/log/ms/classes."$NOW" 2>/dev/null | grep "8" 2>/dev/null | wc -l 2>/dev/null)
+    WARLOCK=$(cat /var/log/ms/classes."$NOW" 2>/dev/null | grep "9" 2>/dev/null | wc -l 2>/dev/null)
+    DRUID=$(cat /var/log/ms/classes."$NOW" 2>/dev/null | egrep -x '.{2}' 2>/dev/null | grep "11" 2>/dev/null | wc -l 2>/dev/null)
+
     echo "Characters"
     echo
-    mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, level, online, account FROM $db_characters.characters;" 2>/dev/null
+    mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, level, online, account, class FROM $db_characters.characters;" 2>/dev/null
+    printf '%b' "
+Classes
+
+\e[90m1 \033[0m Warrior\e[32m.:\033[0m $WARRIOR
+\e[90m2 \033[0m Paladin\e[32m.:\033[0m $PALADIN
+\e[90m3 \033[0m Hunter\e[32m..:\033[0m $HUNTER
+\e[90m4 \033[0m Rogue\e[32m...:\033[0m $ROGUE
+\e[90m5 \033[0m Priest\e[32m..:\033[0m $PRIEST
+\e[90m7 \033[0m Shaman\e[32m..:\033[0m $SHAMAN
+\e[90m8 \033[0m Mage\e[32m....:\033[0m $MAGE
+\e[90m9 \033[0m Warlock\e[32m.:\033[0m $WARLOCK
+\e[90m11\033[0m Druid\e[32m...:\033[0m $DRUID \n"
+    echo
     read -r -p "Check database size? (y/n) " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
