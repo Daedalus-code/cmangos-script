@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20212001
-# 4.2.6.6
+# 4.2.8.0
 
 # codes >
 while :; do
@@ -2948,21 +2948,35 @@ Check log for which database needs 'applying updates'"
     WARLOCK=$(cat /var/log/ms/classes."$NOW" 2>/dev/null | grep "9" 2>/dev/null | wc -l 2>/dev/null)
     DRUID=$(cat /var/log/ms/classes."$NOW" 2>/dev/null | egrep -x '.{2}' 2>/dev/null | grep "11" 2>/dev/null | wc -l 2>/dev/null)
 
+    # total count
+    CLASS_TOTAL=$(cat /var/log/ms/classes."$NOW" 2>/dev/null | grep "[1-9]" 2>/dev/null | wc -l 2>/dev/null)
+
+    # percentage of each class
+    WARRIOR_P=$(echo "100/$CLASS_TOTAL*$WARRIOR" 2>/dev/null | bc -l 2>/dev/null | awk -F. '{ print $1 }' 2>/dev/null)
+    PALADIN_P=$(echo "100/$CLASS_TOTAL*$PALADIN" 2>/dev/null | bc -l 2>/dev/null | awk -F. '{ print $1 }' 2>/dev/null)
+    HUNTER_P=$(echo "100/$CLASS_TOTAL*$HUNTER" 2>/dev/null | bc -l 2>/dev/null | awk -F. '{ print $1 }' 2>/dev/null)
+    ROGUE_P=$(echo "100/$CLASS_TOTAL*$ROGUE" 2>/dev/null | bc -l 2>/dev/null | awk -F. '{ print $1 }' 2>/dev/null)
+    PRIEST_P=$(echo "100/$CLASS_TOTAL*$PRIEST" 2>/dev/null | bc -l 2>/dev/null | awk -F. '{ print $1 }' 2>/dev/null)
+    SHAMAN_P=$(echo "100/$CLASS_TOTAL*$SHAMAN" 2>/dev/null | bc -l 2>/dev/null | awk -F. '{ print $1 }' 2>/dev/null)
+    MAGE_P=$(echo "100/$CLASS_TOTAL*$MAGE" 2>/dev/null | bc -l 2>/dev/null | awk -F. '{ print $1 }' 2>/dev/null)
+    WARLOCK_P=$(echo "100/$CLASS_TOTAL*$WARLOCK" 2>/dev/null | bc -l 2>/dev/null | awk -F. '{ print $1 }' 2>/dev/null)
+    DRUID_P=$(echo "100/$CLASS_TOTAL*$DRUID" 2>/dev/null | bc -l 2>/dev/null | awk -F. '{ print $1 }' 2>/dev/null)
+
     echo "Characters"
     echo
     mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT name, level, online, account, class FROM $db_characters.characters;" 2>/dev/null
     printf '%b' "
 Classes
 
-\e[90m1 \033[0m Warrior\e[32m.:\033[0m $WARRIOR
-\e[90m2 \033[0m Paladin\e[32m.:\033[0m $PALADIN
-\e[90m3 \033[0m Hunter\e[32m..:\033[0m $HUNTER
-\e[90m4 \033[0m Rogue\e[32m...:\033[0m $ROGUE
-\e[90m5 \033[0m Priest\e[32m..:\033[0m $PRIEST
-\e[90m7 \033[0m Shaman\e[32m..:\033[0m $SHAMAN
-\e[90m8 \033[0m Mage\e[32m....:\033[0m $MAGE
-\e[90m9 \033[0m Warlock\e[32m.:\033[0m $WARLOCK
-\e[90m11\033[0m Druid\e[32m...:\033[0m $DRUID \n"
+\e[90m1 \033[0m Warrior\e[32m.:\033[0m $WARRIOR \e[90m$WARRIOR_P%\033[0m
+\e[90m2 \033[0m Paladin\e[32m.:\033[0m $PALADIN \e[90m$PALADIN_P%\033[0m
+\e[90m3 \033[0m Hunter\e[32m..:\033[0m $HUNTER \e[90m$HUNTER_P%\033[0m
+\e[90m4 \033[0m Rogue\e[32m...:\033[0m $ROGUE \e[90m$ROGUE_P%\033[0m
+\e[90m5 \033[0m Priest\e[32m..:\033[0m $PRIEST \e[90m$PRIEST_P%\033[0m
+\e[90m7 \033[0m Shaman\e[32m..:\033[0m $SHAMAN \e[90m$SHAMAN_P%\033[0m
+\e[90m8 \033[0m Mage\e[32m....:\033[0m $MAGE \e[90m$MAGE_P%\033[0m
+\e[90m9 \033[0m Warlock\e[32m.:\033[0m $WARLOCK \e[90m$WARLOCK_P%\033[0m
+\e[90m11\033[0m Druid\e[32m...:\033[0m $DRUID \e[90m$DRUID_P%\033[0m\n"
     echo
     read -r -p "Check database size? (y/n) " -n 1 -r
     echo
