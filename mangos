@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20212001
-# 4.2.8.0
+# V20212601
+# 4.3.1.5
 
 # codes >
 while :; do
@@ -1056,6 +1056,41 @@ EOF
         printline "$dive_log_query" "$dive_DBError_quer" "$dive_log_logou" "$dive_char_logouts" "$dive_log_nonex" "$dive_EventAInonex"
         printline "$dive_log_never" "$dive_DBError_used" "$dive_log_none" "$dive_log_zero" "$dive_log_NULL0" "$dive_EventAI_NULL"
         printline "$dive_log_crash" "$dive_DBError_cras" "$dive_log_none" "$dive_log_zero" "$dive_log_NotUs" "$dive_EventAINotUs"
+
+        # count error from logs
+        error_charac=$(grep -c "ERROR:.*" "$folder_core"/run/logs/Char.log 2>/dev/null)
+        error_dberro=$(grep -c "ERROR:.*" "$folder_core"/run/logs/DBErrors.log 2>/dev/null)
+        error_eventa=$(grep -c "ERROR:.*" "$folder_core"/run/logs/EventAIErrors.log 2>/dev/null)
+
+        echo
+        printf '%b' "\e[2m"
+        read -r -p "RAW ERROR Output? (y/n) " -n 1 -r
+        printf '%b' "\033[0m"
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+          # get raw error from logs
+          grep -Eo "ERROR:.*" "$folder_core"/run/logs/Server.log 2>/dev/null
+          grep -Eo "ERROR:.*" "$folder_core"/run/logs/Realmd.log 2>/dev/null
+          grep -Eo "ERROR:.*" "$folder_core"/run/logs/Char.log 2>/dev/null
+          grep -Eo "ERROR:.*" "$folder_core"/run/logs/DBErrors.log 2>/dev/null
+          grep -Eo "ERROR:.*" "$folder_core"/run/logs/EventAIErrors.log 2>/dev/null
+        fi
+        # tail logs instead
+        printf '%b' "\e[2m"
+        read -r -p "tail Output? (y/n) " -n 1 -r
+        printf '%b' "\033[0m"
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+          # tail logs for error
+          tail -f "$folder_core"/run/logs/*.log 2>/dev/null |
+            grep -Eo "ERROR:.*" 2>/dev/null
+        fi
+        printf '%b' "
+Server\e[0;32m........:\033[0m $dive_server_error
+Realmd\e[0;32m........:\033[0m $dive_realmd_error
+Char\e[0;32m..........:\033[0m $error_charac
+DBErrors\e[0;32m......:\033[0m $error_dberro
+EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
         echo
         read -r -p "Press Enter to continue" </dev/tty
         echo
