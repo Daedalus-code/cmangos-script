@@ -1069,11 +1069,11 @@ EOF
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           # get raw error from logs
-          grep -Eo "ERROR:.*" "$folder_core"/run/logs/Server.log 2>/dev/null
-          grep -Eo "ERROR:.*" "$folder_core"/run/logs/Realmd.log 2>/dev/null
-          grep -Eo "ERROR:.*" "$folder_core"/run/logs/Char.log 2>/dev/null
-          grep -Eo "ERROR:.*" "$folder_core"/run/logs/DBErrors.log 2>/dev/null
-          grep -Eo "ERROR:.*" "$folder_core"/run/logs/EventAIErrors.log 2>/dev/null
+          grep -Eo "ERROR:.*|.*empty!|.*empty" "$folder_core"/run/logs/Server.log 2>/dev/null | awk '!a[$0]++' 2>/dev/null
+          grep -Eo "ERROR:.*|.*empty!|.*empty" "$folder_core"/run/logs/Realmd.log 2>/dev/null | awk '!a[$0]++' 2>/dev/null
+          grep -Eo "ERROR:.*|.*empty!|.*empty" "$folder_core"/run/logs/Char.log 2>/dev/null | awk '!a[$0]++' 2>/dev/null
+          grep -Eo "ERROR:.*|.*empty!|.*empty" "$folder_core"/run/logs/DBErrors.log 2>/dev/null | awk '!a[$0]++' 2>/dev/null
+          grep -Eo "ERROR:.*|.*empty!|.*empty" "$folder_core"/run/logs/EventAIErrors.log 2>/dev/null | awk '!a[$0]++' 2>/dev/null
         fi
         # tail logs instead
         printf '%b' "\e[2m"
@@ -1083,7 +1083,7 @@ EOF
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           # tail logs for error
           tail -f "$folder_core"/run/logs/*.log 2>/dev/null |
-            grep -Eo "ERROR:.*" 2>/dev/null
+            grep -Eo "ERROR:.*|.*empty!|.*empty" 2>/dev/null
         fi
         printf '%b' "
 Server\e[0;32m........:\033[0m $dive_server_error
