@@ -7,14 +7,14 @@
 #               Continued Massive Network Game Object Server               #
 ############################################################################
 
-# Built on a ubuntu system - Linux 5.4.0-1011-raspi - (Raspberry Pi4)
+# Built on a ubuntu system - Linux 5.4.0-1026-raspi - (Raspberry Pi4)
 # https://ubuntu.com/download/raspberry-pi
 
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
 # V20212701
-# 4.3.6.4
+# 4.2.7.4
 
 # codes >
 while :; do
@@ -4202,152 +4202,62 @@ Classes
     FILECNF="$folder_install/server.txt"
     if [ ! -f "$FILETXT" ]; then
       echo "No CMaNGOS-Script Configuration found! ($folder_install)"
+      sleep 1
       # copy new config, server.txt
       cp "$folder_helper"/server.txt "$folder_install"
       echo "Creating new configuration > $folder_install/server.txt"
+      sleep 1
     fi
     if [ ! -f "$FILECNF" ]; then
       echo "No MySQL Configuration found! ($folder_install)"
+      sleep 1
       # copy new config, server.cnf
       cp "$folder_helper"/server.cnf "$folder_install"
       echo "Creating new configuration > $folder_install/server.cnf"
+      sleep 1
     fi
 
-    # check if 'mangosd.conf.dist' exist >
-    FILE="$folder_core/run/etc/mangosd.conf.dist"
-    if [ ! -f "$FILE" ]; then
-      echo "Core not compiled!"
-      echo
-      read -r -p "Edit cmangos-script configuration? (nano) (y/n) " -n 1 -r
-      echo
-      if [[ $REPLY =~ ^[Yy]$ ]]; then
-        # edit cmangos-script configuration
-        echo "
-1 : nano server.txt
-2 : nano server.cnf"
+    HEIGHT=19
+    WIDTH=33
+    CHOICE_HEIGHT=11
+    BACKTITLE="Server configuration"
+    TITLE="Configurations"
+    MENU="Choose one of the following options:"
 
-        read -n1 -s
-        case "$REPLY" in
-        # edit server.txt
-        "1")
-          nano "$folder_install"/server.txt
-          ;;
-          # edit server.cnf
-        "2")
-          nano "$folder_install"/server.cnf
-          ;;
+    OPTIONS=(1 "server.txt"
+      2 "server.cnf"
+      3 "mangos.conf.dist"
+      4 "mangos.conf"
+      5 "realmd.conf.dist"
+      6 "realmd.conf"
+      7 "ahbot.conf.dist"
+      8 "ahbot.conf"
+      9 "playerbot.conf.dist"
+      10 "playerbot.conf"
+      11 "InstallFullDB")
 
-        "q") exit ;;
-        *) echo "invalid option" ;;
-        esac
-      fi
-    else
-      read -r -p "Edit config files? (nano) (y/n) " -n 1 -r
-      echo
-      if [[ $REPLY =~ ^[Yy]$ ]]; then
+    CHOICE=$(dialog --clear \
+      --backtitle "$BACKTITLE" \
+      --title "$TITLE" \
+      --menu "$MENU" \
+      $HEIGHT $WIDTH $CHOICE_HEIGHT \
+      "${OPTIONS[@]}" \
+      2>&1 >/dev/tty)
 
-        title="       Save config without .dist
-    ================================
-          Server configuration
-"
-        echo
-        prompt="
-
-Choose number ->
-
->"
-        echo
-        options=(
-
-          "mangos.conf.dist"
-
-          "realmd.conf.dist"
-
-          "playerbot.conf.dist"
-
-          "ahbot.conf.dist"
-
-          "mangos.conf"
-
-          "realmd.conf"
-
-          "playerbot.conf"
-
-          "ahbot.conf"
-
-          "InstallFullDB.config"
-
-          "server.txt"
-
-          "server.cnf"
-        )
-
-        echo "$title"
-        PS3="$prompt "
-        select opt in "${options[@]}" "Quit"; do
-
-          case "$REPLY" in
-
-          1)
-            echo "You picked $opt $REPLY"
-            nano "$folder_core"/run/etc/mangosd.conf.dist
-            ;;
-          2)
-            echo "You picked $opt $REPLY"
-            nano "$folder_core"/run/etc/realmd.conf.dist
-            ;;
-          3)
-            echo "You picked $opt $REPLY"
-            nano "$folder_core"/run/etc/playerbot.conf.dist
-            ;;
-          4)
-            echo "You picked $opt $REPLY"
-            nano "$folder_core"/run/etc/ahbot.conf.dist
-            ;;
-
-          5)
-            echo "You picked $opt $REPLY"
-            nano "$folder_core"/run/etc/mangosd.conf
-            ;;
-          6)
-            echo "You picked $opt $REPLY"
-            nano "$folder_core"/run/etc/realmd.conf
-            ;;
-          7)
-            echo "You picked $opt $REPLY"
-            nano "$folder_core"/run/etc/playerbot.conf
-            ;;
-          8)
-            echo "You picked $opt $REPLY"
-            nano "$folder_core"/run/etc/ahbot.conf
-            ;;
-          9)
-            echo "You picked $opt $REPLY"
-            nano "$folder_db"/InstallFullDB.config
-            ;;
-          10)
-            echo "You picked $opt $REPLY"
-            nano "$folder_install"/server.txt
-            ;;
-          11)
-            echo "You picked $opt $REPLY"
-            nano "$folder_install"/server.cnf
-            ;;
-
-          $((${#options[@]} + 1)))
-            echo "
- See you next time!
- "
-            break
-            ;;
-          *)
-            echo "Invalid option. Try another one."
-            continue
-            ;;
-          esac
-        done
-      fi
-    fi
+    clear
+    case $CHOICE in
+    "1") nano "$folder_install"/server.txt ;;
+    "2") nano "$folder_install"/server.cnf ;;
+    "3") nano "$folder_core"/run/etc/mangosd.conf.dist ;;
+    "4") nano "$folder_core"/run/etc/mangosd.conf ;;
+    "5") nano "$folder_core"/run/etc/realmd.conf.dist ;;
+    "6") nano "$folder_core"/run/etc/realmd.conf ;;
+    "7") nano "$folder_core"/run/etc/ahbot.conf.dist ;;
+    "8") nano "$folder_core"/run/etc/ahbot.conf ;;
+    "9") nano "$folder_core"/run/etc/playerbot.conf.dist ;;
+    "10") nano "$folder_core"/run/etc/playerbot.conf ;;
+    "11") nano "$folder_db"/InstallFullDB.config ;;
+    esac
 
     ;;
 
