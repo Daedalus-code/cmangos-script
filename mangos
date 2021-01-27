@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20212701
-# 4.3.1.5
+# 4.3.5.1
 
 # codes >
 while :; do
@@ -4202,8 +4202,44 @@ Classes
     if [ ! -f "$FILE" ]; then
       echo "Core not compiled!"
       echo
-      read -r -p "Press Enter to continue" </dev/tty
+      read -r -p "Edit cmangos-script configuration? (nano) (y/n) " -n 1 -r
       echo
+      if [[ $REPLY =~ ^[Yy]$ ]]; then
+        # configuration files
+        FILETXT="$folder_install/server.cnf"
+        FILECNF="$folder_install/server.txt"
+        if [ ! -f "$FILETXT" ]; then
+          echo "No CMaNGOS-Script Configuration found! ($folder_install)"
+          # copy new config, server.txt
+          cp "$folder_helper"/server.txt "$folder_install"
+          echo "Creating new configuration > $folder_install/server.txt"
+        fi
+        if [ ! -f "$FILECNF" ]; then
+          echo "No MySQL Configuration found! ($folder_install)"
+          # copy new config, server.cnf
+          cp "$folder_helper"/server.cnf "$folder_install"
+          echo "Creating new configuration > $folder_install/server.cnf"
+        fi
+        # edit cmangos-script configuration
+        echo "
+1 : nano server.txt
+2 : nano server.cnf"
+
+        read -n1 -s
+        case "$REPLY" in
+        # edit server.txt
+        "1")
+          nano "$folder_install"/server.txt
+          ;;
+          # edit server.cnf
+        "2")
+          nano "$folder_install"/server.cnf
+          ;;
+
+        "q") exit ;;
+        *) echo "invalid option" ;;
+        esac
+      fi
     else
       read -r -p "Edit config files? (nano) (y/n) " -n 1 -r
       echo
