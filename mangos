@@ -13,7 +13,7 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20212601
+# V20212701
 # 4.3.1.5
 
 # codes >
@@ -1260,7 +1260,7 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
       rm /var/log/ms/installed_core &>/dev/null
       # fresh install ? >
       echo "Cloning repository 'mangos-classic' Please wait this might take a while
-(https://github.com/cmangos/mangos-classic)"
+(${github_cmangos:?})"
       sudo mkdir "$folder_wow" &>/dev/null
       sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
       cd "$folder_wow" || exit
@@ -1301,7 +1301,7 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
       rm /var/log/ms/installed_db &>/dev/null
       # fresh install ? >
       echo "Cloning repository 'classic-db' Please wait this might take a while
-(https://github.com/cmangos/classic-db)"
+(${github_database:?})"
       sudo mkdir "$folder_wow" &>/dev/null
       sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
       cd "$folder_wow" || exit
