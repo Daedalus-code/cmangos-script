@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Remote login with netcat
+# This is default settings, please feel free to change anything and everything.
+
+USER="ubuntu"       # system user (YOU probably NEED to change THIS)
+HOST_NC="localhost" # netcat host
+PORT_NC="3443"      # netcat port
+
+sudo rm /home/"$USER"/nc.tmp &>/dev/null                 # remove tmp file, regardless
+printf '%b' "Username: "                                 # output, ask for username
+read -r USER_NC                                          # enter netcat username
+printf '%b' "Password: \e[90m?\033[0m"                   # output, ask for password
+read -r -s PASS_NC                                       # enter netcat password
+if [[ -z "$USER_NC" || -z "$PASS_NC" ]]; then            # if anything is empty, exit
+  printf '%b' "\e[90mEmpty Stuff Doesn't Work!\033[0m\n" # output, nothing
+  sudo rm /home/"$USER"/nc.tmp &>/dev/null               # remove tmp file, regardless
+else                                                     # continue on with login
+  echo "$USER_NC
+$PASS_NC" >/home/"$USER"/nc.tmp                       # output, create tmp file
+  nc -q 1 "$HOST_NC" "$PORT_NC" </home/"$USER"/nc.tmp # login with tmp output
+  printf '%b' "\e[92m!\033[0m\n"                      # output, working! (hopefully)
+  sudo rm /home/"$USER"/nc.tmp &>/dev/null            # remove tmp file
+fi
