@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20212701
-# 4.3.5.1
+# 4.3.6.4
 
 # codes >
 while :; do
@@ -4197,6 +4197,22 @@ Classes
 
   "e")
 
+    # configuration files
+    FILETXT="$folder_install/server.cnf"
+    FILECNF="$folder_install/server.txt"
+    if [ ! -f "$FILETXT" ]; then
+      echo "No CMaNGOS-Script Configuration found! ($folder_install)"
+      # copy new config, server.txt
+      cp "$folder_helper"/server.txt "$folder_install"
+      echo "Creating new configuration > $folder_install/server.txt"
+    fi
+    if [ ! -f "$FILECNF" ]; then
+      echo "No MySQL Configuration found! ($folder_install)"
+      # copy new config, server.cnf
+      cp "$folder_helper"/server.cnf "$folder_install"
+      echo "Creating new configuration > $folder_install/server.cnf"
+    fi
+
     # check if 'mangosd.conf.dist' exist >
     FILE="$folder_core/run/etc/mangosd.conf.dist"
     if [ ! -f "$FILE" ]; then
@@ -4205,21 +4221,6 @@ Classes
       read -r -p "Edit cmangos-script configuration? (nano) (y/n) " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
-        # configuration files
-        FILETXT="$folder_install/server.cnf"
-        FILECNF="$folder_install/server.txt"
-        if [ ! -f "$FILETXT" ]; then
-          echo "No CMaNGOS-Script Configuration found! ($folder_install)"
-          # copy new config, server.txt
-          cp "$folder_helper"/server.txt "$folder_install"
-          echo "Creating new configuration > $folder_install/server.txt"
-        fi
-        if [ ! -f "$FILECNF" ]; then
-          echo "No MySQL Configuration found! ($folder_install)"
-          # copy new config, server.cnf
-          cp "$folder_helper"/server.cnf "$folder_install"
-          echo "Creating new configuration > $folder_install/server.cnf"
-        fi
         # edit cmangos-script configuration
         echo "
 1 : nano server.txt
@@ -4275,6 +4276,10 @@ Choose number ->
           "ahbot.conf"
 
           "InstallFullDB.config"
+
+          "server.txt"
+
+          "server.cnf"
         )
 
         echo "$title"
@@ -4319,6 +4324,14 @@ Choose number ->
           9)
             echo "You picked $opt $REPLY"
             nano "$folder_db"/InstallFullDB.config
+            ;;
+          10)
+            echo "You picked $opt $REPLY"
+            nano "$folder_install"/server.txt
+            ;;
+          11)
+            echo "You picked $opt $REPLY"
+            nano "$folder_install"/server.cnf
             ;;
 
           $((${#options[@]} + 1)))
