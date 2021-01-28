@@ -537,7 +537,7 @@ Are You Sure? (y/n) " -n 1 -r
           cut -c -4 2>/dev/null)
         menu_print_cpu_temp=$(printf '%b' "Temp\e[0;32m........:\033[0m ${menu_cpu_temp:?}c")
       else
-        menu_print_cpu_temp=$("")
+        menu_print_cpu_temp=$("" &>/dev/null)
       fi
       # commit
       if grep -E "Using commit.*(.*)" "${folder_core:?}"/run/logs/Server.log &>/dev/null; then
