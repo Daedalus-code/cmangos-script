@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20212701
-# 4.2.7.4
+# V20212801
+# 4.2.7.8
 
 # codes >
 while :; do
@@ -2327,10 +2327,14 @@ Please install mysql or mariadb database/client"
         if [ "$RESULT" == "$db_mangos" ]; then
           mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP "$db_mangos"
         fi
-        # drop database 'realmd'
-        RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_realmd")
-        if [ "$RESULT" == "$db_realmd" ]; then
-          mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP "$db_realmd"
+        read -r -p "Drop realmd database? (y/n) " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+          # drop database 'realmd'
+          RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_realmd")
+          if [ "$RESULT" == "$db_realmd" ]; then
+            mysqladmin --defaults-extra-file="$sql_mycnf" -f DROP "$db_realmd"
+          fi
         fi
 
         # drop databases done
