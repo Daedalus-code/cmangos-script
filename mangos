@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20212801
-# 4.3.7.0
+# 4.3.8.8
 
 # codes >
 while :; do
@@ -1425,7 +1425,8 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
       subversion
       unzip
       zip
-      zlibc)
+      zlibc
+      psmisc)
     # codes done
     HEIGHT=12
     WIDTH=40
@@ -3099,13 +3100,12 @@ Classes
 
           # this is for docker users
           if [ -f /.dockerenv ]; then
-            if ! [ -x "$(command -v psmisc)" ]; then
-              # install psmisc so 'killall' command is available
-              sudo apt-get install psmisc -y 2>/dev/null
-            fi
             echo "Killing screens (realmd, mangosd)"
             sleep 3
             sudo killall screen 2>/dev/null
+            # keep old logs >
+            cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
+            cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
           else
 
             # keep old logs >
@@ -3162,7 +3162,10 @@ Classes
             REALMD_ID=$(screen -list 2>/dev/null | grep -Eo "[0-9]+.realmd" 2>/dev/null |
               awk -F. '{ print $1 }' 2>/dev/null)
             # kill that screen
-            screen -S "$REALMD_ID" -X quit 2>/dev/null
+            screen -S "$REALMD_ID" -X quit
+            # keep old logs >
+            cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
+            cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
           else
 
             # keep old logs >
@@ -3201,7 +3204,10 @@ Classes
             MANGOSD_ID=$(screen -list 2>/dev/null | grep -Eo "[0-9]+.mangosd" 2>/dev/null |
               awk -F. '{ print $1 }' 2>/dev/null)
             # kill that screen
-            screen -S "$MANGOSD_ID" -X quit 2>/dev/null
+            screen -S "$MANGOSD_ID" -X quit
+            # keep old logs >
+            cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
+            cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
           else
 
             # keep old logs >
@@ -3310,6 +3316,9 @@ Classes
 
           # this is for docker users
           if [ -f /.dockerenv ]; then
+            echo "Killing screens (realmd, mangosd)"
+            sleep 3
+            sudo killall screen 2>/dev/null
             echo "Starting server with screen
 'screen -list' -> 'screen -r NUM'"
             sleep 3
@@ -3324,6 +3333,9 @@ Classes
             # implement daemons inside newly made screens
             screen -S realmd -X -p 0 stuff "$REALMD_SCREEN"
             screen -S mangosd -X -p 0 stuff "$MANGOSD_SCREEN"
+            # keep old logs >
+            cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
+            cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
           else
 
             # keep old logs >
@@ -3647,6 +3659,9 @@ Classes
             REALMD_SCREEN="$folder_core/run/bin/./realmd -c $folder_core/run/etc/realmd.conf\n"
             # implement daemon inside newly made screens
             screen -S realmd -X -p 0 stuff "$REALMD_SCREEN"
+            # keep old logs >
+            cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
+            cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
           else
 
             # keep old logs >
@@ -3687,6 +3702,9 @@ Classes
             MANGOSD_SCREEN="$folder_core/run/bin/./mangosd -c $folder_core/run/etc/mangosd.conf\n"
             # implement daemon inside newly made screens
             screen -S mangosd -X -p 0 stuff "$MANGOSD_SCREEN"
+            # keep old logs >
+            cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
+            cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
           else
 
             # keep old logs >
