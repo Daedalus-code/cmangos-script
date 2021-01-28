@@ -4257,7 +4257,7 @@ Classes
 
     # is fping installed? >
     if ! [ -x "$(command -v fping)" ]; then
-      sudo apt-get install fping ping -y 2>/dev/null
+      sudo apt-get install fping -y 2>/dev/null
     fi
     echo
     printf '%b' "Online check -> \e[92minternet\033[0m/\e[92mintranet\033[0m\n"
