@@ -1461,7 +1461,7 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
 
         # this is for docker users
         if [ -f /.dockerenv ]; then
-          echo "Killing screens (realmd, mangosd)"
+          printf '%b' "\e[90mKilling screens (realmd, mangosd)\033[0m\n"
           sleep 3
           sudo killall screen 2>/dev/null
           # keep old logs >
@@ -1797,7 +1797,7 @@ Check if correct information, or just restart server."
 
         # this is for docker users
         if [ -f /.dockerenv ]; then
-          echo "Killing screens (realmd, mangosd)"
+          printf '%b' "\e[90mKilling screens (realmd, mangosd)\033[0m\n"
           sleep 3
           sudo killall screen 2>/dev/null
           # keep old logs >
@@ -2300,7 +2300,7 @@ Please install mysql or mariadb database/client"
 
         # this is for docker users
         if [ -f /.dockerenv ]; then
-          echo "Killing screens (realmd, mangosd)"
+          printf '%b' "\e[90mKilling screens (realmd, mangosd)\033[0m\n"
           sleep 3
           sudo killall screen 2>/dev/null
           # keep old logs >
@@ -2435,7 +2435,7 @@ Please install mysql or mariadb database/client"
 
         # this is for docker users
         if [ -f /.dockerenv ]; then
-          echo "Killing screens (realmd, mangosd)"
+          printf '%b' "\e[90mKilling screens (realmd, mangosd)\033[0m\n"
           sleep 3
           sudo killall screen 2>/dev/null
           # keep old logs >
@@ -2619,7 +2619,7 @@ Please install mysql or mariadb database/client"
 
         # this is for docker users
         if [ -f /.dockerenv ]; then
-          echo "Killing screens (realmd, mangosd)"
+          printf '%b' "\e[90mKilling screens (realmd, mangosd)\033[0m\n"
           sleep 3
           sudo killall screen 2>/dev/null
           # keep old logs >
@@ -3293,7 +3293,7 @@ Classes
               grep -q "mangosd" 2>/dev/null; then
               echo "Killing screen (mangosd)"
             fi
-            echo "Killing screens (realmd, mangosd)"
+            printf '%b' "\e[90mKilling screens (realmd, mangosd)\033[0m\n"
             sleep 3
             sudo killall screen 2>/dev/null
             # keep old logs >
@@ -3313,7 +3313,7 @@ Classes
 
             # this is for docker users
             if [ -f /.dockerenv ]; then
-              echo "Killing screens (realmd, mangosd)"
+              printf '%b' "\e[90mKilling screens (realmd, mangosd)\033[0m\n"
               sleep 3
               sudo killall screen 2>/dev/null
               # keep old logs >
