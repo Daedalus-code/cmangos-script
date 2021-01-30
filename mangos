@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20212801
-# 4.4.3.6
+# V20213101
+# 4.5.9.7
 
 # codes >
 while :; do
@@ -1519,13 +1519,24 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
         if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
           cpu_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
             cut -c -4 2>/dev/null)
-          cmake_temp=$(printf '%b' "CPU: \e[1;32m$cpu_temp\033[0m°")
+          cmake_temp=$(printf '%b' "CPU: \e[1;32m$cpu_temp \033[0m°")
         else
           cmake_temp=$(printf '%b' "")
         fi
 
+        # count system cores
+        CORES=$(grep -c ^processor /proc/cpuinfo 2>/dev/null)
+        if [[ "$CORES" -ge "1" ]]; then
+          # report count
+          CORES_COUNT=$(printf '%b' "\e[93mThis system has \e[96m$CORES\e[93m cores!\e[33m
+That is the limit, so do whatever you want.\033[0m")
+        else
+          CORES_COUNT=""
+        fi
+
         cat <<EOF
 
+$CORES_COUNT
 $cmake_temp
 
 Compiling using multiple cores:
@@ -1534,17 +1545,34 @@ Compiling using multiple cores:
  2 : 2 cores
  3 : 3 cores
  4 : 4 cores
+ 8 : 8 cores
+ h : 16 cores
+ w : 32 cores
+ t : 64 cores
+ H : 128 cores
+
+ C : Custom
+
  q : quit
 
 EOF
         read -r -n1 -s
         case "$REPLY" in
 
+        "C")
+
+          printf '%b' "\e[90m[  0%] Enter amount of core(s): \033[0m"
+          read -r CUSTOM
+          cores=("$CUSTOM")
+          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          make # custom n cores
+
+          ;;
+
         "1")
 
           cores=("1")
-          printf '%b' "\e[0;32m[  0%] Building with ${cores[0]} core(s)"
-          echo
+          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
           make # 1 core
 
           ;;
@@ -1552,8 +1580,7 @@ EOF
         "2")
 
           cores=("2")
-          printf '%b' "\e[0;32m[  0%] Building with ${cores[0]} core(s)"
-          echo
+          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
           make -j2 # 2 cores
 
           ;;
@@ -1561,8 +1588,7 @@ EOF
         "3")
 
           cores=("3")
-          printf '%b' "\e[0;32m[  0%] Building with ${cores[0]} core(s)"
-          echo
+          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
           make -j3 # 3 cores
 
           ;;
@@ -1570,9 +1596,48 @@ EOF
         "4")
 
           cores=("4")
-          printf '%b' "\e[0;32m[  0%] Building with ${cores[0]} core(s)"
-          echo
+          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
           make -j4 # 4 cores
+
+          ;;
+
+        "8")
+
+          cores=("8")
+          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          make -j8 # 8 cores
+
+          ;;
+
+        "h")
+
+          cores=("16")
+          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          make -j16 # 16 cores, h1gh-
+
+          ;;
+
+        "w")
+
+          cores=("32")
+          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          make -j32 # 32 cores, -w@y
+
+          ;;
+
+        "t")
+
+          cores=("64")
+          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          make -j64 # 64 cores, t0
+
+          ;;
+
+        "H")
+
+          cores=("128")
+          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          make -j128 # 128 cores, h3ll
 
           ;;
 
@@ -1593,7 +1658,7 @@ EOF
             cut -c -4 2>/dev/null)
           cmake_temp=$(printf '%b' "CPU: \e[1;32m$cpu_temp\033[0m° with ${cores[0]} core(s).")
         else
-          cmake_temp=$(printf '%b' "")
+          cmake_temp=""
         fi
         echo
         printf '%b' "$cmake_temp
@@ -1797,13 +1862,24 @@ Check if correct information, or just restart server."
         if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
           cpu_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
             cut -c -4 2>/dev/null)
-          cmake_temp=$(printf '%b' "CPU: \e[1;32m$cpu_temp\033[0m°")
+          cmake_temp=$(printf '%b' "CPU: \e[1;32m$cpu_temp \033[0m°")
         else
           cmake_temp=$(printf '%b' "")
         fi
 
+        # count system cores
+        CORES=$(grep -c ^processor /proc/cpuinfo 2>/dev/null)
+        if [[ "$CORES" -ge "1" ]]; then
+          # report count
+          CORES_COUNT=$(printf '%b' "\e[93mThis system has \e[96m$CORES\e[93m cores!\e[33m
+That is the limit, so do whatever you want.\033[0m")
+        else
+          CORES_COUNT=""
+        fi
+
         cat <<EOF
 
+$CORES_COUNT
 $cmake_temp
 
 Compiling using multiple cores:
@@ -1812,17 +1888,34 @@ Compiling using multiple cores:
  2 : 2 cores
  3 : 3 cores
  4 : 4 cores
+ 8 : 8 cores
+ h : 16 cores
+ w : 32 cores
+ t : 64 cores
+ H : 128 cores
+
+ C : Custom
+
  q : quit
 
 EOF
         read -r -n1 -s
         case "$REPLY" in
 
+        "C")
+
+          printf '%b' "\e[90m[  0%] Enter amount of core(s): \033[0m"
+          read -r CUSTOM
+          cores=("$CUSTOM")
+          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          make # custom n cores
+
+          ;;
+
         "1")
 
           cores=("1")
-          printf '%b' "\e[0;32m[  0%] Building with ${cores[0]} core(s)"
-          echo
+          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
           make # 1 core
 
           ;;
@@ -1830,8 +1923,7 @@ EOF
         "2")
 
           cores=("2")
-          printf '%b' "\e[0;32m[  0%] Building with ${cores[0]} core(s)"
-          echo
+          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
           make -j2 # 2 cores
 
           ;;
@@ -1839,8 +1931,7 @@ EOF
         "3")
 
           cores=("3")
-          printf '%b' "\e[0;32m[  0%] Building with ${cores[0]} core(s)"
-          echo
+          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
           make -j3 # 3 cores
 
           ;;
@@ -1848,9 +1939,48 @@ EOF
         "4")
 
           cores=("4")
-          printf '%b' "\e[0;32m[  0%] Building with ${cores[0]} core(s)"
-          echo
+          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
           make -j4 # 4 cores
+
+          ;;
+
+        "8")
+
+          cores=("8")
+          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          make -j8 # 8 cores
+
+          ;;
+
+        "h")
+
+          cores=("16")
+          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          make -j16 # 16 cores, h1gh-
+
+          ;;
+
+        "w")
+
+          cores=("32")
+          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          make -j32 # 32 cores, -w@y
+
+          ;;
+
+        "t")
+
+          cores=("64")
+          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          make -j64 # 64 cores, t0
+
+          ;;
+
+        "H")
+
+          cores=("128")
+          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          make -j128 # 128 cores, h3ll
 
           ;;
 
@@ -1871,7 +2001,7 @@ EOF
             cut -c -4 2>/dev/null)
           cmake_temp=$(printf '%b' "CPU: \e[1;32m$cpu_temp\033[0m° with ${cores[0]} core(s).")
         else
-          cmake_temp=$(printf '%b' "")
+          cmake_temp=""
         fi
         echo
         printf '%b' "$cmake_temp
@@ -3155,6 +3285,14 @@ Classes
 
           # this is for docker users
           if [ -f /.dockerenv ]; then
+            if screen -list 2>/dev/null |
+              grep -q "realmd" 2>/dev/null; then
+              echo "Killing screen (realmd)"
+            fi
+            if screen -list 2>/dev/null |
+              grep -q "mangosd" 2>/dev/null; then
+              echo "Killing screen (mangosd)"
+            fi
             echo "Killing screens (realmd, mangosd)"
             sleep 3
             sudo killall screen 2>/dev/null
@@ -3222,6 +3360,10 @@ Classes
 
           # this is for docker users
           if [ -f /.dockerenv ]; then
+            if screen -list 2>/dev/null |
+              grep -q "realmd" 2>/dev/null; then
+              echo "Killing screen (realmd)"
+            fi
             echo "Killing screen (realmd)"
             sleep 3
             # get realmd screen id
@@ -3265,6 +3407,10 @@ Classes
 
           # this is for docker users
           if [ -f /.dockerenv ]; then
+            if screen -list 2>/dev/null |
+              grep -q "mangosd" 2>/dev/null; then
+              echo "Killing screen (mangosd)"
+            fi
             echo "Killing screen (mangosd)"
             sleep 3
             # get mangosd screen id
@@ -3384,7 +3530,14 @@ Classes
 
           # this is for docker users
           if [ -f /.dockerenv ]; then
-            echo "Killing screens (realmd, mangosd)"
+            if screen -list 2>/dev/null |
+              grep -q "realmd" 2>/dev/null; then
+              echo "Killing screen (realmd)"
+            fi
+            if screen -list 2>/dev/null |
+              grep -q "mangosd" 2>/dev/null; then
+              echo "Killing screen (mangosd)"
+            fi
             sleep 3
             sudo killall screen 2>/dev/null
             echo "Starting server with screen
@@ -3716,6 +3869,10 @@ Classes
 
           # this is for docker users
           if [ -f /.dockerenv ]; then
+            if screen -list 2>/dev/null |
+              grep -q "realmd" 2>/dev/null; then
+              echo "Killing screen (realmd)"
+            fi
             echo "Starting server with screen
 'screen -list' -> 'screen -r NUM'"
             sleep 3
@@ -3759,6 +3916,10 @@ Classes
 
           # this is for docker users
           if [ -f /.dockerenv ]; then
+            if screen -list 2>/dev/null |
+              grep -q "mangosd" 2>/dev/null; then
+              echo "Killing screen (mangosd)"
+            fi
             echo "Starting server with screen
 'screen -list' -> 'screen -r NUM'"
             sleep 3
