@@ -1565,7 +1565,7 @@ EOF
           read -r CUSTOM
           cores=("$CUSTOM")
           printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
-          make # custom n cores
+          make -j"$CUSTOM" # custom n cores
 
           ;;
 
@@ -1908,7 +1908,7 @@ EOF
           read -r CUSTOM
           cores=("$CUSTOM")
           printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
-          make # custom n cores
+          make -j"$CUSTOM" # custom n cores
 
           ;;
 
