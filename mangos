@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20213101
-# 4.5.9.7
+# 4.5.9.2
 
 # codes >
 while :; do
@@ -3313,9 +3313,6 @@ Classes
 
             # this is for docker users
             if [ -f /.dockerenv ]; then
-              printf '%b' "\e[90mKilling screens (realmd, mangosd)\033[0m\n"
-              sleep 3
-              sudo killall screen 2>/dev/null
               # keep old logs >
               cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
               cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
@@ -3364,7 +3361,6 @@ Classes
               grep -q "realmd" 2>/dev/null; then
               echo "Killing screen (realmd)"
             fi
-            echo "Killing screen (realmd)"
             sleep 3
             # get realmd screen id
             REALMD_ID=$(screen -list 2>/dev/null | grep -Eo "[0-9]+.realmd" 2>/dev/null |
@@ -3411,7 +3407,6 @@ Classes
               grep -q "mangosd" 2>/dev/null; then
               echo "Killing screen (mangosd)"
             fi
-            echo "Killing screen (mangosd)"
             sleep 3
             # get mangosd screen id
             MANGOSD_ID=$(screen -list 2>/dev/null | grep -Eo "[0-9]+.mangosd" 2>/dev/null |
