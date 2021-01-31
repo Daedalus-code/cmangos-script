@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20213101
-# 4.5.9.2
+# 4.6.0.8
 
 # codes >
 while :; do
@@ -1524,20 +1524,28 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
           cmake_temp=$(printf '%b' "")
         fi
 
+        # get cpu model name
+        CPU_MODEL=$(lscpu 2>/dev/null | grep 'Model name' 2>/dev/null |
+          cut -f 2 -d ":" 2>/dev/null | awk '{$1=$1}1' 2>/dev/null)
+        if [ ! -z "$CPU_MODEL" ]; then
+          CPU_MODEL=$(printf '%b' "\e[96m$CPU_MODEL\e[33m\n")
+        else
+          CPU_MODEL=""
+        fi
+
         # count system cores
         CORES=$(grep -c ^processor /proc/cpuinfo 2>/dev/null)
         if [[ "$CORES" -ge "1" ]]; then
           # report count
           CORES_COUNT=$(printf '%b' "\e[93mThis system has \e[96m$CORES\e[93m cores!\e[33m
-That is the limit, so do whatever you want.\033[0m")
+$CPU_MODEL\033[0m")
         else
           CORES_COUNT=""
         fi
 
         cat <<EOF
 
-$CORES_COUNT
-$cmake_temp
+$CORES_COUNT $cmake_temp
 
 Compiling using multiple cores:
 
@@ -1551,7 +1559,7 @@ Compiling using multiple cores:
  t : 64 cores
  H : 128 cores
 
- C : Custom
+ c : custom
 
  q : quit
 
@@ -1559,7 +1567,7 @@ EOF
         read -r -n1 -s
         case "$REPLY" in
 
-        "C")
+        "c")
 
           printf '%b' "\e[90m[  0%] Enter amount of core(s): \033[0m"
           read -r CUSTOM
@@ -1867,20 +1875,28 @@ Check if correct information, or just restart server."
           cmake_temp=$(printf '%b' "")
         fi
 
+        # get cpu model name
+        CPU_MODEL=$(lscpu 2>/dev/null | grep 'Model name' 2>/dev/null |
+          cut -f 2 -d ":" 2>/dev/null | awk '{$1=$1}1' 2>/dev/null)
+        if [ ! -z "$CPU_MODEL" ]; then
+          CPU_MODEL=$(printf '%b' "\e[96m$CPU_MODEL\033[0m\n")
+        else
+          CPU_MODEL=""
+        fi
+
         # count system cores
         CORES=$(grep -c ^processor /proc/cpuinfo 2>/dev/null)
         if [[ "$CORES" -ge "1" ]]; then
           # report count
           CORES_COUNT=$(printf '%b' "\e[93mThis system has \e[96m$CORES\e[93m cores!\e[33m
-That is the limit, so do whatever you want.\033[0m")
+$CPU_MODEL\033[0m")
         else
           CORES_COUNT=""
         fi
 
         cat <<EOF
 
-$CORES_COUNT
-$cmake_temp
+$CORES_COUNT $cmake_temp
 
 Compiling using multiple cores:
 
@@ -1894,7 +1910,7 @@ Compiling using multiple cores:
  t : 64 cores
  H : 128 cores
 
- C : Custom
+ c : custom
 
  q : quit
 
@@ -1902,7 +1918,7 @@ EOF
         read -r -n1 -s
         case "$REPLY" in
 
-        "C")
+        "c")
 
           printf '%b' "\e[90m[  0%] Enter amount of core(s): \033[0m"
           read -r CUSTOM
