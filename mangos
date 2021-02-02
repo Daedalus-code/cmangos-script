@@ -1529,7 +1529,7 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
         CPU_MODEL=$(lscpu 2>/dev/null | grep 'Model name' 2>/dev/null |
           cut -f 2 -d ":" 2>/dev/null | awk '{$1=$1}1' 2>/dev/null)
         if [ ! -z "$CPU_MODEL" ]; then
-          CPU_MODEL=$(printf '%b' "\e[96m$CPU_MODEL\e[33m\n")
+          CPU_MODEL=$(printf '%b' "\e[90m$CPU_MODEL\e[33m\n")
         else
           CPU_MODEL=""
         fi
@@ -1538,7 +1538,7 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
         CORES=$(grep -c ^processor /proc/cpuinfo 2>/dev/null)
         if [[ "$CORES" -ge "1" ]]; then
           # report count
-          CORES_COUNT=$(printf '%b' "\e[93mThis system has \e[96m$CORES\e[93m cores!\e[90m
+          CORES_COUNT=$(printf '%b' "\e[93mThis system has \e[96m$CORES\e[93m cores!
 $CPU_MODEL\033[0m")
         else
           CORES_COUNT=""
@@ -1880,7 +1880,7 @@ Check if correct information, or just restart server."
         CPU_MODEL=$(lscpu 2>/dev/null | grep 'Model name' 2>/dev/null |
           cut -f 2 -d ":" 2>/dev/null | awk '{$1=$1}1' 2>/dev/null)
         if [ ! -z "$CPU_MODEL" ]; then
-          CPU_MODEL=$(printf '%b' "\e[96m$CPU_MODEL\033[0m\n")
+          CPU_MODEL=$(printf '%b' "\e[90m$CPU_MODEL\033[0m\n")
         else
           CPU_MODEL=""
         fi
@@ -1889,7 +1889,7 @@ Check if correct information, or just restart server."
         CORES=$(grep -c ^processor /proc/cpuinfo 2>/dev/null)
         if [[ "$CORES" -ge "1" ]]; then
           # report count
-          CORES_COUNT=$(printf '%b' "\e[93mThis system has \e[96m$CORES\e[93m cores!\e[90m
+          CORES_COUNT=$(printf '%b' "\e[93mThis system has \e[96m$CORES\e[93m cores!
 $CPU_MODEL\033[0m")
         else
           CORES_COUNT=""
