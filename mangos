@@ -2101,8 +2101,8 @@ Select install operation"
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         sudo mkdir "${folder_wow:?}"/backup 2>/dev/null
         sudo mkdir "${folder_wow:?}"/backup/configurations 2>/dev/null
+        sudo cp -R "$folder_core"/run/etc/* "${folder_wow:?}"/backup/configurations 2>/dev/null
         sudo chown -R "$user":"$group" "$folder_wow"
-        cp "$folder_core"/run/etc/*.conf "${folder_wow:?}"/backup/configurations 2>/dev/null
       fi
       read -r -p "Delete Core Directory? (y/n) " -n 1 -r
       echo
