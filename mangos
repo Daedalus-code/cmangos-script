@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20210202
-# 4.6.5.0
+# 4.6.5.7
 
 # codes >
 while :; do
@@ -1266,7 +1266,14 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
       sudo mkdir "$folder_wow" &>/dev/null
       sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
       cd "$folder_wow" || exit
-      git clone "${github_cmangos:?}"
+      read -r -p "--recursive? (y/n) " -n 1 -r
+      echo
+      if [[ $REPLY =~ ^[Yy]$ ]]; then
+        recursive="--recursive"
+        git clone "${github_cmangos:?}" "$recursive"
+      else
+        git clone "${github_cmangos:?}"
+      fi
       echo "Done"
       sleep 1
     else
