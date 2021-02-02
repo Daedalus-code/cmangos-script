@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# script >
+# script
 
 ############################################################################
 #                      C M a N G O S  -  H E L P E R                       #
@@ -14,17 +14,17 @@
 
 # By Rainman
 # V20210202
-# 4.6.5.7
+# 4.7.0.9
 
-# codes >
+# codes
 while :; do
   clear
 
-  # config directory >
+  # config directory
   # shellcheck disable=SC1091
   source /scripts/server.txt # please edit if wrong.
 
-  # dialog, ncurses no utf8 acs >
+  # dialog, ncurses no utf8 acs
   # ! -> https://github.com/scarygliders/X11RDP-o-Matic/issues/45
   export NCURSES_NO_UTF8_ACS=1
 
@@ -65,7 +65,7 @@ while :; do
   esac
   # codes done
 
-  # menu >
+  # menu
 
   printf "\033[0m ---------------------------------------------
     _____ _____     _____ _____ _____ _____
@@ -84,7 +84,7 @@ EOF
 
 EOF
 
-  # service status >
+  # service status
 
   printf '%b' "      $menu_mangosd $menu_realmd"
   echo
@@ -112,14 +112,14 @@ EOF
 
   "a")
 
-    # codes >
+    # codes
     ac_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM ${db_realmd:?}.account;" 2>/dev/null)
     bn_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account_banned;" 2>/dev/null)
     # codes done
 
     clear
 
-    # menu >
+    # menu
 
     printf '%b' "\033[0m ---------------------------------------------
 \033[0m                                       __
@@ -146,7 +146,7 @@ EOF
     read -r -n1 -s
     case "$REPLY" in
 
-    # create account >
+    # create account
 
     "c")
 
@@ -174,7 +174,7 @@ EOF
 
       # menu done
 
-      # username, password, expansion, gmlevel >
+      # username, password, expansion, gmlevel
 
       echo
       echo
@@ -233,13 +233,13 @@ ${pass_nc:?}
 
       # create account done
 
-      # delete account >
+      # delete account
 
     "d")
 
-      # codes >
-      # check for backup >
-      # realmd backup >
+      # codes
+      # check for backup
+      # realmd backup
       FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
       if [ ! -f "$FILE" ]; then
         realmd_backup="[\e[0;31mold\033[0m]"
@@ -248,7 +248,7 @@ ${pass_nc:?}
         realmd_backup="[\e[0;32mok\033[0m]"
         echo
       fi
-      # characters backup >
+      # characters backup
       FILE="$folder_wow/backup/$db_characters-$NOW.sql"
       if [ ! -f "$FILE" ]; then
         charac_backup="[\e[0;31mold\033[0m]"
@@ -259,7 +259,7 @@ ${pass_nc:?}
       fi
       # codes done
 
-      # menu >
+      # menu
 
       clear
 
@@ -348,7 +348,7 @@ Are You Sure? (y/n) " -n 1 -r
 
     # delete account done
 
-    # Login (command) >
+    # Login (command)
 
     # * f★★ck; b7122@rd >> @ct1vlz1★n && chln@.
 
@@ -357,7 +357,7 @@ Are You Sure? (y/n) " -n 1 -r
     while :; do
       clear
 
-      # codes >
+      # codes
       # service status
       world_service=mangosd
       realm_service=realmd
@@ -429,12 +429,12 @@ Are You Sure? (y/n) " -n 1 -r
       # init the color variables
       init_colors
 
-      # uptime >
+      # uptime
       cm_uptime="\033[0mTime""$W""$(uptime)\033[0m"
 
-      # log data >
+      # log data
 
-      # Realmd.log >
+      # Realmd.log
 
       # look for error
       if grep -E -q ".*ERROR*." "${folder_core:?}"/run/logs/Realmd.log &>/dev/null; then
@@ -451,7 +451,7 @@ Are You Sure? (y/n) " -n 1 -r
       fi
       # Realmd.log done
 
-      # Server.log >
+      # Server.log
 
       # look for error
       if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log &>/dev/null; then
@@ -474,9 +474,9 @@ Are You Sure? (y/n) " -n 1 -r
 
       # Server.log done
 
-      # check for backup >
+      # check for backup
 
-      # realmd backup >
+      # realmd backup
       FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
       if [ ! -f "$FILE" ]; then
         realmd_backup="[\e[0;31mold\033[0m]"
@@ -485,7 +485,7 @@ Are You Sure? (y/n) " -n 1 -r
         realmd_backup="[\e[0;32mok\033[0m]"
         echo
       fi
-      # characters backup >
+      # characters backup
       FILE="$folder_wow/backup/$db_characters-$NOW.sql"
       if [ ! -f "$FILE" ]; then
         charac_backup="[\e[0;31mold\033[0m]"
@@ -495,7 +495,7 @@ Are You Sure? (y/n) " -n 1 -r
         echo
       fi
 
-      # world server latest build >
+      # world server latest build
       if grep -q -o -a "\sBuilt\son\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null; then
         # if any, print "built date"
         latest_world_built=$(grep -o -a "\sBuilt\son\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null |
@@ -504,7 +504,7 @@ Are You Sure? (y/n) " -n 1 -r
       else
         latest_world_built="\e[90mBuilt on Nov 23 2004 at 10:00:01\033[0m"
       fi
-      # built for >
+      # built for
       if grep -q -o -a "\sBuilt\sfor\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null; then
         # if any, print "built for"
         built_for=$(grep -o -a "\sBuilt\sfor\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null |
@@ -513,7 +513,7 @@ Are You Sure? (y/n) " -n 1 -r
       else
         built_for="\e[90mBuilt for Linux_x00 (next-to-nothing)\033[0m"
       fi
-      # EventAI >
+      # EventAI
       if grep -q -o -a "\sACID\s1.12.x\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null; then
         # if any, print "EventAI"
         eventai=$(grep -o -a "\sACID\s1.12.x\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null |
@@ -522,7 +522,7 @@ Are You Sure? (y/n) " -n 1 -r
       else
         eventai="\e[90mACID 0.00.x (Classic) for CMaNGOS-CLASSIC (0.00.X Client)\033[0m"
       fi
-      # World DB >
+      # World DB
       if grep -q -o -a "\s1.11\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null; then
         # if any, print "World DB"
         world_db=$(grep -Eo "Classic DB version.*" "$folder_core"/run/logs/Server.log 2>/dev/null |
@@ -531,7 +531,7 @@ Are You Sure? (y/n) " -n 1 -r
       else
         world_db="\e[90m0.00 'Into the Abyss of nothing.' For Classic core z0000.\033[0m"
       fi
-      # cpu temp >
+      # cpu temp
       if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
         menu_cpu_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
           cut -c -4 2>/dev/null)
@@ -570,7 +570,7 @@ Are You Sure? (y/n) " -n 1 -r
       read -r -s -n1
       case "$REPLY" in
 
-      # Information >
+      # Information
 
       "i")
 
@@ -636,18 +636,18 @@ Are You Sure? (y/n) " -n 1 -r
 
         # Information done
 
-        # seedbox menu >
+        # seedbox menu
 
       "m")
 
-        # codes >
+        # codes
         if ! [ -x "$(command -v transmission-cli)" ]; then
           seed_transmission="[\e[0;33mnot installed\033[0m]"
         else
           transmission_list=$(transmission-remote -l 2>/dev/null)
-          # transmission-daemon service >
+          # transmission-daemon service
           transmission_service=transmission-daemon
-          # transmission-daemon status >
+          # transmission-daemon status
           case "$(pidof $transmission_service | wc -w)" in
           0) seed_transmission="[\033[1;31moff\033[0m]" ;;
           1) seed_transmission="[\e[0;32mok\033[0m]" ;;
@@ -661,7 +661,7 @@ Are You Sure? (y/n) " -n 1 -r
         fi
         # codes done
 
-        # menu >
+        # menu
 
         clear
         echo
@@ -694,7 +694,7 @@ $transmission_list
         read -r -s -n1
         case "$REPLY" in
 
-        # remove transmission-daemon >
+        # remove transmission-daemon
 
         "u")
 
@@ -712,7 +712,7 @@ $transmission_list
 
           # remove transmission-daemon done
 
-          # setup seedbox (transmission) >
+          # setup seedbox (transmission)
           # ubuntu
 
         "t")
@@ -723,25 +723,25 @@ $transmission_list
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
 
-            # already installed? >
+            # already installed?
             if ! [ -x "$(command -v transmission-daemon)" ]; then
-              # check for updates regardless >
+              # check for updates regardless
               echo "Please wait"
               sudo apt-get update 2>/dev/null
-              # make sure unzip exist >
+              # make sure unzip exist
               sudo apt-get install unzip -y 2>/dev/null
-              # install transmission-daemon >
+              # install transmission-daemon
               sudo apt-get install transmission-daemon -y &>/dev/null
-              # temporary stop ^ >
+              # temporary stop ^
               sudo service transmission-daemon stop &>/dev/null
-              # remove old config >
+              # remove old config
               sudo rm /var/lib/transmission-daemon/.config/transmission-daemon/settings.json &>/dev/null
-              # create 'seedbox' directory >
+              # create 'seedbox' directory
               cd || exit
               sudo mkdir "/seedbox" &>/dev/null
-              # fix folder owner >
+              # fix folder owner
               sudo chown -R debian-transmission:debian-transmission /seedbox/ &>/dev/null
-              # setup transmission-daemon configuration file >
+              # setup transmission-daemon configuration file
               # settings.json
               cat >"$folder_wow"/settings.json <<'EOF'
 {
@@ -813,22 +813,22 @@ $transmission_list
     "utp-enabled": true
 }
 EOF
-              # install to correct folder >
+              # install to correct folder
               sudo mv "$folder_wow"/settings.json /var/lib/transmission-daemon/.config/transmission-daemon/settings.json &>/dev/null
               sleep 1
-              # start transmission-daemon >
+              # start transmission-daemon
               sudo service transmission-daemon start &>/dev/null
               echo
               printf '%b' "[\e[0;32mok\033[0m] - transmission should be running now"
               echo
               sleep 1
-              # add magnet link: vanilla.maps.zip.torrent >
+              # add magnet link: vanilla.maps.zip.torrent
               transmission-remote -a "magnet:?xt=urn:btih:1cdcaa3d77a7f4df79935d885e639903e37dda24&dn=vanilla%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
               echo
               printf '%b' "[\e[0;32mok\033[0m] - torrent added"
               echo
               sleep 1
-              # reload >
+              # reload
               sudo systemctl daemon-reload 2>/dev/null
               sleep 1
             else
@@ -842,7 +842,7 @@ EOF
 
           # setup seedbox (transmission) done
 
-          # start seedbox (transmission) >
+          # start seedbox (transmission)
 
         "r")
 
@@ -855,9 +855,9 @@ EOF
             echo "Please wait"
             sudo service transmission-daemon start &>/dev/null
             sleep 1
-            # enable service >
+            # enable service
             sudo systemctl enable transmission-daemon &>/dev/null
-            # reload >
+            # reload
             sudo systemctl daemon-reload &>/dev/null
             echo
             printf '%b' "[\e[0;32mok\033[0m] - seedbox started."
@@ -869,7 +869,7 @@ EOF
 
           # start seedbox (transmission) done
 
-          # stop seedbox (transmission) >
+          # stop seedbox (transmission)
 
         "s")
 
@@ -882,9 +882,9 @@ EOF
             echo "Please wait"
             sudo service transmission-daemon stop &>/dev/null
             sleep 1
-            # disable service >
+            # disable service
             sudo systemctl disable transmission-daemon &>/dev/null
-            # reload >
+            # reload
             sudo systemctl daemon-reload &>/dev/null
             echo
             printf '%b' "[\033[1;31moff\033[0m] - seedbox stopped."
@@ -896,7 +896,7 @@ EOF
 
           # stop seedbox (transmission) done
 
-          # install maps >
+          # install maps
 
         "m")
 
@@ -906,7 +906,7 @@ EOF
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
 
-            # codes >
+            # codes
             MAPS="$folder_core"/run/maps/5332742.map
             MMAPS="$folder_core"/run/mmaps/5332742.mmtile
             VMAPS="$folder_core"/run/vmaps/Zulgurub_Ziggurat.wmo.vmo
@@ -935,7 +935,7 @@ EOF
 
         # seedbox menu done
 
-        # htop >
+        # htop
 
       "p")
 
@@ -949,7 +949,7 @@ EOF
 
         # htop done
 
-        # reset --hard (everything) >
+        # reset --hard (everything)
 
       "h")
 
@@ -980,64 +980,64 @@ EOF
 
         # reset --hard (everything) done
 
-        # dive into logs >
+        # dive into logs
 
       "l")
 
-        # codes >
-        # server.log.old >
+        # codes
+        # server.log.old
         dive_server_old_empty=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty.|.*empty*." "$folder_core"/run/logs/Server.log.old 2>/dev/null)
         dive_server_old_error=$(grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log.old 2>/dev/null)
         dive_server_old_serio=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log.old 2>/dev/null)
         dive_server_old_ignor=$(grep -c -E ".*ignoring*.|.*ignore*.|.*ignored*." "$folder_core"/run/logs/Server.log.old 2>/dev/null)
-        # server.log >
+        # server.log
         dive_server_empty=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty.|.*empty*." "$folder_core"/run/logs/Server.log 2>/dev/null)
         dive_server_error=$(grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log 2>/dev/null)
         dive_server_serio=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log 2>/dev/null)
         dive_server_ignor=$(grep -c -E ".*ignoring*.|.*ignore*.|.*ignored*." "$folder_core"/run/logs/Server.log 2>/dev/null)
-        # realmd.log >
+        # realmd.log
         dive_realmd_empty=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log 2>/dev/null)
         dive_realmd_error=$(grep -c -E ".*ERROR*." "$folder_core"/run/logs/Realmd.log 2>/dev/null)
         dive_realmd_serio=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Realmd.log 2>/dev/null)
-        # DBErrors.log >
+        # DBErrors.log
         dive_DBError_corr=$(grep -c -E "does\snot\shave\scorresponding" "$folder_core"/run/logs/DBErrors.log 2>/dev/null)
         dive_DBError_exis=$(grep -c -E "doesn't\sexist" "$folder_core"/run/logs/DBErrors.log 2>/dev/null)
         dive_DBError_quer=$(grep -c -E "query\sERROR" "$folder_core"/run/logs/DBErrors.log 2>/dev/null)
         dive_DBError_used=$(grep -c -E "Option\swill\snever\sbe\sused" "$folder_core"/run/logs/DBErrors.log 2>/dev/null)
         dive_DBError_cras=$(grep -c -E "can\scrash\sclient" "$folder_core"/run/logs/DBErrors.log 2>/dev/null)
-        # char.log >
+        # char.log
         dive_char_created=$(grep -c -E "Create\sCharacter" "$folder_core"/run/logs/Char.log 2>/dev/null)
         dive_char_login_c=$(grep -c -E "Login" "$folder_core"/run/logs/Char.log 2>/dev/null)
         dive_char_logouts=$(grep -c -E "Logout" "$folder_core"/run/logs/Char.log 2>/dev/null)
-        # EventAIErrors.log >
+        # EventAIErrors.log
         dive_EventAIError=$(grep -c -E "skipping" "$folder_core"/run/logs/EventAIErrors.log 2>/dev/null)
         dive_EventAInoeff=$(grep -c -E "Action\swill\snot\shave\sany\seffect." "$folder_core"/run/logs/EventAIErrors.log 2>/dev/null)
         dive_EventAInonex=$(grep -c -E "nonexistent|non-existing" "$folder_core"/run/logs/EventAIErrors.log 2>/dev/null)
         dive_EventAI_NULL=$(grep -c -E ".*NULL*." "$folder_core"/run/logs/EventAIErrors.log 2>/dev/null)
         dive_EventAINotUs=$(grep -c -E "but\snot\sused" "$folder_core"/run/logs/EventAIErrors.log 2>/dev/null)
 
-        # Server.log, .old, Realmd.log >
+        # Server.log, .old, Realmd.log
         dive_log_empty=$(printf "\e[0;33mEmpty....\033[0m")
         dive_log_error=$(printf "\033[0;31mError..\033[0m")
         dive_log_ignor=$(printf "\033[0;31mIgnore.\033[0m")
         dive_log_serio=$(printf "\033[1;31mSerious\033[0m")
-        # DBErrors.log >
+        # DBErrors.log
         dive_log_corre=$(printf "\033[0;31mNotCorresponding\033[0m")
         dive_log_exist=$(printf "\033[0;31mDoesn'tExist....\033[0m")
         dive_log_query=$(printf "\033[0;31mQueryERROR......\033[0m")
         dive_log_never=$(printf "\033[0;31mWillNeverBeUsed.\033[0m")
         dive_log_crash=$(printf "\033[1;31mCanCrashClient!.\033[0m")
-        # EventAIErrors.log >
+        # EventAIErrors.log
         dive_log_skipp=$(printf "\033[0;31mSkipping\033[0m")
         dive_log_noeff=$(printf "\033[0;31mNoEffect\033[0m")
         dive_log_nonex=$(printf "\033[0;31mNonExist\033[0m")
         dive_log_NULL0=$(printf "\033[0;31mNULL....\033[0m")
         dive_log_NotUs=$(printf "\033[0;31mNotUsed.\033[0m")
-        # Char.log >
+        # Char.log
         dive_log_creat=$(printf "\e[0;33mCreated\033[0m")
         dive_log_login=$(printf "\e[0;33mLogin..\033[0m")
         dive_log_logou=$(printf "\e[0;33mLogout.\033[0m")
-        # empty table >
+        # empty table
         dive_log_none=$(printf "\e[2mempty..\033[0m")
         dive_log_zero=$(printf "0")
         # codes done
@@ -1099,7 +1099,7 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
 
         # dive into logs done
 
-        # Get database info (kinda heavy..) >
+        # Get database info (kinda heavy..)
 
       "w")
 
@@ -1133,13 +1133,13 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
 
         # Get database info (kinda heavy..) done
 
-        # backup sql >
+        # backup sql
 
       "b")
 
         # create directory, backup
         mkdir "$folder_wow"/backup &>/dev/null
-        # well (: backup probably hours old by now >
+        # well (: backup probably hours old by now
         echo
         printf "Making fresh backup\e[0;32m.\033[0m"
         sleep 1
@@ -1150,7 +1150,7 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
         printf '%b' "[\e[0;32mok\033[0m] $db_characters-$NOW.sql"
         sleep 2
         echo
-        # backup characters sql >
+        # backup characters sql
         printf "Making fresh backup\e[0;32m.\033[0m"
         sleep 1
         printf "\e[0;32m.\033[0m"
@@ -1165,7 +1165,7 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
 
         # backup sql done
 
-        # remote access >
+        # remote access
 
       "r")
 
@@ -1225,7 +1225,7 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
 
     # Login (command) done * Free Hong Kong.
 
-    # Checking for updates >
+    # Checking for updates
 
   "c")
 
@@ -1255,12 +1255,12 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
       ok_ms="[\e[93mok\033[0m]"
     fi
 
-    # check if 'mangos-classic' exist >
+    # check if 'mangos-classic' exist
     FILE="$folder_core/README.md"
     if [ ! -f "$FILE" ]; then
       # remove old file
       rm /var/log/ms/installed_core &>/dev/null
-      # fresh install ? >
+      # fresh install ?
       printf '%b' "Cloning repository 'mangos-classic' Please wait this might take a while
 (\e[92m${github_cmangos:?}\033[0m)\n"
       sudo mkdir "$folder_wow" &>/dev/null
@@ -1277,7 +1277,7 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
       echo "Done"
       sleep 1
     else
-      # check for updates >
+      # check for updates
 
       # CMaNGOS Core (mangos-classic)
       printf "[ Checking for \e[1;32m+\033[1;31m-\033[0m Updates\033[0m ] .. "
@@ -1303,12 +1303,12 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
     # check if 'mangos-classic' exist done
     fi
 
-    # check if 'classic-db' exist >
+    # check if 'classic-db' exist
     FILE="$folder_db/README.md"
     if [ ! -f "$FILE" ]; then
       # remove old file
       rm /var/log/ms/installed_db &>/dev/null
-      # fresh install ? >
+      # fresh install ?
       printf '%b' "Cloning repository 'classic-db' Please wait this might take a while
 (\e[92m${github_database:?})\033[0m\n"
       sudo mkdir "$folder_wow" &>/dev/null
@@ -1321,9 +1321,9 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
       sleep 1
     else
 
-      # check for updates >
+      # check for updates
 
-      # check if 'classic-db' exist >
+      # check if 'classic-db' exist
 
       # Classic Database (classic-db)
 
@@ -1347,12 +1347,12 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
     # check if 'classic-db' exist done
     fi
 
-    # check if 'cmangos-script' exist >
+    # check if 'cmangos-script' exist
     FILE="$folder_helper/README.md"
     if [ ! -f "$FILE" ]; then
       # remove old file
       rm /var/log/ms/installed_ms &>/dev/null
-      # fresh install ? >
+      # fresh install ?
       echo "Cloning repository 'cmangos-script' Please wait"
       sudo mkdir "$folder_helper" &>/dev/null
       sudo chown -R "${user:?}":"${group:?}" "$folder_helper"
@@ -1361,7 +1361,7 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
       echo "Done"
       sleep 1
     else
-      # check for updates >
+      # check for updates
 
       # CMaNGOS Helper
 
@@ -1384,7 +1384,7 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
       fi
     # check if 'cmangos-script' exist done
     fi
-    # check if 'InstallFullDB.config' exist >
+    # check if 'InstallFullDB.config' exist
     FILE="$folder_db/InstallFullDB.config"
     if [ ! -f "$FILE" ]; then
       cd "$folder_db" || exit
@@ -1400,15 +1400,15 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
 
     # Checking for updates done
 
-    # update CMaNGOS >
+    # update CMaNGOS
 
   "m")
 
-    # codes >
+    # codes
     if ! [ -x "$(command -v dialog)" ]; then
       sudo apt-get install dialog -y 2>/dev/null
     fi
-    # required 'packagelist' to build CMaNGOS >
+    # required 'packagelist' to build CMaNGOS
     # ubuntu server
     packagelist=(autoconf
       automake
@@ -1435,9 +1435,9 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
       zlibc
       psmisc)
     # codes done
-    HEIGHT=12
+    HEIGHT=13
     WIDTH=41
-    CHOICE_HEIGHT=5
+    CHOICE_HEIGHT=6
     BACKTITLE="update CMaNGOS"
     TITLE="Update mangos-classic [core]"
     MENU="Choose one of the following options:"
@@ -1446,7 +1446,8 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
       2 "Install systemd unit files"
       3 "Reinstall (delete /build)"
       4 "Reset --hard origin/master"
-      5 "Delete Core /mangos-classic")
+      5 "Delete Core /mangos-classic"
+      6 "Backup configurations")
 
     CHOICE=$(dialog --clear \
       --backtitle "$BACKTITLE" \
@@ -1459,7 +1460,7 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
     clear
     case $CHOICE in
 
-    # compile latest build >
+    # compile latest build
 
     "1")
 
@@ -1472,7 +1473,7 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
           printf '%b' "\e[90mKilling screens (realmd, mangosd)\033[0m\n"
           sleep 3
           sudo killall screen 2>/dev/null
-          # keep old logs >
+          # keep old logs
           cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
           cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
         else
@@ -1509,7 +1510,7 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
         cp "$folder_core"/run/logs/*.log "$folder_core"/run/logs/old
         # ahbot.conf
         cp "$folder_core"/src/game/AuctionHouseBot/ahbot.conf.dist.in "$folder_core"/run/etc/ahbot.conf.dist &>/dev/null
-        # new compile, new system logs >
+        # new compile, new system logs
         cd "$folder_core"/run/logs || exit &>/dev/null
         mv -t "$folder_core"/run/logs/old/ Realmd.log Server.log Server.log.old DBErrors.log EventAIErrors.log &>/dev/null
         # done
@@ -1521,9 +1522,9 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
         cmake .. ${cmake:?}
         cd "$folder_build" || exit
 
-        # compiling using multiple cores >
+        # compiling using multiple cores
 
-        # cpu temp >
+        # cpu temp
         if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
           cpu_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
             cut -c -4 2>/dev/null)
@@ -1668,7 +1669,7 @@ EOF
 
         # compiling using multiple cores done
 
-        # cpu temp >
+        # cpu temp
         if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
           cpu_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
             cut -c -4 2>/dev/null)
@@ -1737,7 +1738,7 @@ Select install operation"
 
       # compile latest build done
 
-      # install systemd Services >
+      # install systemd Services
       # ubuntu
 
     "2")
@@ -1777,13 +1778,13 @@ Restart=on-abort
 
 [Install]
 WantedBy=multi-user.target" >"$folder_wow"/mangosd.service 2>/dev/null
-        # install services >
+        # install services
         sudo mv "$folder_wow"/*.service /etc/systemd/system/ &>/dev/null
-        # enable services >
+        # enable services
         sudo systemctl enable realmd
         sleep 1
         sudo systemctl enable mangosd
-        # reload >
+        # reload
         sudo systemctl daemon-reload 2>/dev/null
         sleep 1
         echo
@@ -1803,7 +1804,7 @@ Check if correct information, or just restart server."
 
       # install systemd Services done
 
-      # reinstall (delete /build) >
+      # reinstall (delete /build)
 
     "3")
 
@@ -1816,7 +1817,7 @@ Check if correct information, or just restart server."
           printf '%b' "\e[90mKilling screens (realmd, mangosd)\033[0m\n"
           sleep 3
           sudo killall screen 2>/dev/null
-          # keep old logs >
+          # keep old logs
           cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
           cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
         else
@@ -1860,7 +1861,7 @@ Check if correct information, or just restart server."
         cp "$folder_core"/run/logs/*.log "$folder_core"/run/logs/old
         # ahbot.conf
         cp "$folder_core"/src/game/AuctionHouseBot/ahbot.conf.dist.in "$folder_core"/run/etc/ahbot.conf.dist &>/dev/null
-        # new compile, new system logs >
+        # new compile, new system logs
         cd "$folder_core"/run/logs || exit &>/dev/null
         mv -t "$folder_core"/run/logs/old/ Realmd.log Server.log Server.log.old DBErrors.log EventAIErrors.log &>/dev/null
         # done
@@ -1872,9 +1873,9 @@ Check if correct information, or just restart server."
         cmake .. ${cmake:?}
         cd "$folder_build" || exit
 
-        # compiling using multiple cores >
+        # compiling using multiple cores
 
-        # cpu temp >
+        # cpu temp
         if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
           cpu_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
             cut -c -4 2>/dev/null)
@@ -2019,7 +2020,7 @@ EOF
 
         # compiling using multiple cores done
 
-        # cpu temp >
+        # cpu temp
         if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
           cpu_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
             cut -c -4 2>/dev/null)
@@ -2072,7 +2073,7 @@ Select install operation"
 
       # reinstall (delete /build) done
 
-      # reset --hard origin/master ? >
+      # reset --hard origin/master ?
 
     "4")
 
@@ -2107,7 +2108,7 @@ Select install operation"
       read -r -p "Delete Core Directory? (y/n) " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
-        cp "$folder_core"/run/etc/*.conf "${folder_wow:?}"/backup 2>/dev/null
+        sudo cp -R "$folder_core"/run/etc/* "${folder_wow:?}"/backup/configurations 2>/dev/null
         sudo rm -R "$folder_core" &>/dev/null
       fi
 
@@ -2115,17 +2116,28 @@ Select install operation"
 
       # delete core directory (everything) done
 
+      # backup configurations
+
+    "6")
+
+      sudo chown -R "$user":"$group" "$folder_wow"
+      sudo cp -R "$folder_core"/run/etc/* "${folder_wow:?}"/backup/configurations 2>/dev/null
+
+      ;;
+
     esac
+
+    # backup configurations
 
     # update CMaNGOS done
 
-    # update Database >
+    # update Database
 
     ;;
 
   "d")
 
-    # codes >
+    # codes
     if ! [ -x "$(command -v dialog)" ]; then
       sudo apt-get install dialog -y 2>/dev/null
     fi
@@ -2177,16 +2189,16 @@ Select install operation"
 
       # delete database directory (everything) done
 
-      # install database system >
+      # install database system
 
     "11")
 
-      # codes >
-      # check if 'mangos' user exist >
-      # mariadb >
+      # codes
+      # check if 'mangos' user exist
+      # mariadb
       packagelist_maria=(mariadb-client
         mariadb-server)
-      # mysql >
+      # mysql
       packagelist_mysql=(mysql-client
         mysql-server)
       # codes done
@@ -2200,7 +2212,7 @@ Select install operation"
       echo "Please wait.."
       case $n in
 
-      "1") # install mariadb >
+      "1") # install mariadb
 
         sudo apt-get install "${packagelist_maria[@]}" -y
         sudo service mariadb stop &>/dev/null
@@ -2208,7 +2220,7 @@ Select install operation"
 
         ;;
 
-      "2") # install mysql >
+      "2") # install mysql
 
         sudo apt-get install "${packagelist_mysql[@]}" -y
         sudo service mysql stop &>/dev/null
@@ -2224,14 +2236,14 @@ Select install operation"
 
       # install database system done
 
-      # install database client >
+      # install database client
 
     "10")
 
-      # codes >
-      # mariadb-client >
+      # codes
+      # mariadb-client
       packagelist_client_maria=(mariadb-client*)
-      # mysql-client >
+      # mysql-client
       packagelist_client_mysql=(mysql-client*)
       # codes done
 
@@ -2248,13 +2260,13 @@ This is needed to operate local/remote database"
       echo "Please wait.."
       case $n in
 
-      "1") # install mariadb-client >
+      "1") # install mariadb-client
 
         sudo apt-get install "${packagelist_client_maria[@]}" -y
 
         ;;
 
-      "2") # install mysql-client >
+      "2") # install mysql-client
 
         sudo apt-get install "${packagelist_client_mysql[@]}" -y
 
@@ -2276,34 +2288,34 @@ This is needed to operate local/remote database"
 
       # install database client done
 
-      # update classic-db >
+      # update classic-db
 
     "1")
 
-      # checking depends >
+      # checking depends
 
-      # mysql >
+      # mysql
       if sudo dpkg -s mysql-server &>/dev/null; then
         mysql_server_installed=$(printf '%b' "[\e[1;32mok\033[0m]")
       else
         mysql_server_installed=$(printf '%b' "[\e[1;90mno\033[0m]")
       fi
 
-      # mysql-client >
+      # mysql-client
       if sudo dpkg -s mysql-client &>/dev/null; then
         mysql_client_installed=$(printf '%b' "[\e[1;32mok\033[0m]")
       else
         mysql_client_installed=$(printf '%b' "[\e[1;90mno\033[0m]")
       fi
 
-      # mariadb >
+      # mariadb
       if sudo dpkg -s mariadb-server &>/dev/null; then
         mariadb_server_installed=$(printf '%b' "[\e[1;32mok\033[0m]")
       else
         mariadb_server_installed=$(printf '%b' "[\e[1;90mno\033[0m]")
       fi
 
-      # mariadb-client >
+      # mariadb-client
       if sudo dpkg -s mariadb-client &>/dev/null; then
         mariadb_client_installed=$(printf '%b' "[\e[1;32mok\033[0m]")
       else
@@ -2336,7 +2348,7 @@ database user, client/server is needed."
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
 
-          # restart mysql service, if it exists >
+          # restart mysql service, if it exists
           if sudo service mysql status 2>/dev/null | grep -E 'mysql'; then
             echo "No database system found
 Please install mysql or mariadb database/client"
@@ -2347,7 +2359,7 @@ Please install mysql or mariadb database/client"
             sudo service mysql restart &>/dev/null
           fi
 
-          # restart mariadb service, if it exists >
+          # restart mariadb service, if it exists
           if sudo service mariadb status 2>/dev/null | grep -E 'mariadb'; then
             echo "No database system found
 Please install mysql or mariadb database/client"
@@ -2368,7 +2380,7 @@ Please install mysql or mariadb database/client"
           printf '%b' "\e[90mKilling screens (realmd, mangosd)\033[0m\n"
           sleep 3
           sudo killall screen 2>/dev/null
-          # keep old logs >
+          # keep old logs
           cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
           cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
         else
@@ -2395,7 +2407,7 @@ Please install mysql or mariadb database/client"
         printf "Updating classic-db [\e[1;32mdatabase\033[0m]"
         echo
 
-        # backup >
+        # backup
         mkdir "$folder_wow"/backup &>/dev/null
         mkdir "$folder_wow"/backup/old &>/dev/null
         cp "$folder_wow"/backup/*.sql "$folder_wow"/backup/old &>/dev/null
@@ -2417,7 +2429,7 @@ Please install mysql or mariadb database/client"
           read -r -p "New backup? ($db_characters) (y/n) " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
-            # backup characters sql >
+            # backup characters sql
             echo
             printf "Making fresh backup\e[0;32m.\033[0m"
             sleep 1
@@ -2443,7 +2455,7 @@ Please install mysql or mariadb database/client"
           read -r -p "New backup? ($db_realmd) (y/n) " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
-            # backup characters sql >
+            # backup characters sql
             echo
             printf "Making fresh backup\e[0;32m.\033[0m"
             sleep 1
@@ -2456,7 +2468,7 @@ Please install mysql or mariadb database/client"
             echo
           fi
         fi
-        # InstallFullDB ? >
+        # InstallFullDB ?
         echo
         read -r -p "InstallFullDB? (y/n) " -n 1 -r
         echo
@@ -2490,7 +2502,7 @@ Please install mysql or mariadb database/client"
 
       # update classic-db done
 
-      # drop/import databases >
+      # drop/import databases
 
     "2")
 
@@ -2503,7 +2515,7 @@ Please install mysql or mariadb database/client"
           printf '%b' "\e[90mKilling screens (realmd, mangosd)\033[0m\n"
           sleep 3
           sudo killall screen 2>/dev/null
-          # keep old logs >
+          # keep old logs
           cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
           cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
         else
@@ -2555,7 +2567,7 @@ Please install mysql or mariadb database/client"
 
         # backup done
 
-        # drop databases >
+        # drop databases
 
         # drop database 'characters'
 
@@ -2581,7 +2593,7 @@ Please install mysql or mariadb database/client"
 
         # drop databases done
 
-        # create databases >
+        # create databases
 
         # create database 'characters'
         echo
@@ -2623,7 +2635,7 @@ Please install mysql or mariadb database/client"
 
         # delete and start over done
 
-        # InstallFullDB ? >
+        # InstallFullDB ?
 
         read -r -p "InstallFullDB? (y/n) " -n 1 -r
         echo
@@ -2635,7 +2647,7 @@ Please install mysql or mariadb database/client"
 
         # InstallFullDB done
 
-        # import backup ? >
+        # import backup ?
 
         echo
         ls -lQS "$folder_wow"/backup
@@ -2674,7 +2686,7 @@ Please install mysql or mariadb database/client"
 
       # import backup done
 
-      # convert_mysql_engine = myisam -> innodb >
+      # convert_mysql_engine = myisam -> innodb
 
     "3")
 
@@ -2687,7 +2699,7 @@ Please install mysql or mariadb database/client"
           printf '%b' "\e[90mKilling screens (realmd, mangosd)\033[0m\n"
           sleep 3
           sudo killall screen 2>/dev/null
-          # keep old logs >
+          # keep old logs
           cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
           cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
         else
@@ -2761,7 +2773,7 @@ Please install mysql or mariadb database/client"
 
       # convert_mysql_engine = myisam -> innodb done
 
-      # reinstall (delete /classic-db) >
+      # reinstall (delete /classic-db)
 
     "4")
 
@@ -2785,7 +2797,7 @@ Please install mysql or mariadb database/client"
 
       # reinstall (delete /classic-db) done
 
-      # reset --hard origin/master >
+      # reset --hard origin/master
 
     "5")
 
@@ -2804,7 +2816,7 @@ Please install mysql or mariadb database/client"
 
       # reset --hard origin/master done
 
-      # restart mysql/mariadb server (service) >
+      # restart mysql/mariadb server (service)
 
     "6")
 
@@ -2821,7 +2833,7 @@ EOF
       read -r -n1 -s
       case "$REPLY" in
 
-      # restart mariadb >
+      # restart mariadb
 
       "1")
 
@@ -2837,7 +2849,7 @@ EOF
 
         ;;
 
-        # restart mysql >
+        # restart mysql
 
       "2")
 
@@ -2863,7 +2875,7 @@ EOF
 
       # restart mysql/mariadb server (service) done
 
-      # Stop mysql/mariadb server (service) >
+      # Stop mysql/mariadb server (service)
 
     "7")
 
@@ -2880,7 +2892,7 @@ EOF
       read -r -n1 -s
       case "$REPLY" in
 
-      # stop mysql >
+      # stop mysql
 
       "1")
 
@@ -2896,7 +2908,7 @@ EOF
 
         ;;
 
-        # stop mariadb >
+        # stop mariadb
 
       "2")
 
@@ -2919,7 +2931,7 @@ EOF
 
       # Stop mysql/mariadb server (service) done
 
-      # enable/disable mysql/mariadb server >
+      # enable/disable mysql/mariadb server
 
     "8")
 
@@ -2938,13 +2950,13 @@ EOF
       read -r -n1 -s
       case "$REPLY" in
 
-      # enable mysql >
+      # enable mysql
 
       "1")
 
         sudo systemctl enable mysql 2>/dev/null
         sudo systemctl enable mysql.service 2>/dev/null
-        # reload >
+        # reload
         sudo systemctl daemon-reload 2>/dev/null
         echo
         read -r -p "Press Enter to continue" </dev/tty
@@ -2952,13 +2964,13 @@ EOF
 
         ;;
 
-        # disable mysql >
+        # disable mysql
 
       "2")
 
         sudo systemctl disable mysql 2>/dev/null
         sudo systemctl disable mysql.service 2>/dev/null
-        # reload >
+        # reload
         sudo systemctl daemon-reload 2>/dev/null
         echo
         read -r -p "Press Enter to continue" </dev/tty
@@ -2966,13 +2978,13 @@ EOF
 
         ;;
 
-        # enable mariadb >
+        # enable mariadb
 
       "3")
 
         sudo systemctl enable mariadb@.service 2>/dev/null
         sudo systemctl enable mariadb@ 2>/dev/null
-        # reload >
+        # reload
         sudo systemctl daemon-reload 2>/dev/null
         echo
         read -r -p "Press Enter to continue" </dev/tty
@@ -2980,13 +2992,13 @@ EOF
 
         ;;
 
-        # disable mariadb >
+        # disable mariadb
 
       "4")
 
         sudo systemctl disable mariadb@ 2>/dev/null
         sudo systemctl disable mariadb.service 2>/dev/null
-        # reload >
+        # reload
         sudo systemctl daemon-reload 2>/dev/null
         echo
         read -r -p "Press Enter to continue" </dev/tty
@@ -3002,9 +3014,9 @@ EOF
 
       ;;
 
-      # enable/disable mysql/mariadb server >
+      # enable/disable mysql/mariadb server
 
-      # apply all updates [A] to [B] >
+      # apply all updates [A] to [B]
 
     "9")
 
@@ -3012,12 +3024,12 @@ EOF
       printf '%b' "[\033[1;31mWarning\033[0m]: Only update whats missing.
 Check log for which database needs 'applying updates'"
       echo
-      # combine [A] to [B] updates individually >
+      # combine [A] to [B] updates individually
       cat "${folder_core:?}"/sql/updates/characters/*.sql >"$folder_wow"/.all_characters.sql
       cat "${folder_core:?}"/sql/updates/mangos/*.sql >"$folder_wow"/.all_mangos.sql
       cat "${folder_core:?}"/sql/updates/realmd/*.sql >"$folder_wow"/.all_realmd.sql
 
-      # apply all updates [A] to [B] characters ? >
+      # apply all updates [A] to [B] characters ?
       echo
       read -r -p "Characters? (y/n) " -n 1 -r
       echo
@@ -3058,7 +3070,7 @@ Check log for which database needs 'applying updates'"
         printf '%b' "[\e[0;32mok\033[0m]"
         echo
       fi
-      # apply all updates [A] to [B] mangos ? >
+      # apply all updates [A] to [B] mangos ?
       read -r -p "Mangos? (y/n) " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -3098,7 +3110,7 @@ Check log for which database needs 'applying updates'"
         printf '%b' "[\e[0;32mok\033[0m]"
         echo
       fi
-      # apply all updates [A] to [B] realmd ? >
+      # apply all updates [A] to [B] realmd ?
       read -r -p "Realmd? (y/n) " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -3138,9 +3150,9 @@ Check log for which database needs 'applying updates'"
         printf '%b' "[\e[0;32mok\033[0m]"
         echo
       fi
-      # remove old 'combined updates' sql files >
+      # remove old 'combined updates' sql files
       rm "$folder_wow"/.*.sql 2>/dev/null
-      # InstallFullDB ? >
+      # InstallFullDB ?
       echo
       printf '%b' "\e[0;32mRecommended if you applied anything\033[0m"
       echo
@@ -3192,7 +3204,7 @@ Check log for which database needs 'applying updates'"
 
     # update database done
 
-    # accounts >
+    # accounts
 
   "u")
 
@@ -3215,7 +3227,7 @@ Check log for which database needs 'applying updates'"
 
     # accounts done
 
-    # characters >
+    # characters
 
   "t")
 
@@ -3281,7 +3293,7 @@ Classes
 
     # characters done
 
-    # guilds >
+    # guilds
 
   "g")
 
@@ -3298,22 +3310,42 @@ Classes
 
   "s")
 
-    # check if 'mangosd.conf' are installed >
+    # check if 'mangosd.conf' are installed
     FILE="$folder_core/run/etc/mangosd.conf"
     if [ ! -f "$FILE" ]; then
       echo "Please edit mangosd.conf.dist into mangosd.conf"
       printf '%b' "\e[90mmangosd.conf\033[0m not found."
       echo
+      # check if 'mangosd.conf' backup exist
+      FILE="$folder_wow/backup/configurations/mangosd.conf"
+      if [ -f "$FILE" ]; then
+        # found backup
+        printf '%b' "\e[90m$folder_wow/backup/configurations/mangosd.conf\033[0m\n"
+        echo "Configurations backup was found!"
+        cp "$folder_wow"/backup/configurations/mangosd.conf "$folder_core"/run/etc/
+        sleep 1
+        echo "Restored."
+      fi
       echo
       read -r -p "hit Enter to go back." </dev/tty
       echo
     fi
-    # check if 'realmd.conf' are installed >
+    # check if 'realmd.conf' are installed
     FILE="$folder_core/run/etc/realmd.conf"
     if [ ! -f "$FILE" ]; then
       echo "Please edit realmd.conf.dist into realmd.conf"
       printf '%b' "\e[90mrealmd.conf\033[0m not found."
       echo
+      # check if 'realmd.conf' backup exit
+      FILE="$folder_wow/backup/configurations/realmd.conf"
+      if [ -f "$FILE" ]; then
+        # found backup
+        printf '%b' "\e[90m$folder_wow/backup/configurations/realmd.conf\033[0m\n"
+        echo "Configurations backup was found!"
+        cp "$folder_wow"/backup/configurations/realmd.conf "$folder_core"/run/etc/
+        sleep 1
+        echo "Restored."
+      fi
       echo
       read -r -p "hit Enter to go back." </dev/tty
       echo
@@ -3340,7 +3372,7 @@ Classes
       clear
       case $CHOICE in
 
-      # shutdown realmd, mangosd >
+      # shutdown realmd, mangosd
 
       "1")
 
@@ -3361,12 +3393,12 @@ Classes
             printf '%b' "\e[90mKilling screens (realmd, mangosd)\033[0m\n"
             sleep 3
             sudo killall screen 2>/dev/null
-            # keep old logs >
+            # keep old logs
             cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
             cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
           else
 
-            # keep old logs >
+            # keep old logs
             cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
             cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
             # done
@@ -3378,7 +3410,7 @@ Classes
 
             # this is for docker users
             if [ -f /.dockerenv ]; then
-              # keep old logs >
+              # keep old logs
               cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
               cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
             else
@@ -3412,7 +3444,7 @@ Classes
 
         # shutdown realmd, mangosd done
 
-        # shutdown realmd >
+        # shutdown realmd
 
       "2")
 
@@ -3433,12 +3465,12 @@ Classes
             # kill that screen
             screen -S "$REALMD_ID" -X quit
             screen -S realmd -X quit
-            # keep old logs >
+            # keep old logs
             cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
             cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
           else
 
-            # keep old logs >
+            # keep old logs
             cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
             # done
             printf "\e[0;31mShutting down\033[0m realmd service"
@@ -3458,7 +3490,7 @@ Classes
 
         # shutdown realmd done
 
-        # shutdown mangosd >
+        # shutdown mangosd
 
       "3")
 
@@ -3479,12 +3511,12 @@ Classes
             # kill that screen
             screen -S "$MANGOSD_ID" -X quit
             screen -S mangosd -X quit
-            # keep old logs >
+            # keep old logs
             cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
             cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
           else
 
-            # keep old logs >
+            # keep old logs
             cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
             # done
             printf "\e[0;31mShutting down\033[0m mangosd service"
@@ -3511,26 +3543,46 @@ Classes
 
     # shutdown server done << it's over!!
 
-    # restart server >
+    # restart server
 
   "r")
 
-    # check if 'mangosd.conf' are installed >
+    # check if 'mangosd.conf' are installed
     FILE="$folder_core/run/etc/mangosd.conf"
     if [ ! -f "$FILE" ]; then
       echo "Please edit mangosd.conf.dist into mangosd.conf"
       printf '%b' "\e[90mmangosd.conf\033[0m not found."
       echo
+      # check if 'mangosd.conf' backup exist
+      FILE="$folder_wow/backup/configurations/mangosd.conf"
+      if [ -f "$FILE" ]; then
+        # found backup
+        echo "$folder_wow/backup/configurations/mangosd.conf"
+        echo "Configurations backup was found!"
+        cp "$folder_wow"/backup/configurations/mangosd.conf "$folder_core"/run/etc/
+        sleep 1
+        echo "Restored."
+      fi
       echo
       read -r -p "hit Enter to go back." </dev/tty
       echo
     fi
-    # check if 'realmd.conf' are installed >
+    # check if 'realmd.conf' are installed
     FILE="$folder_core/run/etc/realmd.conf"
     if [ ! -f "$FILE" ]; then
       echo "Please edit realmd.conf.dist into realmd.conf"
       printf '%b' "\e[90mrealmd.conf\033[0m not found."
       echo
+      # check if 'realmd.conf' backup exit
+      FILE="$folder_wow/backup/configurations/realmd.conf"
+      if [ -f "$FILE" ]; then
+        # found backup
+        echo "$folder_wow/backup/configurations/realmd.conf"
+        echo "Configurations backup was found!"
+        cp "$folder_wow"/backup/configurations/realmd.conf "$folder_core"/run/etc/
+        sleep 1
+        echo "Restored."
+      fi
       echo
       read -r -p "hit Enter to go back." </dev/tty
       echo
@@ -3538,7 +3590,7 @@ Classes
       if ! [ -x "$(command -v screen)" ]; then
         sudo apt-get install screen -y 2>/dev/null
       fi
-      # codes >
+      # codes
       # realmd.log
       realmd_log_empty="\e[0;33mEmpty\033[0m -> "
       realmd_log_error="\033[0;31mError\033[0m -> "
@@ -3580,7 +3632,7 @@ Classes
       clear
       case $CHOICE in
 
-      # restart realmd,mangos >
+      # restart realmd,mangos
 
       "1")
 
@@ -3614,12 +3666,12 @@ Classes
             # implement daemons inside newly made screens
             screen -S realmd -X -p 0 stuff "$REALMD_SCREEN"
             screen -S mangosd -X -p 0 stuff "$MANGOSD_SCREEN"
-            # keep old logs >
+            # keep old logs
             cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
             cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
           else
 
-            # keep old logs >
+            # keep old logs
             cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
             cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
             # done
@@ -3636,10 +3688,10 @@ Classes
             echo
             echo "Please wait"
 
-            # wait wordlist >
+            # wait wordlist
             # note - don't put any space(s) between keywords.
 
-            # realmd >
+            # realmd
             wordlist_realmd=(".*[A]\sYou\shave:\s-->*.
 .*[B]\sYou\sneed:\s-->*.
 .*Added\srealm\sid*.
@@ -3647,7 +3699,7 @@ Classes
 .*cannot\sfind\sthe\sversion\sinfo*.
 .*database\sis\smissing\sor\scorrupt*.
 .*reinstall\syour*.")
-            # mangosd >
+            # mangosd
 
             wordlist_mangosd=(".*[A]\sYou\shave:\s-->*.
 .*[B]\sYou\sneed:\s-->*.
@@ -3672,12 +3724,12 @@ Classes
 
             # wait wordlist done
 
-            # wait for realmd & mangosd to fill up logs >
+            # wait for realmd & mangosd to fill up logs
 
-            # Realmd.log >
+            # Realmd.log
             tail -f "$folder_core"/run/logs/Realmd.log 2>/dev/null |
               { grep -q -m 1 "${wordlist_realmd[@]}" && pkill -P $$ -x tail 2>/dev/null; }
-            # Server.log >
+            # Server.log
             tail -f "$folder_core"/run/logs/Server.log 2>/dev/null |
               { grep -q -m 1 "${wordlist_mangosd[@]}" && pkill -P $$ -x tail 2>/dev/null; }
             # wait for realmd & mangosd to fill up logs done
@@ -3837,7 +3889,7 @@ Classes
                 printf '%b' "mangosd.conf is out of date!"
                 echo
               fi
-              # get startup time >
+              # get startup time
               startup_time=$(grep "SERVER\sSTARTUP\sTIME*." wow/mangos-classic/run/logs/Server.log 2>/dev/null |
                 cut -d\  -f6-9 2>/dev/null)
               # world initialized
@@ -3847,23 +3899,23 @@ Classes
                 printf '%b' "$server_log_initialized $startup_time"
                 echo
               fi
-              # Playerbot loaded >
+              # Playerbot loaded
               if grep -E -q "Playerbot: Using configuration file" "$folder_core"/run/logs/Server.log 2>/dev/null; then
                 # if any, print "Playerbot ok"
                 printf '%b' "\e[0;32mPlayerbot\033[0m"
                 echo
               else
-                # off >
+                # off
                 printf '%b' "\e[90mPlayerbot\033[0m"
                 echo
               fi
-              # ahbot loaded and initialized >
+              # ahbot loaded and initialized
               if grep -E -q "Initialize AuctionHouseBot..." "$folder_core"/run/logs/Server.log 2>/dev/null; then
                 # if any, print "AHbot ok"
                 printf '%b' "\e[0;32mAHbot\033[0m"
                 echo
               else
-                # off >
+                # off
                 printf '%b' "\e[90mAHbot\033[0m"
                 echo
               fi
@@ -3895,11 +3947,11 @@ Classes
               nano "$folder_core"/run/logs/Realmd.log
               ;;
 
-              # lnav >
+              # lnav
 
             "l")
               echo
-              # codes >
+              # codes
               logs=("$folder_core"/run/logs/EventAIErrors.log
                 "$folder_core"/run/logs/DBErrors.log
                 "$folder_core"/run/logs/Realmd.log
@@ -3919,7 +3971,7 @@ Classes
 
         # restart realmd,mangos done
 
-        # restart realmd >
+        # restart realmd
 
       "2")
 
@@ -3944,12 +3996,12 @@ Classes
             REALMD_SCREEN="$folder_core/run/bin/./realmd -c $folder_core/run/etc/realmd.conf\n"
             # implement daemon inside newly made screens
             screen -S realmd -X -p 0 stuff "$REALMD_SCREEN"
-            # keep old logs >
+            # keep old logs
             cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
             cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
           else
 
-            # keep old logs >
+            # keep old logs
             cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
             # done
             printf "\e[1;32mRestarting\033[0m realmd"
@@ -3966,7 +4018,7 @@ Classes
 
         # restart realmd done
 
-        # restart mangosd >
+        # restart mangosd
 
       "3")
 
@@ -3991,12 +4043,12 @@ Classes
             MANGOSD_SCREEN="$folder_core/run/bin/./mangosd -c $folder_core/run/etc/mangosd.conf\n"
             # implement daemon inside newly made screens
             screen -S mangosd -X -p 0 stuff "$MANGOSD_SCREEN"
-            # keep old logs >
+            # keep old logs
             cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
             cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
           else
 
-            # keep old logs >
+            # keep old logs
             cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
             # done
             printf "\e[1;32mRestarting\033[0m mangosd"
@@ -4006,10 +4058,10 @@ Classes
             sleep 1
             echo "Please wait"
 
-            # wait wordlist >
+            # wait wordlist
             # note - don't put any space(s) between keywords.
 
-            # mangosd >
+            # mangosd
             wordlist_mangosd=(".*[A]\sYou\shave:\s-->*.
 .*[B]\sYou\sneed:\s-->*.
 .*Can't\sconnect\sto\slocal\sMySQL*.
@@ -4033,9 +4085,9 @@ Classes
 
             # wait wordlist done
 
-            # wait for mangosd to fill up logs >
+            # wait for mangosd to fill up logs
 
-            # Server.log >
+            # Server.log
             tail -f "$folder_core"/run/logs/Server.log 2>/dev/null |
               { grep -q -m 1 "${wordlist_mangosd[@]}" && pkill -P $$ -x tail 2>/dev/null; }
             # wait for mangosd to fill up logs done
@@ -4055,11 +4107,11 @@ Classes
 
     # restart server done
 
-    # update cmangos-script >
+    # update cmangos-script
 
   "w")
 
-    # codes >
+    # codes
     if ! [ -x "$(command -v dialog)" ]; then
       sudo apt-get install dialog -y
     fi
@@ -4086,7 +4138,7 @@ Classes
     clear
     case $CHOICE in
 
-    # update helper >
+    # update helper
 
     "1")
 
@@ -4125,7 +4177,7 @@ Classes
             printf "[\e[1;32mUpdating Helper\033[0m]"
             echo
             echo
-            # keep old mangos >
+            # keep old mangos
             sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old &>/dev/null
             # done
             printf "[\e[0;32mok\033[0m] -> /usr/local/bin/mangos.old"
@@ -4148,7 +4200,7 @@ Classes
             echo
             sleep 1 && exit
           else
-            # install new upgrades >
+            # install new upgrades
             sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old &>/dev/null
             sudo chmod -x /usr/local/bin/mangos.old
             sudo cp "$folder_helper"/mangos /usr/local/bin/mangos &>/dev/null
@@ -4172,7 +4224,7 @@ Classes
 
       # update helper done
 
-      # fresh install (delete/git clone /cmangos-script) >
+      # fresh install (delete/git clone /cmangos-script)
 
     "2")
 
@@ -4207,7 +4259,7 @@ Classes
 
       # fresh install (delete/git clone /cmangos-script) done
 
-      # reset --hard origin/master >
+      # reset --hard origin/master
 
     "3")
 
@@ -4232,13 +4284,13 @@ Classes
 
     ;;
 
-    # Check logs >
+    # Check logs
 
   "l")
 
     clear
 
-    # codes >
+    # codes
     # realmd.log
     realmd_log_empty="\e[0;33mEmpty\033[0m -> "
     realmd_log_error="\033[0;31mError\033[0m -> "
@@ -4404,7 +4456,7 @@ Classes
         printf '%b' "mangosd.conf is out of date!"
         echo
       fi
-      # get startup time >
+      # get startup time
       startup_time=$(grep "SERVER\sSTARTUP\sTIME*." wow/mangos-classic/run/logs/Server.log 2>/dev/null |
         cut -d\  -f6-9 2>/dev/null)
       # world initialized
@@ -4414,23 +4466,23 @@ Classes
         printf '%b' "$server_log_initialized $startup_time"
         echo
       fi
-      # Playerbot loaded >
+      # Playerbot loaded
       if grep -E -q "Playerbot: Using configuration file" "$folder_core"/run/logs/Server.log 2>/dev/null; then
         # if any, print "Playerbot ok"
         printf '%b' "\e[0;32mPlayerbot\033[0m"
         echo
       else
-        # off >
+        # off
         printf '%b' "\e[90mPlayerbot\033[0m"
         echo
       fi
-      # ahbot loaded and initialized >
+      # ahbot loaded and initialized
       if grep -E -q "Initialize AuctionHouseBot..." "$folder_core"/run/logs/Server.log 2>/dev/null; then
         # if any, print "AHbot ok"
         printf '%b' "\e[0;32mAHbot\033[0m"
         echo
       else
-        # off >
+        # off
         printf '%b' "\e[90mAHbot\033[0m"
         echo
       fi
@@ -4462,11 +4514,11 @@ Classes
       nano "$folder_core"/run/logs/Realmd.log 2>/dev/null
       ;;
 
-      # lnav >
+      # lnav
 
     "l")
       echo
-      # codes >
+      # codes
       logs=("$folder_core"/run/logs/EventAIErrors.log
         "$folder_core"/run/logs/DBErrors.log
         "$folder_core"/run/logs/Realmd.log
@@ -4489,7 +4541,7 @@ Classes
 
     # check logs done
 
-    # create/apply .patch file >
+    # create/apply .patch file
 
   "p")
 
@@ -4515,7 +4567,7 @@ Classes
     clear
     case $CHOICE in
 
-    # create patch >
+    # create patch
 
     "1")
 
@@ -4528,7 +4580,7 @@ Classes
 
       # create patch done
 
-      # apply patch >
+      # apply patch
 
     "2")
 
@@ -4539,7 +4591,7 @@ Classes
 
       # apply patch done
 
-      # search for .patch files >
+      # search for .patch files
 
     "3")
 
@@ -4558,18 +4610,18 @@ Classes
 
     # create/apply .patch file done
 
-    # online check >
+    # online check
 
   "o")
 
-    # is fping installed? >
+    # is fping installed?
     if ! [ -x "$(command -v fping)" ]; then
       sudo apt-get install fping -y 2>/dev/null
     fi
     echo
     printf '%b' "Online check -> \e[92minternet\033[0m/\e[92mintranet\033[0m\n"
     echo
-    # internet >
+    # internet
     if nc -z "$internet" "${realm_port:?}" 2>/dev/null; then
       PING_MS=$(fping -c 1 "$internet" 2>/dev/null |
         grep -o '[0-9].[0-9][0-9] ms' 2>/dev/null)
@@ -4579,7 +4631,7 @@ Classes
     else
       printf '%b' "\033[1;31m✗ \e[1;90m$internet - $server_name - \e[1;90m? ms - 100% loss\033[0m\n"
     fi
-    # intranet >
+    # intranet
     if nc -z "$intranet" "${realm_port:?}" 2>/dev/null; then
       PING_MS=$(fping -c 1 "$intranet" 2>/dev/null |
         grep -o '[0-9].[0-9][0-9] ms' 2>/dev/null)
@@ -4596,7 +4648,7 @@ Classes
 
     # online check done
 
-    # edit/copy config files ? >
+    # edit/copy config files ?
 
   "e")
 
