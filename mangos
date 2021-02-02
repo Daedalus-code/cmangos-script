@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20213101
-# 4.6.0.8
+# V20210202
+# 4.6.5.0
 
 # codes >
 while :; do
@@ -1261,8 +1261,8 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
       # remove old file
       rm /var/log/ms/installed_core &>/dev/null
       # fresh install ? >
-      echo "Cloning repository 'mangos-classic' Please wait this might take a while
-(${github_cmangos:?})"
+      printf '%b' "Cloning repository 'mangos-classic' Please wait this might take a while
+(\e[92m${github_cmangos:?}\033[0m)\n"
       sudo mkdir "$folder_wow" &>/dev/null
       sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
       cd "$folder_wow" || exit
@@ -1302,8 +1302,8 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
       # remove old file
       rm /var/log/ms/installed_db &>/dev/null
       # fresh install ? >
-      echo "Cloning repository 'classic-db' Please wait this might take a while
-(${github_database:?})"
+      printf '%b' "Cloning repository 'classic-db' Please wait this might take a while
+(\e[92m${github_database:?})\033[0m\n"
       sudo mkdir "$folder_wow" &>/dev/null
       sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
       cd "$folder_wow" || exit
@@ -1429,8 +1429,8 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
       psmisc)
     # codes done
     HEIGHT=12
-    WIDTH=40
-    CHOICE_HEIGHT=4
+    WIDTH=41
+    CHOICE_HEIGHT=5
     BACKTITLE="update CMaNGOS"
     TITLE="Update mangos-classic [core]"
     MENU="Choose one of the following options:"
@@ -1438,7 +1438,8 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
     OPTIONS=(1 "Compile latest build"
       2 "Install systemd unit files"
       3 "Reinstall (delete /build)"
-      4 "Reset --hard origin/master")
+      4 "Reset --hard origin/master"
+      5 "Delete Core /mangos-classic")
 
     CHOICE=$(dialog --clear \
       --backtitle "$BACKTITLE" \
@@ -1537,7 +1538,7 @@ EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
         CORES=$(grep -c ^processor /proc/cpuinfo 2>/dev/null)
         if [[ "$CORES" -ge "1" ]]; then
           # report count
-          CORES_COUNT=$(printf '%b' "\e[93mThis system has \e[96m$CORES\e[93m cores!\e[33m
+          CORES_COUNT=$(printf '%b' "\e[93mThis system has \e[96m$CORES\e[93m cores!\e[90m
 $CPU_MODEL\033[0m")
         else
           CORES_COUNT=""
@@ -1888,7 +1889,7 @@ Check if correct information, or just restart server."
         CORES=$(grep -c ^processor /proc/cpuinfo 2>/dev/null)
         if [[ "$CORES" -ge "1" ]]; then
           # report count
-          CORES_COUNT=$(printf '%b' "\e[93mThis system has \e[96m$CORES\e[93m cores!\e[33m
+          CORES_COUNT=$(printf '%b' "\e[93mThis system has \e[96m$CORES\e[93m cores!\e[90m
 $CPU_MODEL\033[0m")
         else
           CORES_COUNT=""
@@ -2081,9 +2082,33 @@ Select install operation"
 
       ;;
 
-    esac
+      # reset --hard origin/master done
 
-    # reset --hard origin/master done
+      # delete core directory (everything)
+
+    "5")
+
+      printf '%b' "\e[90mDeleting Core! $folder_core\033[0m\n"
+      read -r -p "Backup configurations first? (y/n) " -n 1 -r
+      echo
+      if [[ $REPLY =~ ^[Yy]$ ]]; then
+        sudo mkdir "${folder_wow:?}"/backup 2>/dev/null
+        sudo mkdir "${folder_wow:?}"/backup/configurations 2>/dev/null
+        sudo chown -R "$user":"$group" "$folder_wow"
+        cp "$folder_core"/run/etc/*.conf "${folder_wow:?}"/backup/configurations 2>/dev/null
+      fi
+      read -r -p "Delete Core Directory? (y/n) " -n 1 -r
+      echo
+      if [[ $REPLY =~ ^[Yy]$ ]]; then
+        cp "$folder_core"/run/etc/*.conf "${folder_wow:?}"/backup 2>/dev/null
+        sudo rm -R "$folder_core" &>/dev/null
+      fi
+
+      ;;
+
+      # delete core directory (everything) done
+
+    esac
 
     # update CMaNGOS done
 
@@ -2098,9 +2123,9 @@ Select install operation"
       sudo apt-get install dialog -y 2>/dev/null
     fi
     # codes done
-    HEIGHT=18
+    HEIGHT=19
     WIDTH=40
-    CHOICE_HEIGHT=11
+    CHOICE_HEIGHT=12
     BACKTITLE="update Database"
     TITLE="Update classic-db [database]"
     MENU="Choose one of the following options:"
@@ -2115,7 +2140,8 @@ Select install operation"
       8 "Enable/Disable MySQL Server"
       9 "Apply all updates [A]-[B]"
       10 "Install database client"
-      11 "Install database system")
+      11 "Install database system"
+      12 "Delete /classic-db")
 
     CHOICE=$(dialog --clear \
       --backtitle "$BACKTITLE" \
@@ -2128,7 +2154,23 @@ Select install operation"
     clear
     case $CHOICE in
 
-    # install database system >
+    # delete database directory (everything)
+
+    "12")
+
+      printf '%b' "\e[90mDeleting Database! $folder_db\033[0m\n"
+      read -r -p "Delete Database Directory? (y/n) " -n 1 -r
+      echo
+      if [[ $REPLY =~ ^[Yy]$ ]]; then
+        cp "$folder_core"/run/etc/*.conf "${folder_wow:?}"/backup 2>/dev/null
+        sudo rm -R "$folder_db" &>/dev/null
+      fi
+
+      ;;
+
+      # delete database directory (everything) done
+
+      # install database system >
 
     "11")
 
