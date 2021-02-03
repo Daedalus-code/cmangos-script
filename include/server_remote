@@ -17,8 +17,8 @@ if [[ -z "$USER_NC" || -z "$PASS_NC" ]]; then            # if anything is empty,
   sudo rm /home/"$USER"/nc.tmp &>/dev/null               # remove tmp file, regardless
 else                                                     # continue on with login
   echo "$USER_NC
-$PASS_NC" >/home/"$USER"/nc.tmp                       # output, create tmp file
-  nc -q 1 "$HOST_NC" "$PORT_NC" </home/"$USER"/nc.tmp # login with tmp output
-  printf '%b' "\e[92m!\033[0m\n"                      # output, working! (hopefully)
-  sudo rm /home/"$USER"/nc.tmp &>/dev/null            # remove tmp file
+$PASS_NC" >/home/"$USER"/nc.tmp                  # output, create tmp file
+  nc "$HOST_NC" "$PORT_NC" </home/"$USER"/nc.tmp # login with tmp output
+  printf '%b' "\e[92m!\033[0m\n"                 # output, working! (hopefully)
+  sudo rm /home/"$USER"/nc.tmp &>/dev/null       # remove tmp file
 fi
