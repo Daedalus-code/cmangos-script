@@ -24,7 +24,7 @@ while :; do
   # shellcheck disable=SC1091
   source /scripts/server.txt # please edit if wrong.
 
-  # color ######################################################################
+  # color
 
   CY='\e[36m'   # Cyan
   G0='\e[1;32m' # Green
