@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20210402
-# 4.7.1.7
+# 4.7.0.5
 
 # codes
 while :; do
@@ -84,29 +84,17 @@ while :; do
     _____ _____     _____ _____ _____ _____
    |     |     |___|   | |   __|     |   __|
    |   --| | | | .'| | | |  |  |  |  |__   |${P1:?}
-   |_____|_|_|_|__,|_|___|_____|_____|_____|\n\e[0m"
-  cat <<EOF
-           C(ontinued)-MaNGOS Helper
-             --------------------
-EOF
-  echo "               Online Players $menu_on_count"
-  echo "                   Guilds $menu_gu_count"
-  echo
-  cat <<EOF
+   |_____|_|_|_|__,|_|___|_____|_____|_____|${N0:?}
+           C(ontinued)-MaNGOS Helper${GR:?}
+              - - - - - - - - - -${N0:?}
+               Online Players${GR:?}:${N0:?} $menu_on_count
+                   Guilds${GR:?}:${N0:?} $menu_gu_count
+
                 $load
 
-EOF
+      $menu_mangosd $menu_realmd
 
-  # service status
-
-  printf '%b' "      $menu_mangosd $menu_realmd"
-  echo
-
-  # service status done
-
-  cat <<EOF
-
-       Start with checking for updates c)
+      Start with checking for updates c)
 
    A : Login (command)      t : Characters
    a : Create account       u : Accounts
@@ -117,7 +105,7 @@ EOF
    s : Shutdown server      l : Logs
    r : Restart server       Q : Quit
 
-EOF
+"
   read -r -n1 -s
   case "$REPLY" in
 
@@ -134,13 +122,13 @@ EOF
 
     # menu
 
-    printf '%b' "${N0:?} ---------------------------------------------
+    printf '%b' "${GR:?} - - - - - - - - - - - - - - - - - - - - - - -
 ${N0:?}                                       __
    .---.-.----.----.-----.--.--.-----.|  |_
    |  _  |  __|  __|  _  |  |  |     ||   _|${P1:?}
    |___._|____|____|_____|_____|__|__||____|
            ${N0:?}C(ontinued)-MaNGOS Helper
-             ${N0:?}--------------------
+             ${GR:?}- - - - - - - - - -${N0:?}
 
                 Accounts${G0:?}...:${N0:?} $ac_count
                 Banned${G0:?}.....:${N0:?} $bn_count
@@ -152,7 +140,7 @@ ${N0:?}                                       __
               c : Create account
               d : Delete account
 
-${N0:?} ---------------------------------------------
+${GR:?} - - - - - - - - - - - - - - - - - - - - - - -${N0:?}
              Press Any Key To Exit
 >"
 
@@ -164,7 +152,7 @@ ${N0:?} ---------------------------------------------
     "c")
 
       clear
-      printf "${N0:?} ---------------------------------------------
+      printf "${GR:?} - - - - - - - - - - - - - - - - - - - - - - -${N0:?}
 
            ${N0:?}0: Vanilla${G0:?}
            1: The Burning Crusade
@@ -182,7 +170,7 @@ ${N0:?} ---------------------------------------------
         Set the (${P1:?}account${N0:?}) privilege.
 
         ${P1:?}Example${N0:?}: 'username' '0' '0'
-${N0:?} ---------------------------------------------
+${GR:?} - - - - - - - - - - - - - - - - - - - - - - -${N0:?}
              Press Any Key To Exit"
 
       # menu done
@@ -1062,7 +1050,7 @@ EOF
         printline "$dive_log_ignor" "$dive_server_ignor" "$dive_log_ignor" "$dive_server_old_ignor" "$dive_log_ignor" "$dive_realmd_serio"
         printline "$dive_log_serio" "$dive_server_serio" "$dive_log_serio" "$dive_server_old_serio" "$dive_log_serio" "$dive_realmd_serio"
         echo
-        printf "      DBErrors.log      Char.log          EventAIErrors.log"
+        printf "      DBErrors.log        Char.log          EventAIErrors.log"
         echo
         printline "$dive_log_corre" "$dive_DBError_corr" "$dive_log_creat" "$dive_char_created" "$dive_log_skipp" "$dive_EventAIError"
         printline "$dive_log_exist" "$dive_DBError_exis" "$dive_log_login" "$dive_char_login_c" "$dive_log_noeff" "$dive_EventAInoeff"
@@ -1105,8 +1093,8 @@ EOF
           ;;
 
         "q") exit ;;
-        "Q") echo "case sensitive!!" ;;
-        *) echo "invalid option" ;;
+        "Q") ;;
+        *) ;;
         esac
 
         printf '%b' "
