@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20210202
-# 4.7.0.9
+# V20210402
+# 4.7.0.4
 
 # codes
 while :; do
@@ -67,7 +67,7 @@ while :; do
 
   # menu
 
-  printf "\033[0m ---------------------------------------------
+  printf "\e[90m - - - - - - - - - - - - - - - - - - - - - - -\033[0m
     _____ _____     _____ _____ _____ _____
    |     |     |___|   | |   __|     |   __|
    |   --| | | | .'| | | |  |  |  |  |__   |\e[0;35m
@@ -1062,35 +1062,46 @@ EOF
         error_dberro=$(grep -c "ERROR:.*" "$folder_core"/run/logs/DBErrors.log 2>/dev/null)
         error_eventa=$(grep -c "ERROR:.*" "$folder_core"/run/logs/EventAIErrors.log 2>/dev/null)
 
+        echo "
+      1 : Raw ERROR Output
+      2 : tail ERROR Output"
         echo
-        printf '%b' "\e[2m"
-        read -r -p "RAW ERROR Output? (y/n) " -n 1 -r
-        printf '%b' "\033[0m"
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
+
+        read -n1 -s
+        case "$REPLY" in
+
+        "1")
+
           # get raw error from logs
-          grep -Eo "ERROR:.*|.*empty*." "$folder_core"/run/logs/Server.log 2>/dev/null
-          grep -Eo "ERROR:.*|.*empty*." "$folder_core"/run/logs/Realmd.log 2>/dev/null
-          grep -Eo "ERROR:.*|.*empty*." "$folder_core"/run/logs/Char.log 2>/dev/null
-          grep -Eo "ERROR:.*|.*empty*." "$folder_core"/run/logs/DBErrors.log 2>/dev/null
-          grep -Eo "ERROR:.*|.*empty*." "$folder_core"/run/logs/EventAIErrors.log 2>/dev/null
-        fi
-        # tail logs instead
-        printf '%b' "\e[2m"
-        read -r -p "tail Output? (y/n) " -n 1 -r
-        printf '%b' "\033[0m"
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
+          ERROR_ERROR=$(grep --no-filename -Eo "ERROR:.*" "$folder_core"/run/logs/*.log 2>/dev/null)
+          # get raw empty from logs
+          EMPTY_ERROR=$(grep --no-filename -Eo ".*empty*." "$folder_core"/run/logs/*.log 2>/dev/null)
+          printf '%b' "\e[93m$EMPTY_ERROR\033[0m\n"
+          printf '%b' "\e[31m$ERROR_ERROR\033[0m\n"
+
+          ;;
+
+        "2")
+
           # tail logs for error
+          echo "Tail logs.."
+          printf '%b' "\e[90mCTRL+C to exit\033[0m\n"
           tail -f "$folder_core"/run/logs/*.log 2>/dev/null |
             grep -Eo "ERROR:.*|.*empty*." 2>/dev/null
-        fi
+
+          ;;
+
+        "q") exit ;;
+        "Q") echo "case sensitive!!" ;;
+        *) echo "invalid option" ;;
+        esac
+
         printf '%b' "
-Server\e[0;32m........:\033[0m $dive_server_error
-Realmd\e[0;32m........:\033[0m $dive_realmd_error
-Char\e[0;32m..........:\033[0m $error_charac
-DBErrors\e[0;32m......:\033[0m $error_dberro
-EventAIErrors\e[0;32m.:\033[0m $error_eventa\n"
+Server\e[31m........: $dive_server_error \e[93m$dive_server_empty\033[0m
+Realmd\e[0;31m........: $dive_realmd_error \e[93m$dive_realmd_empty\033[0m
+Char\e[0;31m..........: $error_charac\033[0m
+DBErrors\e[0;31m......: $error_dberro\033[0m
+EventAIErrors\e[0;31m.: $error_eventa\033[0m\n"
         echo
         read -r -p "Press Enter to continue" </dev/tty
         echo
@@ -3313,41 +3324,33 @@ Classes
     # check if 'mangosd.conf' are installed
     FILE="$folder_core/run/etc/mangosd.conf"
     if [ ! -f "$FILE" ]; then
-      echo "Please edit mangosd.conf.dist into mangosd.conf"
-      printf '%b' "\e[90mmangosd.conf\033[0m not found."
-      echo
-      # check if 'mangosd.conf' backup exist
-      FILE="$folder_wow/backup/configurations/mangosd.conf"
-      if [ -f "$FILE" ]; then
-        # found backup
-        printf '%b' "\e[90m$folder_wow/backup/configurations/mangosd.conf\033[0m\n"
-        echo "Configurations backup was found!"
-        cp "$folder_wow"/backup/configurations/mangosd.conf "$folder_core"/run/etc/
-        sleep 1
-        echo "Restored."
+      printf '%b' "\e[90mmangosd.conf\033[0m not found!\n"
+      sleep 2
+      # restore mangosd configuration from backup if possible
+      if cp "$folder_wow"/backup/configurations/mangosd.conf "$folder_core"/run/etc/; then
+        printf '%b' "Restored configuration! (\e[92mmangosd.conf\033[0m)\n"
+      else
+        echo "No backup found!"
+        echo "Please edit mangosd.conf.dist into mangosd.conf"
       fi
       echo
-      read -r -p "hit Enter to go back." </dev/tty
+      read -r -p "hit Enter to continue" </dev/tty
       echo
     fi
     # check if 'realmd.conf' are installed
     FILE="$folder_core/run/etc/realmd.conf"
     if [ ! -f "$FILE" ]; then
-      echo "Please edit realmd.conf.dist into realmd.conf"
-      printf '%b' "\e[90mrealmd.conf\033[0m not found."
-      echo
-      # check if 'realmd.conf' backup exit
-      FILE="$folder_wow/backup/configurations/realmd.conf"
-      if [ -f "$FILE" ]; then
-        # found backup
-        printf '%b' "\e[90m$folder_wow/backup/configurations/realmd.conf\033[0m\n"
-        echo "Configurations backup was found!"
-        cp "$folder_wow"/backup/configurations/realmd.conf "$folder_core"/run/etc/
-        sleep 1
-        echo "Restored."
+      printf '%b' "\e[90mrealmd.conf\033[0m not found!\n"
+      sleep 2
+      # restore realmd configuration from backup if possible
+      if cp "$folder_wow"/backup/configurations/realmd.conf "$folder_core"/run/etc/; then
+        printf '%b' "Restored configuration! (\e[92mrealmd.conf\033[0m)\n"
+      else
+        echo "No backup found!"
+        echo "Please edit realmd.conf.dist into realmd.conf"
       fi
       echo
-      read -r -p "hit Enter to go back." </dev/tty
+      read -r -p "hit Enter to continue" </dev/tty
       echo
     else
       HEIGHT=10
@@ -3550,41 +3553,33 @@ Classes
     # check if 'mangosd.conf' are installed
     FILE="$folder_core/run/etc/mangosd.conf"
     if [ ! -f "$FILE" ]; then
-      echo "Please edit mangosd.conf.dist into mangosd.conf"
-      printf '%b' "\e[90mmangosd.conf\033[0m not found."
-      echo
-      # check if 'mangosd.conf' backup exist
-      FILE="$folder_wow/backup/configurations/mangosd.conf"
-      if [ -f "$FILE" ]; then
-        # found backup
-        echo "$folder_wow/backup/configurations/mangosd.conf"
-        echo "Configurations backup was found!"
-        cp "$folder_wow"/backup/configurations/mangosd.conf "$folder_core"/run/etc/
-        sleep 1
-        echo "Restored."
+      printf '%b' "\e[90mmangosd.conf\033[0m not found!\n"
+      sleep 2
+      # restore mangosd configuration from backup if possible
+      if cp "$folder_wow"/backup/configurations/mangosd.conf "$folder_core"/run/etc/; then
+        printf '%b' "Restored configuration! (\e[92mmangosd.conf\033[0m)\n"
+      else
+        echo "No backup found!"
+        echo "Please edit mangosd.conf.dist into mangosd.conf"
       fi
       echo
-      read -r -p "hit Enter to go back." </dev/tty
+      read -r -p "hit Enter to continue" </dev/tty
       echo
     fi
     # check if 'realmd.conf' are installed
     FILE="$folder_core/run/etc/realmd.conf"
     if [ ! -f "$FILE" ]; then
-      echo "Please edit realmd.conf.dist into realmd.conf"
-      printf '%b' "\e[90mrealmd.conf\033[0m not found."
-      echo
-      # check if 'realmd.conf' backup exit
-      FILE="$folder_wow/backup/configurations/realmd.conf"
-      if [ -f "$FILE" ]; then
-        # found backup
-        echo "$folder_wow/backup/configurations/realmd.conf"
-        echo "Configurations backup was found!"
-        cp "$folder_wow"/backup/configurations/realmd.conf "$folder_core"/run/etc/
-        sleep 1
-        echo "Restored."
+      printf '%b' "\e[90mrealmd.conf\033[0m not found!\n"
+      sleep 2
+      # restore realmd configuration from backup if possible
+      if cp "$folder_wow"/backup/configurations/realmd.conf "$folder_core"/run/etc/; then
+        printf '%b' "Restored configuration! (\e[92mrealmd.conf\033[0m)\n"
+      else
+        echo "No backup found!"
+        echo "Please edit realmd.conf.dist into realmd.conf"
       fi
       echo
-      read -r -p "hit Enter to go back." </dev/tty
+      read -r -p "hit Enter to continue" </dev/tty
       echo
     else
       if ! [ -x "$(command -v screen)" ]; then
