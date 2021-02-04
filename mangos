@@ -7,14 +7,14 @@
 #               Continued Massive Network Game Object Server               #
 ############################################################################
 
-# Built on a ubuntu system - Linux 5.4.0-1026-raspi - (Raspberry Pi4)
+# Built on a Linux ubuntu 5.4.0-1028-raspi - (Raspberry Pi4_8GB)
 # https://ubuntu.com/download/raspberry-pi
 
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
 # V20210402
-# 4.7.0.4
+# 4.7.1.7
 
 # codes
 while :; do
@@ -24,6 +24,19 @@ while :; do
   # shellcheck disable=SC1091
   source /scripts/server.txt # please edit if wrong.
 
+  # color ######################################################################
+
+  CY='\e[36m'   # Cyan
+  G0='\e[1;32m' # Green
+  G1='\e[92m'   # Green light
+  GR='\e[90m'   # Grey
+  N0='\033[0m'  # No color
+  P1='\e[0;35m' # Purple
+  R0='\e[31m'   # Red
+  R1='\e[91m'   # Red light
+  Y0='\e[33m'   # Yellow
+  Y1='\e[93m'   # Yellow light
+
   # dialog, ncurses no utf8 acs
   # ! -> https://github.com/scarygliders/X11RDP-o-Matic/issues/45
   export NCURSES_NO_UTF8_ACS=1
@@ -32,12 +45,12 @@ while :; do
   if mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT SUM(online) FROM ${db_characters:?}.characters;" &>/dev/null; then
     menu_on_count=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT SUM(online) FROM ${db_characters:?}.characters;" 2>/dev/null)
   else
-    menu_on_count=$(printf '%b' "\033[1;31m0\033[0m")
+    menu_on_count=$(printf '%b' "${R0:?}0${N0:?}")
   fi
   if mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT count(*) FROM ${db_characters:?}.guild;" &>/dev/null; then
     menu_gu_count=$(mysql --defaults-extra-file="${sql_mycnf:?}" -N --execute="SELECT count(*) FROM ${db_characters:?}.guild;" 2>/dev/null)
   else
-    menu_gu_count=$(printf '%b' "\033[1;31m0\033[0m")
+    menu_gu_count=$(printf '%b' "${R0:?}0${N0:?}")
   fi
 
   # get date
@@ -52,25 +65,25 @@ while :; do
 
   # realmd service
   case "$(pidof $realm_service | wc -w)" in
-  0) menu_realmd="realmd: [\033[1;31minactive\033[0m]" ;;
-  1) menu_realmd="realmd: [\e[0;32mactive\033[0m]" ;;
-  *) menu_realmd="realmd: [\e[0;33mrunning\033[0m]" ;;
+  0) menu_realmd="realmd: [${R0:?}inactive${N0:?}]" ;;
+  1) menu_realmd="realmd: [${G0:?}active${N0:?}]" ;;
+  *) menu_realmd="realmd: [${Y0:?}running${N0:?}]" ;;
   esac
 
   # mangosd service
   case "$(pidof $world_service | wc -w)" in
-  0) menu_mangosd="mangosd: [\033[1;31minactive\033[0m]" ;;
-  1) menu_mangosd="mangosd: [\e[0;32mactive\033[0m]" ;;
-  *) menu_mangosd="mangosd: [\e[0;33mrunning\033[0m]" ;;
+  0) menu_mangosd="mangosd: [${R0:?}inactive${N0:?}]" ;;
+  1) menu_mangosd="mangosd: [${G0:?}active${N0:?}]" ;;
+  *) menu_mangosd="mangosd: [${Y0:?}running${N0:?}]" ;;
   esac
   # codes done
 
   # menu
 
-  printf "\e[90m - - - - - - - - - - - - - - - - - - - - - - -\033[0m
+  printf "${GR:?} - - - - - - - - - - - - - - - - - - - - - - -${N0:?}
     _____ _____     _____ _____ _____ _____
    |     |     |___|   | |   __|     |   __|
-   |   --| | | | .'| | | |  |  |  |  |__   |\e[0;35m
+   |   --| | | | .'| | | |  |  |  |  |__   |${P1:?}
    |_____|_|_|_|__,|_|___|_____|_____|_____|\n\e[0m"
   cat <<EOF
            C(ontinued)-MaNGOS Helper
@@ -121,25 +134,25 @@ EOF
 
     # menu
 
-    printf '%b' "\033[0m ---------------------------------------------
-\033[0m                                       __
+    printf '%b' "${N0:?} ---------------------------------------------
+${N0:?}                                       __
    .---.-.----.----.-----.--.--.-----.|  |_
-   |  _  |  __|  __|  _  |  |  |     ||   _|\e[0;35m
+   |  _  |  __|  __|  _  |  |  |     ||   _|${P1:?}
    |___._|____|____|_____|_____|__|__||____|
-           \033[0mC(ontinued)-MaNGOS Helper
-             \033[0m--------------------
+           ${N0:?}C(ontinued)-MaNGOS Helper
+             ${N0:?}--------------------
 
-                Accounts\e[0;32m...:\033[0m $ac_count
-                Banned\e[0;32m.....:\033[0m $bn_count
+                Accounts${G0:?}...:${N0:?} $ac_count
+                Banned${G0:?}.....:${N0:?} $bn_count
 
-                    \e[0;35mInfo:
+                    ${P1:?}Info:
 
-           \e[0;32mSelect account operation\033[0m
+           ${G0:?}Select account operation${N0:?}
 
               c : Create account
               d : Delete account
 
-\033[0m ---------------------------------------------
+${N0:?} ---------------------------------------------
              Press Any Key To Exit
 >"
 
@@ -151,25 +164,25 @@ EOF
     "c")
 
       clear
-      printf "\033[0m ---------------------------------------------
+      printf "${N0:?} ---------------------------------------------
 
-           \033[0m0: Vanilla\e[0;32m
+           ${N0:?}0: Vanilla${G0:?}
            1: The Burning Crusade
            2: Wrath of the Lich King
 
-           \033[0m0: Player\e[0;32m
+           ${N0:?}0: Player${G0:?}
            1: Moderator
            2: Game Master
-           3: Administrator\033[0m
+           3: Administrator${N0:?}
 
       Minimum 5 characters account name.
 
-        Create new account (\e[0;35musername\033[0m)
-        Set the (\e[0;35mexpansion\033[0m) version.
-        Set the (\e[0;35maccount\033[0m) privilege.
+        Create new account (${P1:?}username${N0:?})
+        Set the (${P1:?}expansion${N0:?}) version.
+        Set the (${P1:?}account${N0:?}) privilege.
 
-        \e[0;35mExample\033[0m: 'username' '0' '0'
-\033[0m ---------------------------------------------
+        ${P1:?}Example${N0:?}: 'username' '0' '0'
+${N0:?} ---------------------------------------------
              Press Any Key To Exit"
 
       # menu done
@@ -184,7 +197,7 @@ EOF
         printf "empty"
         echo
       else
-        printf '%b' "[\e[0;32mok\033[0m] $USR"
+        printf '%b' "[${G0:?}ok${N0:?}] $USR"
         echo
         echo "Password"
         read -r -s PWD
@@ -192,7 +205,7 @@ EOF
           printf "empty"
           echo
         else
-          printf "[\e[0;32mok\033[0m] Password"
+          printf "[${G0:?}ok${N0:?}] Password"
           echo
           echo "Expansion - 0"
           read -r -s XPV
@@ -200,7 +213,7 @@ EOF
             printf "empty"
             echo
           else
-            printf '%b' "[\e[0;32mok\033[0m] Expansion ($XPV)"
+            printf '%b' "[${G0:?}ok${N0:?}] Expansion ($XPV)"
             echo
             echo "GMlevel - 0-3"
             read -r -s LVL
@@ -208,7 +221,7 @@ EOF
               printf "empty"
               echo
             else
-              printf '%b' "[\e[0;32mok\033[0m] GMlevel ($LVL)"
+              printf '%b' "[${G0:?}ok${N0:?}] GMlevel ($LVL)"
               echo "${user_nc:?}
 ${pass_nc:?}
 .account create $USR $PWD
@@ -218,7 +231,7 @@ ${pass_nc:?}
               rm "${folder_wow:?}"/tmp.txt
               echo
               echo
-              printf '%b' "[\e[0;32mok\033[0m] Account '\e[0;35m$USR\033[0m' ($XPV/$LVL) created."
+              printf '%b' "[${G0:?}ok${N0:?}] Account '${P1:?}$USR${N0:?}' ($XPV/$LVL) created."
               echo
               echo
             fi
@@ -242,19 +255,19 @@ ${pass_nc:?}
       # realmd backup
       FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
       if [ ! -f "$FILE" ]; then
-        realmd_backup="[\e[0;31mold\033[0m]"
+        realmd_backup="[${R0:?}old${N0:?}]"
         echo
       else
-        realmd_backup="[\e[0;32mok\033[0m]"
+        realmd_backup="[${G0:?}ok${N0:?}]"
         echo
       fi
       # characters backup
       FILE="$folder_wow/backup/$db_characters-$NOW.sql"
       if [ ! -f "$FILE" ]; then
-        charac_backup="[\e[0;31mold\033[0m]"
+        charac_backup="[${R0:?}old${N0:?}]"
         echo
       else
-        charac_backup="[\e[0;32mok\033[0m]"
+        charac_backup="[${G0:?}ok${N0:?}]"
         echo
       fi
       # codes done
@@ -264,21 +277,21 @@ ${pass_nc:?}
       clear
 
       echo
-      printf '%b' "\033[1;31m
+      printf '%b' "${R0:?}
  @@@@@@@  @@@@@@@@ @@@      @@@@@@@@ @@@@@@@ @@@@@@@@
  @@!  @@@ @@!      @@!      @@.        @@!   @@!
  @!@  !@! @!!!.:   @!!      @!!.:!     @!!   @!!!:.
  .!.  .!! !.:      !!.      .!:        !.:   !!.
- .: :  .  : .:  .. : .: : . . :. :.:    .    : .: .:.\033[0m
+ .: :  .  : .:  .. : .: : . . :. :.:    .    : .: .:.${N0:?}
 
  Note: Make sure you have backup laying around!
  $realmd_backup$charac_backup
 
  Delete by id ->
- \e[0;35mExamples\033[0m: 'id' - 'id1,id2' - 'id1 AND id5'
+ ${P1:?}Examples${N0:?}: 'id' - 'id1,id2' - 'id1 AND id5'
  Delete by username ->
- \e[0;35mExamples\033[0m: 'username' - 'username1,username2'
- Select (\e[0;32musername\033[0m) or (\e[0;32mid\033[0m) - Press Enter To Confirm"
+ ${P1:?}Examples${N0:?}: 'username' - 'username1,username2'
+ Select (${G0:?}username${N0:?}) or (${G0:?}id${N0:?}) - Press Enter To Confirm"
 
       echo
       echo
@@ -286,11 +299,11 @@ ${pass_nc:?}
       echo
       mysql --defaults-extra-file="$sql_mycnf" --execute="SELECT username, gmlevel, id FROM $db_realmd.account;"
       echo
-      printf '%b' " Delete directly from '\e[0;35m$db_realmd.account\033[0m'"
+      printf '%b' " Delete directly from '${P1:?}$db_realmd.account${N0:?}'"
       echo
 
       printf "
-\033[0m ---------------------------------------------
+${N0:?} ---------------------------------------------
              Press Any Key To Exit
 >"
       read -r ID
@@ -298,7 +311,7 @@ ${pass_nc:?}
       if [[ -z "$ID" ]]; then
         printf '%s\n' "empty"
       else
-        deleted=$(printf '%b' "\e[91mDELETE\033[0m '$ID' \e[91m?!\033[0m")
+        deleted=$(printf '%b' "${R1:?}DELETE${N0:?} '$ID' ${R1:?}?!${N0:?}")
         echo
         read -r -p "$deleted
 
@@ -318,13 +331,13 @@ Are You Sure? (y/n) " -n 1 -r
           echo " kek!"
           printf "(∩ ᐛ )⊃━━ "
           sleep 3
-          printf "^\e[0;33m｡·.·\033[0mﾟ\e[0;33m★☆ﾟ.｡*\033[0m(つ﹏⊂)\e[0;33m?･ ｡★·"
+          printf "^${Y0:?}｡·.·${N0:?}ﾟ${Y0:?}★☆ﾟ.｡*${N0:?}(つ﹏⊂)${Y0:?}?･ ｡★·"
           sleep 2
-          printf ".\033[0m..poof!"
+          printf ".${N0:?}..poof!"
           sleep 1
           echo
           echo
-          printf '%b' "$ID \033[0m..vanished!"
+          printf '%b' "$ID ${N0:?}..vanished!"
           sleep 1
           echo
           echo
@@ -364,16 +377,16 @@ Are You Sure? (y/n) " -n 1 -r
 
       # realmd service
       case "$(pidof $realm_service | wc -w)" in
-      0) command_realmd="[\033[1;31moff\033[0m]" ;;
-      1) command_realmd="[\e[0;32mok\033[0m]" ;;
-      *) command_realmd="[\e[0;33mok\033[0m]" ;;
+      0) command_realmd="[${R0:?}off${N0:?}]" ;;
+      1) command_realmd="[${G0:?}ok${N0:?}]" ;;
+      *) command_realmd="[${Y0:?}ok${N0:?}]" ;;
       esac
 
       # mangosd service
       case "$(pidof $world_service | wc -w)" in
-      0) command_mangosd="[\033[1;31moff\033[0m]" ;;
-      1) command_mangosd="[\e[0;32mok\033[0m]" ;;
-      *) command_mangosd="[\e[0;33mok\033[0m]" ;;
+      0) command_mangosd="[${R0:?}off${N0:?}]" ;;
+      1) command_mangosd="[${G0:?}ok${N0:?}]" ;;
+      *) command_mangosd="[${Y0:?}ok${N0:?}]" ;;
       esac
 
       # Thank you! -> https://stackoverflow.com/questions/59862020
@@ -430,7 +443,7 @@ Are You Sure? (y/n) " -n 1 -r
       init_colors
 
       # uptime
-      cm_uptime="\033[0mTime""$W""$(uptime)\033[0m"
+      cm_uptime="${N0:?}Time""$W""$(uptime)${N0:?}"
 
       # log data
 
@@ -439,15 +452,15 @@ Are You Sure? (y/n) " -n 1 -r
       # look for error
       if grep -E -q ".*ERROR*." "${folder_core:?}"/run/logs/Realmd.log &>/dev/null; then
         # if any, print "error"
-        cm_realmd_log="[\033[0;31mError\033[0m]"
+        cm_realmd_log="[${R0:?}Error${N0:?}]"
       else
         # if nothing, print "ok"
-        cm_realmd_log="[\e[0;32mok\033[0m]"
+        cm_realmd_log="[${G0:?}ok${N0:?}]"
       fi
       # look for empty tables
       if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log &>/dev/null; then
         # if any, print "empty"
-        cm_realmd_log_empty="[\e[0;33mEmpty\033[0m]"
+        cm_realmd_log_empty="[${Y0:?}Empty${N0:?}]"
       fi
       # Realmd.log done
 
@@ -456,20 +469,20 @@ Are You Sure? (y/n) " -n 1 -r
       # look for error
       if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log &>/dev/null; then
         # if any, print "error"
-        cm_server_log="[\033[0;31mError\033[0m]"
+        cm_server_log="[${R0:?}Error${N0:?}]"
       else
         # if nothing, print "ok"
-        cm_server_log="[\e[0;32mok\033[0m]"
+        cm_server_log="[${G0:?}ok${N0:?}]"
       fi
       # look for empty tables
       if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log &>/dev/null; then
         # if any, print "empty"
-        cm_server_log_empty="[\e[0;33mEmpty\033[0m]"
+        cm_server_log_empty="[${Y0:?}Empty${N0:?}]"
       fi
       # look for serious error
       if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log &>/dev/null; then
         # if any, print "serious"
-        cm_server_log_serious="[\033[1;31mSerious\033[0m]"
+        cm_server_log_serious="[${R1:?}Serious${N0:?}]"
       fi
 
       # Server.log done
@@ -479,19 +492,19 @@ Are You Sure? (y/n) " -n 1 -r
       # realmd backup
       FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
       if [ ! -f "$FILE" ]; then
-        realmd_backup="[\e[0;31mold\033[0m]"
+        realmd_backup="[${R0:?}old${N0:?}]"
         echo
       else
-        realmd_backup="[\e[0;32mok\033[0m]"
+        realmd_backup="[${G0:?}ok${N0:?}]"
         echo
       fi
       # characters backup
       FILE="$folder_wow/backup/$db_characters-$NOW.sql"
       if [ ! -f "$FILE" ]; then
-        charac_backup="[\e[0;31mold\033[0m]"
+        charac_backup="[${R0:?}old${N0:?}]"
         echo
       else
-        charac_backup="[\e[0;32mok\033[0m]"
+        charac_backup="[${G0:?}ok${N0:?}]"
         echo
       fi
 
@@ -502,7 +515,7 @@ Are You Sure? (y/n) " -n 1 -r
           sed 's/^ *//' 2>/dev/null)
       # if nothing, print "Restart server please.."
       else
-        latest_world_built="\e[90mBuilt on Nov 23 2004 at 10:00:01\033[0m"
+        latest_world_built="${GR:?}Built on Nov 23 2004 at 10:00:01${N0:?}"
       fi
       # built for
       if grep -q -o -a "\sBuilt\sfor\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null; then
@@ -511,7 +524,7 @@ Are You Sure? (y/n) " -n 1 -r
           sed 's/^ *//' 2>/dev/null)
       # if nothing, print "Restart server please.."
       else
-        built_for="\e[90mBuilt for Linux_x00 (next-to-nothing)\033[0m"
+        built_for="${GR:?}Built for Linux_x00 (next-to-nothing)${N0:?}"
       fi
       # EventAI
       if grep -q -o -a "\sACID\s1.12.x\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null; then
@@ -520,7 +533,7 @@ Are You Sure? (y/n) " -n 1 -r
           sed 's/^ *//' 2>/dev/null)
       # if nothing, print "Restart server please.."
       else
-        eventai="\e[90mACID 0.00.x (Classic) for CMaNGOS-CLASSIC (0.00.X Client)\033[0m"
+        eventai="${GR:?}ACID 0.00.x (Classic) for CMaNGOS-CLASSIC (0.00.X Client)${N0:?}"
       fi
       # World DB
       if grep -q -o -a "\s1.11\s*.*" "$folder_core"/run/logs/Server.log 2>/dev/null; then
@@ -529,13 +542,13 @@ Are You Sure? (y/n) " -n 1 -r
           sed 's/^ *//' 2>/dev/null)
       # if nothing, print "Restart server please.."
       else
-        world_db="\e[90m0.00 'Into the Abyss of nothing.' For Classic core z0000.\033[0m"
+        world_db="${GR:?}0.00 'Into the Abyss of nothing.' For Classic core z0000.${N0:?}"
       fi
       # cpu temp
       if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
         menu_cpu_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
           cut -c -4 2>/dev/null)
-        menu_print_cpu_temp=$(printf '%b' "Temp\e[0;32m........:\033[0m ${menu_cpu_temp:?}c")
+        menu_print_cpu_temp=$(printf '%b' "Temp${G0:?}........:${N0:?} ${menu_cpu_temp:?}c")
       else
         menu_print_cpu_temp=""
       fi
@@ -550,21 +563,21 @@ Are You Sure? (y/n) " -n 1 -r
 
       printf '%b' "      $cm_uptime
 
-      Realm\e[0;32m.......:\e[92m ${server_name:?}\033[0m
+      Realm${G0:?}.......:${G1:?} ${server_name:?}${N0:?}
       $menu_print_cpu_temp
-      World\e[0;32m.......:\033[0m $latest_world_built
-      System\e[0;32m......:\033[0m $built_for
-      Commit Hash\e[0;32m.:\e[90m $commit_hash\033[0m
+      World${G0:?}.......:${N0:?} $latest_world_built
+      System${G0:?}......:${N0:?} $built_for
+      Commit Hash${G0:?}.:${GR:?} $commit_hash${N0:?}
 
-      r : \e[0;35mLogin\033[0m   - Remote access  service.mangosd\e[0;32m.:\033[0m $command_mangosd
-      l : \e[0;35mLogs\033[0m    - Analyze logs   service.realmd\e[0;32m..:\033[0m $command_realmd
-      b : \e[0;35mBackup\033[0m  - New backup
-      h : \e[0;35mReset\033[0m   - Reset --hard   characters.sql\e[0;32m..:\033[0m $charac_backup
-      p : \e[0;35mhtop\033[0m    - Process view   realmd.sql\e[0;32m......:\033[0m $realmd_backup
-      m : \e[0;35mMaps\033[0m    - Download maps
-      w : \e[0;35mStats\033[0m   - World stats
-      q : \e[0;35mQuit\033[0m    - Back to menu   Realmd.log\e[0;32m......:\033[0m $cm_realmd_log_empty$cm_realmd_log
-      i : \e[0;35mInfo\033[0m    - Helper info    Server.log\e[0;32m......:\033[0m $cm_server_log_empty$cm_server_log$cm_server_log_serious
+      r : ${P1:?}Login${N0:?}   - Remote access  service.mangosd${G0:?}.:${N0:?} $command_mangosd
+      l : ${P1:?}Logs${N0:?}    - Analyze logs   service.realmd${G0:?}..:${N0:?} $command_realmd
+      b : ${P1:?}Backup${N0:?}  - New backup
+      h : ${P1:?}Reset${N0:?}   - Reset --hard   characters.sql${G0:?}..:${N0:?} $charac_backup
+      p : ${P1:?}htop${N0:?}    - Process view   realmd.sql${G0:?}......:${N0:?} $realmd_backup
+      m : ${P1:?}Maps${N0:?}    - Download maps
+      w : ${P1:?}Stats${N0:?}   - World stats
+      q : ${P1:?}Quit${N0:?}    - Back to menu   Realmd.log${G0:?}......:${N0:?} $cm_realmd_log_empty$cm_realmd_log
+      i : ${P1:?}Info${N0:?}    - Helper info    Server.log${G0:?}......:${N0:?} $cm_server_log_empty$cm_server_log$cm_server_log_serious
 "
       echo
       read -r -s -n1
@@ -575,7 +588,7 @@ Are You Sure? (y/n) " -n 1 -r
       "i")
 
         clear
-        printf '%b' "\033[0m
+        printf '%b' "${N0:?}
        _____     __  __       _   _  _____  ____   _____
       / ____|   |  \/  |     | \ | |/ ____|/ __ \ / ____|
      | |        | \  / |     |  \| | |  __  |  | | (___
@@ -584,31 +597,31 @@ Are You Sure? (y/n) " -n 1 -r
       \_____|   |_|  |_| (_| |_| \_|\_____|\____/ \____/
       http://cmangos.net\__,_|     Doing things right!
 
-      \e[0;32mC(ontinued)-MaNGOS (Classic fork)\033[0m
+      ${G0:?}C(ontinued)-MaNGOS (Classic fork)${N0:?}
 
-      EventAI\e[0;32m..:\033[0m $eventai
-      World DB\e[0;32m.:\033[0m $world_db
+      EventAI${G0:?}..:${N0:?} $eventai
+      World DB${G0:?}.:${N0:?} $world_db
 
-      \e[0;35mhttps://github.com/cmangos/mangos-classic\033[0m
-      \e[0;35mhttps://github.com/cmangos/classic-db\033[0m
+      ${P1:?}https://github.com/cmangos/mangos-classic${N0:?}
+      ${P1:?}https://github.com/cmangos/classic-db${N0:?}
 
-      Tip: Use both in \e[0;35mrealmlist.wtf\033[0m
+      Tip: Use both in ${P1:?}realmlist.wtf${N0:?}
 
-      \e[0;35mInternet\033[0m: 'set realmlist \e[0;90m${internet:?}\033[0m'
-      \e[0;35mLanparty\033[0m: 'set realmlist \e[0;90m${intranet:?}\033[0m' - When internet drop out.
+      ${P1:?}Internet${N0:?}: 'set realmlist \e[0;90m${internet:?}${N0:?}'
+      ${P1:?}Lanparty${N0:?}: 'set realmlist \e[0;90m${intranet:?}${N0:?}' - When internet drop out.
 
-      Create another '\e[0;35m$db_realmd.realmlist\033[0m'\e[0;35m table row\033[0m, or just copy.
-      Set new 'id', 'sameName (LAN)' and '\e[0;90m${intranet:?}\033[0m' as address.
+      Create another '${P1:?}$db_realmd.realmlist${N0:?}'${P1:?} table row${N0:?}, or just copy.
+      Set new 'id', 'sameName (LAN)' and '\e[0;90m${intranet:?}${N0:?}' as address.
       You can now choose 'Internet' or 'Lanparty' ingame from realm list.
 
-      \033[0mIMPORTANT ! edit '\e[0;35mserver.txt\033[0m' & '\e[0;35mserver.cnf\033[0m' with correct info.
+      ${N0:?}IMPORTANT ! edit '${P1:?}server.txt${N0:?}' & '${P1:?}server.cnf${N0:?}' with correct info.
 
-      'login' & 'create account' edit 'RA/NETCAT' inside \e[0;35mserver.txt.\033[0m
-      'update Database' edit 'MYSQL' inside \e[0;35mserver.txt\033[0m, \e[0;35mserver.cnf\033[0m
+      'login' & 'create account' edit 'RA/NETCAT' inside ${P1:?}server.txt.${N0:?}
+      'update Database' edit 'MYSQL' inside ${P1:?}server.txt${N0:?}, ${P1:?}server.cnf${N0:?}
 
-      \e[0;32mC(ontinued)-MaNGOS - Helper\033[0m
+      ${G0:?}C(ontinued)-MaNGOS - Helper${N0:?}
 
-      \e[0;35mhttps://github.com/Daedalus-code/cmangos-script\033[0m
+      ${P1:?}https://github.com/Daedalus-code/cmangos-script${N0:?}
 
       This script was built on a ubuntu system - (Raspberry Pi4)
       https://ubuntu.com/download/raspberry-pi
@@ -627,8 +640,8 @@ Are You Sure? (y/n) " -n 1 -r
       * Download/Install classic maps
       * Profit
 
-\e[1;32m>\033[0m hit Enter to go back.
-\033[0m"
+${G0:?}>${N0:?} hit Enter to go back.
+${N0:?}"
         echo
         read -r -p ">" </dev/tty
 
@@ -642,20 +655,20 @@ Are You Sure? (y/n) " -n 1 -r
 
         # codes
         if ! [ -x "$(command -v transmission-cli)" ]; then
-          seed_transmission="[\e[0;33mnot installed\033[0m]"
+          seed_transmission="[${Y0:?}not installed${N0:?}]"
         else
           transmission_list=$(transmission-remote -l 2>/dev/null)
           # transmission-daemon service
           transmission_service=transmission-daemon
           # transmission-daemon status
           case "$(pidof $transmission_service | wc -w)" in
-          0) seed_transmission="[\033[1;31moff\033[0m]" ;;
-          1) seed_transmission="[\e[0;32mok\033[0m]" ;;
-          *) seed_transmission="[\e[0;33mok\033[0m]" ;;
+          0) seed_transmission="[${R0:?}off${N0:?}]" ;;
+          1) seed_transmission="[${G0:?}ok${N0:?}]" ;;
+          *) seed_transmission="[${Y0:?}ok${N0:?}]" ;;
           esac
         fi
         if ! [ -x "$(command -v transmission-cli)" ]; then
-          intranet_seed=$(printf '%b' "[\e[0;33mnot installed\033[0m]" 2>/dev/null)
+          intranet_seed=$(printf '%b' "[${Y0:?}not installed${N0:?}]" 2>/dev/null)
         else
           intranet_seed=$(printf '%b' "$intranet:9091" 2>/dev/null)
         fi
@@ -666,29 +679,29 @@ Are You Sure? (y/n) " -n 1 -r
         clear
         echo
         echo
-        printf '%b' "                    \e[0;32mCMaNGOS (Classic fork) - SeedBox for maps\e[31m
+        printf '%b' "                    ${G0:?}CMaNGOS (Classic fork) - SeedBox for maps${R0:?}
 
-     \033[0m* Download/Upload maps for WoW Vanilla server.
+     ${N0:?}* Download/Upload maps for WoW Vanilla server.
      * This is an attempt to make classic maps available through p2p.
      * You can decide if you only want to download and stop transmission.
 
-       Transmission\e[0;32m....:\033[0m $seed_transmission
-       Web access\e[0;32m......:\033[0m $intranet_seed
+       Transmission${G0:?}....:${N0:?} $seed_transmission
+       Web access${G0:?}......:${N0:?} $intranet_seed
 
-       Default: download '\e[0;35munlimited\033[0m' upload '\e[0;35m128kb/s\033[0m'
+       Default: download '${P1:?}unlimited${N0:?}' upload '${P1:?}128kb/s${N0:?}'
 
- \e[0;32m<------------------------------------------------------------------------------>\033[0m
+ ${G0:?}<------------------------------------------------------------------------------>${N0:?}
 $transmission_list
- \e[0;32m<------------------------------------------------------------------------------>\033[0m
+ ${G0:?}<------------------------------------------------------------------------------>${N0:?}
 
-      t : \e[0;35mInstall seedbox\033[0m - Install transmission-daemon
-      u : \e[0;35mRemove seedbox\033[0m  - Remove transmission-daemon
-      r : \e[0;35mStart seedbox\033[0m   - Service transmission-daemon start
-      s : \e[0;35mStop seedbox\033[0m    - Service transmission-daemon stop
-      m : \e[0;35mInstall maps\033[0m    - Install vanilla.maps.zip
+      t : ${P1:?}Install seedbox${N0:?} - Install transmission-daemon
+      u : ${P1:?}Remove seedbox${N0:?}  - Remove transmission-daemon
+      r : ${P1:?}Start seedbox${N0:?}   - Service transmission-daemon start
+      s : ${P1:?}Stop seedbox${N0:?}    - Service transmission-daemon stop
+      m : ${P1:?}Install maps${N0:?}    - Install vanilla.maps.zip
 
-\e[1;32m>\033[0m hit Enter to go back.
-\033[0m"
+${G0:?}>${N0:?} hit Enter to go back.
+${N0:?}"
         echo
         printf '%b' ">"
         read -r -s -n1
@@ -819,13 +832,13 @@ EOF
               # start transmission-daemon
               sudo service transmission-daemon start &>/dev/null
               echo
-              printf '%b' "[\e[0;32mok\033[0m] - transmission should be running now"
+              printf '%b' "[${G0:?}ok${N0:?}] - transmission should be running now"
               echo
               sleep 1
               # add magnet link: vanilla.maps.zip.torrent
               transmission-remote -a "magnet:?xt=urn:btih:1cdcaa3d77a7f4df79935d885e639903e37dda24&dn=vanilla%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
               echo
-              printf '%b' "[\e[0;32mok\033[0m] - torrent added"
+              printf '%b' "[${G0:?}ok${N0:?}] - torrent added"
               echo
               sleep 1
               # reload
@@ -860,7 +873,7 @@ EOF
             # reload
             sudo systemctl daemon-reload &>/dev/null
             echo
-            printf '%b' "[\e[0;32mok\033[0m] - seedbox started."
+            printf '%b' "[${G0:?}ok${N0:?}] - seedbox started."
             echo
             sleep 1
           fi
@@ -887,7 +900,7 @@ EOF
             # reload
             sudo systemctl daemon-reload &>/dev/null
             echo
-            printf '%b' "[\033[1;31moff\033[0m] - seedbox stopped."
+            printf '%b' "[${R0:?}off${N0:?}] - seedbox stopped."
             echo
             sleep 1
           fi
@@ -919,7 +932,7 @@ EOF
             else
               sudo unzip /seedbox/vanilla_maps.zip -d "$folder_core"/run
               echo
-              printf '%b' "[\e[0;32mok\033[0m] - maps installed."
+              printf '%b' "[${G0:?}ok${N0:?}] - maps installed."
               echo
               sleep 1
             fi
@@ -953,7 +966,7 @@ EOF
 
       "h")
 
-        printf " \033[0;31mWARNING\033[0m: 'reset --hard' (\e[0;35meverything\033[0m) Are You Sure? (y/n)"
+        printf " ${R0:?}WARNING${N0:?}: 'reset --hard' (${P1:?}everything${N0:?}) Are You Sure? (y/n)"
         echo
         read -n 1 -r
         echo
@@ -961,13 +974,13 @@ EOF
 
           echo
           echo
-          printf "\e[0;35mmangos-classic\033[0m: "
+          printf "${P1:?}mangos-classic${N0:?}: "
           cd "$folder_core" || exit
           git reset --hard
-          printf "\e[0;35mclassic-db\033[0m: "
+          printf "${P1:?}classic-db${N0:?}: "
           cd "${folder_db:?}" || exit
           git reset --hard
-          printf "\e[0;35mcmangos-script\033[0m: "
+          printf "${P1:?}cmangos-script${N0:?}: "
           cd "${folder_helper:?}" || exit
           git reset --hard
           echo
@@ -1017,28 +1030,28 @@ EOF
         dive_EventAINotUs=$(grep -c -E "but\snot\sused" "$folder_core"/run/logs/EventAIErrors.log 2>/dev/null)
 
         # Server.log, .old, Realmd.log
-        dive_log_empty=$(printf "\e[0;33mEmpty....\033[0m")
-        dive_log_error=$(printf "\033[0;31mError..\033[0m")
-        dive_log_ignor=$(printf "\033[0;31mIgnore.\033[0m")
-        dive_log_serio=$(printf "\033[1;31mSerious\033[0m")
+        dive_log_empty=$(printf "${Y0:?}Empty..${N0:?}")
+        dive_log_error=$(printf "${R0:?}Error..${N0:?}")
+        dive_log_ignor=$(printf "${R0:?}Ignore.${N0:?}")
+        dive_log_serio=$(printf "${R1:?}Serious${N0:?}")
         # DBErrors.log
-        dive_log_corre=$(printf "\033[0;31mNotCorresponding\033[0m")
-        dive_log_exist=$(printf "\033[0;31mDoesn'tExist....\033[0m")
-        dive_log_query=$(printf "\033[0;31mQueryERROR......\033[0m")
-        dive_log_never=$(printf "\033[0;31mWillNeverBeUsed.\033[0m")
-        dive_log_crash=$(printf "\033[1;31mCanCrashClient!.\033[0m")
+        dive_log_corre=$(printf "${R0:?}NotCorresponding${N0:?}")
+        dive_log_exist=$(printf "${R0:?}Doesn'tExist....${N0:?}")
+        dive_log_query=$(printf "${R0:?}QueryERROR......${N0:?}")
+        dive_log_never=$(printf "${R0:?}WillNeverBeUsed.${N0:?}")
+        dive_log_crash=$(printf "${R0:?}CanCrashClient!.${N0:?}")
         # EventAIErrors.log
-        dive_log_skipp=$(printf "\033[0;31mSkipping\033[0m")
-        dive_log_noeff=$(printf "\033[0;31mNoEffect\033[0m")
-        dive_log_nonex=$(printf "\033[0;31mNonExist\033[0m")
-        dive_log_NULL0=$(printf "\033[0;31mNULL....\033[0m")
-        dive_log_NotUs=$(printf "\033[0;31mNotUsed.\033[0m")
+        dive_log_skipp=$(printf "${R0:?}Skipping${N0:?}")
+        dive_log_noeff=$(printf "${R0:?}NoEffect${N0:?}")
+        dive_log_nonex=$(printf "${R0:?}NonExist${N0:?}")
+        dive_log_NULL0=$(printf "${R0:?}NULL....${N0:?}")
+        dive_log_NotUs=$(printf "${R0:?}NotUsed.${N0:?}")
         # Char.log
-        dive_log_creat=$(printf "\e[0;33mCreated\033[0m")
-        dive_log_login=$(printf "\e[0;33mLogin..\033[0m")
-        dive_log_logou=$(printf "\e[0;33mLogout.\033[0m")
+        dive_log_creat=$(printf "${Y0:?}Created${N0:?}")
+        dive_log_login=$(printf "${Y0:?}Login..${N0:?}")
+        dive_log_logou=$(printf "${Y0:?}Logout.${N0:?}")
         # empty table
-        dive_log_none=$(printf "\e[2mempty..\033[0m")
+        dive_log_none=$(printf "\e[2mempty..${N0:?}")
         dive_log_zero=$(printf "0")
         # codes done
 
@@ -1076,8 +1089,8 @@ EOF
           ERROR_ERROR=$(grep --no-filename -Eo "ERROR:.*" "$folder_core"/run/logs/*.log 2>/dev/null)
           # get raw empty from logs
           EMPTY_ERROR=$(grep --no-filename -Eo ".*empty*." "$folder_core"/run/logs/*.log 2>/dev/null)
-          printf '%b' "\e[93m$EMPTY_ERROR\033[0m\n"
-          printf '%b' "\e[31m$ERROR_ERROR\033[0m\n"
+          printf '%b' "${Y1:?}$EMPTY_ERROR${N0:?}\n"
+          printf '%b' "${R0:?}$ERROR_ERROR${N0:?}\n"
 
           ;;
 
@@ -1085,7 +1098,7 @@ EOF
 
           # tail logs for error
           echo "Tail logs.."
-          printf '%b' "\e[90mCTRL+C to exit\033[0m\n"
+          printf '%b' "${GR:?}CTRL+C to exit${N0:?}\n"
           tail -f "$folder_core"/run/logs/*.log 2>/dev/null |
             grep -Eo "ERROR:.*|.*empty*." 2>/dev/null
 
@@ -1097,11 +1110,11 @@ EOF
         esac
 
         printf '%b' "
-Server\e[31m........: $dive_server_error \e[93m$dive_server_empty\033[0m
-Realmd\e[0;31m........: $dive_realmd_error \e[93m$dive_realmd_empty\033[0m
-Char\e[0;31m..........: $error_charac\033[0m
-DBErrors\e[0;31m......: $error_dberro\033[0m
-EventAIErrors\e[0;31m.: $error_eventa\033[0m\n"
+Server${R0:?}........: $dive_server_error ${Y1:?}$dive_server_empty${N0:?}
+Realmd${R0:?}........: $dive_realmd_error ${Y1:?}$dive_realmd_empty${N0:?}
+Char${R0:?}..........: $error_charac${N0:?}
+DBErrors${R0:?}......: $error_dberro${N0:?}
+EventAIErrors${R0:?}.: $error_eventa${N0:?}\n"
         echo
         read -r -p "Press Enter to continue" </dev/tty
         echo
@@ -1152,23 +1165,23 @@ EventAIErrors\e[0;31m.: $error_eventa\033[0m\n"
         mkdir "$folder_wow"/backup &>/dev/null
         # well (: backup probably hours old by now
         echo
-        printf "Making fresh backup\e[0;32m.\033[0m"
+        printf "Making fresh backup${G0:?}.${N0:?}"
         sleep 1
-        printf "\e[0;32m.\033[0m"
+        printf "${G0:?}.${N0:?}"
         mysqldump --defaults-extra-file="$sql_mycnf" "$db_characters" >"$folder_wow"/backup/"$db_characters"-"$NOW".sql
-        printf "\e[0;32m.\033[0m"
+        printf "${G0:?}.${N0:?}"
         sleep 1
-        printf '%b' "[\e[0;32mok\033[0m] $db_characters-$NOW.sql"
+        printf '%b' "[${G0:?}ok${N0:?}] $db_characters-$NOW.sql"
         sleep 2
         echo
         # backup characters sql
-        printf "Making fresh backup\e[0;32m.\033[0m"
+        printf "Making fresh backup${G0:?}.${N0:?}"
         sleep 1
-        printf "\e[0;32m.\033[0m"
+        printf "${G0:?}.${N0:?}"
         mysqldump --defaults-extra-file="$sql_mycnf" "$db_realmd" >"$folder_wow"/backup/"$db_realmd"-"$NOW".sql
-        printf "\e[0;32m.\033[0m"
+        printf "${G0:?}.${N0:?}"
         sleep 1
-        printf '%b' "[\e[0;32mok\033[0m] $db_realmd-$NOW.sql"
+        printf '%b' "[${G0:?}ok${N0:?}] $db_realmd-$NOW.sql"
         sleep 1
         # well (: backup probably hours old by now done
 
@@ -1188,9 +1201,9 @@ EventAIErrors\e[0;31m.: $error_eventa\033[0m\n"
 
           clear
           printf '%b' "
-\e[31m      ._________________.
+${R0:?}      ._________________.
       |.---------------.|
-      || \033[0mmangos>\e[31m       ||
+      || ${N0:?}mangos>${R0:?}       ||
       ||               ||
       ||               ||
       ||               ||
@@ -1199,18 +1212,18 @@ EventAIErrors\e[0;31m.: $error_eventa\033[0m\n"
       /.-.-.-.-.-.-.-.-.\\
      /.-.-.-.-.-.-.-.-.-.\\
     /.-.-.-.-.-.-.-.-.-.-.\\
-   /______/__________\___\e[1;32mo\033[1;31m_\\
-   \_______________________/\033[0m"
+   /______/__________\___${G0:?}o${R0:?}_\\
+   \_______________________/${N0:?}"
           echo
           printf "
      CMaNGOS Command Center
 
-  \e[1;32m>\033[0m hit Enter two times to go back.
+  ${G0:?}>${N0:?} hit Enter two times to go back.
   ------------------------------------------------
   'commands' will list all of the available commands
   'quit' and then hit Enter two times to exit
 
-  Tip: Set '\e[0;35mMessage of the Day\033[0m' inside mangosd.conf"
+  Tip: Set '${P1:?}Message of the Day${N0:?}' inside mangosd.conf"
           echo
           echo
           nc "$host_nc" "$port_nc"
@@ -1243,27 +1256,27 @@ EventAIErrors\e[0;31m.: $error_eventa\033[0m\n"
     # updated and installed
     FILE_CORE="/var/log/ms/installed_core"
     if [ -f "$FILE_CORE" ]; then
-      ok_core="[\e[0;32mok\033[0m]"
+      ok_core="[${G0:?}ok${N0:?}]"
     fi
     FILE_CORE="/var/log/ms/installed_core"
     if [ ! -f "$FILE_CORE" ]; then
-      ok_core="[\e[93mok\033[0m]"
+      ok_core="[${Y1:?}ok${N0:?}]"
     fi
     FILE_DB="/var/log/ms/installed_db"
     if [ -f "$FILE_DB" ]; then
-      ok_db="[\e[0;32mok\033[0m]"
+      ok_db="[${G0:?}ok${N0:?}]"
     fi
     FILE_DB="/var/log/ms/installed_db"
     if [ ! -f "$FILE_DB" ]; then
-      ok_db="[\e[93mok\033[0m]"
+      ok_db="[${Y1:?}ok${N0:?}]"
     fi
     FILE_MS="/var/log/ms/installed_ms"
     if [ -f "$FILE_MS" ]; then
-      ok_ms="[\e[0;32mok\033[0m]"
+      ok_ms="[${G0:?}ok${N0:?}]"
     fi
     FILE_MS="/var/log/ms/installed_ms"
     if [ ! -f "$FILE_MS" ]; then
-      ok_ms="[\e[93mok\033[0m]"
+      ok_ms="[${Y1:?}ok${N0:?}]"
     fi
 
     # check if 'mangos-classic' exist
@@ -1273,7 +1286,7 @@ EventAIErrors\e[0;31m.: $error_eventa\033[0m\n"
       rm /var/log/ms/installed_core &>/dev/null
       # fresh install ?
       printf '%b' "Cloning repository 'mangos-classic' Please wait this might take a while
-(\e[92m${github_cmangos:?}\033[0m)\n"
+(${G1:?}${github_cmangos:?}${N0:?})\n"
       sudo mkdir "$folder_wow" &>/dev/null
       sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
       cd "$folder_wow" || exit
@@ -1291,7 +1304,7 @@ EventAIErrors\e[0;31m.: $error_eventa\033[0m\n"
       # check for updates
 
       # CMaNGOS Core (mangos-classic)
-      printf "[ Checking for \e[1;32m+\033[1;31m-\033[0m Updates\033[0m ] .. "
+      printf "[ Checking for ${G0:?}+${R0:?}-${N0:?} Updates${N0:?} ] .. "
       echo
       echo
       cd "$folder_core" || exit
@@ -1303,12 +1316,12 @@ EventAIErrors\e[0;31m.: $error_eventa\033[0m\n"
         rm /var/log/ms/installed_core &>/dev/null
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
-        printf '%b' "[\e[92mNEW\033[0m] (\e[4;32m$latest_head\033[0m) \e[4;32mNew Updates For Core\033[0m! - $latest_date
-\e[90m(m) Update CMaNGOS > Compile latest\033[0m\n"
+        printf '%b' "[${G1:?}NEW${N0:?}] (\e[4;32m$latest_head${N0:?}) \e[4;32mNew Updates For Core${N0:?}! - $latest_date
+${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
       else
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
-        printf '%b' "$ok_core (\e[4;32m$latest_head\033[0m) Core Updated - $latest_date"
+        printf '%b' "$ok_core (\e[4;32m$latest_head${N0:?}) Core Updated - $latest_date"
         echo
       fi
     # check if 'mangos-classic' exist done
@@ -1321,7 +1334,7 @@ EventAIErrors\e[0;31m.: $error_eventa\033[0m\n"
       rm /var/log/ms/installed_db &>/dev/null
       # fresh install ?
       printf '%b' "Cloning repository 'classic-db' Please wait this might take a while
-(\e[92m${github_database:?})\033[0m\n"
+(${G1:?}${github_database:?})${N0:?}\n"
       sudo mkdir "$folder_wow" &>/dev/null
       sudo chown -R "${user:?}":"${group:?}" "$folder_wow"
       cd "$folder_wow" || exit
@@ -1347,12 +1360,12 @@ EventAIErrors\e[0;31m.: $error_eventa\033[0m\n"
         rm /var/log/ms/installed_db &>/dev/null
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
-        printf '%b' "[\e[92mNEW\033[0m] (\e[4;32m$latest_head\033[0m) \e[4;32mNew Updates For Database\033[0m! - $latest_date
-\e[90m(d) Update Database > Update classic-db\033[0m\n"
+        printf '%b' "[${G1:?}NEW${N0:?}] (\e[4;32m$latest_head${N0:?}) \e[4;32mNew Updates For Database${N0:?}! - $latest_date
+${GR:?}(d) Update Database > Update classic-db${N0:?}\n"
       else
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
-        printf '%b' "$ok_db (\e[4;32m$latest_head\033[0m) Database Updated - $latest_date"
+        printf '%b' "$ok_db (\e[4;32m$latest_head${N0:?}) Database Updated - $latest_date"
         echo
       fi
     # check if 'classic-db' exist done
@@ -1385,12 +1398,12 @@ EventAIErrors\e[0;31m.: $error_eventa\033[0m\n"
         rm /var/log/ms/installed_ms &>/dev/null
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
-        printf '%b' "[\e[92mNEW\033[0m] (\e[4;32m$latest_head\033[0m) \e[4;32mNew Updates For Helper\033[0m! - $latest_date
-\e[90m(w) Update Helper > Update Helper\033[0m\n"
+        printf '%b' "[${G1:?}NEW${N0:?}] (\e[4;32m$latest_head${N0:?}) \e[4;32mNew Updates For Helper${N0:?}! - $latest_date
+${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
       else
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
-        printf '%b' "$ok_ms (\e[4;32m$latest_head\033[0m) Helper Updated - $latest_date"
+        printf '%b' "$ok_ms (\e[4;32m$latest_head${N0:?}) Helper Updated - $latest_date"
         echo
       fi
     # check if 'cmangos-script' exist done
@@ -1481,7 +1494,7 @@ EventAIErrors\e[0;31m.: $error_eventa\033[0m\n"
 
         # this is for docker users
         if [ -f /.dockerenv ]; then
-          printf '%b' "\e[90mKilling screens (realmd, mangosd)\033[0m\n"
+          printf '%b' "${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
           sleep 3
           sudo killall screen 2>/dev/null
           # keep old logs
@@ -1492,7 +1505,7 @@ EventAIErrors\e[0;31m.: $error_eventa\033[0m\n"
           if ! [ -x "$(command -v "${packagelist[@]}")" ]; then
             sudo apt-get install "${packagelist[@]}" -y 2>/dev/null
           fi
-          printf "\e[91mShutting down\e[90m realmd & mangosd service\033[0m"
+          printf "${R1:?}Shutting down${GR:?} realmd & mangosd service${N0:?}"
           echo
           sleep 1
 
@@ -1539,7 +1552,7 @@ EventAIErrors\e[0;31m.: $error_eventa\033[0m\n"
         if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
           cpu_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
             cut -c -4 2>/dev/null)
-          cmake_temp=$(printf '%b' "CPU: \e[1;32m$cpu_temp \033[0m°")
+          cmake_temp=$(printf '%b' "CPU: ${G0:?}$cpu_temp ${N0:?}°")
         else
           cmake_temp=$(printf '%b' "")
         fi
@@ -1548,7 +1561,7 @@ EventAIErrors\e[0;31m.: $error_eventa\033[0m\n"
         CPU_MODEL=$(lscpu 2>/dev/null | grep 'Model name' 2>/dev/null |
           cut -f 2 -d ":" 2>/dev/null | awk '{$1=$1}1' 2>/dev/null)
         if [ ! -z "$CPU_MODEL" ]; then
-          CPU_MODEL=$(printf '%b' "\e[90m$CPU_MODEL\e[33m\n")
+          CPU_MODEL=$(printf '%b' "${GR:?}$CPU_MODEL${Y0:?}\n")
         else
           CPU_MODEL=""
         fi
@@ -1557,8 +1570,8 @@ EventAIErrors\e[0;31m.: $error_eventa\033[0m\n"
         CORES=$(grep -c ^processor /proc/cpuinfo 2>/dev/null)
         if [[ "$CORES" -ge "1" ]]; then
           # report count
-          CORES_COUNT=$(printf '%b' "\e[93mThis system has \e[96m$CORES\e[93m cores!
-$CPU_MODEL\033[0m")
+          CORES_COUNT=$(printf '%b' "${Y1:?}This system has ${CY:?}$CORES${Y1:?} cores!
+$CPU_MODEL${N0:?}")
         else
           CORES_COUNT=""
         fi
@@ -1589,10 +1602,10 @@ EOF
 
         "c")
 
-          printf '%b' "\e[90m[  0%] Enter amount of core(s): \033[0m"
+          printf '%b' "${GR:?}[  0%] Enter amount of core(s): ${N0:?}"
           read -r CUSTOM
           cores=("$CUSTOM")
-          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          printf '%b' "${G0:?}[  0%] Building with ${N0:?}${cores[0]}${G0:?} core(s)${N0:?}\n"
           make -j"$CUSTOM" # custom n cores
 
           ;;
@@ -1600,7 +1613,7 @@ EOF
         "1")
 
           cores=("1")
-          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          printf '%b' "${G0:?}[  0%] Building with ${N0:?}${cores[0]}${G0:?} core(s)${N0:?}\n"
           make # 1 core
 
           ;;
@@ -1608,7 +1621,7 @@ EOF
         "2")
 
           cores=("2")
-          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          printf '%b' "${G0:?}[  0%] Building with ${N0:?}${cores[0]}${G0:?} core(s)${N0:?}\n"
           make -j2 # 2 cores
 
           ;;
@@ -1616,7 +1629,7 @@ EOF
         "3")
 
           cores=("3")
-          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          printf '%b' "${G0:?}[  0%] Building with ${N0:?}${cores[0]}${G0:?} core(s)${N0:?}\n"
           make -j3 # 3 cores
 
           ;;
@@ -1624,7 +1637,7 @@ EOF
         "4")
 
           cores=("4")
-          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          printf '%b' "${G0:?}[  0%] Building with ${N0:?}${cores[0]}${G0:?} core(s)${N0:?}\n"
           make -j4 # 4 cores
 
           ;;
@@ -1632,7 +1645,7 @@ EOF
         "8")
 
           cores=("8")
-          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          printf '%b' "${G0:?}[  0%] Building with ${N0:?}${cores[0]}${G0:?} core(s)${N0:?}\n"
           make -j8 # 8 cores
 
           ;;
@@ -1640,7 +1653,7 @@ EOF
         "h")
 
           cores=("16")
-          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          printf '%b' "${G0:?}[  0%] Building with ${N0:?}${cores[0]}${G0:?} core(s)${N0:?}\n"
           make -j16 # 16 cores, h1gh-
 
           ;;
@@ -1648,7 +1661,7 @@ EOF
         "w")
 
           cores=("32")
-          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          printf '%b' "${G0:?}[  0%] Building with ${N0:?}${cores[0]}${G0:?} core(s)${N0:?}\n"
           make -j32 # 32 cores, -w@y
 
           ;;
@@ -1656,7 +1669,7 @@ EOF
         "t")
 
           cores=("64")
-          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          printf '%b' "${G0:?}[  0%] Building with ${N0:?}${cores[0]}${G0:?} core(s)${N0:?}\n"
           make -j64 # 64 cores, t0
 
           ;;
@@ -1664,7 +1677,7 @@ EOF
         "H")
 
           cores=("128")
-          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          printf '%b' "${G0:?}[  0%] Building with ${N0:?}${cores[0]}${G0:?} core(s)${N0:?}\n"
           make -j128 # 128 cores, h3ll
 
           ;;
@@ -1684,7 +1697,7 @@ EOF
         if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
           cpu_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
             cut -c -4 2>/dev/null)
-          cmake_temp=$(printf '%b' "CPU: \e[1;32m$cpu_temp\033[0m° with ${cores[0]} core(s).")
+          cmake_temp=$(printf '%b' "CPU: ${G0:?}$cpu_temp${N0:?}° with ${cores[0]} core(s).")
         else
           cmake_temp=""
         fi
@@ -1799,14 +1812,14 @@ WantedBy=multi-user.target" >"$folder_wow"/mangosd.service 2>/dev/null
         sudo systemctl daemon-reload 2>/dev/null
         sleep 1
         echo
-        printf '%b' "[\e[0;32mok\033[0m]
+        printf '%b' "[${G0:?}ok${N0:?}]
 
-/etc/systemd/system/'\e[0;35mrealmd.service\033[0m'
-/etc/systemd/system/'\e[0;35mmangosd.service\033[0m'
+/etc/systemd/system/'${P1:?}realmd.service${N0:?}'
+/etc/systemd/system/'${P1:?}mangosd.service${N0:?}'
 
 Check if correct information, or just restart server."
         echo
-        printf '%b' "[\e[0;32mok\033[0m] "
+        printf '%b' "[${G0:?}ok${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
       fi
@@ -1825,7 +1838,7 @@ Check if correct information, or just restart server."
 
         # this is for docker users
         if [ -f /.dockerenv ]; then
-          printf '%b' "\e[90mKilling screens (realmd, mangosd)\033[0m\n"
+          printf '%b' "${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
           sleep 3
           sudo killall screen 2>/dev/null
           # keep old logs
@@ -1836,7 +1849,7 @@ Check if correct information, or just restart server."
           if ! [ -x "$(command -v "${packagelist[@]}")" ]; then
             sudo apt-get install "${packagelist[@]}" -y 2>/dev/null
           fi
-          printf "\e[91mShutting down\e[90m realmd & mangosd service\033[0m"
+          printf "${R1:?}Shutting down${GR:?} realmd & mangosd service${N0:?}"
           echo
           sleep 1
 
@@ -1890,7 +1903,7 @@ Check if correct information, or just restart server."
         if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
           cpu_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
             cut -c -4 2>/dev/null)
-          cmake_temp=$(printf '%b' "CPU: \e[1;32m$cpu_temp \033[0m°")
+          cmake_temp=$(printf '%b' "CPU: ${G0:?}$cpu_temp ${N0:?}°")
         else
           cmake_temp=$(printf '%b' "")
         fi
@@ -1899,7 +1912,7 @@ Check if correct information, or just restart server."
         CPU_MODEL=$(lscpu 2>/dev/null | grep 'Model name' 2>/dev/null |
           cut -f 2 -d ":" 2>/dev/null | awk '{$1=$1}1' 2>/dev/null)
         if [ ! -z "$CPU_MODEL" ]; then
-          CPU_MODEL=$(printf '%b' "\e[90m$CPU_MODEL\033[0m\n")
+          CPU_MODEL=$(printf '%b' "${GR:?}$CPU_MODEL${N0:?}\n")
         else
           CPU_MODEL=""
         fi
@@ -1908,8 +1921,8 @@ Check if correct information, or just restart server."
         CORES=$(grep -c ^processor /proc/cpuinfo 2>/dev/null)
         if [[ "$CORES" -ge "1" ]]; then
           # report count
-          CORES_COUNT=$(printf '%b' "\e[93mThis system has \e[96m$CORES\e[93m cores!
-$CPU_MODEL\033[0m")
+          CORES_COUNT=$(printf '%b' "${Y1:?}This system has ${CY:?}$CORES${Y1:?} cores!
+$CPU_MODEL${N0:?}")
         else
           CORES_COUNT=""
         fi
@@ -1940,10 +1953,10 @@ EOF
 
         "c")
 
-          printf '%b' "\e[90m[  0%] Enter amount of core(s): \033[0m"
+          printf '%b' "${GR:?}[  0%] Enter amount of core(s): ${N0:?}"
           read -r CUSTOM
           cores=("$CUSTOM")
-          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          printf '%b' "${G0:?}[  0%] Building with ${N0:?}${cores[0]}${G0:?} core(s)${N0:?}\n"
           make -j"$CUSTOM" # custom n cores
 
           ;;
@@ -1951,7 +1964,7 @@ EOF
         "1")
 
           cores=("1")
-          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          printf '%b' "${G0:?}[  0%] Building with ${N0:?}${cores[0]}${G0:?} core(s)${N0:?}\n"
           make # 1 core
 
           ;;
@@ -1959,7 +1972,7 @@ EOF
         "2")
 
           cores=("2")
-          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          printf '%b' "${G0:?}[  0%] Building with ${N0:?}${cores[0]}${G0:?} core(s)${N0:?}\n"
           make -j2 # 2 cores
 
           ;;
@@ -1967,7 +1980,7 @@ EOF
         "3")
 
           cores=("3")
-          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          printf '%b' "${G0:?}[  0%] Building with ${N0:?}${cores[0]}${G0:?} core(s)${N0:?}\n"
           make -j3 # 3 cores
 
           ;;
@@ -1975,7 +1988,7 @@ EOF
         "4")
 
           cores=("4")
-          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          printf '%b' "${G0:?}[  0%] Building with ${N0:?}${cores[0]}${G0:?} core(s)${N0:?}\n"
           make -j4 # 4 cores
 
           ;;
@@ -1983,7 +1996,7 @@ EOF
         "8")
 
           cores=("8")
-          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          printf '%b' "${G0:?}[  0%] Building with ${N0:?}${cores[0]}${G0:?} core(s)${N0:?}\n"
           make -j8 # 8 cores
 
           ;;
@@ -1991,7 +2004,7 @@ EOF
         "h")
 
           cores=("16")
-          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          printf '%b' "${G0:?}[  0%] Building with ${N0:?}${cores[0]}${G0:?} core(s)${N0:?}\n"
           make -j16 # 16 cores, h1gh-
 
           ;;
@@ -1999,7 +2012,7 @@ EOF
         "w")
 
           cores=("32")
-          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          printf '%b' "${G0:?}[  0%] Building with ${N0:?}${cores[0]}${G0:?} core(s)${N0:?}\n"
           make -j32 # 32 cores, -w@y
 
           ;;
@@ -2007,7 +2020,7 @@ EOF
         "t")
 
           cores=("64")
-          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          printf '%b' "${G0:?}[  0%] Building with ${N0:?}${cores[0]}${G0:?} core(s)${N0:?}\n"
           make -j64 # 64 cores, t0
 
           ;;
@@ -2015,7 +2028,7 @@ EOF
         "H")
 
           cores=("128")
-          printf '%b' "\e[0;32m[  0%] Building with \033[0m${cores[0]}\e[0;32m core(s)\033[0m\n"
+          printf '%b' "${G0:?}[  0%] Building with ${N0:?}${cores[0]}${G0:?} core(s)${N0:?}\n"
           make -j128 # 128 cores, h3ll
 
           ;;
@@ -2035,7 +2048,7 @@ EOF
         if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
           cpu_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
             cut -c -4 2>/dev/null)
-          cmake_temp=$(printf '%b' "CPU: \e[1;32m$cpu_temp\033[0m° with ${cores[0]} core(s).")
+          cmake_temp=$(printf '%b' "CPU: ${G0:?}$cpu_temp${N0:?}° with ${cores[0]} core(s).")
         else
           cmake_temp=""
         fi
@@ -2075,7 +2088,7 @@ Select install operation"
 
         sudo chown -R "$user":"$group" "$folder_wow"
 
-        printf '%b' "[\e[0;32mok\033[0m] "
+        printf '%b' "[${G0:?}ok${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
       fi
@@ -2094,7 +2107,7 @@ Select install operation"
 
         cd "$folder_core" || exit
         git reset --hard origin/master
-        printf '%b' "[\e[0;32mok\033[0m] "
+        printf '%b' "[${G0:?}ok${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
       fi
@@ -2107,7 +2120,7 @@ Select install operation"
 
     "5")
 
-      printf '%b' "\e[90mDeleting Core! $folder_core\033[0m\n"
+      printf '%b' "${GR:?}Deleting Core! $folder_core${N0:?}\n"
       read -r -p "Backup configurations first? (y/n) " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -2188,7 +2201,7 @@ Select install operation"
 
     "12")
 
-      printf '%b' "\e[90mDeleting Database! $folder_db\033[0m\n"
+      printf '%b' "${GR:?}Deleting Database! $folder_db${N0:?}\n"
       read -r -p "Delete Database Directory? (y/n) " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -2307,37 +2320,37 @@ This is needed to operate local/remote database"
 
       # mysql
       if sudo dpkg -s mysql-server &>/dev/null; then
-        mysql_server_installed=$(printf '%b' "[\e[1;32mok\033[0m]")
+        mysql_server_installed=$(printf '%b' "[${G0:?}ok${N0:?}]")
       else
-        mysql_server_installed=$(printf '%b' "[\e[1;90mno\033[0m]")
+        mysql_server_installed=$(printf '%b' "[${GR:?}no${N0:?}]")
       fi
 
       # mysql-client
       if sudo dpkg -s mysql-client &>/dev/null; then
-        mysql_client_installed=$(printf '%b' "[\e[1;32mok\033[0m]")
+        mysql_client_installed=$(printf '%b' "[${G0:?}ok${N0:?}]")
       else
-        mysql_client_installed=$(printf '%b' "[\e[1;90mno\033[0m]")
+        mysql_client_installed=$(printf '%b' "[${GR:?}no${N0:?}]")
       fi
 
       # mariadb
       if sudo dpkg -s mariadb-server &>/dev/null; then
-        mariadb_server_installed=$(printf '%b' "[\e[1;32mok\033[0m]")
+        mariadb_server_installed=$(printf '%b' "[${G0:?}ok${N0:?}]")
       else
-        mariadb_server_installed=$(printf '%b' "[\e[1;90mno\033[0m]")
+        mariadb_server_installed=$(printf '%b' "[${GR:?}no${N0:?}]")
       fi
 
       # mariadb-client
       if sudo dpkg -s mariadb-client &>/dev/null; then
-        mariadb_client_installed=$(printf '%b' "[\e[1;32mok\033[0m]")
+        mariadb_client_installed=$(printf '%b' "[${G0:?}ok${N0:?}]")
       else
-        mariadb_client_installed=$(printf '%b' "[\e[1;90mno\033[0m]")
+        mariadb_client_installed=$(printf '%b' "[${GR:?}no${N0:?}]")
       fi
 
       mysql_user=$(sudo mysql --defaults-extra-file="$sql_mycnf" -sse "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = 'mangos')" 2>/dev/null)
       if [ "$mysql_user" = 1 ]; then
-        mysql_user=$(printf '%b' "[\e[1;32mok\033[0m]")
+        mysql_user=$(printf '%b' "[${G0:?}ok${N0:?}]")
       else
-        mysql_user=$(printf '%b' "[\e[1;90mno\033[0m]")
+        mysql_user=$(printf '%b' "[${GR:?}no${N0:?}]")
       fi
 
       echo
@@ -2382,13 +2395,13 @@ Please install mysql or mariadb database/client"
           fi
         fi
 
-        printf "\e[91mShutting down\e[90m realmd & mangosd service\033[0m"
+        printf "${R1:?}Shutting down${GR:?} realmd & mangosd service${N0:?}"
         echo
         sleep 1
 
         # this is for docker users
         if [ -f /.dockerenv ]; then
-          printf '%b' "\e[90mKilling screens (realmd, mangosd)\033[0m\n"
+          printf '%b' "${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
           sleep 3
           sudo killall screen 2>/dev/null
           # keep old logs
@@ -2415,7 +2428,7 @@ Please install mysql or mariadb database/client"
 
         sudo chown -R "$user":"$group" "$folder_wow"
         echo
-        printf "Updating classic-db [\e[1;32mdatabase\033[0m]"
+        printf "Updating classic-db [${G0:?}database${N0:?}]"
         echo
 
         # backup
@@ -2431,24 +2444,24 @@ Please install mysql or mariadb database/client"
         echo
         FILE="$folder_wow/backup/$db_characters-$NOW.sql"
         if [ ! -f "$FILE" ]; then
-          printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Characters' ! Creating backup.."
+          printf "[${R0:?}empty${N0:?}/${R0:?}old${N0:?}] 'Characters' ! Creating backup.."
           mysqldump --defaults-extra-file="$sql_mycnf" "$db_characters" >"$folder_wow"/backup/"$db_characters"-"$NOW".sql
           echo
         else
-          printf '%b' "[\e[0;32mok\033[0m] $db_characters-$NOW.sql exist"
+          printf '%b' "[${G0:?}ok${N0:?}] $db_characters-$NOW.sql exist"
           echo
           read -r -p "New backup? ($db_characters) (y/n) " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # backup characters sql
             echo
-            printf "Making fresh backup\e[0;32m.\033[0m"
+            printf "Making fresh backup${G0:?}.${N0:?}"
             sleep 1
-            printf "\e[0;32m.\033[0m"
+            printf "${G0:?}.${N0:?}"
             mysqldump --defaults-extra-file="$sql_mycnf" "$db_characters" >"$folder_wow"/backup/"$db_characters"-"$NOW".sql
-            printf "\e[0;32m.\033[0m"
+            printf "${G0:?}.${N0:?}"
             sleep 1
-            printf '%b' "[\e[0;32mok\033[0m] $db_characters-$NOW.sql"
+            printf '%b' "[${G0:?}ok${N0:?}] $db_characters-$NOW.sql"
             sleep 2
             echo
           fi
@@ -2457,24 +2470,24 @@ Please install mysql or mariadb database/client"
         # backup <- realmd.sql
         FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
         if [ ! -f "$FILE" ]; then
-          printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Realmd' ! Creating backup.."
+          printf "[${R0:?}empty${N0:?}/${R0:?}old${N0:?}] 'Realmd' ! Creating backup.."
           mysqldump --defaults-extra-file="$sql_mycnf" "$db_realmd" >"$folder_wow"/backup/"$db_realmd"-"$NOW".sql
           echo
         else
-          printf '%b' "[\e[0;32mok\033[0m] $db_realmd-$NOW.sql exist"
+          printf '%b' "[${G0:?}ok${N0:?}] $db_realmd-$NOW.sql exist"
           echo
           read -r -p "New backup? ($db_realmd) (y/n) " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # backup characters sql
             echo
-            printf "Making fresh backup\e[0;32m.\033[0m"
+            printf "Making fresh backup${G0:?}.${N0:?}"
             sleep 1
-            printf "\e[0;32m.\033[0m"
+            printf "${G0:?}.${N0:?}"
             mysqldump --defaults-extra-file="$sql_mycnf" "$db_realmd" >"$folder_wow"/backup/"$db_realmd"-"$NOW".sql
-            printf "\e[0;32m.\033[0m"
+            printf "${G0:?}.${N0:?}"
             sleep 1
-            printf '%b' "[\e[0;32mok\033[0m] $db_realmd-$NOW.sql"
+            printf '%b' "[${G0:?}ok${N0:?}] $db_realmd-$NOW.sql"
             sleep 1
             echo
           fi
@@ -2500,7 +2513,7 @@ Please install mysql or mariadb database/client"
         # create installed mark
         echo "Database was installed at ${NOW:?}" >/var/log/ms/installed_db
         echo
-        printf '%b' "[\e[0;32mok\033[0m] "
+        printf '%b' "[${G0:?}ok${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
       fi
@@ -2523,7 +2536,7 @@ Please install mysql or mariadb database/client"
 
         # this is for docker users
         if [ -f /.dockerenv ]; then
-          printf '%b' "\e[90mKilling screens (realmd, mangosd)\033[0m\n"
+          printf '%b' "${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
           sleep 3
           sudo killall screen 2>/dev/null
           # keep old logs
@@ -2531,7 +2544,7 @@ Please install mysql or mariadb database/client"
           cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
         else
 
-          printf "\e[91mShutting down\e[90m realmd & mangosd service\033[0m"
+          printf "${R1:?}Shutting down${GR:?} realmd & mangosd service${N0:?}"
           echo
           sleep 1
 
@@ -2558,21 +2571,21 @@ Please install mysql or mariadb database/client"
         # backup <- characters.sql
         FILE="$folder_wow/backup/$db_characters-$NOW.sql"
         if [ ! -f "$FILE" ]; then
-          printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Characters' ! Creating backup.."
+          printf "[${R0:?}empty${N0:?}/${R0:?}old${N0:?}] 'Characters' ! Creating backup.."
           mysqldump --defaults-extra-file="$sql_mycnf" "$db_characters" >"$folder_wow"/backup/"$db_characters"-"$NOW".sql
           echo
         else
-          printf '%b' "[\e[0;32mok\033[0m] $db_characters-$NOW.sql exist"
+          printf '%b' "[${G0:?}ok${N0:?}] $db_characters-$NOW.sql exist"
           echo
         fi
         # backup <- realmd.sql
         FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
         if [ ! -f "$FILE" ]; then
-          printf "[\e[0;31mempty\033[0m/\e[0;31mold\033[0m] 'Realmd' ! Creating backup.."
+          printf "[${R0:?}empty${N0:?}/${R0:?}old${N0:?}] 'Realmd' ! Creating backup.."
           mysqldump --defaults-extra-file="$sql_mycnf" "$db_realmd" >"$folder_wow"/backup/"$db_realmd"-"$NOW".sql
           echo
         else
-          printf '%b' "[\e[0;32mok\033[0m] $db_realmd-$NOW.sql exist"
+          printf '%b' "[${G0:?}ok${N0:?}] $db_realmd-$NOW.sql exist"
           echo
         fi
 
@@ -2610,10 +2623,10 @@ Please install mysql or mariadb database/client"
         echo
         RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_characters")
         if [ "$RESULT" == "$db_characters" ]; then
-          printf "[\e[0;32mok\033[0m] 'Characters' database installed."
+          printf "[${G0:?}ok${N0:?}] 'Characters' database installed."
           echo
         else
-          printf "[\033[1;31mempty\033[0m] 'Characters' importing.."
+          printf "[${R0:?}empty${N0:?}] 'Characters' importing.."
           echo
           mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_characters CHARACTER SET utf8 COLLATE utf8_general_ci"
           mysql --defaults-extra-file="$sql_mycnf" --database="$db_characters" <"${folder_sql:?}"/base/characters.sql
@@ -2621,10 +2634,10 @@ Please install mysql or mariadb database/client"
         # create database 'mangos'
         RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_mangos")
         if [ "$RESULT" == "$db_mangos" ]; then
-          printf "[\e[0;32mok\033[0m] 'Mangos' database installed."
+          printf "[${G0:?}ok${N0:?}] 'Mangos' database installed."
           echo
         else
-          printf "[\033[1;31mempty\033[0m] 'Mangos' importing.."
+          printf "[${R0:?}empty${N0:?}] 'Mangos' importing.."
           echo
           mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_mangos CHARACTER SET utf8 COLLATE utf8_general_ci"
           mysql --defaults-extra-file="$sql_mycnf" --database="$db_mangos" <"$folder_sql"/base/mangos.sql
@@ -2632,10 +2645,10 @@ Please install mysql or mariadb database/client"
         # create database 'realmd'
         RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_realmd")
         if [ "$RESULT" == "$db_realmd" ]; then
-          printf "[\e[0;32mok\033[0m] 'Realmd' database installed."
+          printf "[${G0:?}ok${N0:?}] 'Realmd' database installed."
           echo
         else
-          printf "[\033[1;31mempty\033[0m] 'Realmd' importing.."
+          printf "[${R0:?}empty${N0:?}] 'Realmd' importing.."
           echo
           mysql --defaults-extra-file="$sql_mycnf" -e "CREATE DATABASE $db_realmd CHARACTER SET utf8 COLLATE utf8_general_ci"
           mysql --defaults-extra-file="$sql_mycnf" --database="$db_realmd" <"$folder_sql"/base/realmd.sql
@@ -2684,7 +2697,7 @@ Please install mysql or mariadb database/client"
           echo -ne '(100%)\r'
         fi
         echo
-        printf '%b' "[\e[0;32mok\033[0m] "
+        printf '%b' "[${G0:?}ok${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
       fi
@@ -2707,7 +2720,7 @@ Please install mysql or mariadb database/client"
 
         # this is for docker users
         if [ -f /.dockerenv ]; then
-          printf '%b' "\e[90mKilling screens (realmd, mangosd)\033[0m\n"
+          printf '%b' "${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
           sleep 3
           sudo killall screen 2>/dev/null
           # keep old logs
@@ -2715,7 +2728,7 @@ Please install mysql or mariadb database/client"
           cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
         else
 
-          printf "\e[91mShutting down\e[90m realmd & mangosd service\033[0m"
+          printf "${R1:?}Shutting down${GR:?} realmd & mangosd service${N0:?}"
           echo
           sleep 1
 
@@ -2775,7 +2788,7 @@ Please install mysql or mariadb database/client"
         sleep 1
         echo -ne '(100%)\r'
         echo
-        printf '%b' "[\e[0;32mok\033[0m] "
+        printf '%b' "[${G0:?}ok${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
       fi
@@ -2799,7 +2812,7 @@ Please install mysql or mariadb database/client"
         git clone "$github_database"
         mv "$folder_wow"/*.config "$folder_db" &>/dev/null
         sudo chown -R "$user":"$group" "$folder_wow"
-        printf '%b' "[\e[0;32mok\033[0m] "
+        printf '%b' "[${G0:?}ok${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
       fi
@@ -2818,7 +2831,7 @@ Please install mysql or mariadb database/client"
 
         cd "$folder_db" || exit
         git reset --hard origin/master
-        printf '%b' "[\e[0;32mok\033[0m] "
+        printf '%b' "[${G0:?}ok${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
       fi
@@ -3032,7 +3045,7 @@ EOF
     "9")
 
       sudo chown -R "$user":"$group" "$folder_wow"
-      printf '%b' "[\033[1;31mWarning\033[0m]: Only update whats missing.
+      printf '%b' "[${R0:?}Warning${N0:?}]: Only update whats missing.
 Check log for which database needs 'applying updates'"
       echo
       # combine [A] to [B] updates individually
@@ -3078,7 +3091,7 @@ Check log for which database needs 'applying updates'"
         sleep 1
         sudo service mariadb restart &>/dev/null
         sudo service mysql restart &>/dev/null
-        printf '%b' "[\e[0;32mok\033[0m]"
+        printf '%b' "[${G0:?}ok${N0:?}]"
         echo
       fi
       # apply all updates [A] to [B] mangos ?
@@ -3118,7 +3131,7 @@ Check log for which database needs 'applying updates'"
         sleep 1
         sudo service mariadb restart &>/dev/null
         sudo service mysql restart &>/dev/null
-        printf '%b' "[\e[0;32mok\033[0m]"
+        printf '%b' "[${G0:?}ok${N0:?}]"
         echo
       fi
       # apply all updates [A] to [B] realmd ?
@@ -3158,14 +3171,14 @@ Check log for which database needs 'applying updates'"
         sleep 1
         sudo service mariadb restart &>/dev/null
         sudo service mysql restart &>/dev/null
-        printf '%b' "[\e[0;32mok\033[0m]"
+        printf '%b' "[${G0:?}ok${N0:?}]"
         echo
       fi
       # remove old 'combined updates' sql files
       rm "$folder_wow"/.*.sql 2>/dev/null
       # InstallFullDB ?
       echo
-      printf '%b' "\e[0;32mRecommended if you applied anything\033[0m"
+      printf '%b' "${G0:?}Recommended if you applied anything${N0:?}"
       echo
       read -r -p "InstallFullDB? (y/n) " -n 1 -r
       echo
@@ -3190,7 +3203,7 @@ Check log for which database needs 'applying updates'"
         *) sudo service mangosd stop ;;
         esac
 
-        printf '%b' "[\e[0;32mok\033[0m]"
+        printf '%b' "[${G0:?}ok${N0:?}]"
         echo
         sudo chown -R "$user":"$group" "$folder_wow"
         cd "$folder_db" || exit
@@ -3200,7 +3213,7 @@ Check log for which database needs 'applying updates'"
         sleep 1
         sudo service mariadb restart &>/dev/null
         sudo service mysql restart &>/dev/null
-        printf '%b' "[\e[0;32mok\033[0m] "
+        printf '%b' "[${G0:?}ok${N0:?}] "
       fi
       read -r -p "Press Enter to continue" </dev/tty
       echo
@@ -3283,15 +3296,15 @@ Check log for which database needs 'applying updates'"
     printf '%b' "
 Classes
 
-\e[90m1 \033[0m Warrior\e[32m.:\033[0m $WARRIOR \e[90m$WARRIOR_P%\033[0m
-\e[90m2 \033[0m Paladin\e[32m.:\033[0m $PALADIN \e[90m$PALADIN_P%\033[0m
-\e[90m3 \033[0m Hunter\e[32m..:\033[0m $HUNTER \e[90m$HUNTER_P%\033[0m
-\e[90m4 \033[0m Rogue\e[32m...:\033[0m $ROGUE \e[90m$ROGUE_P%\033[0m
-\e[90m5 \033[0m Priest\e[32m..:\033[0m $PRIEST \e[90m$PRIEST_P%\033[0m
-\e[90m7 \033[0m Shaman\e[32m..:\033[0m $SHAMAN \e[90m$SHAMAN_P%\033[0m
-\e[90m8 \033[0m Mage\e[32m....:\033[0m $MAGE \e[90m$MAGE_P%\033[0m
-\e[90m9 \033[0m Warlock\e[32m.:\033[0m $WARLOCK \e[90m$WARLOCK_P%\033[0m
-\e[90m11\033[0m Druid\e[32m...:\033[0m $DRUID \e[90m$DRUID_P%\033[0m\n"
+${GR:?}1 ${N0:?} Warrior\e[32m.:${N0:?} $WARRIOR ${GR:?}$WARRIOR_P%${N0:?}
+${GR:?}2 ${N0:?} Paladin\e[32m.:${N0:?} $PALADIN ${GR:?}$PALADIN_P%${N0:?}
+${GR:?}3 ${N0:?} Hunter\e[32m..:${N0:?} $HUNTER ${GR:?}$HUNTER_P%${N0:?}
+${GR:?}4 ${N0:?} Rogue\e[32m...:${N0:?} $ROGUE ${GR:?}$ROGUE_P%${N0:?}
+${GR:?}5 ${N0:?} Priest\e[32m..:${N0:?} $PRIEST ${GR:?}$PRIEST_P%${N0:?}
+${GR:?}7 ${N0:?} Shaman\e[32m..:${N0:?} $SHAMAN ${GR:?}$SHAMAN_P%${N0:?}
+${GR:?}8 ${N0:?} Mage\e[32m....:${N0:?} $MAGE ${GR:?}$MAGE_P%${N0:?}
+${GR:?}9 ${N0:?} Warlock\e[32m.:${N0:?} $WARLOCK ${GR:?}$WARLOCK_P%${N0:?}
+${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
     echo
     read -r -p "Check database size? (y/n) " -n 1 -r
     echo
@@ -3324,11 +3337,11 @@ Classes
     # check if 'mangosd.conf' are installed
     FILE="$folder_core/run/etc/mangosd.conf"
     if [ ! -f "$FILE" ]; then
-      printf '%b' "\e[90mmangosd.conf\033[0m not found!\n"
+      printf '%b' "${GR:?}mangosd.conf${N0:?} not found!\n"
       sleep 2
       # restore mangosd configuration from backup if possible
       if cp "$folder_wow"/backup/configurations/mangosd.conf "$folder_core"/run/etc/; then
-        printf '%b' "Restored configuration! (\e[92mmangosd.conf\033[0m)\n"
+        printf '%b' "Restored configuration! (${G1:?}mangosd.conf${N0:?})\n"
       else
         echo "No backup found!"
         echo "Please edit mangosd.conf.dist into mangosd.conf"
@@ -3340,11 +3353,11 @@ Classes
     # check if 'realmd.conf' are installed
     FILE="$folder_core/run/etc/realmd.conf"
     if [ ! -f "$FILE" ]; then
-      printf '%b' "\e[90mrealmd.conf\033[0m not found!\n"
+      printf '%b' "${GR:?}realmd.conf${N0:?} not found!\n"
       sleep 2
       # restore realmd configuration from backup if possible
       if cp "$folder_wow"/backup/configurations/realmd.conf "$folder_core"/run/etc/; then
-        printf '%b' "Restored configuration! (\e[92mrealmd.conf\033[0m)\n"
+        printf '%b' "Restored configuration! (${G1:?}realmd.conf${N0:?})\n"
       else
         echo "No backup found!"
         echo "Please edit realmd.conf.dist into realmd.conf"
@@ -3393,7 +3406,7 @@ Classes
               grep -q "mangosd" 2>/dev/null; then
               echo "Killing screen (mangosd)"
             fi
-            printf '%b' "\e[90mKilling screens (realmd, mangosd)\033[0m\n"
+            printf '%b' "${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
             sleep 3
             sudo killall screen 2>/dev/null
             # keep old logs
@@ -3405,7 +3418,7 @@ Classes
             cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
             cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
             # done
-            printf "\e[91mShutting down\e[90m realmd & mangosd service\033[0m"
+            printf "${R1:?}Shutting down${GR:?} realmd & mangosd service${N0:?}"
             echo
             sleep 1
             echo -ne '(0%)\r'
@@ -3476,7 +3489,7 @@ Classes
             # keep old logs
             cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
             # done
-            printf "\e[0;31mShutting down\033[0m realmd service"
+            printf "${R0:?}Shutting down${N0:?} realmd service"
 
             # service status
             realm_service=realmd
@@ -3522,7 +3535,7 @@ Classes
             # keep old logs
             cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
             # done
-            printf "\e[0;31mShutting down\033[0m mangosd service"
+            printf "${R0:?}Shutting down${N0:?} mangosd service"
 
             # service status
             world_service=mangosd
@@ -3553,11 +3566,11 @@ Classes
     # check if 'mangosd.conf' are installed
     FILE="$folder_core/run/etc/mangosd.conf"
     if [ ! -f "$FILE" ]; then
-      printf '%b' "\e[90mmangosd.conf\033[0m not found!\n"
+      printf '%b' "${GR:?}mangosd.conf${N0:?} not found!\n"
       sleep 2
       # restore mangosd configuration from backup if possible
       if cp "$folder_wow"/backup/configurations/mangosd.conf "$folder_core"/run/etc/; then
-        printf '%b' "Restored configuration! (\e[92mmangosd.conf\033[0m)\n"
+        printf '%b' "Restored configuration! (${G1:?}mangosd.conf${N0:?})\n"
       else
         echo "No backup found!"
         echo "Please edit mangosd.conf.dist into mangosd.conf"
@@ -3569,11 +3582,11 @@ Classes
     # check if 'realmd.conf' are installed
     FILE="$folder_core/run/etc/realmd.conf"
     if [ ! -f "$FILE" ]; then
-      printf '%b' "\e[90mrealmd.conf\033[0m not found!\n"
+      printf '%b' "${GR:?}realmd.conf${N0:?} not found!\n"
       sleep 2
       # restore realmd configuration from backup if possible
       if cp "$folder_wow"/backup/configurations/realmd.conf "$folder_core"/run/etc/; then
-        printf '%b' "Restored configuration! (\e[92mrealmd.conf\033[0m)\n"
+        printf '%b' "Restored configuration! (${G1:?}realmd.conf${N0:?})\n"
       else
         echo "No backup found!"
         echo "Please edit realmd.conf.dist into realmd.conf"
@@ -3587,18 +3600,18 @@ Classes
       fi
       # codes
       # realmd.log
-      realmd_log_empty="\e[0;33mEmpty\033[0m -> "
-      realmd_log_error="\033[0;31mError\033[0m -> "
-      realmd_log_failed="\033[0;31mRealm halted or failed\033[0m"
-      realmd_log_ok="\e[0;32mok\033[0m"
+      realmd_log_empty="${Y0:?}Empty${N0:?} -> "
+      realmd_log_error="${R0:?}Error${N0:?} -> "
+      realmd_log_failed="${R0:?}Realm halted or failed${N0:?}"
+      realmd_log_ok="${G0:?}ok${N0:?}"
 
       # server.log
-      server_log_initialized="\e[0;32mWorld initialized\033[0m"
-      server_log_serious="\033[1;31mSerious\033[0m -> "
-      server_log_failed="\033[0;31mWorld halted or failed\033[0m"
-      server_log_error="\033[0;31mError\033[0m -> "
-      server_log_empty="\e[0;33mEmpty\033[0m -> "
-      server_log_ok="\e[0;32mok\033[0m"
+      server_log_initialized="${G0:?}World initialized${N0:?}"
+      server_log_serious="${R1:?}Serious${N0:?} -> "
+      server_log_failed="${R0:?}World halted or failed${N0:?}"
+      server_log_error="${R0:?}Error${N0:?} -> "
+      server_log_empty="${Y0:?}Empty${N0:?} -> "
+      server_log_ok="${G0:?}ok${N0:?}"
 
       # service status
       world_service=mangosd
@@ -3670,7 +3683,7 @@ Classes
             cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
             cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
             # done
-            printf "\e[1;32mRestarting\033[0m server"
+            printf "${G0:?}Restarting${N0:?} server"
             echo
             echo -ne '(0%)\r'
             sleep 1
@@ -3733,21 +3746,21 @@ Classes
 
             # realmd service
             case "$(pidof $realm_service | wc -w)" in
-            0) printf "Realm [\033[1;31minactive\033[0m] " ;;
-            1) printf "Realm [\e[0;32mactive\033[0m] " ;;
-            *) printf "Realm [\e[0;33mok?\033[0m] " ;;
+            0) printf "Realm [${R0:?}inactive${N0:?}] " ;;
+            1) printf "Realm [${G0:?}active${N0:?}] " ;;
+            *) printf "Realm [${Y0:?}ok?${N0:?}] " ;;
             esac
 
             # mangosd service
             case "$(pidof $world_service | wc -w)" in
-            0) printf "World [\033[1;31minactive\033[0m] " ;;
-            1) printf "World [\e[0;32mactive\033[0m] " ;;
-            *) printf "World [\e[0;33mok?\033[0m] " ;;
+            0) printf "World [${R0:?}inactive${N0:?}] " ;;
+            1) printf "World [${G0:?}active${N0:?}] " ;;
+            *) printf "World [${Y0:?}ok?${N0:?}] " ;;
             esac
 
             echo
             # realmd.log
-            printf "\e[1;90m<------------------------------------------------------>\033[0m"
+            printf "${GR:?}<------------------------------------------------------>${N0:?}"
             echo
             # if realm failed
             if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
@@ -3781,7 +3794,7 @@ Classes
               if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
                 echo
                 printf '%b' "Database is out of date!
-\e[90m(d) Update Database > Apply all updates [A]-[B]\033[0m"
+${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
                 echo
               fi
               # databases is missing or corrupt.
@@ -3799,7 +3812,7 @@ Classes
               # your realmd.conf version indicates your conf file is out of date
               if grep -E -q ".*Your\srealmd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
                 echo
-                printf "\033[1;31mWARNING\033[0m "
+                printf "${R0:?}WARNING${N0:?} "
                 printf '%b' "realmd.conf is out of date!"
                 echo
               fi
@@ -3807,7 +3820,7 @@ Classes
             echo
             tail "$folder_core"/run/logs/Realmd.log 2>/dev/null
             # server.log
-            printf "\e[1;90m<------------------------------------------------------>\033[0m"
+            printf "${GR:?}<------------------------------------------------------>${N0:?}"
             echo
             # if world failed
             if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log 2>/dev/null; then
@@ -3856,7 +3869,7 @@ Classes
               if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Server.log 2>/dev/null; then
                 echo
                 printf '%b' "Database is out of date!
-\e[90m(d) Update Database > Apply all updates [A]-[B]\033[0m"
+${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
                 echo
               fi
               # databases is missing or corrupt.
@@ -3880,7 +3893,7 @@ Classes
               # your mangosd.conf version indicates your conf file is out of date
               if grep -E -q ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$folder_core"/run/logs/Server.log 2>/dev/null; then
                 echo
-                printf "\033[1;31mWARNING\033[0m "
+                printf "${R0:?}WARNING${N0:?} "
                 printf '%b' "mangosd.conf is out of date!"
                 echo
               fi
@@ -3897,26 +3910,26 @@ Classes
               # Playerbot loaded
               if grep -E -q "Playerbot: Using configuration file" "$folder_core"/run/logs/Server.log 2>/dev/null; then
                 # if any, print "Playerbot ok"
-                printf '%b' "\e[0;32mPlayerbot\033[0m"
+                printf '%b' "${G0:?}Playerbot${N0:?}"
                 echo
               else
                 # off
-                printf '%b' "\e[90mPlayerbot\033[0m"
+                printf '%b' "${GR:?}Playerbot${N0:?}"
                 echo
               fi
               # ahbot loaded and initialized
               if grep -E -q "Initialize AuctionHouseBot..." "$folder_core"/run/logs/Server.log 2>/dev/null; then
                 # if any, print "AHbot ok"
-                printf '%b' "\e[0;32mAHbot\033[0m"
+                printf '%b' "${G0:?}AHbot${N0:?}"
                 echo
               else
                 # off
-                printf '%b' "\e[90mAHbot\033[0m"
+                printf '%b' "${GR:?}AHbot${N0:?}"
                 echo
               fi
             fi
             echo
-            printf "\e[1;32m>\033[0m hit Any key to go back."
+            printf "${G0:?}>${N0:?} hit Any key to go back."
             echo
             read -r -n 1 -p "Server.log (tail/follow/nano) / Realmd.log (Nano) / logs (lnav)" ans
             echo
@@ -3925,7 +3938,7 @@ Classes
             "t")
               tail "$folder_core"/run/logs/Server.log 2>/dev/null
               echo
-              printf "\e[1;90m<------------------------------------------------------>\033[0m"
+              printf "${GR:?}<------------------------------------------------------>${N0:?}"
               echo
               read -r -p "Press Enter to continue" </dev/tty
               ;;
@@ -3999,7 +4012,7 @@ Classes
             # keep old logs
             cp "$folder_core"/run/logs/Realmd.log "$folder_core"/run/logs/Realmd.log.old &>/dev/null
             # done
-            printf "\e[1;32mRestarting\033[0m realmd"
+            printf "${G0:?}Restarting${N0:?} realmd"
             echo
             echo "Please wait"
             sleep 1
@@ -4046,7 +4059,7 @@ Classes
             # keep old logs
             cp "$folder_core"/run/logs/Server.log "$folder_core"/run/logs/Server.log.old &>/dev/null
             # done
-            printf "\e[1;32mRestarting\033[0m mangosd"
+            printf "${G0:?}Restarting${N0:?} mangosd"
             echo
             sleep 1
             sudo service mangosd restart &>/dev/null
@@ -4160,37 +4173,37 @@ Classes
             git merge origin/master; then
             latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
             latest_head=$(git rev-parse --short HEAD)
-            printf '%b' "[\033[0;31mold\033[0m] (\e[4;32m$latest_head\033[0m) \e[4;32mNew Updates For Helper\033[0m! - $latest_date"
+            printf '%b' "[${R0:?}old${N0:?}] (\e[4;32m$latest_head${N0:?}) \e[4;32mNew Updates For Helper${N0:?}! - $latest_date"
             echo
             cd "$folder_helper" || exit
             echo
             sleep 1
-            printf "[\033[0;31mold\033[0m] -> old release installed!"
+            printf "[${R0:?}old${N0:?}] -> old release installed!"
             sleep 1
             echo
             echo
-            printf "[\e[1;32mUpdating Helper\033[0m]"
+            printf "[${G0:?}Updating Helper${N0:?}]"
             echo
             echo
             # keep old mangos
             sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old &>/dev/null
             # done
-            printf "[\e[0;32mok\033[0m] -> /usr/local/bin/mangos.old"
+            printf "[${G0:?}ok${N0:?}] -> /usr/local/bin/mangos.old"
             sleep 1
             echo
-            printf "[\e[0;32mok\033[0m] -> Stripping executable on 'mangos.old'"
+            printf "[${G0:?}ok${N0:?}] -> Stripping executable on 'mangos.old'"
             sleep 1
             echo
             sudo chmod -x /usr/local/bin/mangos.old
             sudo chown -R "$user":"$group" "$folder_helper"
             cd "$folder_helper" || exit
-            printf "[\e[0;32mok\033[0m] -> Installing new release"
+            printf "[${G0:?}ok${N0:?}] -> Installing new release"
             sleep 1
             echo
             sudo cp "$folder_helper"/mangos /usr/local/bin &>/dev/null
             sudo chmod +x /usr/local/bin/mangos
             sleep 1
-            printf "[\e[0;32mok\033[0m] -> Installed."
+            printf "[${G0:?}ok${N0:?}] -> Installed."
             echo
             echo
             sleep 1 && exit
@@ -4201,7 +4214,7 @@ Classes
             sudo cp "$folder_helper"/mangos /usr/local/bin/mangos &>/dev/null
             sudo chmod +x /usr/local/bin/mangos
             sleep 1
-            printf "[\e[0;32mok\033[0m] -> Installed."
+            printf "[${G0:?}ok${N0:?}] -> Installed."
             echo
             echo
           fi
@@ -4228,22 +4241,22 @@ Classes
       if [[ $REPLY =~ ^[Yy]$ ]]; then
 
         sudo mv /usr/local/bin/mangos /usr/local/bin/mangos.old &>/dev/null
-        printf "[\e[0;32mok\033[0m] -> installed mangos removed."
+        printf "[${G0:?}ok${N0:?}] -> installed mangos removed."
         echo
         sudo rm -r "$folder_helper"
-        printf "[\e[0;32mok\033[0m] -> cmangos-script removed."
+        printf "[${G0:?}ok${N0:?}] -> cmangos-script removed."
         echo
         sudo mkdir "${folder_install:?}" &>/dev/null
-        printf '%b' "[\e[0;32mok\033[0m] -> $folder_install/> git clone.."
+        printf '%b' "[${G0:?}ok${N0:?}] -> $folder_install/> git clone.."
         echo
         cd "$folder_install" || exit
         git clone "$github_helper"
         sudo cp "$folder_helper"/mangos /usr/local/bin &>/dev/null
-        printf "[\e[0;32mok\033[0m] -> Installing new release"
+        printf "[${G0:?}ok${N0:?}] -> Installing new release"
         sudo chmod +x /usr/local/bin/mangos
         echo
         sleep 1
-        printf "[\e[0;32mok\033[0m] -> Installed."
+        printf "[${G0:?}ok${N0:?}] -> Installed."
         echo
         echo
         sleep 2
@@ -4264,7 +4277,7 @@ Classes
 
         cd "$folder_helper" || exit
         git reset --hard origin/master
-        printf '%b' "[\e[0;32mok\033[0m] "
+        printf '%b' "[${G0:?}ok${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
       fi
@@ -4287,18 +4300,18 @@ Classes
 
     # codes
     # realmd.log
-    realmd_log_empty="\e[0;33mEmpty\033[0m -> "
-    realmd_log_error="\033[0;31mError\033[0m -> "
-    realmd_log_failed="\033[0;31mRealm halted or failed\033[0m"
-    realmd_log_ok="\e[0;32mok\033[0m"
+    realmd_log_empty="${Y0:?}Empty${N0:?} -> "
+    realmd_log_error="${R0:?}Error${N0:?} -> "
+    realmd_log_failed="${R0:?}Realm halted or failed${N0:?}"
+    realmd_log_ok="${G0:?}ok${N0:?}"
 
     # server.log
-    server_log_initialized="\e[0;32mWorld initialized\033[0m"
-    server_log_serious="\033[1;31mSerious\033[0m -> "
-    server_log_failed="\033[0;31mWorld halted or failed\033[0m"
-    server_log_error="\033[0;31mError\033[0m -> "
-    server_log_empty="\e[0;33mEmpty\033[0m -> "
-    server_log_ok="\e[0;32mok\033[0m"
+    server_log_initialized="${G0:?}World initialized${N0:?}"
+    server_log_serious="${R1:?}Serious${N0:?} -> "
+    server_log_failed="${R0:?}World halted or failed${N0:?}"
+    server_log_error="${R0:?}Error${N0:?} -> "
+    server_log_empty="${Y0:?}Empty${N0:?} -> "
+    server_log_ok="${G0:?}ok${N0:?}"
 
     # service status
     world_service=mangosd
@@ -4307,21 +4320,21 @@ Classes
 
     # realmd service
     case "$(pidof $realm_service | wc -w)" in
-    0) printf "Realm [\033[1;31minactive\033[0m] " ;;
-    1) printf "Realm [\e[0;32mactive\033[0m] " ;;
-    *) printf "Realm [\e[0;33mok?\033[0m] " ;;
+    0) printf "Realm [${R0:?}inactive${N0:?}] " ;;
+    1) printf "Realm [${G0:?}active${N0:?}] " ;;
+    *) printf "Realm [${Y0:?}ok?${N0:?}] " ;;
     esac
 
     # mangosd service
     case "$(pidof $world_service | wc -w)" in
-    0) printf "World [\033[1;31minactive\033[0m] " ;;
-    1) printf "World [\e[0;32mactive\033[0m] " ;;
-    *) printf "World [\e[0;33mok?\033[0m] " ;;
+    0) printf "World [${R0:?}inactive${N0:?}] " ;;
+    1) printf "World [${G0:?}active${N0:?}] " ;;
+    *) printf "World [${Y0:?}ok?${N0:?}] " ;;
     esac
 
     echo
     # realmd.log
-    printf "\e[1;90m<------------------------------------------------------>\033[0m"
+    printf "${GR:?}<------------------------------------------------------>${N0:?}"
     echo
     # if realm failed
     if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
@@ -4355,7 +4368,7 @@ Classes
       if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
         echo
         printf '%b' "Database is out of date!
-\e[90m(d) Update Database > Apply all updates [A]-[B]\033[0m"
+${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
         echo
       fi
       # databases is missing or corrupt.
@@ -4373,7 +4386,7 @@ Classes
       # your realmd.conf version indicates your conf file is out of date
       if grep -E -q ".*Your\srealmd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$folder_core"/run/logs/Realmd.log 2>/dev/null; then
         echo
-        printf "\033[1;31mWARNING\033[0m "
+        printf "${R0:?}WARNING${N0:?} "
         printf '%b' "realmd.conf is out of date!"
         echo
       fi
@@ -4381,7 +4394,7 @@ Classes
     echo
     tail "$folder_core"/run/logs/Realmd.log 2>/dev/null
     # server.log
-    printf "\e[1;90m<------------------------------------------------------>\033[0m"
+    printf "${GR:?}<------------------------------------------------------>${N0:?}"
     echo
     # if world failed
     if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$folder_core"/run/logs/Server.log 2>/dev/null; then
@@ -4423,7 +4436,7 @@ Classes
       if grep -E -q "You\shave:\s-->" "$folder_core"/run/logs/Server.log 2>/dev/null; then
         echo
         printf '%b' "Database is out of date!
-\e[90m(d) Update Database > Apply all updates [A]-[B]\033[0m"
+${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
         echo
       fi
       # databases is missing or corrupt.
@@ -4447,7 +4460,7 @@ Classes
       # your mangosd.conf version indicates your conf file is out of date
       if grep -E -q ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$folder_core"/run/logs/Server.log 2>/dev/null; then
         echo
-        printf "\033[1;31mWARNING\033[0m "
+        printf "${R0:?}WARNING${N0:?} "
         printf '%b' "mangosd.conf is out of date!"
         echo
       fi
@@ -4464,26 +4477,26 @@ Classes
       # Playerbot loaded
       if grep -E -q "Playerbot: Using configuration file" "$folder_core"/run/logs/Server.log 2>/dev/null; then
         # if any, print "Playerbot ok"
-        printf '%b' "\e[0;32mPlayerbot\033[0m"
+        printf '%b' "${G0:?}Playerbot${N0:?}"
         echo
       else
         # off
-        printf '%b' "\e[90mPlayerbot\033[0m"
+        printf '%b' "${GR:?}Playerbot${N0:?}"
         echo
       fi
       # ahbot loaded and initialized
       if grep -E -q "Initialize AuctionHouseBot..." "$folder_core"/run/logs/Server.log 2>/dev/null; then
         # if any, print "AHbot ok"
-        printf '%b' "\e[0;32mAHbot\033[0m"
+        printf '%b' "${G0:?}AHbot${N0:?}"
         echo
       else
         # off
-        printf '%b' "\e[90mAHbot\033[0m"
+        printf '%b' "${GR:?}AHbot${N0:?}"
         echo
       fi
     fi
     echo
-    printf "\e[1;32m>\033[0m hit Any key to go back."
+    printf "${G0:?}>${N0:?} hit Any key to go back."
     echo
     read -r -n 1 -p "Server.log (tail/follow/nano) / Realmd.log (Nano) / logs (lnav)" ans
     echo
@@ -4492,7 +4505,7 @@ Classes
     t | T)
       tail "$folder_core"/run/logs/Server.log 2>/dev/null
       echo
-      printf "\e[1;90m<------------------------------------------------------>\033[0m"
+      printf "${GR:?}<------------------------------------------------------>${N0:?}"
       echo
       read -r -p "Press Enter to continue" </dev/tty
       ;;
@@ -4614,7 +4627,7 @@ Classes
       sudo apt-get install fping -y 2>/dev/null
     fi
     echo
-    printf '%b' "Online check -> \e[92minternet\033[0m/\e[92mintranet\033[0m\n"
+    printf '%b' "Online check -> ${G1:?}internet${N0:?}/${G1:?}intranet${N0:?}\n"
     echo
     # internet
     if nc -z "$internet" "${realm_port:?}" 2>/dev/null; then
@@ -4622,9 +4635,9 @@ Classes
         grep -o '[0-9].[0-9][0-9] ms' 2>/dev/null)
       PING_LOSS=$(fping -c 1 "$internet" 2>/dev/null |
         grep -o '[0-100]% loss' 2>/dev/null)
-      printf '%b' "\e[0;32m✓\033[0m $internet - \e[96m$server_name\033[0m - $PING_MS - $PING_LOSS\n"
+      printf '%b' "${G0:?}✓${N0:?} $internet - ${CY:?}$server_name${N0:?} - $PING_MS - $PING_LOSS\n"
     else
-      printf '%b' "\033[1;31m✗ \e[1;90m$internet - $server_name - \e[1;90m? ms - 100% loss\033[0m\n"
+      printf '%b' "${R0:?}✗ ${GR:?}$internet - $server_name - ${GR:?}? ms - 100% loss${N0:?}\n"
     fi
     # intranet
     if nc -z "$intranet" "${realm_port:?}" 2>/dev/null; then
@@ -4632,9 +4645,9 @@ Classes
         grep -o '[0-9].[0-9][0-9] ms' 2>/dev/null)
       PING_LOSS=$(fping -c 1 "$intranet" 2>/dev/null |
         grep -o '[0-100]% loss' 2>/dev/null)
-      printf '%b' "\e[0;32m✓\033[0m $intranet - \e[96m${server_name_lan:?}\033[0m - $PING_MS - $PING_LOSS\n"
+      printf '%b' "${G0:?}✓${N0:?} $intranet - ${CY:?}${server_name_lan:?}${N0:?} - $PING_MS - $PING_LOSS\n"
     else
-      printf '%b' "\033[1;31m✗ \e[1;90m$intranet - $server_name_lan - \e[1;90m? ms - 100% loss\033[0m\n"
+      printf '%b' "${R0:?}✗ ${GR:?}$intranet - $server_name_lan - ${GR:?}? ms - 100% loss${N0:?}\n"
     fi
     echo
     read -r -p "Press Enter to continue" </dev/tty
