@@ -1,76 +1,54 @@
-##########
-# server #
-##########
+# server #######################################################################
 
-server_name="REALM_NAME"          # please edit.
-server_name_lan="REALM_NAME(lan)" # please edit.
-internet="HOSTNAME"               # please edit.
-intranet="LOCALHOST"              # please edit.
-realm_port="8085"                 # please edit if wrong.
+server_name="REALM_NAME"
+server_name_lan="REALM_NAME(lan)"
+internet="HOSTNAME"
+intranet="LOCALHOST"
+realm_port="8085"
 
-#########
-# cmake #
-#########
+# cmake ########################################################################
 
 cmake="-DCMAKE_INSTALL_PREFIX=/home/ubuntu/wow/mangos-classic/run
 -DBUILD_EXTRACTORS=ON
 -DPCH=1
 -DDEBUG=0
 -DBUILD_PLAYERBOT=OFF
--DBUILD_AHBOT=OFF" # please edit if wrong.
+-DBUILD_AHBOT=OFF"
 
-##########
-# SYSTEM #
-##########
+# SYSTEM #######################################################################
 
-group="ubuntu"        # please edit if wrong.
-user="ubuntu"         # please edit if wrong.
+group="ubuntu"
+user="ubuntu"
 patch="CMaNGOS.patch" # please edit if wrong name.
 
-#######
-# GIT #
-#######
+# GIT ##########################################################################
 
-github_helper="https://github.com/Daedalus-code/cmangos-script.git" # please edit if wrong.
-github_cmangos="https://github.com/cmangos/mangos-classic.git"      # please edit if wrong.
-github_database="https://github.com/cmangos/classic-db.git"         # please edit if wrong.
+github_helper="https://github.com/Daedalus-code/cmangos-script.git"
+github_cmangos="https://github.com/cmangos/mangos-classic.git"
+github_database="https://github.com/cmangos/classic-db.git"
 
-#############
-# RA/NETCAT #
-#############
+# RA/NETCAT ####################################################################
 
-user_nc="USERNAME"  # please edit.
-pass_nc="PASSWORD"  # please edit.
-host_nc="localhost" # please edit if wrong.
-port_nc="3443"      # please edit if wrong.
+user_nc="USERNAME"
+pass_nc="PASSWORD"
+host_nc="localhost"
+port_nc="3443"
 
-###########
-# FOLDERS #
-###########
+# FOLDERS ######################################################################
 
-folder_install="/scripts"                            # please edit if wrong.
-folder_build="/home/ubuntu/wow/mangos-classic/build" # please edit if wrong.
-folder_core="/home/ubuntu/wow/mangos-classic"        # please edit if wrong.
-folder_db="/home/ubuntu/wow/classic-db"              # please edit if wrong.
-folder_helper="/scripts/cmangos-script"              # please edit if wrong.
-folder_sql="/home/ubuntu/wow/mangos-classic/sql"     # please edit if wrong.
-folder_wow="/home/ubuntu/wow"                        # please edit if wrong.
+folder_install="/scripts"
+folder_build="/home/ubuntu/wow/mangos-classic/build"
+folder_core="/home/ubuntu/wow/mangos-classic"
+folder_db="/home/ubuntu/wow/classic-db"
+folder_helper="/scripts/cmangos-script"
+folder_sql="/home/ubuntu/wow/mangos-classic/sql"
+folder_wow="/home/ubuntu/wow"
 
-#########
-# MYSQL #
-#########
+# MYSQL ########################################################################
 
-db_characters="classiccharacters" # please edit if wrong.
-db_mangos="classicmangos"         # please edit if wrong.
-db_realmd="classicrealmd"         # please edit if wrong.
-sql_mycnf="/scripts/server.cnf"   # please edit if wrong.
-
-#########
-# color #
-#########
-
-color_green="\e[1;32m"
-color_no="\033[0m"
-color_red="\033[1;31m"
+db_characters="classiccharacters"
+db_mangos="classicmangos"
+db_realmd="classicrealmd"
+sql_mycnf="/scripts/server.cnf"
 
 # END
