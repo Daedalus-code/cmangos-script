@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20210502
-# 4.7.6.7
+# 4.8.0.4
 
 # codes
 while :; do
@@ -432,15 +432,15 @@ Are You Sure? (y/n) " -n 1 -r
       # look for error
       if grep -E -q ".*ERROR*." "${folder_core:?}"/run/logs/Realmd.log &>/dev/null; then
         # if any, print "error"
-        cm_realmd_log="[${R0:?}Error${N0:?}]"
+        cm_realmd_log="[${R1:?}E${N0:?}]"
       else
         # if nothing, print "ok"
-        cm_realmd_log="[${G0:?}ok${N0:?}]"
+        cm_realmd_log="[${G0:?}✓${N0:?}]"
       fi
       # look for empty tables
       if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Realmd.log &>/dev/null; then
         # if any, print "empty"
-        cm_realmd_log_empty="[${Y0:?}Empty${N0:?}]"
+        cm_realmd_log_empty="[${Y1:?}E${N0:?}]"
       fi
       # Realmd.log done
 
@@ -449,20 +449,29 @@ Are You Sure? (y/n) " -n 1 -r
       # look for error
       if grep -E -q ".*ERROR*." "$folder_core"/run/logs/Server.log &>/dev/null; then
         # if any, print "error"
-        cm_server_log="[${R0:?}Error${N0:?}]"
+        cm_server_log="[${R1:?}E${N0:?}]"
       else
         # if nothing, print "ok"
-        cm_server_log="[${G0:?}ok${N0:?}]"
+        cm_server_log="[${G0:?}✓${N0:?}]"
       fi
       # look for empty tables
       if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$folder_core"/run/logs/Server.log &>/dev/null; then
         # if any, print "empty"
-        cm_server_log_empty="[${Y0:?}Empty${N0:?}]"
+        cm_server_log_empty="[${Y1:?}E${N0:?}]"
       fi
       # look for serious error
       if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log &>/dev/null; then
         # if any, print "serious"
         cm_server_log_serious="[${R1:?}Serious${N0:?}]"
+      fi
+
+      if [ ! -f "$folder_core"/run/logs/Server.log ]; then
+        # non responsive
+        cm_server_log="[${GR:?}✗${N0:?}]"
+      fi
+      if [ ! -f "$folder_core"/run/logs/Realmd.log ]; then
+        # non responsive
+        cm_realmd_log="[${GR:?}✗${N0:?}]"
       fi
 
       # Server.log done
@@ -541,23 +550,22 @@ Are You Sure? (y/n) " -n 1 -r
       fi
       # codes done
 
-      printf '%b' "      $cm_uptime
+      printf '%b' "   $cm_uptime
+   Realm${G0:?}.......:${G1:?} ${server_name:?}${N0:?}
+   $menu_print_cpu_temp
+   World${G0:?}.......:${N0:?} $latest_world_built
+   System${G0:?}......:${N0:?} $built_for
+   Commit Hash${G0:?}.:${GR:?} $commit_hash${N0:?}
 
-      Realm${G0:?}.......:${G1:?} ${server_name:?}${N0:?}
-      $menu_print_cpu_temp
-      World${G0:?}.......:${N0:?} $latest_world_built
-      System${G0:?}......:${N0:?} $built_for
-      Commit Hash${G0:?}.:${GR:?} $commit_hash${N0:?}
-
-      r : ${P1:?}Login${N0:?}   - Remote access  service.mangosd${G0:?}.:${N0:?} $command_mangosd
-      l : ${P1:?}Logs${N0:?}    - Analyze logs   service.realmd${G0:?}..:${N0:?} $command_realmd
-      b : ${P1:?}Backup${N0:?}  - New backup
-      h : ${P1:?}Reset${N0:?}   - Reset --hard   characters.sql${G0:?}..:${N0:?} $charac_backup
-      p : ${P1:?}htop${N0:?}    - Process view   realmd.sql${G0:?}......:${N0:?} $realmd_backup
-      m : ${P1:?}Maps${N0:?}    - Download maps
-      w : ${P1:?}Stats${N0:?}   - World stats
-      q : ${P1:?}Quit${N0:?}    - Back to menu   Realmd.log${G0:?}......:${N0:?} $cm_realmd_log_empty$cm_realmd_log
-      i : ${P1:?}Info${N0:?}    - Helper info    Server.log${G0:?}......:${N0:?} $cm_server_log_empty$cm_server_log$cm_server_log_serious
+   r : ${P1:?}Login${N0:?}   - Remote access  service.mangosd${G0:?}.:${N0:?} $command_mangosd
+   l : ${P1:?}Logs${N0:?}    - Analyze logs   service.realmd${G0:?}..:${N0:?} $command_realmd
+   b : ${P1:?}Backup${N0:?}  - New backup
+   h : ${P1:?}Reset${N0:?}   - Reset --hard   characters.sql${G0:?}..:${N0:?} $charac_backup
+   p : ${P1:?}htop${N0:?}    - Process view   realmd.sql${G0:?}......:${N0:?} $realmd_backup
+   m : ${P1:?}Maps${N0:?}    - Download maps
+   w : ${P1:?}Stats${N0:?}   - World stats
+   q : ${P1:?}Quit${N0:?}    - Back to menu   Realmd.log${G0:?}......:${N0:?} $cm_realmd_log_empty$cm_realmd_log
+   i : ${P1:?}Info${N0:?}    - Helper info    Server.log${G0:?}......:${N0:?} $cm_server_log_empty$cm_server_log$cm_server_log_serious
 "
       echo
       read -r -s -n1
@@ -569,45 +577,45 @@ Are You Sure? (y/n) " -n 1 -r
 
         clear
         printf '%b' "${N0:?}
-       _____     __  __       _   _  _____  ____   _____
-      / ____|   |  \/  |     | \ | |/ ____|/ __ \ / ____|
-     | |        | \  / |     |  \| | |  __  |  | | (___
-     | |ontinued| |\/| | __ _| .   | | |_ | |  | |\___ \\
-     | |____    | |  | |/ _  | |\  | |__| | |__| |____) |
-      \_____|   |_|  |_| (_| |_| \_|\_____|\____/ \____/
-      http://cmangos.net\__,_|     Doing things right!
+     _____     __  __       _   _  _____  ____   _____
+    / ____|   |  \/  |     | \ | |/ ____|/ __ \ / ____|
+   | |        | \  / |     |  \| | |  __  |  | | (___
+   | |ontinued| |\/| | __ _| .   | | |_ | |  | |\___ \\
+   | |____    | |  | |/ _  | |\  | |__| | |__| |____) |
+    \_____|   |_|  |_| (_| |_| \_|\_____|\____/ \____/
+    http://cmangos.net\__,_|     Doing things right!
 
-      ${G0:?}C(ontinued)-MaNGOS (Classic fork)${N0:?}
+   ${G0:?}C(ontinued)-MaNGOS (Classic fork)${N0:?}
 
-      EventAI
-      ${GR:?}$eventai${N0:?}
-      World DB
-      ${GR:?}$world_db${N0:?}
+   EventAI
+   ${GR:?}$eventai${N0:?}
+   World DB
+   ${GR:?}$world_db${N0:?}
 
-      ${P1:?}https://github.com/cmangos/mangos-classic${N0:?}
-      ${P1:?}https://github.com/cmangos/classic-db${N0:?}
+   ${P1:?}https://github.com/cmangos/mangos-classic${N0:?}
+   ${P1:?}https://github.com/cmangos/classic-db${N0:?}
 
-      ${G0:?}C(ontinued)-MaNGOS - Helper${N0:?}
+   ${G0:?}C(ontinued)-MaNGOS - Helper${N0:?}
 
-      ${P1:?}https://github.com/Daedalus-code/cmangos-script${N0:?}
+   ${P1:?}https://github.com/Daedalus-code/cmangos-script${N0:?}
 
-      This script was built on a ubuntu system - (Raspberry Pi4)
-      https://ubuntu.com/download/raspberry-pi
+   This script was built on a ubuntu system - (Raspberry Pi4)
+   https://ubuntu.com/download/raspberry-pi
 
-      Functions and features for admins running a WoW Vanilla server.
+   Functions and features for admins running a WoW Vanilla server.
 
-      Planned Features: Time will tell.
+   Planned Features: Time will tell.
 
-      ---What
+   ---What
 
-      * Install this script on a ubuntu system, make everything more easy.
-      * Connect to a MySQL server outside or localhost
-      * Download latest core/database updates
-      * Upgrade Database with latest fixes
-      * Compile CMaNGOS with latest fixes
-      * Download/Install classic maps
-      * Setup RA for account tools
-      * Profit
+   * Install this script on a ubuntu system, make everything more easy.
+   * Connect to a MySQL server outside or localhost
+   * Download latest core/database updates
+   * Upgrade Database with latest fixes
+   * Compile CMaNGOS with latest fixes
+   * Download/Install classic maps
+   * Setup RA for account tools
+   * Profit
 
 ${G0:?}>${N0:?} hit Enter to go back.
 ${N0:?}"
@@ -685,24 +693,24 @@ ${N0:?}"
 
         clear
         echo
-        printf '%b' "${G1:?}      CMaNGOS - ${G0:?}WoW Vanilla Maps Seedbox${N0:?}
+        printf '%b' "${G1:?}   CMaNGOS - ${G0:?}Vanilla Maps Seedbox${N0:?}
 
-      Seedbox${G0:?}..:${N0:?} $seed_transmission
-      Access${G0:?}...:${N0:?} $intranet_seed
-      Filename${G0:?}.:${N0:?} $P2P_NAME
-      Download${G0:?}.:${N0:?} $P2P_DWNS${GR:?}Unlimited${N0:?}
-      Upload${G0:?}...:${N0:?} $P2P_UPLS${GR:?}128kb/s${N0:?}
-      Status${G0:?}...:${N0:?} $P2P_STAT
-      Progress${G0:?}.:${N0:?} $P2P_PROG
-      Ratio${G0:?}....:${N0:?} $P2P_RATI
+   Seedbox${G0:?}..:${N0:?} $seed_transmission
+   Access${G0:?}...:${N0:?} $intranet_seed
+   Filename${G0:?}.:${N0:?} $P2P_NAME
+   Download${G0:?}.:${N0:?} $P2P_DWNS${GR:?}Unlimited${N0:?}
+   Upload${G0:?}...:${N0:?} $P2P_UPLS${GR:?}128kb/s${N0:?}
+   Status${G0:?}...:${N0:?} $P2P_STAT
+   Progress${G0:?}.:${N0:?} $P2P_PROG
+   Ratio${G0:?}....:${N0:?} $P2P_RATI
 
-      t : ${P1:?}Install${GR:?} - setup$N0
-      u : ${P1:?}Remove${GR:?}  - uninstall$N0
-      r : ${P1:?}Start${GR:?}   - start p2p$N0
-      s : ${P1:?}Stop${GR:?}    - stop p2p$N0
-      m : ${P1:?}Maps${GR:?}    - import maps$N0
-      i : ${P1:?}Info${GR:?}    - torrent info$N0
-      q : ${P1:?}Quit${GR:?}    - return$N0
+   t : ${P1:?}Install${GR:?} - setup$N0
+   u : ${P1:?}Remove${GR:?}  - uninstall$N0
+   r : ${P1:?}Start${GR:?}   - start p2p$N0
+   s : ${P1:?}Stop${GR:?}    - stop p2p$N0
+   m : ${P1:?}Maps${GR:?}    - import maps$N0
+   i : ${P1:?}Info${GR:?}    - torrent info$N0
+   q : ${P1:?}Quit${GR:?}    - return$N0
 
 ${N0:?}"
         read -r -s -n1
@@ -749,7 +757,7 @@ ${N0:?}"
             echo "Please wait"
             # remove old file
             sudo rm -R /var/log/ms/transmission_list &>/dev/null
-            sudo apt-get remove transmission-* --purge -y &>/dev/null
+            sudo apt-get remove transmission-* --purge -y 2>/dev/null
           fi
 
           ;;
@@ -772,6 +780,12 @@ ${N0:?}"
               # check for updates regardless
               echo "Please wait"
               sudo apt-get update 2>/dev/null
+              # clear the local repository of retrieved package files that are left in /var/cache.
+              sudo apt-get clean 2>/dev/null
+              # clear the local repository of retrieved package files
+              sudo apt-get autoclean 2>/dev/null
+              # remove packages that were automatically installed because some other package required them but
+              sudo apt-get -y --purge autoremove 2>/dev/null
               # make sure unzip exist
               sudo apt-get install unzip -y 2>/dev/null
               # install transmission-daemon
@@ -862,23 +876,28 @@ EOF
               sleep 1
               # start transmission-daemon
               sudo service transmission-daemon start &>/dev/null
-              printf '%b' "[${G0:?}ok${N0:?}] - Seedbox should be running now!\n"
+              echo
+              printf '%b' "[${G0:?}ok${N0:?}] - Installed!\n"
               sleep 1
               # add magnet link: vanilla.maps.zip.torrent
               transmission-remote -a "magnet:?xt=urn:btih:1cdcaa3d77a7f4df79935d885e639903e37dda24&dn=vanilla%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
-              printf '%b' "[${G0:?}ok${N0:?}] - torrent added\n"
+              printf '%b' "[${G0:?}ok${N0:?}] - Torrent added\n"
               # try to verify torrent data
-              transmission-remote -t all -v 2>/dev/null
-              printf '%b' "[${Y0:?}ok${N0:?}] - verify data\n"
+              P2P_VERIFY=$(transmission-remote -t all -v 2>/dev/null)
+              printf '%b' "[${Y1:?}ok${N0:?}] - Verifying data..\n"
+              sleep 1
+              printf '%b' "[${G0:?}ok${N0:?}] - $P2P_VERIFY\n"
               sleep 1
               # reload
               sudo systemctl daemon-reload 2>/dev/null
               sleep 1
             else
-              printf '%b' "SeedBox already installed."
-              echo
+              printf '%b' "SeedBox already installed!\n"
               sleep 2
             fi
+            echo
+            read -r -p "Press Enter to continue" </dev/tty
+            echo
           fi
 
           ;;
@@ -1314,6 +1333,15 @@ ${R0:?}      ._________________.
     # check if 'mangos-classic' exist
     FILE="$folder_core/README.md"
     if [ ! -f "$FILE" ]; then
+      # check for updates regardless
+      echo "Please wait"
+      sudo apt-get update 2>/dev/null
+      # clear the local repository of retrieved package files that are left in /var/cache.
+      sudo apt-get clean 2>/dev/null
+      # clear the local repository of retrieved package files
+      sudo apt-get autoclean 2>/dev/null
+      # remove packages that were automatically installed because some other package required them but
+      sudo apt-get -y --purge autoremove 2>/dev/null
       # remove old file
       rm /var/log/ms/installed_core &>/dev/null
       # fresh install ?
@@ -1362,6 +1390,15 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
     # check if 'classic-db' exist
     FILE="$folder_db/README.md"
     if [ ! -f "$FILE" ]; then
+      # check for updates regardless
+      echo "Please wait"
+      sudo apt-get update 2>/dev/null
+      # clear the local repository of retrieved package files that are left in /var/cache.
+      sudo apt-get clean 2>/dev/null
+      # clear the local repository of retrieved package files
+      sudo apt-get autoclean 2>/dev/null
+      # remove packages that were automatically installed because some other package required them but
+      sudo apt-get -y --purge autoremove 2>/dev/null
       # remove old file
       rm /var/log/ms/installed_db &>/dev/null
       # fresh install ?
