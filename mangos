@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20210502
-# 4.7.1.5
+# 4.7.3.5
 
 # codes
 while :; do
@@ -537,7 +537,7 @@ Are You Sure? (y/n) " -n 1 -r
         commit_hash=$(grep -E "Using commit.*(.*)" "${folder_core:?}"/run/logs/Server.log 2>/dev/null |
           grep -o "(.*)" 2>/dev/null | tr -d '()' 2>/dev/null | sed 's/^ *//' 2>/dev/null)
       else
-        commit_hash="000000000000000000000000000000000000"
+        commit_hash="0000000000000000000000000000000000000000"
       fi
       # codes done
 
@@ -579,25 +579,13 @@ Are You Sure? (y/n) " -n 1 -r
 
       ${G0:?}C(ontinued)-MaNGOS (Classic fork)${N0:?}
 
-      EventAI${G0:?}..:${N0:?} $eventai
-      World DB${G0:?}.:${N0:?} $world_db
+      EventAI
+      ${GR:?}$eventai${N0:?}
+      World DB
+      ${GR:?}$world_db${N0:?}
 
       ${P1:?}https://github.com/cmangos/mangos-classic${N0:?}
       ${P1:?}https://github.com/cmangos/classic-db${N0:?}
-
-      Tip: Use both in ${P1:?}realmlist.wtf${N0:?}
-
-      ${P1:?}Internet${N0:?}: 'set realmlist \e[0;90m${internet:?}${N0:?}'
-      ${P1:?}Lanparty${N0:?}: 'set realmlist \e[0;90m${intranet:?}${N0:?}' - When internet drop out.
-
-      Create another '${P1:?}$db_realmd.realmlist${N0:?}'${P1:?} table row${N0:?}, or just copy.
-      Set new 'id', 'sameName (LAN)' and '\e[0;90m${intranet:?}${N0:?}' as address.
-      You can now choose 'Internet' or 'Lanparty' ingame from realm list.
-
-      ${N0:?}IMPORTANT ! edit '${P1:?}server.txt${N0:?}' & '${P1:?}server.cnf${N0:?}' with correct info.
-
-      'login' & 'create account' edit 'RA/NETCAT' inside ${P1:?}server.txt.${N0:?}
-      'update Database' edit 'MYSQL' inside ${P1:?}server.txt${N0:?}, ${P1:?}server.cnf${N0:?}
 
       ${G0:?}C(ontinued)-MaNGOS - Helper${N0:?}
 
@@ -618,6 +606,7 @@ Are You Sure? (y/n) " -n 1 -r
       * Upgrade Database with latest fixes
       * Compile CMaNGOS with latest fixes
       * Download/Install classic maps
+      * Setup RA for account tools
       * Profit
 
 ${G0:?}>${N0:?} hit Enter to go back.
@@ -635,22 +624,46 @@ ${N0:?}"
 
         # codes
         if ! [ -x "$(command -v transmission-cli)" ]; then
-          seed_transmission="[${Y0:?}not installed${N0:?}]"
+          seed_transmission="${GR:?}Not Installed!${N0:?}"
         else
-          transmission_list=$(transmission-remote -l 2>/dev/null)
+          # get remote information from transmission, create a file
+          transmission-remote -l >/var/log/ms/transmission_list 2>/dev/null
+
+          if [ -f /var/log/ms/transmission_list ]; then
+            # cat that file
+            P2P_INFO=$(cat /var/log/ms/transmission_list 2>/dev/null)
+            # get file
+            P2P_NAME=$(echo "$P2P_INFO" 2>/dev/null | grep -o "vanilla_maps.zip" 2>/dev/null)
+            # get progress
+            P2P_PROG=$(echo "$P2P_INFO" 2>/dev/null | awk '{ print $2 }' 2>/dev/null |
+              tail -2 2>/dev/null | head -1 2>/dev/null)
+            # get download stats
+            P2P_DWNS=$(echo "$P2P_INFO" 2>/dev/null | awk '{ print $3 }' 2>/dev/null |
+              tail -2 2>/dev/null | head -1 2>/dev/null)
+            # get upload stats
+            P2P_UPLS=$(echo "$P2P_INFO" 2>/dev/null | awk '{ print $5 }' 2>/dev/null |
+              tail -1 2>/dev/null)
+            # get ratio
+            P2P_RATI=$(echo "$P2P_INFO" 2>/dev/null | awk '{ print $8 }' 2>/dev/null |
+              head -2 2>/dev/null | tail -1 2>/dev/null)
+            # get status
+            P2P_STAT=$(echo "$P2P_INFO" 2>/dev/null | awk '{ print $9 }' 2>/dev/null |
+              head -2 2>/dev/null | tail -1 2>/dev/null)
+          fi
+
           # transmission-daemon service
           transmission_service=transmission-daemon
           # transmission-daemon status
           case "$(pidof $transmission_service | wc -w)" in
-          0) seed_transmission="[${R0:?}off${N0:?}]" ;;
-          1) seed_transmission="[${G0:?}ok${N0:?}]" ;;
-          *) seed_transmission="[${Y0:?}ok${N0:?}]" ;;
+          0) seed_transmission="[${R0:?}Offline${N0:?}]" ;;
+          1) seed_transmission="[${G0:?}Seeding${N0:?}]" ;;
+          *) seed_transmission="[${Y0:?}Seeding${N0:?}]" ;;
           esac
         fi
         if ! [ -x "$(command -v transmission-cli)" ]; then
-          intranet_seed=$(printf '%b' "[${Y0:?}not installed${N0:?}]" 2>/dev/null)
+          intranet_seed=$(printf '%b' "${GR:?}Not Installed!${N0:?}" 2>/dev/null)
         else
-          intranet_seed=$(printf '%b' "$intranet:9091" 2>/dev/null)
+          intranet_seed=$(printf '%b' "${intranet:?}:9091" 2>/dev/null)
         fi
         # codes done
 
@@ -658,41 +671,48 @@ ${N0:?}"
 
         clear
         echo
-        echo
-        printf '%b' "                    ${G0:?}CMaNGOS (Classic fork) - SeedBox for maps${R0:?}
+        printf '%b' "${G1:?}      CMaNGOS - ${G0:?}WoW Vanilla Maps Seedbox${N0:?}
 
-     ${N0:?}* Download/Upload maps for WoW Vanilla server.
-     * This is an attempt to make classic maps available through p2p.
-     * You can decide if you only want to download and stop transmission.
+      Seedbox${G0:?}....:${N0:?} $seed_transmission
+      Access${G0:?}.....:${N0:?} $intranet_seed
+      Filename${G0:?}...:${N0:?} $P2P_NAME
+      Download${G0:?}...:${N0:?} ${P1:?}Unlimited${N0:?}
+      Upload${G0:?}.....:${N0:?} ${P1:?}128kb/s${N0:?}
+      Status${G0:?}.....:${N0:?} $P2P_STAT
+      Progress${G0:?}...:${N0:?} $P2P_PROG
+      Downloaded${G0:?}.:${N0:?} $P2P_DWNS
+      Uploaded${G0:?}...:${N0:?} $P2P_UPLS
+      Ratio${G0:?}......:${N0:?} $P2P_RATI
 
-       Transmission${G0:?}....:${N0:?} $seed_transmission
-       Web access${G0:?}......:${N0:?} $intranet_seed
-
-       Default: download '${P1:?}unlimited${N0:?}' upload '${P1:?}128kb/s${N0:?}'
-
- ${G0:?}<------------------------------------------------------------------------------>${N0:?}
-$transmission_list
- ${G0:?}<------------------------------------------------------------------------------>${N0:?}
-
-      t : ${P1:?}Install seedbox${N0:?} - Install transmission-daemon
-      u : ${P1:?}Remove seedbox${N0:?}  - Remove transmission-daemon
-      r : ${P1:?}Start seedbox${N0:?}   - Service transmission-daemon start
-      s : ${P1:?}Stop seedbox${N0:?}    - Service transmission-daemon stop
-      m : ${P1:?}Install maps${N0:?}    - Install vanilla.maps.zip
+      t : ${P1:?}Install${GR:?} M : Magnet$N0
+      u : ${P1:?}Remove${N0:?}
+      r : ${P1:?}Start${N0:?}
+      s : ${P1:?}Stop${N0:?}
+      m : ${P1:?}Maps${N0:?}
 
 ${G0:?}>${N0:?} hit Enter to go back.
 ${N0:?}"
-        echo
-        printf '%b' ">"
         read -r -s -n1
         case "$REPLY" in
 
-        # remove transmission-daemon
+        # magnet link
+
+        "M")
+
+          printf '%b' "${GR:?}magnet:?xt=urn:btih:1cdcaa3d77a7f4df79935d885e639903e37dda24&dn=vanilla%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce${N0:?}\n"
+          read -r -p "Press Enter to continue" </dev/tty
+          echo
+
+          ;;
+
+          # magnet link done
+
+          # remove transmission-daemon
 
         "u")
 
           echo
-          read -r -p "Remove seedbox? (transmission-daemon) (y/n) " -n 1 -r
+          read -r -p "Remove Seedbox? (transmission-daemon) (y/n) " -n 1 -r
           echo
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -711,7 +731,7 @@ ${N0:?}"
         "t")
 
           echo
-          read -r -p "Setup seedbox? (transmission-daemon) (y/n) " -n 1 -r
+          read -r -p "Setup Seedbox? (transmission-daemon) (y/n) " -n 1 -r
           echo
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -812,7 +832,7 @@ EOF
               # start transmission-daemon
               sudo service transmission-daemon start &>/dev/null
               echo
-              printf '%b' "[${G0:?}ok${N0:?}] - transmission should be running now"
+              printf '%b' "[${G0:?}ok${N0:?}] - Seedbox should be running now!"
               echo
               sleep 1
               # add magnet link: vanilla.maps.zip.torrent
@@ -4628,7 +4648,7 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
     printf '%b' "Online check -> ${G1:?}internet${N0:?}/${G1:?}intranet${N0:?}\n"
     echo
     # internet
-    if nc -z "$internet" "${realm_port:?}" 2>/dev/null; then
+    if nc -z "${internet:?}" "${realm_port:?}" 2>/dev/null; then
       PING_MS=$(fping -c 1 "$internet" 2>/dev/null |
         grep -o '[0-9].[0-9][0-9] ms' 2>/dev/null)
       PING_LOSS=$(fping -c 1 "$internet" 2>/dev/null |
