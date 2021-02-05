@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20210402
-# 4.7.0.3
+# V20210502
+# 4.7.1.6
 
 # codes
 while :; do
@@ -65,16 +65,16 @@ while :; do
 
   # realmd service
   case "$(pidof $realm_service | wc -w)" in
-  0) menu_realmd="realmd: [${GR:?}offline${N0:?}]" ;;
-  1) menu_realmd="realmd: [${G0:?}active${N0:?}]" ;;
-  *) menu_realmd="realmd: [${Y0:?}running${N0:?}]" ;;
+  0) menu_realmd="${GR:?}Realm${N0:?}" ;;
+  1) menu_realmd="${G0:?}Realm${N0:?}" ;;
+  *) menu_realmd="${Y0:?}Realm${N0:?}" ;;
   esac
 
   # mangosd service
   case "$(pidof $world_service | wc -w)" in
-  0) menu_mangosd="mangosd: [${GR:?}offline${N0:?}]" ;;
-  1) menu_mangosd="mangosd: [${G0:?}active${N0:?}]" ;;
-  *) menu_mangosd="mangosd: [${Y0:?}running${N0:?}]" ;;
+  0) menu_mangosd="${GR:?}MaNGOS${N0:?}" ;;
+  1) menu_mangosd="${G0:?}MaNGOS${N0:?}" ;;
+  *) menu_mangosd="${Y0:?}MaNGOS${N0:?}" ;;
   esac
   # codes done
 
@@ -91,8 +91,7 @@ while :; do
                    Guilds $menu_gu_count
 
                 $load
-
-      $menu_mangosd $menu_realmd
+                $menu_mangosd $GR|$N0 $menu_realmd
 
    A : Login (command)      t : Characters
    a : Create account       u : Accounts
@@ -138,8 +137,6 @@ ${N0:?}                                       __
               c : Create account
               d : Delete account
 
-${GR:?} - - - - - - - - - - - - - - - - - - - - - - -${N0:?}
-             Press Any Key To Exit
 >"
 
     read -r -n1 -s
@@ -167,9 +164,7 @@ ${GR:?} - - - - - - - - - - - - - - - - - - - - - - -${N0:?}
         Set the (${P1:?}expansion${N0:?}) version.
         Set the (${P1:?}account${N0:?}) privilege.
 
-        ${P1:?}Example${N0:?}: 'username' '0' '0'
-${GR:?} - - - - - - - - - - - - - - - - - - - - - - -${N0:?}
-             Press Any Key To Exit"
+        ${P1:?}Example${N0:?}: 'username' '0' '0'"
 
       # menu done
 
@@ -289,8 +284,7 @@ ${pass_nc:?}
       echo
 
       printf "
-${N0:?} ---------------------------------------------
-             Press Any Key To Exit
+
 >"
       read -r ID
       echo
@@ -3324,7 +3318,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
     FILE="$folder_core/run/etc/mangosd.conf"
     if [ ! -f "$FILE" ]; then
       printf '%b' "${GR:?}mangosd.conf${N0:?} not found!\n"
-      sleep 2
+      sleep 1
       # restore mangosd configuration from backup if possible
       if cp "$folder_wow"/backup/configurations/mangosd.conf "$folder_core"/run/etc/; then
         printf '%b' "Restored configuration! (${G1:?}mangosd.conf${N0:?})\n"
@@ -3332,15 +3326,13 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         echo "No backup found!"
         echo "Please edit mangosd.conf.dist into mangosd.conf"
       fi
-      echo
-      read -r -p "hit Enter to continue" </dev/tty
-      echo
+      sleep 3
     fi
     # check if 'realmd.conf' are installed
     FILE="$folder_core/run/etc/realmd.conf"
     if [ ! -f "$FILE" ]; then
       printf '%b' "${GR:?}realmd.conf${N0:?} not found!\n"
-      sleep 2
+      sleep 1
       # restore realmd configuration from backup if possible
       if cp "$folder_wow"/backup/configurations/realmd.conf "$folder_core"/run/etc/; then
         printf '%b' "Restored configuration! (${G1:?}realmd.conf${N0:?})\n"
@@ -3348,9 +3340,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         echo "No backup found!"
         echo "Please edit realmd.conf.dist into realmd.conf"
       fi
-      echo
-      read -r -p "hit Enter to continue" </dev/tty
-      echo
+      sleep 3
     else
       HEIGHT=10
       WIDTH=30
@@ -3553,7 +3543,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
     FILE="$folder_core/run/etc/mangosd.conf"
     if [ ! -f "$FILE" ]; then
       printf '%b' "${GR:?}mangosd.conf${N0:?} not found!\n"
-      sleep 2
+      sleep 1
       # restore mangosd configuration from backup if possible
       if cp "$folder_wow"/backup/configurations/mangosd.conf "$folder_core"/run/etc/; then
         printf '%b' "Restored configuration! (${G1:?}mangosd.conf${N0:?})\n"
@@ -3561,15 +3551,13 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         echo "No backup found!"
         echo "Please edit mangosd.conf.dist into mangosd.conf"
       fi
-      echo
-      read -r -p "hit Enter to continue" </dev/tty
-      echo
+      sleep 3
     fi
     # check if 'realmd.conf' are installed
     FILE="$folder_core/run/etc/realmd.conf"
     if [ ! -f "$FILE" ]; then
       printf '%b' "${GR:?}realmd.conf${N0:?} not found!\n"
-      sleep 2
+      sleep 1
       # restore realmd configuration from backup if possible
       if cp "$folder_wow"/backup/configurations/realmd.conf "$folder_core"/run/etc/; then
         printf '%b' "Restored configuration! (${G1:?}realmd.conf${N0:?})\n"
@@ -3577,9 +3565,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         echo "No backup found!"
         echo "Please edit realmd.conf.dist into realmd.conf"
       fi
-      echo
-      read -r -p "hit Enter to continue" </dev/tty
-      echo
+      sleep 3
     else
       if ! [ -x "$(command -v screen)" ]; then
         sudo apt-get install screen -y 2>/dev/null
@@ -4541,14 +4527,15 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
 
     HEIGHT=11
     WIDTH=40
-    CHOICE_HEIGHT=3
+    CHOICE_HEIGHT=4
     BACKTITLE="patch"
     TITLE="Patch operations"
     MENU="Choose one of the following options:"
 
     OPTIONS=(1 "Create new patch"
       2 "Apply existing patch"
-      3 "Search for .patch files")
+      3 "Search for .patch files"
+      4 "my_bool fix (Daedalus)")
 
     CHOICE=$(dialog --clear \
       --backtitle "$BACKTITLE" \
@@ -4596,6 +4583,32 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
       read -r -p "Press Enter to continue" </dev/tty
       echo
       ;;
+
+      # my_bool fix
+
+      # until it's implemented, it's here now: https://github.com/cmangos/issues/issues/2187#issuecomment-622377961
+      # https://github.com/Daedalus-code/cmangos-arm (missing my_bool: error: ‘my_bool’ has not been declared)
+
+    "4")
+
+      sudo chown -R "$user":"$group" "$folder_core"
+      cd "$folder_core" || exit
+      wget https://raw.githubusercontent.com/Daedalus-code/cmangos-arm/master/arm_pi4.patch
+      patch <arm_pi4.patch -p1
+      echo "Files updated!"
+      sleep 1
+      printf '%b' "${GR:?}Renaming patch into 'CMaNGOS.patch'${N0:?}"
+      mv arm_pi4.patch "$folder_core"/"$patch"
+      sleep 1
+      echo "Done!"
+      echo
+      read -r -p "Press Enter to continue" </dev/tty
+      echo
+
+      ;;
+
+      # my_bool fix done
+
     esac
 
     ;;
