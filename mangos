@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20210502
-# 4.7.1.6
+# 4.7.1.5
 
 # codes
 while :; do
@@ -4597,10 +4597,9 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
       patch <arm_pi4.patch -p1
       echo "Files updated!"
       sleep 1
-      printf '%b' "${GR:?}Renaming patch into 'CMaNGOS.patch'${N0:?}"
+      printf '%b' "${GR:?}Renaming patch into 'CMaNGOS.patch'${N0:?}\n"
       mv arm_pi4.patch "$folder_core"/"$patch"
       sleep 1
-      echo "Done!"
       echo
       read -r -p "Press Enter to continue" </dev/tty
       echo
