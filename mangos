@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20210502
-# 4.7.3.5
+# 4.7.3.6
 
 # codes
 while :; do
@@ -684,7 +684,7 @@ ${N0:?}"
       Uploaded${G0:?}...:${N0:?} $P2P_UPLS
       Ratio${G0:?}......:${N0:?} $P2P_RATI
 
-      t : ${P1:?}Install${GR:?} M : Magnet$N0
+      t : ${P1:?}Install${GR:?} i : info$N0
       u : ${P1:?}Remove${N0:?}
       r : ${P1:?}Start${N0:?}
       s : ${P1:?}Stop${N0:?}
@@ -695,17 +695,18 @@ ${N0:?}"
         read -r -s -n1
         case "$REPLY" in
 
-        # magnet link
+        # transmission-remote information
 
-        "M")
+        "i")
 
-          printf '%b' "${GR:?}magnet:?xt=urn:btih:1cdcaa3d77a7f4df79935d885e639903e37dda24&dn=vanilla%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce${N0:?}\n"
+          echo
+          transmission-remote -t 1 -i 2>/dev/null
           read -r -p "Press Enter to continue" </dev/tty
           echo
 
           ;;
 
-          # magnet link done
+          # transmission-remote information
 
           # remove transmission-daemon
 
