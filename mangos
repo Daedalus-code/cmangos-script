@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20210502
-# 4.7.3.8
+# 4.7.4.0
 
 # codes
 while :; do
@@ -719,6 +719,8 @@ ${N0:?}"
           if [[ $REPLY =~ ^[Yy]$ ]]; then
 
             echo "Please wait"
+            # remove old file
+            sudo rm -R /var/log/ms/transmission_list &>/dev/null
             sudo apt-get remove transmission-* --purge -y &>/dev/null
           fi
 
