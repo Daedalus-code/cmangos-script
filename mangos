@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20210502
-# 4.7.4.0
+# 4.7.6.7
 
 # codes
 while :; do
@@ -100,7 +100,7 @@ while :; do
    d : Update Database      p : Patch
    w : Update Helper        o : Ping
    s : Shutdown server      l : Logs
-   r : Restart server       Q : Quit
+   r : Restart server       q : Quit
 
 "
   read -r -n1 -s
@@ -665,32 +665,45 @@ ${N0:?}"
         else
           intranet_seed=$(printf '%b' "${intranet:?}:9091" 2>/dev/null)
         fi
+
+        if [ -z "$P2P_DWNS" ]; then
+          # non responsive
+          P2P_DWNS=""
+        else
+          P2P_DWNS=$(echo "$P2P_DWNS ")
+        fi
+        if [ -z "$P2P_UPLS" ]; then
+          # non responsive
+          P2P_UPLS=""
+        else
+          P2P_UPLS=$(echo "$P2P_UPLS ")
+        fi
+
         # codes done
 
-        # menu
+        # seedbox menu
 
         clear
         echo
         printf '%b' "${G1:?}      CMaNGOS - ${G0:?}WoW Vanilla Maps Seedbox${N0:?}
 
-      Seedbox${G0:?}....:${N0:?} $seed_transmission
-      Access${G0:?}.....:${N0:?} $intranet_seed
-      Filename${G0:?}...:${N0:?} $P2P_NAME
-      Download${G0:?}...:${N0:?} ${P1:?}Unlimited${N0:?}
-      Upload${G0:?}.....:${N0:?} ${P1:?}128kb/s${N0:?}
-      Status${G0:?}.....:${N0:?} $P2P_STAT
-      Progress${G0:?}...:${N0:?} $P2P_PROG
-      Downloaded${G0:?}.:${N0:?} $P2P_DWNS
-      Uploaded${G0:?}...:${N0:?} $P2P_UPLS
-      Ratio${G0:?}......:${N0:?} $P2P_RATI
+      Seedbox${G0:?}..:${N0:?} $seed_transmission
+      Access${G0:?}...:${N0:?} $intranet_seed
+      Filename${G0:?}.:${N0:?} $P2P_NAME
+      Download${G0:?}.:${N0:?} $P2P_DWNS${GR:?}Unlimited${N0:?}
+      Upload${G0:?}...:${N0:?} $P2P_UPLS${GR:?}128kb/s${N0:?}
+      Status${G0:?}...:${N0:?} $P2P_STAT
+      Progress${G0:?}.:${N0:?} $P2P_PROG
+      Ratio${G0:?}....:${N0:?} $P2P_RATI
 
-      t : ${P1:?}Install${GR:?} i : info$N0
-      u : ${P1:?}Remove${N0:?}
-      r : ${P1:?}Start${N0:?}
-      s : ${P1:?}Stop${N0:?}
-      m : ${P1:?}Maps${N0:?}
+      t : ${P1:?}Install${GR:?} - setup$N0
+      u : ${P1:?}Remove${GR:?}  - uninstall$N0
+      r : ${P1:?}Start${GR:?}   - start p2p$N0
+      s : ${P1:?}Stop${GR:?}    - stop p2p$N0
+      m : ${P1:?}Maps${GR:?}    - import maps$N0
+      i : ${P1:?}Info${GR:?}    - torrent info$N0
+      q : ${P1:?}Quit${GR:?}    - return$N0
 
-${G0:?}>${N0:?} hit Enter to go back.
 ${N0:?}"
         read -r -s -n1
         case "$REPLY" in
@@ -699,8 +712,23 @@ ${N0:?}"
 
         "i")
 
+          printf '%b' "${GR:?}INFO${N0:?}\n"
+          # list statistical information from the server
+          P2P_ST=$(transmission-remote -st)
+          printf '%b' "${GR:?}$P2P_ST${N0:?}\n"
           echo
-          transmission-remote -t 1 -i 2>/dev/null
+          # show details of the current torrent(s)
+          P2P_T=$(transmission-remote -t all -i 2>/dev/null)
+          printf '%b' "${N0:?}$P2P_T${N0:?}\n"
+          echo
+          # list session information from the server
+          P2P_SI=$(transmission-remote -t all -si 2>/dev/null)
+          printf '%b' "${GR:?}$P2P_SI${N0:?}\n"
+          echo
+          # list peers, if any
+          P2P_PI=$(transmission-remote -t all -pi 2>/dev/null)
+          printf '%b' "${N0:?}$P2P_PI${N0:?}\n"
+          echo
           read -r -p "Press Enter to continue" </dev/tty
           echo
 
@@ -834,15 +862,14 @@ EOF
               sleep 1
               # start transmission-daemon
               sudo service transmission-daemon start &>/dev/null
-              echo
-              printf '%b' "[${G0:?}ok${N0:?}] - Seedbox should be running now!"
-              echo
+              printf '%b' "[${G0:?}ok${N0:?}] - Seedbox should be running now!\n"
               sleep 1
               # add magnet link: vanilla.maps.zip.torrent
               transmission-remote -a "magnet:?xt=urn:btih:1cdcaa3d77a7f4df79935d885e639903e37dda24&dn=vanilla%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
-              echo
-              printf '%b' "[${G0:?}ok${N0:?}] - torrent added"
-              echo
+              printf '%b' "[${G0:?}ok${N0:?}] - torrent added\n"
+              # try to verify torrent data
+              transmission-remote -t all -v 2>/dev/null
+              printf '%b' "[${Y0:?}ok${N0:?}] - verify data\n"
               sleep 1
               # reload
               sudo systemctl daemon-reload 2>/dev/null
@@ -4727,9 +4754,9 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
 
     ;;
 
-  "Q") exit ;;
-  "q") echo "case sensitive!!" ;;
-  *) echo "empty" ;;
+  "q") exit ;;
+  "Q") echo "CAPS ON!" ;;
+  *) ;;
   esac
 done
 
