@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20210502
-# 4.8.0.4
+# V20210702
+# 4.8.1.2
 
 # codes
 while :; do
@@ -407,7 +407,7 @@ Are You Sure? (y/n) " -n 1 -r
       }
       dot_field() {
         # todo: Change implementation when field can be 2 words with a space in between
-        printf "%-14.14s" "$1" | colorstring "${white}" | tr ' ' '.'
+        printf "%-12.12s" "$1" | colorstring "${white}" | tr ' ' '.'
         # The : must be printed in a second statement when you don't want cyan dots.
         printf ':'
       }
@@ -417,7 +417,7 @@ Are You Sure? (y/n) " -n 1 -r
       }
       # todo: add logic when only 4 parameters are given
       printline() {
-        echo "      $(dot_field "$1") $(space_number "$2")$(dot_field "$3") $(space_number "$4")$(dot_field "$5") $(space_number "$6")"
+        echo "   $(dot_field "$1") $(space_number "$2")$(dot_field "$3") $(space_number "$4")$(dot_field "$5") $(space_number "$6")"
       }
       # init the color variables
       init_colors
@@ -551,6 +551,7 @@ Are You Sure? (y/n) " -n 1 -r
       # codes done
 
       printf '%b' "   $cm_uptime
+
    Realm${G0:?}.......:${G1:?} ${server_name:?}${N0:?}
    $menu_print_cpu_temp
    World${G0:?}.......:${N0:?} $latest_world_built
@@ -566,8 +567,7 @@ Are You Sure? (y/n) " -n 1 -r
    w : ${P1:?}Stats${N0:?}   - World stats
    q : ${P1:?}Quit${N0:?}    - Back to menu   Realmd.log${G0:?}......:${N0:?} $cm_realmd_log_empty$cm_realmd_log
    i : ${P1:?}Info${N0:?}    - Helper info    Server.log${G0:?}......:${N0:?} $cm_server_log_empty$cm_server_log$cm_server_log_serious
-"
-      echo
+\n"
       read -r -s -n1
       case "$REPLY" in
 
@@ -663,9 +663,9 @@ ${N0:?}"
           transmission_service=transmission-daemon
           # transmission-daemon status
           case "$(pidof $transmission_service | wc -w)" in
-          0) seed_transmission="${R0:?}Offline${N0:?}" ;;
+          0) seed_transmission="${GR:?}Offline${N0:?}" ;;
           1) seed_transmission="${G0:?}Seeding${N0:?}" ;;
-          *) seed_transmission="${Y0:?}Seeding${N0:?}" ;;
+          *) seed_transmission="${Y1:?}Seeding${N0:?}" ;;
           esac
         fi
         if ! [ -x "$(command -v transmission-cli)" ]; then
@@ -685,6 +685,19 @@ ${N0:?}"
           P2P_UPLS=""
         else
           P2P_UPLS=$(echo "$P2P_UPLS ")
+        fi
+
+        # pidof transmission-daemon
+        PIDOFP2P=$(pidof transmission-daemon 2>/dev/null | wc -l 2>/dev/null)
+        if [[ "$PIDOFP2P" ]]; then
+          # non responsive
+          intranet_seed="${GR:?}$intranet_seed${N0:?}"
+          P2P_NAME="${GR:?}vanilla_maps.zip${N0:?}"
+          P2P_DWNS="${GR:?}0.0 ${N0:?}"
+          P2P_UPLS="${GR:?}0.0 ${N0:?}"
+          P2P_STAT="${GR:?}N/A${N0:?}"
+          P2P_PROG="${GR:?}N/A${N0:?}"
+          P2P_RATI="${GR:?}N/A${N0:?}"
         fi
 
         # codes done
@@ -1054,6 +1067,13 @@ EOF
         dive_server_old_error=$(grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log.old 2>/dev/null)
         dive_server_old_serio=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$folder_core"/run/logs/Server.log.old 2>/dev/null)
         dive_server_old_ignor=$(grep -c -E ".*ignoring*.|.*ignore*.|.*ignored*." "$folder_core"/run/logs/Server.log.old 2>/dev/null)
+        if [[ -z "$dive_server_old_empty" || -z "$dive_server_old_error" || -z "$dive_server_old_serio" || -z "$dive_server_old_ignor" ]]; then
+          # non responsive
+          dive_server_old_empty="0"
+          dive_server_old_error="0"
+          dive_server_old_serio="0"
+          dive_server_old_ignor="0"
+        fi
         # server.log
         dive_server_empty=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty.|.*empty*." "$folder_core"/run/logs/Server.log 2>/dev/null)
         dive_server_error=$(grep -c -E ".*ERROR*." "$folder_core"/run/logs/Server.log 2>/dev/null)
@@ -1106,14 +1126,14 @@ EOF
         dive_log_zero=$(printf "0")
         # codes done
 
-        printf "      Server.log        Server.log.old    Realmd.log"
+        printf "   Server            Server.old        Realmd"
         echo
         printline "$dive_log_empty" "$dive_server_empty" "$dive_log_empty" "$dive_server_old_empty" "$dive_log_empty" "$dive_realmd_empty"
         printline "$dive_log_error" "$dive_server_error" "$dive_log_error" "$dive_server_old_error" "$dive_log_error" "$dive_realmd_error"
         printline "$dive_log_ignor" "$dive_server_ignor" "$dive_log_ignor" "$dive_server_old_ignor" "$dive_log_ignor" "$dive_realmd_serio"
         printline "$dive_log_serio" "$dive_server_serio" "$dive_log_serio" "$dive_server_old_serio" "$dive_log_serio" "$dive_realmd_serio"
         echo
-        printf "      DBErrors.log        Char.log          EventAIErrors.log"
+        printf "   DBErrors          Char              EventAIErrors"
         echo
         printline "$dive_log_corre" "$dive_DBError_corr" "$dive_log_creat" "$dive_char_created" "$dive_log_skipp" "$dive_EventAIError"
         printline "$dive_log_exist" "$dive_DBError_exis" "$dive_log_login" "$dive_char_login_c" "$dive_log_noeff" "$dive_EventAInoeff"
@@ -1121,15 +1141,9 @@ EOF
         printline "$dive_log_never" "$dive_DBError_used" "$dive_log_none" "$dive_log_zero" "$dive_log_NULL0" "$dive_EventAI_NULL"
         printline "$dive_log_crash" "$dive_DBError_cras" "$dive_log_none" "$dive_log_zero" "$dive_log_NotUs" "$dive_EventAINotUs"
 
-        # count error from logs
-        error_charac=$(grep -c "ERROR:.*" "$folder_core"/run/logs/Char.log 2>/dev/null)
-        error_dberro=$(grep -c "ERROR:.*" "$folder_core"/run/logs/DBErrors.log 2>/dev/null)
-        error_eventa=$(grep -c "ERROR:.*" "$folder_core"/run/logs/EventAIErrors.log 2>/dev/null)
-
-        echo "
-      1 : Raw ERROR Output
-      2 : tail ERROR Output"
-        echo
+        printf '%b' "
+1 : Raw ${R0:?}ERROR${N0:?} Output
+2 : tail ${R1:?}ERROR${N0:?} Output\n"
 
         read -n1 -s
         case "$REPLY" in
@@ -1160,12 +1174,6 @@ EOF
         *) ;;
         esac
 
-        printf '%b' "
-Server${R0:?}........: $dive_server_error ${Y1:?}$dive_server_empty${N0:?}
-Realmd${R0:?}........: $dive_realmd_error ${Y1:?}$dive_realmd_empty${N0:?}
-Char${R0:?}..........: $error_charac${N0:?}
-DBErrors${R0:?}......: $error_dberro${N0:?}
-EventAIErrors${R0:?}.: $error_eventa${N0:?}\n"
         echo
         read -r -p "Press Enter to continue" </dev/tty
         echo
