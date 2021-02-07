@@ -702,7 +702,7 @@ ${N0:?}"
 
           "1")
 
-            seed_transmission="${G0:?}Seeding${N0:?}"
+            seed_transmission="${G0:?}Online${N0:?}"
             intranet_seed="${N0:?}${intranet:?}:9091${N0:?}"
             P2P_FILE_NAME="${N0:?}vanilla_maps.zip${N0:?}"
             SLASH="/"
@@ -711,7 +711,7 @@ ${N0:?}"
 
           "*")
 
-            seed_transmission="${Y1:?}Seeding${N0:?}"
+            seed_transmission="${Y1:?}Online+${N0:?}"
             intranet_seed="${Y1:?}${intranet:?}:9091${N0:?}"
             SLASH="/"
 
