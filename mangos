@@ -690,7 +690,7 @@ ${N0:?}"
 
         # pidof transmission-daemon
         PIDOFP2P=$(pidof transmission-daemon 2>/dev/null | wc -l 2>/dev/null)
-        if [[ "$PIDOFP2P" ]]; then
+        if [[ "$PIDOFP2P" -eq "0" ]]; then
           # non responsive
           intranet_seed="${GR:?}$intranet_seed${N0:?}"
           P2P_NAME="${GR:?}vanilla_maps.zip${N0:?}"
