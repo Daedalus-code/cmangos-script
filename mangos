@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20210702
-# 4.9.4.1
+# 4.9.3.9
 
 # codes
 while :; do
@@ -787,8 +787,7 @@ ${N0:?}"
         "u")
 
           echo
-          read -r -p "Remove Seedbox? (keep maps) (y/n) " -n 1 -r
-          echo
+          read -r -p "Remove Seedbox? (keeping maps) (y/n) " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -809,7 +808,6 @@ ${N0:?}"
 
           echo
           read -r -p "Setup Seedbox? (y/n) " -n 1 -r
-          echo
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -2362,7 +2360,7 @@ Select install operation"
       echo " 2) MySQL"
       echo
       read -r -n1 -s n
-      echo "Please wait.."
+      echo "Please wait"
       case $n in
 
       "1") # install mariadb
@@ -2410,7 +2408,7 @@ This is needed to operate local/remote database"
       echo " q : Quit"
       echo
       read -r -n1 -s n
-      echo "Please wait.."
+      echo "Please wait"
       case $n in
 
       "1") # install mariadb-client
