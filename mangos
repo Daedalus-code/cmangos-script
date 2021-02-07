@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20210702
-# 4.9.3.9
+# 4.9.4.3
 
 # codes
 while :; do
@@ -631,66 +631,57 @@ ${N0:?}"
 
       "m")
 
+        # get remote information from transmission, create a file
+        transmission-remote -t all -i >/var/log/ms/transmission_list 2>/dev/null
         # pidof transmission-daemon, cli, pid/status
         PIDOFP2P_CLI=$(pidof transmission-cli 2>/dev/null)
+        PIDOFP2P_DAE=$(pidof transmission-daemon 2>/dev/null)
 
         # codes
         if ! [ -x "$(command -v transmission-cli)" ]; then
           seed_transmission="${GR:?}Not Installed!${N0:?}"
           intranet_seed="${GR:?}0.0.0.0:9091${N0:?}"
-          P2P_NAME="${GR:?}vanilla_maps.zip${N0:?}"
+          P2P_FILE_NAME="${GR:?}vanilla_maps.zip${N0:?}"
           P2P_DWNS="${GR:?}N/A${N0:?} "
           P2P_UPLS="${GR:?}N/A${N0:?} "
           P2P_STAT="${GR:?}N/A${N0:?}"
           P2P_PROG="${GR:?}N/A${N0:?}"
           P2P_RATI="${GR:?}N/A${N0:?}"
         else
-          # get remote information from transmission, create a file
-          transmission-remote -t all -i >/var/log/ms/transmission_list 2>/dev/null
           if [ -f /var/log/ms/transmission_list ]; then
             # cat that file
             P2P_INFO=$(cat /var/log/ms/transmission_list 2>/dev/null)
+            # peers, connected,
+            P2P_PEERS_CONNECTED=$(echo "$P2P_INFO" 2>/dev/null | grep "Peers" 2>/dev/null | awk '{ print $4 }' 2>/dev/null | awk -F, '{ print $1 }' 2>/dev/null)
+            P2P_PEERS_SEEDINGTO=$(echo "$P2P_INFO" 2>/dev/null | grep "Peers" 2>/dev/null | awk '{ print $7 }' 2>/dev/null | awk -F, '{ print $1 }' 2>/dev/null)
+            P2P_PEERS_DOWN_LOAD=$(echo "$P2P_INFO" 2>/dev/null | grep "Peers" 2>/dev/null | awk '{ print $10 }' 2>/dev/null)
             # get file, progress
-            if P2P_NAME=$(echo "$P2P_INFO" 2>/dev/null | grep -o "Percent Done: 100%" 2>/dev/null); then
-              P2P_NAME=$(echo "vanilla_maps.zip")
+            if echo "$P2P_INFO" 2>/dev/null | grep -q -o "Percent Done: 100%" 2>/dev/null; then
+              P2P_FILE_NAME="${N0:?}vanilla_maps.zip${N0:?}"
             else
-              P2P_NAME="${GR:?}vanilla_maps.zip${N0:?}\n"
+              P2P_FILE_NAME="${GR:?}vanilla_maps.zip${N0:?}"
             fi
             # get progress
-            if P2P_PROG=$(echo "$P2P_INFO" 2>/dev/null | grep -o "Percent Done: 100%" 2>/dev/null |
-              awk '{ print $3 }' 2>/dev/null); then
-              P2P_PROG=$(echo "$P2P_PROG")
+            if echo "$P2P_INFO" 2>/dev/null | grep -q -o "Percent Done: 100%" 2>/dev/null; then
+              P2P_PROG="${G1:?}100%${N0:?}"
             else
-              P2P_PROG="${GR:?}N/A${N0:?}\n"
+              P2P_PROG=$(echo "$P2P_INFO" 2>/dev/null | grep -Eo "Percent Done:.*" 2>/dev/null |
+                awk '{ print $3 }' 2>/dev/null)
             fi
             # get download stats
-            if P2P_DWNS=$(echo "$P2P_INFO" 2>/dev/null | grep -o "Downloaded:.*" 2>/dev/null |
-              awk '{ print $2 }' 2>/dev/null); then
-              P2P_DWNS=$(echo "$P2P_DWNS ")
-            else
-              P2P_DWNS="${GR:?}N/A${N0:?} \n"
-            fi
+            P2P_DWNS=$(echo "$P2P_INFO" 2>/dev/null | grep -o "Downloaded:.*" 2>/dev/null |
+              awk '{ print $2 }' 2>/dev/null)
+            P2P_DWNS=$(echo "$P2P_DWNS ")
             # get upload stats
-            if P2P_UPLS=$(echo "$P2P_INFO" 2>/dev/null | grep -o "Uploaded:.*" 2>/dev/null |
-              awk '{ print $2 }' 2>/dev/null); then
-              P2P_UPLS=$(echo "$P2P_UPLS ")
-            else
-              P2P_UPLS="${GR:?}N/A${N0:?} \n"
-            fi
+            P2P_UPLS=$(echo "$P2P_INFO" 2>/dev/null | grep -o "Uploaded:.*" 2>/dev/null |
+              awk '{ print $2 }' 2>/dev/null)
+            P2P_UPLS=$(echo "$P2P_UPLS ")
             # get ratio
-            if P2P_RATI=$(echo "$P2P_INFO" 2>/dev/null | grep -o "Ratio:.*" 2>/dev/null |
-              awk '{ print $2 }' 2>/dev/null); then
-              P2P_RATI=$(echo "$P2P_RATI")
-            else
-              P2P_RATI="${GR:?}N/A${N0:?}\n"
-            fi
+            P2P_RATI=$(echo "$P2P_INFO" 2>/dev/null | grep -o "Ratio:.*" 2>/dev/null |
+              awk '{ print $2 }' 2>/dev/null)
             # get status
-            if P2P_STAT=$(echo "$P2P_INFO" 2>/dev/null | grep -o "State:.*" 2>/dev/null |
-              awk '{ print $2 }' 2>/dev/null); then
-              P2P_STAT=$(echo "$P2P_STAT")
-            else
-              P2P_STAT="${GR:?}N/A${N0:?}\n"
-            fi
+            P2P_STAT=$(echo "$P2P_INFO" 2>/dev/null | grep -o "State:.*" 2>/dev/null |
+              awk '{ print $2 }' 2>/dev/null)
           fi
           # transmission-daemon status
           case "$(pidof transmission-daemon 2>/dev/null | wc -w 2>/dev/null)" in
@@ -698,12 +689,14 @@ ${N0:?}"
 
             seed_transmission="${GR:?}Offline${N0:?}"
             intranet_seed="${GR:?}0.0.0.0:9091${N0:?}"
-            P2P_NAME="${GR:?}vanilla_maps.zip${N0:?}"
+            P2P_FILE_NAME="${GR:?}vanilla_maps.zip${N0:?}"
             P2P_DWNS="${GR:?}N/A${N0:?} "
             P2P_UPLS="${GR:?}N/A${N0:?} "
             P2P_STAT="${GR:?}N/A${N0:?}"
             P2P_PROG="${GR:?}N/A${N0:?}"
             P2P_RATI="${GR:?}N/A${N0:?}"
+            P2P_PEERS_CONNECTED="${GR:?}N/A${N0:?}"
+            SLASH=""
 
             ;;
 
@@ -711,6 +704,8 @@ ${N0:?}"
 
             seed_transmission="${G0:?}Seeding${N0:?}"
             intranet_seed="${N0:?}${intranet:?}:9091${N0:?}"
+            P2P_FILE_NAME="${N0:?}vanilla_maps.zip${N0:?}"
+            SLASH="/"
 
             ;;
 
@@ -718,7 +713,7 @@ ${N0:?}"
 
             seed_transmission="${Y1:?}Seeding${N0:?}"
             intranet_seed="${Y1:?}${intranet:?}:9091${N0:?}"
-            P2P_PROG="${GR:?}N/A${N0:?}"
+            SLASH="/"
 
             ;;
 
@@ -735,12 +730,13 @@ ${N0:?}"
 
    Seedbox${G0:?}..:${N0:?} $seed_transmission
    Access${G0:?}...:${N0:?} $intranet_seed
-   Filename${G0:?}.:${N0:?} $P2P_NAME
+   Filename${G0:?}.:${N0:?} $P2P_FILE_NAME
    Download${G0:?}.:${N0:?} $P2P_DWNS${GR:?}Unlimited${N0:?}
    Upload${G0:?}...:${N0:?} $P2P_UPLS${GR:?}128kb/s${N0:?}
    Status${G0:?}...:${N0:?} $P2P_STAT
    Progress${G0:?}.:${N0:?} $P2P_PROG
    Ratio${G0:?}....:${N0:?} $P2P_RATI
+   Peers${G0:?}....:${G1:?} $P2P_PEERS_CONNECTED${N0:?}$SLASH${G0:?}$P2P_PEERS_SEEDINGTO${N0:?}$SLASH${Y1:?}$P2P_PEERS_DOWN_LOAD${N0:?}
 
    t : ${P1:?}Install${N0:?} - Setup$N0
    u : ${P1:?}Remove${N0:?}  - Uninstall$N0
@@ -758,25 +754,33 @@ ${N0:?}"
 
         "i")
 
-          printf '%b' "${GR:?}INFO${N0:?}\n"
-          # list statistical information from the server
-          P2P_ST=$(transmission-remote -st)
-          printf '%b' "${GR:?}$P2P_ST${N0:?}\n"
-          echo
-          # show details of the current torrent(s)
-          P2P_T=$(transmission-remote -t all -i 2>/dev/null)
-          printf '%b' "${N0:?}$P2P_T${N0:?}\n"
-          echo
-          # list session information from the server
-          P2P_SI=$(transmission-remote -t all -si 2>/dev/null)
-          printf '%b' "${GR:?}$P2P_SI${N0:?}\n"
-          echo
-          # list peers, if any
-          P2P_PI=$(transmission-remote -t all -pi 2>/dev/null)
-          printf '%b' "${N0:?}$P2P_PI${N0:?}\n"
-          echo
-          read -r -p "Press Enter to continue" </dev/tty
-          echo
+          # is seedbox running?
+          if pidof transmission-daemon 2>/dev/null; then
+            printf '%b' "${GR:?}INFO${N0:?}\n"
+            # list statistical information from the server
+            P2P_ST=$(transmission-remote -st)
+            printf '%b' "${GR:?}$P2P_ST${N0:?}\n"
+            echo
+            # show details of the current torrent(s)
+            P2P_T=$(transmission-remote -t all -i 2>/dev/null)
+            printf '%b' "${N0:?}$P2P_T${N0:?}\n"
+            echo
+            # list session information from the server
+            P2P_SI=$(transmission-remote -t all -si 2>/dev/null)
+            printf '%b' "${GR:?}$P2P_SI${N0:?}\n"
+            echo
+            # list peers, if any
+            P2P_PI=$(transmission-remote -t all -pi 2>/dev/null)
+            printf '%b' "${N0:?}$P2P_PI${N0:?}\n"
+            echo
+            read -r -p "Press Enter to continue" </dev/tty
+            echo
+          else
+            echo "Please Install/Start seedbox first!"
+            echo
+            read -r -p "Press Enter to continue" </dev/tty
+            echo
+          fi
 
           ;;
 
@@ -955,7 +959,7 @@ EOF
               for pid in $(ps -ef 2>/dev/null | grep -E "transmission-cli|transmission-daemon" 2>/dev/null |
                 awk '{print $2}'); do kill -9 $pid 2>/dev/null; done
               # go over it again, kill daemon, cli
-              sudo kill -9 "$PIDOFP2P_DAEMON" &>/dev/null
+              sudo kill -9 "$PIDOFP2P_DAE" &>/dev/null
               sudo kill -9 "$PIDOFP2P_CLI" &>/dev/null
               sudo service transmission-daemon stop &>/dev/null
               sleep 1
@@ -997,7 +1001,7 @@ EOF
               for pid in $(ps -ef 2>/dev/null | grep -E "transmission-cli|transmission-daemon" 2>/dev/null |
                 awk '{print $2}'); do kill -9 $pid 2>/dev/null; done
               # go over it again, kill daemon, cli
-              sudo kill -9 "$PIDOFP2P_DAEMON" &>/dev/null
+              sudo kill -9 "$PIDOFP2P_DAE" &>/dev/null
               sudo kill -9 "$PIDOFP2P_CLI" &>/dev/null
               # stop transmission service
               sudo service transmission-daemon stop &>/dev/null
