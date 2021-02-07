@@ -726,7 +726,7 @@ ${N0:?}"
 
         clear
         echo
-        printf '%b' "${G1:?}   CMaNGOS${G0:?} - Vanilla Maps (${G1:?}Seedbox${G0:?})${N0:?}
+        printf '%b' "${G1:?}   CMaNGOS${G0:?} - Vanilla Maps ${N0:?}Seedbox
 
    Seedbox${G0:?}..:${N0:?} $seed_transmission
    Access${G0:?}...:${N0:?} $intranet_seed
