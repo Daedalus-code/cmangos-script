@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20210702
-# 4.8.9.0
+# 4.9.4.1
 
 # codes
 while :; do
@@ -179,7 +179,7 @@ ${N0:?}                                       __
         printf "empty"
         echo
       else
-        printf '%b' "[${G0:?}ok${N0:?}] $USR"
+        printf '%b' "[${G1:?}ok${N0:?}] $USR"
         echo
         echo "Password"
         read -r -s PWD
@@ -187,7 +187,7 @@ ${N0:?}                                       __
           printf "empty"
           echo
         else
-          printf "[${G0:?}ok${N0:?}] Password"
+          printf "[${G1:?}ok${N0:?}] Password"
           echo
           echo "Expansion - 0"
           read -r -s XPV
@@ -195,7 +195,7 @@ ${N0:?}                                       __
             printf "empty"
             echo
           else
-            printf '%b' "[${G0:?}ok${N0:?}] Expansion ($XPV)"
+            printf '%b' "[${G1:?}ok${N0:?}] Expansion ($XPV)"
             echo
             echo "GMlevel - 0-3"
             read -r -s LVL
@@ -203,7 +203,7 @@ ${N0:?}                                       __
               printf "empty"
               echo
             else
-              printf '%b' "[${G0:?}ok${N0:?}] GMlevel ($LVL)"
+              printf '%b' "[${G1:?}ok${N0:?}] GMlevel ($LVL)"
               echo "${user_nc:?}
 ${pass_nc:?}
 .account create $USR $PWD
@@ -213,7 +213,7 @@ ${pass_nc:?}
               rm "${folder_wow:?}"/tmp.txt
               echo
               echo
-              printf '%b' "[${G0:?}ok${N0:?}] Account '${P1:?}$USR${N0:?}' ($XPV/$LVL) created."
+              printf '%b' "[${G1:?}ok${N0:?}] Account '${P1:?}$USR${N0:?}' ($XPV/$LVL) created."
               echo
               echo
             fi
@@ -240,7 +240,7 @@ ${pass_nc:?}
         realmd_backup="[${R0:?}old${N0:?}]"
         echo
       else
-        realmd_backup="[${G0:?}ok${N0:?}]"
+        realmd_backup="[${G1:?}ok${N0:?}]"
         echo
       fi
       # characters backup
@@ -249,7 +249,7 @@ ${pass_nc:?}
         charac_backup="[${R0:?}old${N0:?}]"
         echo
       else
-        charac_backup="[${G0:?}ok${N0:?}]"
+        charac_backup="[${G1:?}ok${N0:?}]"
         echo
       fi
       # codes done
@@ -358,16 +358,16 @@ Are You Sure? (y/n) " -n 1 -r
 
       # realmd service
       case "$(pidof $realm_service | wc -w)" in
-      0) command_realmd="[${R0:?}off${N0:?}]" ;;
-      1) command_realmd="[${G0:?}ok${N0:?}]" ;;
-      *) command_realmd="[${Y0:?}ok${N0:?}]" ;;
+      0) command_realmd="[${R1:?}off${N0:?}]" ;;
+      1) command_realmd="[${G1:?}ok${N0:?}]" ;;
+      *) command_realmd="[${Y1:?}ok${N0:?}]" ;;
       esac
 
       # mangosd service
       case "$(pidof $world_service | wc -w)" in
-      0) command_mangosd="[${R0:?}off${N0:?}]" ;;
-      1) command_mangosd="[${G0:?}ok${N0:?}]" ;;
-      *) command_mangosd="[${Y0:?}ok${N0:?}]" ;;
+      0) command_mangosd="[${R1:?}off${N0:?}]" ;;
+      1) command_mangosd="[${G1:?}ok${N0:?}]" ;;
+      *) command_mangosd="[${Y1:?}ok${N0:?}]" ;;
       esac
 
       # Thank you! -> https://stackoverflow.com/questions/59862020
@@ -485,7 +485,7 @@ Are You Sure? (y/n) " -n 1 -r
         realmd_backup="[${R0:?}old${N0:?}]"
         echo
       else
-        realmd_backup="[${G0:?}ok${N0:?}]"
+        realmd_backup="[${G1:?}ok${N0:?}]"
         echo
       fi
       # characters backup
@@ -494,7 +494,7 @@ Are You Sure? (y/n) " -n 1 -r
         charac_backup="[${R0:?}old${N0:?}]"
         echo
       else
-        charac_backup="[${G0:?}ok${N0:?}]"
+        charac_backup="[${G1:?}ok${N0:?}]"
         echo
       fi
 
@@ -631,74 +631,98 @@ ${N0:?}"
 
       "m")
 
+        # pidof transmission-daemon, cli, pid/status
+        PIDOFP2P_CLI=$(pidof transmission-cli 2>/dev/null)
+
         # codes
         if ! [ -x "$(command -v transmission-cli)" ]; then
           seed_transmission="${GR:?}Not Installed!${N0:?}"
-        else
-          # get remote information from transmission, create a file
-          transmission-remote -l >/var/log/ms/transmission_list 2>/dev/null
-
-          if [ -f /var/log/ms/transmission_list ]; then
-            # cat that file
-            P2P_INFO=$(cat /var/log/ms/transmission_list 2>/dev/null)
-            # get file
-            P2P_NAME=$(echo "$P2P_INFO" 2>/dev/null | grep -o "vanilla_maps.zip" 2>/dev/null)
-            # get progress
-            P2P_PROG=$(echo "$P2P_INFO" 2>/dev/null | awk '{ print $2 }' 2>/dev/null |
-              tail -2 2>/dev/null | head -1 2>/dev/null | grep -Eo "n/a|idle|downloading|[0-100]+.[0.9]+%" 2>/dev/null)
-            # get download stats
-            P2P_DWNS=$(echo "$P2P_INFO" 2>/dev/null | awk '{ print $3 }' 2>/dev/null |
-              tail -2 2>/dev/null | head -1 2>/dev/null | grep -Eo "[0-9]+.[0-9]+" 2>/dev/null)
-            # get upload stats
-            P2P_UPLS=$(echo "$P2P_INFO" 2>/dev/null | awk '{ print $5 }' 2>/dev/null |
-              tail -1 2>/dev/null | grep -Eo "[0-9]+.[0-9]+" 2>/dev/null)
-            # get ratio
-            P2P_RATI=$(echo "$P2P_INFO" 2>/dev/null | awk '{ print $8 }' 2>/dev/null |
-              head -2 2>/dev/null | tail -1 2>/dev/null | grep -Eo "[0-9]+.[0-9]+" 2>/dev/null)
-            # get status
-            P2P_STAT=$(echo "$P2P_INFO" 2>/dev/null | awk '{ print $9 }' 2>/dev/null |
-              head -2 2>/dev/null | tail -1 2>/dev/null | grep -v "vanilla_maps.zip" 2>/dev/null)
-          fi
-
-          # transmission-daemon service
-          transmission_service=transmission-daemon
-          # transmission-daemon status
-          case "$(pidof $transmission_service | wc -w)" in
-          0) seed_transmission="${GR:?}Offline${N0:?}" ;;
-          1) seed_transmission="${G0:?}Seeding${N0:?}" ;;
-          *) seed_transmission="${Y1:?}Seeding${N0:?}" ;;
-          esac
-        fi
-        if ! [ -x "$(command -v transmission-cli)" ]; then
-          intranet_seed=$(printf '%b' "${GR:?}Not Installed!${N0:?}" 2>/dev/null)
-        else
-          intranet_seed=$(printf '%b' "${intranet:?}:9091" 2>/dev/null)
-        fi
-
-        if [ -z "$P2P_DWNS" ]; then
-          # non responsive
-          P2P_DWNS=""
-        else
-          P2P_DWNS=$(echo "$P2P_DWNS ")
-        fi
-        if [ -z "$P2P_UPLS" ]; then
-          # non responsive
-          P2P_UPLS=""
-        else
-          P2P_UPLS=$(echo "$P2P_UPLS ")
-        fi
-
-        # pidof transmission-daemon
-        PIDOFP2P=$(pidof transmission-daemon 2>/dev/null | wc -l 2>/dev/null)
-        if [[ "$PIDOFP2P" -eq "0" ]]; then
-          # non responsive
-          intranet_seed="${GR:?}$intranet_seed${N0:?}"
+          intranet_seed="${GR:?}0.0.0.0:9091${N0:?}"
           P2P_NAME="${GR:?}vanilla_maps.zip${N0:?}"
-          P2P_DWNS="${GR:?}0.0 ${N0:?}"
-          P2P_UPLS="${GR:?}0.0 ${N0:?}"
+          P2P_DWNS="${GR:?}N/A${N0:?} "
+          P2P_UPLS="${GR:?}N/A${N0:?} "
           P2P_STAT="${GR:?}N/A${N0:?}"
           P2P_PROG="${GR:?}N/A${N0:?}"
           P2P_RATI="${GR:?}N/A${N0:?}"
+        else
+          # get remote information from transmission, create a file
+          transmission-remote -t all -i >/var/log/ms/transmission_list 2>/dev/null
+          if [ -f /var/log/ms/transmission_list ]; then
+            # cat that file
+            P2P_INFO=$(cat /var/log/ms/transmission_list 2>/dev/null)
+            # get file, progress
+            if P2P_NAME=$(echo "$P2P_INFO" 2>/dev/null | grep -o "Percent Done: 100%" 2>/dev/null); then
+              P2P_NAME=$(echo "vanilla_maps.zip")
+            else
+              P2P_NAME="${GR:?}vanilla_maps.zip${N0:?}\n"
+            fi
+            # get progress
+            if P2P_PROG=$(echo "$P2P_INFO" 2>/dev/null | grep -o "Percent Done: 100%" 2>/dev/null |
+              awk '{ print $3 }' 2>/dev/null); then
+              P2P_PROG=$(echo "$P2P_PROG")
+            else
+              P2P_PROG="${GR:?}N/A${N0:?}\n"
+            fi
+            # get download stats
+            if P2P_DWNS=$(echo "$P2P_INFO" 2>/dev/null | grep -o "Downloaded:.*" 2>/dev/null |
+              awk '{ print $2 }' 2>/dev/null); then
+              P2P_DWNS=$(echo "$P2P_DWNS ")
+            else
+              P2P_DWNS="${GR:?}N/A${N0:?} \n"
+            fi
+            # get upload stats
+            if P2P_UPLS=$(echo "$P2P_INFO" 2>/dev/null | grep -o "Uploaded:.*" 2>/dev/null |
+              awk '{ print $2 }' 2>/dev/null); then
+              P2P_UPLS=$(echo "$P2P_UPLS ")
+            else
+              P2P_UPLS="${GR:?}N/A${N0:?} \n"
+            fi
+            # get ratio
+            if P2P_RATI=$(echo "$P2P_INFO" 2>/dev/null | grep -o "Ratio:.*" 2>/dev/null |
+              awk '{ print $2 }' 2>/dev/null); then
+              P2P_RATI=$(echo "$P2P_RATI")
+            else
+              P2P_RATI="${GR:?}N/A${N0:?}\n"
+            fi
+            # get status
+            if P2P_STAT=$(echo "$P2P_INFO" 2>/dev/null | grep -o "State:.*" 2>/dev/null |
+              awk '{ print $2 }' 2>/dev/null); then
+              P2P_STAT=$(echo "$P2P_STAT")
+            else
+              P2P_STAT="${GR:?}N/A${N0:?}\n"
+            fi
+          fi
+          # transmission-daemon status
+          case "$(pidof transmission-daemon 2>/dev/null | wc -w 2>/dev/null)" in
+          "0")
+
+            seed_transmission="${GR:?}Offline${N0:?}"
+            intranet_seed="${GR:?}0.0.0.0:9091${N0:?}"
+            P2P_NAME="${GR:?}vanilla_maps.zip${N0:?}"
+            P2P_DWNS="${GR:?}N/A${N0:?} "
+            P2P_UPLS="${GR:?}N/A${N0:?} "
+            P2P_STAT="${GR:?}N/A${N0:?}"
+            P2P_PROG="${GR:?}N/A${N0:?}"
+            P2P_RATI="${GR:?}N/A${N0:?}"
+
+            ;;
+
+          "1")
+
+            seed_transmission="${G0:?}Seeding${N0:?}"
+            intranet_seed="${N0:?}${intranet:?}:9091${N0:?}"
+
+            ;;
+
+          "*")
+
+            seed_transmission="${Y1:?}Seeding${N0:?}"
+            intranet_seed="${Y1:?}${intranet:?}:9091${N0:?}"
+            P2P_PROG="${GR:?}N/A${N0:?}"
+
+            ;;
+
+          esac
         fi
 
         # codes done
@@ -707,7 +731,7 @@ ${N0:?}"
 
         clear
         echo
-        printf '%b' "${G1:?}   CMaNGOS - ${G0:?}Vanilla Maps Seedbox${N0:?}
+        printf '%b' "${G1:?}   CMaNGOS${G0:?} - Vanilla Maps (${G1:?}Seedbox${G0:?})${N0:?}
 
    Seedbox${G0:?}..:${N0:?} $seed_transmission
    Access${G0:?}...:${N0:?} $intranet_seed
@@ -718,13 +742,13 @@ ${N0:?}"
    Progress${G0:?}.:${N0:?} $P2P_PROG
    Ratio${G0:?}....:${N0:?} $P2P_RATI
 
-   t : ${P1:?}Install${GR:?} - setup$N0
-   u : ${P1:?}Remove${GR:?}  - uninstall$N0
-   r : ${P1:?}Start${GR:?}   - start p2p$N0
-   s : ${P1:?}Stop${GR:?}    - stop p2p$N0
-   m : ${P1:?}Maps${GR:?}    - import maps$N0
-   i : ${P1:?}Info${GR:?}    - torrent info$N0
-   q : ${P1:?}Quit${GR:?}    - return$N0
+   t : ${P1:?}Install${N0:?} - Setup$N0
+   u : ${P1:?}Remove${N0:?}  - Uninstall$N0
+   r : ${P1:?}Start${N0:?}   - Start p2p$N0
+   s : ${P1:?}Stop${N0:?}    - Stop p2p$N0
+   m : ${P1:?}Maps${N0:?}    - Import maps$N0
+   i : ${P1:?}Info${N0:?}    - Torrent info$N0
+   q : ${P1:?}Quit${N0:?}    - Return$N0
 
 ${N0:?}"
         read -r -s -n1
@@ -763,7 +787,7 @@ ${N0:?}"
         "u")
 
           echo
-          read -r -p "Remove Seedbox? (transmission) (y/n) " -n 1 -r
+          read -r -p "Remove Seedbox? (keep maps) (y/n) " -n 1 -r
           echo
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -784,7 +808,7 @@ ${N0:?}"
         "t")
 
           echo
-          read -r -p "Setup Seedbox? (transmission-daemon) (y/n) " -n 1 -r
+          read -r -p "Setup Seedbox? (y/n) " -n 1 -r
           echo
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -891,16 +915,16 @@ EOF
               # start transmission-daemon
               sudo service transmission-daemon start &>/dev/null
               echo
-              printf '%b' "[${G0:?}ok${N0:?}] - Installed!\n"
+              printf '%b' "[${G1:?}ok${N0:?}] - Installed!\n"
               sleep 1
               # add magnet link: vanilla.maps.zip.torrent
               transmission-remote -a "magnet:?xt=urn:btih:1cdcaa3d77a7f4df79935d885e639903e37dda24&dn=vanilla%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
-              printf '%b' "[${G0:?}ok${N0:?}] - Torrent added\n"
+              printf '%b' "[${G1:?}ok${N0:?}] - Torrent added\n"
               # try to verify torrent data
               P2P_VERIFY=$(transmission-remote -t all -v 2>/dev/null)
               printf '%b' "[${Y1:?}ok${N0:?}] - Verifying data..\n"
               sleep 1
-              printf '%b' "[${G0:?}ok${N0:?}] - $P2P_VERIFY\n"
+              printf '%b' "[${G1:?}ok${N0:?}] - $P2P_VERIFY\n"
               sleep 1
               # reload
               sudo systemctl daemon-reload 2>/dev/null
@@ -923,24 +947,37 @@ EOF
         "r")
 
           echo
-          read -r -p "Re/start seedbox? (transmission-daemon) (y/n) " -n 1 -r
-          echo
+          read -r -p "Re/start seedbox? (y/n) " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
-
-            echo "Please wait"
-            sudo service transmission-daemon stop &>/dev/null
-            sleep 1
-            sudo service transmission-daemon start &>/dev/null
-            sleep 1
-            # enable service
-            sudo systemctl enable transmission-daemon &>/dev/null
-            # reload
-            sudo systemctl daemon-reload &>/dev/null
-            echo
-            printf '%b' "[${G0:?}ok${N0:?}] - seedbox started."
-            echo
-            sleep 1
+            # already installed?
+            if [ -x "$(command -v transmission-daemon)" ]; then
+              echo "Please wait"
+              # find it, shut it down
+              for pid in $(ps -ef 2>/dev/null | grep -E "transmission-cli|transmission-daemon" 2>/dev/null |
+                awk '{print $2}'); do kill -9 $pid 2>/dev/null; done
+              # go over it again, kill daemon, cli
+              sudo kill -9 "$PIDOFP2P_DAEMON" &>/dev/null
+              sudo kill -9 "$PIDOFP2P_CLI" &>/dev/null
+              sudo service transmission-daemon stop &>/dev/null
+              sleep 1
+              sudo service transmission-daemon start &>/dev/null
+              sleep 1
+              # enable service
+              sudo systemctl enable transmission-daemon &>/dev/null
+              # reload
+              sudo systemctl daemon-reload &>/dev/null
+              echo
+              printf '%b' "[${G1:?}ok${N0:?}] - seedbox started."
+              echo
+              sleep 1
+            else
+              echo "Install seedbox please!"
+              sleep 1
+              echo
+              read -r -p "Press Enter to continue" </dev/tty
+              echo
+            fi
           fi
 
           ;;
@@ -952,22 +989,36 @@ EOF
         "s")
 
           echo
-          read -r -p "Stop seedbox? (transmission-daemon) (y/n) " -n 1 -r
-          echo
+          read -r -p "Stop seedbox? (y/n) " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
-
-            echo "Please wait"
-            sudo service transmission-daemon stop &>/dev/null
-            sleep 1
-            # disable service
-            sudo systemctl disable transmission-daemon &>/dev/null
-            # reload
-            sudo systemctl daemon-reload &>/dev/null
-            echo
-            printf '%b' "[${R0:?}off${N0:?}] - seedbox stopped."
-            echo
-            sleep 1
+            # already installed?
+            if [ -x "$(command -v transmission-daemon)" ]; then
+              echo "Please wait"
+              # find it, shut it down
+              for pid in $(ps -ef 2>/dev/null | grep -E "transmission-cli|transmission-daemon" 2>/dev/null |
+                awk '{print $2}'); do kill -9 $pid 2>/dev/null; done
+              # go over it again, kill daemon, cli
+              sudo kill -9 "$PIDOFP2P_DAEMON" &>/dev/null
+              sudo kill -9 "$PIDOFP2P_CLI" &>/dev/null
+              # stop transmission service
+              sudo service transmission-daemon stop &>/dev/null
+              sleep 1
+              # disable service
+              sudo systemctl disable transmission-daemon &>/dev/null
+              # reload
+              sudo systemctl daemon-reload &>/dev/null
+              echo
+              printf '%b' "${R1:?}Halted${N0:?} - seedbox stopped."
+              echo
+              sleep 1
+            else
+              echo "Install seedbox please!"
+              sleep 1
+              echo
+              read -r -p "Press Enter to continue" </dev/tty
+              echo
+            fi
           fi
 
           ;;
@@ -997,7 +1048,7 @@ EOF
             else
               sudo unzip /seedbox/vanilla_maps.zip -d "$folder_core"/run
               echo
-              printf '%b' "[${G0:?}ok${N0:?}] - maps installed."
+              printf '%b' "[${G1:?}ok${N0:?}] - maps installed."
               echo
               sleep 1
             fi
@@ -1231,7 +1282,7 @@ EOF
         mysqldump --defaults-extra-file="$sql_mycnf" "$db_characters" >"$folder_wow"/backup/"$db_characters"-"$NOW".sql
         printf "${G0:?}.${N0:?}"
         sleep 1
-        printf '%b' "[${G0:?}ok${N0:?}] $db_characters-$NOW.sql"
+        printf '%b' "[${G1:?}ok${N0:?}] $db_characters-$NOW.sql"
         sleep 2
         echo
         # backup characters sql
@@ -1241,7 +1292,7 @@ EOF
         mysqldump --defaults-extra-file="$sql_mycnf" "$db_realmd" >"$folder_wow"/backup/"$db_realmd"-"$NOW".sql
         printf "${G0:?}.${N0:?}"
         sleep 1
-        printf '%b' "[${G0:?}ok${N0:?}] $db_realmd-$NOW.sql"
+        printf '%b' "[${G1:?}ok${N0:?}] $db_realmd-$NOW.sql"
         sleep 1
         # well (: backup probably hours old by now done
 
@@ -1316,7 +1367,7 @@ ${R0:?}      ._________________.
     # updated and installed
     FILE_CORE="/var/log/ms/installed_core"
     if [ -f "$FILE_CORE" ]; then
-      ok_core="[${G0:?}ok${N0:?}]"
+      ok_core="[${G1:?}ok${N0:?}]"
     fi
     FILE_CORE="/var/log/ms/installed_core"
     if [ ! -f "$FILE_CORE" ]; then
@@ -1324,7 +1375,7 @@ ${R0:?}      ._________________.
     fi
     FILE_DB="/var/log/ms/installed_db"
     if [ -f "$FILE_DB" ]; then
-      ok_db="[${G0:?}ok${N0:?}]"
+      ok_db="[${G1:?}ok${N0:?}]"
     fi
     FILE_DB="/var/log/ms/installed_db"
     if [ ! -f "$FILE_DB" ]; then
@@ -1332,7 +1383,7 @@ ${R0:?}      ._________________.
     fi
     FILE_MS="/var/log/ms/installed_ms"
     if [ -f "$FILE_MS" ]; then
-      ok_ms="[${G0:?}ok${N0:?}]"
+      ok_ms="[${G1:?}ok${N0:?}]"
     fi
     FILE_MS="/var/log/ms/installed_ms"
     if [ ! -f "$FILE_MS" ]; then
@@ -1890,14 +1941,14 @@ WantedBy=multi-user.target" >"$folder_wow"/mangosd.service 2>/dev/null
         sudo systemctl daemon-reload 2>/dev/null
         sleep 1
         echo
-        printf '%b' "[${G0:?}ok${N0:?}]
+        printf '%b' "[${G1:?}ok${N0:?}]
 
 /etc/systemd/system/'${P1:?}realmd.service${N0:?}'
 /etc/systemd/system/'${P1:?}mangosd.service${N0:?}'
 
 Check if correct information, or just restart server."
         echo
-        printf '%b' "[${G0:?}ok${N0:?}] "
+        printf '%b' "[${G1:?}ok${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
       fi
@@ -2166,7 +2217,7 @@ Select install operation"
 
         sudo chown -R "$user":"$group" "$folder_wow"
 
-        printf '%b' "[${G0:?}ok${N0:?}] "
+        printf '%b' "[${G1:?}ok${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
       fi
@@ -2185,7 +2236,7 @@ Select install operation"
 
         cd "$folder_core" || exit
         git reset --hard origin/master
-        printf '%b' "[${G0:?}ok${N0:?}] "
+        printf '%b' "[${G1:?}ok${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
       fi
@@ -2398,35 +2449,35 @@ This is needed to operate local/remote database"
 
       # mysql
       if sudo dpkg -s mysql-server &>/dev/null; then
-        mysql_server_installed=$(printf '%b' "[${G0:?}ok${N0:?}]")
+        mysql_server_installed=$(printf '%b' "[${G1:?}ok${N0:?}]")
       else
         mysql_server_installed=$(printf '%b' "[${GR:?}no${N0:?}]")
       fi
 
       # mysql-client
       if sudo dpkg -s mysql-client &>/dev/null; then
-        mysql_client_installed=$(printf '%b' "[${G0:?}ok${N0:?}]")
+        mysql_client_installed=$(printf '%b' "[${G1:?}ok${N0:?}]")
       else
         mysql_client_installed=$(printf '%b' "[${GR:?}no${N0:?}]")
       fi
 
       # mariadb
       if sudo dpkg -s mariadb-server &>/dev/null; then
-        mariadb_server_installed=$(printf '%b' "[${G0:?}ok${N0:?}]")
+        mariadb_server_installed=$(printf '%b' "[${G1:?}ok${N0:?}]")
       else
         mariadb_server_installed=$(printf '%b' "[${GR:?}no${N0:?}]")
       fi
 
       # mariadb-client
       if sudo dpkg -s mariadb-client &>/dev/null; then
-        mariadb_client_installed=$(printf '%b' "[${G0:?}ok${N0:?}]")
+        mariadb_client_installed=$(printf '%b' "[${G1:?}ok${N0:?}]")
       else
         mariadb_client_installed=$(printf '%b' "[${GR:?}no${N0:?}]")
       fi
 
       mysql_user=$(sudo mysql --defaults-extra-file="$sql_mycnf" -sse "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = 'mangos')" 2>/dev/null)
       if [ "$mysql_user" = 1 ]; then
-        mysql_user=$(printf '%b' "[${G0:?}ok${N0:?}]")
+        mysql_user=$(printf '%b' "[${G1:?}ok${N0:?}]")
       else
         mysql_user=$(printf '%b' "[${GR:?}no${N0:?}]")
       fi
@@ -2526,7 +2577,7 @@ Please install mysql or mariadb database/client"
           mysqldump --defaults-extra-file="$sql_mycnf" "$db_characters" >"$folder_wow"/backup/"$db_characters"-"$NOW".sql
           echo
         else
-          printf '%b' "[${G0:?}ok${N0:?}] $db_characters-$NOW.sql exist"
+          printf '%b' "[${G1:?}ok${N0:?}] $db_characters-$NOW.sql exist"
           echo
           read -r -p "New backup? ($db_characters) (y/n) " -n 1 -r
           echo
@@ -2539,7 +2590,7 @@ Please install mysql or mariadb database/client"
             mysqldump --defaults-extra-file="$sql_mycnf" "$db_characters" >"$folder_wow"/backup/"$db_characters"-"$NOW".sql
             printf "${G0:?}.${N0:?}"
             sleep 1
-            printf '%b' "[${G0:?}ok${N0:?}] $db_characters-$NOW.sql"
+            printf '%b' "[${G1:?}ok${N0:?}] $db_characters-$NOW.sql"
             sleep 2
             echo
           fi
@@ -2552,7 +2603,7 @@ Please install mysql or mariadb database/client"
           mysqldump --defaults-extra-file="$sql_mycnf" "$db_realmd" >"$folder_wow"/backup/"$db_realmd"-"$NOW".sql
           echo
         else
-          printf '%b' "[${G0:?}ok${N0:?}] $db_realmd-$NOW.sql exist"
+          printf '%b' "[${G1:?}ok${N0:?}] $db_realmd-$NOW.sql exist"
           echo
           read -r -p "New backup? ($db_realmd) (y/n) " -n 1 -r
           echo
@@ -2565,7 +2616,7 @@ Please install mysql or mariadb database/client"
             mysqldump --defaults-extra-file="$sql_mycnf" "$db_realmd" >"$folder_wow"/backup/"$db_realmd"-"$NOW".sql
             printf "${G0:?}.${N0:?}"
             sleep 1
-            printf '%b' "[${G0:?}ok${N0:?}] $db_realmd-$NOW.sql"
+            printf '%b' "[${G1:?}ok${N0:?}] $db_realmd-$NOW.sql"
             sleep 1
             echo
           fi
@@ -2591,7 +2642,7 @@ Please install mysql or mariadb database/client"
         # create installed mark
         echo "Database was installed at ${NOW:?}" >/var/log/ms/installed_db
         echo
-        printf '%b' "[${G0:?}ok${N0:?}] "
+        printf '%b' "[${G1:?}ok${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
       fi
@@ -2653,7 +2704,7 @@ Please install mysql or mariadb database/client"
           mysqldump --defaults-extra-file="$sql_mycnf" "$db_characters" >"$folder_wow"/backup/"$db_characters"-"$NOW".sql
           echo
         else
-          printf '%b' "[${G0:?}ok${N0:?}] $db_characters-$NOW.sql exist"
+          printf '%b' "[${G1:?}ok${N0:?}] $db_characters-$NOW.sql exist"
           echo
         fi
         # backup <- realmd.sql
@@ -2663,7 +2714,7 @@ Please install mysql or mariadb database/client"
           mysqldump --defaults-extra-file="$sql_mycnf" "$db_realmd" >"$folder_wow"/backup/"$db_realmd"-"$NOW".sql
           echo
         else
-          printf '%b' "[${G0:?}ok${N0:?}] $db_realmd-$NOW.sql exist"
+          printf '%b' "[${G1:?}ok${N0:?}] $db_realmd-$NOW.sql exist"
           echo
         fi
 
@@ -2701,7 +2752,7 @@ Please install mysql or mariadb database/client"
         echo
         RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_characters")
         if [ "$RESULT" == "$db_characters" ]; then
-          printf "[${G0:?}ok${N0:?}] 'Characters' database installed."
+          printf "[${G1:?}ok${N0:?}] 'Characters' database installed."
           echo
         else
           printf "[${R0:?}empty${N0:?}] 'Characters' importing.."
@@ -2712,7 +2763,7 @@ Please install mysql or mariadb database/client"
         # create database 'mangos'
         RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_mangos")
         if [ "$RESULT" == "$db_mangos" ]; then
-          printf "[${G0:?}ok${N0:?}] 'Mangos' database installed."
+          printf "[${G1:?}ok${N0:?}] 'Mangos' database installed."
           echo
         else
           printf "[${R0:?}empty${N0:?}] 'Mangos' importing.."
@@ -2723,7 +2774,7 @@ Please install mysql or mariadb database/client"
         # create database 'realmd'
         RESULT=$(mysql --defaults-extra-file="$sql_mycnf" -e "SHOW DATABASES" | grep "$db_realmd")
         if [ "$RESULT" == "$db_realmd" ]; then
-          printf "[${G0:?}ok${N0:?}] 'Realmd' database installed."
+          printf "[${G1:?}ok${N0:?}] 'Realmd' database installed."
           echo
         else
           printf "[${R0:?}empty${N0:?}] 'Realmd' importing.."
@@ -2775,7 +2826,7 @@ Please install mysql or mariadb database/client"
           echo -ne '(100%)\r'
         fi
         echo
-        printf '%b' "[${G0:?}ok${N0:?}] "
+        printf '%b' "[${G1:?}ok${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
       fi
@@ -2866,7 +2917,7 @@ Please install mysql or mariadb database/client"
         sleep 1
         echo -ne '(100%)\r'
         echo
-        printf '%b' "[${G0:?}ok${N0:?}] "
+        printf '%b' "[${G1:?}ok${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
       fi
@@ -2890,7 +2941,7 @@ Please install mysql or mariadb database/client"
         git clone "$github_database"
         mv "$folder_wow"/*.config "$folder_db" &>/dev/null
         sudo chown -R "$user":"$group" "$folder_wow"
-        printf '%b' "[${G0:?}ok${N0:?}] "
+        printf '%b' "[${G1:?}ok${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
       fi
@@ -2909,7 +2960,7 @@ Please install mysql or mariadb database/client"
 
         cd "$folder_db" || exit
         git reset --hard origin/master
-        printf '%b' "[${G0:?}ok${N0:?}] "
+        printf '%b' "[${G1:?}ok${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
       fi
@@ -3169,7 +3220,7 @@ Check log for which database needs 'applying updates'"
         sleep 1
         sudo service mariadb restart &>/dev/null
         sudo service mysql restart &>/dev/null
-        printf '%b' "[${G0:?}ok${N0:?}]"
+        printf '%b' "[${G1:?}ok${N0:?}]"
         echo
       fi
       # apply all updates [A] to [B] mangos ?
@@ -3209,7 +3260,7 @@ Check log for which database needs 'applying updates'"
         sleep 1
         sudo service mariadb restart &>/dev/null
         sudo service mysql restart &>/dev/null
-        printf '%b' "[${G0:?}ok${N0:?}]"
+        printf '%b' "[${G1:?}ok${N0:?}]"
         echo
       fi
       # apply all updates [A] to [B] realmd ?
@@ -3249,7 +3300,7 @@ Check log for which database needs 'applying updates'"
         sleep 1
         sudo service mariadb restart &>/dev/null
         sudo service mysql restart &>/dev/null
-        printf '%b' "[${G0:?}ok${N0:?}]"
+        printf '%b' "[${G1:?}ok${N0:?}]"
         echo
       fi
       # remove old 'combined updates' sql files
@@ -3281,7 +3332,7 @@ Check log for which database needs 'applying updates'"
         *) sudo service mangosd stop ;;
         esac
 
-        printf '%b' "[${G0:?}ok${N0:?}]"
+        printf '%b' "[${G1:?}ok${N0:?}]"
         echo
         sudo chown -R "$user":"$group" "$folder_wow"
         cd "$folder_db" || exit
@@ -3291,7 +3342,7 @@ Check log for which database needs 'applying updates'"
         sleep 1
         sudo service mariadb restart &>/dev/null
         sudo service mysql restart &>/dev/null
-        printf '%b' "[${G0:?}ok${N0:?}] "
+        printf '%b' "[${G1:?}ok${N0:?}] "
       fi
       read -r -p "Press Enter to continue" </dev/tty
       echo
@@ -4258,22 +4309,22 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
             # keep old mangos
             sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old &>/dev/null
             # done
-            printf "[${G0:?}ok${N0:?}] -> /usr/local/bin/mangos.old"
+            printf "[${G1:?}ok${N0:?}] -> /usr/local/bin/mangos.old"
             sleep 1
             echo
-            printf "[${G0:?}ok${N0:?}] -> Stripping executable on 'mangos.old'"
+            printf "[${G1:?}ok${N0:?}] -> Stripping executable on 'mangos.old'"
             sleep 1
             echo
             sudo chmod -x /usr/local/bin/mangos.old
             sudo chown -R "$user":"$group" "$folder_helper"
             cd "$folder_helper" || exit
-            printf "[${G0:?}ok${N0:?}] -> Installing new release"
+            printf "[${G1:?}ok${N0:?}] -> Installing new release"
             sleep 1
             echo
             sudo cp "$folder_helper"/mangos /usr/local/bin &>/dev/null
             sudo chmod +x /usr/local/bin/mangos
             sleep 1
-            printf "[${G0:?}ok${N0:?}] -> Installed."
+            printf "[${G1:?}ok${N0:?}] -> Installed."
             echo
             echo
             sleep 1 && exit
@@ -4284,7 +4335,7 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
             sudo cp "$folder_helper"/mangos /usr/local/bin/mangos &>/dev/null
             sudo chmod +x /usr/local/bin/mangos
             sleep 1
-            printf "[${G0:?}ok${N0:?}] -> Installed."
+            printf "[${G1:?}ok${N0:?}] -> Installed."
             echo
             echo
           fi
@@ -4311,22 +4362,22 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
       if [[ $REPLY =~ ^[Yy]$ ]]; then
 
         sudo mv /usr/local/bin/mangos /usr/local/bin/mangos.old &>/dev/null
-        printf "[${G0:?}ok${N0:?}] -> installed mangos removed."
+        printf "[${G1:?}ok${N0:?}] -> installed mangos removed."
         echo
         sudo rm -r "$folder_helper"
-        printf "[${G0:?}ok${N0:?}] -> cmangos-script removed."
+        printf "[${G1:?}ok${N0:?}] -> cmangos-script removed."
         echo
         sudo mkdir "${folder_install:?}" &>/dev/null
-        printf '%b' "[${G0:?}ok${N0:?}] -> $folder_install/> git clone.."
+        printf '%b' "[${G1:?}ok${N0:?}] -> $folder_install/> git clone.."
         echo
         cd "$folder_install" || exit
         git clone "$github_helper"
         sudo cp "$folder_helper"/mangos /usr/local/bin &>/dev/null
-        printf "[${G0:?}ok${N0:?}] -> Installing new release"
+        printf "[${G1:?}ok${N0:?}] -> Installing new release"
         sudo chmod +x /usr/local/bin/mangos
         echo
         sleep 1
-        printf "[${G0:?}ok${N0:?}] -> Installed."
+        printf "[${G1:?}ok${N0:?}] -> Installed."
         echo
         echo
         sleep 2
@@ -4347,7 +4398,7 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
 
         cd "$folder_helper" || exit
         git reset --hard origin/master
-        printf '%b' "[${G0:?}ok${N0:?}] "
+        printf '%b' "[${G1:?}ok${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
       fi
@@ -4813,7 +4864,7 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
       printf '%b' "${R0:?}✗ ${GR:?}$internet - $server_name - ${GR:?}? ms - 100% loss${N0:?}\n"
     fi
     # intranet
-    if nc -z "$intranet" "${realm_port:?}" 2>/dev/null; then
+    if nc -z "${intranet:?}" "${realm_port:?}" 2>/dev/null; then
       PING_MS=$(fping -c 1 "$intranet" 2>/dev/null |
         grep -o '[0-9].[0-9][0-9] ms' 2>/dev/null)
       PING_LOSS=$(fping -c 1 "$intranet" 2>/dev/null |
