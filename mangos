@@ -13,21 +13,19 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20210702
-# 4.9.4.3
+# V20210802
+# 4.9.3.1
 
 # codes
 while :; do
-  clear
 
   # config directory
   # shellcheck disable=SC1091
   source /scripts/server.txt # please edit if wrong.
 
   # color
-
   CY='\e[36m'   # Cyan
-  G0='\e[1;32m' # Green
+  G0='\e[32m'   # Green
   G1='\e[92m'   # Green light
   GR='\e[90m'   # Grey
   N0='\033[0m'  # No color
@@ -36,6 +34,9 @@ while :; do
   R1='\e[91m'   # Red light
   Y0='\e[33m'   # Yellow
   Y1='\e[93m'   # Yellow light
+
+  # effects
+  UND='\e[4m' # Underline
 
   # dialog, ncurses no utf8 acs
   # ! -> https://github.com/scarygliders/X11RDP-o-Matic/issues/45
@@ -80,7 +81,7 @@ while :; do
   # codes done
 
   # menu
-
+  clear
   printf "${GR:?} - - - - - - - - - - - - - - - - - - - - - - -${N0:?}
     _____ _____     _____ _____ _____ _____
    |     |     |___|   | |   __|     |   __|
@@ -116,10 +117,8 @@ while :; do
     bn_count=$(mysql --defaults-extra-file="$sql_mycnf" -N --execute="SELECT count(*) FROM $db_realmd.account_banned;" 2>/dev/null)
     # codes done
 
-    clear
-
     # menu
-
+    clear
     printf '%b' "${GR:?} - - - - - - - - - - - - - - - - - - - - - - -
 ${N0:?}                                       __
    .---.-.----.----.-----.--.--.-----.|  |_
@@ -255,9 +254,7 @@ ${pass_nc:?}
       # codes done
 
       # menu
-
       clear
-
       echo
       printf '%b' "${R0:?}
  @@@@@@@  @@@@@@@@ @@@      @@@@@@@@ @@@@@@@ @@@@@@@@
@@ -423,9 +420,6 @@ Are You Sure? (y/n) " -n 1 -r
       # init the color variables
       init_colors
 
-      # uptime
-      cm_uptime="${N0:?}Time""$W""$(uptime)${N0:?}"
-
       # log data
 
       # Realmd.log
@@ -483,19 +477,15 @@ Are You Sure? (y/n) " -n 1 -r
       FILE="$folder_wow/backup/$db_realmd-$NOW.sql"
       if [ ! -f "$FILE" ]; then
         realmd_backup="[${R0:?}old${N0:?}]"
-        echo
       else
         realmd_backup="[${G1:?}ok${N0:?}]"
-        echo
       fi
       # characters backup
       FILE="$folder_wow/backup/$db_characters-$NOW.sql"
       if [ ! -f "$FILE" ]; then
         charac_backup="[${R0:?}old${N0:?}]"
-        echo
       else
         charac_backup="[${G1:?}ok${N0:?}]"
-        echo
       fi
 
       # world server latest build
@@ -538,7 +528,7 @@ Are You Sure? (y/n) " -n 1 -r
       if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
         menu_cpu_temp=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
           cut -c -4 2>/dev/null)
-        menu_print_cpu_temp=$(printf '%b' "Temp${G0:?}........:${N0:?} ${menu_cpu_temp:?}c")
+        menu_print_cpu_temp=$(printf '%b' "CPU Temp${G0:?}........:${N0:?} ${menu_cpu_temp:?}c")
       else
         menu_print_cpu_temp=""
       fi
@@ -551,10 +541,8 @@ Are You Sure? (y/n) " -n 1 -r
       fi
       # codes done
 
-      printf '%b' "   $cm_uptime
-
+      printf '%b' "
    Realm${G0:?}.......:${G1:?} ${server_name:?}${N0:?}
-   $menu_print_cpu_temp
    World${G0:?}.......:${N0:?} $latest_world_built
    System${G0:?}......:${N0:?} $built_for
    Commit Hash${G0:?}.:${GR:?} $commit_hash${N0:?}
@@ -565,9 +553,9 @@ Are You Sure? (y/n) " -n 1 -r
    h : ${P1:?}Reset${N0:?}   - Reset --hard   characters.sql${G0:?}..:${N0:?} $charac_backup
    p : ${P1:?}htop${N0:?}    - Process view   realmd.sql${G0:?}......:${N0:?} $realmd_backup
    m : ${P1:?}Maps${N0:?}    - Download maps
-   w : ${P1:?}Stats${N0:?}   - World stats
-   q : ${P1:?}Quit${N0:?}    - Back to menu   Realmd.log${G0:?}......:${N0:?} $cm_realmd_log_empty$cm_realmd_log
-   i : ${P1:?}Info${N0:?}    - Helper info    Server.log${G0:?}......:${N0:?} $cm_server_log_empty$cm_server_log$cm_server_log_serious
+   w : ${P1:?}Stats${N0:?}   - World stats    Realmd.log${G0:?}......:${N0:?} $cm_realmd_log_empty$cm_realmd_log
+   q : ${P1:?}Quit${N0:?}    - Back to menu   Server.log${G0:?}......:${N0:?} $cm_server_log_empty$cm_server_log$cm_server_log_serious
+   i : ${P1:?}Info${N0:?}    - Helper info    $menu_print_cpu_temp
 \n"
       read -r -s -n1
       case "$REPLY" in
@@ -651,11 +639,11 @@ ${N0:?}"
           if [ -f /var/log/ms/transmission_list ]; then
             # cat that file
             P2P_INFO=$(cat /var/log/ms/transmission_list 2>/dev/null)
-            # peers, connected,
+            # peers, connected, seeding to, downloading from
             P2P_PEERS_CONNECTED=$(echo "$P2P_INFO" 2>/dev/null | grep "Peers" 2>/dev/null | awk '{ print $4 }' 2>/dev/null | awk -F, '{ print $1 }' 2>/dev/null)
             P2P_PEERS_SEEDINGTO=$(echo "$P2P_INFO" 2>/dev/null | grep "Peers" 2>/dev/null | awk '{ print $7 }' 2>/dev/null | awk -F, '{ print $1 }' 2>/dev/null)
             P2P_PEERS_DOWN_LOAD=$(echo "$P2P_INFO" 2>/dev/null | grep "Peers" 2>/dev/null | awk '{ print $10 }' 2>/dev/null)
-            # get file, progress
+            # get progress
             if echo "$P2P_INFO" 2>/dev/null | grep -q -o "Percent Done: 100%" 2>/dev/null; then
               P2P_FILE_NAME="${N0:?}vanilla_maps.zip${N0:?}"
             else
@@ -1198,7 +1186,7 @@ EOF
         printf '%b' "
 1 : Raw ${R0:?}ERROR${N0:?} Output
 2 : tail ${R1:?}ERROR${N0:?} Output\n"
-
+        echo
         read -n1 -s
         case "$REPLY" in
 
@@ -1438,12 +1426,12 @@ ${R0:?}      ._________________.
         rm /var/log/ms/installed_core &>/dev/null
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
-        printf '%b' "[${G1:?}NEW${N0:?}] (\e[4;32m$latest_head${N0:?}) \e[4;32mNew Updates For Core${N0:?}! - $latest_date
+        printf '%b' "[${G1:?}NEW${N0:?}] (${G0:?}${UND:?}$latest_head${N0:?}) ${G0:?}${UND:?}New Updates For Core${N0:?}! - $latest_date
 ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
       else
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
-        printf '%b' "$ok_core (\e[4;32m$latest_head${N0:?}) Core Updated - $latest_date"
+        printf '%b' "$ok_core (${G0:?}${UND:?}$latest_head${N0:?}) Core Updated - $latest_date"
         echo
       fi
     # check if 'mangos-classic' exist done
@@ -1491,12 +1479,12 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
         rm /var/log/ms/installed_db &>/dev/null
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
-        printf '%b' "[${G1:?}NEW${N0:?}] (\e[4;32m$latest_head${N0:?}) \e[4;32mNew Updates For Database${N0:?}! - $latest_date
+        printf '%b' "[${G1:?}NEW${N0:?}] (${G0:?}${UND:?}$latest_head${N0:?}) ${G0:?}${UND:?}New Updates For Database${N0:?}! - $latest_date
 ${GR:?}(d) Update Database > Update classic-db${N0:?}\n"
       else
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
-        printf '%b' "$ok_db (\e[4;32m$latest_head${N0:?}) Database Updated - $latest_date"
+        printf '%b' "$ok_db (${G0:?}${UND:?}$latest_head${N0:?}) Database Updated - $latest_date"
         echo
       fi
     # check if 'classic-db' exist done
@@ -1529,12 +1517,12 @@ ${GR:?}(d) Update Database > Update classic-db${N0:?}\n"
         rm /var/log/ms/installed_ms &>/dev/null
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
-        printf '%b' "[${G1:?}NEW${N0:?}] (\e[4;32m$latest_head${N0:?}) \e[4;32mNew Updates For Helper${N0:?}! - $latest_date
+        printf '%b' "[${G1:?}NEW${N0:?}] (${G0:?}${UND:?}$latest_head${N0:?}) ${G0:?}${UND:?}New Updates For Helper${N0:?}! - $latest_date
 ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
       else
         latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         latest_head=$(git rev-parse --short HEAD)
-        printf '%b' "$ok_ms (\e[4;32m$latest_head${N0:?}) Helper Updated - $latest_date"
+        printf '%b' "$ok_ms (${G0:?}${UND:?}$latest_head${N0:?}) Helper Updated - $latest_date"
         echo
       fi
     # check if 'cmangos-script' exist done
@@ -1590,8 +1578,8 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
       zlibc
       psmisc)
     # codes done
-    HEIGHT=13
-    WIDTH=41
+    HEIGHT=14
+    WIDTH=38
     CHOICE_HEIGHT=6
     BACKTITLE="update CMaNGOS"
     TITLE="Update mangos-classic [core]"
@@ -2298,7 +2286,7 @@ Select install operation"
     fi
     # codes done
     HEIGHT=19
-    WIDTH=40
+    WIDTH=42
     CHOICE_HEIGHT=12
     BACKTITLE="update Database"
     TITLE="Update classic-db [database]"
@@ -3494,7 +3482,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       sleep 3
     else
       HEIGHT=10
-      WIDTH=30
+      WIDTH=27
       CHOICE_HEIGHT=4
       BACKTITLE="shutdown server"
       TITLE="Service Control"
@@ -3742,7 +3730,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       # codes done
 
       HEIGHT=10
-      WIDTH=30
+      WIDTH=26
       CHOICE_HEIGHT=4
       BACKTITLE="restart server"
       TITLE="Service Control"
@@ -4247,8 +4235,8 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
       sudo apt-get install dialog -y
     fi
     # codes done
-    HEIGHT=10
-    WIDTH=40
+    HEIGHT=11
+    WIDTH=37
     CHOICE_HEIGHT=3
     BACKTITLE="update Helper"
     TITLE="Update cmangos-script [Helper]"
@@ -4296,7 +4284,7 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
             git merge origin/master; then
             latest_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
             latest_head=$(git rev-parse --short HEAD)
-            printf '%b' "[${R0:?}old${N0:?}] (\e[4;32m$latest_head${N0:?}) \e[4;32mNew Updates For Helper${N0:?}! - $latest_date"
+            printf '%b' "[${R0:?}old${N0:?}] (${G0:?}${UND:?}$latest_head${N0:?}) ${G0:?}${UND:?}New Updates For Helper${N0:?}! - $latest_date"
             echo
             cd "$folder_helper" || exit
             echo
@@ -4676,10 +4664,10 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
 
   "p")
 
-    HEIGHT=12
-    WIDTH=40
+    HEIGHT=13
+    WIDTH=34
     CHOICE_HEIGHT=5
-    BACKTITLE="patch"
+    BACKTITLE="Patch"
     TITLE="Patch operations"
     MENU="Choose one of the following options:"
 
@@ -4887,7 +4875,7 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
   "e")
 
     HEIGHT=19
-    WIDTH=33
+    WIDTH=31
     CHOICE_HEIGHT=11
     BACKTITLE="Server configuration"
     TITLE="Configurations"
