@@ -7,14 +7,14 @@
 #               Continued Massive Network Game Object Server               #
 ############################################################################
 
-# Built on a Linux ubuntu 5.4.0-1028-raspi - (Raspberry Pi4_8GB)
+# Built on a Linux ubuntu 5.4.0-1028-raspi - (Raspberry Pi4)
 # https://ubuntu.com/download/raspberry-pi
 
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
 # V20210702
-# 4.8.1.2
+# 4.8.9.0
 
 # codes
 while :; do
@@ -76,6 +76,7 @@ while :; do
   1) menu_mangosd="${G0:?}MaNGOS${N0:?}" ;;
   *) menu_mangosd="${Y0:?}MaNGOS${N0:?}" ;;
   esac
+
   # codes done
 
   # menu
@@ -3417,7 +3418,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       printf '%b' "${GR:?}mangosd.conf${N0:?} not found!\n"
       sleep 1
       # restore mangosd configuration from backup if possible
-      if cp "$folder_wow"/backup/configurations/mangosd.conf "$folder_core"/run/etc/; then
+      if cp "$folder_wow"/backup/configurations/mangosd.conf "$folder_core"/run/etc/ 2>/dev/null; then
         printf '%b' "Restored configuration! (${G1:?}mangosd.conf${N0:?})\n"
       else
         echo "No backup found!"
@@ -3431,7 +3432,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       printf '%b' "${GR:?}realmd.conf${N0:?} not found!\n"
       sleep 1
       # restore realmd configuration from backup if possible
-      if cp "$folder_wow"/backup/configurations/realmd.conf "$folder_core"/run/etc/; then
+      if cp "$folder_wow"/backup/configurations/realmd.conf "$folder_core"/run/etc/ 2>/dev/null; then
         printf '%b' "Restored configuration! (${G1:?}realmd.conf${N0:?})\n"
       else
         echo "No backup found!"
@@ -3642,7 +3643,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       printf '%b' "${GR:?}mangosd.conf${N0:?} not found!\n"
       sleep 1
       # restore mangosd configuration from backup if possible
-      if cp "$folder_wow"/backup/configurations/mangosd.conf "$folder_core"/run/etc/; then
+      if cp "$folder_wow"/backup/configurations/mangosd.conf "$folder_core"/run/etc/ 2>/dev/null; then
         printf '%b' "Restored configuration! (${G1:?}mangosd.conf${N0:?})\n"
       else
         echo "No backup found!"
@@ -3656,7 +3657,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       printf '%b' "${GR:?}realmd.conf${N0:?} not found!\n"
       sleep 1
       # restore realmd configuration from backup if possible
-      if cp "$folder_wow"/backup/configurations/realmd.conf "$folder_core"/run/etc/; then
+      if cp "$folder_wow"/backup/configurations/realmd.conf "$folder_core"/run/etc/ 2>/dev/null; then
         printf '%b' "Restored configuration! (${G1:?}realmd.conf${N0:?})\n"
       else
         echo "No backup found!"
@@ -4622,9 +4623,9 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
 
   "p")
 
-    HEIGHT=11
+    HEIGHT=12
     WIDTH=40
-    CHOICE_HEIGHT=4
+    CHOICE_HEIGHT=5
     BACKTITLE="patch"
     TITLE="Patch operations"
     MENU="Choose one of the following options:"
@@ -4632,7 +4633,8 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
     OPTIONS=(1 "Create new patch"
       2 "Apply existing patch"
       3 "Search for .patch files"
-      4 "my_bool fix (Daedalus)")
+      4 "Delete all .patch files"
+      5 "my_bool fix (Daedalus)")
 
     CHOICE=$(dialog --clear \
       --backtitle "$BACKTITLE" \
@@ -4649,10 +4651,15 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
 
     "1")
 
+      echo "Please wait"
       sudo chown -R "$user":"$group" "$folder_core"
+      # change directory, core
       cd "$folder_core" || exit
-      git checkout sql/create/db_create_mysql.sql 1>/dev/null
+      git checkout sql/create/db_create_mysql.sql 2>/dev/null
+      # create patch
       git diff >"${patch:?}"
+      printf '%b' "${G1:?}${patch:?}${N0:?} Created!\n"
+      sleep 2
 
       ;;
 
@@ -4663,7 +4670,25 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
     "2")
 
       cd "$folder_core" || exit
-      patch <"$patch" -p1
+      if [ ! -z "$patch" ]; then
+        PATCH_FILES=$(sudo find "$folder_wow" -name "*.patch" 2>/dev/null)
+        if [ -z "$PATCH_FILES" ]; then
+          # non responsive
+          PATCH_FILES="${GR:?}No files found!${N0:?}"
+        fi
+        echo "Patch files inside $folder_wow:"
+        echo
+        printf '%b' "${G0:?}$PATCH_FILES${N0:?}\n"
+        echo
+        printf '%b' "${GR:?}Press Enter to go back${N0:?}\n"
+        printf '%b' "Enter name /${GR:?}name.patch${N0:?}\n"
+        read -r NAMED_PATCH
+        # named patch
+        patch <"$NAMED_PATCH" -p1
+      else
+        # named patch ruled by config
+        patch <"$patch" -p1
+      fi
 
       ;;
 
@@ -4673,33 +4698,86 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
 
     "3")
 
-      echo "Searching for existing patches..($folder_wow)"
+      PATCH_FILES=$(sudo find "$folder_wow" -name "*.patch")
+      if [ -z "$PATCH_FILES" ]; then
+        # non responsive
+        PATCH_FILES="${GR:?}No files found!${N0:?}"
+      fi
+      echo "Patch files inside $folder_wow:"
       echo
-      sudo find "$folder_wow" -name "*.patch"
+      printf '%b' "${G0:?}$PATCH_FILES${N0:?}\n"
       echo
       read -r -p "Press Enter to continue" </dev/tty
       echo
+
       ;;
 
-      # my_bool fix
-
-      # until it's implemented, it's here now: https://github.com/cmangos/issues/issues/2187#issuecomment-622377961
-      # https://github.com/Daedalus-code/cmangos-arm (missing my_bool: error: ‘my_bool’ has not been declared)
+      # remove patch files (all of them)
 
     "4")
 
-      sudo chown -R "$user":"$group" "$folder_core"
       cd "$folder_core" || exit
-      wget https://raw.githubusercontent.com/Daedalus-code/cmangos-arm/master/arm_pi4.patch
-      patch <arm_pi4.patch -p1
-      echo "Files updated!"
-      sleep 1
-      printf '%b' "${GR:?}Renaming patch into 'CMaNGOS.patch'${N0:?}\n"
-      mv arm_pi4.patch "$folder_core"/"$patch"
-      sleep 1
-      echo
-      read -r -p "Press Enter to continue" </dev/tty
-      echo
+      if [ ! -z "$patch" ]; then
+        PATCH_FILES=$(sudo find "$folder_wow" -name "*.patch" 2>/dev/null)
+        if [ -z "$PATCH_FILES" ]; then
+          NOFILES="1"
+          # non responsive
+          PATCH_FILES="${GR:?}No files found!${N0:?}"
+        else
+          NOFILES="0"
+        fi
+        echo "Removing:"
+        echo
+        printf '%b' "${GR:?}$PATCH_FILES${N0:?}\n"
+        echo
+        # remove all .patch files inside core folder
+        sudo rm -r "$folder_core"/*.patch* &>/dev/null
+        if [[ "$NOFILES" -eq "1" ]]; then
+          sleep 1
+          printf '%b' "[${Y1:?}ok${N0:?}]\n"
+          sleep 1
+        else
+          sleep 1
+          printf '%b' "[${G1:?}ok${N0:?}]\n"
+          sleep 1
+        fi
+        echo
+        read -r -p "Press Enter to continue" </dev/tty
+        echo
+      fi
+
+      ;;
+
+      # remove patch files (all of them) done
+
+      # my_bool fix - https://github.com/cmangos/issues/issues/2187
+
+    "5")
+
+      if [ ! -f "$folder_core"/my_bool.patch ]; then
+        sudo chown -R "$user":"$group" "$folder_core"
+        cd "$folder_core" || exit
+        # download patch file
+        wget https://raw.githubusercontent.com/Daedalus-code/cmangos-arm/master/arm_pi4.patch
+        printf '%b' "${G1:?}Patch downloaded!${N0:?}\n"
+        sleep 1
+        printf '%b' "${G0:?}Renaming patch into '${G1:?}my_bool.patch${G0:?}'${N0:?}\n"
+        # rename patch file
+        mv arm_pi4.patch "$folder_core"/my_bool.patch
+        sleep 1
+        # run patch inside core folder
+        patch <my_bool.patch -p1
+        printf '%b' "${G1:?}Done!${N0:?}\n"
+        echo
+        read -r -p "Press Enter to continue" </dev/tty
+        echo
+      else
+        # already did this
+        printf '%b' "${G0:?}my_bool.patch ${Y1:?}Already patched, this will reverse it!${N0:?}\n"
+        # patching reversed
+        cd "$folder_core" || exit
+        patch <my_bool.patch -p1
+      fi
 
       ;;
 
