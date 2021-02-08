@@ -94,11 +94,11 @@ while :; do
       # yellow theme
       THEMES="${Y0:?}"
     elif [[ "$THEME" -eq "11" ]] 2>/dev/null; then
-      # green theme
-      THEMES="${G0:?}"
-    elif [[ "$THEME" -eq "12" ]] 2>/dev/null; then
       # green light theme
       THEMES="${G1:?}"
+    elif [[ "$THEME" -eq "12" ]] 2>/dev/null; then
+      # green theme
+      THEMES="${G0:?}"
     elif [[ "$THEME" -eq "13" ]] 2>/dev/null; then
       # black light (grey) theme
       THEMES="${GR:?}"
