@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20210802
-# 5.0.1.9
+# 5.0.1.1
 
 # codes
 while :; do
@@ -366,7 +366,7 @@ ${PASS_NC:?}
         echo
         read -r -p "$DELETED
 
-Are You Sure? (y/n) " -n 1 -r
+Are You Sure? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -763,7 +763,7 @@ ${N0:?}"
 
           "1")
 
-            SEED_TRANSMISSION="${G0:?}Online${N0:?}"
+            SEED_TRANSMISSION="${G1:?}Online${N0:?}"
             INTRANET_SEED="${N0:?}${INTRANET:?}:9091${N0:?}"
             P2P_FILE_NAME="${N0:?}vanilla_maps.zip${N0:?}"
             SLASH="/"
@@ -787,7 +787,7 @@ ${N0:?}"
 
         clear
         echo
-        printf '%b' "${N0:?}   CMaNGOS${G0:?} - Vanilla Maps ${N0:?}Seedbox
+        printf '%b' "${N0:?}   CMaNGOS${N0:?} - ${THEMES:?}Vanilla Maps ${N0:?}Seedbox
 
    Seedbox${G0:?}..:${N0:?} $SEED_TRANSMISSION
    Access${G0:?}...:${N0:?} $INTRANET_SEED
@@ -852,7 +852,7 @@ ${N0:?}"
         "u")
 
           echo
-          read -r -p "Remove Seedbox? (keeping maps) (y/n) " -n 1 -r
+          read -r -p "Remove Seedbox? (keeping maps) y/n " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -872,7 +872,7 @@ ${N0:?}"
         "t")
 
           echo
-          read -r -p "Setup Seedbox? (y/n) " -n 1 -r
+          read -r -p "Setup Seedbox? y/n " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -1010,7 +1010,7 @@ EOF
         "r")
 
           echo
-          read -r -p "Re/start seedbox? (y/n) " -n 1 -r
+          read -r -p "Re/start seedbox? y/n " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # already installed?
@@ -1052,7 +1052,7 @@ EOF
         "s")
 
           echo
-          read -r -p "Stop seedbox? (y/n) " -n 1 -r
+          read -r -p "Stop seedbox? y/n " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # already installed?
@@ -1093,7 +1093,7 @@ EOF
         "m")
 
           echo
-          read -r -p "Install maps? (vanilla_maps.zip) (y/n) " -n 1 -r
+          read -r -p "Install maps? (vanilla_maps.zip) y/n " -n 1 -r
           echo
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -1368,7 +1368,7 @@ EOF
       "r")
 
         echo
-        read -r -p " Want to login? (y/n) " -n 1 -r
+        read -r -p " Want to login? y/n " -n 1 -r
         echo
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -1456,20 +1456,16 @@ ${THEMES:?}      ._________________.
     # check if 'mangos-classic' exist
     FILE="$FOLDER_CORE/README.md"
     if [ ! -f "$FILE" ]; then
-      # check for updates regardless
-      echo -ne 'Please wait\r'
-      sudo apt-get update &>/dev/null
-      # clear the local repository of retrieved package files that are left in /var/cache.
-      sudo apt-get clean &>/dev/null
-      # clear the local repository of retrieved package files
-      sudo apt-get autoclean &>/dev/null
-      # remove packages that were automatically installed because some other package required them
-      sudo apt-get -y --purge autoremove &>/dev/null
+      # look for directory
+      echo -ne 'Please wait, looking for mangos-classic..\r'
+      sleep 3
       # remove old file
       rm /var/log/ms/installed_core &>/dev/null
       # fresh install ?
-      echo -ne '           \r'
-      read -r -s -p "[00] (0000000) Download mangos-classic ? (y/n) " -n 1 -r
+      DOWN_CORE=$(echo -e "\033[5m?\033[0m" 2>/dev/null)
+      echo -ne '                                      \r'
+      printf '%b' "[${Y0:?}no${N0:?}] (${Y0:?}${UND:?}0000000${N0:?}) ${Y1:?}Download mangos-classic$DOWN_CORE y/n, Enter to skip"
+      read -r -p "" -n 1 -r -s
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         printf '%b' "Cloning repository 'mangos-classic' Please wait this might take a while
@@ -1477,7 +1473,7 @@ ${THEMES:?}      ._________________.
         sudo mkdir "$FOLDER_WOW" &>/dev/null
         sudo chown -R "${USER:?}":"${GROUP:?}" "$FOLDER_WOW"
         cd "$FOLDER_WOW" || exit
-        read -r -p "--recursive? (y/n) " -n 1 -r
+        read -r -p "--recursive? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           RECURSIVE="--recursive"
@@ -1504,7 +1500,7 @@ ${THEMES:?}      ._________________.
         rm /var/log/ms/installed_core &>/dev/null
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         LATEST_HEAD=$(git rev-parse --short HEAD)
-        printf '%b' "[${G1:?}NEW${N0:?}] (${G0:?}${UND:?}$LATEST_HEAD${N0:?}) ${G0:?}${UND:?}New Updates For Core${N0:?}! - $LATEST_DATE
+        printf '%b' "[${G1:?}NEW${N0:?}] (${G0:?}${UND:?}$LATEST_HEAD${N0:?}) ${G1:?}${UND:?}New Updates For Core${N0:?}! - $LATEST_DATE
 ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
       else
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
@@ -1518,20 +1514,16 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
     # check if 'classic-db' exist
     FILE="$FOLDER_DB/README.md"
     if [ ! -f "$FILE" ]; then
-      # check for updates regardless
-      echo -ne 'Please wait\r'
-      sudo apt-get update &>/dev/null
-      # clear the local repository of retrieved package files that are left in /var/cache.
-      sudo apt-get clean &>/dev/null
-      # clear the local repository of retrieved package files
-      sudo apt-get autoclean &>/dev/null
-      # remove packages that were automatically installed because some other package required them
-      sudo apt-get -y --purge autoremove &>/dev/null
+      # look for directory
+      echo -ne 'Please wait, looking for classic-db..\r'
+      sleep 3
       # remove old file
       rm /var/log/ms/installed_db &>/dev/null
       # fresh install ?
-      echo -ne '           \r'
-      read -r -s -p "[00] (0000000) Download classic-db ? (y/n) " -n 1 -r
+      DOWN_DB=$(echo -e "\033[5m?\033[0m" 2>/dev/null)
+      echo -ne '                                      \r'
+      printf '%b' "[${Y0:?}no${N0:?}] (${Y0:?}${UND:?}0000000${N0:?}) ${Y1:?}Download classic-db$DOWN_DB y/n, Enter to skip"
+      read -r -p "" -n 1 -r -s
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         printf '%b' "Cloning repository 'classic-db' Please wait this might take a while
@@ -1569,7 +1561,7 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
         rm /var/log/ms/installed_db &>/dev/null
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         LATEST_HEAD=$(git rev-parse --short HEAD)
-        printf '%b' "[${G1:?}NEW${N0:?}] (${G0:?}${UND:?}$LATEST_HEAD${N0:?}) ${G0:?}${UND:?}New Updates For Database${N0:?}! - $LATEST_DATE
+        printf '%b' "[${G1:?}NEW${N0:?}] (${G0:?}${UND:?}$LATEST_HEAD${N0:?}) ${G1:?}${UND:?}New Updates For Database${N0:?}! - $LATEST_DATE
 ${GR:?}(d) Update Database > Update classic-db${N0:?}\n"
       else
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
@@ -1607,7 +1599,7 @@ ${GR:?}(d) Update Database > Update classic-db${N0:?}\n"
         rm /var/log/ms/installed_ms &>/dev/null
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         LATEST_HEAD=$(git rev-parse --short HEAD)
-        printf '%b' "[${G1:?}NEW${N0:?}] (${G0:?}${UND:?}$LATEST_HEAD${N0:?}) ${G0:?}${UND:?}New Updates For Helper${N0:?}! - $LATEST_DATE
+        printf '%b' "[${G1:?}NEW${N0:?}] (${G0:?}${UND:?}$LATEST_HEAD${N0:?}) ${G1:?}${UND:?}New Updates For Helper${N0:?}! - $LATEST_DATE
 ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
       else
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
@@ -1689,7 +1681,7 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
 
     "1")
 
-      read -r -p "Compile latest build? (y/n) " -n 1 -r
+      read -r -p "Compile latest build? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -1968,7 +1960,7 @@ Select install operation"
 
     "2")
 
-      read -r -p "Install systemd Services? (y/n) " -n 1 -r
+      read -r -p "Install systemd Services? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -2033,7 +2025,7 @@ Check if correct information, or just restart server."
 
     "3")
 
-      read -r -p "Reinstall (delete /build)? (y/n) " -n 1 -r
+      read -r -p "Reinstall (delete /build)? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -2302,7 +2294,7 @@ Select install operation"
 
     "4")
 
-      read -r -p "Reset --hard origin/master? (y/n) " -n 1 -r
+      read -r -p "Reset --hard origin/master? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -2322,7 +2314,7 @@ Select install operation"
     "5")
 
       printf '%b' "${GR:?}Deleting Core! $FOLDER_CORE${N0:?}\n"
-      read -r -p "Backup configurations first? (y/n) " -n 1 -r
+      read -r -p "Backup configurations first? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         sudo mkdir "${FOLDER_WOW:?}"/backup 2>/dev/null
@@ -2330,7 +2322,7 @@ Select install operation"
         sudo cp -R "$FOLDER_CORE"/run/etc/* "${FOLDER_WOW:?}"/backup/configurations 2>/dev/null
         sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
       fi
-      read -r -p "Delete Core Directory? (y/n) " -n 1 -r
+      read -r -p "Delete Core Directory? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         sudo cp -R "$FOLDER_CORE"/run/etc/* "${FOLDER_WOW:?}"/backup/configurations 2>/dev/null
@@ -2403,7 +2395,7 @@ Select install operation"
     "12")
 
       printf '%b' "${GR:?}Deleting Database! $FOLDER_DB${N0:?}\n"
-      read -r -p "Delete Database Directory? (y/n) " -n 1 -r
+      read -r -p "Delete Database Directory? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         cp "$FOLDER_CORE"/run/etc/*.conf "${FOLDER_WOW:?}"/backup 2>/dev/null
@@ -2566,10 +2558,10 @@ database user, client/server is needed."
 
       # checking depends done
 
-      read -r -p "Continue? (y/n) " -n 1 -r
+      read -r -p "Continue? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
-        read -r -p "Restart localhost database service? (SQL SERVER) (y/n) " -n 1 -r
+        read -r -p "Restart localhost database service? (SQL SERVER) y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -2651,7 +2643,7 @@ Please install mysql or mariadb database/client"
         else
           printf '%b' "[${G1:?}ok${N0:?}] $DB_CHARACTERS-$NOW.sql exist"
           echo
-          read -r -p "New backup? ($DB_CHARACTERS) (y/n) " -n 1 -r
+          read -r -p "New backup? ($DB_CHARACTERS) y/n " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # backup characters sql
@@ -2677,7 +2669,7 @@ Please install mysql or mariadb database/client"
         else
           printf '%b' "[${G1:?}ok${N0:?}] $DB_REALMD-$NOW.sql exist"
           echo
-          read -r -p "New backup? ($DB_REALMD) (y/n) " -n 1 -r
+          read -r -p "New backup? ($DB_REALMD) y/n " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # backup characters sql
@@ -2695,7 +2687,7 @@ Please install mysql or mariadb database/client"
         fi
         # InstallFullDB ?
         echo
-        read -r -p "InstallFullDB? (y/n) " -n 1 -r
+        read -r -p "InstallFullDB? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
@@ -2731,7 +2723,7 @@ Please install mysql or mariadb database/client"
 
     "2")
 
-      read -r -p "Drop/Import Databases? (y/n) " -n 1 -r
+      read -r -p "Drop/Import Databases? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -2806,7 +2798,7 @@ Please install mysql or mariadb database/client"
         if [ "$RESULT" == "$DB_MANGOS" ]; then
           mysqladmin --defaults-extra-file="$SQL_MYCNF" -f DROP "$DB_MANGOS"
         fi
-        read -r -p "Drop realmd database? (y/n) " -n 1 -r
+        read -r -p "Drop realmd database? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           # drop database 'realmd'
@@ -2862,7 +2854,7 @@ Please install mysql or mariadb database/client"
 
         # InstallFullDB ?
 
-        read -r -p "InstallFullDB? (y/n) " -n 1 -r
+        read -r -p "InstallFullDB? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
@@ -2877,7 +2869,7 @@ Please install mysql or mariadb database/client"
         echo
         ls -lQS "$FOLDER_WOW"/backup
         echo
-        read -r -p "Import latest backup? (y/n) " -n 1 -r
+        read -r -p "Import latest backup? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           sleep 1
@@ -2915,7 +2907,7 @@ Please install mysql or mariadb database/client"
 
     "3")
 
-      read -r -p "Convert MySQL Engine = myisam -> innodb? (y/n) " -n 1 -r
+      read -r -p "Convert MySQL Engine = myisam -> innodb? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -3002,7 +2994,7 @@ Please install mysql or mariadb database/client"
 
     "4")
 
-      read -r -p "Reinstall (Delete /classic-db)? (y/n) " -n 1 -r
+      read -r -p "Reinstall (Delete /classic-db)? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -3026,7 +3018,7 @@ Please install mysql or mariadb database/client"
 
     "5")
 
-      read -r -p "Reset --hard origin/master? (y/n) " -n 1 -r
+      read -r -p "Reset --hard origin/master? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -3256,7 +3248,7 @@ Check log for which database needs 'applying updates'"
 
       # apply all updates [A] to [B] characters ?
       echo
-      read -r -p "Characters? (y/n) " -n 1 -r
+      read -r -p "Characters? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         printf '%b' "Loading.."
@@ -3280,7 +3272,7 @@ Check log for which database needs 'applying updates'"
         esac
 
         echo
-        read -r -p "Without error output? (y/n) " -n 1 -r
+        read -r -p "Without error output? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           mysql --defaults-extra-file="$SQL_MYCNF" -f --database="$DB_CHARACTERS" <"$FOLDER_WOW"/.all_characters.sql 2>/dev/null
@@ -3296,7 +3288,7 @@ Check log for which database needs 'applying updates'"
         echo
       fi
       # apply all updates [A] to [B] mangos ?
-      read -r -p "Mangos? (y/n) " -n 1 -r
+      read -r -p "Mangos? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         printf '%b' "Loading.."
@@ -3320,7 +3312,7 @@ Check log for which database needs 'applying updates'"
         esac
 
         echo
-        read -r -p "Without error output? (y/n) " -n 1 -r
+        read -r -p "Without error output? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           mysql --defaults-extra-file="$SQL_MYCNF" -f --database="$DB_MANGOS" <"$FOLDER_WOW"/.all_mangos.sql 2>/dev/null
@@ -3336,7 +3328,7 @@ Check log for which database needs 'applying updates'"
         echo
       fi
       # apply all updates [A] to [B] realmd ?
-      read -r -p "Realmd? (y/n) " -n 1 -r
+      read -r -p "Realmd? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         printf '%b' "Loading.."
@@ -3360,7 +3352,7 @@ Check log for which database needs 'applying updates'"
         esac
 
         echo
-        read -r -p "Without error output? (y/n) " -n 1 -r
+        read -r -p "Without error output? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           mysql --defaults-extra-file="$SQL_MYCNF" -f --database="$DB_REALMD" <"$FOLDER_WOW"/.all_realmd.sql 2>/dev/null
@@ -3381,7 +3373,7 @@ Check log for which database needs 'applying updates'"
       echo
       printf '%b' "${G0:?}Recommended if you applied anything${N0:?}"
       echo
-      read -r -p "InstallFullDB? (y/n) " -n 1 -r
+      read -r -p "InstallFullDB? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         printf '%b' "Loading.."
@@ -3436,12 +3428,12 @@ Check log for which database needs 'applying updates'"
     echo "User Accounts"
     echo
     mysql --defaults-extra-file="$SQL_MYCNF" --execute="SELECT username, gmlevel, lockedIp, active_realm_id, id FROM $DB_REALMD.account;" 2>/dev/null
-    read -r -p "Last Logins? (y/n) " -n 1 -r
+    read -r -p "Last Logins? y/n " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
       mysql --defaults-extra-file="$SQL_MYCNF" --execute="SELECT id, accountId, ip, loginTime, loginSource, id FROM $DB_REALMD.account_logons;" 2>/dev/null
     fi
-    read -r -p "Check database size? (y/n) " -n 1 -r
+    read -r -p "Check database size? y/n " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
       mysql --defaults-extra-file="$SQL_MYCNF" <<<"SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in MB' FROM information_schema.TABLES WHERE table_schema = \"$DB_REALMD\" ORDER BY (data_length + index_length) DESC;" | head
@@ -3507,7 +3499,7 @@ ${GR:?}8 ${N0:?} Mage\e[32m....:${N0:?} $MAGE ${GR:?}$MAGE_P%${N0:?}
 ${GR:?}9 ${N0:?} Warlock\e[32m.:${N0:?} $WARLOCK ${GR:?}$WARLOCK_P%${N0:?}
 ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
     echo
-    read -r -p "Check database size? (y/n) " -n 1 -r
+    read -r -p "Check database size? y/n " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
       mysql --defaults-extra-file="$SQL_MYCNF" <<<"SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in MB' FROM information_schema.TABLES WHERE table_schema = \"$DB_CHARACTERS\" ORDER BY (data_length + index_length) DESC;" | head
@@ -3589,7 +3581,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
       "1")
 
-        read -r -p "Shutdown realmd, mangosd? (y/n) " -n 1 -r
+        read -r -p "Shutdown realmd, mangosd? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -3661,7 +3653,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
       "2")
 
-        read -r -p "Shutdown realmd? (y/n) " -n 1 -r
+        read -r -p "Shutdown realmd? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -3707,7 +3699,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
       "3")
 
-        read -r -p "Shutdown mangosd? (y/n) " -n 1 -r
+        read -r -p "Shutdown mangosd? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -3837,7 +3829,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
       "1")
 
-        read -r -p "Restart realmd,mangos? (y/n) " -n 1 -r
+        read -r -p "Restart realmd,mangos? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -3953,7 +3945,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
             echo
             # realmd.log
-            printf "${GR:?}<------------------------------------------------------>${N0:?}"
+            printf "${THEMES:?}<------------------------------------------------------>${N0:?}"
             echo
             # if realm failed
             if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
@@ -4013,7 +4005,7 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
             echo
             tail "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null
             # server.log
-            printf "${GR:?}<------------------------------------------------------>${N0:?}"
+            printf "${THEMES:?}<------------------------------------------------------>${N0:?}"
             echo
             # if world failed
             if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
@@ -4131,7 +4123,7 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
             "t")
               tail "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null
               echo
-              printf "${GR:?}<------------------------------------------------------>${N0:?}"
+              printf "${THEMES:?}<------------------------------------------------------>${N0:?}"
               echo
               read -r -p "Press Enter to continue" </dev/tty
               ;;
@@ -4176,7 +4168,7 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
 
       "2")
 
-        read -r -p "Restart realmd? (y/n) " -n 1 -r
+        read -r -p "Restart realmd? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -4223,7 +4215,7 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
 
       "3")
 
-        read -r -p "Restart mangosd? (y/n) " -n 1 -r
+        read -r -p "Restart mangosd? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -4351,7 +4343,7 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
         git clone "${GITHUB_HELPER:?}"
       else
         # installed
-        read -r -p "Update/Install Helper? (y/n) " -n 1 -r
+        read -r -p "Update/Install Helper? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           sudo chown -R "$USER":"$GROUP" "$FOLDER_INSTALL"
@@ -4429,7 +4421,7 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
 
     "2")
 
-      read -r -p "Reinstall (delete/git clone /cmangos-script)? (y/n) " -n 1 -r
+      read -r -p "Reinstall (delete/git clone /cmangos-script)? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -4464,7 +4456,7 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
 
     "3")
 
-      read -r -p "Reset --hard origin/master? (y/n) " -n 1 -r
+      read -r -p "Reset --hard origin/master? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -4527,7 +4519,7 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
 
     echo
     # realmd.log
-    printf "${GR:?}<------------------------------------------------------>${N0:?}"
+    printf "${THEMES:?}<------------------------------------------------------>${N0:?}"
     echo
     # if realm failed
     if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
@@ -4587,7 +4579,7 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
     echo
     tail "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null
     # server.log
-    printf "${GR:?}<------------------------------------------------------>${N0:?}"
+    printf "${THEMES:?}<------------------------------------------------------>${N0:?}"
     echo
     # if world failed
     if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
@@ -4698,7 +4690,7 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
     t | T)
       tail "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null
       echo
-      printf "${GR:?}<------------------------------------------------------>${N0:?}"
+      printf "${THEMES:?}<------------------------------------------------------>${N0:?}"
       echo
       read -r -p "Press Enter to continue" </dev/tty
       ;;
