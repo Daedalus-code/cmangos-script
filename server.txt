@@ -1,6 +1,9 @@
 # theme color ##################################################################
 
-THEME="3" # 1 (purple), 2 (blue), 3 (cyan), 4 (red)
+# (0 White) (1 Red light) (2 Red) (3 Blue) (4 Blue light) (5 Cyan light)
+# (6 Cyan) (7 Purple light) (8 Purple) (9 Yellow light) (10 Yellow) (11 Grey)
+
+THEME="6"
 
 # server #######################################################################
 
