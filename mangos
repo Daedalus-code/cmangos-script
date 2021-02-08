@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20210802
-# 4.9.4.9
+# 5.0.0.4
 
 # codes
 while :; do
@@ -24,13 +24,16 @@ while :; do
   source /scripts/server.txt # please edit if wrong.
 
   # color
-  B1='\e[94m'   # Blue
+  B0='\e[34m'   # Blue
+  B1='\e[94m'   # Blue light
   CY='\e[36m'   # Cyan
+  C1='\e[96m'   # Cyan light
   G0='\e[32m'   # Green
   G1='\e[92m'   # Green light
   GR='\e[90m'   # Grey
   N0='\033[0m'  # No color
-  P1='\e[0;35m' # Purple
+  P0='\e[0;35m' # Purple
+  P1='\e[1;35m' # Purple light
   R0='\e[31m'   # Red
   R1='\e[91m'   # Red light
   Y0='\e[33m'   # Yellow
@@ -39,21 +42,67 @@ while :; do
   # effects
   UND='\e[4m' # Underline
 
+  # themes, must contain a number
   # shellcheck disable=SC2153
   # shellcheck disable=SC2154
   # shellcheck disable=SC2034
-  if [[ "$THEME" -eq "1" ]]; then
-    # purple theme
-    THEMES="${P1:?}"
-  elif [[ "$THEME" -eq "2" ]]; then
-    # blue theme
-    THEMES="${B1:?}"
-  elif [[ "$THEME" -eq "3" ]]; then
-    # cyan theme
-    THEMES="${CY:?}"
-  elif [[ "$THEME" -eq "4" ]]; then
-    # red theme
-    THEMES="${R1:?}"
+  if [[ $THEME =~ [0-9] ]] 2>/dev/null; then
+    if [ -z "$THEME" ] 2>/dev/null; then
+      # NULL, print white theme (safemode)
+      THEMES="${N0:?}"
+    fi
+    if [[ "$THEME" -gt "11" ]] 2>/dev/null; then
+      # greater than n, print white theme (safemode)
+      THEMES="${N0:?}"
+    fi
+    if [[ "$THEME" -lt "0" ]] 2>/dev/null; then
+      # less than zero, print white theme (safemode)
+      THEMES="${N0:?}"
+    fi
+    # configuration ruled by config
+    if [[ "$THEME" -eq "0" ]] 2>/dev/null; then
+      # white theme
+      THEMES="${N0:?}"
+    elif [[ "$THEME" -eq "1" ]] 2>/dev/null; then
+      # red light theme
+      THEMES="${R1:?}"
+    elif [[ "$THEME" -eq "2" ]] 2>/dev/null; then
+      # red theme
+      THEMES="${R0:?}"
+    elif [[ "$THEME" -eq "3" ]] 2>/dev/null; then
+      # blue light theme
+      THEMES="${B1:?}"
+    elif [[ "$THEME" -eq "4" ]] 2>/dev/null; then
+      # blue theme
+      THEMES="${B0:?}"
+    elif [[ "$THEME" -eq "5" ]] 2>/dev/null; then
+      # cyan light theme
+      THEMES="${C1:?}"
+    elif [[ "$THEME" -eq "6" ]] 2>/dev/null; then
+      # cyan theme
+      THEMES="${CY:?}"
+    elif [[ "$THEME" -eq "7" ]] 2>/dev/null; then
+      # purple light theme
+      THEMES="${P1:?}"
+    elif [[ "$THEME" -eq "8" ]] 2>/dev/null; then
+      # purple theme
+      THEMES="${P0:?}"
+    elif [[ "$THEME" -eq "9" ]] 2>/dev/null; then
+      # yellow light theme
+      THEMES="${Y1:?}"
+    elif [[ "$THEME" -eq "10" ]] 2>/dev/null; then
+      # yellow theme
+      THEMES="${Y0:?}"
+    elif [[ "$THEME" -eq "11" ]] 2>/dev/null; then
+      # black light (grey) theme
+      THEMES="${GR:?}"
+    fi
+  else
+    # non numerical value, print white theme (safemode)
+    THEMES="${N0:?}"
+    printf '%b' "${R1:?}Theme config contains non numerical value!${N0:?}\n"
+    printf '%b' "${Y1:?}Fix your configuration! ${GR:?}server.txt${Y1:?}${N0:?}\n"
+    read -r -p "Press Enter to go back" </dev/tty
   fi
 
   # dialog, ncurses no utf8 acs
@@ -4742,11 +4791,17 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
         printf '%b' "${GR:?}Press Enter to go back${N0:?}\n"
         printf '%b' "Enter name /${GR:?}name.patch${N0:?}\n"
         read -r NAMED_PATCH
-        # named patch
-        patch <"$NAMED_PATCH" -p1
+        if [ -z "$NAMED_PATCH" ]; then
+          # non responsive
+          echo "Empty!"
+          sleep 1
+        else
+          # named patch
+          patch -s -p1 <"$NAMED_PATCH"
+        fi
       else
         # named patch ruled by config
-        patch <"$PATCH" -p1
+        patch -s -p1 <"$PATCH"
       fi
 
       ;;
@@ -4757,7 +4812,7 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
 
     "3")
 
-      PATCH_FILES=$(sudo find "$FOLDER_WOW" -name "*.patch")
+      PATCH_FILES=$(sudo find "$FOLDER_WOW" -name "*.patch" 2>/dev/null)
       if [ -z "$PATCH_FILES" ]; then
         # non responsive
         PATCH_FILES="${GR:?}No files found!${N0:?}"
@@ -4825,7 +4880,7 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
         mv arm_pi4.patch "$FOLDER_CORE"/my_bool.patch
         sleep 1
         # run patch inside core folder
-        patch <my_bool.patch -p1
+        patch -s -p1 <my_bool.patch
         printf '%b' "${G1:?}Done!${N0:?}\n"
         echo
         read -r -p "Press Enter to continue" </dev/tty
@@ -4835,7 +4890,7 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
         printf '%b' "${G0:?}my_bool.patch ${Y1:?}Already patched, this will reverse it!${N0:?}\n"
         # patching reversed
         cd "$FOLDER_CORE" || exit
-        patch <my_bool.patch -p1
+        patch -s -p1 <my_bool.patch
       fi
 
       ;;
