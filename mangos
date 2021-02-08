@@ -21,7 +21,7 @@ while :; do
 
   # config directory
   # shellcheck disable=SC1091
-  source /scripts/server.txt # please edit if wrong.
+  source /home/server.txt # please edit if wrong.
 
   # color
   B0='\e[34m'   # Blue
@@ -1464,7 +1464,7 @@ ${THEMES:?}      ._________________.
       # fresh install ?
       DOWN_CORE=$(echo -e "\033[5m?\033[0m" 2>/dev/null)
       echo -ne '                                      \r'
-      printf '%b' "[${Y0:?}no${N0:?}] (${Y0:?}${UND:?}0000000${N0:?}) ${Y1:?}Download mangos-classic$DOWN_CORE y/n, Enter to skip"
+      printf '%b' "[${Y0:?}no${N0:?}] (${Y0:?}${UND:?}0000000${N0:?}) ${Y1:?}Download Core$DOWN_CORE y/n, Enter to skip"
       read -r -p "" -n 1 -r -s
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -1522,7 +1522,7 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
       # fresh install ?
       DOWN_DB=$(echo -e "\033[5m?\033[0m" 2>/dev/null)
       echo -ne '                                      \r'
-      printf '%b' "[${Y0:?}no${N0:?}] (${Y0:?}${UND:?}0000000${N0:?}) ${Y1:?}Download classic-db$DOWN_DB y/n, Enter to skip"
+      printf '%b' "[${Y0:?}no${N0:?}] (${Y0:?}${UND:?}0000000${N0:?}) ${Y1:?}Download Database$DOWN_DB y/n, Enter to skip"
       read -r -p "" -n 1 -r -s
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then

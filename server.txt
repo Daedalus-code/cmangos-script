@@ -48,7 +48,7 @@ FOLDER_INSTALL="/scripts"
 FOLDER_BUILD="/home/ubuntu/wow/mangos-classic/build"
 FOLDER_CORE="/home/ubuntu/wow/mangos-classic"
 FOLDER_DB="/home/ubuntu/wow/classic-db"
-FOLDER_HELPER="/scripts/cmangos-script"
+FOLDER_HELPER="/home/cmangos-script"
 FOLDER_SQL="/home/ubuntu/wow/mangos-classic/sql"
 FOLDER_WOW="/home/ubuntu/wow"
 
@@ -57,6 +57,6 @@ FOLDER_WOW="/home/ubuntu/wow"
 DB_CHARACTERS="classiccharacters"
 DB_MANGOS="classicmangos"
 DB_REALMD="classicrealmd"
-SQL_MYCNF="/scripts/server.cnf"
+SQL_MYCNF="/home/server.cnf"
 
 # END
