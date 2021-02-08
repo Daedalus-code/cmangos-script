@@ -13,7 +13,7 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20210802
+# V20210902
 # 5.0.1.1
 
 # codes
@@ -1457,15 +1457,15 @@ ${THEMES:?}      ._________________.
     FILE="$FOLDER_CORE/README.md"
     if [ ! -f "$FILE" ]; then
       # look for directory
-      echo -ne 'Please wait, looking for core directory..\r'
-      sleep 3
+      echo -ne 'Please wait, looking for core directory!\r'
+      sleep 2
       # remove old file
       rm /var/log/ms/installed_core &>/dev/null
       # fresh install ?
       DOWN_CORE=$(echo -e "\033[5m?\033[0m" 2>/dev/null)
       echo -ne '                                      \r'
-      printf '%b' "[${GR:?}no${N0:?}] (${GR:?}${UND:?}0000000${N0:?}) ${GR:?}Download Core$DOWN_CORE y/n, Enter to skip"
-      read -r -p "" -n 1 -r -s
+      printf '%b' "[${GR:?}ok${N0:?}] (${GR:?}${UND:?}0000000${N0:?}) ${GR:?}Download Core$DOWN_CORE y/n, or wait 5 sec"
+      read -t 5 -r -p "" -n 1 -r -s
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         printf '%b' "Cloning repository 'mangos-classic' Please wait this might take a while
@@ -1515,15 +1515,15 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
     FILE="$FOLDER_DB/README.md"
     if [ ! -f "$FILE" ]; then
       # look for directory
-      echo -ne 'Please wait, looking for database directory..\r'
-      sleep 3
+      echo -ne 'Please wait, looking for database directory!\r'
+      sleep 2
       # remove old file
       rm /var/log/ms/installed_db &>/dev/null
       # fresh install ?
       DOWN_DB=$(echo -e "\033[5m?\033[0m" 2>/dev/null)
       echo -ne '                                      \r'
-      printf '%b' "[${GR:?}no${N0:?}] (${GR:?}${UND:?}0000000${N0:?}) ${GR:?}Download Database$DOWN_DB y/n, Enter to skip"
-      read -r -p "" -n 1 -r -s
+      printf '%b' "[${GR:?}ok${N0:?}] (${GR:?}${UND:?}0000000${N0:?}) ${GR:?}Download Database$DOWN_DB y/n, or wait 5 sec"
+      read -t 5 -r -p "" -n 1 -r -s
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         printf '%b' "Cloning repository 'classic-db' Please wait this might take a while
