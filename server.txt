@@ -1,3 +1,7 @@
+# theme color - 1 (purple), 2 (blue), 3 (cyan), 4 (red) ########################
+
+THEME="3"
+
 # server #######################################################################
 
 SERVER_NAME="REALM_NAME"
@@ -50,9 +54,5 @@ DB_CHARACTERS="classiccharacters"
 DB_MANGOS="classicmangos"
 DB_REALMD="classicrealmd"
 SQL_MYCNF="/scripts/server.cnf"
-
-# theme color - 1 (purple), 2 (blue), 3 (cyan), 4 (red) ########################
-
-THEME="2"
 
 # END
