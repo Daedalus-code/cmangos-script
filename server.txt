@@ -44,7 +44,7 @@ PORT_NC="3443"
 
 # FOLDERS ######################################################################
 
-FOLDER_INSTALL="/scripts"
+FOLDER_INSTALL="/home"
 FOLDER_BUILD="/home/ubuntu/wow/mangos-classic/build"
 FOLDER_CORE="/home/ubuntu/wow/mangos-classic"
 FOLDER_DB="/home/ubuntu/wow/classic-db"
