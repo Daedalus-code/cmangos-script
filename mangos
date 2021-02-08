@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20210802
-# 4.9.4.8
+# 4.9.4.9
 
 # codes
 while :; do
@@ -39,6 +39,7 @@ while :; do
   # effects
   UND='\e[4m' # Underline
 
+  # shellcheck disable=SC2153
   # shellcheck disable=SC2154
   # shellcheck disable=SC2034
   if [[ "$THEME" -eq "1" ]]; then
@@ -4278,7 +4279,7 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
 
     "1")
 
-      FILE="${folder_install:?}/cmangos-script/README.md"
+      FILE="${FOLDER_INSTALL:?}/cmangos-script/README.md"
       if [ ! -f "$FILE" ]; then
         # not installed
         sudo chown -R "$USER":"$GROUP" "$FOLDER_INSTALL"
@@ -4374,7 +4375,7 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
         sudo rm -r "$FOLDER_HELPER"
         printf "[${G1:?}ok${N0:?}] -> cmangos-script removed."
         echo
-        sudo mkdir "${folder_install:?}" &>/dev/null
+        sudo mkdir "${FOLDER_INSTALL:?}" &>/dev/null
         printf '%b' "[${G1:?}ok${N0:?}] -> $FOLDER_INSTALL/> git clone.."
         echo
         cd "$FOLDER_INSTALL" || exit
