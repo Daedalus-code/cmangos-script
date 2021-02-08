@@ -1,14 +1,14 @@
 # server #######################################################################
 
-server_name="REALM_NAME"
-server_name_lan="REALM_NAME(lan)"
-internet="HOSTNAME"
-intranet="LOCALHOST"
-realm_port="8085"
+SERVER_NAME="REALM_NAME"
+SERVER_NAME_LAN="REALM_NAME(lan)"
+INTERNET="HOSTNAME"
+INTRANET="LOCALHOST"
+REALM_PORT="8085"
 
 # cmake ########################################################################
 
-cmake="-DCMAKE_INSTALL_PREFIX=/home/ubuntu/wow/mangos-classic/run
+CMAKE="-DCMAKE_INSTALL_PREFIX=/home/ubuntu/wow/mangos-classic/run
 -DBUILD_EXTRACTORS=ON
 -DPCH=1
 -DDEBUG=0
@@ -17,38 +17,42 @@ cmake="-DCMAKE_INSTALL_PREFIX=/home/ubuntu/wow/mangos-classic/run
 
 # SYSTEM #######################################################################
 
-group="ubuntu"
-user="ubuntu"
-patch="CMaNGOS.patch" # please edit if wrong name.
+GROUP="ubuntu"
+USER="ubuntu"
+PATCH="CMaNGOS.patch" # please edit if wrong name.
 
 # GIT ##########################################################################
 
-github_helper="https://github.com/Daedalus-code/cmangos-script.git"
-github_cmangos="https://github.com/cmangos/mangos-classic.git"
-github_database="https://github.com/cmangos/classic-db.git"
+GITHUB_HELPER="https://github.com/Daedalus-code/cmangos-script.git"
+GITHUB_CMANGOS="https://github.com/cmangos/mangos-classic.git"
+GITHUB_DATABASE="https://github.com/cmangos/classic-db.git"
 
 # RA/NETCAT ####################################################################
 
-user_nc="USERNAME"
-pass_nc="PASSWORD"
-host_nc="localhost"
-port_nc="3443"
+USER_NC="USERNAME"
+PASS_NC="PASSWORD"
+HOST_NC="localhost"
+PORT_NC="3443"
 
 # FOLDERS ######################################################################
 
-folder_install="/scripts"
-folder_build="/home/ubuntu/wow/mangos-classic/build"
-folder_core="/home/ubuntu/wow/mangos-classic"
-folder_db="/home/ubuntu/wow/classic-db"
-folder_helper="/scripts/cmangos-script"
-folder_sql="/home/ubuntu/wow/mangos-classic/sql"
-folder_wow="/home/ubuntu/wow"
+FOLDER_INSTALL="/scripts"
+FOLDER_BUILD="/home/ubuntu/wow/mangos-classic/build"
+FOLDER_CORE="/home/ubuntu/wow/mangos-classic"
+FOLDER_DB="/home/ubuntu/wow/classic-db"
+FOLDER_HELPER="/scripts/cmangos-script"
+FOLDER_SQL="/home/ubuntu/wow/mangos-classic/sql"
+FOLDER_WOW="/home/ubuntu/wow"
 
 # MYSQL ########################################################################
 
-db_characters="classiccharacters"
-db_mangos="classicmangos"
-db_realmd="classicrealmd"
-sql_mycnf="/scripts/server.cnf"
+DB_CHARACTERS="classiccharacters"
+DB_MANGOS="classicmangos"
+DB_REALMD="classicrealmd"
+SQL_MYCNF="/scripts/server.cnf"
+
+# theme color - 1 (purple), 2 (blue), 3 (cyan), 4 (red) ########################
+
+THEME="2"
 
 # END
