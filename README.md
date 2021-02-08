@@ -47,11 +47,9 @@ Edit config file 'server.txt' with correct information.
 
 Edit mangos script at line 24:    
 ```source /home/server.txt # please edit if wrong.```  
-server.txt at line 55:  
+server.txt:  
 ```folder_helper="/home/cmangos-script" # please edit if wrong.```  
-server.txt at line 66:  
 ```sql_mycnf="/home/server.cnf" # please edit if wrong.```  
-server.txt at line 51:  
 ```folder_install="/home" # please edit if wrong.```  
 
 #### Planned Features  
