@@ -1457,14 +1457,14 @@ ${THEMES:?}      ._________________.
     FILE="$FOLDER_CORE/README.md"
     if [ ! -f "$FILE" ]; then
       # look for directory
-      echo -ne 'Please wait, looking for mangos-classic..\r'
+      echo -ne 'Please wait, looking for core directory..\r'
       sleep 3
       # remove old file
       rm /var/log/ms/installed_core &>/dev/null
       # fresh install ?
       DOWN_CORE=$(echo -e "\033[5m?\033[0m" 2>/dev/null)
       echo -ne '                                      \r'
-      printf '%b' "[${Y0:?}no${N0:?}] (${Y0:?}${UND:?}0000000${N0:?}) ${Y1:?}Download Core$DOWN_CORE y/n, Enter to skip"
+      printf '%b' "[${GR:?}no${N0:?}] (${GR:?}${UND:?}0000000${N0:?}) ${GR:?}Download Core$DOWN_CORE y/n, Enter to skip"
       read -r -p "" -n 1 -r -s
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -1500,7 +1500,7 @@ ${THEMES:?}      ._________________.
         rm /var/log/ms/installed_core &>/dev/null
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         LATEST_HEAD=$(git rev-parse --short HEAD)
-        printf '%b' "[${G1:?}NEW${N0:?}] (${G0:?}${UND:?}$LATEST_HEAD${N0:?}) ${G1:?}${UND:?}New Updates For Core${N0:?}! - $LATEST_DATE
+        printf '%b' "[${G1:?}NEW${N0:?}] (${G1:?}${UND:?}$LATEST_HEAD${N0:?}) ${G1:?}${UND:?}New Updates For Core${N0:?}! - $LATEST_DATE
 ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
       else
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
@@ -1515,14 +1515,14 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
     FILE="$FOLDER_DB/README.md"
     if [ ! -f "$FILE" ]; then
       # look for directory
-      echo -ne 'Please wait, looking for classic-db..\r'
+      echo -ne 'Please wait, looking for database directory..\r'
       sleep 3
       # remove old file
       rm /var/log/ms/installed_db &>/dev/null
       # fresh install ?
       DOWN_DB=$(echo -e "\033[5m?\033[0m" 2>/dev/null)
       echo -ne '                                      \r'
-      printf '%b' "[${Y0:?}no${N0:?}] (${Y0:?}${UND:?}0000000${N0:?}) ${Y1:?}Download Database$DOWN_DB y/n, Enter to skip"
+      printf '%b' "[${GR:?}no${N0:?}] (${GR:?}${UND:?}0000000${N0:?}) ${GR:?}Download Database$DOWN_DB y/n, Enter to skip"
       read -r -p "" -n 1 -r -s
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -1561,7 +1561,7 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
         rm /var/log/ms/installed_db &>/dev/null
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         LATEST_HEAD=$(git rev-parse --short HEAD)
-        printf '%b' "[${G1:?}NEW${N0:?}] (${G0:?}${UND:?}$LATEST_HEAD${N0:?}) ${G1:?}${UND:?}New Updates For Database${N0:?}! - $LATEST_DATE
+        printf '%b' "[${G1:?}NEW${N0:?}] (${G1:?}${UND:?}$LATEST_HEAD${N0:?}) ${G1:?}${UND:?}New Updates For Database${N0:?}! - $LATEST_DATE
 ${GR:?}(d) Update Database > Update classic-db${N0:?}\n"
       else
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
@@ -1599,7 +1599,7 @@ ${GR:?}(d) Update Database > Update classic-db${N0:?}\n"
         rm /var/log/ms/installed_ms &>/dev/null
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         LATEST_HEAD=$(git rev-parse --short HEAD)
-        printf '%b' "[${G1:?}NEW${N0:?}] (${G0:?}${UND:?}$LATEST_HEAD${N0:?}) ${G1:?}${UND:?}New Updates For Helper${N0:?}! - $LATEST_DATE
+        printf '%b' "[${G1:?}NEW${N0:?}] (${G1:?}${UND:?}$LATEST_HEAD${N0:?}) ${G1:?}${UND:?}New Updates For Helper${N0:?}! - $LATEST_DATE
 ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
       else
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
