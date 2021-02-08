@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20210802
-# 5.0.1.0
+# 5.0.1.9
 
 # codes
 while :; do
@@ -880,15 +880,15 @@ ${N0:?}"
             if ! [ -x "$(command -v transmission-daemon)" ]; then
               # check for updates regardless
               echo "Please wait"
-              sudo apt-get update 2>/dev/null
+              sudo apt-get update &>/dev/null
               # clear the local repository of retrieved package files that are left in /var/cache.
-              sudo apt-get clean 2>/dev/null
+              sudo apt-get clean &>/dev/null
               # clear the local repository of retrieved package files
-              sudo apt-get autoclean 2>/dev/null
-              # remove packages that were automatically installed because some other package required them but
-              sudo apt-get -y --purge autoremove 2>/dev/null
+              sudo apt-get autoclean &>/dev/null
+              # remove packages that were automatically installed because some other package required them
+              sudo apt-get -y --purge autoremove &>/dev/null
               # make sure unzip exist
-              sudo apt-get install unzip -y 2>/dev/null
+              sudo apt-get install unzip -y &>/dev/null
               # install transmission-daemon
               sudo apt-get install transmission-daemon -y &>/dev/null
               # temporary stop ^
@@ -1457,32 +1457,37 @@ ${THEMES:?}      ._________________.
     FILE="$FOLDER_CORE/README.md"
     if [ ! -f "$FILE" ]; then
       # check for updates regardless
-      echo "Please wait"
-      sudo apt-get update 2>/dev/null
+      echo -ne 'Please wait\r'
+      sudo apt-get update &>/dev/null
       # clear the local repository of retrieved package files that are left in /var/cache.
-      sudo apt-get clean 2>/dev/null
+      sudo apt-get clean &>/dev/null
       # clear the local repository of retrieved package files
-      sudo apt-get autoclean 2>/dev/null
-      # remove packages that were automatically installed because some other package required them but
-      sudo apt-get -y --purge autoremove 2>/dev/null
+      sudo apt-get autoclean &>/dev/null
+      # remove packages that were automatically installed because some other package required them
+      sudo apt-get -y --purge autoremove &>/dev/null
       # remove old file
       rm /var/log/ms/installed_core &>/dev/null
       # fresh install ?
-      printf '%b' "Cloning repository 'mangos-classic' Please wait this might take a while
-(${G1:?}${GITHUB_CMANGOS:?}${N0:?})\n"
-      sudo mkdir "$FOLDER_WOW" &>/dev/null
-      sudo chown -R "${USER:?}":"${GROUP:?}" "$FOLDER_WOW"
-      cd "$FOLDER_WOW" || exit
-      read -r -p "--recursive? (y/n) " -n 1 -r
+      echo -ne '           \r'
+      read -r -s -p "[00] (0000000) Download mangos-classic ? (y/n) " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
-        RECURSIVE="--recursive"
-        git clone "${GITHUB_CMANGOS:?}" "$RECURSIVE"
-      else
-        git clone "${GITHUB_CMANGOS:?}"
+        printf '%b' "Cloning repository 'mangos-classic' Please wait this might take a while
+(${G1:?}${GITHUB_CMANGOS:?}${N0:?})\n"
+        sudo mkdir "$FOLDER_WOW" &>/dev/null
+        sudo chown -R "${USER:?}":"${GROUP:?}" "$FOLDER_WOW"
+        cd "$FOLDER_WOW" || exit
+        read -r -p "--recursive? (y/n) " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+          RECURSIVE="--recursive"
+          git clone "${GITHUB_CMANGOS:?}" "$RECURSIVE"
+        else
+          git clone "${GITHUB_CMANGOS:?}"
+        fi
+        echo "Done"
+        sleep 1
       fi
-      echo "Done"
-      sleep 1
     else
       # check for updates
 
@@ -1514,27 +1519,39 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
     FILE="$FOLDER_DB/README.md"
     if [ ! -f "$FILE" ]; then
       # check for updates regardless
-      echo "Please wait"
-      sudo apt-get update 2>/dev/null
+      echo -ne 'Please wait\r'
+      sudo apt-get update &>/dev/null
       # clear the local repository of retrieved package files that are left in /var/cache.
-      sudo apt-get clean 2>/dev/null
+      sudo apt-get clean &>/dev/null
       # clear the local repository of retrieved package files
-      sudo apt-get autoclean 2>/dev/null
-      # remove packages that were automatically installed because some other package required them but
-      sudo apt-get -y --purge autoremove 2>/dev/null
+      sudo apt-get autoclean &>/dev/null
+      # remove packages that were automatically installed because some other package required them
+      sudo apt-get -y --purge autoremove &>/dev/null
       # remove old file
       rm /var/log/ms/installed_db &>/dev/null
       # fresh install ?
-      printf '%b' "Cloning repository 'classic-db' Please wait this might take a while
+      echo -ne '           \r'
+      read -r -s -p "[00] (0000000) Download classic-db ? (y/n) " -n 1 -r
+      echo
+      if [[ $REPLY =~ ^[Yy]$ ]]; then
+        printf '%b' "Cloning repository 'classic-db' Please wait this might take a while
 (${G1:?}${GITHUB_DATABASE:?})${N0:?}\n"
-      sudo mkdir "$FOLDER_WOW" &>/dev/null
-      sudo chown -R "${USER:?}":"${GROUP:?}" "$FOLDER_WOW"
-      cd "$FOLDER_WOW" || exit
-      git clone "${GITHUB_DATABASE:?}"
-      cd "$FOLDER_DB" || exit
-      ./InstallFullDB.sh
-      echo "Done"
-      sleep 1
+        sudo mkdir "$FOLDER_WOW" &>/dev/null
+        sudo chown -R "${USER:?}":"${GROUP:?}" "$FOLDER_WOW"
+        cd "$FOLDER_WOW" || exit
+        git clone "${GITHUB_DATABASE:?}"
+        cd "$FOLDER_DB" || exit
+        ./InstallFullDB.sh
+        echo "Done"
+        sleep 1
+        # check if 'InstallFullDB.config' exist
+        FILE="$FOLDER_DB/InstallFullDB.config"
+        if [ -z "$FILE" ]; then
+          cd "$FOLDER_DB" || exit
+          ./InstallFullDB.sh &>/dev/null
+        fi
+        # check if 'InstallFullDB.config' exist done
+      fi
     else
 
       # check for updates
@@ -1600,14 +1617,6 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
       fi
     # check if 'cmangos-script' exist done
     fi
-    # check if 'InstallFullDB.config' exist
-    FILE="$FOLDER_DB/InstallFullDB.config"
-    if [ ! -f "$FILE" ]; then
-      cd "$FOLDER_DB" || exit
-      ./InstallFullDB.sh &>/dev/null
-    fi
-
-    # check if 'InstallFullDB.config' exist done
     echo
     read -r -p "Press Enter to continue" </dev/tty
     echo
