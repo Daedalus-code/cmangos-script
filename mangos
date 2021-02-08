@@ -1414,7 +1414,7 @@ ${THEMES:?}      ._________________.
       rm /var/log/ms/installed_core &>/dev/null
       # fresh install ?
       printf '%b' "Cloning repository 'mangos-classic' Please wait this might take a while
-(${G1:?}${github_cmangos:?}${N0:?})\n"
+(${G1:?}${GITHUB_CMANGOS:?}${N0:?})\n"
       sudo mkdir "$FOLDER_WOW" &>/dev/null
       sudo chown -R "${USER:?}":"${GROUP:?}" "$FOLDER_WOW"
       cd "$FOLDER_WOW" || exit
