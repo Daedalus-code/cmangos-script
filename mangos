@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20210902
-# 4.7.3.6
+# 4.7.3.8
 
 # codes
 while :; do
@@ -4285,131 +4285,133 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
     # realmd.log ###############################################################
 
-    # if realm failed
-    if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
-      # if any, print "Realm failed or halted"
-      printf "[     ${R1:?}0H${N0:?}     ] Realm failed or halted!\n"
-    else
-      # look for empty tables
-      if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
-        # count empty inside log
-        COUNT_EMPTY=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null)
-        # if any, print "empty"
-        printf "[     ${Y1:?}0E${N0:?}     ] Realm: ${Y1:?}$COUNT_EMPTY${N0:?} Tables are empty, doesn't exist!\n"
-      fi
-      # look for error
-      if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
-        # count errors inside log
-        COUNT_ERROR=$(grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null)
-        # if any, print "error"
-        printf "[     ${R1:?}1E${N0:?}     ] Realm: ${R1:?}$COUNT_ERROR${N0:?} Error!\n"
+    if [[ "$PIDOFMANGOSD" -eq "1" ]]; then
+      # if realm failed
+      if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
+        # if any, print "Realm failed or halted"
+        printf "[     ${R1:?}0H${N0:?}     ] Realm failed or halted!\n"
       else
-        # if nothing, print "ok"
-        printf "[     ${G1:?}OK${N0:?}     ] Realm OK!\n"
-      fi
-      # this database (realmd) is out of date!
-      if grep -E -q "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
-        printf '%b' "[     ${Y1:?}0D${N0:?}     ] Realm database is out of date!\n"
-        printf '%b' "[     ${G0:?}1D${N0:?}     ] Menu: 'd' > Apply all updates [A]-[B]"
-      fi
-      # databases is missing or corrupt.
-      if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
-        printf "[     ${R1:?}X0${N0:?}     ] Realm database is missing or corrupt!\n"
-      fi
-      # reinstall your (realmd) database
-      if grep -E -q "reinstall\syour|\sUnknown\sdatabase\s|Reinstall\syour\s[REALMD]\sdatabase\s" "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
-        printf "[     ${R1:?}X1${N0:?}     ] Reinstall your realm database!\n"
-      fi
-      # can't connect to local mysql through socket
-      if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
-        printf "[     ${R1:?}X2${N0:?}     ] Realm can't connect to local MySQL!\n"
-      fi
-      # your realmd.conf version indicates your conf file is out of date
-      if grep -E -q ".*Your\srealmd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
-        printf "[     ${R1:?}X3${N0:?}     ] realmd.conf is out of date!\n"
-      fi
-    fi
-
-    # server.log ###############################################################
-
-    # if world failed
-    if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-      # if any, print "World failed or halted"
-      printf "[     ${R1:?}0H${N0:?}     ] World failed or halted!\n"
-    else
-      # look for empty tables
-      if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-        # count empty inside log
-        COUNT_EMPTY=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
-        # if any, print "empty"
-        printf "[     ${Y1:?}0E${N0:?}     ] World: ${Y1:?}$COUNT_EMPTY${N0:?} Tables are empty or doesn't exist!\n"
-      fi
-      # look for error
-      if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-        # count errors inside log
-        COUNT_ERROR=$(grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
-        # if any, print "error"
-        printf "[     ${R1:?}1E${N0:?}     ] World: ${R1:?}$COUNT_ERROR${N0:?} Error!\n"
-        # look for serious error
-        if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-          # count serious errors inside log
-          COUNT_ERROR_SERIOUS=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
-          # if any, print "serious"
-          printf "[     ${R1:?}X9${N0:?}     ] World has ${R1:?}$COUNT_ERROR_SERIOUS${N0:?} serious error!\n"
+        # look for empty tables
+        if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
+          # count empty inside log
+          COUNT_EMPTY=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null)
+          # if any, print "empty"
+          printf "[     ${Y1:?}0E${N0:?}     ] Realm: ${Y1:?}$COUNT_EMPTY${N0:?} Tables are empty, doesn't exist!\n"
         fi
-      else
-        # if nothing, print "ok"
-        printf "[     ${G1:?}OK${N0:?}     ] World OK!\n"
-      fi
-      # world failed
-      if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-        # if any, print "World failed"
-        echo
-        printf '%b' "$SERVER_LOG_FAILED"
-        echo
-      fi
-      # this database (mangosd) is out of date!
-      if grep -E -q "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-        printf '%b' "[     ${GR:?}0D${N0:?}     ] World database is out of date!\n"
-        printf '%b' "[     ${GR:?}1D${N0:?}     ] Menu: 'd' > Apply all updates [A]-[B]"
-      fi
-      # databases is missing or corrupt.
-      if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-        printf "[     ${R1:?}X0${N0:?}     ] World database is missing or corrupt!\n"
-      fi
-      # reinstall your (mangosd) database
-      if grep -E -q "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-        printf "[     ${R1:?}X1${N0:?}     ] Reinstall your world database!\n"
-      fi
-      # can't connect to local mysql through socket
-      if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-        printf "[     ${R1:?}X2${N0:?}     ] World can't connect to local MySQL!\n"
-      fi
-      # your mangosd.conf version indicates your conf file is out of date
-      if grep -E -q ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-        printf "[     ${R1:?}X3${N0:?}     ] realmd.conf is out of date!\n"
+        # look for error
+        if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
+          # count errors inside log
+          COUNT_ERROR=$(grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null)
+          # if any, print "error"
+          printf "[     ${R1:?}1E${N0:?}     ] Realm: ${R1:?}$COUNT_ERROR${N0:?} Error!\n"
+        else
+          # if nothing, print "ok"
+          printf "[     ${G1:?}OK${N0:?}     ] Realm OK!\n"
+        fi
+        # this database (realmd) is out of date!
+        if grep -E -q "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
+          printf '%b' "[     ${Y1:?}0D${N0:?}     ] Realm database is out of date!\n"
+          printf '%b' "[     ${G0:?}1D${N0:?}     ] Menu: 'd' > Apply all updates [A]-[B]"
+        fi
+        # databases is missing or corrupt.
+        if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
+          printf "[     ${R1:?}X0${N0:?}     ] Realm database is missing or corrupt!\n"
+        fi
+        # reinstall your (realmd) database
+        if grep -E -q "reinstall\syour|\sUnknown\sdatabase\s|Reinstall\syour\s[REALMD]\sdatabase\s" "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
+          printf "[     ${R1:?}X1${N0:?}     ] Reinstall your realm database!\n"
+        fi
+        # can't connect to local mysql through socket
+        if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
+          printf "[     ${R1:?}X2${N0:?}     ] Realm can't connect to local MySQL!\n"
+        fi
+        # your realmd.conf version indicates your conf file is out of date
+        if grep -E -q ".*Your\srealmd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
+          printf "[     ${R1:?}X3${N0:?}     ] realmd.conf is out of date!\n"
+        fi
       fi
 
-      # Playerbot loaded
-      if grep -E -q "Playerbot: Using configuration file" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-        # if any, print "Playerbot ok"
-        printf "[     ${G1:?}OK${N0:?}     ] Playerbot is running!\n"
+      # server.log ###############################################################
+
+      # if world failed
+      if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
+        # if any, print "World failed or halted"
+        printf "[     ${R1:?}0H${N0:?}     ] World failed or halted!\n"
       else
-        # offline
-        printf "[     ${GR:?}NO${N0:?}     ] Playerbot is offline.\n"
-      fi
-      # ahbot loaded and initialized
-      if grep -E -q "Initialize AuctionHouseBot..." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-        # if any, print "AHbot ok"
-        printf "[     ${G1:?}OK${N0:?}     ] AHbot is running!\n"
-      else
-        # off
-        printf "[     ${GR:?}NO${N0:?}     ] AHbot is offline.\n"
-      fi
-      # get startup time
-      if STARTUP_TIME=$(grep "SERVER\sSTARTUP\sTIME*." wow/mangos-classic/run/logs/Server.log 2>/dev/null |
-        cut -d\  -f6-9 2>/dev/null); then
-        printf '%b' "[     ${G1:?}OK${N0:?}     ] World initialized! $STARTUP_TIME\n"
+        # look for empty tables
+        if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
+          # count empty inside log
+          COUNT_EMPTY=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
+          # if any, print "empty"
+          printf "[     ${Y1:?}0E${N0:?}     ] World: ${Y1:?}$COUNT_EMPTY${N0:?} Tables are empty or doesn't exist!\n"
+        fi
+        # look for error
+        if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
+          # count errors inside log
+          COUNT_ERROR=$(grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
+          # if any, print "error"
+          printf "[     ${R1:?}1E${N0:?}     ] World: ${R1:?}$COUNT_ERROR${N0:?} Error!\n"
+          # look for serious error
+          if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
+            # count serious errors inside log
+            COUNT_ERROR_SERIOUS=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
+            # if any, print "serious"
+            printf "[     ${R1:?}X9${N0:?}     ] World has ${R1:?}$COUNT_ERROR_SERIOUS${N0:?} serious error!\n"
+          fi
+        else
+          # if nothing, print "ok"
+          printf "[     ${G1:?}OK${N0:?}     ] World OK!\n"
+        fi
+        # world failed
+        if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
+          # if any, print "World failed"
+          echo
+          printf '%b' "$SERVER_LOG_FAILED"
+          echo
+        fi
+        # this database (mangosd) is out of date!
+        if grep -E -q "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
+          printf '%b' "[     ${GR:?}0D${N0:?}     ] World database is out of date!\n"
+          printf '%b' "[     ${GR:?}1D${N0:?}     ] Menu: 'd' > Apply all updates [A]-[B]"
+        fi
+        # databases is missing or corrupt.
+        if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
+          printf "[     ${R1:?}X0${N0:?}     ] World database is missing or corrupt!\n"
+        fi
+        # reinstall your (mangosd) database
+        if grep -E -q "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
+          printf "[     ${R1:?}X1${N0:?}     ] Reinstall your world database!\n"
+        fi
+        # can't connect to local mysql through socket
+        if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
+          printf "[     ${R1:?}X2${N0:?}     ] World can't connect to local MySQL!\n"
+        fi
+        # your mangosd.conf version indicates your conf file is out of date
+        if grep -E -q ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
+          printf "[     ${R1:?}X3${N0:?}     ] realmd.conf is out of date!\n"
+        fi
+
+        # Playerbot loaded
+        if grep -E -q "Playerbot: Using configuration file" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
+          # if any, print "Playerbot ok"
+          printf "[     ${G1:?}OK${N0:?}     ] Playerbot is running!\n"
+        else
+          # offline
+          printf "[     ${GR:?}NO${N0:?}     ] Playerbot is offline.\n"
+        fi
+        # ahbot loaded and initialized
+        if grep -E -q "Initialize AuctionHouseBot..." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
+          # if any, print "AHbot ok"
+          printf "[     ${G1:?}OK${N0:?}     ] AHbot is running!\n"
+        else
+          # off
+          printf "[     ${GR:?}NO${N0:?}     ] AHbot is offline.\n"
+        fi
+        # get startup time
+        if STARTUP_TIME=$(grep "SERVER\sSTARTUP\sTIME*." wow/mangos-classic/run/logs/Server.log 2>/dev/null |
+          cut -d\  -f6-9 2>/dev/null); then
+          printf '%b' "[     ${G1:?}OK${N0:?}     ] World initialized! $STARTUP_TIME\n"
+        fi
       fi
     fi
     echo
