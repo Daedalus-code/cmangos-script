@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20210902
-# 5.0.1.1
+# 4.7.3.6
 
 # codes
 while :; do
@@ -133,19 +133,19 @@ while :; do
   # get load
   LOAD="$(while IFS= read -r i; do echo "${i%?}"; done </proc/loadavg 2>/dev/null | awk '{ print $1,$2,$3 }')"
 
-  # service status
-  WORLD_SERVICE=mangosd
-  REALM_SERVICE=realmd
+  # get pid of realmd, mangosd
+  PIDOF_REALMD=$(pidof $REALM_SERVICE 2>/dev/null | wc -w 2>/dev/null)
+  PIDOFMANGOSD=$(pidof $WORLD_SERVICE 2>/dev/null | wc -w 2>/dev/null)
 
   # realmd service
-  case "$(pidof $REALM_SERVICE | wc -w)" in
+  case "$(echo "$PIDOF_REALMD")" in
   0) MENU_REALMD="${GR:?}Realm${N0:?}" ;;
   1) MENU_REALMD="${G0:?}Realm${N0:?}" ;;
   *) MENU_REALMD="${Y0:?}Realm${N0:?}" ;;
   esac
 
   # mangosd service
-  case "$(pidof $WORLD_SERVICE | wc -w)" in
+  case "$(echo "$PIDOFMANGOSD")" in
   0) MENU_MANGOSD="${GR:?}MaNGOS${N0:?}" ;;
   1) MENU_MANGOSD="${G0:?}MaNGOS${N0:?}" ;;
   *) MENU_MANGOSD="${Y0:?}MaNGOS${N0:?}" ;;
@@ -422,19 +422,16 @@ Are You Sure? y/n " -n 1 -r
       clear
 
       # codes
-      # service status
-      WORLD_SERVICE=mangosd
-      REALM_SERVICE=realmd
 
       # realmd service
-      case "$(pidof $REALM_SERVICE | wc -w)" in
+      case "$(echo "$PIDOF_REALMD")" in
       0) COMMAND_REALMD="[${R1:?}off${N0:?}]" ;;
       1) COMMAND_REALMD="[${G1:?}ok${N0:?}]" ;;
       *) COMMAND_REALMD="[${Y1:?}ok${N0:?}]" ;;
       esac
 
       # mangosd service
-      case "$(pidof $WORLD_SERVICE | wc -w)" in
+      case "$(echo "$PIDOFMANGOSD")" in
       0) COMMAND_MANGOSD="[${R1:?}off${N0:?}]" ;;
       1) COMMAND_MANGOSD="[${G1:?}ok${N0:?}]" ;;
       *) COMMAND_MANGOSD="[${Y1:?}ok${N0:?}]" ;;
@@ -1702,18 +1699,14 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
           echo
           sleep 1
 
-          # service status
-          REALM_SERVICE=realmd
-          WORLD_SERVICE=mangosd
-
           # realmd service
-          case "$(pidof $REALM_SERVICE | wc -w)" in
+          case "$(echo "$PIDOF_REALMD")" in
           0) ;;
           *) sudo service realmd stop ;;
           esac
 
           # mangosd service
-          case "$(pidof $WORLD_SERVICE | wc -w)" in
+          case "$(echo "$PIDOFMANGOSD")" in
           0) ;;
           *) sudo service mangosd stop ;;
           esac
@@ -2046,18 +2039,14 @@ Check if correct information, or just restart server."
           echo
           sleep 1
 
-          # service status
-          REALM_SERVICE=realmd
-          WORLD_SERVICE=mangosd
-
           # realmd service
-          case "$(pidof $REALM_SERVICE | wc -w)" in
+          case "$(echo "$PIDOF_REALMD")" in
           0) ;;
           *) sudo service realmd stop ;;
           esac
 
           # mangosd service
-          case "$(pidof $WORLD_SERVICE | wc -w)" in
+          case "$(echo "$PIDOFMANGOSD")" in
           0) ;;
           *) sudo service mangosd stop ;;
           esac
@@ -2601,19 +2590,13 @@ Please install mysql or mariadb database/client"
           cp "$FOLDER_CORE"/run/logs/Server.log "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
           cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
         else
-
-          # service status
-          REALM_SERVICE=realmd
-          WORLD_SERVICE=mangosd
-
           # realmd service
-          case "$(pidof $REALM_SERVICE | wc -w)" in
+          case "$(echo "$PIDOF_REALMD")" in
           0) ;;
           *) sudo service realmd stop ;;
           esac
-
           # mangosd service
-          case "$(pidof $WORLD_SERVICE | wc -w)" in
+          case "$(echo "$PIDOFMANGOSD")" in
           0) ;;
           *) sudo service mangosd stop ;;
           esac
@@ -2736,28 +2719,20 @@ Please install mysql or mariadb database/client"
           cp "$FOLDER_CORE"/run/logs/Server.log "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
           cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
         else
-
           printf "${R1:?}Shutting down${GR:?} realmd & mangosd service${N0:?}"
           echo
           sleep 1
-
-          # service status
-          REALM_SERVICE=realmd
-          WORLD_SERVICE=mangosd
-
           # realmd service
-          case "$(pidof $REALM_SERVICE | wc -w)" in
+          case "$(echo "$PIDOF_REALMD")" in
           0) ;;
           *) sudo service realmd stop ;;
           esac
-
           # mangosd service
-          case "$(pidof $WORLD_SERVICE | wc -w)" in
+          case "$(echo "$PIDOFMANGOSD")" in
           0) ;;
           *) sudo service mangosd stop ;;
           esac
         fi
-
         sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
         sleep 1
         echo
@@ -2924,24 +2899,17 @@ Please install mysql or mariadb database/client"
           printf "${R1:?}Shutting down${GR:?} realmd & mangosd service${N0:?}"
           echo
           sleep 1
-
-          # service status
-          REALM_SERVICE=realmd
-          WORLD_SERVICE=mangosd
-
           # realmd service
-          case "$(pidof $REALM_SERVICE | wc -w)" in
+          case "$(echo "$PIDOF_REALMD")" in
           0) ;;
           *) sudo service realmd stop ;;
           esac
-
           # mangosd service
-          case "$(pidof $WORLD_SERVICE | wc -w)" in
+          case "$(echo "$PIDOFMANGOSD")" in
           0) ;;
           *) sudo service mangosd stop ;;
           esac
         fi
-
         sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
         echo -ne '(0%)\r'
         sleep 1
@@ -3254,23 +3222,16 @@ Check log for which database needs 'applying updates'"
         printf '%b' "Loading.."
         echo
         sleep 1
-
-        # service status
-        REALM_SERVICE=realmd
-        WORLD_SERVICE=mangosd
-
         # realmd service
-        case "$(pidof $REALM_SERVICE | wc -w)" in
+        case "$(echo "$PIDOF_REALMD")" in
         0) ;;
         *) sudo service realmd stop ;;
         esac
-
         # mangosd service
-        case "$(pidof $WORLD_SERVICE | wc -w)" in
+        case "$(echo "$PIDOFMANGOSD")" in
         0) ;;
         *) sudo service mangosd stop ;;
         esac
-
         echo
         read -r -p "Without error output? y/n " -n 1 -r
         echo
@@ -3294,23 +3255,16 @@ Check log for which database needs 'applying updates'"
         printf '%b' "Loading.."
         echo
         sleep 1
-
-        # service status
-        REALM_SERVICE=realmd
-        WORLD_SERVICE=mangosd
-
         # realmd service
-        case "$(pidof $REALM_SERVICE | wc -w)" in
+        case "$(echo "$PIDOF_REALMD")" in
         0) ;;
         *) sudo service realmd stop ;;
         esac
-
         # mangosd service
-        case "$(pidof $WORLD_SERVICE | wc -w)" in
+        case "$(echo "$PIDOFMANGOSD")" in
         0) ;;
         *) sudo service mangosd stop ;;
         esac
-
         echo
         read -r -p "Without error output? y/n " -n 1 -r
         echo
@@ -3334,23 +3288,16 @@ Check log for which database needs 'applying updates'"
         printf '%b' "Loading.."
         echo
         sleep 1
-
-        # service status
-        REALM_SERVICE=realmd
-        WORLD_SERVICE=mangosd
-
         # realmd service
-        case "$(pidof $REALM_SERVICE | wc -w)" in
+        case "$(echo "$PIDOF_REALMD")" in
         0) ;;
         *) sudo service realmd stop ;;
         esac
-
         # mangosd service
-        case "$(pidof $WORLD_SERVICE | wc -w)" in
+        case "$(echo "$PIDOFMANGOSD")" in
         0) ;;
         *) sudo service mangosd stop ;;
         esac
-
         echo
         read -r -p "Without error output? y/n " -n 1 -r
         echo
@@ -3379,23 +3326,16 @@ Check log for which database needs 'applying updates'"
         printf '%b' "Loading.."
         echo
         sleep 1
-
-        # service status
-        REALM_SERVICE=realmd
-        WORLD_SERVICE=mangosd
-
         # realmd service
-        case "$(pidof $REALM_SERVICE | wc -w)" in
+        case "$(echo "$PIDOF_REALMD")" in
         0) ;;
         *) sudo service realmd stop ;;
         esac
-
         # mangosd service
-        case "$(pidof $WORLD_SERVICE | wc -w)" in
+        case "$(echo "$PIDOFMANGOSD")" in
         0) ;;
         *) sudo service mangosd stop ;;
         esac
-
         printf '%b' "[${G1:?}ok${N0:?}]"
         echo
         sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
@@ -3584,65 +3524,67 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         read -r -p "Shutdown realmd, mangosd? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
-
+          clear
           # this is for docker users
           if [ -f /.dockerenv ]; then
             if screen -list 2>/dev/null |
               grep -q "realmd" 2>/dev/null; then
               echo "Killing screen (realmd)"
+              sudo killall screen 2>/dev/null
+              sleep 2
             fi
             if screen -list 2>/dev/null |
               grep -q "mangosd" 2>/dev/null; then
               echo "Killing screen (mangosd)"
+              sudo killall screen 2>/dev/null
+              sleep 2
             fi
-            printf '%b' "${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
-            sleep 3
-            sudo killall screen 2>/dev/null
             # keep old logs
             cp "$FOLDER_CORE"/run/logs/Server.log "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
             cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
           else
-
             # keep old logs
             cp "$FOLDER_CORE"/run/logs/Server.log "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
             cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
-            # done
-            printf "${R1:?}Shutting down${GR:?} realmd & mangosd service${N0:?}"
-            echo
-            sleep 1
-            echo -ne '(0%)\r'
-            sleep 1
-
             # this is for docker users
             if [ -f /.dockerenv ]; then
               # keep old logs
               cp "$FOLDER_CORE"/run/logs/Server.log "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
               cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
             else
-
-              # service status
-              REALM_SERVICE=realmd
-              WORLD_SERVICE=mangosd
-
               # realmd service
-              case "$(pidof $REALM_SERVICE | wc -w)" in
-              0) ;;
-              *) sudo service realmd stop ;;
+              case "$(echo "$PIDOF_REALMD")" in
+              0)
+                printf "[${GR:?}Shutdown${N0:?}] realmd service already shutdown.\n"
+                sleep 1
+                ;;
+              *)
+                printf "[${R1:?}Shutdown${N0:?}] realmd service...\n"
+                sleep 1
+                sudo service realmd stop
+                sleep 1
+                printf "[    ${G1:?}OK${N0:?}    ] Stopped realmd.service!\n"
+                ;;
               esac
-
-              echo -ne '(50%)\r'
-              sleep 1
-
               # mangosd service
-              case "$(pidof $WORLD_SERVICE | wc -w)" in
-              0) ;;
-              *) sudo service mangosd stop ;;
+              case "$(echo "$PIDOFMANGOSD")" in
+              0)
+                printf "[${GR:?}Shutdown${N0:?}] mangosd service already shutdown.\n"
+                sleep 1
+                ;;
+              *)
+                printf "[${R1:?}Shutdown${N0:?}] realmd, mangosd service...\n"
+                sleep 1
+                sudo service mangosd stop
+                sleep 1
+                printf "[    ${G1:?}OK${N0:?}    ] Stopped mangosd.service!\n"
+                ;;
               esac
             fi
-
-            echo -ne '(100%)\r'
-            sleep 1
           fi
+          echo
+          read -r -p "Press Enter to continue" </dev/tty
+          echo
         fi
 
         ;;
@@ -3662,8 +3604,8 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             if screen -list 2>/dev/null |
               grep -q "realmd" 2>/dev/null; then
               echo "Killing screen (realmd)"
+              sleep 2
             fi
-            sleep 3
             # get realmd screen id
             REALMD_ID=$(screen -list 2>/dev/null | grep -Eo "[0-9]+.realmd" 2>/dev/null |
               awk -F. '{ print $1 }' 2>/dev/null)
@@ -3674,19 +3616,21 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             cp "$FOLDER_CORE"/run/logs/Server.log "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
             cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
           else
-
             # keep old logs
             cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
-            # done
-            printf "${R0:?}Shutting down${N0:?} realmd service"
-
-            # service status
-            REALM_SERVICE=realmd
-
             # realmd service
-            case "$(pidof $REALM_SERVICE | wc -w)" in
-            0) ;;
-            *) sudo service realmd stop ;;
+            case "$(echo "$PIDOF_REALMD")" in
+            0)
+              printf "[${GR:?}Shutdown${N0:?}] realmd service already shutdown.\n"
+              sleep 1
+              ;;
+            *)
+              printf "[${R1:?}Shutdown${N0:?}] realmd service...\n"
+              sleep 1
+              sudo service realmd stop
+              sleep 1
+              printf "[    ${G1:?}OK${N0:?}    ] Stopped realmd.service!\n"
+              ;;
             esac
           fi
         fi
@@ -3702,14 +3646,13 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         read -r -p "Shutdown mangosd? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
-
           # this is for docker users
           if [ -f /.dockerenv ]; then
             if screen -list 2>/dev/null |
               grep -q "mangosd" 2>/dev/null; then
               echo "Killing screen (mangosd)"
+              sleep 2
             fi
-            sleep 3
             # get mangosd screen id
             MANGOSD_ID=$(screen -list 2>/dev/null | grep -Eo "[0-9]+.mangosd" 2>/dev/null |
               awk -F. '{ print $1 }' 2>/dev/null)
@@ -3720,19 +3663,21 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             cp "$FOLDER_CORE"/run/logs/Server.log "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
             cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
           else
-
             # keep old logs
             cp "$FOLDER_CORE"/run/logs/Server.log "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
-            # done
-            printf "${R0:?}Shutting down${N0:?} mangosd service"
-
-            # service status
-            WORLD_SERVICE=mangosd
-
             # mangosd service
-            case "$(pidof $WORLD_SERVICE | wc -w)" in
-            0) ;;
-            *) sudo service mangosd stop ;;
+            case "$(echo "$PIDOFMANGOSD")" in
+            0)
+              printf "[${GR:?}Shutdown${N0:?}] mangosd service already shutdown.\n"
+              sleep 1
+              ;;
+            *)
+              printf "[${R1:?}Shutdown${N0:?}] mangosd service...\n"
+              sleep 1
+              sudo service mangosd stop
+              sleep 1
+              printf "[    ${G1:?}OK${N0:?}    ] Stopped mangosd.service!\n"
+              ;;
             esac
           fi
         fi
@@ -3783,25 +3728,6 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       if ! [ -x "$(command -v screen)" ]; then
         sudo apt-get install screen -y 2>/dev/null
       fi
-      # codes
-      # realmd.log
-      REALMD_LOG_EMPTY="${Y0:?}Empty${N0:?} -> "
-      REALMD_LOG_ERROR="${R0:?}Error${N0:?} -> "
-      REALMD_LOG_FAILED="${R0:?}Realm halted or failed${N0:?}"
-      REALMD_LOG_OK="${G0:?}ok${N0:?}"
-
-      # server.log
-      SERVER_LOG_INITIALIZED="${G0:?}World initialized${N0:?}"
-      SERVER_LOG_SERIOUS="${R1:?}Serious${N0:?} -> "
-      SERVER_LOG_FAILED="${R0:?}World halted or failed${N0:?}"
-      SERVER_LOG_ERROR="${R0:?}Error${N0:?} -> "
-      SERVER_LOG_EMPTY="${Y0:?}Empty${N0:?} -> "
-      SERVER_LOG_OK="${G0:?}ok${N0:?}"
-
-      # service status
-      WORLD_SERVICE=mangosd
-      REALM_SERVICE=realmd
-      # codes done
 
       HEIGHT=10
       WIDTH=26
@@ -3829,25 +3755,26 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
       "1")
 
-        read -r -p "Restart realmd,mangos? y/n " -n 1 -r
+        read -r -p "[     OK     ] Restart realmd,mangos? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
-
           # this is for docker users
           if [ -f /.dockerenv ]; then
             if screen -list 2>/dev/null |
               grep -q "realmd" 2>/dev/null; then
               echo "Killing screen (realmd)"
+              sudo killall screen 2>/dev/null
+              sleep 2
             fi
             if screen -list 2>/dev/null |
               grep -q "mangosd" 2>/dev/null; then
               echo "Killing screen (mangosd)"
+              sudo killall screen 2>/dev/null
+              sleep 2
             fi
-            sleep 3
-            sudo killall screen 2>/dev/null
-            echo "Starting server with screen
-'screen -list' -> 'screen -r NUM'"
-            sleep 3
+            printf "[     ${G1:?}OK${N0:?}     ] Starting realmd & mangos service with screen.\n"
+            echo "[     OK     ] Starting server with screen."
+            sleep 2
             # remove dead screens
             screen -wipe 2>/dev/null
             # setup screens
@@ -3863,185 +3790,118 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             cp "$FOLDER_CORE"/run/logs/Server.log "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
             cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
           else
-
             # keep old logs
             cp "$FOLDER_CORE"/run/logs/Server.log "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
             cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
             # done
-            printf "${G0:?}Restarting${N0:?} server"
-            echo
-            echo -ne '(0%)\r'
+            printf "[     ${G1:?}OK${N0:?}     ] Restarting realmd, mangos service...\n"
             sleep 1
             sudo service realmd restart &>/dev/null
-            echo -ne '(50%)\r'
+            # realmd service
+            case "$(echo "$PIDOF_REALMD")" in
+            0) printf "[  ${GR:?}OFFLINE!${N0:?}  ] realmd service offline!\n" ;;
+            1) printf "[     ${G1:?}OK${N0:?}     ] realmd service started!\n" ;;
+            *) printf "[     ${Y1:?}0!${N0:?}     ] realmd service running?\n" ;;
+            esac
             sleep 1
             sudo service mangosd restart &>/dev/null
-            echo -ne '(100%)\r'
-            sleep 1
-            echo
-            echo "Please wait"
-
-            # wait wordlist
-            # note - don't put any space(s) between keywords.
-
-            # realmd
-            WORDLIST_REALMD=(".*[A]\sYou\shave:\s-->*.
-.*[B]\sYou\sneed:\s-->*.
-.*Added\srealm\sid*.
-.*Can't\sconnect\sto\slocal\sMySQL*.
-.*cannot\sfind\sthe\sversion\sinfo*.
-.*database\sis\smissing\sor\scorrupt*.
-.*reinstall\syour*.")
-            # mangosd
-
-            WORDLIST_MANGOSD=(".*[A]\sYou\shave:\s-->*.
-.*[B]\sYou\sneed:\s-->*.
-.*Can't\sconnect\sto\slocal\sMySQL*.
-.*core\sdumped*.
-.*corrupt*.
-.*critical*.
-.*fail*.
-.*failed*.
-.*fatal*.
-.*file\struncated*.
-.*Halting\sprocess*.
-.*initialized*.
-.*malformed*.
-.*out\sof\sdate!*.
-.*reinstall\syour*.
-.*segfault*.
-.*Segmentation\sfault*.
-.*STARTUP*.
-.*TIME*.
-.*You\smust\sapply\sall\supdates\safter\s[A]\sto\s[B]*.")
-
-            # wait wordlist done
-
-            # wait for realmd & mangosd to fill up logs
-
-            # Realmd.log
-            tail -f "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null |
-              { grep -q -m 1 "${WORDLIST_REALMD[@]}" && pkill -P $$ -x tail 2>/dev/null; }
-            # Server.log
-            tail -f "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null |
-              { grep -q -m 1 "${WORDLIST_MANGOSD[@]}" && pkill -P $$ -x tail 2>/dev/null; }
-            # wait for realmd & mangosd to fill up logs done
-
-            clear
-
-            # realmd service
-            case "$(pidof $REALM_SERVICE | wc -w)" in
-            0) printf "Realm [${GR:?}off${N0:?}] " ;;
-            1) printf "Realm [${G0:?}active${N0:?}] " ;;
-            *) printf "Realm [${Y0:?}ok?${N0:?}] " ;;
-            esac
-
             # mangosd service
-            case "$(pidof $WORLD_SERVICE | wc -w)" in
-            0) printf "World [${GR:?}off${N0:?}] " ;;
-            1) printf "World [${G0:?}active${N0:?}] " ;;
-            *) printf "World [${Y0:?}ok?${N0:?}] " ;;
+            case "$(echo "$PIDOFMANGOSD")" in
+            0) printf "[  ${GR:?}OFFLINE!${N0:?}  ] mangosd service offline!\n" ;;
+            1) printf "[     ${G1:?}OK${N0:?}     ] mangosd service started!\n" ;;
+            *) printf "[     ${Y1:?}0!${N0:?}     ] mangosd service running?\n" ;;
             esac
+            sleep 1
+            read -t 5 -r -p "[     OK     ] Wait on mangosd? y/n " -n 1 -r
+            echo
+            if [[ $REPLY =~ ^[Yy]$ ]]; then
+              # wait on mangosd
+              until grep -q -o "World initialized" "$FOLDER_CORE"/run/logs/Server.log; do
+                printf '%b' "[     ${GR:?}OK${N0:?}     ] ${GR:?}Waiting on mangosd${N0:?}\n"
+                sleep 5
+              done
+            else
+              echo "Server is still starting!"
+              sleep 2
+            fi
 
-            echo
-            # realmd.log
-            printf "${THEMES:?}<------------------------------------------------------>${N0:?}"
-            echo
+            # realmd.log #######################################################
+
             # if realm failed
             if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
               # if any, print "Realm failed or halted"
-              echo
-              printf '%b' "$REALMD_LOG_FAILED"
-              echo
+              printf "[     ${R1:?}0H${N0:?}     ] Realm failed or halted!\n"
             else
               # look for empty tables
               if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
-                # if any, print "empty"
-                printf "Server.log "
-                printf '%b' "$REALMD_LOG_EMPTY"
                 # count empty inside log
-                grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null
+                COUNT_EMPTY=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null)
+                # if any, print "empty"
+                printf "[     ${Y1:?}0E${N0:?}     ] Realm: ${Y1:?}$COUNT_EMPTY${N0:?} Tables are empty, doesn't exist!\n"
               fi
               # look for error
               if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
-                # if any, print "error"
-                printf "Realmd.log "
-                printf '%b' "$REALMD_LOG_ERROR"
                 # count errors inside log
-                grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null
-              # if nothing, print "ok"
+                COUNT_ERROR=$(grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null)
+                # if any, print "error"
+                printf "[     ${R1:?}1E${N0:?}     ] Realm: ${R1:?}$COUNT_ERROR${N0:?} Error!\n"
               else
-                printf "Realmd.log "
-                printf '%b' "$REALMD_LOG_OK"
-                echo
+                # if nothing, print "ok"
+                printf "[     ${G1:?}OK${N0:?}     ] Realm OK!\n"
               fi
               # this database (realmd) is out of date!
               if grep -E -q "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
-                echo
-                printf '%b' "Database is out of date!
-${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
-                echo
+                printf '%b' "[     ${Y1:?}0D${N0:?}     ] Realm database is out of date!\n"
+                printf '%b' "[     ${G0:?}1D${N0:?}     ] Menu: 'd' > Apply all updates [A]-[B]"
               fi
               # databases is missing or corrupt.
               if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
-                echo
-                printf '%b' "Database is missing or corrupt!"
-                echo
+                printf "[     ${R1:?}X0${N0:?}     ] Realm database is missing or corrupt!\n"
               fi
               # reinstall your (realmd) database
               if grep -E -q "reinstall\syour|\sUnknown\sdatabase\s|Reinstall\syour\s[REALMD]\sdatabase\s" "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
-                echo
-                printf '%b' "Reinstall your database!"
-                echo
+                printf "[     ${R1:?}X1${N0:?}     ] Reinstall your realm database!\n"
+              fi
+              # can't connect to local mysql through socket
+              if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
+                printf "[     ${R1:?}X2${N0:?}     ] Realm can't connect to local MySQL!\n"
               fi
               # your realmd.conf version indicates your conf file is out of date
               if grep -E -q ".*Your\srealmd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
-                echo
-                printf "${R0:?}WARNING${N0:?} "
-                printf '%b' "realmd.conf is out of date!"
-                echo
+                printf "[     ${R1:?}X3${N0:?}     ] realmd.conf is out of date!\n"
               fi
             fi
-            echo
-            tail "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null
-            # server.log
-            printf "${THEMES:?}<------------------------------------------------------>${N0:?}"
-            echo
+
+            # server.log #######################################################
+
             # if world failed
             if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
               # if any, print "World failed or halted"
-              echo
-              printf '%b' "$SERVER_LOG_FAILED"
-              echo
+              printf "[     ${R1:?}0H${N0:?}     ] World failed or halted!\n"
             else
               # look for empty tables
               if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-                # if any, print "empty"
-                printf "Server.log "
-                printf '%b' "$SERVER_LOG_EMPTY"
                 # count empty inside log
-                grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null
+                COUNT_EMPTY=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
+                # if any, print "empty"
+                printf "[     ${Y1:?}0E${N0:?}     ] World: ${Y1:?}$COUNT_EMPTY${N0:?} Tables are empty or doesn't exist!\n"
               fi
               # look for error
               if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-                # if any, print "error"
-                printf "Server.log "
-                printf '%b' "$SERVER_LOG_ERROR"
                 # count errors inside log
-                grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null
+                COUNT_ERROR=$(grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
+                # if any, print "error"
+                printf "[     ${R1:?}1E${N0:?}     ] World: ${R1:?}$COUNT_ERROR${N0:?} Error!\n"
                 # look for serious error
                 if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-                  # if any, print "serious"
-                  printf "Server.log "
-                  printf '%b' "$SERVER_LOG_SERIOUS"
                   # count serious errors inside log
-                  grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null
+                  COUNT_ERROR_SERIOUS=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
+                  # if any, print "serious"
+                  printf "[     ${R1:?}X9${N0:?}     ] World has ${R1:?}$COUNT_ERROR_SERIOUS${N0:?} serious error!\n"
                 fi
-              # if nothing, print "ok"
               else
-                printf "Server.log "
-                printf '%b' "$SERVER_LOG_OK"
-                echo
+                # if nothing, print "ok"
+                printf "[     ${G1:?}OK${N0:?}     ] World OK!\n"
               fi
               # world failed
               if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
@@ -4052,66 +3912,46 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
               fi
               # this database (mangosd) is out of date!
               if grep -E -q "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-                echo
-                printf '%b' "Database is out of date!
-${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
-                echo
+                printf '%b' "[     ${GR:?}0D${N0:?}     ] World database is out of date!\n"
+                printf '%b' "[     ${GR:?}1D${N0:?}     ] Menu: 'd' > Apply all updates [A]-[B]"
               fi
               # databases is missing or corrupt.
               if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-                echo
-                printf '%b' "Database is missing or corrupt!"
-                echo
+                printf "[     ${R1:?}X0${N0:?}     ] World database is missing or corrupt!\n"
               fi
               # reinstall your (mangosd) database
               if grep -E -q "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-                echo
-                printf '%b' "Reinstall your database!"
-                echo
+                printf "[     ${R1:?}X1${N0:?}     ] Reinstall your world database!\n"
               fi
               # can't connect to local mysql through socket
               if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-                echo
-                printf '%b' "Can't connect to local MySQL!"
-                echo
+                printf "[     ${R1:?}X2${N0:?}     ] World can't connect to local MySQL!\n"
               fi
               # your mangosd.conf version indicates your conf file is out of date
               if grep -E -q ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-                echo
-                printf "${R0:?}WARNING${N0:?} "
-                printf '%b' "mangosd.conf is out of date!"
-                echo
+                printf "[     ${R1:?}X3${N0:?}     ] realmd.conf is out of date!\n"
               fi
-              # get startup time
-              STARTUP_TIME=$(grep "SERVER\sSTARTUP\sTIME*." wow/mangos-classic/run/logs/Server.log 2>/dev/null |
-                cut -d\  -f6-9 2>/dev/null)
-              # world initialized
-              if grep -E -q "World\sinitialized" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-                # if any, print "World initialized"
-                echo
-                printf '%b' "$SERVER_LOG_INITIALIZED $STARTUP_TIME"
-                echo
-              fi
+
               # Playerbot loaded
               if grep -E -q "Playerbot: Using configuration file" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
                 # if any, print "Playerbot ok"
-                printf '%b' "${G0:?}Playerbot${N0:?}"
-                echo
+                printf "[     ${G1:?}OK${N0:?}     ] Playerbot is running!\n"
               else
-                # off
-                printf '%b' "${GR:?}Playerbot${N0:?}"
-                echo
+                # offline
+                printf "[     ${GR:?}NO${N0:?}     ] Playerbot is offline.\n"
               fi
               # ahbot loaded and initialized
               if grep -E -q "Initialize AuctionHouseBot..." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
                 # if any, print "AHbot ok"
-                printf '%b' "${G0:?}AHbot${N0:?}"
-                echo
+                printf "[     ${G1:?}OK${N0:?}     ] AHbot is running!\n"
               else
                 # off
-                printf '%b' "${GR:?}AHbot${N0:?}"
-                echo
+                printf "[     ${GR:?}NO${N0:?}     ] AHbot is offline.\n"
               fi
+              # get startup time
+              STARTUP_TIME=$(grep "SERVER\sSTARTUP\sTIME*." wow/mangos-classic/run/logs/Server.log 2>/dev/null |
+                cut -d\  -f6-9 2>/dev/null)
+              printf '%b' "[     ${G1:?}OK${N0:?}     ] World initialized! $STARTUP_TIME\n"
             fi
             echo
             printf "${G0:?}>${N0:?} hit Any key to go back."
@@ -4122,8 +3962,6 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
             case $ans in
             "t")
               tail "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null
-              echo
-              printf "${THEMES:?}<------------------------------------------------------>${N0:?}"
               echo
               read -r -p "Press Enter to continue" </dev/tty
               ;;
@@ -4168,19 +4006,19 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
 
       "2")
 
-        read -r -p "Restart realmd? y/n " -n 1 -r
+        read -r -p "[     OK     ] Restart realmd? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
-
           # this is for docker users
           if [ -f /.dockerenv ]; then
             if screen -list 2>/dev/null |
               grep -q "realmd" 2>/dev/null; then
               echo "Killing screen (realmd)"
+              sudo killall screen
+              sleep 2
             fi
-            echo "Starting server with screen
-'screen -list' -> 'screen -r NUM'"
-            sleep 3
+            echo "[     OK     ] Starting server with screen."
+            sleep 2
             # remove dead screens
             screen -wipe 2>/dev/null
             # setup screen
@@ -4193,15 +4031,13 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
             cp "$FOLDER_CORE"/run/logs/Server.log "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
             cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
           else
-
             # keep old logs
             cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
-            # done
-            printf "${G0:?}Restarting${N0:?} realmd"
-            echo
-            echo "Please wait"
+            # restart service (realmd)
+            printf "[     ${Y1:?}OK${N0:?}     ] Restarting realmd, mangos service...\n"
             sleep 1
             sudo service realmd restart &>/dev/null
+            printf "[     ${G1:?}OK${N0:?}     ] realmd service started!\n"
             sleep 1
             echo
           fi
@@ -4215,19 +4051,19 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
 
       "3")
 
-        read -r -p "Restart mangosd? y/n " -n 1 -r
+        read -r -p "[     OK     ] Restart mangos? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
-
           # this is for docker users
           if [ -f /.dockerenv ]; then
             if screen -list 2>/dev/null |
               grep -q "mangosd" 2>/dev/null; then
               echo "Killing screen (mangosd)"
+              sudo killall screen
+              sleep 2
             fi
-            echo "Starting server with screen
-'screen -list' -> 'screen -r NUM'"
-            sleep 3
+            echo "[     OK     ] Starting server with screen."
+            sleep 2
             # remove dead screens
             screen -wipe 2>/dev/null
             # setup screen
@@ -4240,50 +4076,14 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
             cp "$FOLDER_CORE"/run/logs/Server.log "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
             cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
           else
-
             # keep old logs
             cp "$FOLDER_CORE"/run/logs/Server.log "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
-            # done
-            printf "${G0:?}Restarting${N0:?} mangosd"
-            echo
+            # restart service (mangosd)
+            printf "[     ${Y1:?}OK${N0:?}     ] Restarting mangos service...\n"
             sleep 1
             sudo service mangosd restart &>/dev/null
+            printf "[     ${G1:?}OK${N0:?}     ] mangosd service started!\n"
             sleep 1
-            echo "Please wait"
-
-            # wait wordlist
-            # note - don't put any space(s) between keywords.
-
-            # mangosd
-            WORDLIST_MANGOSD=(".*[A]\sYou\shave:\s-->*.
-.*[B]\sYou\sneed:\s-->*.
-.*Can't\sconnect\sto\slocal\sMySQL*.
-.*core\sdumped*.
-.*corrupt*.
-.*critical*.
-.*fail*.
-.*failed*.
-.*fatal*.
-.*file\struncated*.
-.*Halting\sprocess*.
-.*initialized*.
-.*malformed*.
-.*out\sof\sdate!*.
-.*reinstall\syour*.
-.*segfault*.
-.*Segmentation\sfault*.
-.*STARTUP*.
-.*TIME*.
-.*You\smust\sapply\sall\supdates\safter\s[A]\sto\s[B]*.")
-
-            # wait wordlist done
-
-            # wait for mangosd to fill up logs
-
-            # Server.log
-            tail -f "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null |
-              { grep -q -m 1 "${WORDLIST_MANGOSD[@]}" && pkill -P $$ -x tail 2>/dev/null; }
-            # wait for mangosd to fill up logs done
           fi
         fi
 
@@ -4483,201 +4283,133 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
 
     clear
 
-    # codes
-    # realmd.log
-    REALMD_LOG_EMPTY="${Y0:?}Empty${N0:?} -> "
-    REALMD_LOG_ERROR="${R0:?}Error${N0:?} -> "
-    REALMD_LOG_FAILED="${R0:?}Realm halted or failed${N0:?}"
-    REALMD_LOG_OK="${G0:?}ok${N0:?}"
+    # realmd.log ###############################################################
 
-    # server.log
-    SERVER_LOG_INITIALIZED="${G0:?}World initialized${N0:?}"
-    SERVER_LOG_SERIOUS="${R1:?}Serious${N0:?} -> "
-    SERVER_LOG_FAILED="${R0:?}World halted or failed${N0:?}"
-    SERVER_LOG_ERROR="${R0:?}Error${N0:?} -> "
-    SERVER_LOG_EMPTY="${Y0:?}Empty${N0:?} -> "
-    SERVER_LOG_OK="${G0:?}ok${N0:?}"
-
-    # service status
-    WORLD_SERVICE=mangosd
-    REALM_SERVICE=realmd
-    # codes done
-
-    # realmd service
-    case "$(pidof $REALM_SERVICE | wc -w)" in
-    0) printf "Realm [${GR:?}off${N0:?}] " ;;
-    1) printf "Realm [${G0:?}active${N0:?}] " ;;
-    *) printf "Realm [${Y0:?}ok?${N0:?}] " ;;
-    esac
-
-    # mangosd service
-    case "$(pidof $WORLD_SERVICE | wc -w)" in
-    0) printf "World [${GR:?}off${N0:?}] " ;;
-    1) printf "World [${G0:?}active${N0:?}] " ;;
-    *) printf "World [${Y0:?}ok?${N0:?}] " ;;
-    esac
-
-    echo
-    # realmd.log
-    printf "${THEMES:?}<------------------------------------------------------>${N0:?}"
-    echo
     # if realm failed
     if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
       # if any, print "Realm failed or halted"
-      echo
-      printf '%b' "$REALMD_LOG_FAILED"
-      echo
+      printf "[     ${R1:?}0H${N0:?}     ] Realm failed or halted!\n"
     else
       # look for empty tables
       if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
-        # if any, print "empty"
-        printf "Server.log "
-        printf '%b' "$REALMD_LOG_EMPTY"
         # count empty inside log
-        grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null
+        COUNT_EMPTY=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null)
+        # if any, print "empty"
+        printf "[     ${Y1:?}0E${N0:?}     ] Realm: ${Y1:?}$COUNT_EMPTY${N0:?} Tables are empty, doesn't exist!\n"
       fi
       # look for error
       if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
-        # if any, print "error"
-        printf "Realmd.log "
-        printf '%b' "$REALMD_LOG_ERROR"
         # count errors inside log
-        grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null
-      # if nothing, print "ok"
+        COUNT_ERROR=$(grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null)
+        # if any, print "error"
+        printf "[     ${R1:?}1E${N0:?}     ] Realm: ${R1:?}$COUNT_ERROR${N0:?} Error!\n"
       else
-        printf "Realmd.log "
-        printf '%b' "$REALMD_LOG_OK"
-        echo
+        # if nothing, print "ok"
+        printf "[     ${G1:?}OK${N0:?}     ] Realm OK!\n"
       fi
       # this database (realmd) is out of date!
       if grep -E -q "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
-        echo
-        printf '%b' "Database is out of date!
-${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
-        echo
+        printf '%b' "[     ${Y1:?}0D${N0:?}     ] Realm database is out of date!\n"
+        printf '%b' "[     ${G0:?}1D${N0:?}     ] Menu: 'd' > Apply all updates [A]-[B]"
       fi
       # databases is missing or corrupt.
       if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
-        echo
-        printf '%b' "Database is missing or corrupt!"
-        echo
+        printf "[     ${R1:?}X0${N0:?}     ] Realm database is missing or corrupt!\n"
       fi
       # reinstall your (realmd) database
       if grep -E -q "reinstall\syour|\sUnknown\sdatabase\s|Reinstall\syour\s[REALMD]\sdatabase\s" "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
-        echo
-        printf '%b' "Reinstall your database!"
-        echo
+        printf "[     ${R1:?}X1${N0:?}     ] Reinstall your realm database!\n"
+      fi
+      # can't connect to local mysql through socket
+      if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
+        printf "[     ${R1:?}X2${N0:?}     ] Realm can't connect to local MySQL!\n"
       fi
       # your realmd.conf version indicates your conf file is out of date
       if grep -E -q ".*Your\srealmd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
-        echo
-        printf "${R0:?}WARNING${N0:?} "
-        printf '%b' "realmd.conf is out of date!"
-        echo
+        printf "[     ${R1:?}X3${N0:?}     ] realmd.conf is out of date!\n"
       fi
     fi
-    echo
-    tail "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null
-    # server.log
-    printf "${THEMES:?}<------------------------------------------------------>${N0:?}"
-    echo
+
+    # server.log ###############################################################
+
     # if world failed
     if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
       # if any, print "World failed or halted"
-      echo
-      printf '%b' "$SERVER_LOG_FAILED"
-      echo
+      printf "[     ${R1:?}0H${N0:?}     ] World failed or halted!\n"
     else
       # look for empty tables
       if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-        # if any, print "empty"
-        printf "Server.log "
-        printf '%b' "$SERVER_LOG_EMPTY"
         # count empty inside log
-        grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null
+        COUNT_EMPTY=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
+        # if any, print "empty"
+        printf "[     ${Y1:?}0E${N0:?}     ] World: ${Y1:?}$COUNT_EMPTY${N0:?} Tables are empty or doesn't exist!\n"
       fi
       # look for error
       if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-        # if any, print "error"
-        printf "Server.log "
-        printf '%b' "$SERVER_LOG_ERROR"
         # count errors inside log
-        grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null
+        COUNT_ERROR=$(grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
+        # if any, print "error"
+        printf "[     ${R1:?}1E${N0:?}     ] World: ${R1:?}$COUNT_ERROR${N0:?} Error!\n"
         # look for serious error
         if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-          # if any, print "serious"
-          printf "Server.log "
-          printf '%b' "$SERVER_LOG_SERIOUS"
           # count serious errors inside log
-          grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null
+          COUNT_ERROR_SERIOUS=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
+          # if any, print "serious"
+          printf "[     ${R1:?}X9${N0:?}     ] World has ${R1:?}$COUNT_ERROR_SERIOUS${N0:?} serious error!\n"
         fi
-      # if nothing, print "ok"
       else
-        printf "Server.log "
-        printf '%b' "$SERVER_LOG_OK"
+        # if nothing, print "ok"
+        printf "[     ${G1:?}OK${N0:?}     ] World OK!\n"
+      fi
+      # world failed
+      if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
+        # if any, print "World failed"
+        echo
+        printf '%b' "$SERVER_LOG_FAILED"
         echo
       fi
       # this database (mangosd) is out of date!
       if grep -E -q "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-        echo
-        printf '%b' "Database is out of date!
-${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
-        echo
+        printf '%b' "[     ${GR:?}0D${N0:?}     ] World database is out of date!\n"
+        printf '%b' "[     ${GR:?}1D${N0:?}     ] Menu: 'd' > Apply all updates [A]-[B]"
       fi
       # databases is missing or corrupt.
       if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-        echo
-        printf '%b' "Database is missing or corrupt!"
-        echo
+        printf "[     ${R1:?}X0${N0:?}     ] World database is missing or corrupt!\n"
       fi
       # reinstall your (mangosd) database
       if grep -E -q "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-        echo
-        printf '%b' "Reinstall your database!"
-        echo
+        printf "[     ${R1:?}X1${N0:?}     ] Reinstall your world database!\n"
       fi
       # can't connect to local mysql through socket
       if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-        echo
-        printf '%b' "Can't connect to local MySQL!"
-        echo
+        printf "[     ${R1:?}X2${N0:?}     ] World can't connect to local MySQL!\n"
       fi
       # your mangosd.conf version indicates your conf file is out of date
       if grep -E -q ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-        echo
-        printf "${R0:?}WARNING${N0:?} "
-        printf '%b' "mangosd.conf is out of date!"
-        echo
+        printf "[     ${R1:?}X3${N0:?}     ] realmd.conf is out of date!\n"
       fi
-      # get startup time
-      STARTUP_TIME=$(grep "SERVER\sSTARTUP\sTIME*." wow/mangos-classic/run/logs/Server.log 2>/dev/null |
-        cut -d\  -f6-9 2>/dev/null)
-      # world initialized
-      if grep -E -q "World\sinitialized" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
-        # if any, print "World initialized"
-        echo
-        printf '%b' "$SERVER_LOG_INITIALIZED $STARTUP_TIME"
-        echo
-      fi
+
       # Playerbot loaded
       if grep -E -q "Playerbot: Using configuration file" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
         # if any, print "Playerbot ok"
-        printf '%b' "${G0:?}Playerbot${N0:?}"
-        echo
+        printf "[     ${G1:?}OK${N0:?}     ] Playerbot is running!\n"
       else
-        # off
-        printf '%b' "${GR:?}Playerbot${N0:?}"
-        echo
+        # offline
+        printf "[     ${GR:?}NO${N0:?}     ] Playerbot is offline.\n"
       fi
       # ahbot loaded and initialized
       if grep -E -q "Initialize AuctionHouseBot..." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
         # if any, print "AHbot ok"
-        printf '%b' "${G0:?}AHbot${N0:?}"
-        echo
+        printf "[     ${G1:?}OK${N0:?}     ] AHbot is running!\n"
       else
         # off
-        printf '%b' "${GR:?}AHbot${N0:?}"
-        echo
+        printf "[     ${GR:?}NO${N0:?}     ] AHbot is offline.\n"
+      fi
+      # get startup time
+      if STARTUP_TIME=$(grep "SERVER\sSTARTUP\sTIME*." wow/mangos-classic/run/logs/Server.log 2>/dev/null |
+        cut -d\  -f6-9 2>/dev/null); then
+        printf '%b' "[     ${G1:?}OK${N0:?}     ] World initialized! $STARTUP_TIME\n"
       fi
     fi
     echo
@@ -4687,10 +4419,8 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
     echo
     echo
     case $ans in
-    t | T)
+    "t")
       tail "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null
-      echo
-      printf "${THEMES:?}<------------------------------------------------------>${N0:?}"
       echo
       read -r -p "Press Enter to continue" </dev/tty
       ;;
@@ -4700,11 +4430,11 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
       ;;
     "n")
       echo
-      nano "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null
+      nano "$FOLDER_CORE"/run/logs/Server.log
       ;;
     "N")
       echo
-      nano "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null
+      nano "$FOLDER_CORE"/run/logs/Realmd.log
       ;;
 
       # lnav
@@ -4720,13 +4450,8 @@ ${GR:?}(d) Update Database > Apply all updates [A]-[B]${N0:?}"
       if ! [ -x "$(command -v lnav)" ]; then
         sudo apt install lnav -y 2>/dev/null
       fi
-      lnav "${LOGS[@]}"
-
+      lnav "${LOGS[@]}" 2>/dev/null
       ;;
-
-      # lnav - done
-
-    *) ;;
 
     esac
 

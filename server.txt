@@ -27,6 +27,8 @@ CMAKE="-DCMAKE_INSTALL_PREFIX=/home/ubuntu/wow/mangos-classic/run
 
 GROUP="ubuntu"
 USER="ubuntu"
+REALM_SERVICE=realmd
+WORLD_SERVICE=mangosd
 PATCH="CMaNGOS.patch" # please edit if wrong name.
 
 # GIT ##########################################################################
