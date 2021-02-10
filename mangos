@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20211002
-# 4.9.3.6
+# 4.9.4.1
 
 # codes
 while :; do
@@ -1604,6 +1604,8 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
         fi
         # check if 'InstallFullDB.config' exist done
       fi
+      # restore InstallFullDB.config backup
+      cp "${FOLDER_WOW:?}"/backup/configurations "$FOLDER_DB" 2>/dev/null
     else
 
       # check for updates
@@ -2110,10 +2112,8 @@ Check if correct information, or just restart server."
       read -r -p "[YN] Reinstall (delete /build)? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
-
         # this is for docker users
         if [ -f /.dockerenv ]; then
-          echo
           printf '%b' "[OK] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
           sleep 3
           sudo killall screen &>/dev/null
@@ -2121,20 +2121,16 @@ Check if correct information, or just restart server."
           cp "$FOLDER_CORE"/run/logs/Server.log "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
           cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
         else
-
           if ! [ -x "$(command -v "${PACKAGELIST[@]}")" ]; then
             sudo apt-get install "${PACKAGELIST[@]}" -y 2>/dev/null
           fi
-          echo
           printf '%b' "[OK] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
           sleep 1
-
           # realmd service
           case "$(echo "$PIDOF_REALMD")" in
           0) ;;
           *) sudo service realmd stop ;;
           esac
-
           # mangosd service
           case "$(echo "$PIDOFMANGOSD")" in
           0) ;;
@@ -2166,6 +2162,7 @@ Check if correct information, or just restart server."
         cd "${FOLDER_BUILD:?}" || exit
         # double quotes ("") and single quotes ('') around > $cmake < will mess things up.
         # shellcheck disable=SC2086
+        echo
         cmake .. ${CMAKE:?}
         cd "$FOLDER_BUILD" || exit
 
@@ -2508,7 +2505,15 @@ Select install operation"
       read -r -p "[YN] Delete Database Directory? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
-        cp "$FOLDER_CORE"/run/etc/*.conf "${FOLDER_WOW:?}"/backup 2>/dev/null
+        # create backup directory
+        cd "$FOLDER_WOW" || exit
+        sudo mkdir backup &>/dev/null
+        # create configurations directory
+        cd "$FOLDER_WOW"/backup || exit
+        sudo mkdir configurations &>/dev/null
+        cd || exit
+        cp "$FOLDER_DB"/InstallFullDB.config "${FOLDER_WOW:?}"/backup/configurations 2>/dev/null
+        cp "$FOLDER_CORE"/run/etc/*.conf "${FOLDER_WOW:?}"/backup/configurations 2>/dev/null
         sudo rm -R "$FOLDER_DB" &>/dev/null
       fi
 
