@@ -14,7 +14,7 @@
 
 # By Rainman
 # V2021102
-# 4.7.7.9
+# 4.7.8.4
 
 # codes
 while :; do
@@ -1684,6 +1684,7 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
 
         # this is for docker users
         if [ -f /.dockerenv ]; then
+          echo
           printf "[     OK     ] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
           sleep 3
           sudo killall screen 2>/dev/null
@@ -2047,6 +2048,7 @@ Check if correct information, or just restart server."
 
         # this is for docker users
         if [ -f /.dockerenv ]; then
+          echo
           printf "[     OK     ] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
           sleep 3
           sudo killall screen 2>/dev/null
@@ -2628,6 +2630,7 @@ Please install mysql or mariadb database/client"
 
         # this is for docker users
         if [ -f /.dockerenv ]; then
+          echo
           printf "[     OK     ] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
           sleep 3
           sudo killall screen 2>/dev/null
@@ -2757,6 +2760,7 @@ Please install mysql or mariadb database/client"
 
         # this is for docker users
         if [ -f /.dockerenv ]; then
+          echo
           printf "[     OK     ] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
           sleep 3
           sudo killall screen 2>/dev/null
@@ -2933,6 +2937,7 @@ Please install mysql or mariadb database/client"
 
         # this is for docker users
         if [ -f /.dockerenv ]; then
+          echo
           printf "[     OK     ] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
           sleep 3
           sudo killall screen 2>/dev/null
