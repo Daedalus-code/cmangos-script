@@ -3950,7 +3950,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
                 printf "[     ${R1:?}1E${N0:?}     ] Realm: ${R1:?}$COUNT_ERROR${N0:?} Error!\n"
               else
                 # if nothing, print "ok"
-                printf "[     ${G1:?}OK${N0:?}     ] Realm OK!\n"
+                printf "[     ${G1:?}OK${N0:?}     ] Realm: OK!\n"
               fi
               # this database (realmd) is out of date!
               if grep -E -q "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
@@ -4038,7 +4038,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               # Playerbot loaded
               if grep -E -q "Playerbot: Using configuration file" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
                 # if any, print "Playerbot ok"
-                printf "[     ${G1:?}OK${N0:?}     ] Playerbot is running!\n"
+                printf "[     ${G1:?}OK${N0:?}     ] Playerbot is online!\n"
               else
                 # offline
                 printf "[     ${GR:?}NO${N0:?}     ] Playerbot is offline.\n"
@@ -4046,7 +4046,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               # ahbot loaded and initialized
               if grep -E -q "Initialize AuctionHouseBot..." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
                 # if any, print "AHbot ok"
-                printf "[     ${G1:?}OK${N0:?}     ] AHbot is running!\n"
+                printf "[     ${G1:?}OK${N0:?}     ] AHbot is online!\n"
               else
                 # off
                 printf "[     ${GR:?}NO${N0:?}     ] AHbot is offline.\n"
@@ -4409,7 +4409,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           printf "[     ${R1:?}1E${N0:?}     ] Realm: ${R1:?}$COUNT_ERROR${N0:?} Error!\n"
         else
           # if nothing, print "ok"
-          printf "[     ${G1:?}OK${N0:?}     ] Realm OK!\n"
+          printf "[     ${G1:?}OK${N0:?}     ] Realm: OK!\n"
         fi
         # this database (realmd) is out of date!
         if grep -E -q "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
@@ -4497,7 +4497,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         # Playerbot loaded
         if grep -E -q "Playerbot: Using configuration file" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
           # if any, print "Playerbot ok"
-          printf "[     ${G1:?}OK${N0:?}     ] Playerbot is running!\n"
+          printf "[     ${G1:?}OK${N0:?}     ] Playerbot is online!\n"
         else
           # offline
           printf "[     ${GR:?}NO${N0:?}     ] Playerbot is offline.\n"
@@ -4505,7 +4505,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         # ahbot loaded and initialized
         if grep -E -q "Initialize AuctionHouseBot..." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
           # if any, print "AHbot ok"
-          printf "[     ${G1:?}OK${N0:?}     ] AHbot is running!\n"
+          printf "[     ${G1:?}OK${N0:?}     ] AHbot is online!\n"
         else
           # off
           printf "[     ${GR:?}NO${N0:?}     ] AHbot is offline.\n"
