@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20211002
-# 4.9.2.9
+# 4.9.3.0
 
 # codes
 while :; do
@@ -1529,7 +1529,7 @@ ${THEMES:?}      ._________________.
       read -t 5 -r -p "" -n 1 -r -s
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
-        printf '%b' "[OK] Cloning repository! Please wait this might take a while
+        printf '%b' "[${G1:?}OK${N0:?}] Cloning repository! Please wait this might take a while
 (${G1:?}${GITHUB_CMANGOS:?}${N0:?})\n"
         sudo mkdir "$FOLDER_WOW" &>/dev/null
         sudo chown -R "${USER:?}":"${GROUP:?}" "$FOLDER_WOW"
@@ -1587,7 +1587,7 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
       read -t 5 -r -p "" -n 1 -r -s
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
-        printf '%b' "[OK] Cloning repository! Please wait this might take a while
+        printf '%b' "[${G1:?}OK${N0:?}] Cloning repository! Please wait this might take a while
 (${G1:?}${GITHUB_DATABASE:?})${N0:?}\n"
         sudo mkdir "$FOLDER_WOW" &>/dev/null
         sudo chown -R "${USER:?}":"${GROUP:?}" "$FOLDER_WOW"
@@ -1606,7 +1606,7 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
         # check if 'InstallFullDB.config' exist done
       fi
       # restore InstallFullDB.config backup
-      cp "${FOLDER_WOW:?}"/backup/configurations/InstallFullDB.config "$FOLDER_DB" 2>/dev/null
+      cp "${FOLDER_WOW:?}"/backup/configurations/InstallFullDB.config "$FOLDER_DB"/InstallFullDB.config 2>/dev/null
     else
 
       # check for updates
@@ -2512,6 +2512,7 @@ Select install operation"
         # create configurations directory
         cd "$FOLDER_WOW"/backup || exit
         sudo mkdir configurations &>/dev/null
+        sudo chown -R "${USER:?}":"${GROUP:?}" "$FOLDER_WOW"
         cd || exit
         cp "$FOLDER_DB"/InstallFullDB.config "${FOLDER_WOW:?}"/backup/configurations 2>/dev/null
         cp "$FOLDER_CORE"/run/etc/*.conf "${FOLDER_WOW:?}"/backup/configurations 2>/dev/null
