@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20211002
-# 4.9.4.1
+# 4.9.4.2
 
 # codes
 while :; do
@@ -41,6 +41,7 @@ while :; do
 
   # effects
   UND='\e[4m' # Underline
+  DEF='\e[0m' # Default color and effects
 
   # themes, must contain a number
   # shellcheck disable=SC2153
@@ -1524,7 +1525,7 @@ ${THEMES:?}      ._________________.
       # fresh install ?
       DOWN_CORE=$(echo -e "\033[5m?\033[0m" 2>/dev/null)
       echo -ne '                                      \r'
-      printf '%b' "${GR:?}[YN] (${UND:?}0000000${GR:?}) Download Core$DOWN_CORE y/n, or wait 5 sec${N0:?}"
+      printf '%b' "${GR:?}[YN] (${UND:?}0000000${DEF:?}${GR:?}) Download Core$DOWN_CORE y/n, or wait 5 sec${N0:?}"
       read -t 5 -r -p "" -n 1 -r -s
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -1560,12 +1561,12 @@ ${THEMES:?}      ._________________.
         rm /var/log/ms/installed_core &>/dev/null
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         LATEST_HEAD=$(git rev-parse --short HEAD)
-        printf '%b' "[${G1:?}NEW${N0:?}] (${G1:?}${UND:?}$LATEST_HEAD${N0:?}) ${G1:?}${UND:?}New Updates For Core${N0:?}! - $LATEST_DATE
+        printf '%b' "[${G1:?}NEW${N0:?}] (${G1:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) ${G1:?}${UND:?}New Updates For Core${DEF:?}${N0:?}! - $LATEST_DATE
 ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
       else
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         LATEST_HEAD=$(git rev-parse --short HEAD)
-        printf '%b' "$OK_CORE (${G0:?}${UND:?}$LATEST_HEAD${N0:?}) Core Updated - $LATEST_DATE"
+        printf '%b' "$OK_CORE (${G0:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) Core Updated - $LATEST_DATE"
         echo
       fi
     # check if 'mangos-classic' exist done
@@ -1582,7 +1583,7 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
       # fresh install ?
       DOWN_DB=$(echo -e "\033[5m?\033[0m" 2>/dev/null)
       echo -ne '                                      \r'
-      printf '%b' "${GR:?}[YN] (${UND:?}0000000${GR:?}) Download Database$DOWN_DB y/n, or wait 5 sec${N0:?}"
+      printf '%b' "${GR:?}[YN] (${UND:?}0000000${DEF:?}${GR:?}) Download Database$DOWN_DB y/n, or wait 5 sec${N0:?}"
       read -t 5 -r -p "" -n 1 -r -s
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -1605,7 +1606,7 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
         # check if 'InstallFullDB.config' exist done
       fi
       # restore InstallFullDB.config backup
-      cp "${FOLDER_WOW:?}"/backup/configurations "$FOLDER_DB" 2>/dev/null
+      cp "${FOLDER_WOW:?}"/backup/configurations/InstallFullDB.config "$FOLDER_DB" 2>/dev/null
     else
 
       # check for updates
@@ -1623,12 +1624,12 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
         rm /var/log/ms/installed_db &>/dev/null
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         LATEST_HEAD=$(git rev-parse --short HEAD)
-        printf '%b' "[${G1:?}NEW${N0:?}] (${G1:?}${UND:?}$LATEST_HEAD${N0:?}) ${G1:?}${UND:?}New Updates For Database${N0:?}! - $LATEST_DATE
+        printf '%b' "[${G1:?}NEW${N0:?}] (${G1:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) ${G1:?}${UND:?}New Updates For Database${DEF:?}${N0:?}! - $LATEST_DATE
 ${GR:?}(d) Update Database > Update classic-db${N0:?}\n"
       else
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         LATEST_HEAD=$(git rev-parse --short HEAD)
-        printf '%b' "$OK_DB (${G0:?}${UND:?}$LATEST_HEAD${N0:?}) Database Updated - $LATEST_DATE"
+        printf '%b' "$OK_DB (${G0:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) Database Updated - $LATEST_DATE"
         echo
       fi
     # check if 'classic-db' exist done
@@ -1661,12 +1662,12 @@ ${GR:?}(d) Update Database > Update classic-db${N0:?}\n"
         rm /var/log/ms/installed_ms &>/dev/null
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         LATEST_HEAD=$(git rev-parse --short HEAD)
-        printf '%b' "[${G1:?}NEW${N0:?}] (${G1:?}${UND:?}$LATEST_HEAD${N0:?}) ${G1:?}${UND:?}New Updates For Helper${N0:?}! - $LATEST_DATE
+        printf '%b' "[${G1:?}NEW${N0:?}] (${G1:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) ${G1:?}${UND:?}New Updates For Helper${DEF:?}${N0:?}! - $LATEST_DATE
 ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
       else
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         LATEST_HEAD=$(git rev-parse --short HEAD)
-        printf '%b' "$OK_MS (${G0:?}${UND:?}$LATEST_HEAD${N0:?}) Helper Updated - $LATEST_DATE"
+        printf '%b' "$OK_MS (${G0:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) Helper Updated - $LATEST_DATE"
         echo
       fi
     # check if 'cmangos-script' exist done
@@ -4351,7 +4352,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             git merge origin/master; then
             LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
             LATEST_HEAD=$(git rev-parse --short HEAD)
-            printf '%b' "[${R0:?}old${N0:?}] (${G0:?}${UND:?}$LATEST_HEAD${N0:?}) ${G0:?}${UND:?}New Updates For Helper${N0:?}! - $LATEST_DATE"
+            printf '%b' "[${R0:?}old${N0:?}] (${G0:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) ${G0:?}${UND:?}New Updates For Helper${DEF:?}${N0:?}! - $LATEST_DATE"
             echo
             cd "$FOLDER_HELPER" || exit
             echo
