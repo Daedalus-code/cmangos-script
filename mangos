@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20211002
-# 4.8.4.1
+# 4.8.6.1
 
 # codes
 while :; do
@@ -3946,8 +3946,13 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
                 # count errors inside log
                 COUNT_ERROR=$(grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null)
+                # error rate (total)
+                LOG_LINES=$(wc -l "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null | awk '{ print $1 }' 2>/dev/null)
+                # calculate error rate
+                CALC_ERROR=$(echo "100/$LOG_LINES*$COUNT_ERROR" 2>/dev/null | bc -l 2>/dev/null | awk '{ printf "%.2f%\n", $1 }' 2>/dev/null)
+                ERROR_RATE=$(echo "${CALC_ERROR:?}%")
                 # if any, print "error"
-                printf "[     ${R1:?}1E${N0:?}     ] Realm: ${R1:?}$COUNT_ERROR${N0:?} Error!\n"
+                printf "[     ${R1:?}1E${N0:?}     ] Realm: ${R1:?}$COUNT_ERROR${N0:?} Error! ${GR:?}$ERROR_RATE${N0:?}\n"
               else
                 # if nothing, print "ok"
                 printf "[     ${G1:?}OK${N0:?}     ] Realm: OK!\n"
@@ -3993,8 +3998,13 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
                 # count errors inside log
                 COUNT_ERROR=$(grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
+                # error rate (total)
+                LOG_LINES=$(wc -l "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null | awk '{ print $1 }' 2>/dev/null)
+                # calculate error rate
+                CALC_ERROR=$(echo "100/$LOG_LINES*$COUNT_ERROR" 2>/dev/null | bc -l 2>/dev/null | awk '{ printf "%.2f%\n", $1 }' 2>/dev/null)
+                ERROR_RATE=$(echo "${CALC_ERROR:?}%")
                 # if any, print "error"
-                printf "[     ${R1:?}1E${N0:?}     ] World: ${R1:?}$COUNT_ERROR${N0:?} Error!\n"
+                printf "[     ${R1:?}1E${N0:?}     ] World: ${R1:?}$COUNT_ERROR${N0:?} Error! ${GR:?}$ERROR_RATE${N0:?}\n"
                 # look for serious error
                 if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
                   # count serious errors inside log
@@ -4038,18 +4048,18 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               # Playerbot loaded
               if grep -E -q "Playerbot: Using configuration file" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
                 # if any, print "Playerbot ok"
-                printf "[     ${G1:?}OK${N0:?}     ] Playerbot is online!\n"
+                printf "[     ${G1:?}OK${N0:?}     ] Playerbot\n"
               else
                 # offline
-                printf "[     ${GR:?}NO${N0:?}     ] Playerbot is offline.\n"
+                printf "[     ${GR:?}NO${N0:?}     ] Playerbot\n"
               fi
               # ahbot loaded and initialized
               if grep -E -q "Initialize AuctionHouseBot..." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
                 # if any, print "AHbot ok"
-                printf "[     ${G1:?}OK${N0:?}     ] AHbot is online!\n"
+                printf "[     ${G1:?}OK${N0:?}     ] AHbot\n"
               else
                 # off
-                printf "[     ${GR:?}NO${N0:?}     ] AHbot is offline.\n"
+                printf "[     ${GR:?}NO${N0:?}     ] AHbot\n"
               fi
               # get startup time
               STARTUP_TIME=$(grep "SERVER\sSTARTUP\sTIME*." wow/mangos-classic/run/logs/Server.log 2>/dev/null |
@@ -4405,8 +4415,13 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
           # count errors inside log
           COUNT_ERROR=$(grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null)
+          # error rate (total)
+          LOG_LINES=$(wc -l "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null | awk '{ print $1 }' 2>/dev/null)
+          # calculate error rate
+          CALC_ERROR=$(echo "100/$LOG_LINES*$COUNT_ERROR" 2>/dev/null | bc -l 2>/dev/null | awk '{ printf "%.2f%\n", $1 }' 2>/dev/null)
+          ERROR_RATE=$(echo "${CALC_ERROR:?}%")
           # if any, print "error"
-          printf "[     ${R1:?}1E${N0:?}     ] Realm: ${R1:?}$COUNT_ERROR${N0:?} Error!\n"
+          printf "[     ${R1:?}1E${N0:?}     ] Realm: ${R1:?}$COUNT_ERROR${N0:?} Error! ${GR:?}$ERROR_RATE${N0:?}\n"
         else
           # if nothing, print "ok"
           printf "[     ${G1:?}OK${N0:?}     ] Realm: OK!\n"
@@ -4452,8 +4467,13 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
           # count errors inside log
           COUNT_ERROR=$(grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
+          # error rate (total)
+          LOG_LINES=$(wc -l "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null | awk '{ print $1 }' 2>/dev/null)
+          # calculate error rate
+          CALC_ERROR=$(echo "100/$LOG_LINES*$COUNT_ERROR" 2>/dev/null | bc -l 2>/dev/null | awk '{ printf "%.2f%\n", $1 }' 2>/dev/null)
+          ERROR_RATE=$(echo "${CALC_ERROR:?}%")
           # if any, print "error"
-          printf "[     ${R1:?}1E${N0:?}     ] World: ${R1:?}$COUNT_ERROR${N0:?} Error!\n"
+          printf "[     ${R1:?}1E${N0:?}     ] World: ${R1:?}$COUNT_ERROR${N0:?} Error! ${GR:?}$ERROR_RATE${N0:?}\n"
           # look for serious error
           if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
             # count serious errors inside log
@@ -4497,18 +4517,18 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         # Playerbot loaded
         if grep -E -q "Playerbot: Using configuration file" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
           # if any, print "Playerbot ok"
-          printf "[     ${G1:?}OK${N0:?}     ] Playerbot is online!\n"
+          printf "[     ${G1:?}OK${N0:?}     ] Playerbot\n"
         else
           # offline
-          printf "[     ${GR:?}NO${N0:?}     ] Playerbot is offline.\n"
+          printf "[     ${GR:?}NO${N0:?}     ] Playerbot\n"
         fi
         # ahbot loaded and initialized
         if grep -E -q "Initialize AuctionHouseBot..." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
           # if any, print "AHbot ok"
-          printf "[     ${G1:?}OK${N0:?}     ] AHbot is online!\n"
+          printf "[     ${G1:?}OK${N0:?}     ] AHbot\n"
         else
           # off
-          printf "[     ${GR:?}NO${N0:?}     ] AHbot is offline.\n"
+          printf "[     ${GR:?}NO${N0:?}     ] AHbot\n"
         fi
         # get startup time
         if STARTUP_TIME=$(grep "SERVER\sSTARTUP\sTIME*." wow/mangos-classic/run/logs/Server.log 2>/dev/null |
