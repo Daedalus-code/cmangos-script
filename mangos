@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20211002
-# 4.9.4.2
+# 4.9.3.6
 
 # codes
 while :; do
@@ -1671,7 +1671,6 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
     fi
     echo
     read -r -p "Press Enter to continue" </dev/tty
-    echo
 
     ;;
 
@@ -1744,10 +1743,8 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
       read -r -p "[YN] Compile latest build? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
-
         # this is for docker users
         if [ -f /.dockerenv ]; then
-          echo
           printf '%b' "[OK] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
           sleep 3
           sudo killall screen &>/dev/null
@@ -1755,20 +1752,16 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
           cp "$FOLDER_CORE"/run/logs/Server.log "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
           cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
         else
-
           if ! [ -x "$(command -v "${PACKAGELIST[@]}")" ]; then
             sudo apt-get install "${PACKAGELIST[@]}" -y 2>/dev/null
           fi
-          echo
           printf '%b' "[OK] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
           sleep 1
-
           # realmd service
           case "$(echo "$PIDOF_REALMD")" in
           0) ;;
           *) sudo service realmd stop ;;
           esac
-
           # mangosd service
           case "$(echo "$PIDOFMANGOSD")" in
           0) ;;
@@ -1793,6 +1786,7 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
         cd "${FOLDER_BUILD:?}" || exit
         # double quotes ("") and single quotes ('') around > $cmake < will mess things up.
         # shellcheck disable=SC2086
+        echo
         cmake .. ${CMAKE:?}
         cd "$FOLDER_BUILD" || exit
 
@@ -1983,7 +1977,7 @@ EOF
         TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
         echo
         printf '%b' "$CMAKE_TEMP
-Build time: ${G1:?}$TIMER with ${G1:?}${CORES[0]}${N0:?} Core(s)${N0:?}
+Build time: ${G1:?}$TIMER${N0:?} with ${G1:?}${CORES[0]}${N0:?} Core(s)${N0:?}
 
 Select install operation"
         echo
@@ -2362,7 +2356,7 @@ EOF
         TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
         echo
         printf '%b' "$CMAKE_TEMP
-Build time: ${G1:?}$TIMER with ${G1:?}${CORES[0]}${N0:?} Core(s)${N0:?}
+Build time: ${G1:?}$TIMER${N0:?} with ${G1:?}${CORES[0]}${N0:?} Core(s)${N0:?}
 
 Select install operation"
         echo
@@ -4735,11 +4729,11 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           sleep 1
         else
           # named patch
-          patch -s -p1 <"$NAMED_PATCH"
+          patch -p1 <"$NAMED_PATCH"
         fi
       else
         # named patch ruled by config
-        patch -s -p1 <"$PATCH"
+        patch -p1 <"$PATCH"
       fi
 
       ;;
@@ -4818,7 +4812,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         mv arm_pi4.patch "$FOLDER_CORE"/my_bool.patch
         sleep 1
         # run patch inside core folder
-        patch -s -p1 <my_bool.patch
+        patch -p1 <my_bool.patch
         printf '%b' "${G1:?}Done!${N0:?}\n"
         echo
         read -r -p "Press Enter to continue" </dev/tty
@@ -4828,7 +4822,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         printf '%b' "${G0:?}my_bool.patch ${Y1:?}Already patched, this will reverse it!${N0:?}\n"
         # patching reversed
         cd "$FOLDER_CORE" || exit
-        patch -s -p1 <my_bool.patch
+        patch -p1 <my_bool.patch
       fi
 
       ;;
