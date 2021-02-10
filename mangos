@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20211002
-# 4.9.4.2
+# 4.9.2.9
 
 # codes
 while :; do
@@ -4341,9 +4341,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           sudo chown -R "$USER":"$GROUP" "$FOLDER_INSTALL"
-          echo
           echo "[OK] Checking your current release"
-          echo
           sleep 1
           cd "$FOLDER_HELPER" || exit
           if git checkout master &>/dev/null &&
@@ -4352,39 +4350,28 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             git merge origin/master; then
             LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
             LATEST_HEAD=$(git rev-parse --short HEAD)
-            printf '%b' "[${R0:?}old${N0:?}] (${G0:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) ${G0:?}${UND:?}New Updates For Helper${DEF:?}${N0:?}! - $LATEST_DATE"
-            echo
+            printf '%b' "[${R0:?}old${N0:?}] (${G0:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) ${G0:?}${UND:?}New Updates For Helper${DEF:?}${N0:?}! - $LATEST_DATE\n"
             cd "$FOLDER_HELPER" || exit
-            echo
             sleep 1
-            printf '%b' "[${R0:?}old${N0:?}] -> old release installed!"
+            printf '%b' "[${R0:?}old${N0:?}] -> old release installed!\n"
             sleep 1
-            echo
-            echo
-            printf '%b' "[${G0:?}Updating Helper${N0:?}]"
-            echo
-            echo
+            printf '%b' "[${G0:?}Updating Helper${N0:?}]\n"
             # keep old mangos
             sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old &>/dev/null
             # done
-            printf '%b' "[${G1:?}OK${N0:?}] -> /usr/local/bin/mangos.old"
+            printf '%b' "[${G1:?}OK${N0:?}] -> /usr/local/bin/mangos.old\n"
             sleep 1
-            echo
-            printf '%b' "[${G1:?}OK${N0:?}] -> Stripping executable on 'mangos.old'"
+            printf '%b' "[${G1:?}OK${N0:?}] -> Stripping executable on 'mangos.old'\n"
             sleep 1
-            echo
             sudo chmod -x /usr/local/bin/mangos.old
             sudo chown -R "$USER":"$GROUP" "$FOLDER_HELPER"
             cd "$FOLDER_HELPER" || exit
-            printf '%b' "[${G1:?}OK${N0:?}] -> Installing new release"
+            printf '%b' "[${G1:?}OK${N0:?}] -> Installing new release\n"
             sleep 1
-            echo
             sudo cp "$FOLDER_HELPER"/mangos /usr/local/bin &>/dev/null
             sudo chmod +x /usr/local/bin/mangos
             sleep 1
-            printf '%b' "[${G1:?}OK${N0:?}] -> Installed."
-            echo
-            echo
+            printf '%b' "[${G1:?}OK${N0:?}] -> Installed.\n"
             sleep 1 && exit
           else
             # install new upgrades
