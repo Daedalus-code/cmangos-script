@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20210902
-# 4.7.3.8
+# V2021102
+# 4.7.7.9
 
 # codes
 while :; do
@@ -1684,7 +1684,7 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
 
         # this is for docker users
         if [ -f /.dockerenv ]; then
-          printf '%b' "${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
+          printf "[     OK     ] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
           sleep 3
           sudo killall screen 2>/dev/null
           # keep old logs
@@ -1695,8 +1695,8 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
           if ! [ -x "$(command -v "${PACKAGELIST[@]}")" ]; then
             sudo apt-get install "${PACKAGELIST[@]}" -y 2>/dev/null
           fi
-          printf "${R1:?}Shutting down${GR:?} realmd & mangosd service${N0:?}"
           echo
+          printf "[     OK     ] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
           sleep 1
 
           # realmd service
@@ -1756,8 +1756,8 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
         CORES=$(grep -c ^processor /proc/cpuinfo 2>/dev/null)
         if [[ "$CORES" -ge "1" ]]; then
           # report count
-          CORES_COUNT=$(printf '%b' "${Y1:?}This system has ${CY:?}$CORES${Y1:?} cores!
-$CPU_MODEL${N0:?}")
+          CORES_COUNT=$(printf '%b' "${G0:?}This system has ${G1:?}$CORES${G0:?} Cores!
+${GR:?}$CPU_MODEL${N0:?}")
         else
           CORES_COUNT=""
         fi
@@ -1792,6 +1792,8 @@ EOF
           read -r CUSTOM
           CORES=("$CUSTOM")
           printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} core(s)${N0:?}\n"
+          # start counting (seconds)
+          START="$SECONDS"
           make -j"$CUSTOM" # custom n cores
 
           ;;
@@ -1800,6 +1802,8 @@ EOF
 
           CORES=("1")
           printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} core(s)${N0:?}\n"
+          # start counting (seconds)
+          START="$SECONDS"
           make # 1 core
 
           ;;
@@ -1808,6 +1812,8 @@ EOF
 
           CORES=("2")
           printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} core(s)${N0:?}\n"
+          # start counting (seconds)
+          START="$SECONDS"
           make -j2 # 2 cores
 
           ;;
@@ -1816,6 +1822,8 @@ EOF
 
           CORES=("3")
           printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} core(s)${N0:?}\n"
+          # start counting (seconds)
+          START="$SECONDS"
           make -j3 # 3 cores
 
           ;;
@@ -1824,6 +1832,8 @@ EOF
 
           CORES=("4")
           printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} core(s)${N0:?}\n"
+          # start counting (seconds)
+          START="$SECONDS"
           make -j4 # 4 cores
 
           ;;
@@ -1832,6 +1842,8 @@ EOF
 
           CORES=("8")
           printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} core(s)${N0:?}\n"
+          # start counting (seconds)
+          START="$SECONDS"
           make -j8 # 8 cores
 
           ;;
@@ -1840,6 +1852,8 @@ EOF
 
           CORES=("16")
           printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} core(s)${N0:?}\n"
+          # start counting (seconds)
+          START="$SECONDS"
           make -j16 # 16 cores, h1gh-
 
           ;;
@@ -1848,6 +1862,8 @@ EOF
 
           CORES=("32")
           printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} core(s)${N0:?}\n"
+          # start counting (seconds)
+          START="$SECONDS"
           make -j32 # 32 cores, -w@y
 
           ;;
@@ -1856,6 +1872,8 @@ EOF
 
           CORES=("64")
           printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} core(s)${N0:?}\n"
+          # start counting (seconds)
+          START="$SECONDS"
           make -j64 # 64 cores, t0
 
           ;;
@@ -1864,6 +1882,8 @@ EOF
 
           CORES=("128")
           printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} core(s)${N0:?}\n"
+          # start counting (seconds)
+          START="$SECONDS"
           make -j128 # 128 cores, h3ll
 
           ;;
@@ -1883,12 +1903,15 @@ EOF
         if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
           CPU_TEMP=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
             cut -c -4 2>/dev/null)
-          CMAKE_TEMP=$(printf '%b' "CPU: ${G0:?}$CPU_TEMP${N0:?}° with ${CORES[0]} core(s).")
+          CMAKE_TEMP=$(printf '%b' "CPU: ${G0:?}$CPU_TEMP${N0:?}° with ${CORES[0]} Core(s).")
         else
           CMAKE_TEMP=""
         fi
+        # get seconds since start
+        DURATION=$(echo "$SECONDS-$START" 2>/dev/null | bc 2>/dev/null)
         echo
         printf '%b' "$CMAKE_TEMP
+Took ${G1:?}$DURATION${N0:?} seconds to build Core.
 
 Select install operation"
         echo
@@ -1938,8 +1961,8 @@ Select install operation"
         esac
 
         sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
-
         echo
+        printf '%b' "[${G1:?}ok${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
       fi
@@ -2024,7 +2047,7 @@ Check if correct information, or just restart server."
 
         # this is for docker users
         if [ -f /.dockerenv ]; then
-          printf '%b' "${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
+          printf "[     OK     ] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
           sleep 3
           sudo killall screen 2>/dev/null
           # keep old logs
@@ -2035,8 +2058,8 @@ Check if correct information, or just restart server."
           if ! [ -x "$(command -v "${PACKAGELIST[@]}")" ]; then
             sudo apt-get install "${PACKAGELIST[@]}" -y 2>/dev/null
           fi
-          printf "${R1:?}Shutting down${GR:?} realmd & mangosd service${N0:?}"
           echo
+          printf "[     OK     ] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
           sleep 1
 
           # realmd service
@@ -2103,8 +2126,8 @@ Check if correct information, or just restart server."
         CORESC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null)
         if [[ "${CORES:?}" -ge "1" ]]; then
           # report count
-          CORES_COUNT=$(printf '%b' "${Y1:?}This system has ${CY:?}${CORESC:?}${Y1:?} cores!
-$CPU_MODEL${N0:?}")
+          CORES_COUNT=$(printf '%b' "${G0:?}This system has ${G1:?}$CORESC${G0:?} Cores!
+${GR:?}$CPU_MODEL${N0:?}")
         else
           CORES_COUNT=""
         fi
@@ -2139,6 +2162,8 @@ EOF
           read -r CUSTOM
           CORES=("$CUSTOM")
           printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} core(s)${N0:?}\n"
+          # start counting (seconds)
+          START="$SECONDS"
           make -j"$CUSTOM" # custom n cores
 
           ;;
@@ -2147,6 +2172,8 @@ EOF
 
           CORES=("1")
           printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} core(s)${N0:?}\n"
+          # start counting (seconds)
+          START="$SECONDS"
           make # 1 core
 
           ;;
@@ -2155,6 +2182,8 @@ EOF
 
           CORES=("2")
           printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} core(s)${N0:?}\n"
+          # start counting (seconds)
+          START="$SECONDS"
           make -j2 # 2 cores
 
           ;;
@@ -2163,6 +2192,8 @@ EOF
 
           CORES=("3")
           printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} core(s)${N0:?}\n"
+          # start counting (seconds)
+          START="$SECONDS"
           make -j3 # 3 cores
 
           ;;
@@ -2171,6 +2202,8 @@ EOF
 
           CORES=("4")
           printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} core(s)${N0:?}\n"
+          # start counting (seconds)
+          START="$SECONDS"
           make -j4 # 4 cores
 
           ;;
@@ -2179,6 +2212,8 @@ EOF
 
           CORES=("8")
           printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} core(s)${N0:?}\n"
+          # start counting (seconds)
+          START="$SECONDS"
           make -j8 # 8 cores
 
           ;;
@@ -2187,6 +2222,8 @@ EOF
 
           CORES=("16")
           printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} core(s)${N0:?}\n"
+          # start counting (seconds)
+          START="$SECONDS"
           make -j16 # 16 cores, h1gh-
 
           ;;
@@ -2195,6 +2232,8 @@ EOF
 
           CORES=("32")
           printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} core(s)${N0:?}\n"
+          # start counting (seconds)
+          START="$SECONDS"
           make -j32 # 32 cores, -w@y
 
           ;;
@@ -2203,6 +2242,8 @@ EOF
 
           CORES=("64")
           printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} core(s)${N0:?}\n"
+          # start counting (seconds)
+          START="$SECONDS"
           make -j64 # 64 cores, t0
 
           ;;
@@ -2211,6 +2252,8 @@ EOF
 
           CORES=("128")
           printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} core(s)${N0:?}\n"
+          # start counting (seconds)
+          START="$SECONDS"
           make -j128 # 128 cores, h3ll
 
           ;;
@@ -2230,12 +2273,15 @@ EOF
         if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
           CPU_TEMP=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
             cut -c -4 2>/dev/null)
-          CMAKE_TEMP=$(printf '%b' "CPU: ${G0:?}$CPU_TEMP${N0:?}° with ${CORES[0]} core(s).")
+          CMAKE_TEMP=$(printf '%b' "CPU: ${G0:?}$CPU_TEMP${N0:?}° with ${CORES[0]} Core(s).")
         else
           CMAKE_TEMP=""
         fi
+        # get seconds since start
+        DURATION=$(echo "$SECONDS-$START" 2>/dev/null | bc 2>/dev/null)
         echo
         printf '%b' "$CMAKE_TEMP
+Took ${G1:?}$DURATION${N0:?} seconds to build Core.
 
 Select install operation"
         echo
@@ -2269,7 +2315,7 @@ Select install operation"
         esac
 
         sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
-
+        echo
         printf '%b' "[${G1:?}ok${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
@@ -2576,14 +2622,13 @@ Please install mysql or mariadb database/client"
             sudo service mariadb restart &>/dev/null
           fi
         fi
-
-        printf "${R1:?}Shutting down${GR:?} realmd & mangosd service${N0:?}"
         echo
+        printf "[     OK     ] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
         sleep 1
 
         # this is for docker users
         if [ -f /.dockerenv ]; then
-          printf '%b' "${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
+          printf "[     OK     ] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
           sleep 3
           sudo killall screen 2>/dev/null
           # keep old logs
@@ -2712,15 +2757,15 @@ Please install mysql or mariadb database/client"
 
         # this is for docker users
         if [ -f /.dockerenv ]; then
-          printf '%b' "${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
+          printf "[     OK     ] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
           sleep 3
           sudo killall screen 2>/dev/null
           # keep old logs
           cp "$FOLDER_CORE"/run/logs/Server.log "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
           cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
         else
-          printf "${R1:?}Shutting down${GR:?} realmd & mangosd service${N0:?}"
           echo
+          printf "[     OK     ] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
           sleep 1
           # realmd service
           case "$(echo "$PIDOF_REALMD")" in
@@ -2888,16 +2933,15 @@ Please install mysql or mariadb database/client"
 
         # this is for docker users
         if [ -f /.dockerenv ]; then
-          printf '%b' "${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
+          printf "[     OK     ] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
           sleep 3
           sudo killall screen 2>/dev/null
           # keep old logs
           cp "$FOLDER_CORE"/run/logs/Server.log "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
           cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
         else
-
-          printf "${R1:?}Shutting down${GR:?} realmd & mangosd service${N0:?}"
           echo
+          printf "[     OK     ] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
           sleep 1
           # realmd service
           case "$(echo "$PIDOF_REALMD")" in
@@ -3799,7 +3843,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             sudo service realmd restart &>/dev/null
             # realmd service
             case "$(echo "$PIDOF_REALMD")" in
-            0) printf "[  ${GR:?}OFFLINE!${N0:?}  ] realmd service offline!\n" ;;
+            0) printf "[     ${G1:?}O0${N0:?}     ] realmd service offline!\n" ;;
             1) printf "[     ${G1:?}OK${N0:?}     ] realmd service started!\n" ;;
             *) printf "[     ${Y1:?}0!${N0:?}     ] realmd service running?\n" ;;
             esac
@@ -3807,22 +3851,19 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             sudo service mangosd restart &>/dev/null
             # mangosd service
             case "$(echo "$PIDOFMANGOSD")" in
-            0) printf "[  ${GR:?}OFFLINE!${N0:?}  ] mangosd service offline!\n" ;;
+            0) printf "[     ${G1:?}O0${N0:?}     ] mangosd service offline!\n" ;;
             1) printf "[     ${G1:?}OK${N0:?}     ] mangosd service started!\n" ;;
             *) printf "[     ${Y1:?}0!${N0:?}     ] mangosd service running?\n" ;;
             esac
             sleep 1
             read -t 5 -r -p "[     OK     ] Wait on mangosd? y/n " -n 1 -r
             echo
-            if [[ $REPLY =~ ^[Yy]$ ]]; then
+            if [[ ! $REPLY =~ ^[Nn]$ ]]; then
               # wait on mangosd
               until grep -q -o "World initialized" "$FOLDER_CORE"/run/logs/Server.log; do
-                printf '%b' "[     ${GR:?}OK${N0:?}     ] ${GR:?}Waiting on mangosd${N0:?}\n"
+                printf '%b' "[     ${GR:?}OK${N0:?}     ] ${GR:?}Waiting 5 seconds..${N0:?}\n"
                 sleep 5
               done
-            else
-              echo "Server is still starting!"
-              sleep 2
             fi
 
             # realmd.log #######################################################
