@@ -332,7 +332,7 @@ ${PASS_NC:?}
       # realmd backup
       FILE="$FOLDER_WOW/backup/$DB_REALMD-$NOW.sql"
       if [ ! -f "$FILE" ]; then
-        REALMD_BACKUP="[${R0:?}old${N0:?}]"
+        REALMD_BACKUP="[${R0:?}!!${N0:?}]"
         echo
       else
         REALMD_BACKUP="[${G1:?}OK${N0:?}]"
@@ -341,7 +341,7 @@ ${PASS_NC:?}
       # characters backup
       FILE="$FOLDER_WOW/backup/$DB_CHARACTERS-$NOW.sql"
       if [ ! -f "$FILE" ]; then
-        CHARAC_BACKUP="[${R0:?}old${N0:?}]"
+        CHARAC_BACKUP="[${R0:?}!!${N0:?}]"
         echo
       else
         CHARAC_BACKUP="[${G1:?}OK${N0:?}]"
@@ -569,14 +569,14 @@ ${PASS_NC:?}
       # realmd backup
       FILE="$FOLDER_WOW/backup/$DB_REALMD-$NOW.sql"
       if [ ! -f "$FILE" ]; then
-        REALMD_BACKUP="[${R0:?}old${N0:?}]"
+        REALMD_BACKUP="[${R0:?}!!${N0:?}]"
       else
         REALMD_BACKUP="[${G1:?}OK${N0:?}]"
       fi
       # characters backup
       FILE="$FOLDER_WOW/backup/$DB_CHARACTERS-$NOW.sql"
       if [ ! -f "$FILE" ]; then
-        CHARAC_BACKUP="[${R0:?}old${N0:?}]"
+        CHARAC_BACKUP="[${R0:?}!!${N0:?}]"
       else
         CHARAC_BACKUP="[${G1:?}OK${N0:?}]"
       fi
@@ -2747,7 +2747,7 @@ Please install mysql or mariadb database/client"
         echo
         FILE="$FOLDER_WOW/backup/$DB_CHARACTERS-$NOW.sql"
         if [ ! -f "$FILE" ]; then
-          printf '%b' "[${R0:?}empty${N0:?}/${R0:?}old${N0:?}] 'Characters' ! Creating backup.."
+          printf '%b' "[${R0:?}empty${N0:?}/${R0:?}!!${N0:?}] 'Characters' ! Creating backup.."
           mysqldump --defaults-extra-file="$SQL_MYCNF" "$DB_CHARACTERS" >"$FOLDER_WOW"/backup/"$DB_CHARACTERS"-"$NOW".sql
           echo
         else
@@ -2773,7 +2773,7 @@ Please install mysql or mariadb database/client"
         # backup <- realmd.sql
         FILE="$FOLDER_WOW/backup/$DB_REALMD-$NOW.sql"
         if [ ! -f "$FILE" ]; then
-          printf '%b' "[${R0:?}empty${N0:?}/${R0:?}old${N0:?}] 'Realmd' ! Creating backup.."
+          printf '%b' "[${R0:?}empty${N0:?}/${R0:?}!!${N0:?}] 'Realmd' ! Creating backup.."
           mysqldump --defaults-extra-file="$SQL_MYCNF" "$DB_REALMD" >"$FOLDER_WOW"/backup/"$DB_REALMD"-"$NOW".sql
           echo
         else
@@ -2867,7 +2867,7 @@ Please install mysql or mariadb database/client"
         # backup <- characters.sql
         FILE="$FOLDER_WOW/backup/$DB_CHARACTERS-$NOW.sql"
         if [ ! -f "$FILE" ]; then
-          printf '%b' "[${R0:?}empty${N0:?}/${R0:?}old${N0:?}] 'Characters' ! Creating backup.."
+          printf '%b' "[${R0:?}empty${N0:?}/${R0:?}!!${N0:?}] 'Characters' ! Creating backup.."
           mysqldump --defaults-extra-file="$SQL_MYCNF" "$DB_CHARACTERS" >"$FOLDER_WOW"/backup/"$DB_CHARACTERS"-"$NOW".sql
           echo
         else
@@ -2877,7 +2877,7 @@ Please install mysql or mariadb database/client"
         # backup <- realmd.sql
         FILE="$FOLDER_WOW/backup/$DB_REALMD-$NOW.sql"
         if [ ! -f "$FILE" ]; then
-          printf '%b' "[${R0:?}empty${N0:?}/${R0:?}old${N0:?}] 'Realmd' ! Creating backup.."
+          printf '%b' "[${R0:?}empty${N0:?}/${R0:?}!!${N0:?}] 'Realmd' ! Creating backup.."
           mysqldump --defaults-extra-file="$SQL_MYCNF" "$DB_REALMD" >"$FOLDER_WOW"/backup/"$DB_REALMD"-"$NOW".sql
           echo
         else
@@ -4341,7 +4341,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           sudo chown -R "$USER":"$GROUP" "$FOLDER_INSTALL"
-          echo "[OK] Checking your current release"
+          printf '%b' "[${G1:?}OK${N0:?}] Checking your current release\n"
           sleep 1
           cd "$FOLDER_HELPER" || exit
           if git checkout master &>/dev/null &&
@@ -4350,12 +4350,12 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             git merge origin/master; then
             LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
             LATEST_HEAD=$(git rev-parse --short HEAD)
-            printf '%b' "[${R0:?}old${N0:?}] (${G0:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) ${G0:?}${UND:?}New Updates For Helper${DEF:?}${N0:?}! - $LATEST_DATE\n"
+            printf '%b' "[${R0:?}!!${N0:?}] (${G0:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) ${G0:?}${UND:?}New Updates For Helper${DEF:?}${N0:?}! - $LATEST_DATE\n"
             cd "$FOLDER_HELPER" || exit
             sleep 1
-            printf '%b' "[${R0:?}old${N0:?}] -> old release installed!\n"
+            printf '%b' "[${R0:?}!!${N0:?}] -> old release installed!\n"
             sleep 1
-            printf '%b' "[${G0:?}Updating Helper${N0:?}]\n"
+            printf '%b' "[${G1:?}OK${N0:?}] -> Updating Helper!\n"
             # keep old mangos
             sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old &>/dev/null
             # done
