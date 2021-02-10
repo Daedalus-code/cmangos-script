@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20211002
-# 4.7.8.4
+# 4.8.4.1
 
 # codes
 while :; do
@@ -1179,44 +1179,84 @@ EOF
         DIVE_SERVER_OLD_ERROR=$(grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null)
         DIVE_SERVER_OLD_SERIO=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null)
         DIVE_SERVER_OLD_IGNOR=$(grep -c -E ".*ignoring*.|.*ignore*.|.*ignored*." "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null)
-        if [[ -z "$DIVE_SERVER_OLD_EMPTY" || -z "$DIVE_SERVER_OLD_ERROR" || -z "$DIVE_SERVER_OLD_SERIO" || -z "$DIVE_SERVER_OLD_IGNOR" ]]; then
+        DIVE_SERVER_OLD_POLYR=$(grep -c -E "Invalid poly ref" "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null)
+        if [[ -z "$DIVE_SERVER_OLD_EMPTY" || -z "$DIVE_SERVER_OLD_ERROR" || -z "$DIVE_SERVER_OLD_SERIO" || -z "$DIVE_SERVER_OLD_IGNOR" || -z "$DIVE_SERVER_OLD_POLYR" ]]; then
           # non responsive
           DIVE_SERVER_OLD_EMPTY="0"
           DIVE_SERVER_OLD_ERROR="0"
           DIVE_SERVER_OLD_SERIO="0"
           DIVE_SERVER_OLD_IGNOR="0"
+          DIVE_SERVER_OLD_POLYR="0"
         fi
         # server.log
         DIVE_SERVER_EMPTY=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty.|.*empty*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
         DIVE_SERVER_ERROR=$(grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
         DIVE_SERVER_SERIO=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
         DIVE_SERVER_IGNOR=$(grep -c -E ".*ignoring*.|.*ignore*.|.*ignored*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
+        DIVE_SERVER_POLYR=$(grep -c -E "Invalid poly ref" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
+        if [[ -z "$DIVE_SERVER_EMPTY" || -z "$DIVE_SERVER_ERROR" || -z "$DIVE_SERVER_SERIO" || -z "$DIVE_SERVER_IGNOR" || -z "$DIVE_SERVER_POLYR" ]]; then
+          # non responsive
+          DIVE_SERVER_EMPTY="0"
+          DIVE_SERVER_ERROR="0"
+          DIVE_SERVER_SERIO="0"
+          DIVE_SERVER_IGNOR="0"
+          DIVE_SERVER_POLYR="0"
+        fi
         # realmd.log
         DIVE_REALMD_EMPTY=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null)
         DIVE_REALMD_ERROR=$(grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null)
         DIVE_REALMD_SERIO=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null)
+        if [[ -z "$DIVE_REALMD_EMPTY" || -z "$DIVE_REALMD_ERROR" || -z "$DIVE_REALMD_SERIO" ]]; then
+          # non responsive
+          DIVE_REALMD_EMPTY="0"
+          DIVE_REALMD_ERROR="0"
+          DIVE_REALMD_SERIO="0"
+        fi
         # DBErrors.log
         DIVE_DBERROR_CORR=$(grep -c -E "does\snot\shave\scorresponding" "$FOLDER_CORE"/run/logs/DBErrors.log 2>/dev/null)
         DIVE_DBERROR_EXIS=$(grep -c -E "doesn't\sexist" "$FOLDER_CORE"/run/logs/DBErrors.log 2>/dev/null)
         DIVE_DBERROR_QUER=$(grep -c -E "query\sERROR" "$FOLDER_CORE"/run/logs/DBErrors.log 2>/dev/null)
         DIVE_DBERROR_USED=$(grep -c -E "Option\swill\snever\sbe\sused" "$FOLDER_CORE"/run/logs/DBErrors.log 2>/dev/null)
         DIVE_DBERROR_CRAS=$(grep -c -E "can\scrash\sclient" "$FOLDER_CORE"/run/logs/DBErrors.log 2>/dev/null)
+        if [[ -z "$DIVE_DBERROR_CORR" || -z "$DIVE_DBERROR_EXIS" || -z "$DIVE_DBERROR_QUER" || -z "$DIVE_DBERROR_USED" || -z "$DIVE_DBERROR_CRAS" ]]; then
+          # non responsive
+          DIVE_DBERROR_CORR="0"
+          DIVE_DBERROR_EXIS="0"
+          DIVE_DBERROR_QUER="0"
+          DIVE_DBERROR_USED="0"
+          DIVE_DBERROR_CRAS="0"
+        fi
         # char.log
         DIVE_CHAR_CREATED=$(grep -c -E "Create\sCharacter" "$FOLDER_CORE"/run/logs/Char.log 2>/dev/null)
         DIVE_CHAR_LOGIN_C=$(grep -c -E "Login" "$FOLDER_CORE"/run/logs/Char.log 2>/dev/null)
         DIVE_CHAR_LOGOUTS=$(grep -c -E "Logout" "$FOLDER_CORE"/run/logs/Char.log 2>/dev/null)
+        if [[ -z "$DIVE_CHAR_CREATED" || -z "$DIVE_CHAR_LOGIN_C" || -z "$DIVE_CHAR_LOGOUTS" ]]; then
+          # non responsive
+          DIVE_CHAR_CREATED="0"
+          DIVE_CHAR_LOGIN_C="0"
+          DIVE_CHAR_LOGOUTS="0"
+        fi
         # EventAIErrors.log
         DIVE_EVENTAIERROR=$(grep -c -E "skipping" "$FOLDER_CORE"/run/logs/EventAIErrors.log 2>/dev/null)
         DIVE_EVENTAINOEFF=$(grep -c -E "Action\swill\snot\shave\sany\seffect." "$FOLDER_CORE"/run/logs/EventAIErrors.log 2>/dev/null)
         DIVE_EVENTAINONEX=$(grep -c -E "nonexistent|non-existing" "$FOLDER_CORE"/run/logs/EventAIErrors.log 2>/dev/null)
         DIVE_EVENTAI_NULL=$(grep -c -E ".*NULL*." "$FOLDER_CORE"/run/logs/EventAIErrors.log 2>/dev/null)
         DIVE_EVENTAINOTUS=$(grep -c -E "but\snot\sused" "$FOLDER_CORE"/run/logs/EventAIErrors.log 2>/dev/null)
+        if [[ -z "$DIVE_EVENTAIERROR" || -z "$DIVE_EVENTAINOEFF" || -z "$DIVE_EVENTAINONEX" || -z "$DIVE_EVENTAI_NULL" || -z "$DIVE_EVENTAINOTUS" ]]; then
+          # non responsive
+          DIVE_EVENTAIERROR="0"
+          DIVE_EVENTAINOEFF="0"
+          DIVE_EVENTAINONEX="0"
+          DIVE_EVENTAI_NULL="0"
+          DIVE_EVENTAINOTUS="0"
+        fi
 
         # Server.log, .old, Realmd.log
         DIVE_LOG_EMPTY=$(printf "${Y0:?}Empty..${N0:?}")
         DIVE_LOG_ERROR=$(printf "${R0:?}Error..${N0:?}")
         DIVE_LOG_IGNOR=$(printf "${R0:?}Ignore.${N0:?}")
         DIVE_LOG_SERIO=$(printf "${R1:?}Serious${N0:?}")
+        DIVE_LOG_POLYR=$(printf "${R0:?}InvPoly${N0:?}")
         # DBErrors.log
         DIVE_LOG_CORRE=$(printf "${R0:?}NotCorresponding${N0:?}")
         DIVE_LOG_EXIST=$(printf "${R0:?}Doesn'tExist....${N0:?}")
@@ -1243,7 +1283,8 @@ EOF
         printline "$DIVE_LOG_EMPTY" "$DIVE_SERVER_EMPTY" "$DIVE_LOG_EMPTY" "$DIVE_SERVER_OLD_EMPTY" "$DIVE_LOG_EMPTY" "$DIVE_REALMD_EMPTY"
         printline "$DIVE_LOG_ERROR" "$DIVE_SERVER_ERROR" "$DIVE_LOG_ERROR" "$DIVE_SERVER_OLD_ERROR" "$DIVE_LOG_ERROR" "$DIVE_REALMD_ERROR"
         printline "$DIVE_LOG_IGNOR" "$DIVE_SERVER_IGNOR" "$DIVE_LOG_IGNOR=" "$DIVE_SERVER_OLD_IGNOR" "$DIVE_LOG_IGNOR" "$DIVE_REALMD_SERIO"
-        printline "$DIVE_LOG_SERIO" "$DIVE_SERVER_SERIO" "$DIVE_LOG_SERIO" "$DIVE_SERVER_OLD_SERIO" "$DIVE_LOG_SERIO" "$DIVE_REALMD_SERIO"
+        printline "$DIVE_LOG_POLYR" "$DIVE_SERVER_POLYR" "$DIVE_LOG_POLYR" "$DIVE_SERVER_OLD_POLYR" "$DIVE_LOG_NONE" "$DIVE_LOG_ZERO"
+        printline "$DIVE_LOG_SERIO" "$DIVE_SERVER_SERIO" "$DIVE_LOG_SERIO" "$DIVE_SERVER_OLD_SERIO" "$DIVE_LOG_SERIO" "$DIVE_LOG_ZERO"
         echo
         printf "   DBErrors          Char              EventAIErrors"
         echo
@@ -1254,8 +1295,8 @@ EOF
         printline "$DIVE_LOG_CRASH" "$DIVE_DBERROR_CRAS" "$DIVE_LOG_NONE" "$DIVE_LOG_ZERO" "$DIVE_LOG_NOTUS" "$DIVE_EVENTAINOTUS"
 
         printf '%b' "
-1 : Raw ${R0:?}ERROR${N0:?} Output
-2 : tail ${R1:?}ERROR${N0:?} Output\n"
+1 : Raw error output
+2 : tail error output\n"
         echo
         read -n1 -s
         case "$REPLY" in
@@ -1737,18 +1778,23 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
 
         # cpu temp
         if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
+          CPU_FREQ=$(sudo cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq 2>/dev/null)
+          CPU_FREQ=$(echo "$CPU_FREQ/1000000" | bc -l | awk '{ printf "%.2f\n", $1 }' 2>/dev/null)
+          CPU_FREQ=$(echo "@ ${CPU_FREQ:?}GHz")
           CPU_TEMP=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
             cut -c -4 2>/dev/null)
-          CMAKE_TEMP=$(printf '%b' "CPU: ${G0:?}$CPU_TEMP ${N0:?}°")
+          CMAKE_TEMP=$(printf '%b' "CPU: ${G0:?}${CPU_TEMP:?}°${N0:?}")
         else
           CMAKE_TEMP=$(printf '%b' "")
         fi
 
         # get cpu model name
+        KERNAL_RE=$(uname -r 2>/dev/null)
+        PROCESSOR=$(uname -p 2>/dev/null)
         CPU_MODEL=$(lscpu 2>/dev/null | grep 'Model name' 2>/dev/null |
           cut -f 2 -d ":" 2>/dev/null | awk '{$1=$1}1' 2>/dev/null)
         if [ ! -z "$CPU_MODEL" ]; then
-          CPU_MODEL=$(printf '%b' "${GR:?}$CPU_MODEL${Y0:?}\n")
+          CPU_MODEL=$(printf '%b' "${GR:?}$CPU_MODEL $CPU_FREQ ($PROCESSOR)${Y0:?}\n")
         else
           CPU_MODEL=""
         fi
@@ -1757,7 +1803,8 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
         CORES=$(grep -c ^processor /proc/cpuinfo 2>/dev/null)
         if [[ "$CORES" -ge "1" ]]; then
           # report count
-          CORES_COUNT=$(printf '%b' "${G0:?}This system has ${G1:?}$CORES${G0:?} Cores!
+          CORES_COUNT=$(printf '%b' "${GR:?}$KERNAL_RE${N0:?}
+${N0:?}This system has ${G1:?}$CORES${N0:?} Cores!
 ${GR:?}$CPU_MODEL${N0:?}")
         else
           CORES_COUNT=""
@@ -1904,15 +1951,17 @@ EOF
         if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
           CPU_TEMP=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
             cut -c -4 2>/dev/null)
-          CMAKE_TEMP=$(printf '%b' "CPU: ${G0:?}$CPU_TEMP${N0:?}° with ${CORES[0]} Core(s).")
+          CMAKE_TEMP=$(printf '%b' "CPU: ${G1:?}$CPU_TEMP${N0:?}° with ${G1:?}${CORES[0]}${N0:?} Core(s).")
         else
           CMAKE_TEMP=""
         fi
         # get seconds since start
         DURATION=$(echo "$SECONDS-$START" 2>/dev/null | bc 2>/dev/null)
+        # convert seconds
+        TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
         echo
         printf '%b' "$CMAKE_TEMP
-Took ${G1:?}$DURATION${N0:?} seconds to build Core.
+Build time: ${G1:?}$TIMER${N0:?}.
 
 Select install operation"
         echo
@@ -2108,18 +2157,23 @@ Check if correct information, or just restart server."
 
         # cpu temp
         if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
+          CPU_FREQ=$(sudo cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq 2>/dev/null)
+          CPU_FREQ=$(echo "$CPU_FREQ/1000000" | bc -l | awk '{ printf "%.2f\n", $1 }' 2>/dev/null)
+          CPU_FREQ=$(echo "@ ${CPU_FREQ:?}GHz")
           CPU_TEMP=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
             cut -c -4 2>/dev/null)
-          CMAKE_TEMP=$(printf '%b' "CPU: ${G0:?}$CPU_TEMP ${N0:?}°")
+          CMAKE_TEMP=$(printf '%b' "CPU: ${G0:?}${CPU_TEMP:?}°${N0:?}")
         else
           CMAKE_TEMP=$(printf '%b' "")
         fi
 
         # get cpu model name
+        KERNAL_RE=$(uname -r 2>/dev/null)
+        PROCESSOR=$(uname -p 2>/dev/null)
         CPU_MODEL=$(lscpu 2>/dev/null | grep 'Model name' 2>/dev/null |
           cut -f 2 -d ":" 2>/dev/null | awk '{$1=$1}1' 2>/dev/null)
         if [ ! -z "$CPU_MODEL" ]; then
-          CPU_MODEL=$(printf '%b' "${GR:?}$CPU_MODEL${N0:?}\n")
+          CPU_MODEL=$(printf '%b' "${GR:?}$CPU_MODEL $CPU_FREQ ($PROCESSOR)${N0:?}\n")
         else
           CPU_MODEL=""
         fi
@@ -2128,7 +2182,8 @@ Check if correct information, or just restart server."
         CORESC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null)
         if [[ "${CORES:?}" -ge "1" ]]; then
           # report count
-          CORES_COUNT=$(printf '%b' "${G0:?}This system has ${G1:?}$CORESC${G0:?} Cores!
+          CORES_COUNT=$(printf '%b' "${GR:?}$KERNAL_RE${N0:?}
+${N0:?}This system has ${G1:?}$CORESC${N0:?} Cores!
 ${GR:?}$CPU_MODEL${N0:?}")
         else
           CORES_COUNT=""
@@ -2275,15 +2330,17 @@ EOF
         if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
           CPU_TEMP=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
             cut -c -4 2>/dev/null)
-          CMAKE_TEMP=$(printf '%b' "CPU: ${G0:?}$CPU_TEMP${N0:?}° with ${CORES[0]} Core(s).")
+          CMAKE_TEMP=$(printf '%b' "CPU: ${G1:?}$CPU_TEMP${N0:?}° with ${G1:?}${CORES[0]}${N0:?} Core(s).")
         else
           CMAKE_TEMP=""
         fi
         # get seconds since start
         DURATION=$(echo "$SECONDS-$START" 2>/dev/null | bc 2>/dev/null)
+        # convert seconds
+        TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
         echo
         printf '%b' "$CMAKE_TEMP
-Took ${G1:?}$DURATION${N0:?} seconds to build Core.
+Build time: ${G1:?}$TIMER${N0:?}.
 
 Select install operation"
         echo
