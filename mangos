@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20211102
-# 4.9.4.8
+# 4.9.4.9
 
 # codes
 while :; do
@@ -898,7 +898,8 @@ ${N0:?}"
           read -r -p "[YN] Setup Seedbox? y/n " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
-
+            # create ms folder
+            sudo mkdir /var/log/ms/ 2>/dev/null
             # already installed?
             if ! [ -x "$(command -v transmission-daemon)" ]; then
               # check for updates regardless
