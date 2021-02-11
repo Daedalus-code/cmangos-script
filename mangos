@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20211002
-# 4.9.3.0
+# 4.9.4.8
 
 # codes
 while :; do
@@ -448,16 +448,16 @@ ${PASS_NC:?}
 
       # realmd service
       case "$(echo "$PIDOF_REALMD")" in
-      0) COMMAND_REALMD="[${R1:?}off${N0:?}]" ;;
-      1) COMMAND_REALMD="[${G1:?}OK${N0:?}]" ;;
-      *) COMMAND_REALMD="[${Y1:?}ok${N0:?}]" ;;
+      0) COMMAND_REALMD="${GR:?}Offline${N0:?}" ;;
+      1) COMMAND_REALMD="${G1:?}Online${N0:?}" ;;
+      *) COMMAND_REALMD="${Y1:?}Online${N0:?}" ;;
       esac
 
       # mangosd service
       case "$(echo "$PIDOFMANGOSD")" in
-      0) COMMAND_MANGOSD="[${R1:?}off${N0:?}]" ;;
-      1) COMMAND_MANGOSD="[${G1:?}OK${N0:?}]" ;;
-      *) COMMAND_MANGOSD="[${Y1:?}ok${N0:?}]" ;;
+      0) COMMAND_MANGOSD="${GR:?}Offline${N0:?}" ;;
+      1) COMMAND_MANGOSD="${G1:?}Online${N0:?}" ;;
+      *) COMMAND_MANGOSD="${Y1:?}Online${N0:?}" ;;
       esac
 
       # Thank you! -> https://stackoverflow.com/questions/59862020
@@ -520,15 +520,15 @@ ${PASS_NC:?}
       # look for error
       if grep -E -q ".*ERROR*." "${FOLDER_CORE:?}"/run/logs/Realmd.log &>/dev/null; then
         # if any, print "error"
-        CM_REALMD_LOG="[${R1:?}E${N0:?}]"
+        CM_REALMD_LOG="${R1:?}E${N0:?}"
       else
         # if nothing, print "ok"
-        CM_REALMD_LOG="[${G0:?}✓${N0:?}]"
+        CM_REALMD_LOG="${G1:?}✓${N0:?}"
       fi
       # look for empty tables
       if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log &>/dev/null; then
         # if any, print "empty"
-        CM_REALMD_LOG_EMPTY="[${Y1:?}E${N0:?}]"
+        CM_REALMD_LOG_EMPTY="${Y1:?}E${N0:?}"
       fi
       # Realmd.log done
 
@@ -537,29 +537,29 @@ ${PASS_NC:?}
       # look for error
       if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
         # if any, print "error"
-        CM_SERVER_LOG="[${R1:?}E${N0:?}]"
+        CM_SERVER_LOG="${R1:?}E${N0:?}"
       else
         # if nothing, print "ok"
-        CM_SERVER_LOG="[${G0:?}✓${N0:?}]"
+        CM_SERVER_LOG="${G1:?}✓${N0:?}"
       fi
       # look for empty tables
       if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
         # if any, print "empty"
-        CM_SERVER_LOG_EMPTY="[${Y1:?}E${N0:?}]"
+        CM_SERVER_LOG_EMPTY="${Y1:?}E${N0:?}"
       fi
       # look for serious error
       if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
         # if any, print "serious"
-        CM_SERVER_LOG_SERIOUS="[${R1:?}Serious${N0:?}]"
+        CM_SERVER_LOG_SERIOUS="${R1:?}S${N0:?}"
       fi
 
       if [ ! -f "$FOLDER_CORE"/run/logs/Server.log ]; then
         # non responsive
-        CM_SERVER_LOG="[${GR:?}✗${N0:?}]"
+        CM_SERVER_LOG="${GR:?}✗${N0:?}"
       fi
       if [ ! -f "$FOLDER_CORE"/run/logs/Realmd.log ]; then
         # non responsive
-        CM_REALMD_LOG="[${GR:?}✗${N0:?}]"
+        CM_REALMD_LOG="${GR:?}✗${N0:?}"
       fi
 
       # Server.log done
@@ -569,16 +569,16 @@ ${PASS_NC:?}
       # realmd backup
       FILE="$FOLDER_WOW/backup/$DB_REALMD-$NOW.sql"
       if [ ! -f "$FILE" ]; then
-        REALMD_BACKUP="[${R0:?}!!${N0:?}]"
+        REALMD_BACKUP="${GR:?}NO${N0:?}"
       else
-        REALMD_BACKUP="[${G1:?}OK${N0:?}]"
+        REALMD_BACKUP="${G1:?}OK${N0:?}"
       fi
       # characters backup
       FILE="$FOLDER_WOW/backup/$DB_CHARACTERS-$NOW.sql"
       if [ ! -f "$FILE" ]; then
-        CHARAC_BACKUP="[${R0:?}!!${N0:?}]"
+        CHARAC_BACKUP="${GR:?}NO${N0:?}"
       else
-        CHARAC_BACKUP="[${G1:?}OK${N0:?}]"
+        CHARAC_BACKUP="${G1:?}OK${N0:?}"
       fi
 
       # world server latest build
@@ -623,7 +623,10 @@ ${PASS_NC:?}
           cut -c -4 2>/dev/null)
         MENU_PRINT_CPU_TEMP=$(printf '%b' "CPU Temp${G0:?}........:${N0:?} ${MENU_CPU_TEMP:?}c")
       else
-        MENU_PRINT_CPU_TEMP=""
+        MENU_PRINT_CPU_TEMP=$(lscpu 2>/dev/null | grep 'Model name' 2>/dev/null |
+          cut -f 2 -d ":" 2>/dev/null | awk '{$1=$1}1' 2>/dev/null |
+          grep -Eo "@.*" 2>/dev/null | tr -d '@' 2>/dev/null | tr -d ' ' 2>/dev/null)
+        MENU_PRINT_CPU_TEMP=$(printf '%b' "CPU Freq${G0:?}........:${N0:?} $MENU_PRINT_CPU_TEMP\n")
       fi
       # commit
       if grep -E "Using commit.*(.*)" "${FOLDER_CORE:?}"/run/logs/Server.log &>/dev/null; then
@@ -640,8 +643,8 @@ ${PASS_NC:?}
    System${G0:?}......:${N0:?} $BUILT_FOR
    Commit Hash${G0:?}.:${GR:?} $COMMIT_HASH${N0:?}
 
-   r : ${THEMES:?}Login${N0:?}   - Remote access  service.mangosd${G0:?}.:${N0:?} $COMMAND_MANGOSD
-   l : ${THEMES:?}Logs${N0:?}    - Analyze logs   service.realmd${G0:?}..:${N0:?} $COMMAND_REALMD
+   r : ${THEMES:?}Login${N0:?}   - Remote access  mangosd.service${G0:?}.:${N0:?} $COMMAND_MANGOSD
+   l : ${THEMES:?}Logs${N0:?}    - Analyze logs   realmd.service${G0:?}..:${N0:?} $COMMAND_REALMD
    b : ${THEMES:?}Backup${N0:?}  - New backup
    h : ${THEMES:?}Reset${N0:?}   - Reset --hard   characters.sql${G0:?}..:${N0:?} $CHARAC_BACKUP
    p : ${THEMES:?}htop${N0:?}    - Process view   realmd.sql${G0:?}......:${N0:?} $REALMD_BACKUP
@@ -1399,25 +1402,40 @@ EOF
         # create directory, backup
         mkdir "$FOLDER_WOW"/backup &>/dev/null
         # well (: backup probably hours old by now
-        echo
-        printf '%b' "Making fresh backup${G0:?}.${N0:?}"
+        printf '%b' "Backup${G0:?}.${N0:?}"
         sleep 1
         printf '%b' "${G0:?}.${N0:?}"
         mysqldump --defaults-extra-file="$SQL_MYCNF" "$DB_CHARACTERS" >"$FOLDER_WOW"/backup/"$DB_CHARACTERS"-"$NOW".sql
         printf '%b' "${G0:?}.${N0:?}"
         sleep 1
-        printf '%b' "[${G1:?}OK${N0:?}] $DB_CHARACTERS-$NOW.sql"
+        printf '%b' "[${G1:?}OK${N0:?}] $DB_CHARACTERS-$NOW.sql\n"
         sleep 2
-        echo
         # backup characters sql
-        printf '%b' "Making fresh backup${G0:?}.${N0:?}"
+        printf '%b' "Backup${G0:?}.${N0:?}"
         sleep 1
         printf '%b' "${G0:?}.${N0:?}"
         mysqldump --defaults-extra-file="$SQL_MYCNF" "$DB_REALMD" >"$FOLDER_WOW"/backup/"$DB_REALMD"-"$NOW".sql
         printf '%b' "${G0:?}.${N0:?}"
         sleep 1
-        printf '%b' "[${G1:?}OK${N0:?}] $DB_REALMD-$NOW.sql"
+        printf '%b' "[${G1:?}OK${N0:?}] $DB_REALMD-$NOW.sql\n"
         sleep 1
+        echo
+        read -r -p "[YN] Show content? y/n " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+          echo
+          ls -l "$FOLDER_WOW"/backup/
+          echo
+          read -r -p "[YN] Show configurations? y/n " -n 1 -r
+          echo
+          if [[ $REPLY =~ ^[Yy]$ ]]; then
+            echo
+            ls -l "$FOLDER_WOW"/backup/configurations
+          fi
+          echo
+          read -r -p "Press Enter to continue" </dev/tty
+          echo
+        fi
         # well (: backup probably hours old by now done
 
         ;;
