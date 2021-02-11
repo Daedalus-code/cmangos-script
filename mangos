@@ -906,15 +906,15 @@ ${N0:?}"
               echo "[OK] Please wait"
               sudo apt-get update &>/dev/null
               # clear the local repository of retrieved package files that are left in /var/cache.
-              sudo apt-get clean &>/dev/null
+              sudo apt-get clean 2>/dev/null
               # clear the local repository of retrieved package files
-              sudo apt-get autoclean &>/dev/null
+              sudo apt-get autoclean 2>/dev/null
               # remove packages that were automatically installed because some other package required them
-              sudo apt-get -y --purge autoremove &>/dev/null
+              sudo apt-get -y --purge autoremove 2>/dev/null
               # make sure unzip exist
-              sudo apt-get install unzip -y &>/dev/null
+              sudo apt-get install unzip -y 2>/dev/null
               # install transmission-daemon
-              sudo apt-get install transmission-daemon -y &>/dev/null
+              sudo apt-get install transmission-daemon -y 2>/dev/null
               # temporary stop ^
               sudo service transmission-daemon stop &>/dev/null
               # remove old config
