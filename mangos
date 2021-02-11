@@ -900,6 +900,8 @@ ${N0:?}"
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # create ms folder
             sudo mkdir /var/log/ms/ 2>/dev/null
+            # fix ownership
+            sudo chown -R "${USER:?}":"${GROUP:?}" /var/log/ms
             # already installed?
             if ! [ -x "$(command -v transmission-daemon)" ]; then
               # check for updates regardless
@@ -1121,13 +1123,11 @@ EOF
           echo
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
-
             # codes
             MAPS="$FOLDER_CORE"/run/maps/5332742.map
             MMAPS="$FOLDER_CORE"/run/mmaps/5332742.mmtile
             VMAPS="$FOLDER_CORE"/run/vmaps/Zulgurub_Ziggurat.wmo.vmo
             # codes done
-
             if [ -f "$MAPS" ] && [ -f "$MMAPS" ] && [ -f "$VMAPS" ]; then
               printf '%b' "[OK] Maps already installed."
               echo
