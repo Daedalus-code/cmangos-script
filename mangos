@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20211202
-# 4.9.4.7
+# 4.9.5.7
 
 # codes
 while :; do
@@ -715,6 +715,7 @@ ${N0:?}"
 
       "m")
 
+        printf '%b' "${GR:?}Please wait${N0:?}\n"
         # get remote information from transmission, create a file
         transmission-remote -t all -i >/var/log/ms/transmission_list 2>/dev/null
         # pidof transmission-daemon, cli, pid/status
@@ -860,7 +861,7 @@ ${N0:?}"
             read -r -p "Press Enter to continue" </dev/tty
             echo
           else
-            echo "Please Install/Start SeedBox first!"
+            echo "Install/Start SeedBox first!"
             echo
             read -r -p "Press Enter to continue" </dev/tty
             echo
@@ -874,15 +875,17 @@ ${N0:?}"
 
         "u")
 
-          echo
-          read -r -p "[YN] Remove Seedbox? ${GR:?}keeping maps${N0:?} y/n " -n 1 -r
+          printf '%b' "[YN] Remove Seedbox? (${GR:?}keeping maps${N0:?}) y/n "
+          read -r -p "" -n 1 -r -s
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
-
             printf '%b' "[${G1:?}OK${N0:?}] Please wait\n"
             # remove old file
             sudo rm -R /var/log/ms/transmission_list &>/dev/null
             sudo apt-get remove transmission-* --purge -y 2>/dev/null
+            echo
+            read -r -p "Press Enter to continue" </dev/tty
+            echo
           fi
 
           ;;
@@ -894,8 +897,7 @@ ${N0:?}"
 
         "t")
 
-          echo
-          read -r -p "[YN] Setup Seedbox? y/n " -n 1 -r
+          read -r -p "[YN] Setup Seedbox? y/n " -n 1 -r -s
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # create ms folder
@@ -1003,7 +1005,7 @@ EOF
               sleep 1
               # start transmission-daemon
               sudo service transmission-daemon start &>/dev/null
-              printf '%b' "[${G1:?}OK${N0:?}] Starting SeedBox ${GR:?}transmission${N0:?}!\n"
+              printf '%b' "[${G1:?}OK${N0:?}] Starting SeedBox (${GR:?}transmission${N0:?})\n"
               sleep 1
               printf '%b' "[${G1:?}OK${N0:?}] Installed!\n"
               sleep 1
@@ -1036,7 +1038,6 @@ EOF
 
         "r")
 
-          echo
           read -r -p "[YN] Re/start SeedBox? y/n " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -1058,9 +1059,9 @@ EOF
               # reload
               sudo systemctl daemon-reload &>/dev/null
               printf '%b' "[${G1:?}OK${N0:?}] SeedBox started.\n"
-              sleep 1
+              sleep 2
             else
-              echo "Install SeedBox please!"
+              echo "Install/Start SeedBox first!"
               sleep 1
               echo
               read -r -p "Press Enter to continue" </dev/tty
@@ -1076,7 +1077,6 @@ EOF
 
         "s")
 
-          echo
           read -r -p "[YN] Stop SeedBox? y/n " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -1096,10 +1096,10 @@ EOF
               sudo systemctl disable transmission-daemon &>/dev/null
               # reload
               sudo systemctl daemon-reload &>/dev/null
-              printf '%b' "${G1:?}OK${N0:?} SeedBox stopped!\n"
-              sleep 1
+              printf '%b' "[${G1:?}OK${N0:?}] SeedBox stopped!\n"
+              sleep 2
             else
-              echo "Install SeedBox please!"
+              echo "Install/Start SeedBox first!"
               sleep 1
               echo
               read -r -p "Press Enter to continue" </dev/tty
@@ -1115,11 +1115,12 @@ EOF
 
         "m")
 
-          echo
-          read -r -p "[YN] Install Maps? (vanilla_maps.zip) y/n " -n 1 -r
+          read -r -p "[YN] Import Maps? y/n " -n 1 -r
           echo
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
+            # start counting (seconds)
+            START="$SECONDS"
             # codes
             MAPS="$FOLDER_CORE"/run/maps/5332742.map
             MMAPS="$FOLDER_CORE"/run/mmaps/5332742.mmtile
@@ -1130,9 +1131,18 @@ EOF
               sleep 2
             else
               sudo unzip /seedbox/vanilla_maps.zip -d "$FOLDER_CORE"/run
+              # get seconds since start
+              DURATION=$(echo "$SECONDS-$START" 2>/dev/null | bc 2>/dev/null)
+              # convert seconds
+              TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
+              echo
+              printf '%b' "Import time: ${G1:?}$TIMER${N0:?}\n"
               echo
               printf '%b' "[${G1:?}OK${N0:?}] Maps installed!\n"
               sleep 1
+              echo
+              read -r -p "Press Enter to continue" </dev/tty
+              echo
             fi
           fi
 
