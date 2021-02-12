@@ -875,7 +875,7 @@ ${N0:?}"
 
         "u")
 
-          printf '%b' "[YN] Remove Seedbox? (${GR:?}keeping maps${N0:?}) y/n "
+          printf '%b' "[YN] Remove Seedbox? ${GR:?}keeping maps${N0:?} y/n "
           read -r -p "" -n 1 -r -s
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -1005,7 +1005,7 @@ EOF
               sleep 1
               # start transmission-daemon
               sudo service transmission-daemon start &>/dev/null
-              printf '%b' "[${G1:?}OK${N0:?}] Starting SeedBox (${GR:?}transmission${N0:?})\n"
+              printf '%b' "[${G1:?}OK${N0:?}] Starting SeedBox ${GR:?}transmission-daemon${N0:?}\n"
               sleep 1
               printf '%b' "[${G1:?}OK${N0:?}] Installed!\n"
               sleep 1
@@ -1058,7 +1058,7 @@ EOF
               sudo systemctl enable transmission-daemon &>/dev/null
               # reload
               sudo systemctl daemon-reload &>/dev/null
-              printf '%b' "[${G1:?}OK${N0:?}] SeedBox started.\n"
+              printf '%b' "[${G1:?}OK${N0:?}] SeedBox started!\n"
               sleep 2
             else
               echo "Install/Start SeedBox first!"
