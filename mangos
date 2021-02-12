@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20211202
-# 4.9.5.7
+# 4.9.6.9
 
 # codes
 while :; do
@@ -727,11 +727,13 @@ ${N0:?}"
           SEED_TRANSMISSION="${GR:?}Not Installed!${N0:?}"
           INTRANET_SEED="${GR:?}0.0.0.0:9091${N0:?}"
           P2P_FILE_NAME="${GR:?}vanilla_maps.zip${N0:?}"
+          P2P_PEERS_CONNECTED="${GR:?}N/A${N0:?}"
           P2P_DWNS="${GR:?}N/A${N0:?} "
           P2P_UPLS="${GR:?}N/A${N0:?} "
           P2P_STAT="${GR:?}N/A${N0:?}"
           P2P_PROG="${GR:?}N/A${N0:?}"
           P2P_RATI="${GR:?}N/A${N0:?}"
+          SLASH=""
         else
           if [ -f /var/log/ms/transmission_list ]; then
             # cat that file
@@ -775,12 +777,14 @@ ${N0:?}"
             SEED_TRANSMISSION="${GR:?}Offline${N0:?}"
             INTRANET_SEED="${GR:?}0.0.0.0:9091${N0:?}"
             P2P_FILE_NAME="${GR:?}vanilla_maps.zip${N0:?}"
+            P2P_PEERS_CONNECTED="${GR:?}N/A${N0:?}"
+            P2P_PEERS_SEEDINGTO="${GR:?}N/A${N0:?}"
+            P2P_PEERS_DOWN_LOAD="${GR:?}N/A${N0:?}"
             P2P_DWNS="${GR:?}N/A${N0:?} "
             P2P_UPLS="${GR:?}N/A${N0:?} "
             P2P_STAT="${GR:?}N/A${N0:?}"
             P2P_PROG="${GR:?}N/A${N0:?}"
             P2P_RATI="${GR:?}N/A${N0:?}"
-            P2P_PEERS_CONNECTED="${GR:?}N/A${N0:?}"
             SLASH=""
 
             ;;
@@ -798,7 +802,10 @@ ${N0:?}"
 
             SEED_TRANSMISSION="${Y1:?}Online+${N0:?}"
             INTRANET_SEED="${Y1:?}${INTRANET:?}:9091${N0:?}"
-            SLASH="/"
+            P2P_PEERS_CONNECTED="${GR:?}N/A${N0:?}"
+            P2P_PEERS_SEEDINGTO="${GR:?}N/A${N0:?}"
+            P2P_PEERS_DOWN_LOAD="${GR:?}N/A${N0:?}"
+            SLASH=""
 
             ;;
 
@@ -840,10 +847,10 @@ ${N0:?}"
         "i")
 
           # is seedbox running?
-          if pidof transmission-daemon 2>/dev/null; then
-            printf '%b' "${GR:?}INFO${N0:?}\n"
+          if [[ "$PIDOFP2P_DAE" -ge "1" ]]; then
+            printf '%b' "[${G1:?}OK${N0:?}] Torrent information\n"
             # list statistical information from the server
-            P2P_ST=$(transmission-remote -st)
+            P2P_ST=$(transmission-remote -st 2>/dev/null)
             printf '%b' "${GR:?}$P2P_ST${N0:?}\n"
             echo
             # show details of the current torrent(s)
@@ -861,10 +868,9 @@ ${N0:?}"
             read -r -p "Press Enter to continue" </dev/tty
             echo
           else
-            echo "Install/Start SeedBox first!"
-            echo
-            read -r -p "Press Enter to continue" </dev/tty
-            echo
+            echo "[!!] Torrent information"
+            echo "[!!] Install/Start SeedBox first!"
+            sleep 2
           fi
 
           ;;
@@ -879,10 +885,25 @@ ${N0:?}"
           read -r -p "" -n 1 -r -s
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
+            # stop transmission service
+            sudo service transmission-daemon stop &>/dev/null
+            # find it, shut it down
+            for PID in $(ps -ef 2>/dev/null | grep -E "transmission-cli|transmission-daemon" 2>/dev/null |
+              awk '{print $2}'); do kill -9 $PID 2>/dev/null; done
+            # go over it again, kill daemon, cli
+            sudo kill -9 "$PIDOFP2P_DAE" &>/dev/null
+            sudo kill -9 "$PIDOFP2P_CLI" &>/dev/null
             printf '%b' "[${G1:?}OK${N0:?}] Please wait\n"
             # remove old file
             sudo rm -R /var/log/ms/transmission_list &>/dev/null
             sudo apt-get remove transmission-* --purge -y 2>/dev/null
+            sudo apt-get update &>/dev/null
+            # clear the local repository of retrieved package files that are left in /var/cache.
+            sudo apt-get clean 2>/dev/null
+            # clear the local repository of retrieved package files
+            sudo apt-get autoclean 2>/dev/null
+            # remove packages that were automatically installed because some other package required them
+            sudo apt-get -y --purge autoremove 2>/dev/null
             echo
             read -r -p "Press Enter to continue" </dev/tty
             echo
@@ -1007,8 +1028,6 @@ EOF
               sudo service transmission-daemon start &>/dev/null
               printf '%b' "[${G1:?}OK${N0:?}] Starting SeedBox ${GR:?}transmission-daemon${N0:?}\n"
               sleep 1
-              printf '%b' "[${G1:?}OK${N0:?}] Installed!\n"
-              sleep 1
               # add magnet link: vanilla.maps.zip.torrent
               transmission-remote -a "magnet:?xt=urn:btih:1cdcaa3d77a7f4df79935d885e639903e37dda24&dn=vanilla%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
               printf '%b' "[${G1:?}OK${N0:?}] Torrent added\n"
@@ -1022,7 +1041,7 @@ EOF
               sudo systemctl daemon-reload 2>/dev/null
               sleep 1
             else
-              printf '%b' "SeedBox already installed!\n"
+              printf '%b' "[${G1:?}OK${N0:?}] SeedBox already installed!\n"
               sleep 2
             fi
             echo
@@ -1044,13 +1063,14 @@ EOF
             # already installed?
             if [ -x "$(command -v transmission-daemon)" ]; then
               printf '%b' "[${G1:?}OK${N0:?}] Please wait\n"
+              # stop transmission service
+              sudo service transmission-daemon stop &>/dev/null
               # find it, shut it down
               for PID in $(ps -ef 2>/dev/null | grep -E "transmission-cli|transmission-daemon" 2>/dev/null |
                 awk '{print $2}'); do kill -9 $PID 2>/dev/null; done
               # go over it again, kill daemon, cli
               sudo kill -9 "$PIDOFP2P_DAE" &>/dev/null
               sudo kill -9 "$PIDOFP2P_CLI" &>/dev/null
-              sudo service transmission-daemon stop &>/dev/null
               sleep 1
               sudo service transmission-daemon start &>/dev/null
               sleep 1
@@ -1061,11 +1081,8 @@ EOF
               printf '%b' "[${G1:?}OK${N0:?}] SeedBox started!\n"
               sleep 2
             else
-              echo "Install/Start SeedBox first!"
-              sleep 1
-              echo
-              read -r -p "Press Enter to continue" </dev/tty
-              echo
+              echo "[!!] Install/Start SeedBox first!"
+              sleep 2
             fi
           fi
 
@@ -1083,14 +1100,14 @@ EOF
             # already installed?
             if [ -x "$(command -v transmission-daemon)" ]; then
               printf '%b' "[${G1:?}OK${N0:?}] Please wait\n"
+              # stop transmission service
+              sudo service transmission-daemon stop &>/dev/null
               # find it, shut it down
               for PID in $(ps -ef 2>/dev/null | grep -E "transmission-cli|transmission-daemon" 2>/dev/null |
                 awk '{print $2}'); do kill -9 $PID 2>/dev/null; done
               # go over it again, kill daemon, cli
               sudo kill -9 "$PIDOFP2P_DAE" &>/dev/null
               sudo kill -9 "$PIDOFP2P_CLI" &>/dev/null
-              # stop transmission service
-              sudo service transmission-daemon stop &>/dev/null
               sleep 1
               # disable service
               sudo systemctl disable transmission-daemon &>/dev/null
@@ -1099,11 +1116,8 @@ EOF
               printf '%b' "[${G1:?}OK${N0:?}] SeedBox stopped!\n"
               sleep 2
             else
-              echo "Install/Start SeedBox first!"
-              sleep 1
-              echo
-              read -r -p "Press Enter to continue" </dev/tty
-              echo
+              echo "[!!] Install/Start SeedBox first!"
+              sleep 2
             fi
           fi
 
@@ -1116,7 +1130,6 @@ EOF
         "m")
 
           read -r -p "[YN] Import Maps? y/n " -n 1 -r
-          echo
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # start counting (seconds)
@@ -1137,7 +1150,6 @@ EOF
               TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
               echo
               printf '%b' "Import time: ${G1:?}$TIMER${N0:?}\n"
-              echo
               printf '%b' "[${G1:?}OK${N0:?}] Maps installed!\n"
               sleep 1
               echo
