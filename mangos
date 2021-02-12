@@ -2805,7 +2805,7 @@ Please install mysql or mariadb database/client"
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # backup characters sql
             echo
-            printf '%b' "[${G1:?}OK${N0:?}] Making fresh backup${G0:?}.${N0:?}"
+            printf '%b' "Making fresh backup${G0:?}.${N0:?}"
             sleep 1
             printf '%b' "${G0:?}.${N0:?}"
             mysqldump --defaults-extra-file="$SQL_MYCNF" "$DB_CHARACTERS" >"$FOLDER_WOW"/backup/"$DB_CHARACTERS"-"$NOW".sql
@@ -2831,7 +2831,7 @@ Please install mysql or mariadb database/client"
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # backup characters sql
             echo
-            printf '%b' "[${G1:?}OK${N0:?}] Making fresh backup${G0:?}.${N0:?}"
+            printf '%b' "Making fresh backup${G0:?}.${N0:?}"
             sleep 1
             printf '%b' "${G0:?}.${N0:?}"
             mysqldump --defaults-extra-file="$SQL_MYCNF" "$DB_REALMD" >"$FOLDER_WOW"/backup/"$DB_REALMD"-"$NOW".sql
