@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20211102
-# 4.9.4.9
+# V20211202
+# 4.9.5.8
 
 # codes
 while :; do
@@ -1174,19 +1174,28 @@ EOF
         read -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
-
           echo
-          echo
-          printf '%b' "${THEMES:?}[OK] mangos-classic${N0:?}: "
-          cd "$FOLDER_CORE" || exit
-          git reset --hard
-          printf '%b' "${THEMES:?}[OK] classic-db${N0:?}: "
-          cd "${FOLDER_DB:?}" || exit
-          git reset --hard
-          printf '%b' "${THEMES:?}[OK] cmangos-script${N0:?}: "
-          cd "${FOLDER_HELPER:?}" || exit
-          git reset --hard
-          echo
+          if [ -z "$(ls -A "$FOLDER_CORE" 2>/dev/null)" ]; then
+            printf '%b' "[${GR:?}NO${N0:?}]${THEMES:?} Core:${N0:?} Empty!\n"
+          else
+            printf '%b' "[${G1:?}OK${N0:?}]${THEMES:?} Core${N0:?}: "
+            cd "$FOLDER_CORE" || exit
+            git reset --hard 2>/dev/null
+          fi
+          if [ -z "$(ls -A "$FOLDER_DB" 2>/dev/null)" ]; then
+            printf '%b' "[${GR:?}NO${N0:?}]${THEMES:?} Database:${N0:?} Empty!\n"
+          else
+            printf '%b' "[${G1:?}OK${N0:?}]${THEMES:?} Database${N0:?}: "
+            cd "${FOLDER_DB:?}" || exit
+            git reset --hard 2>/dev/null
+          fi
+          if [ -z "$(ls -A "$FOLDER_HELPER" 2>/dev/null)" ]; then
+            printf '%b' "[${GR:?}NO${N0:?}]${THEMES:?} Helper:${N0:?} Empty!\n"
+          else
+            printf '%b' "[${G1:?}OK${N0:?}]${THEMES:?} Helper${N0:?}: "
+            cd "${FOLDER_HELPER:?}" || exit
+            git reset --hard 2>/dev/null
+          fi
           echo
           read -r -p "Press Enter to continue" </dev/tty
           echo
