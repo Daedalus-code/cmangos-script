@@ -2771,7 +2771,7 @@ Please install mysql or mariadb database/client"
         echo
         FILE="$FOLDER_WOW/backup/$DB_CHARACTERS-$NOW.sql"
         if [ ! -f "$FILE" ]; then
-          printf '%b' "[${R0:?}empty${N0:?}/${R0:?}!!${N0:?}] 'Characters' ! Creating backup.."
+          printf '%b' "[${GR:?}Empty${N0:?}/${N0:?}!!] 'Characters' ! Creating backup.."
           mysqldump --defaults-extra-file="$SQL_MYCNF" "$DB_CHARACTERS" >"$FOLDER_WOW"/backup/"$DB_CHARACTERS"-"$NOW".sql
           echo
         else
@@ -2797,7 +2797,7 @@ Please install mysql or mariadb database/client"
         # backup <- realmd.sql
         FILE="$FOLDER_WOW/backup/$DB_REALMD-$NOW.sql"
         if [ ! -f "$FILE" ]; then
-          printf '%b' "[${R0:?}empty${N0:?}/${R0:?}!!${N0:?}] 'Realmd' ! Creating backup.."
+          printf '%b' "[${GR:?}Empty${N0:?}/${N0:?}!!] 'Realmd' ! Creating backup.."
           mysqldump --defaults-extra-file="$SQL_MYCNF" "$DB_REALMD" >"$FOLDER_WOW"/backup/"$DB_REALMD"-"$NOW".sql
           echo
         else
@@ -2891,7 +2891,7 @@ Please install mysql or mariadb database/client"
         # backup <- characters.sql
         FILE="$FOLDER_WOW/backup/$DB_CHARACTERS-$NOW.sql"
         if [ ! -f "$FILE" ]; then
-          printf '%b' "[${R0:?}empty${N0:?}/${R0:?}!!${N0:?}] 'Characters' ! Creating backup.."
+          printf '%b' "[${GR:?}Empty${N0:?}/${N0:?}!!] 'Characters' ! Creating backup.."
           mysqldump --defaults-extra-file="$SQL_MYCNF" "$DB_CHARACTERS" >"$FOLDER_WOW"/backup/"$DB_CHARACTERS"-"$NOW".sql
           echo
         else
@@ -2901,7 +2901,7 @@ Please install mysql or mariadb database/client"
         # backup <- realmd.sql
         FILE="$FOLDER_WOW/backup/$DB_REALMD-$NOW.sql"
         if [ ! -f "$FILE" ]; then
-          printf '%b' "[${R0:?}empty${N0:?}/${R0:?}!!${N0:?}] 'Realmd' ! Creating backup.."
+          printf '%b' "[${GR:?}Empty${N0:?}/${N0:?}!!] 'Realmd' ! Creating backup.."
           mysqldump --defaults-extra-file="$SQL_MYCNF" "$DB_REALMD" >"$FOLDER_WOW"/backup/"$DB_REALMD"-"$NOW".sql
           echo
         else
@@ -3687,7 +3687,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               screen -S realmd -X quit &>/dev/null
               printf '%b' "[${G1:?}OK${N0:?}] Stopped! $REALMD_ID.realmd\n"
             else
-              printf '%b' "[${GR:?}!!${N0:?}] realmd not running!\n"
+              printf '%b' "[!!] realmd not running!\n"
             fi
             if screen -list 2>/dev/null |
               grep -q "mangosd" &>/dev/null; then
@@ -3701,7 +3701,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               screen -S mangosd -X quit &>/dev/null
               printf '%b' "[${G1:?}OK${N0:?}] Stopped! $MANGOSD_ID.mangosd\n"
             else
-              printf '%b' "[${GR:?}!!${N0:?}] mangosd not running!\n"
+              printf '%b' "[!!] mangosd not running!\n"
             fi
             # keep old logs
             cp "$FOLDER_CORE"/run/logs/Server.log "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
@@ -3781,7 +3781,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               cp "$FOLDER_CORE"/run/logs/Server.log "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
               cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
             else
-              printf '%b' "[${GR:?}!!${N0:?}] realmd not running!\n"
+              printf '%b' "[!!] realmd not running!\n"
               sleep 2
             fi
           else
@@ -3837,7 +3837,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               cp "$FOLDER_CORE"/run/logs/Server.log "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
               cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
             else
-              printf '%b' "[${GR:?}!!${N0:?}] mangosd not running!\n"
+              printf '%b' "[!!] mangosd not running!\n"
               sleep 2
             fi
           else
@@ -3955,7 +3955,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               screen -S realmd -X quit &>/dev/null
               printf '%b' "[${G1:?}OK${N0:?}] Stopped! $REALMD_ID.realmd\n"
             else
-              printf '%b' "[${GR:?}!!${N0:?}] realmd not running!\n"
+              printf '%b' "[!!] realmd not running!\n"
             fi
             # running screen named mangosd
             if screen -list 2>/dev/null |
@@ -3970,7 +3970,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               screen -S mangosd -X quit &>/dev/null
               printf '%b' "[${G1:?}OK${N0:?}] Stopped! $MANGOSD_ID.mangosd\n"
             else
-              printf '%b' "[${GR:?}!!${N0:?}] mangosd not running!\n"
+              printf '%b' "[!!] mangosd not running!\n"
             fi
             printf '%b' "[${G1:?}OK${N0:?}] Starting server with screen.\n"
             sleep 2
@@ -4373,25 +4373,25 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             printf '%b' "[!!] (${G0:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) ${G0:?}${UND:?}New Updates For Helper${DEF:?}${N0:?}! - $LATEST_DATE\n"
             cd "$FOLDER_HELPER" || exit
             sleep 1
-            printf '%b' "[!!] -> old release installed!\n"
+            printf '%b' "[!!] Old release installed!\n"
             sleep 1
-            printf '%b' "[${G1:?}OK${N0:?}] -> Updating Helper!\n"
+            printf '%b' "[${G1:?}OK${N0:?}] Updating Helper!\n"
             # keep old mangos
             sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old &>/dev/null
             # done
-            printf '%b' "[${G1:?}OK${N0:?}] -> /usr/local/bin/mangos.old\n"
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}/usr/local/bin/mangos.old${N0:?}\n"
             sleep 1
-            printf '%b' "[${G1:?}OK${N0:?}] -> Stripping executable on 'mangos.old'\n"
+            printf '%b' "[${G1:?}OK${N0:?}] Stripping executable on 'mangos.old'\n"
             sleep 1
             sudo chmod -x /usr/local/bin/mangos.old
             sudo chown -R "$USER":"$GROUP" "$FOLDER_HELPER"
             cd "$FOLDER_HELPER" || exit
-            printf '%b' "[${G1:?}OK${N0:?}] -> Installing new release\n"
+            printf '%b' "[${G1:?}OK${N0:?}] Installing new release\n"
             sleep 1
             sudo cp "$FOLDER_HELPER"/mangos /usr/local/bin &>/dev/null
             sudo chmod +x /usr/local/bin/mangos
             sleep 1
-            printf '%b' "[${G1:?}OK${N0:?}] -> Installed.\n"
+            printf '%b' "[${G1:?}OK${N0:?}] Installed.\n"
             sleep 1 && exit
           else
             # install new upgrades
@@ -4400,7 +4400,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             sudo cp "$FOLDER_HELPER"/mangos /usr/local/bin/mangos &>/dev/null
             sudo chmod +x /usr/local/bin/mangos
             sleep 1
-            printf '%b' "[${G1:?}OK${N0:?}] -> Installed."
+            printf '%b' "[${G1:?}OK${N0:?}] Installed."
             echo
             echo
           fi
@@ -4427,22 +4427,22 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       if [[ $REPLY =~ ^[Yy]$ ]]; then
 
         sudo mv /usr/local/bin/mangos /usr/local/bin/mangos.old &>/dev/null
-        printf '%b' "[${G1:?}OK${N0:?}] -> installed mangos removed."
+        printf '%b' "[${G1:?}OK${N0:?}] Installed mangos removed."
         echo
         sudo rm -r "$FOLDER_HELPER"
-        printf '%b' "[${G1:?}OK${N0:?}] -> cmangos-script removed."
+        printf '%b' "[${G1:?}OK${N0:?}] cmangos-script removed."
         echo
         sudo mkdir "${FOLDER_INSTALL:?}" &>/dev/null
-        printf '%b' "[${G1:?}OK${N0:?}] -> $FOLDER_INSTALL/> git clone.."
+        printf '%b' "[${G1:?}OK${N0:?}] $FOLDER_INSTALL/> git clone.."
         echo
         cd "$FOLDER_INSTALL" || exit
         git clone "$GITHUB_HELPER"
         sudo cp "$FOLDER_HELPER"/mangos /usr/local/bin &>/dev/null
-        printf '%b' "[${G1:?}OK${N0:?}] -> Installing new release"
+        printf '%b' "[${G1:?}OK${N0:?}] Installing new release"
         sudo chmod +x /usr/local/bin/mangos
         echo
         sleep 1
-        printf '%b' "[${G1:?}OK${N0:?}] -> Installed."
+        printf '%b' "[${G1:?}OK${N0:?}] Installed."
         echo
         echo
         sleep 2
