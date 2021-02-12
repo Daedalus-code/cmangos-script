@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20211202
-# 4.9.4.9
+# 4.9.4.7
 
 # codes
 while :; do
@@ -810,9 +810,9 @@ ${N0:?}"
 
         clear
         echo
-        printf '%b' "${N0:?}   CMaNGOS${N0:?} - ${THEMES:?}Vanilla Maps ${N0:?}Seedbox
+        printf '%b' "${N0:?}   CMaNGOS${N0:?} - ${THEMES:?}Vanilla Maps ${N0:?}SeedBox
 
-   Seedbox${G0:?}..:${N0:?} $SEED_TRANSMISSION
+   SeedBox${G0:?}..:${N0:?} $SEED_TRANSMISSION
    Access${G0:?}...:${N0:?} $INTRANET_SEED
    Filename${G0:?}.:${N0:?} $P2P_FILE_NAME
    Download${G0:?}.:${N0:?} $P2P_DWNS${GR:?}Unlimited${N0:?}
@@ -860,7 +860,7 @@ ${N0:?}"
             read -r -p "Press Enter to continue" </dev/tty
             echo
           else
-            echo "Please Install/Start seedbox first!"
+            echo "Please Install/Start SeedBox first!"
             echo
             read -r -p "Press Enter to continue" </dev/tty
             echo
@@ -875,7 +875,7 @@ ${N0:?}"
         "u")
 
           echo
-          read -r -p "[YN] Remove Seedbox? (keeping maps) y/n " -n 1 -r
+          read -r -p "[YN] Remove Seedbox? ${GR:?}keeping maps${N0:?} y/n " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -1003,17 +1003,18 @@ EOF
               sleep 1
               # start transmission-daemon
               sudo service transmission-daemon start &>/dev/null
-              echo
-              printf '%b' "[${G1:?}OK${N0:?}] - Installed!\n"
+              printf '%b' "[${G1:?}OK${N0:?}] Starting SeedBox ${GR:?}transmission${N0:?}!\n"
+              sleep 1
+              printf '%b' "[${G1:?}OK${N0:?}] Installed!\n"
               sleep 1
               # add magnet link: vanilla.maps.zip.torrent
               transmission-remote -a "magnet:?xt=urn:btih:1cdcaa3d77a7f4df79935d885e639903e37dda24&dn=vanilla%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
-              printf '%b' "[${G1:?}OK${N0:?}] - Torrent added\n"
+              printf '%b' "[${G1:?}OK${N0:?}] Torrent added\n"
               # try to verify torrent data
               P2P_VERIFY=$(transmission-remote -t all -v 2>/dev/null)
-              printf '%b' "[${Y1:?}OK${N0:?}] - Verifying data..\n"
+              printf '%b' "[${Y1:?}OK${N0:?}] Verifying data..\n"
               sleep 1
-              printf '%b' "[${G1:?}OK${N0:?}] - $P2P_VERIFY\n"
+              printf '%b' "[${G1:?}OK${N0:?}] $P2P_VERIFY\n"
               sleep 1
               # reload
               sudo systemctl daemon-reload 2>/dev/null
@@ -1036,7 +1037,7 @@ EOF
         "r")
 
           echo
-          read -r -p "[YN] Re/start seedbox? y/n " -n 1 -r
+          read -r -p "[YN] Re/start SeedBox? y/n " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # already installed?
@@ -1056,11 +1057,10 @@ EOF
               sudo systemctl enable transmission-daemon &>/dev/null
               # reload
               sudo systemctl daemon-reload &>/dev/null
-              echo
-              printf '%b' "[${G1:?}OK${N0:?}] - seedbox started.\n"
+              printf '%b' "[${G1:?}OK${N0:?}] SeedBox started.\n"
               sleep 1
             else
-              echo "Install seedbox please!"
+              echo "Install SeedBox please!"
               sleep 1
               echo
               read -r -p "Press Enter to continue" </dev/tty
@@ -1077,7 +1077,7 @@ EOF
         "s")
 
           echo
-          read -r -p "[YN] Stop seedbox? y/n " -n 1 -r
+          read -r -p "[YN] Stop SeedBox? y/n " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # already installed?
@@ -1096,12 +1096,10 @@ EOF
               sudo systemctl disable transmission-daemon &>/dev/null
               # reload
               sudo systemctl daemon-reload &>/dev/null
-              echo
-              printf '%b' "${R1:?}Halted${N0:?} - seedbox stopped."
-              echo
+              printf '%b' "${G1:?}OK${N0:?} SeedBox stopped!\n"
               sleep 1
             else
-              echo "Install seedbox please!"
+              echo "Install SeedBox please!"
               sleep 1
               echo
               read -r -p "Press Enter to continue" </dev/tty
@@ -1118,7 +1116,7 @@ EOF
         "m")
 
           echo
-          read -r -p "[YN] Install maps? (vanilla_maps.zip) y/n " -n 1 -r
+          read -r -p "[YN] Install Maps? (vanilla_maps.zip) y/n " -n 1 -r
           echo
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -1128,12 +1126,12 @@ EOF
             VMAPS="$FOLDER_CORE"/run/vmaps/Zulgurub_Ziggurat.wmo.vmo
             # codes done
             if [ -f "$MAPS" ] && [ -f "$MMAPS" ] && [ -f "$VMAPS" ]; then
-              printf '%b' "[${G1:?}OK${N0:?}] Maps already installed.\n"
+              printf '%b' "[${G1:?}OK${N0:?}] Maps already installed!\n"
               sleep 2
             else
               sudo unzip /seedbox/vanilla_maps.zip -d "$FOLDER_CORE"/run
               echo
-              printf '%b' "[${G1:?}OK${N0:?}] - maps installed.\n"
+              printf '%b' "[${G1:?}OK${N0:?}] Maps installed!\n"
               sleep 1
             fi
           fi
