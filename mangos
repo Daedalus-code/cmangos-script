@@ -2809,9 +2809,9 @@ Please install mysql or mariadb database/client"
             sleep 1
             printf '%b' "${G0:?}.${N0:?}"
             mysqldump --defaults-extra-file="$SQL_MYCNF" "$DB_CHARACTERS" >"$FOLDER_WOW"/backup/"$DB_CHARACTERS"-"$NOW".sql
-            printf '%b' "${G0:?}.${N0:?}"
+            printf '%b' "${G0:?}.${N0:?}\n"
             sleep 1
-            printf '%b' "[${G1:?}OK${N0:?}] $DB_CHARACTERS-$NOW.sql"
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}$DB_CHARACTERS-$NOW.sql${N0:?}"
             sleep 2
             echo
           fi
@@ -2835,9 +2835,9 @@ Please install mysql or mariadb database/client"
             sleep 1
             printf '%b' "${G0:?}.${N0:?}"
             mysqldump --defaults-extra-file="$SQL_MYCNF" "$DB_REALMD" >"$FOLDER_WOW"/backup/"$DB_REALMD"-"$NOW".sql
-            printf '%b' "${G0:?}.${N0:?}"
+            printf '%b' "${G0:?}.${N0:?}\n"
             sleep 1
-            printf '%b' "[${G1:?}OK${N0:?}] $DB_REALMD-$NOW.sql"
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}$DB_REALMD-$NOW.sql${N0:?}"
             sleep 1
             echo
           fi
