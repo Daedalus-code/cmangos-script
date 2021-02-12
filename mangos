@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20211202
-# 4.9.6.9
+# 4.9.7.2
 
 # codes
 while :; do
@@ -733,6 +733,8 @@ ${N0:?}"
           P2P_STAT="${GR:?}N/A${N0:?}"
           P2P_PROG="${GR:?}N/A${N0:?}"
           P2P_RATI="${GR:?}N/A${N0:?}"
+          P2P_PEERS_SEEDINGTO=""
+          P2P_PEERS_DOWN_LOAD=""
           SLASH=""
         else
           if [ -f /var/log/ms/transmission_list ]; then
@@ -778,13 +780,13 @@ ${N0:?}"
             INTRANET_SEED="${GR:?}0.0.0.0:9091${N0:?}"
             P2P_FILE_NAME="${GR:?}vanilla_maps.zip${N0:?}"
             P2P_PEERS_CONNECTED="${GR:?}N/A${N0:?}"
-            P2P_PEERS_SEEDINGTO="${GR:?}N/A${N0:?}"
-            P2P_PEERS_DOWN_LOAD="${GR:?}N/A${N0:?}"
             P2P_DWNS="${GR:?}N/A${N0:?} "
             P2P_UPLS="${GR:?}N/A${N0:?} "
             P2P_STAT="${GR:?}N/A${N0:?}"
             P2P_PROG="${GR:?}N/A${N0:?}"
             P2P_RATI="${GR:?}N/A${N0:?}"
+            P2P_PEERS_SEEDINGTO=""
+            P2P_PEERS_DOWN_LOAD=""
             SLASH=""
 
             ;;
@@ -869,8 +871,9 @@ ${N0:?}"
             echo
           else
             echo "[!!] Torrent information"
+            sleep 1
             echo "[!!] Install/Start SeedBox first!"
-            sleep 2
+            sleep 1
           fi
 
           ;;
@@ -1082,7 +1085,7 @@ EOF
               sleep 2
             else
               echo "[!!] Install/Start SeedBox first!"
-              sleep 2
+              sleep 1
             fi
           fi
 
@@ -1117,7 +1120,7 @@ EOF
               sleep 2
             else
               echo "[!!] Install/Start SeedBox first!"
-              sleep 2
+              sleep 1
             fi
           fi
 
