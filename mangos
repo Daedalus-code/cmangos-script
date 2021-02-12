@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20211202
-# 4.9.5.8
+# 4.9.5.1
 
 # codes
 while :; do
@@ -879,7 +879,7 @@ ${N0:?}"
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
 
-            echo "[OK] Please wait"
+            printf '%b' "[${G1:?}OK${N0:?}] Please wait\n"
             # remove old file
             sudo rm -R /var/log/ms/transmission_list &>/dev/null
             sudo apt-get remove transmission-* --purge -y 2>/dev/null
@@ -905,7 +905,7 @@ ${N0:?}"
             # already installed?
             if ! [ -x "$(command -v transmission-daemon)" ]; then
               # check for updates regardless
-              echo "[OK] Please wait"
+              printf '%b' "[${G1:?}OK${N0:?}] Please wait\n"
               sudo apt-get update &>/dev/null
               # clear the local repository of retrieved package files that are left in /var/cache.
               sudo apt-get clean 2>/dev/null
@@ -1011,7 +1011,7 @@ EOF
               printf '%b' "[${G1:?}OK${N0:?}] - Torrent added\n"
               # try to verify torrent data
               P2P_VERIFY=$(transmission-remote -t all -v 2>/dev/null)
-              printf '%b' "[${Y1:?}ok${N0:?}] - Verifying data..\n"
+              printf '%b' "[${Y1:?}OK${N0:?}] - Verifying data..\n"
               sleep 1
               printf '%b' "[${G1:?}OK${N0:?}] - $P2P_VERIFY\n"
               sleep 1
@@ -1041,7 +1041,7 @@ EOF
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # already installed?
             if [ -x "$(command -v transmission-daemon)" ]; then
-              echo "[OK] Please wait"
+              printf '%b' "[${G1:?}OK${N0:?}] Please wait\n"
               # find it, shut it down
               for PID in $(ps -ef 2>/dev/null | grep -E "transmission-cli|transmission-daemon" 2>/dev/null |
                 awk '{print $2}'); do kill -9 $PID 2>/dev/null; done
@@ -1057,8 +1057,7 @@ EOF
               # reload
               sudo systemctl daemon-reload &>/dev/null
               echo
-              printf '%b' "[${G1:?}OK${N0:?}] - seedbox started."
-              echo
+              printf '%b' "[${G1:?}OK${N0:?}] - seedbox started.\n"
               sleep 1
             else
               echo "Install seedbox please!"
@@ -1083,7 +1082,7 @@ EOF
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # already installed?
             if [ -x "$(command -v transmission-daemon)" ]; then
-              echo "[OK] Please wait"
+              printf '%b' "[${G1:?}OK${N0:?}] Please wait\n"
               # find it, shut it down
               for PID in $(ps -ef 2>/dev/null | grep -E "transmission-cli|transmission-daemon" 2>/dev/null |
                 awk '{print $2}'); do kill -9 $PID 2>/dev/null; done
@@ -1129,14 +1128,12 @@ EOF
             VMAPS="$FOLDER_CORE"/run/vmaps/Zulgurub_Ziggurat.wmo.vmo
             # codes done
             if [ -f "$MAPS" ] && [ -f "$MMAPS" ] && [ -f "$VMAPS" ]; then
-              printf '%b' "[OK] Maps already installed."
-              echo
+              printf '%b' "[${G1:?}OK${N0:?}] Maps already installed.\n"
               sleep 2
             else
               sudo unzip /seedbox/vanilla_maps.zip -d "$FOLDER_CORE"/run
               echo
-              printf '%b' "[${G1:?}OK${N0:?}] - maps installed."
-              echo
+              printf '%b' "[${G1:?}OK${N0:?}] - maps installed.\n"
               sleep 1
             fi
           fi
@@ -1623,7 +1620,7 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
         git clone "${GITHUB_DATABASE:?}"
         cd "$FOLDER_DB" || exit
         ./InstallFullDB.sh
-        echo "[OK] Done!"
+        printf '%b' "[${G1:?}OK${N0:?}] Done!\n"
         sleep 1
         # check if 'InstallFullDB.config' exist
         FILE="$FOLDER_DB/InstallFullDB.config"
@@ -1776,7 +1773,7 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         # this is for docker users
         if [ -f /.dockerenv ]; then
-          printf '%b' "[OK] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
           sleep 3
           sudo killall screen &>/dev/null
           # keep old logs
@@ -1786,7 +1783,7 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
           if ! [ -x "$(command -v "${PACKAGELIST[@]}")" ]; then
             sudo apt-get install "${PACKAGELIST[@]}" -y 2>/dev/null
           fi
-          printf '%b' "[OK] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
           sleep 1
           # realmd service
           case "$(echo "$PIDOF_REALMD")" in
@@ -2143,7 +2140,7 @@ Check if correct information, or just restart server."
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         # this is for docker users
         if [ -f /.dockerenv ]; then
-          printf '%b' "[OK] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
           sleep 3
           sudo killall screen &>/dev/null
           # keep old logs
@@ -2153,7 +2150,7 @@ Check if correct information, or just restart server."
           if ! [ -x "$(command -v "${PACKAGELIST[@]}")" ]; then
             sudo apt-get install "${PACKAGELIST[@]}" -y 2>/dev/null
           fi
-          printf '%b' "[OK] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
           sleep 1
           # realmd service
           case "$(echo "$PIDOF_REALMD")" in
@@ -2733,13 +2730,13 @@ Please install mysql or mariadb database/client"
           fi
         fi
         echo
-        printf '%b' "[OK] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
+        printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
         sleep 1
 
         # this is for docker users
         if [ -f /.dockerenv ]; then
           echo
-          printf '%b' "[OK] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
           sleep 3
           sudo killall screen &>/dev/null
           # keep old logs
@@ -2787,7 +2784,7 @@ Please install mysql or mariadb database/client"
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # backup characters sql
             echo
-            printf '%b' "[OK] Making fresh backup${G0:?}.${N0:?}"
+            printf '%b' "[${G1:?}OK${N0:?}] Making fresh backup${G0:?}.${N0:?}"
             sleep 1
             printf '%b' "${G0:?}.${N0:?}"
             mysqldump --defaults-extra-file="$SQL_MYCNF" "$DB_CHARACTERS" >"$FOLDER_WOW"/backup/"$DB_CHARACTERS"-"$NOW".sql
@@ -2813,7 +2810,7 @@ Please install mysql or mariadb database/client"
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # backup characters sql
             echo
-            printf '%b' "[OK] Making fresh backup${G0:?}.${N0:?}"
+            printf '%b' "[${G1:?}OK${N0:?}] Making fresh backup${G0:?}.${N0:?}"
             sleep 1
             printf '%b' "${G0:?}.${N0:?}"
             mysqldump --defaults-extra-file="$SQL_MYCNF" "$DB_REALMD" >"$FOLDER_WOW"/backup/"$DB_REALMD"-"$NOW".sql
@@ -2869,7 +2866,7 @@ Please install mysql or mariadb database/client"
         # this is for docker users
         if [ -f /.dockerenv ]; then
           echo
-          printf '%b' "[OK] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
           sleep 3
           sudo killall screen 2>/dev/null
           # keep old logs
@@ -2877,7 +2874,7 @@ Please install mysql or mariadb database/client"
           cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
         else
           echo
-          printf '%b' "[OK] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
           sleep 1
           # realmd service
           case "$(echo "$PIDOF_REALMD")" in
@@ -3046,7 +3043,7 @@ Please install mysql or mariadb database/client"
         # this is for docker users
         if [ -f /.dockerenv ]; then
           echo
-          printf '%b' "[OK] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
           sleep 3
           sudo killall screen &>/dev/null
           # keep old logs
@@ -3054,7 +3051,7 @@ Please install mysql or mariadb database/client"
           cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
         else
           echo
-          printf '%b' "[OK] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
           sleep 1
           # realmd service
           case "$(echo "$PIDOF_REALMD")" in
@@ -3376,8 +3373,7 @@ Check log for which database needs 'applying updates'"
       read -r -p "[YN] Characters? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
-        printf '%b' "[OK] Loading.."
-        echo
+        printf '%b' "[${G1:?}OK${N0:?}] Loading..\n"
         sleep 1
         # realmd service
         case "$(echo "$PIDOF_REALMD")" in
@@ -3409,8 +3405,7 @@ Check log for which database needs 'applying updates'"
       read -r -p "[YN] Mangos? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
-        printf '%b' "[OK] Loading.."
-        echo
+        printf '%b' "[${G1:?}OK${N0:?}] Loading..\n"
         sleep 1
         # realmd service
         case "$(echo "$PIDOF_REALMD")" in
@@ -3442,8 +3437,7 @@ Check log for which database needs 'applying updates'"
       read -r -p "[YN] Realmd? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
-        printf '%b' "[OK] Loading.."
-        echo
+        printf '%b' "[${G1:?}OK${N0:?}] Loading..\n"
         sleep 1
         # realmd service
         case "$(echo "$PIDOF_REALMD")" in
@@ -3480,8 +3474,7 @@ Check log for which database needs 'applying updates'"
       read -r -p "[YN] InstallFullDB? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
-        printf '%b' "[OK] Loading.."
-        echo
+        printf '%b' "[${G1:?}OK${N0:?}] Loading..\n"
         sleep 1
         # realmd service
         case "$(echo "$PIDOF_REALMD")" in
