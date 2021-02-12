@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20211202
-# 4.9.5.1
+# 4.9.4.9
 
 # codes
 while :; do
@@ -332,7 +332,7 @@ ${PASS_NC:?}
       # realmd backup
       FILE="$FOLDER_WOW/backup/$DB_REALMD-$NOW.sql"
       if [ ! -f "$FILE" ]; then
-        REALMD_BACKUP="[${R0:?}!!${N0:?}]"
+        REALMD_BACKUP="[!!]"
         echo
       else
         REALMD_BACKUP="[${G1:?}OK${N0:?}]"
@@ -341,7 +341,7 @@ ${PASS_NC:?}
       # characters backup
       FILE="$FOLDER_WOW/backup/$DB_CHARACTERS-$NOW.sql"
       if [ ! -f "$FILE" ]; then
-        CHARAC_BACKUP="[${R0:?}!!${N0:?}]"
+        CHARAC_BACKUP="[!!]"
         echo
       else
         CHARAC_BACKUP="[${G1:?}OK${N0:?}]"
@@ -1549,9 +1549,8 @@ ${THEMES:?}      ._________________.
       rm /var/log/ms/installed_core &>/dev/null
       # fresh install ?
       DOWN_CORE=$(echo -e "\033[5m?\033[0m" 2>/dev/null)
-      echo -ne '                                      \r'
-      printf '%b' "${GR:?}[YN] (${UND:?}0000000${DEF:?}${GR:?}) Download Core$DOWN_CORE y/n, or wait 5 sec${N0:?}"
-      read -t 5 -r -p "" -n 1 -r -s
+      printf '%b' "[YN]${GR:?} ${N0:?}(${GR:?}${UND:?}0000000${DEF:?}${N0:?})${GR:?} Download Core$DOWN_CORE y/n ${GR:?}skip in 5s ${N0:?}"
+      read -t 4 -r -p "" -n 1 -r -s
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         printf '%b' "[${G1:?}OK${N0:?}] Cloning repository! Please wait this might take a while
@@ -1607,9 +1606,8 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
       rm /var/log/ms/installed_db &>/dev/null
       # fresh install ?
       DOWN_DB=$(echo -e "\033[5m?\033[0m" 2>/dev/null)
-      echo -ne '                                      \r'
-      printf '%b' "${GR:?}[YN] (${UND:?}0000000${DEF:?}${GR:?}) Download Database$DOWN_DB y/n, or wait 5 sec${N0:?}"
-      read -t 5 -r -p "" -n 1 -r -s
+      printf '%b' "[YN]${GR:?} ${N0:?}(${GR:?}${UND:?}0000000${DEF:?}${N0:?})${GR:?} Download Database$DOWN_DB y/n ${GR:?}skip in 5s ${N0:?}"
+      read -t 4 -r -p "" -n 1 -r -s
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         printf '%b' "[${G1:?}OK${N0:?}] Cloning repository! Please wait this might take a while
@@ -4372,10 +4370,10 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             git merge origin/master; then
             LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
             LATEST_HEAD=$(git rev-parse --short HEAD)
-            printf '%b' "[${R0:?}!!${N0:?}] (${G0:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) ${G0:?}${UND:?}New Updates For Helper${DEF:?}${N0:?}! - $LATEST_DATE\n"
+            printf '%b' "[!!] (${G0:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) ${G0:?}${UND:?}New Updates For Helper${DEF:?}${N0:?}! - $LATEST_DATE\n"
             cd "$FOLDER_HELPER" || exit
             sleep 1
-            printf '%b' "[${R0:?}!!${N0:?}] -> old release installed!\n"
+            printf '%b' "[!!] -> old release installed!\n"
             sleep 1
             printf '%b' "[${G1:?}OK${N0:?}] -> Updating Helper!\n"
             # keep old mangos
