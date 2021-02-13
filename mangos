@@ -646,15 +646,15 @@ ${PASS_NC:?}
    System${G0:?}......:${N0:?} $BUILT_FOR
    Commit Hash${G0:?}.:${GR:?} $COMMIT_HASH${N0:?}
 
-   r : ${THEMES_OP:?}Login${N0:?}   - Remote access  mangosd.service${G0:?}.:${N0:?} $COMMAND_MANGOSD
-   l : ${THEMES_OP:?}Logs${N0:?}    - Analyze logs   realmd.service${G0:?}..:${N0:?} $COMMAND_REALMD
-   b : ${THEMES_OP:?}Backup${N0:?}  - New backup
-   h : ${THEMES_OP:?}Reset${N0:?}   - Reset --hard   characters.sql${G0:?}..:${N0:?} $CHARAC_BACKUP
-   p : ${THEMES_OP:?}htop${N0:?}    - Process view   realmd.sql${G0:?}......:${N0:?} $REALMD_BACKUP
-   m : ${THEMES_OP:?}Maps${N0:?}    - Download maps
-   w : ${THEMES_OP:?}Stats${N0:?}   - World stats    Realmd.log${G0:?}......:${N0:?} $CM_REALMD_LOG_EMPTY$CM_REALMD_LOG
-   q : ${THEMES_OP:?}Quit${N0:?}    - Back to menu   Server.log${G0:?}......:${N0:?} $CM_SERVER_LOG_EMPTY$CM_SERVER_LOG$CM_SERVER_LOG_SERIOUS
-   i : ${THEMES_OP:?}Info${N0:?}    - Helper info    $MENU_PRINT_CPU_TEMP
+   r : ${THEMES_OP:?}Login${N0:?}   - ${GR:?}Remote access  ${N0:?}mangosd.service${G0:?}.:${N0:?} $COMMAND_MANGOSD
+   l : ${THEMES_OP:?}Logs${N0:?}    - ${GR:?}Analyze logs   ${N0:?}realmd.service${G0:?}..:${N0:?} $COMMAND_REALMD
+   b : ${THEMES_OP:?}Backup${N0:?}  - ${GR:?}New backup
+   h : ${THEMES_OP:?}Reset${N0:?}   - ${GR:?}Reset --hard   ${N0:?}characters.sql${G0:?}..:${N0:?} $CHARAC_BACKUP
+   p : ${THEMES_OP:?}htop${N0:?}    - ${GR:?}Process view   ${N0:?}realmd.sql${G0:?}......:${N0:?} $REALMD_BACKUP
+   m : ${THEMES_OP:?}Maps${N0:?}    - ${GR:?}Download maps
+   w : ${THEMES_OP:?}Stats${N0:?}   - ${GR:?}World stats    ${N0:?}Realmd.log${G0:?}......:${N0:?} $CM_REALMD_LOG_EMPTY$CM_REALMD_LOG
+   q : ${THEMES_OP:?}Quit${N0:?}    - ${GR:?}Back to menu   ${N0:?}Server.log${G0:?}......:${N0:?} $CM_SERVER_LOG_EMPTY$CM_SERVER_LOG$CM_SERVER_LOG_SERIOUS
+   i : ${THEMES_OP:?}Info${N0:?}    - ${GR:?}Helper info    ${N0:?}$MENU_PRINT_CPU_TEMP
 \n"
       read -r -s -n1
       case "$REPLY" in
@@ -835,13 +835,13 @@ ${N0:?}"
    Ratio${G0:?}....:${N0:?} $P2P_RATI
    Peers${G0:?}....:${G1:?} $P2P_PEERS_CONNECTED${N0:?}$SLASH${G0:?}$P2P_PEERS_SEEDINGTO${N0:?}$SLASH${Y1:?}$P2P_PEERS_DOWN_LOAD${N0:?}
 
-   t : ${THEMES_OP:?}Install${N0:?} - Setup$N0
-   u : ${THEMES_OP:?}Remove${N0:?}  - Uninstall$N0
-   r : ${THEMES_OP:?}Start${N0:?}   - Start p2p$N0
-   s : ${THEMES_OP:?}Stop${N0:?}    - Stop p2p$N0
-   m : ${THEMES_OP:?}Maps${N0:?}    - Import maps$N0
-   i : ${THEMES_OP:?}Info${N0:?}    - Torrent info$N0
-   q : ${THEMES_OP:?}Quit${N0:?}    - Return$N0
+   t : ${THEMES_OP:?}Install${N0:?} - ${GR:?}Setup$N0
+   u : ${THEMES_OP:?}Remove${N0:?}  - ${GR:?}Uninstall$N0
+   r : ${THEMES_OP:?}Start${N0:?}   - ${GR:?}Start p2p$N0
+   s : ${THEMES_OP:?}Stop${N0:?}    - ${GR:?}Stop p2p$N0
+   m : ${THEMES_OP:?}Maps${N0:?}    - ${GR:?}Import maps$N0
+   i : ${THEMES_OP:?}Info${N0:?}    - ${GR:?}Torrent info$N0
+   q : ${THEMES_OP:?}Quit${N0:?}    - ${GR:?}Return$N0
 
 ${N0:?}"
         read -r -s -n1
