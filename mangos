@@ -1360,8 +1360,8 @@ EOF
         printline "$DIVE_LOG_CRASH" "$DIVE_DBERROR_CRAS" "$DIVE_LOG_NONE" "$DIVE_LOG_ZERO" "$DIVE_LOG_NOTUS" "$DIVE_EVENTAINOTUS"
 
         printf '%b' "
-1 : Raw error output
-2 : tail error output\n"
+   1 : Raw error output
+   2 : tail error output\n"
         echo
         read -n1 -s
         case "$REPLY" in
