@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20211302
-# 5.0.1.4
+# 5.0.1.5
 
 # codes
 while :; do
@@ -204,6 +204,9 @@ while :; do
    r : ${THEMES_OP:?}Restart server       ${N0:?}q : ${THEMES_OP:?}Quit${N0:?}
 
 "
+
+  # menu done
+
   read -r -n1 -s
   case "$REPLY" in
 
@@ -229,9 +232,7 @@ while :; do
 
     ;;
 
-    # debug mangos_script
-
-    # menu done
+    # debug mangos_script done
 
   "a")
 
