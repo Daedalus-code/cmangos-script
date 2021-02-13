@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20211302
-# 4.9.9.1
+# 4.9.9.0
 
 # codes
 while :; do
@@ -4900,7 +4900,6 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
     if ! [ -x "$(command -v fping)" ]; then
       sudo apt-get install fping -y 2>/dev/null
     fi
-    echo
     printf '%b' "Online check -> ${G1:?}internet${N0:?}/${G1:?}intranet${N0:?}\n"
     echo
     # internet
