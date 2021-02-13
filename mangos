@@ -648,10 +648,10 @@ ${PASS_NC:?}
 
    r : ${THEMES_OP:?}Login${N0:?}   - ${GR:?}Remote access  ${N0:?}mangosd.service${G0:?}.:${N0:?} $COMMAND_MANGOSD
    l : ${THEMES_OP:?}Logs${N0:?}    - ${GR:?}Analyze logs   ${N0:?}realmd.service${G0:?}..:${N0:?} $COMMAND_REALMD
-   b : ${THEMES_OP:?}Backup${N0:?}  - ${GR:?}New backup
+   b : ${THEMES_OP:?}Backup${N0:?}  - ${GR:?}New backup     ${N0:?}
    h : ${THEMES_OP:?}Reset${N0:?}   - ${GR:?}Reset --hard   ${N0:?}characters.sql${G0:?}..:${N0:?} $CHARAC_BACKUP
    p : ${THEMES_OP:?}htop${N0:?}    - ${GR:?}Process view   ${N0:?}realmd.sql${G0:?}......:${N0:?} $REALMD_BACKUP
-   m : ${THEMES_OP:?}Maps${N0:?}    - ${GR:?}Download maps
+   m : ${THEMES_OP:?}Maps${N0:?}    - ${GR:?}Download maps  ${N0:?}
    w : ${THEMES_OP:?}Stats${N0:?}   - ${GR:?}World stats    ${N0:?}Realmd.log${G0:?}......:${N0:?} $CM_REALMD_LOG_EMPTY$CM_REALMD_LOG
    q : ${THEMES_OP:?}Quit${N0:?}    - ${GR:?}Back to menu   ${N0:?}Server.log${G0:?}......:${N0:?} $CM_SERVER_LOG_EMPTY$CM_SERVER_LOG$CM_SERVER_LOG_SERIOUS
    i : ${THEMES_OP:?}Info${N0:?}    - ${GR:?}Helper info    ${N0:?}$MENU_PRINT_CPU_TEMP
