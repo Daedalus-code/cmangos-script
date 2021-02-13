@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20211302
-# 4.9.8.8
+# 4.9.9.1
 
 # codes
 while :; do
@@ -112,6 +112,9 @@ while :; do
     read -r -p "Press Enter to go back" </dev/tty
   fi
 
+  # custom option text color (default white)
+  THEMES_OP="$N0"
+
   # dialog, ncurses no utf8 acs
   # ! -> https://github.com/scarygliders/X11RDP-o-Matic/issues/45
   export NCURSES_NO_UTF8_ACS=1
@@ -191,14 +194,14 @@ while :; do
                 $LOAD
                 $MENU_MANGOSD $GR|$N0 $MENU_REALMD
 
-   A : Login (command)      t : Characters
-   a : Create account       u : Accounts
-   c : Check for updates    g : Guilds
-   m : Update CMaNGOS       e : Config
-   d : Update Database      p : Patch
-   w : Update Helper        o : Ping
-   s : Shutdown server      l : Logs
-   r : Restart server       q : Quit
+   A : ${THEMES_OP:?}Login (command)      ${N0:?}t : ${THEMES_OP:?}Characters${N0:?}
+   a : ${THEMES_OP:?}Create account       ${N0:?}u : ${THEMES_OP:?}Accounts${N0:?}
+   c : ${THEMES_OP:?}Check for updates    ${N0:?}g : ${THEMES_OP:?}Guilds${N0:?}
+   m : ${THEMES_OP:?}Update CMaNGOS       ${N0:?}e : ${THEMES_OP:?}Config${N0:?}
+   d : ${THEMES_OP:?}Update Database      ${N0:?}p : ${THEMES_OP:?}Patch${N0:?}
+   w : ${THEMES_OP:?}Update Helper        ${N0:?}o : ${THEMES_OP:?}Ping${N0:?}
+   s : ${THEMES_OP:?}Shutdown server      ${N0:?}l : ${THEMES_OP:?}Logs${N0:?}
+   r : ${THEMES_OP:?}Restart server       ${N0:?}q : ${THEMES_OP:?}Quit${N0:?}
 
 "
   read -r -n1 -s
