@@ -42,38 +42,38 @@ while :; do
 
   # helper text color
   case "${THEME_TXT:?}" in
-  "0") THEME_TXT="${N0:?}" ;;  # white
-  "1") THEME_TXT="${R1:?}" ;;  # red light
-  "2") THEME_TXT="${R0:?}" ;;  # red
-  "3") THEME_TXT="${B1:?}" ;;  # blue
-  "4") THEME_TXT="${B0:?}" ;;  # blue light
-  "5") THEME_TXT="${C1:?}" ;;  # cyan light
-  "6") THEME_TXT="${CY:?}" ;;  # cyan
-  "7") THEME_TXT="${P1:?}" ;;  # purple light
-  "8") THEME_TXT="${P0:?}" ;;  # purple
-  "9") THEME_TXT="${Y1:?}" ;;  # yellow light
-  "10") THEME_TXT="${Y0:?}" ;; # yellow
-  "11") THEME_TXT="${G1:?}" ;; # green light
-  "12") THEME_TXT="${G0:?}" ;; # green
-  "13") THEME_TXT="${GR:?}" ;; # black light (grey)
+  "0") THEME_TXT="${N0:?}" ;;  # White
+  "1") THEME_TXT="${R1:?}" ;;  # Red light
+  "2") THEME_TXT="${R0:?}" ;;  # Red
+  "3") THEME_TXT="${B1:?}" ;;  # Blue
+  "4") THEME_TXT="${B0:?}" ;;  # Blue light
+  "5") THEME_TXT="${C1:?}" ;;  # Cyan light
+  "6") THEME_TXT="${CY:?}" ;;  # Cyan
+  "7") THEME_TXT="${P1:?}" ;;  # Purple light
+  "8") THEME_TXT="${P0:?}" ;;  # Purple
+  "9") THEME_TXT="${Y1:?}" ;;  # Yellow light
+  "10") THEME_TXT="${Y0:?}" ;; # Yellow
+  "11") THEME_TXT="${G1:?}" ;; # Green light
+  "12") THEME_TXT="${G0:?}" ;; # Green
+  "13") THEME_TXT="${GR:?}" ;; # Black light (grey)
   esac
 
   # helper theme color
   case "${THEME_ALL:?}" in
-  "0") THEME_ALL="${N0:?}" ;;  # white
-  "1") THEME_ALL="${R1:?}" ;;  # red light
-  "2") THEME_ALL="${R0:?}" ;;  # red
-  "3") THEME_ALL="${B1:?}" ;;  # blue
-  "4") THEME_ALL="${B0:?}" ;;  # blue light
-  "5") THEME_ALL="${C1:?}" ;;  # cyan light
-  "6") THEME_ALL="${CY:?}" ;;  # cyan
-  "7") THEME_ALL="${P1:?}" ;;  # purple light
-  "8") THEME_ALL="${P0:?}" ;;  # purple
-  "9") THEME_ALL="${Y1:?}" ;;  # yellow light
-  "10") THEME_ALL="${Y0:?}" ;; # yellow
-  "11") THEME_ALL="${G1:?}" ;; # green light
-  "12") THEME_ALL="${G0:?}" ;; # green
-  "13") THEME_ALL="${GR:?}" ;; # black light (grey)
+  "0") THEME_ALL="${N0:?}" ;;  # White
+  "1") THEME_ALL="${R1:?}" ;;  # Red light
+  "2") THEME_ALL="${R0:?}" ;;  # Red
+  "3") THEME_ALL="${B1:?}" ;;  # Blue
+  "4") THEME_ALL="${B0:?}" ;;  # Blue light
+  "5") THEME_ALL="${C1:?}" ;;  # Cyan light
+  "6") THEME_ALL="${CY:?}" ;;  # Cyan
+  "7") THEME_ALL="${P1:?}" ;;  # Purple light
+  "8") THEME_ALL="${P0:?}" ;;  # Purple
+  "9") THEME_ALL="${Y1:?}" ;;  # Yellow light
+  "10") THEME_ALL="${Y0:?}" ;; # Yellow
+  "11") THEME_ALL="${G1:?}" ;; # Green light
+  "12") THEME_ALL="${G0:?}" ;; # Green
+  "13") THEME_ALL="${GR:?}" ;; # Black light (grey)
   esac
 
   # dialog, ncurses no utf8 acs
