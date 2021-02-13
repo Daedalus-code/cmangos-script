@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# script
-
 ############################################################################
 #                      C M a N G O S  -  H E L P E R                       #
 #               Continued Massive Network Game Object Server               #
@@ -14,9 +12,8 @@
 
 # By Rainman
 # V20211402
-# 4.9.7.9
+# 4.9.6.2
 
-# codes
 while :; do
 
   # config directory
@@ -83,19 +80,20 @@ while :; do
   # ! -> https://github.com/scarygliders/X11RDP-o-Matic/issues/45
   export NCURSES_NO_UTF8_ACS=1
 
-  # get database info
+  # get online players
   if mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT SUM(online) FROM ${DB_CHARACTERS:?}.characters;" &>/dev/null; then
     MENU_ON_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT SUM(online) FROM ${DB_CHARACTERS:?}.characters;" 2>/dev/null)
   else
     MENU_ON_COUNT=$(printf '%b' "${R0:?}0${N0:?}")
   fi
+  # get guild count
   if mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM ${DB_CHARACTERS:?}.guild;" &>/dev/null; then
     MENU_GU_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM ${DB_CHARACTERS:?}.guild;" 2>/dev/null)
   else
     MENU_GU_COUNT=$(printf '%b' "${R0:?}0${N0:?}")
   fi
 
-  # get date
+  # get date, month, day, year
   NOW="$(date +"%m.%d.%Y")"
 
   # get load
@@ -141,9 +139,8 @@ while :; do
     fi
   fi
 
-  # codes done
-
   # menu
+
   clear
   printf '%b' "${GR:?} - - - - - - - - - - - - - - - - - - - - - - -${N0:?}
     _____ _____     _____ _____ _____ _____
@@ -178,13 +175,13 @@ while :; do
 
   "D")
 
+    # fix ownership
+    sudo chown -R "${USER:?}":"${GROUP:?}" /usr/local/bin/mangos
     echo "[YN] Debug Helper (mangos)? y/n "
     read -r -p "" -n 1 -r -s
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
       clear
-      # fix ownership
-      sudo chown -R "${USER:?}":"${GROUP:?}" /usr/local/bin/mangos
       nano /usr/local/bin/mangos
       echo "[YN] Exit to take effect? y/n "
       read -r -p "" -n 1 -r -s
@@ -200,12 +197,13 @@ while :; do
 
   "a")
 
-    # codes
+    # account count
     AC_COUNT=$(mysql --defaults-extra-file="$SQL_MYCNF" -N --execute="SELECT count(*) FROM ${DB_REALMD:?}.account;" 2>/dev/null)
+    # banned count
     BN_COUNT=$(mysql --defaults-extra-file="$SQL_MYCNF" -N --execute="SELECT count(*) FROM $DB_REALMD.account_banned;" 2>/dev/null)
-    # codes done
 
     # menu
+
     clear
     printf '%b' "${GR:?} - - - - - - - - - - - - - - - - - - - - - - -
 ${N0:?}                                       __
@@ -319,7 +317,6 @@ ${PASS_NC:?}
 
     "d")
 
-      # codes
       # check for backup
       # realmd backup
       FILE="$FOLDER_WOW/backup/$DB_REALMD-$NOW.sql"
@@ -339,9 +336,9 @@ ${PASS_NC:?}
         CHARAC_BACKUP="[${G1:?}OK${N0:?}]"
         echo
       fi
-      # codes done
 
       # menu
+
       clear
       echo
       printf '%b' "${R0:?}
@@ -435,8 +432,6 @@ ${PASS_NC:?}
 
     while :; do
       clear
-
-      # codes
 
       # realmd service
       case "$(echo "$PIDOF_REALMD")" in
@@ -627,7 +622,6 @@ ${PASS_NC:?}
       else
         COMMIT_HASH="0000000000000000000000000000000000000000"
       fi
-      # codes done
 
       printf '%b' "
    Realm${G0:?}.......:${G1:?} ${SERVER_NAME:?}${N0:?}
@@ -714,7 +708,7 @@ ${N0:?}"
         PIDOFP2P_CLI=$(pidof transmission-cli 2>/dev/null)
         PIDOFP2P_DAE=$(pidof transmission-daemon 2>/dev/null)
 
-        # codes
+        # is transmission-cli installed?
         if ! [ -x "$(command -v transmission-cli)" ]; then
           SEED_TRANSMISSION="${GR:?}Not Installed!${N0:?}"
           INTRANET_SEED="${GR:?}0.0.0.0:9091${N0:?}"
@@ -805,8 +799,6 @@ ${N0:?}"
 
           esac
         fi
-
-        # codes done
 
         # seedbox menu
 
@@ -920,7 +912,7 @@ ${N0:?}"
             sudo mkdir /var/log/ms/ 2>/dev/null
             # fix ownership
             sudo chown -R "${USER:?}":"${GROUP:?}" /var/log/ms
-            # already installed?
+            # is transmission-daemon installed?
             if ! [ -x "$(command -v transmission-daemon)" ]; then
               # check for updates regardless
               printf '%b' "[${G1:?}OK${N0:?}] Please wait\n"
@@ -1055,7 +1047,7 @@ EOF
           read -r -p "[YN] Re/start SeedBox? y/n " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
-            # already installed?
+            # is transmission-daemon installed?
             if [ -x "$(command -v transmission-daemon)" ]; then
               printf '%b' "[${G1:?}OK${N0:?}] Please wait\n"
               # stop transmission service
@@ -1092,7 +1084,7 @@ EOF
           read -r -p "[YN] Stop SeedBox? y/n " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
-            # already installed?
+            # is transmission-daemon installed?
             if [ -x "$(command -v transmission-daemon)" ]; then
               printf '%b' "[${G1:?}OK${N0:?}] Please wait\n"
               # stop transmission service
@@ -1129,11 +1121,9 @@ EOF
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # start counting (seconds)
             START="$SECONDS"
-            # codes
             MAPS="$FOLDER_CORE"/run/maps/5332742.map
             MMAPS="$FOLDER_CORE"/run/mmaps/5332742.mmtile
             VMAPS="$FOLDER_CORE"/run/vmaps/Zulgurub_Ziggurat.wmo.vmo
-            # codes done
             if [ -f "$MAPS" ] && [ -f "$MMAPS" ] && [ -f "$VMAPS" ]; then
               printf '%b' "[${G1:?}OK${N0:?}] Maps already installed!\n"
               sleep 2
@@ -1167,6 +1157,7 @@ EOF
 
       "p")
 
+        # is htop installed?
         if ! [ -x "$(command -v htop)" ]; then
           echo "Please wait"
           sudo apt-get install htop -y 2>/dev/null
@@ -1221,7 +1212,6 @@ EOF
 
       "l")
 
-        # codes
         # server.log.old
         DIVE_SERVER_OLD_EMPTY=$(grep -E -v "ERROR*." "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null |
           grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty.|.*empty*." 2>/dev/null)
@@ -1330,7 +1320,6 @@ EOF
         # empty table
         DIVE_LOG_NONE=$(printf '%b' "\e[2mempty..${N0:?}")
         DIVE_LOG_ZERO=$(printf '%b' "0")
-        # codes done
 
         printf '%b' "   Server            Server.old        Realmd"
         echo
@@ -1729,7 +1718,7 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
 
   "m")
 
-    # codes
+    # is dialog installed?
     if ! [ -x "$(command -v dialog)" ]; then
       sudo apt-get install dialog -y 2>/dev/null
     fi
@@ -1759,7 +1748,6 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
       zip
       zlibc
       psmisc)
-    # codes done
     HEIGHT=14
     WIDTH=38
     CHOICE_HEIGHT=6
@@ -1801,6 +1789,7 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
           cp "$FOLDER_CORE"/run/logs/Server.log "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
           cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
         else
+          # is packagelist@ installed?
           if ! [ -x "$(command -v "${PACKAGELIST[@]}")" ]; then
             sudo apt-get install "${PACKAGELIST[@]}" -y 2>/dev/null
           fi
@@ -2168,6 +2157,7 @@ Check if correct information, or just restart server."
           cp "$FOLDER_CORE"/run/logs/Server.log "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
           cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
         else
+          # is packagelist@ installed?
           if ! [ -x "$(command -v "${PACKAGELIST[@]}")" ]; then
             sudo apt-get install "${PACKAGELIST[@]}" -y 2>/dev/null
           fi
@@ -2508,11 +2498,11 @@ Select install operation"
 
   "d")
 
-    # codes
+    # is dialog installed?
     if ! [ -x "$(command -v dialog)" ]; then
       sudo apt-get install dialog -y 2>/dev/null
     fi
-    # codes done
+
     HEIGHT=19
     WIDTH=42
     CHOICE_HEIGHT=12
@@ -2573,7 +2563,6 @@ Select install operation"
 
     "11")
 
-      # codes
       # check if 'mangos' user exist
       # mariadb
       PACKAGELIST_MARIA=(mariadb-client
@@ -2581,7 +2570,6 @@ Select install operation"
       # mysql
       PACKAGELIST_MYSQL=(mysql-client
         mysql-server)
-      # codes done
       echo
       printf '%b' "MariaDB, MySQL - Database system"
       echo
@@ -2620,12 +2608,10 @@ Select install operation"
 
     "10")
 
-      # codes
       # mariadb-client
       PACKAGELIST_CLIENT_MARIA=(mariadb-client*)
       # mysql-client
       PACKAGELIST_CLIENT_MYSQL=(mysql-client*)
-      # codes done
 
       echo
       printf '%b' "MariaDB, MySQL - Database Client
@@ -3930,6 +3916,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       fi
       sleep 3
     else
+      # is screen installed?
       if ! [ -x "$(command -v screen)" ]; then
         sudo apt-get install screen -y 2>/dev/null
       fi
@@ -4218,12 +4205,11 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
             "l")
               echo
-              # codes
               LOGS=("$FOLDER_CORE"/run/logs/EventAIErrors.log
                 "$FOLDER_CORE"/run/logs/DBErrors.log
                 "$FOLDER_CORE"/run/logs/Realmd.log
                 "$FOLDER_CORE"/run/logs/Server.log)
-              # codes done
+              # is lnav installed?
               if ! [ -x "$(command -v lnav)" ]; then
                 sudo apt install lnav -y 2>/dev/null
               fi
@@ -4345,11 +4331,11 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
   "w")
 
-    # codes
+    # is dialog installed?
     if ! [ -x "$(command -v dialog)" ]; then
       sudo apt-get install dialog -y
     fi
-    # codes done
+
     HEIGHT=11
     WIDTH=37
     CHOICE_HEIGHT=3
@@ -4685,12 +4671,11 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
     "l")
       echo
-      # codes
       LOGS=("$FOLDER_CORE"/run/logs/EventAIErrors.log
         "$FOLDER_CORE"/run/logs/DBErrors.log
         "$FOLDER_CORE"/run/logs/Realmd.log
         "$FOLDER_CORE"/run/logs/Server.log)
-      # codes done
+      # is lnav installed?
       if ! [ -x "$(command -v lnav)" ]; then
         sudo apt install lnav -y 2>/dev/null
       fi
@@ -4975,5 +4960,3 @@ done
 # edit/copy config files done
 
 # b9ea65cd1e2b40cfcbf777559ef0c9ca
-
-# script done
