@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20211302
-# 4.9.9.0
+# 5.0.1.4
 
 # codes
 while :; do
@@ -207,7 +207,31 @@ while :; do
   read -r -n1 -s
   case "$REPLY" in
 
-  # menu done
+  # debug mangos_script
+
+  "D")
+
+    echo "[YN] Debug Helper (mangos)? y/n "
+    read -r -p "" -n 1 -r -s
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+      clear
+      # fix ownership
+      sudo chown -R "${USER:?}":"${GROUP:?}" /usr/local/bin/mangos
+      nano /usr/local/bin/mangos
+      echo "[YN] Exit to take effect? y/n "
+      read -r -p "" -n 1 -r -s
+      echo
+      if [[ $REPLY =~ ^[Yy]$ ]]; then
+        exit
+      fi
+    fi
+
+    ;;
+
+    # debug mangos_script
+
+    # menu done
 
   "a")
 
