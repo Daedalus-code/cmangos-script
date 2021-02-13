@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20211302
-# 5.0.1.5
+# 4.9.7.9
 
 # codes
 while :; do
@@ -43,77 +43,41 @@ while :; do
   UND='\e[4m' # Underline
   DEF='\e[0m' # Default color and effects
 
-  # custom option text color (default white)
-  THEMES_OP="$N0"
-  # themes
-  #  must contain a number
-  # shellcheck disable=SC2153
-  # shellcheck disable=SC2154
-  # shellcheck disable=SC2034
-  if [[ $THEME =~ [0-9] ]] 2>/dev/null; then
-    if [ -z "$THEME" ] 2>/dev/null; then
-      # NULL, print white theme (safemode)
-      THEMES="${N0:?}"
-    fi
-    if [[ "$THEME" -gt "13" ]] 2>/dev/null; then
-      # greater than n, print white theme (safemode)
-      THEMES="${N0:?}"
-    fi
-    if [[ "$THEME" -lt "0" ]] 2>/dev/null; then
-      # less than zero, print white theme (safemode)
-      THEMES="${N0:?}"
-    fi
-    # configuration ruled by config
-    if [[ "$THEME" -eq "0" ]] 2>/dev/null; then
-      # white theme
-      THEMES="${N0:?}"
-    elif [[ "$THEME" -eq "1" ]] 2>/dev/null; then
-      # red light theme
-      THEMES="${R1:?}"
-    elif [[ "$THEME" -eq "2" ]] 2>/dev/null; then
-      # red theme
-      THEMES="${R0:?}"
-    elif [[ "$THEME" -eq "3" ]] 2>/dev/null; then
-      # blue light theme
-      THEMES="${B1:?}"
-    elif [[ "$THEME" -eq "4" ]] 2>/dev/null; then
-      # blue theme
-      THEMES="${B0:?}"
-    elif [[ "$THEME" -eq "5" ]] 2>/dev/null; then
-      # cyan light theme
-      THEMES="${C1:?}"
-    elif [[ "$THEME" -eq "6" ]] 2>/dev/null; then
-      # cyan theme
-      THEMES="${CY:?}"
-    elif [[ "$THEME" -eq "7" ]] 2>/dev/null; then
-      # purple light theme
-      THEMES="${P1:?}"
-    elif [[ "$THEME" -eq "8" ]] 2>/dev/null; then
-      # purple theme
-      THEMES="${P0:?}"
-    elif [[ "$THEME" -eq "9" ]] 2>/dev/null; then
-      # yellow light theme
-      THEMES="${Y1:?}"
-    elif [[ "$THEME" -eq "10" ]] 2>/dev/null; then
-      # yellow theme
-      THEMES="${Y0:?}"
-    elif [[ "$THEME" -eq "11" ]] 2>/dev/null; then
-      # green light theme
-      THEMES="${G1:?}"
-    elif [[ "$THEME" -eq "12" ]] 2>/dev/null; then
-      # green theme
-      THEMES="${G0:?}"
-    elif [[ "$THEME" -eq "13" ]] 2>/dev/null; then
-      # black light (grey) theme
-      THEMES="${GR:?}"
-    fi
-  else
-    # non numerical value, print white theme (safemode)
-    THEMES="${N0:?}"
-    printf '%b' "${R1:?}Theme config contains non numerical value!${N0:?}\n"
-    printf '%b' "${Y1:?}Fix your configuration! ${GR:?}server.txt${Y1:?}${N0:?}\n"
-    read -r -p "Press Enter to go back" </dev/tty
-  fi
+  # helper text color
+  case "${THEME_TXT:?}" in
+  "0") THEME_TXT="${N0:?}" ;;  # white
+  "1") THEME_TXT="${R1:?}" ;;  # red light
+  "2") THEME_TXT="${R0:?}" ;;  # red
+  "3") THEME_TXT="${B1:?}" ;;  # blue
+  "4") THEME_TXT="${B0:?}" ;;  # blue light
+  "5") THEME_TXT="${C1:?}" ;;  # cyan light
+  "6") THEME_TXT="${CY:?}" ;;  # cyan
+  "7") THEME_TXT="${P1:?}" ;;  # purple light
+  "8") THEME_TXT="${P0:?}" ;;  # purple
+  "9") THEME_TXT="${Y1:?}" ;;  # yellow light
+  "10") THEME_TXT="${Y0:?}" ;; # yellow
+  "11") THEME_TXT="${G1:?}" ;; # green light
+  "12") THEME_TXT="${G0:?}" ;; # green
+  "13") THEME_TXT="${GR:?}" ;; # black light (grey)
+  esac
+
+  # helper theme color
+  case "${THEME_ALL:?}" in
+  "0") THEME_ALL="${N0:?}" ;;  # white
+  "1") THEME_ALL="${R1:?}" ;;  # red light
+  "2") THEME_ALL="${R0:?}" ;;  # red
+  "3") THEME_ALL="${B1:?}" ;;  # blue
+  "4") THEME_ALL="${B0:?}" ;;  # blue light
+  "5") THEME_ALL="${C1:?}" ;;  # cyan light
+  "6") THEME_ALL="${CY:?}" ;;  # cyan
+  "7") THEME_ALL="${P1:?}" ;;  # purple light
+  "8") THEME_ALL="${P0:?}" ;;  # purple
+  "9") THEME_ALL="${Y1:?}" ;;  # yellow light
+  "10") THEME_ALL="${Y0:?}" ;; # yellow
+  "11") THEME_ALL="${G1:?}" ;; # green light
+  "12") THEME_ALL="${G0:?}" ;; # green
+  "13") THEME_ALL="${GR:?}" ;; # black light (grey)
+  esac
 
   # dialog, ncurses no utf8 acs
   # ! -> https://github.com/scarygliders/X11RDP-o-Matic/issues/45
@@ -184,7 +148,7 @@ while :; do
   printf '%b' "${GR:?} - - - - - - - - - - - - - - - - - - - - - - -${N0:?}
     _____ _____     _____ _____ _____ _____
    |     |     |___|   | |   __|     |   __|
-   |   --| | | | .'| | | |  |  |  |  |__   |${THEMES:?}
+   |   --| | | | .'| | | |  |  |  |  |__   |${THEME_ALL:?}
    |_____|_|_|_|__,|_|___|_____|_____|_____|${N0:?}
            C(ontinued)-MaNGOS Helper${GR:?}
               - - - - - - - - - -${N0:?}
@@ -194,14 +158,14 @@ while :; do
                 $LOAD
                 $MENU_MANGOSD $GR|$N0 $MENU_REALMD
 
-   A : ${THEMES_OP:?}Login (command)      ${N0:?}t : ${THEMES_OP:?}Characters${N0:?}
-   a : ${THEMES_OP:?}Create account       ${N0:?}u : ${THEMES_OP:?}Accounts${N0:?}
-   c : ${THEMES_OP:?}Check for updates    ${N0:?}g : ${THEMES_OP:?}Guilds${N0:?}
-   m : ${THEMES_OP:?}Update CMaNGOS       ${N0:?}e : ${THEMES_OP:?}Config${N0:?}
-   d : ${THEMES_OP:?}Update Database      ${N0:?}p : ${THEMES_OP:?}Patch${N0:?}
-   w : ${THEMES_OP:?}Update Helper        ${N0:?}o : ${THEMES_OP:?}Ping${N0:?}
-   s : ${THEMES_OP:?}Shutdown server      ${N0:?}l : ${THEMES_OP:?}Logs${N0:?}
-   r : ${THEMES_OP:?}Restart server       ${N0:?}q : ${THEMES_OP:?}Quit${N0:?}
+   A : ${THEME_TXT:?}Login (command)      ${N0:?}t : ${THEME_TXT:?}Characters${N0:?}
+   a : ${THEME_TXT:?}Create account       ${N0:?}u : ${THEME_TXT:?}Accounts${N0:?}
+   c : ${THEME_TXT:?}Check for updates    ${N0:?}g : ${THEME_TXT:?}Guilds${N0:?}
+   m : ${THEME_TXT:?}Update CMaNGOS       ${N0:?}e : ${THEME_TXT:?}Config${N0:?}
+   d : ${THEME_TXT:?}Update Database      ${N0:?}p : ${THEME_TXT:?}Patch${N0:?}
+   w : ${THEME_TXT:?}Update Helper        ${N0:?}o : ${THEME_TXT:?}Ping${N0:?}
+   s : ${THEME_TXT:?}Shutdown server      ${N0:?}l : ${THEME_TXT:?}Logs${N0:?}
+   r : ${THEME_TXT:?}Restart server       ${N0:?}q : ${THEME_TXT:?}Quit${N0:?}
 
 "
 
@@ -246,7 +210,7 @@ while :; do
     printf '%b' "${GR:?} - - - - - - - - - - - - - - - - - - - - - - -
 ${N0:?}                                       __
    .---.-.----.----.-----.--.--.-----.|  |_
-   |  _  |  __|  __|  _  |  |  |     ||   _|${THEMES:?}
+   |  _  |  __|  __|  _  |  |  |     ||   _|${THEME_ALL:?}
    |___._|____|____|_____|_____|__|__||____|
            ${N0:?}C(ontinued)-MaNGOS Helper
              ${GR:?}- - - - - - - - - -${N0:?}
@@ -254,7 +218,7 @@ ${N0:?}                                       __
                 Accounts${G0:?}...:${N0:?} $AC_COUNT
                 Banned${G0:?}.....:${N0:?} $BN_COUNT
 
-                    ${THEMES:?}Info:
+                    ${THEME_ALL:?}Info:
 
            ${G0:?}Select account operation${N0:?}
 
@@ -284,11 +248,11 @@ ${N0:?}                                       __
 
       Minimum 5 characters account name.
 
-        Create new account (${THEMES:?}username${N0:?})
-        Set the (${THEMES:?}expansion${N0:?}) version.
-        Set the (${THEMES:?}account${N0:?}) privilege.
+        Create new account (${THEME_ALL:?}username${N0:?})
+        Set the (${THEME_ALL:?}expansion${N0:?}) version.
+        Set the (${THEME_ALL:?}account${N0:?}) privilege.
 
-        ${THEMES:?}Example${N0:?}: 'username' '0' '0'"
+        ${THEME_ALL:?}Example${N0:?}: 'username' '0' '0'"
 
       # menu done
 
@@ -336,7 +300,7 @@ ${PASS_NC:?}
               rm "${FOLDER_WOW:?}"/tmp.txt
               echo
               echo
-              printf '%b' "[${G1:?}OK${N0:?}] Account '${THEMES:?}$USR${N0:?}' ($XPV/$LVL) created."
+              printf '%b' "[${G1:?}OK${N0:?}] Account '${THEME_ALL:?}$USR${N0:?}' ($XPV/$LVL) created."
               echo
               echo
             fi
@@ -671,15 +635,15 @@ ${PASS_NC:?}
    System${G0:?}......:${N0:?} $BUILT_FOR
    Commit Hash${G0:?}.:${GR:?} $COMMIT_HASH${N0:?}
 
-   r : ${THEMES_OP:?}Login${N0:?}   - ${GR:?}Remote access  ${N0:?}mangosd.service${G0:?}.:${N0:?} $COMMAND_MANGOSD
-   l : ${THEMES_OP:?}Logs${N0:?}    - ${GR:?}Analyze logs   ${N0:?}realmd.service${G0:?}..:${N0:?} $COMMAND_REALMD
-   b : ${THEMES_OP:?}Backup${N0:?}  - ${GR:?}New backup     ${N0:?}
-   h : ${THEMES_OP:?}Reset${N0:?}   - ${GR:?}Reset --hard   ${N0:?}characters.sql${G0:?}..:${N0:?} $CHARAC_BACKUP
-   p : ${THEMES_OP:?}htop${N0:?}    - ${GR:?}Process view   ${N0:?}realmd.sql${G0:?}......:${N0:?} $REALMD_BACKUP
-   m : ${THEMES_OP:?}Maps${N0:?}    - ${GR:?}Download maps  ${N0:?}
-   w : ${THEMES_OP:?}Stats${N0:?}   - ${GR:?}World stats    ${N0:?}Realmd.log${G0:?}......:${N0:?} $CM_REALMD_LOG_EMPTY$CM_REALMD_LOG
-   q : ${THEMES_OP:?}Quit${N0:?}    - ${GR:?}Back to menu   ${N0:?}Server.log${G0:?}......:${N0:?} $CM_SERVER_LOG_EMPTY$CM_SERVER_LOG$CM_SERVER_LOG_SERIOUS
-   i : ${THEMES_OP:?}Info${N0:?}    - ${GR:?}Helper info    ${N0:?}$MENU_PRINT_CPU_TEMP
+   r : ${THEME_TXT:?}Login${N0:?}   - ${GR:?}Remote access  ${N0:?}mangosd.service${G0:?}.:${N0:?} $COMMAND_MANGOSD
+   l : ${THEME_TXT:?}Logs${N0:?}    - ${GR:?}Analyze logs   ${N0:?}realmd.service${G0:?}..:${N0:?} $COMMAND_REALMD
+   b : ${THEME_TXT:?}Backup${N0:?}  - ${GR:?}New backup     ${N0:?}
+   h : ${THEME_TXT:?}Reset${N0:?}   - ${GR:?}Reset --hard   ${N0:?}characters.sql${G0:?}..:${N0:?} $CHARAC_BACKUP
+   p : ${THEME_TXT:?}htop${N0:?}    - ${GR:?}Process view   ${N0:?}realmd.sql${G0:?}......:${N0:?} $REALMD_BACKUP
+   m : ${THEME_TXT:?}Maps${N0:?}    - ${GR:?}Download maps  ${N0:?}
+   w : ${THEME_TXT:?}Stats${N0:?}   - ${GR:?}World stats    ${N0:?}Realmd.log${G0:?}......:${N0:?} $CM_REALMD_LOG_EMPTY$CM_REALMD_LOG
+   q : ${THEME_TXT:?}Quit${N0:?}    - ${GR:?}Back to menu   ${N0:?}Server.log${G0:?}......:${N0:?} $CM_SERVER_LOG_EMPTY$CM_SERVER_LOG$CM_SERVER_LOG_SERIOUS
+   i : ${THEME_TXT:?}Info${N0:?}    - ${GR:?}Helper info    ${N0:?}$MENU_PRINT_CPU_TEMP
 \n"
       read -r -s -n1
       case "$REPLY" in
@@ -705,12 +669,12 @@ ${PASS_NC:?}
    World DB
    ${GR:?}$WORLD_DB${N0:?}
 
-   ${THEMES:?}https://github.com/cmangos/mangos-classic${N0:?}
-   ${THEMES:?}https://github.com/cmangos/classic-db${N0:?}
+   ${THEME_ALL:?}https://github.com/cmangos/mangos-classic${N0:?}
+   ${THEME_ALL:?}https://github.com/cmangos/classic-db${N0:?}
 
    ${G0:?}C(ontinued)-MaNGOS - Helper${N0:?}
 
-   ${THEMES:?}https://github.com/Daedalus-code/cmangos-script${N0:?}
+   ${THEME_ALL:?}https://github.com/Daedalus-code/cmangos-script${N0:?}
 
    This script was built on a ubuntu system - (Raspberry Pi4)
    https://ubuntu.com/download/raspberry-pi
@@ -848,7 +812,7 @@ ${N0:?}"
 
         clear
         echo
-        printf '%b' "${N0:?}   CMaNGOS${N0:?} - ${THEMES:?}Vanilla Maps ${N0:?}SeedBox
+        printf '%b' "${N0:?}   CMaNGOS${N0:?} - ${THEME_ALL:?}Vanilla Maps ${N0:?}SeedBox
 
    SeedBox${G0:?}..:${N0:?} $SEED_TRANSMISSION
    Access${G0:?}...:${N0:?} $INTRANET_SEED
@@ -860,13 +824,13 @@ ${N0:?}"
    Ratio${G0:?}....:${N0:?} $P2P_RATI
    Peers${G0:?}....:${G1:?} $P2P_PEERS_CONNECTED${N0:?}$SLASH${G0:?}$P2P_PEERS_SEEDINGTO${N0:?}$SLASH${Y1:?}$P2P_PEERS_DOWN_LOAD${N0:?}
 
-   t : ${THEMES_OP:?}Install${N0:?} - ${GR:?}Setup$N0
-   u : ${THEMES_OP:?}Remove${N0:?}  - ${GR:?}Uninstall$N0
-   r : ${THEMES_OP:?}Start${N0:?}   - ${GR:?}Start p2p$N0
-   s : ${THEMES_OP:?}Stop${N0:?}    - ${GR:?}Stop p2p$N0
-   m : ${THEMES_OP:?}Maps${N0:?}    - ${GR:?}Import maps$N0
-   i : ${THEMES_OP:?}Info${N0:?}    - ${GR:?}Torrent info$N0
-   q : ${THEMES_OP:?}Quit${N0:?}    - ${GR:?}Return$N0
+   t : ${THEME_TXT:?}Install${N0:?} - ${GR:?}Setup$N0
+   u : ${THEME_TXT:?}Remove${N0:?}  - ${GR:?}Uninstall$N0
+   r : ${THEME_TXT:?}Start${N0:?}   - ${GR:?}Start p2p$N0
+   s : ${THEME_TXT:?}Stop${N0:?}    - ${GR:?}Stop p2p$N0
+   m : ${THEME_TXT:?}Maps${N0:?}    - ${GR:?}Import maps$N0
+   i : ${THEME_TXT:?}Info${N0:?}    - ${GR:?}Torrent info$N0
+   q : ${THEME_TXT:?}Quit${N0:?}    - ${GR:?}Return$N0
 
 ${N0:?}"
         read -r -s -n1
@@ -1224,23 +1188,23 @@ EOF
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           echo
           if [ -z "$(ls -A "$FOLDER_CORE" 2>/dev/null)" ]; then
-            printf '%b' "[${GR:?}NO${N0:?}]${THEMES:?} Core:${N0:?} Empty!\n"
+            printf '%b' "[${GR:?}NO${N0:?}]${THEME_ALL:?} Core:${N0:?} Empty!\n"
           else
-            printf '%b' "[${G1:?}OK${N0:?}]${THEMES:?} Core${N0:?}: "
+            printf '%b' "[${G1:?}OK${N0:?}]${THEME_ALL:?} Core${N0:?}: "
             cd "$FOLDER_CORE" || exit
             git reset --hard 2>/dev/null
           fi
           if [ -z "$(ls -A "$FOLDER_DB" 2>/dev/null)" ]; then
-            printf '%b' "[${GR:?}NO${N0:?}]${THEMES:?} Database:${N0:?} Empty!\n"
+            printf '%b' "[${GR:?}NO${N0:?}]${THEME_ALL:?} Database:${N0:?} Empty!\n"
           else
-            printf '%b' "[${G1:?}OK${N0:?}]${THEMES:?} Database${N0:?}: "
+            printf '%b' "[${G1:?}OK${N0:?}]${THEME_ALL:?} Database${N0:?}: "
             cd "${FOLDER_DB:?}" || exit
             git reset --hard 2>/dev/null
           fi
           if [ -z "$(ls -A "$FOLDER_HELPER" 2>/dev/null)" ]; then
-            printf '%b' "[${GR:?}NO${N0:?}]${THEMES:?} Helper:${N0:?} Empty!\n"
+            printf '%b' "[${GR:?}NO${N0:?}]${THEME_ALL:?} Helper:${N0:?} Empty!\n"
           else
-            printf '%b' "[${G1:?}OK${N0:?}]${THEMES:?} Helper${N0:?}: "
+            printf '%b' "[${G1:?}OK${N0:?}]${THEME_ALL:?} Helper${N0:?}: "
             cd "${FOLDER_HELPER:?}" || exit
             git reset --hard 2>/dev/null
           fi
@@ -1520,9 +1484,9 @@ EOF
 
           clear
           printf '%b' "
-${THEMES:?}      ._________________.
+${THEME_ALL:?}      ._________________.
       |.---------------.|
-      || ${N0:?}mangos>${THEMES:?}       ||
+      || ${N0:?}mangos>${THEME_ALL:?}       ||
       ||               ||
       ||               ||
       ||               ||
@@ -1531,7 +1495,7 @@ ${THEMES:?}      ._________________.
       /.-.-.-.-.-.-.-.-.\\
      /.-.-.-.-.-.-.-.-.-.\\
     /.-.-.-.-.-.-.-.-.-.-.\\
-   /______/__________\___${G0:?}o${THEMES:?}_\\
+   /______/__________\___${G0:?}o${THEME_ALL:?}_\\
    \_______________________/${N0:?}"
           echo
           printf '%b' "
@@ -2174,8 +2138,8 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/mangosd.service 2>/dev/null
         echo
         printf '%b' "[${G1:?}OK${N0:?}]
 
-/etc/systemd/system/'${THEMES:?}realmd.service${N0:?}'
-/etc/systemd/system/'${THEMES:?}mangosd.service${N0:?}'
+/etc/systemd/system/'${THEME_ALL:?}realmd.service${N0:?}'
+/etc/systemd/system/'${THEME_ALL:?}mangosd.service${N0:?}'
 
 Check if correct information, or just restart server."
         echo

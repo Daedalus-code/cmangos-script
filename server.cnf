@@ -1,17 +1,17 @@
 [mysql]
-host=HOSTNAME # please edit.
-port=3306 # please edit if wrong.
-user=USERNAME # please edit.
-password=PASSWORD # please edit.
+host=HOSTNAME
+port=3306
+user=USERNAME
+password=PASSWORD
 
 [mysqldump]
-host=HOSTNAME # please edit.
-port=3306 # please edit if wrong.
-user=USERNAME # please edit.
-password=PASSWORD # please edit.
+host=HOSTNAME
+port=3306
+user=USERNAME
+password=PASSWORD
 
 [mysqladmin]
-host=HOSTNAME # please edit.
-port=3306 # please edit if wrong.
-user=USERNAME # please edit.
-password=PASSWORD # please edit.
+host=HOSTNAME
+port=3306
+user=USERNAME
+password=PASSWORD
