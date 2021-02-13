@@ -2802,7 +2802,7 @@ Please install mysql or mariadb database/client"
         echo
         FILE="$FOLDER_WOW/backup/$DB_CHARACTERS-$NOW.sql"
         if [ ! -f "$FILE" ]; then
-          printf '%b' "[!!] '${GR:?}Characters${N0:?}' Creating backup!"
+          printf '%b' "[!!] '${G1:?}Characters${N0:?}' Creating backup!"
           mysqldump --defaults-extra-file="$SQL_MYCNF" "$DB_CHARACTERS" >"$FOLDER_WOW"/backup/"$DB_CHARACTERS"-"$NOW".sql
           echo
         else
@@ -2828,7 +2828,7 @@ Please install mysql or mariadb database/client"
         # backup <- realmd.sql
         FILE="$FOLDER_WOW/backup/$DB_REALMD-$NOW.sql"
         if [ ! -f "$FILE" ]; then
-          printf '%b' "[!!] '${GR:?}Realmd${N0:?}' Creating backup!"
+          printf '%b' "[!!] '${G1:?}Realmd${N0:?}' Creating backup!"
           mysqldump --defaults-extra-file="$SQL_MYCNF" "$DB_REALMD" >"$FOLDER_WOW"/backup/"$DB_REALMD"-"$NOW".sql
           echo
         else
@@ -2922,7 +2922,7 @@ Please install mysql or mariadb database/client"
         # backup <- characters.sql
         FILE="$FOLDER_WOW/backup/$DB_CHARACTERS-$NOW.sql"
         if [ ! -f "$FILE" ]; then
-          printf '%b' "[!!] '${GR:?}Characters${N0:?}' Creating backup!"
+          printf '%b' "[!!] '${G1:?}Characters${N0:?}' Creating backup!"
           mysqldump --defaults-extra-file="$SQL_MYCNF" "$DB_CHARACTERS" >"$FOLDER_WOW"/backup/"$DB_CHARACTERS"-"$NOW".sql
           echo
         else
@@ -2932,7 +2932,7 @@ Please install mysql or mariadb database/client"
         # backup <- realmd.sql
         FILE="$FOLDER_WOW/backup/$DB_REALMD-$NOW.sql"
         if [ ! -f "$FILE" ]; then
-          printf '%b' "[!!] '${GR:?}Realmd${N0:?}' Creating backup!"
+          printf '%b' "[!!] '${G1:?}Realmd${N0:?}' Creating backup!"
           mysqldump --defaults-extra-file="$SQL_MYCNF" "$DB_REALMD" >"$FOLDER_WOW"/backup/"$DB_REALMD"-"$NOW".sql
           echo
         else
