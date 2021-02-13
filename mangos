@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20211202
-# 4.9.7.2
+# V20211302
+# 4.9.8.8
 
 # codes
 while :; do
@@ -526,7 +526,7 @@ ${PASS_NC:?}
         CM_REALMD_LOG="${G1:?}✓${N0:?}"
       fi
       # look for empty tables
-      if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log &>/dev/null; then
+      if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log &>/dev/null; then
         # if any, print "empty"
         CM_REALMD_LOG_EMPTY="${Y1:?}E${N0:?}"
       fi
@@ -543,7 +543,7 @@ ${PASS_NC:?}
         CM_SERVER_LOG="${G1:?}✓${N0:?}"
       fi
       # look for empty tables
-      if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
+      if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
         # if any, print "empty"
         CM_SERVER_LOG_EMPTY="${Y1:?}E${N0:?}"
       fi
@@ -1231,8 +1231,10 @@ EOF
 
         # codes
         # server.log.old
-        DIVE_SERVER_OLD_EMPTY=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty.|.*empty*." "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null)
-        DIVE_SERVER_OLD_ERROR=$(grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null)
+        DIVE_SERVER_OLD_EMPTY=$(grep -E -v "ERROR*." "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null |
+          grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty.|.*empty*." 2>/dev/null)
+        DIVE_SERVER_OLD_ERROR=$(grep -E -v ".*empty*." "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null |
+          grep -c -E ".*ERROR*." 2>/dev/null)
         DIVE_SERVER_OLD_SERIO=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null)
         DIVE_SERVER_OLD_IGNOR=$(grep -c -E ".*ignoring*.|.*ignore*.|.*ignored*." "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null)
         DIVE_SERVER_OLD_POLYR=$(grep -c -E "Invalid poly ref" "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null)
@@ -1245,8 +1247,10 @@ EOF
           DIVE_SERVER_OLD_POLYR="0"
         fi
         # server.log
-        DIVE_SERVER_EMPTY=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty.|.*empty*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
-        DIVE_SERVER_ERROR=$(grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
+        DIVE_SERVER_EMPTY=$(grep -E -v "ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null |
+          grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty.|.*empty*." 2>/dev/null)
+        DIVE_SERVER_ERROR=$(grep -E -v ".*empty*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null |
+          grep -c -E ".*ERROR*." 2>/dev/null)
         DIVE_SERVER_SERIO=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
         DIVE_SERVER_IGNOR=$(grep -c -E ".*ignoring*.|.*ignore*.|.*ignored*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
         DIVE_SERVER_POLYR=$(grep -c -E "Invalid poly ref" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
@@ -1259,8 +1263,10 @@ EOF
           DIVE_SERVER_POLYR="0"
         fi
         # realmd.log
-        DIVE_REALMD_EMPTY=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null)
-        DIVE_REALMD_ERROR=$(grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null)
+        DIVE_REALMD_EMPTY=$(grep -E -v "ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null |
+          grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." 2>/dev/null)
+        DIVE_REALMD_ERROR=$(grep -E -v ".*empty*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null |
+          grep -c -E ".*ERROR*." 2>/dev/null)
         DIVE_REALMD_SERIO=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null)
         if [[ -z "$DIVE_REALMD_EMPTY" || -z "$DIVE_REALMD_ERROR" || -z "$DIVE_REALMD_SERIO" ]]; then
           # non responsive
@@ -1360,9 +1366,11 @@ EOF
         "1")
 
           # get raw error from logs
-          ERROR_ERROR=$(grep --no-filename -Eo "ERROR:.*" "$FOLDER_CORE"/run/logs/*.log 2>/dev/null)
+          ERROR_ERROR=$(grep --no-filename -Eo "ERROR:.*" "$FOLDER_CORE"/run/logs/*.log 2>/dev/null |
+            grep -E -v ".*empty*." 2>/dev/null)
           # get raw empty from logs
-          EMPTY_ERROR=$(grep --no-filename -Eo ".*empty*." "$FOLDER_CORE"/run/logs/*.log 2>/dev/null)
+          EMPTY_ERROR=$(grep --no-filename -Eo ".*empty*." "$FOLDER_CORE"/run/logs/*.log 2>/dev/null |
+            grep -E -v "ERROR:.*" 2>/dev/null)
           printf '%b' "${Y1:?}$EMPTY_ERROR${N0:?}\n"
           printf '%b' "${R0:?}$ERROR_ERROR${N0:?}\n"
 
@@ -2966,7 +2974,7 @@ Please install mysql or mariadb database/client"
         echo
         RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "$DB_CHARACTERS")
         if [ "$RESULT" == "$DB_CHARACTERS" ]; then
-          printf '%b' "[${G1:?}OK${N0:?}] 'Characters' database installed."
+          printf '%b' "[${G1:?}OK${N0:?}] 'Characters' database installed!"
           echo
         else
           printf '%b' "[${R0:?}empty${N0:?}] 'Characters' importing.."
@@ -2977,7 +2985,7 @@ Please install mysql or mariadb database/client"
         # create database 'mangos'
         RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "$DB_MANGOS")
         if [ "$RESULT" == "$DB_MANGOS" ]; then
-          printf '%b' "[${G1:?}OK${N0:?}] 'Mangos' database installed."
+          printf '%b' "[${G1:?}OK${N0:?}] 'Mangos' database installed!"
           echo
         else
           printf '%b' "[${R0:?}empty${N0:?}] 'Mangos' importing.."
@@ -2988,7 +2996,7 @@ Please install mysql or mariadb database/client"
         # create database 'realmd'
         RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "$DB_REALMD")
         if [ "$RESULT" == "$DB_REALMD" ]; then
-          printf '%b' "[${G1:?}OK${N0:?}] 'Realmd' database installed."
+          printf '%b' "[${G1:?}OK${N0:?}] 'Realmd' database installed!"
           echo
         else
           printf '%b' "[${R0:?}empty${N0:?}] 'Realmd' importing.."
@@ -4055,16 +4063,18 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               printf '%b' "[${R1:?}0H${N0:?}] Realm failed or halted!\n"
             else
               # look for empty tables
-              if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
+              if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
                 # count empty inside log
-                COUNT_EMPTY=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null)
+                COUNT_EMPTY=$(grep -E -v "ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null |
+                  grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." 2>/dev/null)
                 # if any, print "empty"
                 printf '%b' "[${Y1:?}0E${N0:?}] Realm: ${Y1:?}$COUNT_EMPTY${N0:?} Tables are empty, doesn't exist!\n"
               fi
               # look for error
               if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
                 # count errors inside log
-                COUNT_ERROR_REALM=$(grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null)
+                COUNT_ERROR_REALM=$(grep -E -v ".*empty*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null |
+                  grep -c -E ".*ERROR*." 2>/dev/null)
                 # error rate (total)
                 LOG_LINES=$(wc -l "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null | awk '{ print $1 }' 2>/dev/null)
                 # calculate error rate
@@ -4107,16 +4117,18 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               printf '%b' "[${R1:?}0H${N0:?}] World failed or halted!\n"
             else
               # look for empty tables
-              if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
+              if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
                 # count empty inside log
-                COUNT_EMPTY=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
+                COUNT_EMPTY=$(grep -E -v "ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null |
+                  grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." 2>/dev/null)
                 # if any, print "empty"
                 printf '%b' "[${Y1:?}0E${N0:?}] World: ${Y1:?}$COUNT_EMPTY${N0:?} Tables are empty or doesn't exist!\n"
               fi
               # look for error
               if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
                 # count errors inside log
-                COUNT_ERROR_SERVER=$(grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
+                COUNT_ERROR_SERVER=$(grep -E -v ".*empty*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null |
+                  grep -c -E ".*ERROR*." 2>/dev/null)
                 # error rate (total)
                 LOG_LINES=$(wc -l "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null | awk '{ print $1 }' 2>/dev/null)
                 # calculate error rate
@@ -4414,7 +4426,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             sudo cp "$FOLDER_HELPER"/mangos /usr/local/bin &>/dev/null
             sudo chmod +x /usr/local/bin/mangos
             sleep 1
-            printf '%b' "[${G1:?}OK${N0:?}] Installed.\n"
+            printf '%b' "[${G1:?}OK${N0:?}] installed!\n"
             sleep 1 && exit
           else
             # install new upgrades
@@ -4423,7 +4435,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             sudo cp "$FOLDER_HELPER"/mangos /usr/local/bin/mangos &>/dev/null
             sudo chmod +x /usr/local/bin/mangos
             sleep 1
-            printf '%b' "[${G1:?}OK${N0:?}] Installed."
+            printf '%b' "[${G1:?}OK${N0:?}] installed!"
             echo
             echo
           fi
@@ -4465,7 +4477,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         sudo chmod +x /usr/local/bin/mangos
         echo
         sleep 1
-        printf '%b' "[${G1:?}OK${N0:?}] Installed."
+        printf '%b' "[${G1:?}OK${N0:?}] installed!"
         echo
         echo
         sleep 2
@@ -4516,16 +4528,18 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         printf '%b' "[${R1:?}0H${N0:?}] Realm failed or halted!\n"
       else
         # look for empty tables
-        if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
+        if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
           # count empty inside log
-          COUNT_EMPTY=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null)
+          COUNT_EMPTY=$(grep -E -v "ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null |
+            grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." 2>/dev/null)
           # if any, print "empty"
           printf '%b' "[${Y1:?}0E${N0:?}] Realm: ${Y1:?}$COUNT_EMPTY${N0:?} Tables are empty, doesn't exist!\n"
         fi
         # look for error
         if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
           # count errors inside log
-          COUNT_ERROR_REALM=$(grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null)
+          COUNT_ERROR_REALM=$(grep -E -v ".*empty*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null |
+            grep -c -E ".*ERROR*." 2>/dev/null)
           # error rate (total)
           LOG_LINES=$(wc -l "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null | awk '{ print $1 }' 2>/dev/null)
           # calculate error rate
@@ -4568,16 +4582,18 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         printf '%b' "[${R1:?}0H${N0:?}] World failed or halted!\n"
       else
         # look for empty tables
-        if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
+        if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
           # count empty inside log
-          COUNT_EMPTY=$(grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty!|is\sempty." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
+          COUNT_EMPTY=$(grep -E -v "ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null |
+            grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." 2>/dev/null)
           # if any, print "empty"
           printf '%b' "[${Y1:?}0E${N0:?}] World: ${Y1:?}$COUNT_EMPTY${N0:?} Tables are empty or doesn't exist!\n"
         fi
         # look for error
         if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
           # count errors inside log
-          COUNT_ERROR_SERVER=$(grep -c -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
+          COUNT_ERROR_SERVER=$(grep -E -v ".*empty*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null |
+            grep -c -E ".*ERROR*." 2>/dev/null)
           # error rate (total)
           LOG_LINES=$(wc -l "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null | awk '{ print $1 }' 2>/dev/null)
           # calculate error rate
