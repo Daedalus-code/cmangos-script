@@ -3383,7 +3383,7 @@ Please install mysql or mariadb database/client"
           case "$(echo "$PIDOF_REALMD")" in
           0) ;;
           *)
-            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
             sudo service realmd stop
             ;;
           esac
@@ -3391,7 +3391,7 @@ Please install mysql or mariadb database/client"
           case "$(echo "$PIDOFMANGOSD")" in
           0) ;;
           *)
-            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
             sudo service mangosd stop
             ;;
           esac
@@ -3711,7 +3711,7 @@ Check log for which database needs 'applying updates'"
         case "$(echo "$PIDOF_REALMD")" in
         0) ;;
         *)
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
           sudo service realmd stop
           ;;
         esac
@@ -3719,7 +3719,7 @@ Check log for which database needs 'applying updates'"
         case "$(echo "$PIDOFMANGOSD")" in
         0) ;;
         *)
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
           sudo service mangosd stop
           ;;
         esac
@@ -3749,7 +3749,7 @@ Check log for which database needs 'applying updates'"
         case "$(echo "$PIDOF_REALMD")" in
         0) ;;
         *)
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
           sudo service realmd stop
           ;;
         esac
@@ -3757,7 +3757,7 @@ Check log for which database needs 'applying updates'"
         case "$(echo "$PIDOFMANGOSD")" in
         0) ;;
         *)
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
           sudo service mangosd stop
           ;;
         esac
@@ -3787,7 +3787,7 @@ Check log for which database needs 'applying updates'"
         case "$(echo "$PIDOF_REALMD")" in
         0) ;;
         *)
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
           sudo service realmd stop
           ;;
         esac
@@ -3795,7 +3795,7 @@ Check log for which database needs 'applying updates'"
         case "$(echo "$PIDOFMANGOSD")" in
         0) ;;
         *)
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
           sudo service mangosd stop
           ;;
         esac
@@ -3830,7 +3830,7 @@ Check log for which database needs 'applying updates'"
         case "$(echo "$PIDOF_REALMD")" in
         0) ;;
         *)
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
           sudo service realmd stop
           ;;
         esac
@@ -3838,7 +3838,7 @@ Check log for which database needs 'applying updates'"
         case "$(echo "$PIDOFMANGOSD")" in
         0) ;;
         *)
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
           sudo service mangosd stop
           ;;
         esac
