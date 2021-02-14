@@ -1888,7 +1888,7 @@ ${GR:?}$CPU_MODEL${N0:?}")
         if [[ "$SYS_CORES" -eq "8" ]]; then
           SYS_CPU8="${GR:?}<--${G1:?} System CPU${N0:?}"
         else
-          SYS_CPU4=""
+          SYS_CPU8=""
         fi
         if [[ "$SYS_CORES" -ge "8" ]]; then
           SYS_CPU16="${GR:?}<--${G1:?} System CPU${GR:?} ($SYS_CORES)"
@@ -2416,7 +2416,7 @@ ${GR:?}$CPU_MODEL${N0:?}")
         if [[ "$SYS_CORES" -eq "8" ]]; then
           SYS_CPU8="${GR:?}<--${G1:?} System CPU${N0:?}"
         else
-          SYS_CPU4=""
+          SYS_CPU8=""
         fi
         if [[ "$SYS_CORES" -ge "8" ]]; then
           SYS_CPU16="${GR:?}<--${G1:?} System CPU${GR:?} ($SYS_CORES)"
