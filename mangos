@@ -1215,7 +1215,7 @@ EOF
         # server.log.old
         DIVE_SERVER_OLD_EMPTY=$(grep -E -v "ERROR*." "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null |
           grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty.|.*empty*." 2>/dev/null)
-        DIVE_SERVER_OLD_ERROR=$(grep -E -v ".*empty*." "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null |
+        DIVE_SERVER_OLD_ERROR=$(grep -E -v ".*is empty*." "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null |
           grep -c -E ".*ERROR*." 2>/dev/null)
         DIVE_SERVER_OLD_SERIO=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null)
         DIVE_SERVER_OLD_IGNOR=$(grep -c -E ".*ignoring*.|.*ignore*.|.*ignored*." "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null)
@@ -1231,7 +1231,7 @@ EOF
         # server.log
         DIVE_SERVER_EMPTY=$(grep -E -v "ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null |
           grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty.|.*empty*." 2>/dev/null)
-        DIVE_SERVER_ERROR=$(grep -E -v ".*empty*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null |
+        DIVE_SERVER_ERROR=$(grep -E -v ".*is empty*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null |
           grep -c -E ".*ERROR*." 2>/dev/null)
         DIVE_SERVER_SERIO=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
         DIVE_SERVER_IGNOR=$(grep -c -E ".*ignoring*.|.*ignore*.|.*ignored*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null)
@@ -1247,7 +1247,7 @@ EOF
         # realmd.log
         DIVE_REALMD_EMPTY=$(grep -E -v "ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null |
           grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." 2>/dev/null)
-        DIVE_REALMD_ERROR=$(grep -E -v ".*empty*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null |
+        DIVE_REALMD_ERROR=$(grep -E -v ".*is empty*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null |
           grep -c -E ".*ERROR*." 2>/dev/null)
         DIVE_REALMD_SERIO=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null)
         if [[ -z "$DIVE_REALMD_EMPTY" || -z "$DIVE_REALMD_ERROR" || -z "$DIVE_REALMD_SERIO" ]]; then
@@ -1348,7 +1348,7 @@ EOF
 
           # get raw error from logs
           ERROR_ERROR=$(grep --no-filename -Eo "ERROR:.*" "$FOLDER_CORE"/run/logs/*.log 2>/dev/null |
-            grep -E -v ".*empty*." 2>/dev/null)
+            grep -E -v ".*is empty*." 2>/dev/null)
           # get raw empty from logs
           EMPTY_ERROR=$(grep --no-filename -Eo ".*empty*." "$FOLDER_CORE"/run/logs/*.log 2>/dev/null |
             grep -E -v "ERROR:.*" 2>/dev/null)
@@ -4358,7 +4358,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               # look for error
               if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
                 # count errors inside log
-                COUNT_ERROR_REALM=$(grep -E -v ".*empty*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null |
+                COUNT_ERROR_REALM=$(grep -E -v ".*is empty*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null |
                   grep -c -E ".*ERROR*." 2>/dev/null)
                 # error rate (total)
                 LOG_LINES=$(wc -l "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null | awk '{ print $1 }' 2>/dev/null)
@@ -4412,7 +4412,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               # look for error
               if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
                 # count errors inside log
-                COUNT_ERROR_SERVER=$(grep -E -v ".*empty*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null |
+                COUNT_ERROR_SERVER=$(grep -E -v ".*is empty*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null |
                   grep -c -E ".*ERROR*." 2>/dev/null)
                 # error rate (total)
                 LOG_LINES=$(wc -l "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null | awk '{ print $1 }' 2>/dev/null)
@@ -4822,7 +4822,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         # look for error
         if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
           # count errors inside log
-          COUNT_ERROR_REALM=$(grep -E -v ".*empty*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null |
+          COUNT_ERROR_REALM=$(grep -E -v ".*is empty*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null |
             grep -c -E ".*ERROR*." 2>/dev/null)
           # error rate (total)
           LOG_LINES=$(wc -l "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null | awk '{ print $1 }' 2>/dev/null)
@@ -4876,7 +4876,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         # look for error
         if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
           # count errors inside log
-          COUNT_ERROR_SERVER=$(grep -E -v ".*empty*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null |
+          COUNT_ERROR_SERVER=$(grep -E -v ".*is empty*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null |
             grep -c -E ".*ERROR*." 2>/dev/null)
           # error rate (total)
           LOG_LINES=$(wc -l "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null | awk '{ print $1 }' 2>/dev/null)
