@@ -4240,7 +4240,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
     # check if 'mangosd.conf' are installed
     FILE="$FOLDER_CORE/run/etc/mangosd.conf"
     if [ ! -f "$FILE" ]; then
-      printf '%b' "${GR:?}mangosd.conf${N0:?} not found!\n"
+      printf '%b' "[!!] ${GR:?}mangosd.conf${N0:?} not found!\n"
       sleep 1
       # restore mangosd configuration from backup if possible
       if cp "$FOLDER_WOW"/backup/configurations/mangosd.conf "$FOLDER_CORE"/run/etc/ 2>/dev/null; then
