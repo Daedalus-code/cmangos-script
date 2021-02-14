@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211402
-# 5.2.6.8
+# 5.3.1.1
 
 while :; do
 
@@ -1793,17 +1793,21 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
           if ! [ -x "$(command -v "${PACKAGELIST[@]}")" ]; then
             sudo apt-get install "${PACKAGELIST[@]}" -y 2>/dev/null
           fi
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
-          sleep 1
           # realmd service
           case "$(echo "$PIDOF_REALMD")" in
           0) ;;
-          *) sudo service realmd stop ;;
+          *)
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
+            sudo service realmd stop
+            ;;
           esac
           # mangosd service
           case "$(echo "$PIDOFMANGOSD")" in
           0) ;;
-          *) sudo service mangosd stop ;;
+          *)
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
+            sudo service mangosd stop
+            ;;
           esac
         fi
 
@@ -2314,17 +2318,21 @@ Check if correct information, or just restart server."
           if ! [ -x "$(command -v "${PACKAGELIST[@]}")" ]; then
             sudo apt-get install "${PACKAGELIST[@]}" -y 2>/dev/null
           fi
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
-          sleep 1
           # realmd service
           case "$(echo "$PIDOF_REALMD")" in
           0) ;;
-          *) sudo service realmd stop ;;
+          *)
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
+            sudo service realmd stop
+            ;;
           esac
           # mangosd service
           case "$(echo "$PIDOFMANGOSD")" in
           0) ;;
-          *) sudo service mangosd stop ;;
+          *)
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
+            sudo service mangosd stop
+            ;;
           esac
         fi
 
@@ -3043,9 +3051,6 @@ Please install mysql or mariadb database/client"
           fi
         fi
         echo
-        printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
-        sleep 1
-
         # this is for docker users
         if [ -f /.dockerenv ]; then
           echo
@@ -3059,12 +3064,18 @@ Please install mysql or mariadb database/client"
           # realmd service
           case "$(echo "$PIDOF_REALMD")" in
           0) ;;
-          *) sudo service realmd stop ;;
+          *)
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
+            sudo service realmd stop
+            ;;
           esac
           # mangosd service
           case "$(echo "$PIDOFMANGOSD")" in
           0) ;;
-          *) sudo service mangosd stop ;;
+          *)
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
+            sudo service mangosd stop
+            ;;
           esac
         fi
 
@@ -3187,17 +3198,21 @@ Please install mysql or mariadb database/client"
           cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
         else
           echo
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
-          sleep 1
           # realmd service
           case "$(echo "$PIDOF_REALMD")" in
           0) ;;
-          *) sudo service realmd stop ;;
+          *)
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
+            sudo service realmd stop
+            ;;
           esac
           # mangosd service
           case "$(echo "$PIDOFMANGOSD")" in
           0) ;;
-          *) sudo service mangosd stop ;;
+          *)
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
+            sudo service mangosd stop
+            ;;
           esac
         fi
         sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
@@ -3364,17 +3379,21 @@ Please install mysql or mariadb database/client"
           cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
         else
           echo
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
-          sleep 1
           # realmd service
           case "$(echo "$PIDOF_REALMD")" in
           0) ;;
-          *) sudo service realmd stop ;;
+          *)
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
+            sudo service realmd stop
+            ;;
           esac
           # mangosd service
           case "$(echo "$PIDOFMANGOSD")" in
           0) ;;
-          *) sudo service mangosd stop ;;
+          *)
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
+            sudo service mangosd stop
+            ;;
           esac
         fi
         sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
@@ -3691,12 +3710,18 @@ Check log for which database needs 'applying updates'"
         # realmd service
         case "$(echo "$PIDOF_REALMD")" in
         0) ;;
-        *) sudo service realmd stop ;;
+        *)
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
+          sudo service realmd stop
+          ;;
         esac
         # mangosd service
         case "$(echo "$PIDOFMANGOSD")" in
         0) ;;
-        *) sudo service mangosd stop ;;
+        *)
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
+          sudo service mangosd stop
+          ;;
         esac
         echo
         read -r -p "[YN] Without error output? y/n " -n 1 -r
@@ -3723,12 +3748,18 @@ Check log for which database needs 'applying updates'"
         # realmd service
         case "$(echo "$PIDOF_REALMD")" in
         0) ;;
-        *) sudo service realmd stop ;;
+        *)
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
+          sudo service realmd stop
+          ;;
         esac
         # mangosd service
         case "$(echo "$PIDOFMANGOSD")" in
         0) ;;
-        *) sudo service mangosd stop ;;
+        *)
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
+          sudo service mangosd stop
+          ;;
         esac
         echo
         read -r -p "[YN] Without error output? y/n " -n 1 -r
@@ -3755,12 +3786,18 @@ Check log for which database needs 'applying updates'"
         # realmd service
         case "$(echo "$PIDOF_REALMD")" in
         0) ;;
-        *) sudo service realmd stop ;;
+        *)
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
+          sudo service realmd stop
+          ;;
         esac
         # mangosd service
         case "$(echo "$PIDOFMANGOSD")" in
         0) ;;
-        *) sudo service mangosd stop ;;
+        *)
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
+          sudo service mangosd stop
+          ;;
         esac
         echo
         read -r -p "[YN] Without error output? y/n " -n 1 -r
@@ -3792,12 +3829,18 @@ Check log for which database needs 'applying updates'"
         # realmd service
         case "$(echo "$PIDOF_REALMD")" in
         0) ;;
-        *) sudo service realmd stop ;;
+        *)
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
+          sudo service realmd stop
+          ;;
         esac
         # mangosd service
         case "$(echo "$PIDOFMANGOSD")" in
         0) ;;
-        *) sudo service mangosd stop ;;
+        *)
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Shutting down, realmd & mangosd service${N0:?}\n"
+          sudo service mangosd stop
+          ;;
         esac
         printf '%b' "[${G1:?}OK${N0:?}]"
         echo
@@ -4034,7 +4077,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               # realmd service
               case "$(echo "$PIDOF_REALMD")" in
               0)
-                printf '%b' "[${GR:?}OK${N0:?}] realmd service not running.\n"
+                printf '%b' "[${GR:?}OK${N0:?}] realmd.service not running.\n"
                 sleep 1
                 ;;
               *)
@@ -4562,10 +4605,10 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             # keep old logs
             cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
             # restart service (realmd)
-            printf '%b' "[${Y1:?}OK${N0:?}] Restarting realmd, mangos service..\n"
+            printf '%b' "[${Y1:?}OK${N0:?}] Restarting realmd.service\n"
             sleep 1
             sudo service realmd restart &>/dev/null
-            printf '%b' "[${G1:?}OK${N0:?}] realmd service started!\n"
+            printf '%b' "[${G1:?}OK${N0:?}] realmd.service started!\n"
             sleep 2
           fi
         fi
@@ -4609,7 +4652,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             # keep old logs
             cp "$FOLDER_CORE"/run/logs/Server.log "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
             # restart service (mangosd)
-            printf '%b' "[${Y1:?}OK${N0:?}] Restarting mangos service..\n"
+            printf '%b' "[${Y1:?}OK${N0:?}] Restarting mangos.service\n"
             sleep 1
             sudo service mangosd restart &>/dev/null
             printf '%b' "[${G1:?}OK${N0:?}] mangosd service started!\n"
