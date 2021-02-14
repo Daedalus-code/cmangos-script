@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211402
-# 5.1.7.8
+# 5.2.6.8
 
 while :; do
 
@@ -1864,27 +1864,72 @@ ${GR:?}$CPU_MODEL${N0:?}")
           CORES_COUNT=""
         fi
 
-        cat <<EOF
+        # system cpu core count
+        if [[ "$SYS_CORES" -eq "1" ]]; then
+          SYS_CPU1="${GR:?}<--${G1:?} System CPU${N0:?}"
+        else
+          SYS_CPU1=""
+        fi
+        if [[ "$SYS_CORES" -eq "2" ]]; then
+          SYS_CPU2="${GR:?}<--${G1:?} System CPU${N0:?}"
+        else
+          SYS_CPU2=""
+        fi
+        if [[ "$SYS_CORES" -eq "3" ]]; then
+          SYS_CPU3="${GR:?}<--${G1:?} System CPU${N0:?}"
+        else
+          SYS_CPU3=""
+        fi
+        if [[ "$SYS_CORES" -eq "4" ]]; then
+          SYS_CPU4="${GR:?}<--${G1:?} System CPU${N0:?}"
+        else
+          SYS_CPU4=""
+        fi
+        if [[ "$SYS_CORES" -eq "8" ]]; then
+          SYS_CPU8="${GR:?}<--${G1:?} System CPU${N0:?}"
+        else
+          SYS_CPU4=""
+        fi
+        if [[ "$SYS_CORES" -ge "8" ]]; then
+          SYS_CPU16="${GR:?}<--${G1:?} System CPU${GR:?} ($SYS_CORES)"
+        else
+          SYS_CPU16=""
+        fi
+        if [[ "$SYS_CORES" -ge "16" ]]; then
+          SYS_CPU32="${GR:?}<--${G1:?} System CPU${GR:?} ($SYS_CORES)"
+        else
+          SYS_CPU32=""
+        fi
+        if [[ "$SYS_CORES" -ge "32" ]]; then
+          SYS_CPU64="${GR:?}<--${G1:?} System CPU${GR:?} ($SYS_CORES)"
+        else
+          SYS_CPU64=""
+        fi
+        if [[ "$SYS_CORES" -ge "64" ]]; then
+          SYS_CPU128="${GR:?}<--${G1:?} System CPU${GR:?} ($SYS_CORES)"
+        else
+          SYS_CPU128=""
+        fi
 
+        printf '%b' "
 $CORES_COUNT $CMAKE_TEMP
 
 Compiling using multiple cores:
 
- 1 : 1 core
- 2 : 2 cores
- 3 : 3 cores
- 4 : 4 cores
- 8 : 8 cores
- h : 16 cores
- w : 32 cores
- t : 64 cores
- H : 128 cores
+ c ${GR:?}:${N0:?} Custom
+ 1 ${GR:?}:${N0:?} 1 Core $SYS_CPU1
+ 2 ${GR:?}:${N0:?} 2 Cores $SYS_CPU2
+ 3 ${GR:?}:${N0:?} 3 Cores $SYS_CPU3
+ 4 ${GR:?}:${N0:?} 4 Cores $SYS_CPU4
+ 8 ${GR:?}:${N0:?} 8 Cores $SYS_CPU8
+ h ${GR:?}:${N0:?} 16 Cores $SYS_CPU16
+ w ${GR:?}:${N0:?} 32 Cores $SYS_CPU32
+ t ${GR:?}:${N0:?} 64 Cores $SYS_CPU64
+ H ${GR:?}:${N0:?} 128 Cores $SYS_CPU128
 
- c : custom
+ q ${GR:?}:${N0:?} Quit
+\n"
 
- q : quit
-
-EOF
         read -r -n1 -s
         case "$REPLY" in
 
@@ -2347,27 +2392,72 @@ ${GR:?}$CPU_MODEL${N0:?}")
           CORES_COUNT=""
         fi
 
-        cat <<EOF
+        # system cpu core count
+        if [[ "$SYS_CORES" -eq "1" ]]; then
+          SYS_CPU1="${GR:?}<--${G1:?} System CPU${N0:?}"
+        else
+          SYS_CPU1=""
+        fi
+        if [[ "$SYS_CORES" -eq "2" ]]; then
+          SYS_CPU2="${GR:?}<--${G1:?} System CPU${N0:?}"
+        else
+          SYS_CPU2=""
+        fi
+        if [[ "$SYS_CORES" -eq "3" ]]; then
+          SYS_CPU3="${GR:?}<--${G1:?} System CPU${N0:?}"
+        else
+          SYS_CPU3=""
+        fi
+        if [[ "$SYS_CORES" -eq "4" ]]; then
+          SYS_CPU4="${GR:?}<--${G1:?} System CPU${N0:?}"
+        else
+          SYS_CPU4=""
+        fi
+        if [[ "$SYS_CORES" -eq "8" ]]; then
+          SYS_CPU8="${GR:?}<--${G1:?} System CPU${N0:?}"
+        else
+          SYS_CPU4=""
+        fi
+        if [[ "$SYS_CORES" -ge "8" ]]; then
+          SYS_CPU16="${GR:?}<--${G1:?} System CPU${GR:?} ($SYS_CORES)"
+        else
+          SYS_CPU16=""
+        fi
+        if [[ "$SYS_CORES" -ge "16" ]]; then
+          SYS_CPU32="${GR:?}<--${G1:?} System CPU${GR:?} ($SYS_CORES)"
+        else
+          SYS_CPU32=""
+        fi
+        if [[ "$SYS_CORES" -ge "32" ]]; then
+          SYS_CPU64="${GR:?}<--${G1:?} System CPU${GR:?} ($SYS_CORES)"
+        else
+          SYS_CPU64=""
+        fi
+        if [[ "$SYS_CORES" -ge "64" ]]; then
+          SYS_CPU128="${GR:?}<--${G1:?} System CPU${GR:?} ($SYS_CORES)"
+        else
+          SYS_CPU128=""
+        fi
 
+        printf '%b' "
 $CORES_COUNT $CMAKE_TEMP
 
 Compiling using multiple cores:
 
- 1 : 1 core
- 2 : 2 cores
- 3 : 3 cores
- 4 : 4 cores
- 8 : 8 cores
- h : 16 cores
- w : 32 cores
- t : 64 cores
- H : 128 cores
+ c ${GR:?}:${N0:?} Custom
+ 1 ${GR:?}:${N0:?} 1 Core $SYS_CPU1
+ 2 ${GR:?}:${N0:?} 2 Cores $SYS_CPU2
+ 3 ${GR:?}:${N0:?} 3 Cores $SYS_CPU3
+ 4 ${GR:?}:${N0:?} 4 Cores $SYS_CPU4
+ 8 ${GR:?}:${N0:?} 8 Cores $SYS_CPU8
+ h ${GR:?}:${N0:?} 16 Cores $SYS_CPU16
+ w ${GR:?}:${N0:?} 32 Cores $SYS_CPU32
+ t ${GR:?}:${N0:?} 64 Cores $SYS_CPU64
+ H ${GR:?}:${N0:?} 128 Cores $SYS_CPU128
 
- c : custom
+ q ${GR:?}:${N0:?} Quit
+\n"
 
- q : quit
-
-EOF
         read -r -n1 -s
         case "$REPLY" in
 
