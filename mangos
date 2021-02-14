@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20211402
-# 5.3.1.1
+# V20211502
+# 5.3.4.3
 
 while :; do
 
@@ -39,6 +39,24 @@ while :; do
   # effects
   UND='\e[4m' # Underline
   DEF='\e[0m' # Default color and effects
+
+  # helper description color
+  case "${THEME_DSC:?}" in
+  "0") THEME_DSC="${N0:?}" ;;  # White
+  "1") THEME_DSC="${R1:?}" ;;  # Red light
+  "2") THEME_DSC="${R0:?}" ;;  # Red
+  "3") THEME_DSC="${B1:?}" ;;  # Blue
+  "4") THEME_DSC="${B0:?}" ;;  # Blue light
+  "5") THEME_DSC="${C1:?}" ;;  # Cyan light
+  "6") THEME_DSC="${CY:?}" ;;  # Cyan
+  "7") THEME_DSC="${P1:?}" ;;  # Purple light
+  "8") THEME_DSC="${P0:?}" ;;  # Purple
+  "9") THEME_DSC="${Y1:?}" ;;  # Yellow light
+  "10") THEME_DSC="${Y0:?}" ;; # Yellow
+  "11") THEME_DSC="${G1:?}" ;; # Green light
+  "12") THEME_DSC="${G0:?}" ;; # Green
+  "13") THEME_DSC="${GR:?}" ;; # Black light (grey)
+  esac
 
   # helper text color
   case "${THEME_TXT:?}" in
@@ -177,19 +195,26 @@ while :; do
 
     # fix ownership
     sudo chown -R "${USER:?}":"${GROUP:?}" /usr/local/bin/mangos
-    echo "[YN] Debug Helper (mangos)? y/n "
-    read -r -p "" -n 1 -r -s
+    printf '%b' "   ${GR:?}Yy${N0:?} redo ${GR:?}/usr/local/bin/mangos${N0:?}\n"
+    printf '%b' "   ${GR:?}N*${N0:?} nano ${GR:?}/usr/local/bin/mangos${N0:?}\n"
     echo
+    printf '%b' "   [YN] Debug helper? ${GR:?}mangos${N0:?} y/n \n"
+    read -r -p "" -n 1 -r -s
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-      clear
-      nano /usr/local/bin/mangos
-      echo "[YN] Exit to take effect? y/n "
+      printf '%b' "   [!!] Redo helper? ${GR:?}empty${N0:?} y/n \n"
       read -r -p "" -n 1 -r -s
-      echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
-        exit
+        sudo rm /usr/local/bin/mangos 2>/dev/null
+        sudo touch /usr/local/bin/mangos 2>/dev/null
+        sudo chmod +x /usr/local/bin/mangos 2>/dev/null
+        sudo nano /usr/local/bin/mangos 2>/dev/null
       fi
+    else
+      sudo nano /usr/local/bin/mangos 2>/dev/null
     fi
+    clear
+    echo "[!!] Any edits? Restart helper please!"
+    sleep 2
 
     ;;
 
@@ -629,15 +654,15 @@ ${PASS_NC:?}
    System${G0:?}......:${N0:?} $BUILT_FOR
    Commit Hash${G0:?}.:${GR:?} $COMMIT_HASH${N0:?}
 
-   r : ${THEME_TXT:?}Login${N0:?}   - ${GR:?}Remote access  ${N0:?}mangosd.service${G0:?}.:${N0:?} $COMMAND_MANGOSD
-   l : ${THEME_TXT:?}Logs${N0:?}    - ${GR:?}Analyze logs   ${N0:?}realmd.service${G0:?}..:${N0:?} $COMMAND_REALMD
-   b : ${THEME_TXT:?}Backup${N0:?}  - ${GR:?}New backup     ${N0:?}
-   h : ${THEME_TXT:?}Reset${N0:?}   - ${GR:?}Reset --hard   ${N0:?}characters.sql${G0:?}..:${N0:?} $CHARAC_BACKUP
-   p : ${THEME_TXT:?}htop${N0:?}    - ${GR:?}Process view   ${N0:?}realmd.sql${G0:?}......:${N0:?} $REALMD_BACKUP
-   m : ${THEME_TXT:?}Maps${N0:?}    - ${GR:?}Download maps  ${N0:?}
-   w : ${THEME_TXT:?}Stats${N0:?}   - ${GR:?}World stats    ${N0:?}Realmd.log${G0:?}......:${N0:?} $CM_REALMD_LOG_EMPTY$CM_REALMD_LOG
-   q : ${THEME_TXT:?}Quit${N0:?}    - ${GR:?}Back to menu   ${N0:?}Server.log${G0:?}......:${N0:?} $CM_SERVER_LOG_EMPTY$CM_SERVER_LOG$CM_SERVER_LOG_SERIOUS
-   i : ${THEME_TXT:?}Info${N0:?}    - ${GR:?}Helper info    ${N0:?}$MENU_PRINT_CPU_TEMP
+   r : ${THEME_TXT:?}Login${N0:?}   - ${THEME_DSC:?}Remote access  ${N0:?}mangosd.service${G0:?}.:${N0:?} $COMMAND_MANGOSD
+   l : ${THEME_TXT:?}Logs${N0:?}    - ${THEME_DSC:?}Analyze logs   ${N0:?}realmd.service${G0:?}..:${N0:?} $COMMAND_REALMD
+   b : ${THEME_TXT:?}Backup${N0:?}  - ${THEME_DSC:?}New backup     ${N0:?}
+   h : ${THEME_TXT:?}Reset${N0:?}   - ${THEME_DSC:?}Reset --hard   ${N0:?}characters.sql${G0:?}..:${N0:?} $CHARAC_BACKUP
+   p : ${THEME_TXT:?}htop${N0:?}    - ${THEME_DSC:?}Process view   ${N0:?}realmd.sql${G0:?}......:${N0:?} $REALMD_BACKUP
+   m : ${THEME_TXT:?}Maps${N0:?}    - ${THEME_DSC:?}Download maps  ${N0:?}
+   w : ${THEME_TXT:?}Stats${N0:?}   - ${THEME_DSC:?}World stats    ${N0:?}Realmd.log${G0:?}......:${N0:?} $CM_REALMD_LOG_EMPTY$CM_REALMD_LOG
+   q : ${THEME_TXT:?}Quit${N0:?}    - ${THEME_DSC:?}Back to menu   ${N0:?}Server.log${G0:?}......:${N0:?} $CM_SERVER_LOG_EMPTY$CM_SERVER_LOG$CM_SERVER_LOG_SERIOUS
+   i : ${THEME_TXT:?}Info${N0:?}    - ${THEME_DSC:?}Helper info    ${N0:?}$MENU_PRINT_CPU_TEMP
 \n"
       read -r -s -n1
       case "$REPLY" in
@@ -663,12 +688,12 @@ ${PASS_NC:?}
    World DB
    ${GR:?}$WORLD_DB${N0:?}
 
-   ${THEME_ALL:?}https://github.com/cmangos/mangos-classic${N0:?}
-   ${THEME_ALL:?}https://github.com/cmangos/classic-db${N0:?}
+   ${THEME_DSC:?}https://github.com/cmangos/mangos-classic${N0:?}
+   ${THEME_DSC:?}https://github.com/cmangos/classic-db${N0:?}
 
    ${G0:?}C(ontinued)-MaNGOS - Helper${N0:?}
 
-   ${THEME_ALL:?}https://github.com/Daedalus-code/cmangos-script${N0:?}
+   ${THEME_DSC:?}https://github.com/Daedalus-code/cmangos-script${N0:?}
 
    This script was built on a ubuntu system - (Raspberry Pi4)
    https://ubuntu.com/download/raspberry-pi
@@ -701,6 +726,13 @@ ${N0:?}"
 
       "m")
 
+        # look for ms folder
+        if [ -z "$(ls -A /var/log/ms/ 2>/dev/null)" ]; then
+          # create ms folder if not found
+          sudo mkdir /var/log/ms/ 2>/dev/null
+          # fix ownership
+          sudo chown -R "${USER:?}":"${GROUP:?}" /var/log/ms
+        fi
         printf '%b' "${GR:?}Please wait${N0:?}\n"
         # get remote information from transmission, create a file
         transmission-remote -t all -i >/var/log/ms/transmission_list 2>/dev/null
@@ -816,13 +848,13 @@ ${N0:?}"
    Ratio${G0:?}....:${N0:?} $P2P_RATI
    Peers${G0:?}....:${G1:?} $P2P_PEERS_CONNECTED${N0:?}$SLASH${G0:?}$P2P_PEERS_SEEDINGTO${N0:?}$SLASH${Y1:?}$P2P_PEERS_DOWN_LOAD${N0:?}
 
-   t : ${THEME_TXT:?}Install${N0:?} - ${GR:?}Setup$N0
-   u : ${THEME_TXT:?}Remove${N0:?}  - ${GR:?}Uninstall$N0
-   r : ${THEME_TXT:?}Start${N0:?}   - ${GR:?}Start p2p$N0
-   s : ${THEME_TXT:?}Stop${N0:?}    - ${GR:?}Stop p2p$N0
-   m : ${THEME_TXT:?}Maps${N0:?}    - ${GR:?}Import maps$N0
-   i : ${THEME_TXT:?}Info${N0:?}    - ${GR:?}Torrent info$N0
-   q : ${THEME_TXT:?}Quit${N0:?}    - ${GR:?}Return$N0
+   t : ${THEME_TXT:?}Install${N0:?} - ${THEME_DSC:?}Setup$N0
+   u : ${THEME_TXT:?}Remove${N0:?}  - ${THEME_DSC:?}Uninstall$N0
+   r : ${THEME_TXT:?}Start${N0:?}   - ${THEME_DSC:?}Start p2p$N0
+   s : ${THEME_TXT:?}Stop${N0:?}    - ${THEME_DSC:?}Stop p2p$N0
+   m : ${THEME_TXT:?}Maps${N0:?}    - ${THEME_DSC:?}Import maps$N0
+   i : ${THEME_TXT:?}Info${N0:?}    - ${THEME_DSC:?}Torrent info$N0
+   q : ${THEME_TXT:?}Quit${N0:?}    - ${THEME_DSC:?}Return$N0
 
 ${N0:?}"
         read -r -s -n1
@@ -1495,7 +1527,7 @@ ${THEME_ALL:?}      ._________________.
   'commands' will list all of the available commands
   'quit' and then hit Enter two times to exit
 
-  Tip: Set '${CY:?}Message of the Day${N0:?}' inside mangosd.conf"
+  Tip: Set '${THEME_DSC:?}Message of the Day${N0:?}' inside mangosd.conf"
           echo
           echo
           nc "$HOST_NC" "$PORT_NC"
