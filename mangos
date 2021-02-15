@@ -1245,7 +1245,7 @@ EOF
       "l")
 
         # server.log.old
-        DIVE_SERVER_OLD_EMPTY=$(grep -E -v "ERROR*." "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null |
+        DIVE_SERVER_OLD_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null |
           grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty.|.*empty*." 2>/dev/null)
         DIVE_SERVER_OLD_ERROR=$(grep -E -v ".*is empty*." "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null |
           grep -c -E ".*ERROR*." 2>/dev/null)
@@ -1261,7 +1261,7 @@ EOF
           DIVE_SERVER_OLD_POLYR="0"
         fi
         # server.log
-        DIVE_SERVER_EMPTY=$(grep -E -v "ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null |
+        DIVE_SERVER_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null |
           grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty.|.*empty*." 2>/dev/null)
         DIVE_SERVER_ERROR=$(grep -E -v ".*is empty*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null |
           grep -c -E ".*ERROR*." 2>/dev/null)
@@ -1277,7 +1277,7 @@ EOF
           DIVE_SERVER_POLYR="0"
         fi
         # realmd.log
-        DIVE_REALMD_EMPTY=$(grep -E -v "ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null |
+        DIVE_REALMD_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null |
           grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." 2>/dev/null)
         DIVE_REALMD_ERROR=$(grep -E -v ".*is empty*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null |
           grep -c -E ".*ERROR*." 2>/dev/null)
@@ -1383,7 +1383,7 @@ EOF
             grep -E -v ".*is empty*." 2>/dev/null)
           # get raw empty from logs
           EMPTY_ERROR=$(grep --no-filename -Eo ".*empty*." "$FOLDER_CORE"/run/logs/*.log 2>/dev/null |
-            grep -E -v "ERROR:.*" 2>/dev/null)
+            grep -E -v "ERROR:.*|Only expired mails*" 2>/dev/null)
           printf '%b' "${Y1:?}$EMPTY_ERROR${N0:?}\n"
           printf '%b' "${R0:?}$ERROR_ERROR${N0:?}\n"
 
@@ -4425,7 +4425,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               # look for empty tables
               if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
                 # count empty inside log
-                COUNT_EMPTY=$(grep -E -v "ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null |
+                COUNT_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null |
                   grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." 2>/dev/null)
                 # if any, print "empty"
                 printf '%b' "[${Y1:?}0E${N0:?}] Realm: ${Y1:?}$COUNT_EMPTY${N0:?} Tables are empty, doesn't exist!\n"
@@ -4479,7 +4479,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               # look for empty tables
               if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
                 # count empty inside log
-                COUNT_EMPTY=$(grep -E -v "ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null |
+                COUNT_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null |
                   grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." 2>/dev/null)
                 # if any, print "empty"
                 printf '%b' "[${Y1:?}0E${N0:?}] World: ${Y1:?}$COUNT_EMPTY${N0:?} Tables are empty or doesn't exist!\n"
@@ -4889,7 +4889,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         # look for empty tables
         if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null; then
           # count empty inside log
-          COUNT_EMPTY=$(grep -E -v "ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null |
+          COUNT_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "$FOLDER_CORE"/run/logs/Realmd.log 2>/dev/null |
             grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." 2>/dev/null)
           # if any, print "empty"
           printf '%b' "[${Y1:?}0E${N0:?}] Realm: ${Y1:?}$COUNT_EMPTY${N0:?} Tables are empty, doesn't exist!\n"
@@ -4943,7 +4943,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         # look for empty tables
         if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
           # count empty inside log
-          COUNT_EMPTY=$(grep -E -v "ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null |
+          COUNT_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null |
             grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." 2>/dev/null)
           # if any, print "empty"
           printf '%b' "[${Y1:?}0E${N0:?}] World: ${Y1:?}$COUNT_EMPTY${N0:?} Tables are empty or doesn't exist!\n"
