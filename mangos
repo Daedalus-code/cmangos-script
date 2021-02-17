@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211702
-# 5.3.5.1
+# 5.3.4.2
 
 while :; do
 
@@ -3226,13 +3226,11 @@ Please install mysql or mariadb database/client"
     "2")
 
       read -r -p "[YN] Drop/Import Databases? y/n " -n 1 -r
-      echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
-
+        echo
         # this is for docker users
         if [ -f /.dockerenv ]; then
-          echo
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
           sleep 3
           sudo killall screen 2>/dev/null
           # keep old logs
@@ -3258,26 +3256,21 @@ Please install mysql or mariadb database/client"
         fi
         sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
         sleep 1
-        echo
         # backup <- characters.sql
         FILE="$FOLDER_WOW/backup/$DB_CHARACTERS-$NOW.sql"
         if [ ! -f "$FILE" ]; then
-          printf '%b' "[!!] '${G1:?}Characters${N0:?}' Creating backup!"
+          printf '%b' "[!!] '${G1:?}Characters${N0:?}' Creating backup!\n"
           mysqldump --defaults-extra-file="$SQL_MYCNF" "$DB_CHARACTERS" >"$FOLDER_WOW"/backup/"$DB_CHARACTERS"-"$NOW".sql
-          echo
         else
-          printf '%b' "[${G1:?}OK${N0:?}] $DB_CHARACTERS-$NOW.sql exist"
-          echo
+          printf '%b' "[${G1:?}OK${N0:?}] $DB_CHARACTERS-$NOW.sql exist\n"
         fi
         # backup <- realmd.sql
         FILE="$FOLDER_WOW/backup/$DB_REALMD-$NOW.sql"
         if [ ! -f "$FILE" ]; then
-          printf '%b' "[!!] '${G1:?}Realmd${N0:?}' Creating backup!"
+          printf '%b' "[!!] '${G1:?}Realmd${N0:?}' Creating backup!\n"
           mysqldump --defaults-extra-file="$SQL_MYCNF" "$DB_REALMD" >"$FOLDER_WOW"/backup/"$DB_REALMD"-"$NOW".sql
-          echo
         else
-          printf '%b' "[${G1:?}OK${N0:?}] $DB_REALMD-$NOW.sql exist"
-          echo
+          printf '%b' "[${G1:?}OK${N0:?}] $DB_REALMD-$NOW.sql exist\n"
         fi
 
         # backup done
@@ -3286,7 +3279,6 @@ Please install mysql or mariadb database/client"
 
         # drop database 'characters'
 
-        echo
         RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "$DB_CHARACTERS")
         if [ "$RESULT" == "$DB_CHARACTERS" ]; then
           mysqladmin --defaults-extra-file="$SQL_MYCNF" -f DROP "$DB_CHARACTERS"
@@ -3297,7 +3289,6 @@ Please install mysql or mariadb database/client"
           mysqladmin --defaults-extra-file="$SQL_MYCNF" -f DROP "$DB_MANGOS"
         fi
         read -r -p "[YN] Drop realmd database? y/n " -n 1 -r
-        echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           # drop database 'realmd'
           RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "$DB_REALMD")
@@ -3314,37 +3305,30 @@ Please install mysql or mariadb database/client"
         echo
         RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "$DB_CHARACTERS")
         if [ "$RESULT" == "$DB_CHARACTERS" ]; then
-          printf '%b' "[${G1:?}OK${N0:?}] 'Characters' database installed!"
-          echo
+          printf '%b' "[${G1:?}OK${N0:?}] 'Characters' database installed!\n"
         else
-          printf '%b' "[${R0:?}empty${N0:?}] 'Characters' importing.."
-          echo
+          printf '%b' "[${GR:?}ok${N0:?}] 'Characters' Importing!\n"
           mysql --defaults-extra-file="$SQL_MYCNF" -e "CREATE DATABASE $DB_CHARACTERS CHARACTER SET utf8 COLLATE utf8_general_ci"
           mysql --defaults-extra-file="$SQL_MYCNF" --database="$DB_CHARACTERS" <"${FOLDER_SQL:?}"/base/characters.sql
         fi
         # create database 'mangos'
         RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "$DB_MANGOS")
         if [ "$RESULT" == "$DB_MANGOS" ]; then
-          printf '%b' "[${G1:?}OK${N0:?}] 'Mangos' database installed!"
-          echo
+          printf '%b' "[${G1:?}OK${N0:?}] 'Mangos' database installed!\n"
         else
-          printf '%b' "[${R0:?}empty${N0:?}] 'Mangos' importing.."
-          echo
+          printf '%b' "[${GR:?}ok${N0:?}] 'Mangos' Importing!\n"
           mysql --defaults-extra-file="$SQL_MYCNF" -e "CREATE DATABASE $DB_MANGOS CHARACTER SET utf8 COLLATE utf8_general_ci"
           mysql --defaults-extra-file="$SQL_MYCNF" --database="$DB_MANGOS" <"$FOLDER_SQL"/base/mangos.sql
         fi
         # create database 'realmd'
         RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "$DB_REALMD")
         if [ "$RESULT" == "$DB_REALMD" ]; then
-          printf '%b' "[${G1:?}OK${N0:?}] 'Realmd' database installed!"
-          echo
+          printf '%b' "[${G1:?}OK${N0:?}] 'Realmd' database installed!\n"
         else
-          printf '%b' "[${R0:?}empty${N0:?}] 'Realmd' importing.."
-          echo
+          printf '%b' "[${GR:?}ok${N0:?}] 'Realmd' Importing!\n"
           mysql --defaults-extra-file="$SQL_MYCNF" -e "CREATE DATABASE $DB_REALMD CHARACTER SET utf8 COLLATE utf8_general_ci"
           mysql --defaults-extra-file="$SQL_MYCNF" --database="$DB_REALMD" <"$FOLDER_SQL"/base/realmd.sql
         fi
-        echo
 
         # create databases done
 
@@ -3355,9 +3339,16 @@ Please install mysql or mariadb database/client"
         read -r -p "[YN] InstallFullDB? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
-          sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
-          cd "$FOLDER_DB" || exit
-          ./InstallFullDB.sh
+          if [[ -z "$FOLDER_DB" ]]; then
+            sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
+            cd "$FOLDER_DB" || exit
+            ./InstallFullDB.sh
+          else
+            printf '%b' "[!!] ${GR:?}$FOLDER_DB${N0:?} Not Found!\n"
+            echo
+            read -r -p "Press Enter to continue" </dev/tty
+            echo
+          fi
         fi
 
         # InstallFullDB done
@@ -4016,7 +4007,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
     # check if 'mangosd.conf' are installed
     FILE="$FOLDER_CORE/run/etc/mangosd.conf"
     if [ ! -f "$FILE" ]; then
-      printf '%b' "[!!] ${GR:?}mangosd.conf${N0:?} not found!\n"
+      printf '%b' "[!!] ${GR:?}mangosd.conf${N0:?} Not Found!\n"
       sleep 1
       # restore mangosd configuration from backup if possible
       if cp "$FOLDER_WOW"/backup/configurations/mangosd.conf "$FOLDER_CORE"/run/etc/ 2>/dev/null; then
@@ -4030,7 +4021,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
     # check if 'realmd.conf' are installed
     FILE="$FOLDER_CORE/run/etc/realmd.conf"
     if [ ! -f "$FILE" ]; then
-      printf '%b' "[!!] ${GR:?}realmd.conf${N0:?} not found!\n"
+      printf '%b' "[!!] ${GR:?}realmd.conf${N0:?} Not Found!\n"
       sleep 1
       # restore realmd configuration from backup if possible
       if cp "$FOLDER_WOW"/backup/configurations/realmd.conf "$FOLDER_CORE"/run/etc/ 2>/dev/null; then
@@ -4280,7 +4271,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
     # check if 'mangosd.conf' are installed
     FILE="$FOLDER_CORE/run/etc/mangosd.conf"
     if [ ! -f "$FILE" ]; then
-      printf '%b' "[!!] ${GR:?}mangosd.conf${N0:?} not found!\n"
+      printf '%b' "[!!] ${GR:?}mangosd.conf${N0:?} Not Found!\n"
       sleep 1
       # restore mangosd configuration from backup if possible
       if cp "$FOLDER_WOW"/backup/configurations/mangosd.conf "$FOLDER_CORE"/run/etc/ 2>/dev/null; then
@@ -4294,7 +4285,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
     # check if 'realmd.conf' are installed
     FILE="$FOLDER_CORE/run/etc/realmd.conf"
     if [ ! -f "$FILE" ]; then
-      printf '%b' "[!!] ${GR:?}realmd.conf${N0:?} not found!\n"
+      printf '%b' "[!!] ${GR:?}realmd.conf${N0:?} Not Found!\n"
       sleep 1
       # restore realmd configuration from backup if possible
       if cp "$FOLDER_WOW"/backup/configurations/realmd.conf "$FOLDER_CORE"/run/etc/ 2>/dev/null; then
