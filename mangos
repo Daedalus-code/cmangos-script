@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211702
-# 5.3.5.3
+# 5.3.5.1
 
 while :; do
 
@@ -742,7 +742,7 @@ ${N0:?}"
 
         # is transmission-cli installed?
         if ! [ -x "$(command -v transmission-cli)" ]; then
-          SEED_TRANSMISSION="${GR:?}Not Installed!${N0:?}"
+          SEED_TRANSMISSION="${GR:?}Not installed!${N0:?}"
           INTRANET_SEED="${GR:?}0.0.0.0:9091${N0:?}"
           P2P_FILE_NAME="${GR:?}vanilla_maps.zip${N0:?}"
           P2P_PEERS_CONNECTED="${GR:?}N/A${N0:?}"
@@ -1814,7 +1814,7 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         # this is for docker users
         if [ -f /.dockerenv ]; then
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}"
           sleep 3
           sudo killall screen &>/dev/null
           # keep old logs
@@ -2349,7 +2349,7 @@ Check if correct information, or just restart server."
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         # this is for docker users
         if [ -f /.dockerenv ]; then
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}"
           sleep 3
           sudo killall screen &>/dev/null
           # keep old logs
@@ -3096,7 +3096,7 @@ Please install mysql or mariadb database/client"
         # this is for docker users
         if [ -f /.dockerenv ]; then
           echo
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}"
           sleep 3
           sudo killall screen &>/dev/null
           # keep old logs
@@ -3232,14 +3232,13 @@ Please install mysql or mariadb database/client"
         # this is for docker users
         if [ -f /.dockerenv ]; then
           echo
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}"
           sleep 3
           sudo killall screen 2>/dev/null
           # keep old logs
           cp "$FOLDER_CORE"/run/logs/Server.log "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
           cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
         else
-          echo
           # realmd service
           case "$(echo "$PIDOF_REALMD")" in
           0) ;;
@@ -3413,14 +3412,13 @@ Please install mysql or mariadb database/client"
         # this is for docker users
         if [ -f /.dockerenv ]; then
           echo
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}"
           sleep 3
           sudo killall screen &>/dev/null
           # keep old logs
           cp "$FOLDER_CORE"/run/logs/Server.log "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
           cp "$FOLDER_CORE"/run/logs/Realmd.log "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
         else
-          echo
           # realmd service
           case "$(echo "$PIDOF_REALMD")" in
           0) ;;
@@ -4795,7 +4793,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             sudo cp "$FOLDER_HELPER"/mangos /usr/local/bin &>/dev/null
             sudo chmod +x /usr/local/bin/mangos
             sleep 1
-            printf '%b' "[${G1:?}OK${N0:?}] installed!\n"
+            printf '%b' "[${G1:?}OK${N0:?}] Installed!\n"
             sleep 1 && exit
           else
             # install new upgrades
@@ -4804,7 +4802,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             sudo cp "$FOLDER_HELPER"/mangos /usr/local/bin/mangos &>/dev/null
             sudo chmod +x /usr/local/bin/mangos
             sleep 1
-            printf '%b' "[${G1:?}OK${N0:?}] installed!"
+            printf '%b' "[${G1:?}OK${N0:?}] Installed!"
             echo
             echo
           fi
@@ -4846,7 +4844,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         sudo chmod +x /usr/local/bin/mangos
         echo
         sleep 1
-        printf '%b' "[${G1:?}OK${N0:?}] installed!"
+        printf '%b' "[${G1:?}OK${N0:?}] Installed!"
         echo
         echo
         sleep 2
