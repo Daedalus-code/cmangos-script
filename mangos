@@ -3307,7 +3307,7 @@ Please install mysql or mariadb database/client"
         if [ "$RESULT" == "$DB_CHARACTERS" ]; then
           printf '%b' "[${G1:?}OK${N0:?}] 'Characters' database installed!\n"
         else
-          printf '%b' "[${Y1:?}ok${N0:?}] 'Characters' Importing!\n"
+          printf '%b' "[${Y1:?}ok${N0:?}] Importing 'Characters'\n"
           mysql --defaults-extra-file="$SQL_MYCNF" -e "CREATE DATABASE $DB_CHARACTERS CHARACTER SET utf8 COLLATE utf8_general_ci"
           mysql --defaults-extra-file="$SQL_MYCNF" --database="$DB_CHARACTERS" <"${FOLDER_SQL:?}"/base/characters.sql
         fi
@@ -3316,7 +3316,7 @@ Please install mysql or mariadb database/client"
         if [ "$RESULT" == "$DB_MANGOS" ]; then
           printf '%b' "[${G1:?}OK${N0:?}] 'Mangos' database installed!\n"
         else
-          printf '%b' "[${Y1:?}ok${N0:?}] 'Mangos' Importing!\n"
+          printf '%b' "[${Y1:?}ok${N0:?}] Importing 'Mangos'\n"
           mysql --defaults-extra-file="$SQL_MYCNF" -e "CREATE DATABASE $DB_MANGOS CHARACTER SET utf8 COLLATE utf8_general_ci"
           mysql --defaults-extra-file="$SQL_MYCNF" --database="$DB_MANGOS" <"$FOLDER_SQL"/base/mangos.sql
         fi
@@ -3325,7 +3325,7 @@ Please install mysql or mariadb database/client"
         if [ "$RESULT" == "$DB_REALMD" ]; then
           printf '%b' "[${G1:?}OK${N0:?}] 'Realmd' database installed!\n"
         else
-          printf '%b' "[${Y1:?}ok${N0:?}] 'Realmd' Importing!\n"
+          printf '%b' "[${Y1:?}ok${N0:?}] Importing 'Realmd'\n"
           mysql --defaults-extra-file="$SQL_MYCNF" -e "CREATE DATABASE $DB_REALMD CHARACTER SET utf8 COLLATE utf8_general_ci"
           mysql --defaults-extra-file="$SQL_MYCNF" --database="$DB_REALMD" <"$FOLDER_SQL"/base/realmd.sql
         fi
