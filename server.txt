@@ -25,6 +25,8 @@ CMAKE="-DCMAKE_INSTALL_PREFIX=/home/ubuntu/wow/mangos-classic/run
 -DBUILD_PLAYERBOT=OFF
 -DBUILD_AHBOT=OFF"
 
+AUTO_BUILD="0" # auto detect cores
+
 # SYSTEM #######################################################################
 
 GROUP="ubuntu"
