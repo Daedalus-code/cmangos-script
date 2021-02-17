@@ -1386,7 +1386,7 @@ EOF
 
         "1")
 
-          if [ -f "$FOLDER_CORE/run/logs/*.log" ]; then
+          if [ -f "$FOLDER_CORE/run/logs/Server.log" ]; then
             # get raw error from logs
             ERROR_ERROR=$(grep --no-filename -Eo "ERROR:.*" "$FOLDER_CORE"/run/logs/*.log 2>/dev/null |
               grep -E -v ".*is empty*." 2>/dev/null)
@@ -1404,7 +1404,7 @@ EOF
 
         "2")
 
-          if [ -f "$FOLDER_CORE/run/logs/*.log" ]; then
+          if [ -f "$FOLDER_CORE/run/logs/Server.log" ]; then
             # tail logs for error
             echo "Tailing logs!"
             printf '%b' "${GR:?}CTRL+C to exit${N0:?}\n"
