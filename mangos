@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211702
-# 5.3.3.3
+# 5.3.3.4
 
 while :; do
 
@@ -3290,6 +3290,7 @@ Please install mysql or mariadb database/client"
         fi
         read -r -p "[YN] Drop realmd database? y/n " -n 1 -r
         if [[ $REPLY =~ ^[Yy]$ ]]; then
+          echo
           # drop database 'realmd'
           RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "$DB_REALMD")
           if [ "$RESULT" == "$DB_REALMD" ]; then
