@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211702
-# 5.3.3.4
+# 5.3.2.7
 
 while :; do
 
@@ -1591,7 +1591,7 @@ ${THEME_ALL:?}      ._________________.
       sleep 2
       # remove old file
       rm /var/log/ms/installed_core &>/dev/null
-      # fresh install ?
+      # fresh install?
       DOWN_CORE=$(echo -e "\033[5m?\033[0m" 2>/dev/null)
       printf '%b' "[YN]${GR:?} ${N0:?}(${GR:?}${UND:?}0000000${DEF:?}${N0:?})${GR:?} Download Core$DOWN_CORE y/n ${GR:?}skip in 5s ${N0:?}"
       read -t 4 -r -p "" -n 1 -r -s
@@ -1648,7 +1648,7 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
       sleep 2
       # remove old file
       rm /var/log/ms/installed_db &>/dev/null
-      # fresh install ?
+      # fresh install?
       DOWN_DB=$(echo -e "\033[5m?\033[0m" 2>/dev/null)
       printf '%b' "[YN]${GR:?} ${N0:?}(${GR:?}${UND:?}0000000${DEF:?}${N0:?})${GR:?} Download Database$DOWN_DB y/n ${GR:?}skip in 5s ${N0:?}"
       read -t 4 -r -p "" -n 1 -r -s
@@ -1707,7 +1707,7 @@ ${GR:?}(d) Update Database > Update classic-db${N0:?}\n"
     if [ ! -f "$FILE" ]; then
       # remove old file
       rm /var/log/ms/installed_ms &>/dev/null
-      # fresh install ?
+      # fresh install?
       echo "Cloning repository 'cmangos-script' Please wait"
       sudo mkdir "$FOLDER_HELPER" &>/dev/null
       sudo chown -R "${USER:?}":"${GROUP:?}" "$FOLDER_HELPER"
@@ -2790,7 +2790,7 @@ Select install operation"
 
       # reinstall (delete /build) done
 
-      # reset --hard origin/master ?
+      # reset --hard origin/master?
 
     "4")
 
@@ -3058,7 +3058,7 @@ $MARIADB_SERVER_INSTALLED - mariadb-server
 $MARIADB_CLIENT_INSTALLED - mariadb-client
 $MYSQL_USER - database user 'mangos'
 
-database user, client/server is needed."
+Database User, Client/Server is needed."
       echo
 
       # checking depends done
@@ -3067,25 +3067,20 @@ database user, client/server is needed."
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         read -r -p "[YN] Restart localhost database service? (SQL SERVER) y/n " -n 1 -r
-        echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
-
           # restart mysql service, if it exists
           if sudo service mysql status 2>/dev/null | grep -E 'mysql'; then
-            echo "No database system found
-Please install mysql or mariadb database/client"
-            echo
+            echo "[!!] No database system found"
+            echo "[!!] Please install mysql or mariadb database/client"
             exit
           else
             sudo service mysql stop &>/dev/null
             sudo service mysql restart &>/dev/null
           fi
-
           # restart mariadb service, if it exists
           if sudo service mariadb status 2>/dev/null | grep -E 'mariadb'; then
-            echo "No database system found
-Please install mysql or mariadb database/client"
-            echo
+            echo "[!!] No database system found"
+            echo "[!!] Please install mysql or mariadb database/client"
             exit
           else
             sudo service mariadb stop &>/dev/null
@@ -3095,7 +3090,6 @@ Please install mysql or mariadb database/client"
         echo
         # this is for docker users
         if [ -f /.dockerenv ]; then
-          echo
           printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}"
           sleep 3
           sudo killall screen &>/dev/null
@@ -3122,9 +3116,6 @@ Please install mysql or mariadb database/client"
         fi
 
         sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
-        echo
-        printf '%b' "Updating classic-db [${G0:?}database${N0:?}]"
-        echo
 
         # backup
         mkdir "$FOLDER_WOW"/backup &>/dev/null
@@ -3146,11 +3137,10 @@ Please install mysql or mariadb database/client"
           printf '%b' "[${G1:?}OK${N0:?}] $DB_CHARACTERS-$NOW.sql exist"
           echo
           read -r -p "[YN] New backup? ($DB_CHARACTERS) y/n " -n 1 -r
-          echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # backup characters sql
             echo
-            printf '%b' "Making fresh backup${G0:?}.${N0:?}"
+            printf '%b' "[${Y1:?}ok${N0:?}] Making fresh backup${G0:?}.${N0:?}"
             sleep 1
             printf '%b' "${G0:?}.${N0:?}"
             mysqldump --defaults-extra-file="$SQL_MYCNF" "$DB_CHARACTERS" >"$FOLDER_WOW"/backup/"$DB_CHARACTERS"-"$NOW".sql
@@ -3158,7 +3148,6 @@ Please install mysql or mariadb database/client"
             sleep 1
             printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}$DB_CHARACTERS-$NOW.sql${N0:?}"
             sleep 2
-            echo
           fi
         fi
         echo
@@ -3172,11 +3161,10 @@ Please install mysql or mariadb database/client"
           printf '%b' "[${G1:?}OK${N0:?}] $DB_REALMD-$NOW.sql exist"
           echo
           read -r -p "[YN] New backup? ($DB_REALMD) y/n " -n 1 -r
-          echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # backup characters sql
             echo
-            printf '%b' "Making fresh backup${G0:?}.${N0:?}"
+            printf '%b' "[${Y1:?}ok${N0:?}] Making fresh backup${G0:?}.${N0:?}"
             sleep 1
             printf '%b' "${G0:?}.${N0:?}"
             mysqldump --defaults-extra-file="$SQL_MYCNF" "$DB_REALMD" >"$FOLDER_WOW"/backup/"$DB_REALMD"-"$NOW".sql
@@ -3184,22 +3172,25 @@ Please install mysql or mariadb database/client"
             sleep 1
             printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}$DB_REALMD-$NOW.sql${N0:?}"
             sleep 1
-            echo
           fi
         fi
-        # InstallFullDB ?
+        # InstallFullDB?
         echo
         read -r -p "[YN] InstallFullDB? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
-          sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
-          cd "$FOLDER_DB" || exit
-          ./InstallFullDB.sh
-          sudo service mariadb stop &>/dev/null
-          sudo service mysql stop &>/dev/null
-          sleep 1
-          sudo service mariadb restart &>/dev/null
-          sudo service mysql restart &>/dev/null
+          if [[ -z "$FOLDER_DB" ]]; then
+            sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
+            cd "$FOLDER_DB" || exit
+            ./InstallFullDB.sh
+            sudo service mariadb stop &>/dev/null
+            sudo service mysql stop &>/dev/null
+            sleep 1
+            sudo service mariadb restart &>/dev/null
+            sudo service mysql restart &>/dev/null
+          else
+            printf '%b' "[!!] ${GR:?}$FOLDER_DB${N0:?} Not Found!\n"
+          fi
         fi
         # create ms folder
         sudo mkdir /var/log/ms/ 2>/dev/null
@@ -3207,7 +3198,6 @@ Please install mysql or mariadb database/client"
         sudo chown -R "${USER:?}":"${GROUP:?}" /var/log/ms
         # create installed mark
         echo "Database was installed at ${NOW:?}" >/var/log/ms/installed_db
-        echo
         printf '%b' "[${G1:?}OK${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
@@ -3303,7 +3293,6 @@ Please install mysql or mariadb database/client"
         # create databases
 
         # create database 'characters'
-        echo
         RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "$DB_CHARACTERS")
         if [ "$RESULT" == "$DB_CHARACTERS" ]; then
           printf '%b' "[${G1:?}OK${N0:?}] 'Characters' database installed!\n"
@@ -3335,7 +3324,7 @@ Please install mysql or mariadb database/client"
 
         # delete and start over done
 
-        # InstallFullDB ?
+        # InstallFullDB?
 
         read -r -p "[YN] InstallFullDB? y/n " -n 1 -r
         echo
@@ -3723,7 +3712,7 @@ Check log for which database needs 'applying updates'"
       cat "${FOLDER_CORE:?}"/sql/updates/mangos/*.sql >"$FOLDER_WOW"/.all_mangos.sql
       cat "${FOLDER_CORE:?}"/sql/updates/realmd/*.sql >"$FOLDER_WOW"/.all_realmd.sql
 
-      # apply all updates [A] to [B] characters ?
+      # apply all updates [A] to [B] characters?
       echo
       read -r -p "[YN] Characters? y/n " -n 1 -r
       echo
@@ -3762,7 +3751,7 @@ Check log for which database needs 'applying updates'"
         printf '%b' "[${G1:?}OK${N0:?}]"
         echo
       fi
-      # apply all updates [A] to [B] mangos ?
+      # apply all updates [A] to [B] mangos?
       read -r -p "[YN] Mangos? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -3800,7 +3789,7 @@ Check log for which database needs 'applying updates'"
         printf '%b' "[${G1:?}OK${N0:?}]"
         echo
       fi
-      # apply all updates [A] to [B] realmd ?
+      # apply all updates [A] to [B] realmd?
       read -r -p "[YN] Realmd? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -3840,42 +3829,46 @@ Check log for which database needs 'applying updates'"
       fi
       # remove old 'combined updates' sql files
       rm "$FOLDER_WOW"/.*.sql 2>/dev/null
-      # InstallFullDB ?
+      # InstallFullDB?
       echo
       printf '%b' "${G0:?}Recommended if you applied anything${N0:?}"
       echo
       read -r -p "[YN] InstallFullDB? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
-        printf '%b' "[${G1:?}OK${N0:?}] Loading..\n"
-        sleep 1
-        # realmd service
-        case "$(echo "$PIDOF_REALMD")" in
-        0) ;;
-        *)
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
-          sudo service realmd stop
-          ;;
-        esac
-        # mangosd service
-        case "$(echo "$PIDOFMANGOSD")" in
-        0) ;;
-        *)
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
-          sudo service mangosd stop
-          ;;
-        esac
-        printf '%b' "[${G1:?}OK${N0:?}]"
-        echo
-        sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
-        cd "$FOLDER_DB" || exit
-        ./InstallFullDB.sh
-        sudo service mariadb stop &>/dev/null
-        sudo service mysql stop &>/dev/null
-        sleep 1
-        sudo service mariadb restart &>/dev/null
-        sudo service mysql restart &>/dev/null
-        printf '%b' "[${G1:?}OK${N0:?}] "
+        if [[ -z "$FOLDER_DB" ]]; then
+          printf '%b' "[${G1:?}OK${N0:?}] Loading..\n"
+          sleep 1
+          # realmd service
+          case "$(echo "$PIDOF_REALMD")" in
+          0) ;;
+          *)
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
+            sudo service realmd stop
+            ;;
+          esac
+          # mangosd service
+          case "$(echo "$PIDOFMANGOSD")" in
+          0) ;;
+          *)
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
+            sudo service mangosd stop
+            ;;
+          esac
+          printf '%b' "[${G1:?}OK${N0:?}]"
+          echo
+          sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
+          cd "$FOLDER_DB" || exit
+          ./InstallFullDB.sh
+          sudo service mariadb stop &>/dev/null
+          sudo service mysql stop &>/dev/null
+          sleep 1
+          sudo service mariadb restart &>/dev/null
+          sudo service mysql restart &>/dev/null
+          printf '%b' "[${G1:?}OK${N0:?}] "
+        else
+          printf '%b' "[!!] ${GR:?}$FOLDER_DB${N0:?} Not Found!\n"
+        fi
       fi
       read -r -p "Press Enter to continue" </dev/tty
       echo
@@ -3992,7 +3985,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
     # guilds done
 
-    # shutdown server ? >> (ﾉ °益°)ﾉ 彡 ┻━┻ holy *@?!1kek .. need muh grindz x()<zz ! OO
+    # shutdown server? >> (ﾉ °益°)ﾉ 彡 ┻━┻ holy *@?!1kek .. need muh grindz x()<zz ! OO
 
   "s")
 
@@ -5275,7 +5268,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
     # online check done
 
-    # edit/copy config files ?
+    # edit/copy config files?
 
   "e")
 
