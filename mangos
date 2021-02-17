@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211702
-# 5.3.4.2
+# 5.3.3.3
 
 while :; do
 
@@ -3307,7 +3307,7 @@ Please install mysql or mariadb database/client"
         if [ "$RESULT" == "$DB_CHARACTERS" ]; then
           printf '%b' "[${G1:?}OK${N0:?}] 'Characters' database installed!\n"
         else
-          printf '%b' "[${GR:?}ok${N0:?}] 'Characters' Importing!\n"
+          printf '%b' "[${Y1:?}ok${N0:?}] 'Characters' Importing!\n"
           mysql --defaults-extra-file="$SQL_MYCNF" -e "CREATE DATABASE $DB_CHARACTERS CHARACTER SET utf8 COLLATE utf8_general_ci"
           mysql --defaults-extra-file="$SQL_MYCNF" --database="$DB_CHARACTERS" <"${FOLDER_SQL:?}"/base/characters.sql
         fi
@@ -3316,7 +3316,7 @@ Please install mysql or mariadb database/client"
         if [ "$RESULT" == "$DB_MANGOS" ]; then
           printf '%b' "[${G1:?}OK${N0:?}] 'Mangos' database installed!\n"
         else
-          printf '%b' "[${GR:?}ok${N0:?}] 'Mangos' Importing!\n"
+          printf '%b' "[${Y1:?}ok${N0:?}] 'Mangos' Importing!\n"
           mysql --defaults-extra-file="$SQL_MYCNF" -e "CREATE DATABASE $DB_MANGOS CHARACTER SET utf8 COLLATE utf8_general_ci"
           mysql --defaults-extra-file="$SQL_MYCNF" --database="$DB_MANGOS" <"$FOLDER_SQL"/base/mangos.sql
         fi
@@ -3325,7 +3325,7 @@ Please install mysql or mariadb database/client"
         if [ "$RESULT" == "$DB_REALMD" ]; then
           printf '%b' "[${G1:?}OK${N0:?}] 'Realmd' database installed!\n"
         else
-          printf '%b' "[${GR:?}ok${N0:?}] 'Realmd' Importing!\n"
+          printf '%b' "[${Y1:?}ok${N0:?}] 'Realmd' Importing!\n"
           mysql --defaults-extra-file="$SQL_MYCNF" -e "CREATE DATABASE $DB_REALMD CHARACTER SET utf8 COLLATE utf8_general_ci"
           mysql --defaults-extra-file="$SQL_MYCNF" --database="$DB_REALMD" <"$FOLDER_SQL"/base/realmd.sql
         fi
@@ -3345,40 +3345,31 @@ Please install mysql or mariadb database/client"
             ./InstallFullDB.sh
           else
             printf '%b' "[!!] ${GR:?}$FOLDER_DB${N0:?} Not Found!\n"
-            echo
-            read -r -p "Press Enter to continue" </dev/tty
-            echo
           fi
         fi
 
         # InstallFullDB done
 
-        # import backup ?
-
-        echo
-        ls -lQS "$FOLDER_WOW"/backup
-        echo
-        read -r -p "[YN] Import latest backup? y/n " -n 1 -r
+        # list backup?
+        read -r -p "[YN] List backup? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
+          echo "[!!] Backup files ($FOLDER_WOW/backup)"
+          ls -lQS "$FOLDER_WOW"/backup
+          # import backup?
+          read -r -p "[YN] Import latest backup? y/n " -n 1 -r
+          echo
+        fi
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
           sleep 1
-          echo -ne '(0%)\r'
+          echo -ne '[00] Importing characters backup!\r'
           mysql --defaults-extra-file="$SQL_MYCNF" "$DB_CHARACTERS" <"$FOLDER_WOW"/backup/"$DB_CHARACTERS"-"$NOW".sql
           sleep 1
-          echo -ne '(25%)\r'
+          echo -ne '[50] Importing realmd backup!    \r'
           mysql --defaults-extra-file="$SQL_MYCNF" "$DB_REALMD" <"$FOLDER_WOW"/backup/"$DB_REALMD"-"$NOW".sql
           sleep 1
-          echo -ne '(50%)\r'
-          sudo service mariadb stop &>/dev/null
-          sudo service mysql stop &>/dev/null
-          echo -ne '(75%)\r'
-          sleep 1
-          echo -ne '(90%)\r'
-          sudo service mariadb restart &>/dev/null
-          sudo service mysql restart &>/dev/null
-          echo -ne '(100%)\r'
+          echo -ne '[OK] Done!                       \r'
         fi
-        echo
         printf '%b' "[${G1:?}OK${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
