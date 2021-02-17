@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211702
-# 5.3.2.7
+# 5.3.4.9
 
 while :; do
 
@@ -109,6 +109,14 @@ while :; do
     MENU_GU_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM ${DB_CHARACTERS:?}.guild;" 2>/dev/null)
   else
     MENU_GU_COUNT=$(printf '%b' "${R0:?}0${N0:?}")
+  fi
+
+  # non responsive
+  if [[ "$MENU_GU_COUNT" -eq "NULL" ]]; then
+    MENU_GU_COUNT="0"
+  fi
+  if [[ "$MENU_ON_COUNT" -eq "NULL" ]]; then
+    MENU_ON_COUNT="0"
   fi
 
   # get date, month, day, year
@@ -516,7 +524,7 @@ ${PASS_NC:?}
       }
       # todo: Change implementation when field can be 2 words with a space in between
       space_number() {
-        printf "%-9.9s" "$1" | colorstring "${GREEN}"
+        printf "%-7.7s" "$1" | colorstring "${GREEN}"
       }
       # todo: add logic when only 4 parameters are given
       printline() {
@@ -618,7 +626,7 @@ ${PASS_NC:?}
           sed 's/^ *//' 2>/dev/null)
       # if nothing, print "Restart server please.."
       else
-        EVENTAI="${GR:?}ACID 0.00.x (Classic) for CMaNGOS-CLASSIC (0.00.X Client)${N0:?}"
+        EVENTAI="${GR:?}ACID 0.00.x (Expansion) for CMaNGOS-Expansion (0.01.X Client)${N0:?}"
       fi
       # World DB
       if grep -q -o -a "\s1.11\s*.*" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
@@ -627,7 +635,7 @@ ${PASS_NC:?}
           sed 's/^ *//' 2>/dev/null)
       # if nothing, print "Restart server please.."
       else
-        WORLD_DB="${GR:?}0.00 'Into the Abyss of nothing.' For Classic core z0000.${N0:?}"
+        WORLD_DB="${GR:?}Expansion DB version 0.01 'Into the Abyss of nothing.' For Expansion core z0000.${N0:?}"
       fi
       # cpu temp
       if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
@@ -1353,7 +1361,7 @@ EOF
         DIVE_LOG_NONE=$(printf '%b' "\e[2mempty..${N0:?}")
         DIVE_LOG_ZERO=$(printf '%b' "0")
 
-        printf '%b' "   Server            Server.old        Realmd"
+        printf '%b' "   Server          Server.old      Realmd"
         echo
         printline "$DIVE_LOG_EMPTY" "$DIVE_SERVER_EMPTY" "$DIVE_LOG_EMPTY" "$DIVE_SERVER_OLD_EMPTY" "$DIVE_LOG_EMPTY" "$DIVE_REALMD_EMPTY"
         printline "$DIVE_LOG_ERROR" "$DIVE_SERVER_ERROR" "$DIVE_LOG_ERROR" "$DIVE_SERVER_OLD_ERROR" "$DIVE_LOG_ERROR" "$DIVE_REALMD_ERROR"
@@ -1361,7 +1369,7 @@ EOF
         printline "$DIVE_LOG_POLYR" "$DIVE_SERVER_POLYR" "$DIVE_LOG_POLYR" "$DIVE_SERVER_OLD_POLYR" "$DIVE_LOG_NONE" "$DIVE_LOG_ZERO"
         printline "$DIVE_LOG_SERIO" "$DIVE_SERVER_SERIO" "$DIVE_LOG_SERIO" "$DIVE_SERVER_OLD_SERIO" "$DIVE_LOG_SERIO" "$DIVE_LOG_ZERO"
         echo
-        printf '%b' "   DBErrors          Char              EventAIErrors"
+        printf '%b' "   DBErrors        Char            EventAIErrors"
         echo
         printline "$DIVE_LOG_CORRE" "$DIVE_DBERROR_CORR" "$DIVE_LOG_CREAT" "$DIVE_CHAR_CREATED" "$DIVE_LOG_SKIPP" "$DIVE_EVENTAIERROR"
         printline "$DIVE_LOG_EXIST" "$DIVE_DBERROR_EXIS" "$DIVE_LOG_LOGIN" "$DIVE_CHAR_LOGIN_C" "$DIVE_LOG_NOEFF" "$DIVE_EVENTAINOEFF"
@@ -1378,24 +1386,35 @@ EOF
 
         "1")
 
-          # get raw error from logs
-          ERROR_ERROR=$(grep --no-filename -Eo "ERROR:.*" "$FOLDER_CORE"/run/logs/*.log 2>/dev/null |
-            grep -E -v ".*is empty*." 2>/dev/null)
-          # get raw empty from logs
-          EMPTY_ERROR=$(grep --no-filename -Eo ".*empty*." "$FOLDER_CORE"/run/logs/*.log 2>/dev/null |
-            grep -E -v "ERROR:.*|Only expired mails*" 2>/dev/null)
-          printf '%b' "${Y1:?}$EMPTY_ERROR${N0:?}\n"
-          printf '%b' "${R0:?}$ERROR_ERROR${N0:?}\n"
+          if [[ -f "$FOLDER_CORE/run/logs/*.log" ]]; then
+            # get raw error from logs
+            ERROR_ERROR=$(grep --no-filename -Eo "ERROR:.*" "$FOLDER_CORE"/run/logs/*.log 2>/dev/null |
+              grep -E -v ".*is empty*." 2>/dev/null)
+            # get raw empty from logs
+            EMPTY_ERROR=$(grep --no-filename -Eo ".*empty*." "$FOLDER_CORE"/run/logs/*.log 2>/dev/null |
+              grep -E -v "ERROR:.*|Only expired mails*" 2>/dev/null)
+            printf '%b' "${Y1:?}$EMPTY_ERROR${N0:?}\n"
+            printf '%b' "${R0:?}$ERROR_ERROR${N0:?}\n"
+          else
+            # no files, nothing to grep
+            printf '%b' "${GR:?}No logs found!${N0:?}\n"
+          fi
 
           ;;
 
         "2")
 
-          # tail logs for error
-          echo "Tail logs.."
-          printf '%b' "${GR:?}CTRL+C to exit${N0:?}\n"
-          tail -f "$FOLDER_CORE"/run/logs/*.log 2>/dev/null |
-            grep -Eo "ERROR:.*|.*empty*." 2>/dev/null
+          if [[ -f "$FOLDER_CORE/run/logs/*.log" ]]; then
+            # tail logs for error
+            echo "Tailing logs!"
+            printf '%b' "${GR:?}CTRL+C to exit${N0:?}\n"
+            tail -f "$FOLDER_CORE"/run/logs/*.log 2>/dev/null |
+              grep -Eo "ERROR:.*|.*empty*." 2>/dev/null
+            echo
+          else
+            # no files, nothing to grep
+            printf '%b' "${GR:?}No logs found!${N0:?}\n"
+          fi
 
           ;;
 
@@ -1403,8 +1422,6 @@ EOF
         "Q") ;;
         *) ;;
         esac
-
-        echo
         read -r -p "Press Enter to continue" </dev/tty
         echo
 
@@ -1432,6 +1449,11 @@ EOF
         CO_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.corpse;" 2>/dev/null)
         PV_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.pvpstats_players;" 2>/dev/null)
         GI_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.character_gifts;" 2>/dev/null)
+
+        # non responsive
+        if [[ "$ON_COUNT" -eq "NULL" ]]; then
+          ON_COUNT="0"
+        fi
 
         printline "Accounts" "$AC_COUNT" "Guilds" "$GU_COUNT" "Tickets" "$TI_COUNT"
         printline "Banned" "$BN_COUNT" "Members" "$ME_COUNT" "Corpses" "$CO_COUNT"
