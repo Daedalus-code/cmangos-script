@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20211502
-# 5.3.4.3
+# V20211702
+# 5.3.5.3
 
 while :; do
 
@@ -1947,7 +1947,16 @@ ${GR:?}$CPU_MODEL${N0:?}")
           SYS_CPU128=""
         fi
 
-        printf '%b' "
+        # auto build, ruled by configuration
+        if [[ "$AUTO_BUILD" -eq "1" ]]; then
+          CPU_TCSC=$(lscpu 2>/dev/null | grep -E '^Thread|^Core|^Socket|^CPU\(' 2>/dev/null)
+          printf '%b' "[  0%]${Y1:?} Auto detecting Core(s)${N0:?}\n"
+          echo "$CPU_TCSC"
+          printf '%b' "[  0%]${G0:?} Building with ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
+          make -j"$SYS_CORES" # max system cores
+        else
+
+          printf '%b' "
 $CORES_COUNT $CMAKE_TEMP
 
 Compiling using multiple cores:
@@ -1966,292 +1975,293 @@ Compiling using multiple cores:
  q ${GR:?}:${N0:?} Quit
 \n"
 
-        read -r -n1 -s
-        case "$REPLY" in
+          read -r -n1 -s
+          case "$REPLY" in
 
-        "c")
+          "c")
 
-          printf '%b' "${GR:?}[  0%] Enter amount of Core(s): ${N0:?}"
-          read -r CUSTOM
-          if [[ ! "${CUSTOM:?}" -gt "$SYS_CORES" ]]; then
-            CORES=("$CUSTOM")
-            printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
-            CORES_BUILD=$(echo "$CUSTOM")
+            printf '%b' "${GR:?}[  0%] Enter amount of Core(s): ${N0:?}"
+            read -r CUSTOM
+            if [[ ! "${CUSTOM:?}" -gt "$SYS_CORES" ]]; then
+              CORES=("$CUSTOM")
+              printf '%b' "[  0%]${G0:?} Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
+              CORES_BUILD=$(echo "$CUSTOM")
+              # start counting (seconds)
+              START="$SECONDS"
+              make -j"$CUSTOM" # custom n cores
+            else
+              # exceeding cores! using max amount of cores found instead
+              printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CUSTOM:?}${Y1:?} Cores on this system!${N0:?}\n"
+              sleep 1
+              printf '%b' "[  0%]${G0:?} Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
+              CORES_BUILD=$(echo "$SYS_CORES")
+              # start counting (seconds)
+              START="$SECONDS"
+              make -j"$SYS_CORES" # max system cores
+            fi
+
+            ;;
+
+          "1")
+
+            CORES=("1")
+            printf '%b' "[  0%]${G0:?} Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
             # start counting (seconds)
             START="$SECONDS"
-            make -j"$CUSTOM" # custom n cores
+            make # 1 core
+
+            ;;
+
+          "2")
+
+            CORES=("2")
+            if [[ ! "${CORES:?}" -gt "$SYS_CORES" ]]; then
+              printf '%b' "[  0%]${G0:?} Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
+              CORES_BUILD=$(echo "${CORES:?}")
+              # start counting (seconds)
+              START="$SECONDS"
+              make -j2 # 2 cores
+            else
+              # exceeding cores! using max amount of cores found instead
+              printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CORES:?}${Y1:?} Cores on this system!${N0:?}\n"
+              sleep 1
+              printf '%b' "[  0%]${G0:?} Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
+              CORES_BUILD=$(echo "$SYS_CORES")
+              # start counting (seconds)
+              START="$SECONDS"
+              make -j"$SYS_CORES" # max system cores
+            fi
+
+            ;;
+
+          "3")
+
+            CORES=("3")
+            if [[ ! "${CORES:?}" -gt "$SYS_CORES" ]]; then
+              printf '%b' "[  0%]${G0:?} Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
+              CORES_BUILD=$(echo "${CORES:?}")
+              # start counting (seconds)
+              START="$SECONDS"
+              make -j3 # 3 cores
+            else
+              # exceeding cores! using max amount of cores found instead
+              printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CORES:?}${Y1:?} Cores on this system!${N0:?}\n"
+              sleep 1
+              printf '%b' "[  0%]${G0:?} Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
+              CORES_BUILD=$(echo "$SYS_CORES")
+              # start counting (seconds)
+              START="$SECONDS"
+              make -j"$SYS_CORES" # max system cores
+            fi
+
+            ;;
+
+          "4")
+
+            CORES=("4")
+            if [[ ! "${CORES:?}" -gt "$SYS_CORES" ]]; then
+              printf '%b' "[  0%]${G0:?} Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
+              CORES_BUILD=$(echo "${CORES:?}")
+              # start counting (seconds)
+              START="$SECONDS"
+              make -j4 # 4 cores
+            else
+              # exceeding cores! using max amount of cores found instead
+              printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CORES:?}${Y1:?} Cores on this system!${N0:?}\n"
+              sleep 1
+              printf '%b' "[  0%]${G0:?} Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
+              CORES_BUILD=$(echo "$SYS_CORES")
+              # start counting (seconds)
+              START="$SECONDS"
+              make -j"$SYS_CORES" # max system cores
+            fi
+
+            ;;
+
+          "8")
+
+            CORES=("8")
+            if [[ ! "${CORES:?}" -gt "$SYS_CORES" ]]; then
+              printf '%b' "[  0%]${G0:?} Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
+              CORES_BUILD=$(echo "${CORES:?}")
+              # start counting (seconds)
+              START="$SECONDS"
+              make -j8 # 8 cores
+            else
+              # exceeding cores! using max amount of cores found instead
+              printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CORES:?}${Y1:?} Cores on this system!${N0:?}\n"
+              sleep 1
+              printf '%b' "[  0%]${G0:?} Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
+              CORES_BUILD=$(echo "$SYS_CORES")
+              # start counting (seconds)
+              START="$SECONDS"
+              make -j"$SYS_CORES" # max system cores
+            fi
+
+            ;;
+
+          "h")
+
+            CORES=("16")
+            if [[ ! "${CORES:?}" -gt "$SYS_CORES" ]]; then
+              printf '%b' "[  0%]${G0:?} Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
+              CORES_BUILD=$(echo "${CORES:?}")
+              # start counting (seconds)
+              START="$SECONDS"
+              make -j16 # 16 cores, h1gh-
+            else
+              # exceeding cores! using max amount of cores found instead
+              printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CORES:?}${Y1:?} Cores on this system!${N0:?}\n"
+              sleep 1
+              printf '%b' "[  0%]${G0:?} Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
+              CORES_BUILD=$(echo "$SYS_CORES")
+              # start counting (seconds)
+              START="$SECONDS"
+              make -j"$SYS_CORES" # max system cores
+            fi
+
+            ;;
+
+          "w")
+
+            CORES=("32")
+            if [[ ! "${CORES:?}" -gt "$SYS_CORES" ]]; then
+              printf '%b' "[  0%]${G0:?} Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
+              CORES_BUILD=$(echo "${CORES:?}")
+              # start counting (seconds)
+              START="$SECONDS"
+              make -j32 # 32 cores, -w@y
+            else
+              # exceeding cores! using max amount of cores found instead
+              printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CORES:?}${Y1:?} Cores on this system!${N0:?}\n"
+              sleep 1
+              printf '%b' "[  0%]${G0:?} Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
+              CORES_BUILD=$(echo "$SYS_CORES")
+              # start counting (seconds)
+              START="$SECONDS"
+              make -j"$SYS_CORES" # max system cores
+            fi
+
+            ;;
+
+          "t")
+
+            CORES=("64")
+            if [[ ! "${CORES:?}" -gt "$SYS_CORES" ]]; then
+              printf '%b' "[  0%]${G0:?} Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
+              CORES_BUILD=$(echo "${CORES:?}")
+              # start counting (seconds)
+              START="$SECONDS"
+              make -j64 # 64 cores, t0
+            else
+              # exceeding cores! using max amount of cores found instead
+              printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CORES:?}${Y1:?} Cores on this system!${N0:?}\n"
+              sleep 1
+              printf '%b' "[  0%]${G0:?} Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
+              CORES_BUILD=$(echo "$SYS_CORES")
+              # start counting (seconds)
+              START="$SECONDS"
+              make -j"$SYS_CORES" # max system cores
+            fi
+
+            ;;
+
+          "H")
+
+            CORES=("128")
+            if [[ ! "${CORES:?}" -gt "$SYS_CORES" ]]; then
+              printf '%b' "[  0%]${G0:?} Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
+              CORES_BUILD=$(echo "${CORES:?}")
+              # start counting (seconds)
+              START="$SECONDS"
+              make -j128 # 128 cores, h3ll
+            else
+              # exceeding cores! using max amount of cores found instead
+              printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CORES:?}${Y1:?} Cores on this system!${N0:?}\n"
+              sleep 1
+              printf '%b' "[  0%]${G0:?} Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
+              CORES_BUILD=$(echo "$SYS_CORES")
+              # start counting (seconds)
+              START="$SECONDS"
+              make -j"$SYS_CORES" # max system cores
+            fi
+
+            ;;
+
+          "q") exit ;;
+          "Q") echo "case sensitive!!" ;;
+          *)
+            echo "Invalid option. Restart please.."
+            exit
+            ;;
+
+          esac
+
+          # compiling using multiple cores done
+
+          # cpu temp
+          if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
+            CPU_TEMP=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
+              cut -c -4 2>/dev/null)
+            CMAKE_TEMP=$(printf '%b' "CPU: ${G1:?}$CPU_TEMP${N0:?}°")
           else
-            # exceeding cores! using max amount of cores found instead
-            printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CUSTOM:?}${Y1:?} Cores on this system!${N0:?}\n"
-            sleep 1
-            printf '%b' "${G0:?}[  0%] Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
-            CORES_BUILD=$(echo "$SYS_CORES")
-            # start counting (seconds)
-            START="$SECONDS"
-            make -j"$SYS_CORES" # max system cores
+            CMAKE_TEMP=""
           fi
-
-          ;;
-
-        "1")
-
-          CORES=("1")
-          printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
-          # start counting (seconds)
-          START="$SECONDS"
-          make # 1 core
-
-          ;;
-
-        "2")
-
-          CORES=("2")
-          if [[ ! "${CORES:?}" -gt "$SYS_CORES" ]]; then
-            printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
-            CORES_BUILD=$(echo "${CORES:?}")
-            # start counting (seconds)
-            START="$SECONDS"
-            make -j2 # 2 cores
-          else
-            # exceeding cores! using max amount of cores found instead
-            printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CORES:?}${Y1:?} Cores on this system!${N0:?}\n"
-            sleep 1
-            printf '%b' "${G0:?}[  0%] Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
-            CORES_BUILD=$(echo "$SYS_CORES")
-            # start counting (seconds)
-            START="$SECONDS"
-            make -j"$SYS_CORES" # max system cores
-          fi
-
-          ;;
-
-        "3")
-
-          CORES=("3")
-          if [[ ! "${CORES:?}" -gt "$SYS_CORES" ]]; then
-            printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
-            CORES_BUILD=$(echo "${CORES:?}")
-            # start counting (seconds)
-            START="$SECONDS"
-            make -j3 # 3 cores
-          else
-            # exceeding cores! using max amount of cores found instead
-            printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CORES:?}${Y1:?} Cores on this system!${N0:?}\n"
-            sleep 1
-            printf '%b' "${G0:?}[  0%] Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
-            CORES_BUILD=$(echo "$SYS_CORES")
-            # start counting (seconds)
-            START="$SECONDS"
-            make -j"$SYS_CORES" # max system cores
-          fi
-
-          ;;
-
-        "4")
-
-          CORES=("4")
-          if [[ ! "${CORES:?}" -gt "$SYS_CORES" ]]; then
-            printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
-            CORES_BUILD=$(echo "${CORES:?}")
-            # start counting (seconds)
-            START="$SECONDS"
-            make -j4 # 4 cores
-          else
-            # exceeding cores! using max amount of cores found instead
-            printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CORES:?}${Y1:?} Cores on this system!${N0:?}\n"
-            sleep 1
-            printf '%b' "${G0:?}[  0%] Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
-            CORES_BUILD=$(echo "$SYS_CORES")
-            # start counting (seconds)
-            START="$SECONDS"
-            make -j"$SYS_CORES" # max system cores
-          fi
-
-          ;;
-
-        "8")
-
-          CORES=("8")
-          if [[ ! "${CORES:?}" -gt "$SYS_CORES" ]]; then
-            printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
-            CORES_BUILD=$(echo "${CORES:?}")
-            # start counting (seconds)
-            START="$SECONDS"
-            make -j8 # 8 cores
-          else
-            # exceeding cores! using max amount of cores found instead
-            printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CORES:?}${Y1:?} Cores on this system!${N0:?}\n"
-            sleep 1
-            printf '%b' "${G0:?}[  0%] Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
-            CORES_BUILD=$(echo "$SYS_CORES")
-            # start counting (seconds)
-            START="$SECONDS"
-            make -j"$SYS_CORES" # max system cores
-          fi
-
-          ;;
-
-        "h")
-
-          CORES=("16")
-          if [[ ! "${CORES:?}" -gt "$SYS_CORES" ]]; then
-            printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
-            CORES_BUILD=$(echo "${CORES:?}")
-            # start counting (seconds)
-            START="$SECONDS"
-            make -j16 # 16 cores, h1gh-
-          else
-            # exceeding cores! using max amount of cores found instead
-            printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CORES:?}${Y1:?} Cores on this system!${N0:?}\n"
-            sleep 1
-            printf '%b' "${G0:?}[  0%] Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
-            CORES_BUILD=$(echo "$SYS_CORES")
-            # start counting (seconds)
-            START="$SECONDS"
-            make -j"$SYS_CORES" # max system cores
-          fi
-
-          ;;
-
-        "w")
-
-          CORES=("32")
-          if [[ ! "${CORES:?}" -gt "$SYS_CORES" ]]; then
-            printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
-            CORES_BUILD=$(echo "${CORES:?}")
-            # start counting (seconds)
-            START="$SECONDS"
-            make -j32 # 32 cores, -w@y
-          else
-            # exceeding cores! using max amount of cores found instead
-            printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CORES:?}${Y1:?} Cores on this system!${N0:?}\n"
-            sleep 1
-            printf '%b' "${G0:?}[  0%] Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
-            CORES_BUILD=$(echo "$SYS_CORES")
-            # start counting (seconds)
-            START="$SECONDS"
-            make -j"$SYS_CORES" # max system cores
-          fi
-
-          ;;
-
-        "t")
-
-          CORES=("64")
-          if [[ ! "${CORES:?}" -gt "$SYS_CORES" ]]; then
-            printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
-            CORES_BUILD=$(echo "${CORES:?}")
-            # start counting (seconds)
-            START="$SECONDS"
-            make -j64 # 64 cores, t0
-          else
-            # exceeding cores! using max amount of cores found instead
-            printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CORES:?}${Y1:?} Cores on this system!${N0:?}\n"
-            sleep 1
-            printf '%b' "${G0:?}[  0%] Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
-            CORES_BUILD=$(echo "$SYS_CORES")
-            # start counting (seconds)
-            START="$SECONDS"
-            make -j"$SYS_CORES" # max system cores
-          fi
-
-          ;;
-
-        "H")
-
-          CORES=("128")
-          if [[ ! "${CORES:?}" -gt "$SYS_CORES" ]]; then
-            printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
-            CORES_BUILD=$(echo "${CORES:?}")
-            # start counting (seconds)
-            START="$SECONDS"
-            make -j128 # 128 cores, h3ll
-          else
-            # exceeding cores! using max amount of cores found instead
-            printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CORES:?}${Y1:?} Cores on this system!${N0:?}\n"
-            sleep 1
-            printf '%b' "${G0:?}[  0%] Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
-            CORES_BUILD=$(echo "$SYS_CORES")
-            # start counting (seconds)
-            START="$SECONDS"
-            make -j"$SYS_CORES" # max system cores
-          fi
-
-          ;;
-
-        "q") exit ;;
-        "Q") echo "case sensitive!!" ;;
-        *)
-          echo "Invalid option. Restart please.."
-          exit
-          ;;
-
-        esac
-
-        # compiling using multiple cores done
-
-        # cpu temp
-        if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
-          CPU_TEMP=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
-            cut -c -4 2>/dev/null)
-          CMAKE_TEMP=$(printf '%b' "CPU: ${G1:?}$CPU_TEMP${N0:?}°")
-        else
-          CMAKE_TEMP=""
-        fi
-        # get seconds since start
-        DURATION=$(echo "$SECONDS-$START" 2>/dev/null | bc 2>/dev/null)
-        # convert seconds
-        TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
-        echo
-        printf '%b' "$CMAKE_TEMP
+          # get seconds since start
+          DURATION=$(echo "$SECONDS-$START" 2>/dev/null | bc 2>/dev/null)
+          # convert seconds
+          TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
+          echo
+          printf '%b' "$CMAKE_TEMP
 Build time: ${G1:?}$TIMER${N0:?} with ${G1:?}${CORES_BUILD[0]}${N0:?} Core(s)${N0:?}
 
 Select install operation"
-        echo
-        echo " 1) make install"
-        echo " 2) checkinstall with backup"
-        echo
-        read -r n
-        case $n in
+          echo
+          echo " 1) make install"
+          echo " 2) checkinstall with backup"
+          echo
+          read -r n
+          case $n in
 
-        "1")
+          "1")
 
-          # create ms folder
-          sudo mkdir /var/log/ms/ 2>/dev/null
-          # fix ownership
-          sudo chown -R "${USER:?}":"${GROUP:?}" /var/log/ms
-          # create installed mark
-          echo "Core was installed at ${NOW:?}" >/var/log/ms/installed_core
+            # create ms folder
+            sudo mkdir /var/log/ms/ 2>/dev/null
+            # fix ownership
+            sudo chown -R "${USER:?}":"${GROUP:?}" /var/log/ms
+            # create installed mark
+            echo "Core was installed at ${NOW:?}" >/var/log/ms/installed_core
 
-          echo "make install"
+            echo "make install"
 
-          cd "$FOLDER_BUILD" || exit
-          sudo make install
+            cd "$FOLDER_BUILD" || exit
+            sudo make install
 
-          ;;
+            ;;
 
-        "2")
+          "2")
 
-          # create ms folder
-          sudo mkdir /var/log/ms/ 2>/dev/null
-          # fix ownership
-          sudo chown -R "${USER:?}":"${GROUP:?}" /var/log/ms
-          # create installed mark
-          echo "Core was installed at ${NOW:?} with backup" >/var/log/ms/installed_core
+            # create ms folder
+            sudo mkdir /var/log/ms/ 2>/dev/null
+            # fix ownership
+            sudo chown -R "${USER:?}":"${GROUP:?}" /var/log/ms
+            # create installed mark
+            echo "Core was installed at ${NOW:?} with backup" >/var/log/ms/installed_core
 
-          echo "checkinstall"
+            echo "checkinstall"
 
-          cd "$FOLDER_BUILD" || exit
-          sudo checkinstall
+            cd "$FOLDER_BUILD" || exit
+            sudo checkinstall
 
-          ;;
+            ;;
 
-        *)
-          echo "invalid option"
+          *)
+            echo "invalid option"
 
-          ;;
+            ;;
 
-        esac
+          esac
+        fi
 
         sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
         echo
@@ -2507,7 +2517,7 @@ Compiling using multiple cores:
           read -r CUSTOM
           if [[ ! "${CUSTOM:?}" -gt "$SYS_CORES" ]]; then
             CORES=("$CUSTOM")
-            printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
+            printf '%b' "[  0%]${G0:?} Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
             CORES_BUILD=$(echo "$CUSTOM")
             # start counting (seconds)
             START="$SECONDS"
@@ -2516,7 +2526,7 @@ Compiling using multiple cores:
             # exceeding cores! using max amount of cores found instead
             printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CUSTOM:?}${Y1:?} Cores on this system!${N0:?}\n"
             sleep 1
-            printf '%b' "${G0:?}[  0%] Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
+            printf '%b' "[  0%]${G0:?} Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
             CORES_BUILD=$(echo "$SYS_CORES")
             # start counting (seconds)
             START="$SECONDS"
@@ -2528,7 +2538,7 @@ Compiling using multiple cores:
         "1")
 
           CORES=("1")
-          printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
+          printf '%b' "[  0%]${G0:?} Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
           # start counting (seconds)
           START="$SECONDS"
           make # 1 core
@@ -2539,7 +2549,7 @@ Compiling using multiple cores:
 
           CORES=("2")
           if [[ ! "${CORES:?}" -gt "$SYS_CORES" ]]; then
-            printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
+            printf '%b' "[  0%]${G0:?} Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
             CORES_BUILD=$(echo "${CORES:?}")
             # start counting (seconds)
             START="$SECONDS"
@@ -2548,7 +2558,7 @@ Compiling using multiple cores:
             # exceeding cores! using max amount of cores found instead
             printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CORES:?}${Y1:?} Cores on this system!${N0:?}\n"
             sleep 1
-            printf '%b' "${G0:?}[  0%] Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
+            printf '%b' "[  0%]${G0:?} Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
             CORES_BUILD=$(echo "$SYS_CORES")
             # start counting (seconds)
             START="$SECONDS"
@@ -2561,7 +2571,7 @@ Compiling using multiple cores:
 
           CORES=("3")
           if [[ ! "${CORES:?}" -gt "$SYS_CORES" ]]; then
-            printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
+            printf '%b' "[  0%]${G0:?} Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
             CORES_BUILD=$(echo "${CORES:?}")
             # start counting (seconds)
             START="$SECONDS"
@@ -2570,7 +2580,7 @@ Compiling using multiple cores:
             # exceeding cores! using max amount of cores found instead
             printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CORES:?}${Y1:?} Cores on this system!${N0:?}\n"
             sleep 1
-            printf '%b' "${G0:?}[  0%] Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
+            printf '%b' "[  0%]${G0:?} Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
             CORES_BUILD=$(echo "$SYS_CORES")
             # start counting (seconds)
             START="$SECONDS"
@@ -2583,7 +2593,7 @@ Compiling using multiple cores:
 
           CORES=("4")
           if [[ ! "${CORES:?}" -gt "$SYS_CORES" ]]; then
-            printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
+            printf '%b' "[  0%]${G0:?} Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
             CORES_BUILD=$(echo "${CORES:?}")
             # start counting (seconds)
             START="$SECONDS"
@@ -2592,7 +2602,7 @@ Compiling using multiple cores:
             # exceeding cores! using max amount of cores found instead
             printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CORES:?}${Y1:?} Cores on this system!${N0:?}\n"
             sleep 1
-            printf '%b' "${G0:?}[  0%] Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
+            printf '%b' "[  0%]${G0:?} Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
             CORES_BUILD=$(echo "$SYS_CORES")
             # start counting (seconds)
             START="$SECONDS"
@@ -2605,7 +2615,7 @@ Compiling using multiple cores:
 
           CORES=("8")
           if [[ ! "${CORES:?}" -gt "$SYS_CORES" ]]; then
-            printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
+            printf '%b' "[  0%]${G0:?} Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
             CORES_BUILD=$(echo "${CORES:?}")
             # start counting (seconds)
             START="$SECONDS"
@@ -2614,7 +2624,7 @@ Compiling using multiple cores:
             # exceeding cores! using max amount of cores found instead
             printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CORES:?}${Y1:?} Cores on this system!${N0:?}\n"
             sleep 1
-            printf '%b' "${G0:?}[  0%] Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
+            printf '%b' "[  0%]${G0:?} Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
             CORES_BUILD=$(echo "$SYS_CORES")
             # start counting (seconds)
             START="$SECONDS"
@@ -2627,7 +2637,7 @@ Compiling using multiple cores:
 
           CORES=("16")
           if [[ ! "${CORES:?}" -gt "$SYS_CORES" ]]; then
-            printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
+            printf '%b' "[  0%]${G0:?} Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
             CORES_BUILD=$(echo "${CORES:?}")
             # start counting (seconds)
             START="$SECONDS"
@@ -2636,7 +2646,7 @@ Compiling using multiple cores:
             # exceeding cores! using max amount of cores found instead
             printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CUSTOM:?}${Y1:?} Cores on this system!${N0:?}\n"
             sleep 1
-            printf '%b' "${G0:?}[  0%] Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
+            printf '%b' "[  0%]${G0:?} Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
             CORES_BUILD=$(echo "$SYS_CORES")
             # start counting (seconds)
             START="$SECONDS"
@@ -2649,7 +2659,7 @@ Compiling using multiple cores:
 
           CORES=("32")
           if [[ ! "${CORES:?}" -gt "$SYS_CORES" ]]; then
-            printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
+            printf '%b' "[  0%]${G0:?} Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
             CORES_BUILD=$(echo "${CORES:?}")
             # start counting (seconds)
             START="$SECONDS"
@@ -2658,7 +2668,7 @@ Compiling using multiple cores:
             # exceeding cores! using max amount of cores found instead
             printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CUSTOM:?}${Y1:?} Cores on this system!${N0:?}\n"
             sleep 1
-            printf '%b' "${G0:?}[  0%] Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
+            printf '%b' "[  0%]${G0:?} Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
             CORES_BUILD=$(echo "$SYS_CORES")
             # start counting (seconds)
             START="$SECONDS"
@@ -2671,7 +2681,7 @@ Compiling using multiple cores:
 
           CORES=("64")
           if [[ ! "${CORES:?}" -gt "$SYS_CORES" ]]; then
-            printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
+            printf '%b' "[  0%]${G0:?} Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
             CORES_BUILD=$(echo "${CORES:?}")
             # start counting (seconds)
             START="$SECONDS"
@@ -2680,7 +2690,7 @@ Compiling using multiple cores:
             # exceeding cores! using max amount of cores found instead
             printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CUSTOM:?}${Y1:?} Cores on this system!${N0:?}\n"
             sleep 1
-            printf '%b' "${G0:?}[  0%] Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
+            printf '%b' "[  0%]${G0:?} Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
             CORES_BUILD=$(echo "$SYS_CORES")
             # start counting (seconds)
             START="$SECONDS"
@@ -2693,7 +2703,7 @@ Compiling using multiple cores:
 
           CORES=("128")
           if [[ ! "${CORES:?}" -gt "$SYS_CORES" ]]; then
-            printf '%b' "${G0:?}[  0%] Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
+            printf '%b' "[  0%]${G0:?} Building with ${N0:?}${CORES[0]}${G0:?} Core(s)${N0:?}\n"
             CORES_BUILD=$(echo "${CORES:?}")
             # start counting (seconds)
             START="$SECONDS"
@@ -2702,7 +2712,7 @@ Compiling using multiple cores:
             # exceeding cores! using max amount of cores found instead
             printf '%b' "${Y1:?}[  0%] Unable to find ${N0:?}${CUSTOM:?}${Y1:?} Cores on this system!${N0:?}\n"
             sleep 1
-            printf '%b' "${G0:?}[  0%] Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
+            printf '%b' "[  0%]${G0:?} Building with max ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
             CORES_BUILD=$(echo "$SYS_CORES")
             # start counting (seconds)
             START="$SECONDS"
@@ -5142,7 +5152,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           patch -p1 <"$NAMED_PATCH"
         fi
       else
-        # named patch ruled by config
+        # named patch ruled by configuration
         patch -p1 <"$PATCH"
       fi
 
