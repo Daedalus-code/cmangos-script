@@ -1524,7 +1524,7 @@ EOF
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           # test RA connection
-          if nc -z -w 1 "$HOST_NC" "$PORT_NC" &>/dev/null; then
+          if nc -zv "$HOST_NC" "$PORT_NC" &>/dev/null; then
             # connected
             RA_SERVER="mangos"
             ENT_MARK=$(echo -e "\e[5m>\033[0m")
@@ -1574,7 +1574,7 @@ ${THEME_ALL_RA:?}      ._________________.
 
   $RA_TIP\n"
           echo
-          if nc -z -w 1 "$HOST_NC" "$PORT_NC" &>/dev/null; then
+          if nc -zv "$HOST_NC" "$PORT_NC" &>/dev/null; then
             # connect with netcat
             nc "$HOST_NC" "$PORT_NC"
           fi
