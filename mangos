@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211802
-# 5.3.7.5
+# 5.3.7.0
 
 while :; do
 
@@ -1532,7 +1532,6 @@ EOF
             RA_MSG="${G0:?}>${N0:?} hit Enter, and then two times to go back."
             RA_DSC0="'commands' will list all of the available commands"
             RA_DSC1="'quit' and then hit Enter two times to exit${N0:?}"
-            THEME_ALL_RA=$(echo "$CY")
             RA_TIP="Tip: Set '${GR:?}Message of the Day${N0:?}' inside mangosd.conf"
             RA_LINE="------------------------------------------------"
           else
@@ -1543,16 +1542,15 @@ EOF
             RA_MSG="${Y1:?}Setup RA inside mangosd.conf!${N0:?}"
             RA_DSC0="CONSOLE, REMOTE ACCESS"
             RA_DSC1="${GR:?}Ra.Enable = 1${N0:?}"
-            THEME_ALL_RA="$GR"
             RA_TIP="Press Enter to go back"
             RA_LINE="-----------------------------"
           fi
 
           clear
           printf '%b' "
-${THEME_ALL_RA:?}      ._________________.
+${THEME_ALL:?}      ._________________.
       |.---------------.|
-      || ${N0:?}$RA_SERVER${N0:?}$ENT_MARK${THEME_ALL_RA:?}       ||
+      || ${N0:?}$RA_SERVER${N0:?}$ENT_MARK${THEME_ALL:?}       ||
       ||               ||
       ||               ||
       ||               ||
@@ -1561,24 +1559,21 @@ ${THEME_ALL_RA:?}      ._________________.
       /.-.-.-.-.-.-.-.-.\\
      /.-.-.-.-.-.-.-.-.-.\\
     /.-.-.-.-.-.-.-.-.-.-.\\
-   /______/__________\___${PWR_BUTTON:?}o${THEME_ALL_RA:?}_\\
+   /______/__________\___${PWR_BUTTON:?}o${THEME_ALL:?}_\\
    \_______________________/${N0:?}"
           echo
           printf '%b' "
      CMaNGOS Command Center
 
   $RA_MSG
-  $RA_LINE$THEME_ALL_RA
+  $RA_LINE
   $RA_DSC0
   $RA_DSC1
 
   $RA_TIP\n"
           echo
-          if nc -zv "$HOST_NC" "$PORT_NC" &>/dev/null; then
-            # connect with netcat
-            nc "$HOST_NC" "$PORT_NC"
-          fi
-          # no connection
+          # connect with netcat
+          nc "$HOST_NC" "$PORT_NC"
           read -r -p "" </dev/tty
         fi
 
