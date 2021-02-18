@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211802
-# 5.3.7.0
+# 5.3.7.6
 
 while :; do
 
@@ -1521,27 +1521,33 @@ EOF
 
         read -r -p "[YN] Want to login? y/n " -n 1 -r
         echo
-        echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           # test RA connection
           if nc -zv "$HOST_NC" "$PORT_NC" &>/dev/null; then
             # connected
-            RA_SERVER="mangos"
-            ENT_MARK=$(echo -e "\e[5m>\033[0m")
+            RA_SERVER="mangos>"
+            ENT_MARK=$(echo -e "\e[5m_\033[0m")
             PWR_BUTTON="${G1:?}"
-            RA_MSG="${G0:?}>${N0:?} hit Enter two times to go back."
+            RA_MSG="${G0:?}>${N0:?} hit Enter to go back."
             RA_DSC0="'commands' will list all of the available commands"
-            RA_DSC1="'quit' and then hit Enter two times to exit${N0:?}"
-            RA_TIP="Tip: Set '${GR:?}Message of the Day${N0:?}' inside mangosd.conf"
+            RA_DSC1="'quit' and then hit Enter to exit${N0:?}"
+            RA_TIP="Tip: Set '${THEME_ALL:?}Message of the Day${N0:?}' inside mangosd.conf"
             RA_LINE="------------------------------------------------"
           else
+            # get configuration
+            RA_STATUS=$(cat "$FOLDER_WOW"/backup/configurations/mangosd.conf 2>/dev/null |
+              grep "Ra.Enable =.*" 2>/dev/null)
+            if [ -z "$RA_STATUS" ]; then
+              RA_STATUS=$(cat "$FOLDER_CORE"/run/etc/mangosd.conf 2>/dev/null |
+                grep "Ra.Enable =.*" 2>/dev/null)
+            fi
             # no connection
-            RA_SERVER="${GR:?}OFFLINE${N0:?}"
+            RA_SERVER="${GR:?}        ${N0:?}"
             ENT_MARK=""
             PWR_BUTTON="${GR:?}"
-            RA_MSG="${Y1:?}Setup RA inside mangosd.conf!${N0:?}"
-            RA_DSC0="CONSOLE, REMOTE ACCESS"
-            RA_DSC1="${GR:?}Ra.Enable = 1${N0:?}"
+            RA_MSG="${Y1:?}Setup ${THEME_ALL:?}RA${Y1:?} inside mangosd.conf!${N0:?}"
+            RA_DSC0="CONSOLE, ${THEME_ALL:?}R${N0:?}EMOTE ${THEME_ALL:?}A${N0:?}CCESS"
+            RA_DSC1="${GR:?}$RA_STATUS (1/0 on/off)${N0:?}"
             RA_TIP="Press Enter to go back"
             RA_LINE="-----------------------------"
           fi
@@ -1550,15 +1556,15 @@ EOF
           printf '%b' "
 ${THEME_ALL:?}      ._________________.
       |.---------------.|
-      || ${N0:?}$RA_SERVER${N0:?}$ENT_MARK${THEME_ALL:?}       ||
+      || ${N0:?}$RA_SERVER${N0:?}$ENT_MARK${THEME_ALL:?}      ||
       ||               ||
       ||               ||
       ||               ||
       ||               ||
       ||_______________||
-      /.-.-.-.-.-.-.-.-.\\
-     /.-.-.-.-.-.-.-.-.-.\\
-    /.-.-.-.-.-.-.-.-.-.-.\\
+      /$N0.-.-.-.-.-.-.-.-.${THEME_ALL:?}\\
+     /$N0.-.-.-.-.-.-.-.-.-.${THEME_ALL:?}\\
+    /$N0.-.-.-.-.-.-.-.-.-.-.${THEME_ALL:?}\\
    /______/__________\___${PWR_BUTTON:?}o${THEME_ALL:?}_\\
    \_______________________/${N0:?}"
           echo
