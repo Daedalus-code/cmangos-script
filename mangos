@@ -1529,7 +1529,7 @@ EOF
             RA_SERVER="mangos"
             ENT_MARK=$(echo -e "\e[5m>\033[0m")
             PWR_BUTTON="${G1:?}"
-            RA_MSG="${G0:?}>${N0:?} hit Enter, and then two times to go back."
+            RA_MSG="${G0:?}>${N0:?} hit Enter two times to go back."
             RA_DSC0="'commands' will list all of the available commands"
             RA_DSC1="'quit' and then hit Enter two times to exit${N0:?}"
             RA_TIP="Tip: Set '${GR:?}Message of the Day${N0:?}' inside mangosd.conf"
