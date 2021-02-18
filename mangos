@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20211702
-# 5.3.4.9
+# V20211802
+# 5.3.7.5
 
 while :; do
 
@@ -1519,17 +1519,40 @@ EOF
 
       "r")
 
-        echo
         read -r -p "[YN] Want to login? y/n " -n 1 -r
         echo
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
+          # test RA connection
+          if nc -z -w 1 "$HOST_NC" "$PORT_NC" &>/dev/null; then
+            # connected
+            RA_SERVER="mangos"
+            ENT_MARK=$(echo -e "\e[5m>\033[0m")
+            PWR_BUTTON="${G1:?}"
+            RA_MSG="${G0:?}>${N0:?} hit Enter, and then two times to go back."
+            RA_DSC0="'commands' will list all of the available commands"
+            RA_DSC1="'quit' and then hit Enter two times to exit${N0:?}"
+            THEME_ALL_RA=$(echo "$CY")
+            RA_TIP="Tip: Set '${GR:?}Message of the Day${N0:?}' inside mangosd.conf"
+            RA_LINE="------------------------------------------------"
+          else
+            # no connection
+            RA_SERVER="${GR:?}OFFLINE${N0:?}"
+            ENT_MARK=""
+            PWR_BUTTON="${GR:?}"
+            RA_MSG="${Y1:?}Setup RA inside mangosd.conf!${N0:?}"
+            RA_DSC0="CONSOLE, REMOTE ACCESS"
+            RA_DSC1="${GR:?}Ra.Enable = 1${N0:?}"
+            THEME_ALL_RA="$GR"
+            RA_TIP="Press Enter to go back"
+            RA_LINE="-----------------------------"
+          fi
 
           clear
           printf '%b' "
-${THEME_ALL:?}      ._________________.
+${THEME_ALL_RA:?}      ._________________.
       |.---------------.|
-      || ${N0:?}mangos>${THEME_ALL:?}       ||
+      || ${N0:?}$RA_SERVER${N0:?}$ENT_MARK${THEME_ALL_RA:?}       ||
       ||               ||
       ||               ||
       ||               ||
@@ -1538,22 +1561,25 @@ ${THEME_ALL:?}      ._________________.
       /.-.-.-.-.-.-.-.-.\\
      /.-.-.-.-.-.-.-.-.-.\\
     /.-.-.-.-.-.-.-.-.-.-.\\
-   /______/__________\___${G0:?}o${THEME_ALL:?}_\\
+   /______/__________\___${PWR_BUTTON:?}o${THEME_ALL_RA:?}_\\
    \_______________________/${N0:?}"
           echo
           printf '%b' "
      CMaNGOS Command Center
 
-  ${G0:?}>${N0:?} hit Enter two times to go back.
-  ------------------------------------------------
-  'commands' will list all of the available commands
-  'quit' and then hit Enter two times to exit
+  $RA_MSG
+  $RA_LINE$THEME_ALL_RA
+  $RA_DSC0
+  $RA_DSC1
 
-  Tip: Set '${THEME_DSC:?}Message of the Day${N0:?}' inside mangosd.conf"
+  $RA_TIP\n"
           echo
-          echo
-          nc "$HOST_NC" "$PORT_NC"
-          echo
+          if nc -z -w 1 "$HOST_NC" "$PORT_NC" &>/dev/null; then
+            # connect with netcat
+            nc "$HOST_NC" "$PORT_NC"
+          fi
+          # no connection
+          read -r -p "" </dev/tty
         fi
 
         ;;
