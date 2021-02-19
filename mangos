@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211902
-# 5.3.8.2
+# 5.3.9.9
 
 while :; do
 
@@ -1252,9 +1252,6 @@ EOF
 
       "l")
 
-        # empty mail
-        DIVE_LOG_OLD_MAIL=$(grep -c -E "Returning old mails..." "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null)
-
         # server.log.old
         DIVE_SERVER_OLD_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null |
           grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty.|.*empty*." 2>/dev/null)
@@ -1263,9 +1260,8 @@ EOF
         DIVE_SERVER_OLD_SERIO=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null)
         DIVE_SERVER_OLD_IGNOR=$(grep -c -E ".*ignoring*.|.*ignore*.|.*ignored*." "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null)
         DIVE_SERVER_OLD_POLYR=$(grep -c -E "Invalid poly ref" "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null)
-        if [[ -z "$DIVE_LOG_OLD_MAIL" || -z "$DIVE_SERVER_OLD_EMPTY" || -z "$DIVE_SERVER_OLD_ERROR" || -z "$DIVE_SERVER_OLD_SERIO" || -z "$DIVE_SERVER_OLD_IGNOR" || -z "$DIVE_SERVER_OLD_POLYR" ]]; then
+        if [[ -z "$DIVE_SERVER_OLD_EMPTY" || -z "$DIVE_SERVER_OLD_ERROR" || -z "$DIVE_SERVER_OLD_SERIO" || -z "$DIVE_SERVER_OLD_IGNOR" || -z "$DIVE_SERVER_OLD_POLYR" ]]; then
           # non responsive
-          DIVE_LOG_OLD_MAIL="0"
           DIVE_SERVER_OLD_EMPTY="0"
           DIVE_SERVER_OLD_ERROR="0"
           DIVE_SERVER_OLD_SERIO="0"
@@ -1380,8 +1376,6 @@ EOF
         printline "$DIVE_LOG_QUERY" "$DIVE_DBERROR_QUER" "$DIVE_LOG_LOGOU" "$DIVE_CHAR_LOGOUTS" "$DIVE_LOG_NONEX" "$DIVE_EVENTAINONEX"
         printline "$DIVE_LOG_NEVER" "$DIVE_DBERROR_USED" "$DIVE_LOG_NONE" "$DIVE_LOG_ZERO" "$DIVE_LOG_NULL0" "$DIVE_EVENTAI_NULL"
         printline "$DIVE_LOG_CRASH" "$DIVE_DBERROR_CRAS" "$DIVE_LOG_NONE" "$DIVE_LOG_ZERO" "$DIVE_LOG_NOTUS" "$DIVE_EVENTAINOTUS"
-        echo
-        printf '%b' "   ${GR:?}MailExp:${N0:?} $DIVE_LOG_OLD_MAIL\n"
         printf '%b' "
    1 : Raw error output
    2 : tail error output\n"
@@ -1400,9 +1394,11 @@ EOF
               grep -E -v "ERROR:.*|Only expired mails*" 2>/dev/null)
             printf '%b' "${Y1:?}$EMPTY_ERROR${N0:?}\n"
             printf '%b' "${R0:?}$ERROR_ERROR${N0:?}\n"
+            echo
           else
             # no files, nothing to grep
             printf '%b' "${GR:?}No logs found!${N0:?}\n"
+            echo
           fi
 
           ;;
@@ -1419,6 +1415,7 @@ EOF
           else
             # no files, nothing to grep
             printf '%b' "${GR:?}No logs found!${N0:?}\n"
+            echo
           fi
 
           ;;
@@ -1434,14 +1431,26 @@ EOF
 
         # dive into logs done
 
-        # Get database info (kinda heavy..)
+        # Get info from mysql database and logs
 
       "w")
 
+        # mysql data
         ON_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT SUM(online) FROM ${DB_CHARACTERS:?}.characters;" 2>/dev/null)
         GU_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM ${DB_CHARACTERS:?}.guild;" 2>/dev/null)
         AC_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_REALMD.account;" 2>/dev/null)
+        AU_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.auction;" 2>/dev/null)
+        BG_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.bugreport;" 2>/dev/null)
         BN_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_REALMD.account_banned;" 2>/dev/null)
+        MI_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.mail_items;" 2>/dev/null)
+        PT_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.petition;" 2>/dev/null)
+        PS_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.petition_sign;" 2>/dev/null)
+        RL_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_REALMD.realmlist;" 2>/dev/null)
+        AL_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_REALMD.account_logons;" 2>/dev/null)
+        CS_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.character_social;" 2>/dev/null)
+        CC_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.character_spell_cooldown;" 2>/dev/null)
+        GM_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.gm_surveys;" 2>/dev/null)
+        GP_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.groups;" 2>/dev/null)
         # on_count at TOP ^
         CH_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.characters;" 2>/dev/null)
 
@@ -1455,15 +1464,23 @@ EOF
         PV_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.pvpstats_players;" 2>/dev/null)
         GI_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.character_gifts;" 2>/dev/null)
 
+        # log data
+        # empty mail, returning old mails...
+        MA_CYCLE=$(grep -c -E "Returning old mails" "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null)
+
         # non responsive
-        if [[ "$ON_COUNT" -eq "NULL" ]]; then
-          ON_COUNT="0"
+        if [ -z "$MA_CYCLE" ]; then
+          MA_CYCLE="0"
         fi
 
         printline "Accounts" "$AC_COUNT" "Guilds" "$GU_COUNT" "Tickets" "$TI_COUNT"
         printline "Banned" "$BN_COUNT" "Members" "$ME_COUNT" "Corpses" "$CO_COUNT"
         printline "Online" "$ON_COUNT" "Mail" "$MA_COUNT" "PvP" "$PV_COUNT"
         printline "Characters" "$CH_COUNT" "Pets" "$PE_COUNT" "Gifts" "$GI_COUNT"
+        printline "MailCycle" "$MA_CYCLE" "Petition" "$PT_COUNT" "PetitionSign" "$PS_COUNT"
+        printline "MailItems" "$MI_COUNT" "BugReport" "$BG_COUNT" "Groups" "$GP_COUNT"
+        printline "Realms" "$RL_COUNT" "Social" "$CS_COUNT" "Logons" "$AL_COUNT"
+        printline "Cooldowns" "$CC_COUNT" "<GM>Surveys" "$GM_COUNT" "Auctions" "$AU_COUNT"
 
         echo
         read -r -p "Press Enter to continue" </dev/tty
@@ -1471,7 +1488,7 @@ EOF
 
         ;;
 
-        # Get database info (kinda heavy..) done
+        # Get info from mysql database and logs done
 
         # backup sql
 
