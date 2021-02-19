@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20211802
-# 5.3.7.6
+# V20211902
+# 5.3.7.7
 
 while :; do
 
@@ -181,14 +181,14 @@ while :; do
                 $LOAD
                 $MENU_MANGOSD $GR|$N0 $MENU_REALMD
 
-   A : ${THEME_TXT:?}Login (command)      ${N0:?}t : ${THEME_TXT:?}Characters${N0:?}
-   a : ${THEME_TXT:?}Create account       ${N0:?}u : ${THEME_TXT:?}Accounts${N0:?}
-   c : ${THEME_TXT:?}Check for updates    ${N0:?}g : ${THEME_TXT:?}Guilds${N0:?}
-   m : ${THEME_TXT:?}Update CMaNGOS       ${N0:?}e : ${THEME_TXT:?}Config${N0:?}
-   d : ${THEME_TXT:?}Update Database      ${N0:?}p : ${THEME_TXT:?}Patch${N0:?}
-   w : ${THEME_TXT:?}Update Helper        ${N0:?}o : ${THEME_TXT:?}Ping${N0:?}
-   s : ${THEME_TXT:?}Shutdown server      ${N0:?}l : ${THEME_TXT:?}Logs${N0:?}
-   r : ${THEME_TXT:?}Restart server       ${N0:?}q : ${THEME_TXT:?}Quit${N0:?}
+   A $GR: ${THEME_TXT:?}Login (command)      ${N0:?}t $GR: ${THEME_TXT:?}Characters${N0:?}
+   a $GR: ${THEME_TXT:?}Create account       ${N0:?}u $GR: ${THEME_TXT:?}Accounts${N0:?}
+   c $GR: ${THEME_TXT:?}Check for updates    ${N0:?}g $GR: ${THEME_TXT:?}Guilds${N0:?}
+   m $GR: ${THEME_TXT:?}Update CMaNGOS       ${N0:?}e $GR: ${THEME_TXT:?}Config${N0:?}
+   d $GR: ${THEME_TXT:?}Update Database      ${N0:?}p $GR: ${THEME_TXT:?}Patch${N0:?}
+   w $GR: ${THEME_TXT:?}Update Helper        ${N0:?}o $GR: ${THEME_TXT:?}Ping${N0:?}
+   s $GR: ${THEME_TXT:?}Shutdown server      ${N0:?}l $GR: ${THEME_TXT:?}Logs${N0:?}
+   r $GR: ${THEME_TXT:?}Restart server       ${N0:?}q $GR: ${THEME_TXT:?}Quit${N0:?}
 
 "
 
@@ -203,13 +203,14 @@ while :; do
 
     # fix ownership
     sudo chown -R "${USER:?}":"${GROUP:?}" /usr/local/bin/mangos
-    printf '%b' "   ${GR:?}Yy${N0:?} redo ${GR:?}/usr/local/bin/mangos${N0:?}\n"
-    printf '%b' "   ${GR:?}N*${N0:?} nano ${GR:?}/usr/local/bin/mangos${N0:?}\n"
+    printf '%b' "   ${GR:?}y${N0:?} $GR:$N0 redo ${GR:?}/usr/local/bin/mangos${N0:?}\n"
+    printf '%b' "   ${GR:?}n${N0:?} $GR:$N0 nano ${GR:?}/usr/local/bin/mangos${N0:?}\n"
     echo
-    printf '%b' "   [YN] Debug helper? ${GR:?}mangos${N0:?} y/n \n"
+    printf '%b' "    $G1*$P0*$Y1*$R1*$N0*$GR*$B1*$R0*$G0*$P0*$G1*$GR*$R1*$CY*$NO*$Y0*$B2*$R1*$P0*$G1*$GR*$N0*$G1*$CY*$Y1*$GR*$P0*$N0\n"
+    printf '%b' "   [${P0:?}Y${R1:?}N${N0:?}] Debug helper? ${GR:?}mangos${N0:?} y/n \n"
     read -r -p "" -n 1 -r -s
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-      printf '%b' "   [!!] Redo helper? ${GR:?}empty${N0:?} y/n \n"
+      printf '%b' "   [$CY!$G1!$N0] Redo helper? ${GR:?}empty${N0:?} y/n \n"
       read -r -p "" -n 1 -r -s
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         sudo rm /usr/local/bin/mangos 2>/dev/null
@@ -221,8 +222,8 @@ while :; do
       sudo nano /usr/local/bin/mangos 2>/dev/null
     fi
     clear
-    echo "[!!] Any edits? Restart helper please!"
-    sleep 2
+    printf '%b' "[$Y1!$G1!$N0] Any edits? Restart helper please!"
+    sleep 1.23 # kek
 
     ;;
 
@@ -253,8 +254,8 @@ ${N0:?}                                       __
 
            ${G0:?}Select account operation${N0:?}
 
-              c : Create account
-              d : Delete account
+              c $GR:$N0 Create account
+              d $GR:$N0 Delete account
 
 >"
 
@@ -268,14 +269,14 @@ ${N0:?}                                       __
       clear
       printf '%b' "${GR:?} - - - - - - - - - - - - - - - - - - - - - - -${N0:?}
 
-           ${N0:?}0: Vanilla${G0:?}
-           1: The Burning Crusade
-           2: Wrath of the Lich King
+           ${N0:?}0 $GR:$N0 Vanilla${G0:?}
+           1 $GR:$N0 The Burning Crusade
+           2 $GR:$N0 Wrath of the Lich King
 
-           ${N0:?}0: Player${G0:?}
-           1: Moderator
-           2: Game Master
-           3: Administrator${N0:?}
+           ${N0:?}0 $GR:$N0 Player${G0:?}
+           1 $GR:$N0 Moderator
+           2 $GR:$N0 Game Master
+           3 $GR:$N0 Administrator${N0:?}
 
       Minimum 5 characters account name.
 
@@ -662,15 +663,15 @@ ${PASS_NC:?}
    System${G0:?}......:${N0:?} $BUILT_FOR
    Commit Hash${G0:?}.:${GR:?} $COMMIT_HASH${N0:?}
 
-   r : ${THEME_TXT:?}Login${N0:?}   - ${THEME_DSC:?}Remote access  ${N0:?}mangosd.service${G0:?}.:${N0:?} $COMMAND_MANGOSD
-   l : ${THEME_TXT:?}Logs${N0:?}    - ${THEME_DSC:?}Analyze logs   ${N0:?}realmd.service${G0:?}..:${N0:?} $COMMAND_REALMD
-   b : ${THEME_TXT:?}Backup${N0:?}  - ${THEME_DSC:?}New backup     ${N0:?}
-   h : ${THEME_TXT:?}Reset${N0:?}   - ${THEME_DSC:?}Reset --hard   ${N0:?}characters.sql${G0:?}..:${N0:?} $CHARAC_BACKUP
-   p : ${THEME_TXT:?}htop${N0:?}    - ${THEME_DSC:?}Process view   ${N0:?}realmd.sql${G0:?}......:${N0:?} $REALMD_BACKUP
-   m : ${THEME_TXT:?}Maps${N0:?}    - ${THEME_DSC:?}Download maps  ${N0:?}
-   w : ${THEME_TXT:?}Stats${N0:?}   - ${THEME_DSC:?}World stats    ${N0:?}Realmd.log${G0:?}......:${N0:?} $CM_REALMD_LOG_EMPTY$CM_REALMD_LOG
-   q : ${THEME_TXT:?}Quit${N0:?}    - ${THEME_DSC:?}Back to menu   ${N0:?}Server.log${G0:?}......:${N0:?} $CM_SERVER_LOG_EMPTY$CM_SERVER_LOG$CM_SERVER_LOG_SERIOUS
-   i : ${THEME_TXT:?}Info${N0:?}    - ${THEME_DSC:?}Helper info    ${N0:?}$MENU_PRINT_CPU_TEMP
+   r $GR: ${THEME_TXT:?}Login${N0:?}   - ${THEME_DSC:?}Remote access  ${N0:?}mangosd.service${G0:?}.:${N0:?} $COMMAND_MANGOSD
+   l $GR: ${THEME_TXT:?}Logs${N0:?}    - ${THEME_DSC:?}Analyze logs   ${N0:?}realmd.service${G0:?}..:${N0:?} $COMMAND_REALMD
+   b $GR: ${THEME_TXT:?}Backup${N0:?}  - ${THEME_DSC:?}New backup     ${N0:?}
+   h $GR: ${THEME_TXT:?}Reset${N0:?}   - ${THEME_DSC:?}Reset --hard   ${N0:?}characters.sql${G0:?}..:${N0:?} $CHARAC_BACKUP
+   p $GR: ${THEME_TXT:?}htop${N0:?}    - ${THEME_DSC:?}Process view   ${N0:?}realmd.sql${G0:?}......:${N0:?} $REALMD_BACKUP
+   m $GR: ${THEME_TXT:?}Maps${N0:?}    - ${THEME_DSC:?}Download maps  ${N0:?}
+   w $GR: ${THEME_TXT:?}Stats${N0:?}   - ${THEME_DSC:?}World stats    ${N0:?}Realmd.log${G0:?}......:${N0:?} $CM_REALMD_LOG_EMPTY$CM_REALMD_LOG
+   q $GR: ${THEME_TXT:?}Quit${N0:?}    - ${THEME_DSC:?}Back to menu   ${N0:?}Server.log${G0:?}......:${N0:?} $CM_SERVER_LOG_EMPTY$CM_SERVER_LOG$CM_SERVER_LOG_SERIOUS
+   i $GR: ${THEME_TXT:?}Info${N0:?}    - ${THEME_DSC:?}Helper info    ${N0:?}$MENU_PRINT_CPU_TEMP
 \n"
       read -r -s -n1
       case "$REPLY" in
@@ -856,13 +857,13 @@ ${N0:?}"
    Ratio${G0:?}....:${N0:?} $P2P_RATI
    Peers${G0:?}....:${G1:?} $P2P_PEERS_CONNECTED${N0:?}$SLASH${G0:?}$P2P_PEERS_SEEDINGTO${N0:?}$SLASH${Y1:?}$P2P_PEERS_DOWN_LOAD${N0:?}
 
-   t : ${THEME_TXT:?}Install${N0:?} - ${THEME_DSC:?}Setup$N0
-   u : ${THEME_TXT:?}Remove${N0:?}  - ${THEME_DSC:?}Uninstall$N0
-   r : ${THEME_TXT:?}Start${N0:?}   - ${THEME_DSC:?}Start p2p$N0
-   s : ${THEME_TXT:?}Stop${N0:?}    - ${THEME_DSC:?}Stop p2p$N0
-   m : ${THEME_TXT:?}Maps${N0:?}    - ${THEME_DSC:?}Import maps$N0
-   i : ${THEME_TXT:?}Info${N0:?}    - ${THEME_DSC:?}Torrent info$N0
-   q : ${THEME_TXT:?}Quit${N0:?}    - ${THEME_DSC:?}Return$N0
+   t $GR: ${THEME_TXT:?}Install${N0:?} - ${THEME_DSC:?}Setup$N0
+   u $GR: ${THEME_TXT:?}Remove${N0:?}  - ${THEME_DSC:?}Uninstall$N0
+   r $GR: ${THEME_TXT:?}Start${N0:?}   - ${THEME_DSC:?}Start p2p$N0
+   s $GR: ${THEME_TXT:?}Stop${N0:?}    - ${THEME_DSC:?}Stop p2p$N0
+   m $GR: ${THEME_TXT:?}Maps${N0:?}    - ${THEME_DSC:?}Import maps$N0
+   i $GR: ${THEME_TXT:?}Info${N0:?}    - ${THEME_DSC:?}Torrent info$N0
+   q $GR: ${THEME_TXT:?}Quit${N0:?}    - ${THEME_DSC:?}Return$N0
 
 ${N0:?}"
         read -r -s -n1
@@ -1529,16 +1530,17 @@ EOF
             ENT_MARK=$(echo -e "\e[5m_\033[0m")
             PWR_BUTTON="${G1:?}"
             RA_MSG="${G0:?}>${N0:?} hit Enter to go back."
-            RA_DSC0="'commands' will list all of the available commands"
-            RA_DSC1="'quit' and then hit Enter to exit${N0:?}"
-            RA_TIP="Tip: Set '${THEME_ALL:?}Message of the Day${N0:?}' inside mangosd.conf"
-            RA_LINE="------------------------------------------------"
+            RA_DSC0="${GR:?}commands${N0:?}, list all commands"
+            RA_DSC1="${GR:?}quit${N0:?}, hit Enter to exit${N0:?}"
+            RA_LINE="${GR:?}- - - - - - - - - - - - - -${N0:?}"
+            RA_IDLE=" "
           else
             # get configuration
-            RA_STATUS=$(cat "$FOLDER_WOW"/backup/configurations/mangosd.conf 2>/dev/null |
+            RA_STATUS=$(cat "$FOLDER_CORE"/run/etc/mangosd.conf 2>/dev/null 2>/dev/null |
               grep "Ra.Enable =.*" 2>/dev/null)
+            # no configuration, use backup
             if [ -z "$RA_STATUS" ]; then
-              RA_STATUS=$(cat "$FOLDER_CORE"/run/etc/mangosd.conf 2>/dev/null |
+              RA_STATUS=$(cat "$FOLDER_WOW"/backup/configurations/mangosd.conf |
                 grep "Ra.Enable =.*" 2>/dev/null)
             fi
             # no connection
@@ -1549,7 +1551,9 @@ EOF
             RA_DSC0="CONSOLE, ${THEME_ALL:?}R${N0:?}EMOTE ${THEME_ALL:?}A${N0:?}CCESS"
             RA_DSC1="${GR:?}$RA_STATUS (1/0 on/off)${N0:?}"
             RA_TIP="Press Enter to go back"
-            RA_LINE="-----------------------------"
+            RA_LINE="${GR:?}- - - - - - - - - - - - - - -${N0:?}"
+            RA_IDLE="/"
+            RA_IDLE_DOWN="_"
           fi
 
           clear
@@ -1557,11 +1561,11 @@ EOF
 ${THEME_ALL:?}      ._________________.
       |.---------------.|
       || ${N0:?}$RA_SERVER${N0:?}$ENT_MARK${THEME_ALL:?}      ||
-      ||               ||
-      ||               ||
-      ||               ||
-      ||               ||
-      ||_______________||
+      ||              ${GR:?}$RA_IDLE${THEME_ALL:?}||
+      ||      ${GR:?}$RA_IDLE${THEME_ALL:?}      ${GR:?}$RA_IDLE${THEME_ALL:?} ||
+      ||     ${GR:?}$RA_IDLE${THEME_ALL:?}      ${GR:?}$RA_IDLE${THEME_ALL:?}  ||
+      ||    ${GR:?}$RA_IDLE${THEME_ALL:?}          ||
+      ||___${GR:?}${RA_IDLE_DOWN:?}${THEME_ALL:?}___________||
       /$N0.-.-.-.-.-.-.-.-.${THEME_ALL:?}\\
      /$N0.-.-.-.-.-.-.-.-.-.${THEME_ALL:?}\\
     /$N0.-.-.-.-.-.-.-.-.-.-.${THEME_ALL:?}\\
@@ -1576,8 +1580,7 @@ ${THEME_ALL:?}      ._________________.
   $RA_DSC0
   $RA_DSC1
 
-  $RA_TIP\n"
-          echo
+$RA_TIP"
           # connect with netcat
           nc "$HOST_NC" "$PORT_NC"
           read -r -p "" </dev/tty
@@ -1588,11 +1591,9 @@ ${THEME_ALL:?}      ._________________.
         # remote access done
 
       "q")
-        echo
         break
         ;;
       *)
-        echo
         echo "empty"
         ;;
       esac
