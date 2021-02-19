@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211902
-# 5.3.9.9
+# 5.4.1.5
 
 while :; do
 
@@ -2025,7 +2025,23 @@ ${GR:?}$CPU_MODEL${N0:?}")
           printf '%b' "[  0%]${Y1:?} Auto detecting Core(s)${N0:?}\n"
           echo "$CPU_TCSC"
           printf '%b' "[  0%]${G0:?} Building with ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
+          cd "$FOLDER_BUILD" || exit
           make -j"$SYS_CORES" # max system cores
+          sudo make install 2>/dev/null | sudo tee /var/log/ms/build &>/dev/null
+          if grep -q -o "100" /var/log/ms/build 2>/dev/null; then
+            # create ms folder
+            sudo mkdir /var/log/ms/ 2>/dev/null
+            # fix ownership
+            sudo chown -R "${USER:?}":"${GROUP:?}" /var/log/ms
+            # create installed mark
+            echo "Core was installed at ${NOW:?}" >/var/log/ms/installed_core
+            BUILD_BUTTON="${G1:?}OK${N0:?}"
+          else
+            echo
+            rm /var/log/ms/installed_core &>/dev/null
+            printf '%b' "${R1:?}Something went wrong!${N0:?}\n"
+            BUILD_BUTTON="${R1:?}!!${N0:?}"
+          fi
         else
 
           printf '%b' "
@@ -2337,7 +2353,7 @@ Select install operation"
 
         sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
         echo
-        printf '%b' "[${G1:?}OK${N0:?}] "
+        printf '%b' "[$BUILD_BUTTON] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
       fi
