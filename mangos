@@ -1534,6 +1534,7 @@ EOF
             RA_DSC1="${GR:?}quit${N0:?}, hit Enter to exit${N0:?}"
             RA_LINE="${GR:?}- - - - - - - - - - - - - -${N0:?}"
             RA_IDLE=" "
+            RA_IDLE_DOWN="$GR/$THEME_ALL"
           else
             # get configuration
             RA_STATUS=$(cat "$FOLDER_CORE"/run/etc/mangosd.conf 2>/dev/null 2>/dev/null |
