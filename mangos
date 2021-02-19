@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211902
-# 5.3.7.8
+# 5.3.8.2
 
 while :; do
 
@@ -203,10 +203,9 @@ while :; do
 
     # fix ownership
     sudo chown -R "${USER:?}":"${GROUP:?}" /usr/local/bin/mangos
-    printf '%b' "   ${GR:?}y${N0:?} $GR:$N0 redo ${GR:?}/usr/local/bin/mangos${N0:?}\n"
-    printf '%b' "   ${GR:?}n${N0:?} $GR:$N0 nano ${GR:?}/usr/local/bin/mangos${N0:?}\n"
+    printf '%b' "   ${GR:?}y${N0:?} $GR:$N0 Redo ${GR:?}cmangos-script${N0:?}\n"
+    printf '%b' "   ${GR:?}n${N0:?} $GR:$N0 nano ${GR:?}cmangos-script${N0:?}\n"
     echo
-    printf '%b' "    $G1*$P0*$Y1*$R1*$N0*$GR*$B1*$R0*$G0*$P0*$G1*$GR*$R1*$CY*$NO*$Y0*$B2*$R1*$P0*$G1*$GR*$N0*$G1*$CY*$Y1*$GR*$P0*$N0\n"
     printf '%b' "   [${P0:?}Y${R1:?}N${N0:?}] Debug helper? ${GR:?}mangos${N0:?} y/n \n"
     read -r -p "" -n 1 -r -s
     if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -222,8 +221,8 @@ while :; do
       sudo nano /usr/local/bin/mangos 2>/dev/null
     fi
     clear
-    printf '%b' "[$Y1!$G1!$N0] Any edits? Restart helper please!"
-    sleep 1.23 # kek
+    printf '%b' "[$Y1!$G1!$N0] Any edits? Restart Helper Please!"
+    sleep 1
 
     ;;
 
@@ -1253,6 +1252,9 @@ EOF
 
       "l")
 
+        # empty mail
+        DIVE_LOG_OLD_MAIL=$(grep -c -E "Returning old mails..." "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null)
+
         # server.log.old
         DIVE_SERVER_OLD_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null |
           grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty.|.*empty*." 2>/dev/null)
@@ -1261,8 +1263,9 @@ EOF
         DIVE_SERVER_OLD_SERIO=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null)
         DIVE_SERVER_OLD_IGNOR=$(grep -c -E ".*ignoring*.|.*ignore*.|.*ignored*." "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null)
         DIVE_SERVER_OLD_POLYR=$(grep -c -E "Invalid poly ref" "$FOLDER_CORE"/run/logs/Server.log.old 2>/dev/null)
-        if [[ -z "$DIVE_SERVER_OLD_EMPTY" || -z "$DIVE_SERVER_OLD_ERROR" || -z "$DIVE_SERVER_OLD_SERIO" || -z "$DIVE_SERVER_OLD_IGNOR" || -z "$DIVE_SERVER_OLD_POLYR" ]]; then
+        if [[ -z "$DIVE_LOG_OLD_MAIL" || -z "$DIVE_SERVER_OLD_EMPTY" || -z "$DIVE_SERVER_OLD_ERROR" || -z "$DIVE_SERVER_OLD_SERIO" || -z "$DIVE_SERVER_OLD_IGNOR" || -z "$DIVE_SERVER_OLD_POLYR" ]]; then
           # non responsive
+          DIVE_LOG_OLD_MAIL="0"
           DIVE_SERVER_OLD_EMPTY="0"
           DIVE_SERVER_OLD_ERROR="0"
           DIVE_SERVER_OLD_SERIO="0"
@@ -1377,7 +1380,8 @@ EOF
         printline "$DIVE_LOG_QUERY" "$DIVE_DBERROR_QUER" "$DIVE_LOG_LOGOU" "$DIVE_CHAR_LOGOUTS" "$DIVE_LOG_NONEX" "$DIVE_EVENTAINONEX"
         printline "$DIVE_LOG_NEVER" "$DIVE_DBERROR_USED" "$DIVE_LOG_NONE" "$DIVE_LOG_ZERO" "$DIVE_LOG_NULL0" "$DIVE_EVENTAI_NULL"
         printline "$DIVE_LOG_CRASH" "$DIVE_DBERROR_CRAS" "$DIVE_LOG_NONE" "$DIVE_LOG_ZERO" "$DIVE_LOG_NOTUS" "$DIVE_EVENTAINOTUS"
-
+        echo
+        printf '%b' "   ${GR:?}MailExp:${N0:?} $DIVE_LOG_OLD_MAIL\n"
         printf '%b' "
    1 : Raw error output
    2 : tail error output\n"
@@ -1534,7 +1538,7 @@ EOF
             RA_DSC1="${GR:?}quit${N0:?}, hit Enter to exit${N0:?}"
             RA_LINE="${GR:?}- - - - - - - - - - - - - -${N0:?}"
             RA_IDLE=" "
-            RA_IDLE_DOWN="_"
+            RA_IDLE_DOWN="${THEME_ALL:?}_${N0:?}"
           else
             # get configuration
             RA_STATUS=$(cat "$FOLDER_CORE"/run/etc/mangosd.conf 2>/dev/null 2>/dev/null |
@@ -1551,7 +1555,7 @@ EOF
             RA_MSG="${Y1:?}Setup ${THEME_ALL:?}RA${Y1:?} inside mangosd.conf!${N0:?}"
             RA_DSC0="CONSOLE, ${THEME_ALL:?}R${N0:?}EMOTE ${THEME_ALL:?}A${N0:?}CCESS"
             RA_DSC1="${GR:?}$RA_STATUS (1/0 on/off)${N0:?}"
-            RA_TIP="Press Enter to go back"
+            RA_TIP=""
             RA_LINE="${GR:?}- - - - - - - - - - - - - - -${N0:?}"
             RA_IDLE="/"
             RA_IDLE_DOWN="$GR/$THEME_ALL"
@@ -1566,7 +1570,7 @@ ${THEME_ALL:?}      ._________________.
       ||      ${GR:?}$RA_IDLE${THEME_ALL:?}      ${GR:?}$RA_IDLE${THEME_ALL:?} ||
       ||     ${GR:?}$RA_IDLE${THEME_ALL:?}      ${GR:?}$RA_IDLE${THEME_ALL:?}  ||
       ||    ${GR:?}$RA_IDLE${THEME_ALL:?}          ||
-      ||___${GR:?}${RA_IDLE_DOWN:?}${THEME_ALL:?}___________||
+      ||___${RA_IDLE_DOWN:?}${THEME_ALL:?}___________||
       /$N0.-.-.-.-.-.-.-.-.${THEME_ALL:?}\\
      /$N0.-.-.-.-.-.-.-.-.-.${THEME_ALL:?}\\
     /$N0.-.-.-.-.-.-.-.-.-.-.${THEME_ALL:?}\\
