@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211902
-# 5.4.1.5
+# 5.4.3.0
 
 while :; do
 
@@ -2026,9 +2026,17 @@ ${GR:?}$CPU_MODEL${N0:?}")
           echo "$CPU_TCSC"
           printf '%b' "[  0%]${G0:?} Building with ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
           cd "$FOLDER_BUILD" || exit
+          # start counting (seconds)
+          START="$SECONDS"
           make -j"$SYS_CORES" # max system cores
           sudo make install 2>/dev/null | sudo tee /var/log/ms/build &>/dev/null
           if grep -q -o "100" /var/log/ms/build 2>/dev/null; then
+            # get seconds since start
+            DURATION=$(echo "$SECONDS-$START" 2>/dev/null | bc 2>/dev/null)
+            # convert seconds
+            TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
+            echo
+            printf '%b' "Build time: ${G1:?}$TIMER${N0:?} with ${G1:?}$SYS_CORES${N0:?} Core(s)\n"
             # create ms folder
             sudo mkdir /var/log/ms/ 2>/dev/null
             # fix ownership
@@ -2038,8 +2046,15 @@ ${GR:?}$CPU_MODEL${N0:?}")
             BUILD_BUTTON="${G1:?}OK${N0:?}"
           else
             echo
-            rm /var/log/ms/installed_core &>/dev/null
             printf '%b' "${R1:?}Something went wrong!${N0:?}\n"
+            # get seconds since start
+            DURATION=$(echo "$SECONDS-$START" 2>/dev/null | bc 2>/dev/null)
+            # convert seconds
+            TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
+            echo
+            printf '%b' "Build time: ${R1:?}$TIMER${N0:?} with ${R1:?}$SYS_CORES${N0:?} Core(s)\n"
+            # remove old file
+            rm /var/log/ms/installed_core &>/dev/null
             BUILD_BUTTON="${R1:?}!!${N0:?}"
           fi
         else
