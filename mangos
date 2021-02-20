@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20211902
-# 5.4.3.0
+# V20212002
+# 5.4.5.0
 
 while :; do
 
@@ -646,7 +646,7 @@ ${PASS_NC:?}
         MENU_PRINT_CPU_TEMP=$(lscpu 2>/dev/null | grep 'Model name' 2>/dev/null |
           cut -f 2 -d ":" 2>/dev/null | awk '{$1=$1}1' 2>/dev/null |
           grep -Eo "@.*" 2>/dev/null | tr -d '@' 2>/dev/null | tr -d ' ' 2>/dev/null)
-        MENU_PRINT_CPU_TEMP=$(printf '%b' "CPU Freq${G0:?}........:${N0:?} $MENU_PRINT_CPU_TEMP\n")
+        MENU_PRINT_CPU_TEMP="CPU Freq${G0:?}........:${N0:?} $MENU_PRINT_CPU_TEMP"
       fi
       # commit
       if grep -E "Using commit.*(.*)" "${FOLDER_CORE:?}"/run/logs/Server.log &>/dev/null; then
@@ -656,21 +656,41 @@ ${PASS_NC:?}
         COMMIT_HASH="0000000000000000000000000000000000000000"
       fi
 
+      # free Space, mmc block device #0, partition #2, partition #2, dev/root, overlay
+      MENU_USED_HDD=$(df -h 2>/dev/null | grep -E "mmcblk0p2|mmcblk0p3|/dev/root|overlay" 2>/dev/null |
+        awk '{ print $3 }' 2>/dev/null)
+      MENU_USED_HDD_P=$(df -h | grep -E "mmcblk0p2|mmcblk0p3|/dev/root|overlay" 2>/dev/null |
+        awk '{ print $5 }' 2>/dev/null)
+
+      # free Memory
+      MENU_FREE_MEM=$(free --mega 2>/dev/null | grep "Mem" 2>/dev/null |
+        awk '{ print $4 }' 2>/dev/null)
+      # total Memory
+      MENU_TOTAL_MEM=$(free --mega 2>/dev/null | grep "Mem" 2>/dev/null |
+        awk '{ print $2 }' 2>/dev/null)
+
+      # total uptime
+      TOTAL_UPTIME=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT SUM(uptime) FROM ${DB_REALMD:?}.uptime;" 2>/dev/null)
+      # calculate seconds
+      UPTIME_TIMER=$(printf '%dh:%dm:%ds\n' $(("$TOTAL_UPTIME/3600")) $(("$TOTAL_UPTIME%3600/60")) $(("$TOTAL_UPTIME%60")))
+      # calculate days
+      TOTAL_UPTIME_DAYS=$(echo "$TOTAL_UPTIME/3600/24" 2>/dev/null | bc -l 2>/dev/null | awk -F. '{ print $1 }' 2>/dev/null)
+
       printf '%b' "
-   Realm${G0:?}.......:${G1:?} ${SERVER_NAME:?}${N0:?}
+   Realm${G0:?}.......:${G1:?} ${SERVER_NAME:?} ${GR:?}$UPTIME_TIMER (${TOTAL_UPTIME_DAYS:?} Days)${N0:?}
    World${G0:?}.......:${N0:?} $LATEST_WORLD_BUILT
    System${G0:?}......:${N0:?} $BUILT_FOR
    Commit Hash${G0:?}.:${GR:?} $COMMIT_HASH${N0:?}
 
    r $GR: ${THEME_TXT:?}Login${N0:?}   - ${THEME_DSC:?}Remote access  ${N0:?}mangosd.service${G0:?}.:${N0:?} $COMMAND_MANGOSD
    l $GR: ${THEME_TXT:?}Logs${N0:?}    - ${THEME_DSC:?}Analyze logs   ${N0:?}realmd.service${G0:?}..:${N0:?} $COMMAND_REALMD
-   b $GR: ${THEME_TXT:?}Backup${N0:?}  - ${THEME_DSC:?}New backup     ${N0:?}
-   h $GR: ${THEME_TXT:?}Reset${N0:?}   - ${THEME_DSC:?}Reset --hard   ${N0:?}characters.sql${G0:?}..:${N0:?} $CHARAC_BACKUP
-   p $GR: ${THEME_TXT:?}htop${N0:?}    - ${THEME_DSC:?}Process view   ${N0:?}realmd.sql${G0:?}......:${N0:?} $REALMD_BACKUP
-   m $GR: ${THEME_TXT:?}Maps${N0:?}    - ${THEME_DSC:?}Download maps  ${N0:?}
-   w $GR: ${THEME_TXT:?}Stats${N0:?}   - ${THEME_DSC:?}World stats    ${N0:?}Realmd.log${G0:?}......:${N0:?} $CM_REALMD_LOG_EMPTY$CM_REALMD_LOG
-   q $GR: ${THEME_TXT:?}Quit${N0:?}    - ${THEME_DSC:?}Back to menu   ${N0:?}Server.log${G0:?}......:${N0:?} $CM_SERVER_LOG_EMPTY$CM_SERVER_LOG$CM_SERVER_LOG_SERIOUS
-   i $GR: ${THEME_TXT:?}Info${N0:?}    - ${THEME_DSC:?}Helper info    ${N0:?}$MENU_PRINT_CPU_TEMP
+   b $GR: ${THEME_TXT:?}Backup${N0:?}  - ${THEME_DSC:?}New backup     ${N0:?}characters.sql${G0:?}..:${N0:?} $CHARAC_BACKUP
+   h $GR: ${THEME_TXT:?}Reset${N0:?}   - ${THEME_DSC:?}Reset --hard   ${N0:?}realmd.sql${G0:?}......:${N0:?} $REALMD_BACKUP
+   p $GR: ${THEME_TXT:?}htop${N0:?}    - ${THEME_DSC:?}Process view   ${N0:?}Realmd.log${G0:?}......:${N0:?} $CM_REALMD_LOG_EMPTY$CM_REALMD_LOG
+   m $GR: ${THEME_TXT:?}Maps${N0:?}    - ${THEME_DSC:?}Download maps  ${N0:?}Server.log${G0:?}......:${N0:?} $CM_SERVER_LOG_EMPTY$CM_SERVER_LOG$CM_SERVER_LOG_SERIOUS
+   w $GR: ${THEME_TXT:?}Stats${N0:?}   - ${THEME_DSC:?}World stats    ${N0:?}$MENU_PRINT_CPU_TEMP
+   i $GR: ${THEME_TXT:?}Info${N0:?}    - ${THEME_DSC:?}Helper info    ${N0:?}HDDuse${G0:?}..........:${N0:?} $MENU_USED_HDD ${GR:?}$MENU_USED_HDD_P${N0:?}
+   q $GR: ${THEME_TXT:?}Quit${N0:?}    - ${THEME_DSC:?}Back to menu   ${N0:?}Memory${G0:?}..........:${N0:?} ${G1:?}${MENU_FREE_MEM:?}M${GR:?}/${G0:?}${MENU_TOTAL_MEM:?}M${N0:?}
 \n"
       read -r -s -n1
       case "$REPLY" in
