@@ -3191,7 +3191,7 @@ Database User, Client/Server is needed."
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         read -t 5 -r -p "[YN] Restart localhost SQL Server? y/n " -n 1 -r
         if [[ $REPLY =~ ^[Yy]$ ]]; then
-          echo "Please wait"
+          echo "[!!] Restarting service!"
           # restart mysql service, if it exists
           if sudo service mysql status 2>/dev/null | grep -E 'mysql'; then
             echo "[!!] No database system found"
@@ -3211,7 +3211,7 @@ Database User, Client/Server is needed."
             sudo service mariadb restart &>/dev/null
           fi
         fi
-        echo
+        echo "Please wait"
         # this is for docker users
         if [ -f /.dockerenv ]; then
           printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}"
