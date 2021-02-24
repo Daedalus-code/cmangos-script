@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20212002
-# 5.4.5.0
+# V20212502
+# 5.4.5.1
 
 while :; do
 
@@ -965,7 +965,7 @@ ${N0:?}"
 
         "t")
 
-          read -r -p "[YN] Setup Seedbox? y/n " -n 1 -r -s
+          read -t 5 -r -p "[YN] Setup Seedbox? y/n " -n 1 -r -s
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # create ms folder
@@ -1104,7 +1104,7 @@ EOF
 
         "r")
 
-          read -r -p "[YN] Re/start SeedBox? y/n " -n 1 -r
+          read -t 5 -r -p "[YN] Re/start SeedBox? y/n " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # is transmission-daemon installed?
@@ -1141,7 +1141,7 @@ EOF
 
         "s")
 
-          read -r -p "[YN] Stop SeedBox? y/n " -n 1 -r
+          read -t 5 -r -p "[YN] Stop SeedBox? y/n " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # is transmission-daemon installed?
@@ -1176,7 +1176,7 @@ EOF
 
         "m")
 
-          read -r -p "[YN] Import Maps? y/n " -n 1 -r
+          read -t 5 -r -p "[YN] Import Maps? y/n " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # start counting (seconds)
@@ -1238,21 +1238,21 @@ EOF
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           echo
-          if [ -z "$(ls -A "$FOLDER_CORE" 2>/dev/null)" ]; then
+          if [ ! -z "$(ls -A "$FOLDER_CORE" 2>/dev/null)" ]; then
             printf '%b' "[${GR:?}NO${N0:?}]${THEME_ALL:?} Core:${N0:?} Empty!\n"
           else
             printf '%b' "[${G1:?}OK${N0:?}]${THEME_ALL:?} Core${N0:?}: "
             cd "$FOLDER_CORE" || exit
             git reset --hard 2>/dev/null
           fi
-          if [ -z "$(ls -A "$FOLDER_DB" 2>/dev/null)" ]; then
+          if [ ! -z "$(ls -A "$FOLDER_DB" 2>/dev/null)" ]; then
             printf '%b' "[${GR:?}NO${N0:?}]${THEME_ALL:?} Database:${N0:?} Empty!\n"
           else
             printf '%b' "[${G1:?}OK${N0:?}]${THEME_ALL:?} Database${N0:?}: "
             cd "${FOLDER_DB:?}" || exit
             git reset --hard 2>/dev/null
           fi
-          if [ -z "$(ls -A "$FOLDER_HELPER" 2>/dev/null)" ]; then
+          if [ ! -z "$(ls -A "$FOLDER_HELPER" 2>/dev/null)" ]; then
             printf '%b' "[${GR:?}NO${N0:?}]${THEME_ALL:?} Helper:${N0:?} Empty!\n"
           else
             printf '%b' "[${G1:?}OK${N0:?}]${THEME_ALL:?} Helper${N0:?}: "
@@ -1535,13 +1535,13 @@ EOF
         printf '%b' "[${G1:?}OK${N0:?}] $DB_REALMD-$NOW.sql\n"
         sleep 1
         echo
-        read -r -p "[YN] Show content? y/n " -n 1 -r
+        read -t 5 -r -p "[YN] Show content? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           echo
           ls -l "$FOLDER_WOW"/backup/
           echo
-          read -r -p "[YN] Show configurations? y/n " -n 1 -r
+          read -t 5 -r -p "[YN] Show configurations? y/n " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             echo
@@ -1561,7 +1561,7 @@ EOF
 
       "r")
 
-        read -r -p "[YN] Want to login? y/n " -n 1 -r
+        read -t 5 -r -p "[YN] Want to login? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           # test RA connection
@@ -1901,7 +1901,7 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
 
     "1")
 
-      read -r -p "[YN] Compile latest build? y/n " -n 1 -r
+      read -t 5 -r -p "[YN] Compile latest build? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         # this is for docker users
@@ -2402,7 +2402,7 @@ Select install operation"
 
     "2")
 
-      read -r -p "[YN] Install systemd Services? y/n " -n 1 -r
+      read -t 5 -r -p "[YN] Install systemd Services? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -2467,7 +2467,7 @@ Check if correct information, or just restart server."
 
     "3")
 
-      read -r -p "[YN] Reinstall (delete /build)? y/n " -n 1 -r
+      read -t 5 -r -p "[YN] Reinstall (delete /build)? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         # this is for docker users
@@ -2917,7 +2917,7 @@ Select install operation"
 
     "4")
 
-      read -r -p "[YN] Reset --hard origin/master? y/n " -n 1 -r
+      read -t 5 -r -p "[YN] Reset --hard origin/master? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -3018,7 +3018,7 @@ Select install operation"
     "12")
 
       printf '%b' "${GR:?}Deleting Database! $FOLDER_DB${N0:?}\n"
-      read -r -p "[YN] Delete Database Directory? y/n " -n 1 -r
+      read -t 5 -r -p "[YN] Delete Database Directory? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         # create backup directory
@@ -3189,8 +3189,9 @@ Database User, Client/Server is needed."
       read -r -p "[YN] Continue? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
-        read -r -p "[YN] Restart localhost database service? (SQL SERVER) y/n " -n 1 -r
+        read -t 5 -r -p "[YN] Restart localhost SQL Server? y/n " -n 1 -r
         if [[ $REPLY =~ ^[Yy]$ ]]; then
+          echo "Please wait"
           # restart mysql service, if it exists
           if sudo service mysql status 2>/dev/null | grep -E 'mysql'; then
             echo "[!!] No database system found"
@@ -3259,7 +3260,7 @@ Database User, Client/Server is needed."
         else
           printf '%b' "[${G1:?}OK${N0:?}] $DB_CHARACTERS-$NOW.sql exist"
           echo
-          read -r -p "[YN] New backup? ($DB_CHARACTERS) y/n " -n 1 -r
+          read -t 5 -r -p "[YN] New backup? ($DB_CHARACTERS) y/n " -n 1 -r
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # backup characters sql
             echo
@@ -3283,7 +3284,7 @@ Database User, Client/Server is needed."
         else
           printf '%b' "[${G1:?}OK${N0:?}] $DB_REALMD-$NOW.sql exist"
           echo
-          read -r -p "[YN] New backup? ($DB_REALMD) y/n " -n 1 -r
+          read -t 5 -r -p "[YN] New backup? ($DB_REALMD) y/n " -n 1 -r
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # backup characters sql
             echo
@@ -3302,7 +3303,7 @@ Database User, Client/Server is needed."
         read -r -p "[YN] InstallFullDB? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
-          if [[ -z "$FOLDER_DB" ]]; then
+          if [ ! -z "$(ls -A "$FOLDER_DB" 2>/dev/null)" ]; then
             sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
             cd "$FOLDER_DB" || exit
             ./InstallFullDB.sh
@@ -3338,7 +3339,7 @@ Database User, Client/Server is needed."
 
     "2")
 
-      read -r -p "[YN] Drop/Import Databases? y/n " -n 1 -r
+      read -t 5 -r -p "[YN] Drop/Import Databases? y/n " -n 1 -r
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         echo
         # this is for docker users
@@ -3452,7 +3453,7 @@ Database User, Client/Server is needed."
         read -r -p "[YN] InstallFullDB? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
-          if [[ -z "$FOLDER_DB" ]]; then
+          if [ ! -z "$(ls -A "$FOLDER_DB" 2>/dev/null)" ]; then
             sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
             cd "$FOLDER_DB" || exit
             ./InstallFullDB.sh
@@ -3464,15 +3465,15 @@ Database User, Client/Server is needed."
         # InstallFullDB done
 
         # list backup?
-        read -r -p "[YN] List backup? y/n " -n 1 -r
+        read -t 5 -r -p "[YN] List backup? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           echo "[!!] Backup files ($FOLDER_WOW/backup)"
           ls -lQS "$FOLDER_WOW"/backup
-          # import backup?
-          read -r -p "[YN] Import latest backup? y/n " -n 1 -r
-          echo
         fi
+        # import backup?
+        read -r -p "[YN] Import latest backup? y/n " -n 1 -r
+        echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           sleep 1
           echo -ne '[00] Importing characters backup!\r'
@@ -3500,7 +3501,7 @@ Database User, Client/Server is needed."
 
     "3")
 
-      read -r -p "[YN] Convert MySQL Engine = myisam -> innodb? y/n " -n 1 -r
+      read -t 5 -r -p "[YN] Convert MySQL Engine = myisam -> innodb? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -3583,7 +3584,7 @@ Database User, Client/Server is needed."
 
     "4")
 
-      read -r -p "[YN] Reinstall (Delete /classic-db)? y/n " -n 1 -r
+      read -t 5 -r -p "[YN] Reinstall (Delete /classic-db)? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -3607,7 +3608,7 @@ Database User, Client/Server is needed."
 
     "5")
 
-      read -r -p "[YN] Reset --hard origin/master? y/n " -n 1 -r
+      read -t 5 -r -p "[YN] Reset --hard origin/master? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -3837,7 +3838,7 @@ Check log for which database needs 'applying updates'"
 
       # apply all updates [A] to [B] characters?
       echo
-      read -r -p "[YN] Characters? y/n " -n 1 -r
+      read -t 5 -r -p "[YN] Characters? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         printf '%b' "[${G1:?}OK${N0:?}] Loading..\n"
@@ -3859,7 +3860,7 @@ Check log for which database needs 'applying updates'"
           ;;
         esac
         echo
-        read -r -p "[YN] Without error output? y/n " -n 1 -r
+        read -t 5 -r -p "[YN] Without error output? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           mysql --defaults-extra-file="$SQL_MYCNF" -f --database="$DB_CHARACTERS" <"$FOLDER_WOW"/.all_characters.sql 2>/dev/null
@@ -3875,7 +3876,7 @@ Check log for which database needs 'applying updates'"
         echo
       fi
       # apply all updates [A] to [B] mangos?
-      read -r -p "[YN] Mangos? y/n " -n 1 -r
+      read -t 5 -r -p "[YN] Mangos? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         printf '%b' "[${G1:?}OK${N0:?}] Loading..\n"
@@ -3897,7 +3898,7 @@ Check log for which database needs 'applying updates'"
           ;;
         esac
         echo
-        read -r -p "[YN] Without error output? y/n " -n 1 -r
+        read -t 5 -r -p "[YN] Without error output? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           mysql --defaults-extra-file="$SQL_MYCNF" -f --database="$DB_MANGOS" <"$FOLDER_WOW"/.all_mangos.sql 2>/dev/null
@@ -3913,7 +3914,7 @@ Check log for which database needs 'applying updates'"
         echo
       fi
       # apply all updates [A] to [B] realmd?
-      read -r -p "[YN] Realmd? y/n " -n 1 -r
+      read -t 5 -r -p "[YN] Realmd? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         printf '%b' "[${G1:?}OK${N0:?}] Loading..\n"
@@ -3935,7 +3936,7 @@ Check log for which database needs 'applying updates'"
           ;;
         esac
         echo
-        read -r -p "[YN] Without error output? y/n " -n 1 -r
+        read -t 5 -r -p "[YN] Without error output? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           mysql --defaults-extra-file="$SQL_MYCNF" -f --database="$DB_REALMD" <"$FOLDER_WOW"/.all_realmd.sql 2>/dev/null
@@ -3959,7 +3960,7 @@ Check log for which database needs 'applying updates'"
       read -r -p "[YN] InstallFullDB? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
-        if [[ -z "$FOLDER_DB" ]]; then
+        if [ ! -z "$(ls -A "$FOLDER_DB" 2>/dev/null)" ]; then
           printf '%b' "[${G1:?}OK${N0:?}] Loading..\n"
           sleep 1
           # realmd service
@@ -4166,7 +4167,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
       "1")
 
-        read -r -p "[YN] Shutdown realmd, mangosd? y/n " -n 1 -r
+        read -t 5 -r -p "[YN] Shutdown realmd, mangosd? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           # this is for docker users
@@ -4258,7 +4259,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
       "2")
 
-        read -r -p "[YN] Shutdown realmd? y/n " -n 1 -r
+        read -t 5 -r -p "[YN] Shutdown realmd? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           # this is for docker users
@@ -4314,7 +4315,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
       "3")
 
-        read -r -p "[YN] Shutdown mangosd? y/n " -n 1 -r
+        read -t 5 -r -p "[YN] Shutdown mangosd? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           # this is for docker users
@@ -4435,7 +4436,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
       "1")
 
-        read -r -p "[YN] Restart realmd,mangos? y/n " -n 1 -r
+        read -t 5 -r -p "[YN] Restart realmd,mangos? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           # this is for docker users
@@ -4716,7 +4717,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
       "2")
 
-        read -r -p "[YN] Restart realmd? y/n " -n 1 -r
+        read -t 5 -r -p "[YN] Restart realmd? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           # this is for docker users
@@ -4763,7 +4764,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
       "3")
 
-        read -r -p "[YN] Restart mangos? y/n " -n 1 -r
+        read -t 5 -r -p "[YN] Restart mangos? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           # this is for docker users
@@ -4858,7 +4859,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         git clone "${GITHUB_HELPER:?}"
       else
         # installed
-        read -r -p "[YN] Update/Install Helper? y/n " -n 1 -r
+        read -t 5 -r -p "[YN] Update/Install Helper? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           sudo chown -R "$USER":"$GROUP" "$FOLDER_INSTALL"
@@ -4923,7 +4924,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
     "2")
 
-      read -r -p "[YN] Reinstall (delete/git clone /cmangos-script)? y/n " -n 1 -r
+      read -t 5 -r -p "[YN] Reinstall (delete/git clone /cmangos-script)? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -4958,7 +4959,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
     "3")
 
-      read -r -p "[YN] Reset --hard origin/master? y/n " -n 1 -r
+      read -t 5 -r -p "[YN] Reset --hard origin/master? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
 
