@@ -1,0 +1,214 @@
+#!/bin/bash
+
+#################################
+#   C M a N G O S  -  M E N U   #
+################################# .. ALPHA VERSION!
+
+# By Rainman
+# V20212502
+# 0.2.1.4
+
+# references:
+# https://askubuntu.com/questions/1705/how-can-i-create-a-select-menu-in-a-shell-script
+# https://linuxcommand.org/lc3_adv_dialog.php
+
+export NCURSES_NO_UTF8_ACS=1
+DIALOG_CANCEL=1
+DIALOG_ESC=255
+HEIGHT=20
+WIDTH=45
+CHOICE_HEIGHT=15
+
+BACKTITLE="CMaNGOS features"
+TITLE="<  C M a N G O S - M e n u  >"
+MENU="Choose one of the following options:"
+
+OPTIONS=(Start "Start Server"
+  Stop "Stop Server"
+  Restart "Restart Server"
+  Config "Server Configuration"
+  Update "Update CMaNGOS Server"
+  Install "Setup CMaNGOS Server"
+  Maps "Download, Import Maps"
+  Database "Database Configuration"
+  Remote "Remote Access"
+  Uninstall "Remove Everything"
+  System "System Information"
+  Disk "Display Disk Space"
+  Repo "Display Repo Space")
+
+while true; do
+  exec 3>&1
+  CHOICE=$(dialog --clear \
+    --backtitle "$BACKTITLE" \
+    --title "$TITLE" \
+    --cancel-label "Exit" \
+    --menu "$MENU" \
+    $HEIGHT $WIDTH $CHOICE_HEIGHT \
+    "${OPTIONS[@]}" \
+    2>&1 1>&3)
+
+  # error status
+  EXIT_STATUS=$?
+  exec 3>&-
+  case $EXIT_STATUS in
+  "$DIALOG_CANCEL")
+    clear
+    echo "Program terminated."
+    exit
+    ;;
+  "$DIALOG_ESC")
+    clear
+    echo "Program aborted." >&2
+    exit 1
+    ;;
+  esac
+
+  clear
+
+  display_result() {
+    dialog --title "$1" \
+      --no-collapse \
+      --msgbox "$RESULT" 0 0
+  }
+
+  case $CHOICE in
+
+  0)
+    clear
+    echo "Program terminated."
+    ;;
+
+  Start)
+
+    # look for install folders (mangos-classic)
+    if find "/home/$(whoami)/wow" -type d -name "mangos-classic" &>/dev/null; then
+      CORE_STATUS="1"
+    else
+      CORE_STATUS="0"
+    fi
+    # look for install folders (classic-db)
+    if find "/home/$(whoami)/wow" -type d -name "classic-db" &>/dev/null; then
+      DB_STATUS="1"
+    else
+      DB_STATUS="0"
+    fi
+    REPO_STATUS=$(echo "$CORE_STATUS+$DB_STATUS" 2>/dev/null | bc 2>/dev/null)
+    if [[ "$REPO_STATUS" -eq "2" ]]; then
+      # all set with repos, core and database
+      RESULT=$(echo "Found Install")
+      display_result "Everything Set"
+      # CODE
+    else
+      # all set with repos, core and database
+      RESULT=$(echo "Nothing!")
+      display_result "No Install Found"
+      # CODE
+    fi
+
+    ;;
+
+  Stop)
+
+    # Stop CODE
+
+    ;;
+
+  Restart)
+
+    # Restart CODE
+
+    ;;
+
+  Config)
+
+    # Config CODE
+
+    ;;
+
+  Update)
+
+    # Update CODE
+
+    ;;
+
+  Install)
+
+    # Install CODE
+
+    ;;
+
+  Maps)
+
+    # Maps CODE
+
+    ;;
+
+  Database)
+
+    # Database CODE
+
+    ;;
+
+  Remote)
+
+    # Remote CODE
+
+    ;;
+
+  System)
+
+    # free Memory
+    SYSTEM_FREE_MEM=$(free --mega 2>/dev/null | grep "Mem" 2>/dev/null | awk '{ print $4 }' 2>/dev/null)
+    # total Memory
+    SYSTEM_TOTAL_MEM=$(free --mega 2>/dev/null | grep "Mem" 2>/dev/null | awk '{ print $2 }' 2>/dev/null)
+    # free Space, mmc block device #0, partition #2, partition #2, dev/root, overlay
+    SYSTEM_HDD=$(df -h 2>/dev/null | grep -E "mmcblk0p2|mmcblk0p3|/dev/root|overlay" 2>/dev/null | awk '{ print $3 }' 2>/dev/null)
+    # percentage of total used
+    SYSTEM_HDD_P=$(df -h 2>/dev/null | grep -E "mmcblk0p2|mmcblk0p3|/dev/root|overlay" 2>/dev/null | awk '{ print $5 }' 2>/dev/null)
+    # total size
+    SYSTEM_HDD_T=$(df -h 2>/dev/null | grep -E "mmcblk0p2|mmcblk0p3|/dev/root|overlay" 2>/dev/null | awk '{ print $2 }' 2>/dev/null)
+    # operating system, cpu type, kernal release
+    SYSTEM_CPU=$(uname -p 2>/dev/null)
+    SYSTEM_OS=$(uname -o 2>/dev/null)
+    SYSTEM_KR=$(uname -r 2>/dev/null)
+    # system load, uptime
+    SYSTEM_LOAD=$(uptime 2>/dev/null | grep -o "load.*" 2>/dev/null)
+    SYSTEM_UPTIME=$(uptime 2>/dev/null | grep -Eo "[0-9]+ days, [0-9]+:[0-9]+" 2>/dev/null)
+    # cpu temp
+    SYSTEM_TEMP=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null | cut -c -4 2>/dev/null)
+
+    RESULT=$(
+      echo "Load.....: $SYSTEM_LOAD"
+      echo "System...: $SYSTEM_KR $SYSTEM_OS"
+      echo "Uptime...: $SYSTEM_UPTIME"
+      echo "Hostname.: $HOSTNAME"
+      echo "CPU-Type.: $SYSTEM_CPU ($SYSTEM_TEMP)"
+      echo "Memory...: $SYSTEM_FREE_MEM/$SYSTEM_TOTAL_MEM"
+      echo "HDD......: $SYSTEM_HDD/$SYSTEM_HDD_T $SYSTEM_HDD_P"
+    )
+    display_result "System Information"
+
+    ;;
+
+  Disk)
+
+    RESULT=$(df -h)
+    display_result "Disk Space"
+
+    ;;
+
+  Repo)
+
+    # repo space
+    REPO_SIZE=$(du -h --max-depth=1 "$HOME"/wow/ 2>/dev/null)
+    RESULT=$(
+      echo "Repositories: Core, Database & Backup"
+      echo "$REPO_SIZE"
+    )
+    display_result "Repo Size"
+
+    ;;
+
+  esac
+done
