@@ -4603,7 +4603,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
                 CALC_ERROR_SERVER=$(echo "100/$LOG_LINES*$COUNT_ERROR_SERVER" 2>/dev/null | bc -l 2>/dev/null | awk '{ printf "%.2f%\n", $1 }' 2>/dev/null)
                 ERROR_RATE_SERVER=$(echo "${CALC_ERROR_SERVER:?}")
                 # if any, print "error"
-                printf '%b' "[${R1:?}1E${N0:?}] World: ${R1:?}$COUNT_ERROR_SERVER${N0:?} Error! ${GR:?}${ERROR_RATE_SERVER:?} percent${N0:?}\n"
+                printf '%b' "[${R1:?}1E${N0:?}] World: ${R1:?}$COUNT_ERROR_SERVER${N0:?} Error! ${GR:?}${ERROR_RATE_SERVER:?}${N0:?}\n"
                 # look for serious error
                 if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
                   # count serious errors inside log
@@ -5067,7 +5067,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           CALC_ERROR_SERVER=$(echo "100/$LOG_LINES*$COUNT_ERROR_SERVER" 2>/dev/null | bc -l 2>/dev/null | awk '{ printf "%.2f%\n", $1 }' 2>/dev/null)
           ERROR_RATE_SERVER=$(echo "${CALC_ERROR_SERVER:?}")
           # if any, print "error"
-          printf '%b' "[${R1:?}1E${N0:?}] World: ${R1:?}$COUNT_ERROR_SERVER${N0:?} Error! ${GR:?}${ERROR_RATE_SERVER:?} percent${N0:?}\n"
+          printf '%b' "[${R1:?}1E${N0:?}] World: ${R1:?}$COUNT_ERROR_SERVER${N0:?} Error! ${GR:?}${ERROR_RATE_SERVER:?}${N0:?}\n"
           # look for serious error
           if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>/dev/null; then
             # count serious errors inside log
