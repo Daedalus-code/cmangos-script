@@ -5,12 +5,13 @@
 ################################# .. ALPHA VERSION! expect nothing !
 
 # By Rainman
-# V20212602-barebone
-# 0.3.9.1
+# V20212702-barebone
+# 0.3.3.6
 
 # sources:
 # https://www.osrsbox.com/blog/2019/04/13/installing-a-wow-vanilla-server-on-ubuntu-linux/
 # https://www.osrsbox.com/blog/2019/04/14/configuring-a-wow-vanilla-server-on-ubuntu-linux/
+# https://www.2daygeek.com/bash-shell-script-view-linux-system-information/
 # https://apple.stackexchange.com/questions/4286/is-there-a-mac-os-x-terminal-version-of-the-free-command-in-linux-systems
 # https://medium.com/@takanori.ishikawa/how-to-show-progress-bar-while-unzipping-tons-of-files-7b1ea7a84b01
 # https://askubuntu.com/questions/1705/how-can-i-create-a-select-menu-in-a-shell-script
@@ -46,18 +47,45 @@ fi
 ### Get System Information #####################################################
 
 # do this once, if not found
-if [ ! -f /tmp/uname_a ]; then
-  # behave as though all of the options -mnrsv were specified.
-  uname -a >/tmp/uname_a 2>&1
-  # processor architecture name
-  uname -p >>/tmp/uname_a 2>&1
-  # print the operating system version.
-  uname -v 2>&1 | rev 2>&1 | awk '{ print $1 }' 2>&1 | rev 2>&1 |
-    grep -o "X[0-9][0-9]_.*" >>/tmp/uname_a 2>&1
+if [ ! -f /tmp/sys_info ]; then
+  echo "Getting System Information!"
+  # Hostname
+  echo "Hostname.: $(hostname)" >/tmp/sys_info 2>&1
+  # Uptime
+  echo "Uptime...: $(uptime | awk '{print $3,$4}' | sed 's/,//')" >>/tmp/sys_info 2>&1
+  # Manufacturer
+  echo "Mfr......: $(cat /sys/class/dmi/id/chassis_vendor)" >>/tmp/sys_info 2>&1
+  # Product Name
+  echo "Product..: $(cat /sys/class/dmi/id/product_name)" >>/tmp/sys_info 2>&1
+  # Version
+  echo "Version..: $(cat /sys/class/dmi/id/product_version)" >>/tmp/sys_info 2>&1
+  # Serial Number
+  echo "Serial...: $(cat /sys/class/dmi/id/product_serial)" >>/tmp/sys_info 2>&1
+  # Machine Type
+  echo "Machine..: $(
+    VSERVER=$(lscpu | grep Hypervisor | wc -l)
+    if [ $VSERVER -gt 0 ]; then echo "VM"; else echo "Physical"; fi
+  )" >>/tmp/sys_info 2>&1
+  # Operating System
+  echo "OS.......: $(hostnamectl | grep "Operating System" | cut -d ' ' -f5-)" >>/tmp/sys_info 2>&1
+  # Kernel
+  echo "Kernel...: $(uname -r)" >>/tmp/sys_info 2>&1
+  # Architecture
+  echo "Arch.....: $(arch)" >>/tmp/sys_info 2>&1
+  # Processor Name
+  echo "CPU Name.: $(awk -F':' '/^model name/ {print $2}' /proc/cpuinfo | uniq | sed -e 's/^[ \t]*//')" >>/tmp/sys_info 2>&1
+  # Active User
+  echo "Users....: $(w | cut -d ' ' -f1 | grep -v USER | xargs -n1 | tail -1)" >>/tmp/sys_info 2>&1
+  # System Main IP
+  echo "IP.......: $(hostname -I)" >>/tmp/sys_info 2>&1
+  # Memory Usage
+  echo "RAM Free.: $(free | awk '/Mem/{printf("%.2f%"), $3/$2*100}')" >>/tmp/sys_info 2>&1
+  # Swap Usage
+  echo "RAM Swap.: $(free | awk '/Swap/{printf("%.2f%"), $3/$2*100}')" >>/tmp/sys_info 2>&1
+  # CPU Usage
+  echo "CPU Load.: $(cat /proc/stat | awk '/cpu/{printf("%.2f%\n"), ($2+$4)*100/($2+$4+$5)}' | awk '{print $0}' | head -1)" >>/tmp/sys_info 2>&1
+  echo "OK!"
 fi
-
-# cat uname_a file
-SYSTEM_UNAME=$(cat /tmp/uname_a 2>&1)
 
 ### Dialog Menu ################################################################
 
@@ -264,90 +292,7 @@ while true; do
 
   System)
 
-    if echo "$SYSTEM_UNAME" 2>&1 | grep -q -Eo "Linux"; then
-      # processor architecture, linux
-      SYSTEM_CPU=$(echo "$SYSTEM_UNAME" 2>&1 | tail -1 2>&1)
-      SYSTEM_OS=$(echo "$SYSTEM_UNAME" | head -1 2>&1 | awk '{ print $3 }' 2>&1)
-      SYSTEM_KR=$(echo "$SYSTEM_UNAME" | head -1 2>&1 | awk '{ print $1 }' 2>&1)
-      # system load, uptime, linux
-      SYSTEM_LOAD=$(uptime 2>&1 | grep -o "load.*" 2>&1)
-      SYSTEM_UPTIME_DAYS=$(uptime 2>&1 | grep -Eo "[0-9]+ days" 2>&1)
-      SYSTEM_UPTIME_HOURS=$(uptime 2>&1 | grep -Eo "[0-9]+:[0-9]+" | tail -1)
-      SYSTEM_UPTIME_HOURS=$(printf '%b' "$SYSTEM_UPTIME_HOURS hours")
-      # hostname
-      SYSTEM_HOSTNAME=$(hostname 2>&1)
-      # free Space, mmc block device #0, partition #2, partition #2, dev/root, overlay
-      SYSTEM_HDD=$(df -h 2>&1 | grep -E "mmcblk0p2|mmcblk0p3|/dev/root|overlay" 2>&1 |
-        awk '{ print $3 }' 2>&1)
-      # percentage of total used
-      SYSTEM_HDD_P=$(df -h 2>&1 | grep -E "mmcblk0p2|mmcblk0p3|/dev/root|overlay" 2>&1 |
-        awk '{ print $5 }' 2>&1)
-      # total size
-      SYSTEM_HDD_T=$(df -h 2>&1 | grep -E "mmcblk0p2|mmcblk0p3|/dev/root|overlay" 2>&1 |
-        awk '{ print $2 }' 2>&1)
-      # free Memory
-      SYSTEM_USED_MEM=$(free --mega 2>&1 | grep "Mem" 2>&1 | awk '{ print $4 }' 2>&1)
-      # total Memory
-      SYSTEM_TOTAL_MEM=$(free --mega 2>&1 | grep "Mem" 2>&1 | awk '{ print $2 }' 2>&1)
-
-    elif echo "$SYSTEM_UNAME" 2>&1 | grep -q -Eo "Darwin"; then
-
-      # processor architecture, darwin
-      SYSTEM_CPU=$(echo "$SYSTEM_UNAME" 2>&1 | tail -1 2>&1)
-      SYSTEM_OS=$(echo "$SYSTEM_UNAME" | head -1 2>&1 | awk '{ print $3 }' 2>&1)
-      SYSTEM_KR=$(echo "$SYSTEM_UNAME" | head -1 2>&1 | awk '{ print $1 }' 2>&1)
-      # system load, uptime, darwin
-      SYSTEM_LOAD=$(uptime 2>&1 | grep -o "load.*" 2>&1)
-      SYSTEM_UPTIME_DAYS=$(uptime 2>&1 | grep -Eo "up [0-9]+" 2>&1)
-      SYSTEM_UPTIME_HOURS=$(uptime 2>&1 | grep -Eo "[0-9]+:[0-9]+" | tail -1)
-      SYSTEM_UPTIME_HOURS=$(printf '%b' "$SYSTEM_UPTIME_HOURS hours")
-      # hostname
-      SYSTEM_HOSTNAME=$(hostname 2>&1)
-      # free Space, mmc block device #0, partition #2, partition #2, dev/root, overlay
-      SYSTEM_HDD=$(df -h 2>&1 | grep -E "disk*s*|mmcblk0p2|mmcblk0p3|/dev/root|overlay" 2>&1 |
-        awk '{ print $3 }' 2>&1 | head -1 2>&1)
-      # percentage of total used
-      SYSTEM_HDD_P=$(df -h 2>&1 | grep -E "disk*s*|mmcblk0p2|mmcblk0p3|/dev/root|overlay" 2>&1 |
-        awk '{ print $5 }' 2>&1 | head -1 2>&1)
-      # total size
-      SYSTEM_HDD_T=$(df -h 2>&1 | grep -E "disk*s*|mmcblk0p2|mmcblk0p3|/dev/root|overlay" 2>&1 |
-        awk '{ print $4 }' 2>&1 | head -1 2>&1)
-      # free Memory
-      SYSTEM_USED_MEM=$(top -l 1 -s 0 2>&1 | grep PhysMem 2>&1 | awk '{ print $2 }' 2>&1 | tr -d 'M' 2>&1)
-      # total Memory
-      SYSTEM_TOTAL_MEM=$(top -l 1 -s 0 2>&1 | grep PhysMem 2>&1 | awk '{ print $6 }' 2>&1 | tr -d 'M' 2>&1)
-    fi
-    # docker user
-    if [ -f /.dockerenv ]; then
-      SYSTEM_USER="Docker"
-    else
-      SYSTEM_USER=$(users 2>&1 | awk '{ print $1 }' 2>&1)
-    fi
-
-    # cpu temp
-    if echo "$SYSTEM_UNAME" 2>&1 | grep -q -Eo "aarch64|arm"; then
-      SYSTEM_TEMP=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>&1 |
-        cut -c -4 2>&1)
-      SYSTEM_TEMP=$(echo "($SYSTEM_TEMP)")
-    else
-      SYSTEM_TEMP=""
-    fi
-
-    # no hours
-    SYSTEM_UPTIME_DAYS_MOD=$(echo "$SYSTEM_UPTIME_DAYS" 2>&1 | grep -Eo "[0-9]+" 2>&1)
-    if [[ "$SYSTEM_UPTIME_DAYS_MOD" -ge "1" ]]; then
-      SYSTEM_UPTIME_DAYS=$(echo "$SYSTEM_UPTIME_DAYS ")
-    fi
-
-    RESULT=$(
-      echo "Load.....: $SYSTEM_LOAD"
-      echo "System...: $SYSTEM_KR $SYSTEM_OS"
-      echo "Uptime...: $SYSTEM_UPTIME_DAYS$SYSTEM_UPTIME_HOURS"
-      echo "Hostname.: $SYSTEM_HOSTNAME ($SYSTEM_USER)"
-      echo "CPU-Type.: $SYSTEM_CPU $SYSTEM_TEMP"
-      echo "Memory...: $SYSTEM_USED_MEM/$SYSTEM_TOTAL_MEM"
-      echo "HDD......: $SYSTEM_HDD/$SYSTEM_HDD_T $SYSTEM_HDD_P"
-    )
+    RESULT=$(cat /tmp/sys_info)
     display_result "System Information"
 
     ;;
