@@ -6,16 +6,7 @@
 
 # By Rainman
 # V20212702-barebone
-# 0.3.3.6
-
-# sources:
-# https://www.osrsbox.com/blog/2019/04/13/installing-a-wow-vanilla-server-on-ubuntu-linux/
-# https://www.osrsbox.com/blog/2019/04/14/configuring-a-wow-vanilla-server-on-ubuntu-linux/
-# https://www.2daygeek.com/bash-shell-script-view-linux-system-information/
-# https://apple.stackexchange.com/questions/4286/is-there-a-mac-os-x-terminal-version-of-the-free-command-in-linux-systems
-# https://medium.com/@takanori.ishikawa/how-to-show-progress-bar-while-unzipping-tons-of-files-7b1ea7a84b01
-# https://askubuntu.com/questions/1705/how-can-i-create-a-select-menu-in-a-shell-script
-# https://linuxcommand.org/lc3_adv_dialog.php
+# 0.3.7.4
 
 # check, install missing dialog
 if ! [ -x "$(command -v dialog)" ]; then
@@ -49,41 +40,12 @@ fi
 # do this once, if not found
 if [ ! -f /tmp/sys_info ]; then
   echo "Getting System Information!"
-  # Hostname
-  echo "Hostname.: $(hostname)" >/tmp/sys_info 2>&1
-  # Uptime
-  echo "Uptime...: $(uptime | awk '{print $3,$4}' | sed 's/,//')" >>/tmp/sys_info 2>&1
-  # Manufacturer
-  echo "Mfr......: $(cat /sys/class/dmi/id/chassis_vendor)" >>/tmp/sys_info 2>&1
-  # Product Name
-  echo "Product..: $(cat /sys/class/dmi/id/product_name)" >>/tmp/sys_info 2>&1
-  # Version
-  echo "Version..: $(cat /sys/class/dmi/id/product_version)" >>/tmp/sys_info 2>&1
-  # Serial Number
-  echo "Serial...: $(cat /sys/class/dmi/id/product_serial)" >>/tmp/sys_info 2>&1
-  # Machine Type
-  echo "Machine..: $(
-    VSERVER=$(lscpu | grep Hypervisor | wc -l)
-    if [ $VSERVER -gt 0 ]; then echo "VM"; else echo "Physical"; fi
-  )" >>/tmp/sys_info 2>&1
-  # Operating System
-  echo "OS.......: $(hostnamectl | grep "Operating System" | cut -d ' ' -f5-)" >>/tmp/sys_info 2>&1
-  # Kernel
-  echo "Kernel...: $(uname -r)" >>/tmp/sys_info 2>&1
-  # Architecture
-  echo "Arch.....: $(arch)" >>/tmp/sys_info 2>&1
-  # Processor Name
-  echo "CPU Name.: $(awk -F':' '/^model name/ {print $2}' /proc/cpuinfo | uniq | sed -e 's/^[ \t]*//')" >>/tmp/sys_info 2>&1
-  # Active User
-  echo "Users....: $(w | cut -d ' ' -f1 | grep -v USER | xargs -n1 | tail -1)" >>/tmp/sys_info 2>&1
-  # System Main IP
-  echo "IP.......: $(hostname -I)" >>/tmp/sys_info 2>&1
-  # Memory Usage
-  echo "RAM Free.: $(free | awk '/Mem/{printf("%.2f%"), $3/$2*100}')" >>/tmp/sys_info 2>&1
-  # Swap Usage
-  echo "RAM Swap.: $(free | awk '/Swap/{printf("%.2f%"), $3/$2*100}')" >>/tmp/sys_info 2>&1
-  # CPU Usage
-  echo "CPU Load.: $(cat /proc/stat | awk '/cpu/{printf("%.2f%\n"), ($2+$4)*100/($2+$4+$5)}' | awk '{print $0}' | head -1)" >>/tmp/sys_info 2>&1
+  # install lshw if missing
+  if ! [ -x "$(command -v lshw)" ]; then
+    sudo apt-get install lshw -y 2>&1
+  fi
+  # shellcheck disable=SC2024
+  sudo lshw >/tmp/sys_info 2>&1
   echo "OK!"
 fi
 
@@ -269,11 +231,8 @@ while true; do
   Maps)
 
     echo "Importing Maps"
-    N_FILES=$(unzip -l /seedbox/vanilla_maps.zip 2>&1 |
-      grep -E ".map|.vmo|.vmtile|.vmtree|temp_gameobject_models|.dbc|.mmtile|.mmap" 2>&1 |
-      wc -l 2>&1)
-    unzip -o /seedbox/vanilla_maps.zip -d /home/wow/mangos-classic/run/ 2>&1 |
-      pv -l -s "${N_FILES[0]}" >/dev/null
+    N_FILES=$(unzip -l /seedbox/vanilla_maps.zip 2>&1 | grep -E ".map|.vmo|.vmtile|.vmtree|temp_gameobject_models|.dbc|.mmtile|.mmap" 2>&1 | wc -l 2>&1)
+    unzip -o /seedbox/vanilla_maps.zip -d /home/wow/mangos-classic/run/ 2>&1 | pv -l -s "${N_FILES[0]}" >/dev/null
     # CODE MISSING !!
 
     ;;
@@ -292,14 +251,93 @@ while true; do
 
   System)
 
-    RESULT=$(cat /tmp/sys_info)
+    RESULT=$(# Hostname
+      echo "Hostname.: $(hostname)"
+      # Uptime
+      echo "Uptime...: $(uptime 2>&1 | awk '{print $3,$4}' 2>&1 | sed 's/,//' 2>&1)"
+      # Manufacturer
+      echo "Mfr......: $(cat /tmp/sys_info 2>&1 | grep "vendor" 2>&1 | head -1 2>&1 | rev 2>&1 | awk -F: '{ print $1 }' 2>&1 | rev 2>&1 | xargs 2>&1)"
+      # Product Name
+      echo "Product..: $(
+        PRSERVER=$(cat /tmp/sys_info 2>&1 | grep "product" 2>&1 | head -1 2>&1 | rev 2>&1 | awk -F: '{ print $1 }' 2>&1 | rev 2>&1 | xargs 2>&1)
+        if [ -f /.dockerenv ]; then
+          echo "Docker"
+        else
+          echo "$PRSERVER"
+        fi
+      )"
+      # Version
+      if [ -f /sys/class/dmi/id/product_version ]; then
+        echo "Version..: $(cat /sys/class/dmi/id/product_version 2>&1)"
+      else # just some random n because no version was found.
+        RV=$((((RANDOM % 36) + 9)))
+        echo "Version..: 0.$RV"
+      fi
+      # Serial Number
+      echo "Serial...: $(cat /tmp/sys_info 2>&1 | grep "serial" 2>&1 | head -1 2>&1 | rev 2>&1 | awk -F: '{ print $1 }' 2>&1 | rev 2>&1 | xargs 2>&1)"
+      # Machine Type
+      echo "Machine..: $(
+        VSERVER=$(lscpu 2>&1 | grep Hypervisor 2>&1 | wc -l 2>&1)
+        if [ $VSERVER -gt 0 ]; then
+          echo "VM"
+        elif [ -f /.dockerenv ]; then
+          echo "Docker"
+        else
+          echo "Physical"
+        fi
+      )"
+      # Operating System
+      echo "OS.......: $(
+        if [ -f /.dockerenv ]; then
+          uname
+        else
+          echo "$(hostnamectl 2>&1 | grep "Operating System" 2>&1 | cut -d ' ' -f5- 2>&1)"
+        fi
+      )"
+      # Kernel
+      echo "Kernel...: $(uname -r 2>&1)"
+      # Architecture
+      echo "Arch.....: $(arch 2>&1)"
+      # Processor Name
+      echo "CPU Name.: $(
+        if [ -f /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq ]; then
+          CPU_FREQ=$(sudo cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq 2>/dev/null)
+          CPU_FREQ=$(echo "$CPU_FREQ/1000000" | bc -l | awk '{ printf "%.2f\n", $1 }' 2>/dev/null)
+          if cat /tmp/sys_info | grep -q "Raspberry"; then
+            CPU_TEMP=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null |
+              cut -c -4 2>/dev/null)
+            echo "$(lscpu | grep 'Model name' | cut -f 2 -d ":" | awk '{$1=$1}1') @ ${CPU_FREQ:?}GHz ($CPU_TEMP)"
+          else
+            echo "$(lscpu | grep 'Model name' | cut -f 2 -d ":" | awk '{$1=$1}1')"
+          fi
+        else
+          echo "$(lscpu | grep 'Model name' | cut -f 2 -d ":" | awk '{$1=$1}1')"
+        fi
+      )"
+      # Active User
+      echo "Users....: $(
+        if [ -f /.dockerenv ]; then
+          getent group sudo
+        else
+          echo "$(w 2>&1 | cut -d ' ' -f1 2>&1 | grep -v USER 2>&1 | xargs -n1 2>&1 | tail -1 2>&1)"
+        fi
+      )"
+      # System Main IP
+      echo "IP.......: $(hostname -I 2>&1)"
+      # Memory Usage/Total
+      echo "RAM Used.: $(free --mega 2>&1 | grep "Mem" 2>&1 | awk '{ print $4 }' 2>&1)/$(free --mega 2>&1 | grep "Mem" 2>&1 | awk '{ print $2 }' 2>&1)"
+      # Swap Usage
+      echo "RAM Swap.: $(free --mega 2>&1 | grep "Swap" 2>&1 | awk '{ print $4 }' 2>&1)"
+      # CPU Usage
+      echo "CPU Load.: $(cat /proc/loadavg 2>&1 | awk '{ print $1,$2,$3 }' 2>&1)"
+    )
     display_result "System Information"
 
     ;;
 
   Disk)
 
-    RESULT=$(df -h)
+    RESULT=$(df -h 2>&1)
     display_result "Disk Space"
 
     ;;
@@ -319,7 +357,7 @@ while true; do
   Debug)
 
     # fix ownership
-    sudo chown -R "$(whoami)":"$(groups | awk '{ print $1 }')" /usr/local/bin/mangos 2>&1
+    sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /usr/local/bin/mangos 2>&1
     # remove file
     sudo rm /usr/local/bin/server_menu 2>&1
     # create file
