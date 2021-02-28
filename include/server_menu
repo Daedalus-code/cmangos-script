@@ -5,8 +5,10 @@
 ################################# .. ALPHA VERSION! expect nothing !
 
 # By Rainman
-# V20212702-barebone
-# 0.3.7.4
+# V20212802-barebone
+# 0.3.8.3
+
+# https://www.linuxatemyram.com, num num num
 
 # check, install missing dialog
 if ! [ -x "$(command -v dialog)" ]; then
@@ -47,6 +49,7 @@ if [ ! -f /tmp/sys_info ]; then
   # shellcheck disable=SC2024
   sudo lshw >/tmp/sys_info 2>&1
   echo "OK!"
+  sleep 1
 fi
 
 ### Dialog Menu ################################################################
@@ -62,20 +65,20 @@ BACKTITLE="CMaNGOS features"
 TITLE="<  C M a N G O S - M e n u  >"
 MENU="Choose one of the following options:"
 
-OPTIONS=(Start "Start Server"
-  Stop "Stop Server"
-  Restart "Restart Server"
+OPTIONS=(Manage "Start/Stop Server"
+  Update "Update/Upgrade Server"
   Config "Server Configuration"
-  Update "Update Server, Script"
-  Install "Setup Server"
-  Maps "Download, Import Maps"
-  Database "Database Configuration"
+  Core "Core Configuration"
+  Data "Database Configuration"
+  Bots "Bot Configuration"
+  Maps "P2P/Extract/Import Maps"
   Remote "Remote Access"
-  Uninstall "Remove Everything"
+  Realm "Realm Information"
   System "System Information"
-  Disk "Display Disk Space"
   Repo "Display Repo Space"
-  Debug "Debug Script")
+  Disk "Display Disk Space"
+  Debug "Debug Menu (developer)"
+  Remove "Uninstall Everything")
 
 while true; do
   exec 3>&1
@@ -119,7 +122,7 @@ while true; do
     echo "Program terminated."
     ;;
 
-  Start)
+  Manage)
 
     # look for install folders (mangos-classic)
     if find "/home/$(whoami)/wow" -type d -name "mangos-classic" &>/dev/null; then
@@ -148,25 +151,7 @@ while true; do
 
     ;;
 
-  Stop)
-
-    # CODE MISSING !!
-
-    ;;
-
-  Restart)
-
-    # CODE MISSING !!
-
-    ;;
-
-  Config)
-
-    # CODE MISSING !!
-
-    ;;
-
-  Install)
+  Update)
 
     HEIGHT=15
     WIDTH=40
@@ -222,7 +207,25 @@ while true; do
 
     ;;
 
-  Update)
+  Config)
+
+    # CODE MISSING !!
+
+    ;;
+
+  Core)
+
+    # CODE MISSING !!
+
+    ;;
+
+  Data)
+
+    # CODE MISSING !!
+
+    ;;
+
+  Bots)
 
     # CODE MISSING !!
 
@@ -237,13 +240,13 @@ while true; do
 
     ;;
 
-  Database)
+  Remote)
 
     # CODE MISSING !!
 
     ;;
 
-  Remote)
+  Realm)
 
     # CODE MISSING !!
 
@@ -335,13 +338,6 @@ while true; do
 
     ;;
 
-  Disk)
-
-    RESULT=$(df -h 2>&1)
-    display_result "Disk Space"
-
-    ;;
-
   Repo)
 
     # repo space
@@ -351,6 +347,13 @@ while true; do
       echo "$REPO_SIZE"
     )
     display_result "Repo Size"
+
+    ;;
+
+  Disk)
+
+    RESULT=$(df -h 2>&1)
+    display_result "Disk Space"
 
     ;;
 
@@ -366,6 +369,12 @@ while true; do
     sudo chmod +x /usr/local/bin/server_menu 2>&1
     # nano file
     sudo nano /usr/local/bin/server_menu 2>&1
+    # CODE MISSING !!
+
+    ;;
+
+  Remove)
+
     # CODE MISSING !!
 
     ;;
