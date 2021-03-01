@@ -6,9 +6,27 @@
 
 # By Rainman
 # V20210103-barebone
-# 0.4.9.1
+# 0.5.3.2
 
 # https://www.linuxatemyram.com, num num num
+
+# shellcheck disable=SC2034
+
+# color
+B0='\e[34m'   # Blue
+B1='\e[94m'   # Blue light
+CY='\e[36m'   # Cyan
+C1='\e[96m'   # Cyan light
+G0='\e[32m'   # Green
+G1='\e[92m'   # Green light
+GR='\e[90m'   # Grey
+N0='\033[0m'  # No color
+P0='\e[0;35m' # Purple
+P1='\e[1;35m' # Purple light
+R0='\e[31m'   # Red
+R1='\e[91m'   # Red light
+Y0='\e[33m'   # Yellow
+Y1='\e[93m'   # Yellow light
 
 export NCURSES_NO_UTF8_ACS=1
 
@@ -126,17 +144,21 @@ while true; do
 
     DIALOG_CANCEL=1
     DIALOG_ESC=255
-    HEIGHT=12
-    WIDTH=45
-    CHOICE_HEIGHT=3
+    HEIGHT=15
+    WIDTH=40
+    CHOICE_HEIGHT=7
 
-    BACKTITLE="Install Server"
-    TITLE="Server Cores & Databases"
+    BACKTITLE="Manage Server"
+    TITLE="Start Stop Restart Server"
     MENU="Choose one of the following options:"
 
-    OPTIONS=(1 "CMaNGOS Classic"
-      2 "CMaNGOS The Burning Crusade"
-      3 "CMaNGOS Wrath of the Lich King")
+    OPTIONS=(1 "Restart Realm, Mangos"
+      2 "Start Realm, Mangos"
+      3 "Stop Realm, Mangos"
+      4 "Start Realm"
+      5 "Start Mangos"
+      6 "Stop Realm"
+      7 "Stop Mangos")
 
     exec 3>&1
     CHOICE=$(dialog --clear \
@@ -199,12 +221,12 @@ while true; do
 
     DIALOG_CANCEL=1
     DIALOG_ESC=255
-    HEIGHT=12
+    HEIGHT=10
     WIDTH=45
     CHOICE_HEIGHT=3
     BACKTITLE="Install, Update, Upgrade Server"
     TITLE="Server Cores & Databases"
-    MENU="Choose one of the following options:"
+    MENU="Choose one of the following expansions:"
 
     OPTIONS=(1 "CMaNGOS Classic"
       2 "CMaNGOS The Burning Crusade"
@@ -257,8 +279,16 @@ while true; do
       cd build || exit          # change to the newly created directory called build
       # cmake command
       cmake .. -DCMAKE_INSTALL_PREFIX=\../run -DBUILD_EXTRACTORS=ON -DPCH=1 -DDEBUG=0 -DBUILD_PLAYERBOT=OFF
+      # start counting (seconds)
+      START="$SECONDS"
       make
       make install
+      # get seconds since start
+      DURATION=$(echo "$SECONDS-$START" 2>/dev/null | bc 2>/dev/null)
+      # convert seconds
+      TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
+      echo
+      printf '%b' "Build time: ${G1:?}$TIMER${N0:?}\n"
       # CODE MISSING !!
 
       ;;
@@ -281,8 +311,16 @@ while true; do
       cd build || exit      # change to the newly created directory called build
       # cmake command
       cmake .. -DCMAKE_INSTALL_PREFIX=\../run -DBUILD_EXTRACTORS=ON -DPCH=1 -DDEBUG=0 -DBUILD_PLAYERBOT=OFF
+      # start counting (seconds)
+      START="$SECONDS"
       make
       make install
+      # get seconds since start
+      DURATION=$(echo "$SECONDS-$START" 2>/dev/null | bc 2>/dev/null)
+      # convert seconds
+      TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
+      echo
+      printf '%b' "Build time: ${G1:?}$TIMER${N0:?}\n"
       # CODE MISSING !!
 
       ;;
@@ -305,8 +343,16 @@ while true; do
       cd build || exit      # change to the newly created directory called build
       # cmake command
       cmake .. -DCMAKE_INSTALL_PREFIX=\../run -DBUILD_EXTRACTORS=ON -DPCH=1 -DDEBUG=0 -DBUILD_PLAYERBOT=OFF
+      # start counting (seconds)
+      START="$SECONDS"
       make
       make install
+      # get seconds since start
+      DURATION=$(echo "$SECONDS-$START" 2>/dev/null | bc 2>/dev/null)
+      # convert seconds
+      TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
+      echo
+      printf '%b' "Build time: ${G1:?}$TIMER${N0:?}\n"
       # CODE MISSING !!
 
       ;;
@@ -339,16 +385,11 @@ while true; do
 
     ;;
 
-  Maps)
+  Maps) ;;
 
-    echo "Importing Maps"
-    N_FILES=$(unzip -l /seedbox/vanilla_maps.zip 2>&1 | grep -E ".map|.vmo|.vmtile|.vmtree|temp_gameobject_models|.dbc|.mmtile|.mmap" 2>&1 | wc -l 2>&1)
-    unzip -o /seedbox/vanilla_maps.zip -d /home/wow/mangos-classic/run/ 2>&1 | pv -l -s "${N_FILES[0]}" >/dev/null
-    # CODE MISSING !!
-
-    ;;
-
-  Remote)
+  \
+    \
+    Remote)
 
     # CODE MISSING !!
 
