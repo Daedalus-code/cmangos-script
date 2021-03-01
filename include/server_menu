@@ -6,7 +6,7 @@
 
 # By Rainman
 # V20210103-barebone
-# 0.5.4.3
+# 0.5.3.8
 
 # https://www.linuxatemyram.com, num num num
 
@@ -144,21 +144,16 @@ while true; do
 
     DIALOG_CANCEL=1
     DIALOG_ESC=255
-    HEIGHT=15
+    HEIGHT=9
     WIDTH=40
-    CHOICE_HEIGHT=7
+    CHOICE_HEIGHT=2
 
     BACKTITLE="Manage Server"
-    TITLE="Start Stop Restart Server"
+    TITLE="Start Stop Restart Realmd, Mangosd"
     MENU="Choose one of the following options:"
 
-    OPTIONS=(1 "Restart Realm, Mangos"
-      2 "Start Realm, Mangos"
-      3 "Stop Realm, Mangos"
-      4 "Start Realm"
-      5 "Start Mangos"
-      6 "Stop Realm"
-      7 "Stop Mangos")
+    OPTIONS=(1 "Re/Start Realmd, Mangosd"
+      2 "Stop Realmd, Mangosd")
 
     exec 3>&1
     CHOICE=$(dialog --clear \
@@ -344,9 +339,9 @@ while true; do
       cd wow || exit # change to the wow directory
       git clone git://github.com/cmangos/mangos-wotlk.git
       git clone git://github.com/cmangos/wotlk-db.git
-      cd mangos-tbc || exit # change to the mangos-wotlk directory
-      mkdir build           # make a new directory in mangos-wotlk called build
-      cd build || exit      # change to the newly created directory called build
+      cd mangos-wotlk || exit # change to the mangos-wotlk directory
+      mkdir build             # make a new directory in mangos-wotlk called build
+      cd build || exit        # change to the newly created directory called build
       # cmake command
       cmake .. -DCMAKE_INSTALL_PREFIX=\../run -DBUILD_EXTRACTORS=ON -DPCH=1 -DDEBUG=0 -DBUILD_PLAYERBOT=OFF
       # start counting (seconds)
