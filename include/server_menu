@@ -6,7 +6,7 @@
 
 # By Rainman
 # V20210103-barebone
-# 0.5.3.2
+# 0.5.4.3
 
 # https://www.linuxatemyram.com, num num num
 
@@ -289,6 +289,9 @@ while true; do
       TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
       echo
       printf '%b' "Build time: ${G1:?}$TIMER${N0:?}\n"
+      echo
+      read -r -p "Press Enter to continue" </dev/tty
+      echo
       # CODE MISSING !!
 
       ;;
@@ -321,6 +324,9 @@ while true; do
       TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
       echo
       printf '%b' "Build time: ${G1:?}$TIMER${N0:?}\n"
+      echo
+      read -r -p "Press Enter to continue" </dev/tty
+      echo
       # CODE MISSING !!
 
       ;;
@@ -353,6 +359,9 @@ while true; do
       TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
       echo
       printf '%b' "Build time: ${G1:?}$TIMER${N0:?}\n"
+      echo
+      read -r -p "Press Enter to continue" </dev/tty
+      echo
       # CODE MISSING !!
 
       ;;
@@ -385,11 +394,13 @@ while true; do
 
     ;;
 
-  Maps) ;;
+  Maps)
 
-  \
-    \
-    Remote)
+    # CODE MISSING !!
+
+    ;;
+
+  Remote)
 
     # CODE MISSING !!
 
