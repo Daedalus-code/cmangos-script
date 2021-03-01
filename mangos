@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20212502
-# 5.4.5.1
+# V20210103
+# 5.4.5.6
 
 while :; do
 
@@ -4898,8 +4898,13 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           else
             # install new upgrades
             sudo cp /usr/local/bin/mangos /usr/local/bin/mangos.old &>/dev/null
+            # non executable
             sudo chmod -x /usr/local/bin/mangos.old
+            # install mangos script
             sudo cp "$FOLDER_HELPER"/mangos /usr/local/bin/mangos &>/dev/null
+            # install server_menu script
+            sudo cp "$FOLDER_HELPER"/include/server_menu /usr/local/bin/ &>/dev/null
+            # make mangos executable
             sudo chmod +x /usr/local/bin/mangos
             sleep 1
             printf '%b' "[${G1:?}OK${N0:?}] Installed!"
