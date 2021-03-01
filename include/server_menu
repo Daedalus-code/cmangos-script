@@ -5,10 +5,12 @@
 ################################# .. ALPHA VERSION! expect nothing !
 
 # By Rainman
-# V20212802-barebone
-# 0.3.8.3
+# V20210103-barebone
+# 0.4.9.1
 
 # https://www.linuxatemyram.com, num num num
+
+export NCURSES_NO_UTF8_ACS=1
 
 # check, install missing dialog
 if ! [ -x "$(command -v dialog)" ]; then
@@ -48,13 +50,11 @@ if [ ! -f /tmp/sys_info ]; then
   fi
   # shellcheck disable=SC2024
   sudo lshw >/tmp/sys_info 2>&1
-  echo "OK!"
   sleep 1
 fi
 
 ### Dialog Menu ################################################################
 
-export NCURSES_NO_UTF8_ACS=1
 DIALOG_CANCEL=1
 DIALOG_ESC=255
 HEIGHT=21
@@ -124,38 +124,12 @@ while true; do
 
   Manage)
 
-    # look for install folders (mangos-classic)
-    if find "/home/$(whoami)/wow" -type d -name "mangos-classic" &>/dev/null; then
-      CORE_STATUS="1"
-    else
-      CORE_STATUS="0"
-    fi
-    # look for install folders (classic-db)
-    if find "/home/$(whoami)/wow" -type d -name "classic-db" &>/dev/null; then
-      DB_STATUS="1"
-    else
-      DB_STATUS="0"
-    fi
-    REPO_STATUS=$(echo "$CORE_STATUS+$DB_STATUS" 2>&1 | bc 2>&1)
-    if [[ "$REPO_STATUS" -eq "2" ]]; then
-      # all set with repos, core and database
-      RESULT=$(echo "Found Install")
-      display_result "Everything Set"
-      # CODE MISSING !!
-    else
-      # all set with repos, core and database
-      RESULT=$(echo "Nothing!")
-      display_result "No Install Found"
-      # CODE MISSING !!
-    fi
+    DIALOG_CANCEL=1
+    DIALOG_ESC=255
+    HEIGHT=12
+    WIDTH=45
+    CHOICE_HEIGHT=3
 
-    ;;
-
-  Update)
-
-    HEIGHT=15
-    WIDTH=40
-    CHOICE_HEIGHT=4
     BACKTITLE="Install Server"
     TITLE="Server Cores & Databases"
     MENU="Choose one of the following options:"
@@ -164,23 +138,115 @@ while true; do
       2 "CMaNGOS The Burning Crusade"
       3 "CMaNGOS Wrath of the Lich King")
 
+    exec 3>&1
     CHOICE=$(dialog --clear \
       --backtitle "$BACKTITLE" \
       --title "$TITLE" \
+      --cancel-label "Exit" \
       --menu "$MENU" \
       $HEIGHT $WIDTH $CHOICE_HEIGHT \
       "${OPTIONS[@]}" \
-      2>&1 >/dev/tty)
+      2>&1 1>&3)
+
+    # error status
+    EXIT_STATUS=$?
+    exec 3>&-
+    case $EXIT_STATUS in
+    "$DIALOG_CANCEL")
+      clear
+      echo "Program terminated."
+      exit
+      ;;
+    "$DIALOG_ESC")
+      clear
+      echo "Program aborted." >&2
+      exit 1
+      ;;
+    esac
 
     clear
     case $CHOICE in
+
+    ### CMaNGOS Classic (vanilla) ##############################################
+
+    1)
+
+      # CODE MISSING !!
+
+      ;;
+
+      ### CMaNGOS The Burning Crusade (TBC) ####################################
+
+    2)
+
+      # CODE MISSING !!
+
+      ;;
+
+      ### CMaNGOS Wrath of the Lich King (WOTLK) ###############################
+
+    3)
+
+      # CODE MISSING !!
+
+      ;;
+
+    esac
+
+    ;;
+
+  Update)
+
+    DIALOG_CANCEL=1
+    DIALOG_ESC=255
+    HEIGHT=12
+    WIDTH=45
+    CHOICE_HEIGHT=3
+    BACKTITLE="Install, Update, Upgrade Server"
+    TITLE="Server Cores & Databases"
+    MENU="Choose one of the following options:"
+
+    OPTIONS=(1 "CMaNGOS Classic"
+      2 "CMaNGOS The Burning Crusade"
+      3 "CMaNGOS Wrath of the Lich King")
+
+    exec 3>&1
+    CHOICE=$(dialog --clear \
+      --backtitle "$BACKTITLE" \
+      --title "$TITLE" \
+      --cancel-label "Exit" \
+      --menu "$MENU" \
+      $HEIGHT $WIDTH $CHOICE_HEIGHT \
+      "${OPTIONS[@]}" \
+      2>&1 1>&3)
+
+    # error status
+    EXIT_STATUS=$?
+    exec 3>&-
+    case $EXIT_STATUS in
+    "$DIALOG_CANCEL")
+      clear
+      echo "Program terminated."
+      exit
+      ;;
+    "$DIALOG_ESC")
+      clear
+      echo "Program aborted." >&2
+      exit 1
+      ;;
+    esac
+
+    clear
+    case $CHOICE in
+
+    ### CMaNGOS Classic (vanilla) ##############################################
 
     1)
 
       # preparing
       sudo apt update && sudo apt upgrade
       # install all the required packages to build CMaNGOS
-      sudo apt install build-essential gcc g++ automake git-core autoconf make patch libmysql++-dev mysql-server libtool libssl-dev grep binutils zlibc libc6 libbz2-dev cmake subversion libboost-all-dev -y
+      sudo apt-get install build-essential gcc g++ automake git-core autoconf make patch libmysql++-dev mysql-server libtool libssl-dev grep binutils zlibc libc6 libbz2-dev cmake subversion libboost-all-dev -y
       cd || exit     # change to home directory
       mkdir wow      # create folder named wow
       cd wow || exit # change to the wow directory
@@ -197,12 +263,54 @@ while true; do
 
       ;;
 
+      ### CMaNGOS The Burning Crusade (TBC) ####################################
+
     2)
-      echo "You chose Option 2"
+
+      # preparing
+      sudo apt update && sudo apt upgrade
+      # install all the required packages to build CMaNGOS
+      sudo apt-get install build-essential gcc g++ automake git-core autoconf make patch libmysql++-dev mysql-server libtool libssl-dev grep binutils zlibc libc6 libbz2-dev cmake subversion libboost-all-dev -y
+      cd || exit     # change to home directory
+      mkdir wow      # create folder named wow
+      cd wow || exit # change to the wow directory
+      git clone git://github.com/cmangos/mangos-tbc.git
+      git clone git://github.com/cmangos/tbc-db.git
+      cd mangos-tbc || exit # change to the mangos-tbc directory
+      mkdir build           # make a new directory in mangos-tbc called build
+      cd build || exit      # change to the newly created directory called build
+      # cmake command
+      cmake .. -DCMAKE_INSTALL_PREFIX=\../run -DBUILD_EXTRACTORS=ON -DPCH=1 -DDEBUG=0 -DBUILD_PLAYERBOT=OFF
+      make
+      make install
+      # CODE MISSING !!
+
       ;;
+
+      ### CMaNGOS Wrath of the Lich King (WOTLK) ###############################
+
     3)
-      echo "You chose Option 3"
+
+      # preparing
+      sudo apt update && sudo apt upgrade
+      # install all the required packages to build CMaNGOS
+      sudo apt-get install build-essential gcc g++ automake git-core autoconf make patch libmysql++-dev mysql-server libtool libssl-dev grep binutils zlibc libc6 libbz2-dev cmake subversion libboost-all-dev -y
+      cd || exit     # change to home directory
+      mkdir wow      # create folder named wow
+      cd wow || exit # change to the wow directory
+      git clone git://github.com/cmangos/mangos-wotlk.git
+      git clone git://github.com/cmangos/wotlk-db.git
+      cd mangos-tbc || exit # change to the mangos-wotlk directory
+      mkdir build           # make a new directory in mangos-wotlk called build
+      cd build || exit      # change to the newly created directory called build
+      # cmake command
+      cmake .. -DCMAKE_INSTALL_PREFIX=\../run -DBUILD_EXTRACTORS=ON -DPCH=1 -DDEBUG=0 -DBUILD_PLAYERBOT=OFF
+      make
+      make install
+      # CODE MISSING !!
+
       ;;
+
     esac
 
     ;;
@@ -273,8 +381,8 @@ while true; do
       if [ -f /sys/class/dmi/id/product_version ]; then
         echo "Version..: $(cat /sys/class/dmi/id/product_version 2>&1)"
       else # just some random n because no version was found.
-        RV=$((((RANDOM % 36) + 9)))
-        echo "Version..: 0.$RV"
+        RV=$((((RANDOM % 3) + 1)))
+        echo "Version..: 0.0$RV"
       fi
       # Serial Number
       echo "Serial...: $(cat /tmp/sys_info 2>&1 | grep "serial" 2>&1 | head -1 2>&1 | rev 2>&1 | awk -F: '{ print $1 }' 2>&1 | rev 2>&1 | xargs 2>&1)"
@@ -327,8 +435,8 @@ while true; do
       )"
       # System Main IP
       echo "IP.......: $(hostname -I 2>&1)"
-      # Memory Usage/Total
-      echo "RAM Used.: $(free --mega 2>&1 | grep "Mem" 2>&1 | awk '{ print $4 }' 2>&1)/$(free --mega 2>&1 | grep "Mem" 2>&1 | awk '{ print $2 }' 2>&1)"
+      # Memory Free/Total
+      echo "RAM Free.: $(free --mega 2>&1 | grep "Mem" 2>&1 | awk '{ print $4 }' 2>&1)/$(free --mega 2>&1 | grep "Mem" 2>&1 | awk '{ print $2 }' 2>&1)"
       # Swap Usage
       echo "RAM Swap.: $(free --mega 2>&1 | grep "Swap" 2>&1 | awk '{ print $4 }' 2>&1)"
       # CPU Usage
