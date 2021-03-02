@@ -596,10 +596,10 @@ ${PASS_NC:?}
       # look for error
       if grep -q -E ".*ERROR*." "${FOLDER_CORE:?}"/run/logs/Realmd.log &>/dev/null; then
         # if any, print "error"
-        CM_REALMD_LOG="$CM_REALMD_LOG_STAT${R1:?}E${N0:?}"
+        CM_REALMD_LOG="${R1:?}E${N0:?}"
       else
         # if nothing, print "ok"
-        CM_REALMD_LOG="$CM_REALMD_LOG_STAT${G1:?}✓${N0:?}"
+        CM_REALMD_LOG="${G1:?}✓${N0:?}"
       fi
       # look for empty tables
       if grep -q -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log &>/dev/null; then
@@ -613,10 +613,10 @@ ${PASS_NC:?}
       # look for error
       if grep -q -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
         # if any, print "error"
-        CM_SERVER_LOG="$CM_SERVER_LOG_STAT${R1:?}E${N0:?}"
+        CM_SERVER_LOG="${R1:?}E${N0:?}"
       else
         # if nothing, print "ok"
-        CM_SERVER_LOG="$CM_SERVER_LOG_STAT${G1:?}✓${N0:?}"
+        CM_SERVER_LOG="${G1:?}✓${N0:?}"
       fi
       # look for empty tables
       if grep -q -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
@@ -739,8 +739,8 @@ ${PASS_NC:?}
    l $GR: ${THEME_TXT:?}Logs${N0:?}    - ${THEME_DSC:?}Analyze logs   ${N0:?}realmd.service${G0:?}..:${N0:?} $COMMAND_REALMD
    b $GR: ${THEME_TXT:?}Backup${N0:?}  - ${THEME_DSC:?}New backup     ${N0:?}characters.sql${G0:?}..:${N0:?} $CHARAC_BACKUP
    h $GR: ${THEME_TXT:?}Reset${N0:?}   - ${THEME_DSC:?}Reset --hard   ${N0:?}realmd.sql${G0:?}......:${N0:?} $REALMD_BACKUP
-   p $GR: ${THEME_TXT:?}htop${N0:?}    - ${THEME_DSC:?}Process view   ${N0:?}Realmd.log${G0:?}......:${N0:?} $CM_REALMD_LOG_EMPTY$CM_REALMD_LOG
-   m $GR: ${THEME_TXT:?}Maps${N0:?}    - ${THEME_DSC:?}Download maps  ${N0:?}Server.log${G0:?}......:${N0:?} $CM_SERVER_LOG_EMPTY$CM_SERVER_LOG$CM_SERVER_LOG_SERIOUS
+   p $GR: ${THEME_TXT:?}htop${N0:?}    - ${THEME_DSC:?}Process view   ${N0:?}Realmd.log${G0:?}......:${N0:?} $CM_REALMD_LOG_STAT$CM_REALMD_LOG_EMPTY$CM_REALMD_LOG
+   m $GR: ${THEME_TXT:?}Maps${N0:?}    - ${THEME_DSC:?}Download maps  ${N0:?}Server.log${G0:?}......:${N0:?} $CM_SERVER_LOG_STAT$CM_SERVER_LOG_EMPTY$CM_SERVER_LOG$CM_SERVER_LOG_SERIOUS
    w $GR: ${THEME_TXT:?}Stats${N0:?}   - ${THEME_DSC:?}World stats    ${N0:?}$MENU_PRINT_CPU_TEMP
    i $GR: ${THEME_TXT:?}Info${N0:?}    - ${THEME_DSC:?}Helper info    ${N0:?}HDDuse${G0:?}..........:${N0:?} $MENU_USED_HDD ${GR:?}$MENU_USED_HDD_P${N0:?}
    q $GR: ${THEME_TXT:?}Quit${N0:?}    - ${THEME_DSC:?}Back to menu   ${N0:?}Memory${G0:?}..........:${N0:?} ${G1:?}${MENU_FREE_MEM:?}M${GR:?}/${G0:?}${MENU_TOTAL_MEM:?}M${N0:?}
