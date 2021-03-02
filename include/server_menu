@@ -275,9 +275,9 @@ while true; do
       sudo apt update && sudo apt upgrade
       # install all the required packages to build CMaNGOS
       sudo apt-get install build-essential gcc g++ automake git-core autoconf make patch libmysql++-dev mysql-server libtool libssl-dev grep binutils zlibc libc6 libbz2-dev cmake subversion libboost-all-dev -y
-      cd || exit     # change to home directory
-      mkdir wow      # create folder named wow
-      cd wow || exit # change to the wow directory
+      cd /home/"$(whoami)"/ || exit # change to home directory
+      mkdir wow                     # create folder named wow
+      cd wow || exit                # change to the wow directory
       git clone git://github.com/cmangos/mangos-classic.git
       git clone git://github.com/cmangos/classic-db.git
       cd mangos-classic || exit # change to the mangos-classic directory
@@ -303,9 +303,9 @@ while true; do
       sudo apt update && sudo apt upgrade
       # install all the required packages to build CMaNGOS
       sudo apt-get install build-essential gcc g++ automake git-core autoconf make patch libmysql++-dev mysql-server libtool libssl-dev grep binutils zlibc libc6 libbz2-dev cmake subversion libboost-all-dev -y
-      cd || exit     # change to home directory
-      mkdir wow      # create folder named wow
-      cd wow || exit # change to the wow directory
+      cd /home/"$(whoami)"/ || exit # change to home directory
+      mkdir wow                     # create folder named wow
+      cd wow || exit                # change to the wow directory
       git clone git://github.com/cmangos/mangos-tbc.git
       git clone git://github.com/cmangos/tbc-db.git
       cd mangos-tbc || exit # change to the mangos-tbc directory
@@ -331,9 +331,9 @@ while true; do
       sudo apt update && sudo apt upgrade
       # install all the required packages to build CMaNGOS
       sudo apt-get install build-essential gcc g++ automake git-core autoconf make patch libmysql++-dev mysql-server libtool libssl-dev grep binutils zlibc libc6 libbz2-dev cmake subversion libboost-all-dev -y
-      cd || exit     # change to home directory
-      mkdir wow      # create folder named wow
-      cd wow || exit # change to the wow directory
+      cd /home/"$(whoami)"/ || exit # change to home directory
+      mkdir wow                     # create folder named wow
+      cd wow || exit                # change to the wow directory
       git clone git://github.com/cmangos/mangos-wotlk.git
       git clone git://github.com/cmangos/wotlk-db.git
       cd mangos-wotlk || exit # change to the mangos-wotlk directory
