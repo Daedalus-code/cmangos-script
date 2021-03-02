@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210203
-# 5.4.6.7
+# 5.4.7.2
 
 while :; do
 
@@ -201,7 +201,12 @@ while :; do
 
   "M")
 
-    sudo bash /usr/local/bin/server_menu 2>&1
+    printf '%b' "${GR:?}[!!] Server_Menu (${Y1:?}Alpha version${GR:?})${N0:?}\n"
+    echo "[YN] This can break stuff! Continue? y/n " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+      sudo bash /usr/local/bin/server_menu 2>&1
+    fi
 
     ;;
 
