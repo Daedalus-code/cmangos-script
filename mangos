@@ -201,7 +201,7 @@ while :; do
 
   "M")
 
-    sudo bash "$FOLDER_HELPER"/usr/local/bin/server_menu 2>&1
+    sudo bash /usr/local/bin/server_menu 2>&1
 
     ;;
 
@@ -767,7 +767,7 @@ ${N0:?}"
         # look for ms folder
         if [ -z "$(ls -A /var/log/ms/ 2>&1)" ]; then
           # create ms folder if not found
-          sudo mkdir /var/log/ms/ 2>&1
+          sudo mkdir /var/log/ms/ &>/dev/null
           # fix ownership
           sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms
         fi
@@ -979,7 +979,7 @@ ${N0:?}"
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # create ms folder
-            sudo mkdir /var/log/ms/ 2>&1
+            sudo mkdir /var/log/ms/ &>/dev/null
             # fix ownership
             sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms
             # is transmission-daemon installed?
@@ -2068,7 +2068,7 @@ ${GR:?}$CPU_MODEL${N0:?}")
             echo
             printf '%b' "Build time: ${G1:?}$TIMER${N0:?} with ${G1:?}$SYS_CORES${N0:?} Core(s)\n"
             # create ms folder
-            sudo mkdir /var/log/ms/ 2>&1
+            sudo mkdir /var/log/ms/ &>/dev/null
             # fix ownership
             sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms
             # create installed mark
@@ -2359,7 +2359,7 @@ Select install operation"
           "1")
 
             # create ms folder
-            sudo mkdir /var/log/ms/ 2>&1
+            sudo mkdir /var/log/ms/ &>/dev/null
             # fix ownership
             sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms
             # create installed mark
@@ -2375,7 +2375,7 @@ Select install operation"
           "2")
 
             # create ms folder
-            sudo mkdir /var/log/ms/ 2>&1
+            sudo mkdir /var/log/ms/ &>/dev/null
             # fix ownership
             sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms
             # create installed mark
@@ -3327,7 +3327,7 @@ Database User, Client/Server is needed."
           fi
         fi
         # create ms folder
-        sudo mkdir /var/log/ms/ 2>&1
+        sudo mkdir /var/log/ms/ &>/dev/null
         # fix ownership
         sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms
         # create installed mark
@@ -4923,7 +4923,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             echo
           fi
           # create ms folder
-          sudo mkdir /var/log/ms/ 2>&1
+          sudo mkdir /var/log/ms/ &>/dev/null
           # fix ownership
           sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms
           # create installed mark
