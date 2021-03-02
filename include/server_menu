@@ -6,7 +6,7 @@
 
 # By Rainman
 # V20210203-barebone
-# 0.5.2.8
+# 0.5.3.7
 
 # https://www.linuxatemyram.com, num num num
 
@@ -214,15 +214,41 @@ while true; do
 
   Update)
 
+    function preparing_make {
+      # preparing
+      printf '%b' "${GR:?}Updating, please wait${N0:?}\n"
+      sudo apt update && sudo apt upgrade
+      sudo apt autoremove -y
+      # install all the required packages to build CMaNGOS
+      printf '%b' "${GR:?}Installing latest!${N0:?}\n"
+      sudo apt-get install build-essential gcc g++ automake git-core autoconf make patch libmysql++-dev mysql-server libtool libssl-dev grep binutils zlibc libc6 libbz2-dev cmake subversion libboost-all-dev -y
+      printf '%b' "${GR:?}Changing directory home!${N0:?}\n"
+      cd /home/"$(whoami)"/ || exit # change to home directory
+      printf '%b' "${GR:?}Creating directory wow!${N0:?}\n"
+      mkdir wow &>/dev/null # create folder named wow
+      printf '%b' "${GR:?}Changing directory wow!${N0:?}\n"
+      cd /home/"$(whoami)"/wow || exit # change to the wow directory
+    }
+
     function build_make {
+      printf '%b' "${GR:?}Creating directory build!${N0:?}\n"
+      mkdir build &>/dev/null # make a new directory in mangos-wotlk called build
+      printf '%b' "${GR:?}Changing directory build!${N0:?}\n"
+      cd build || exit # change to the newly created directory called build
+      printf '%b' "${GR:?}Configurating!${N0:?}\n"
       # cmake command
       cmake .. -DCMAKE_INSTALL_PREFIX=\../run -DBUILD_EXTRACTORS=ON -DPCH=1 -DDEBUG=0 -DBUILD_PLAYERBOT=OFF
+      printf '%b' "${GR:?}Starting, please wait${N0:?}\n"
       # start counting (seconds)
       START="$SECONDS"
       make
-      make install
+      make install &>/dev/null
       # get seconds since start
       DURATION=$(echo "$SECONDS-$START" 2>&1 | bc 2>&1)
+      # convert seconds
+      TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
+      echo
+      printf '%b' "Build time: ${G1:?}$TIMER${N0:?}\n"
     }
 
     DIALOG_CANCEL=1
@@ -271,23 +297,17 @@ while true; do
 
     1)
 
-      # preparing
-      sudo apt update && sudo apt upgrade
-      # install all the required packages to build CMaNGOS
-      sudo apt-get install build-essential gcc g++ automake git-core autoconf make patch libmysql++-dev mysql-server libtool libssl-dev grep binutils zlibc libc6 libbz2-dev cmake subversion libboost-all-dev -y
-      cd /home/"$(whoami)"/ || exit    # change to home directory
-      mkdir wow &>/dev/null            # create folder named wow
-      cd /home/"$(whoami)"/wow || exit # change to the wow directory
-      git clone git://github.com/cmangos/mangos-classic.git
-      git clone git://github.com/cmangos/classic-db.git
-      cd /home/"$(whoami)"/wow/mangos-classic || exit # change to the mangos-classic directory
-      mkdir build &>/dev/null                         # make a new directory in mangos-classic called build
-      cd build || exit                                # change to the newly created directory called build
+      # prepare make
+      preparing_make
+      # if already cloned
+      if [[ ! -f /home/"$(whoami)"/wow/mangos-classic/README.md ]]; then
+        # git clone repos
+        git clone git://github.com/cmangos/mangos-classic.git 2>&1
+        git clone git://github.com/cmangos/classic-db.git 2>&1
+      fi
+      # change directory into classic
+      cd /home/"$(whoami)"/wow/mangos-classic || exit
       build_make
-      # convert seconds
-      TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
-      echo
-      printf '%b' "Build time: ${G1:?}$TIMER${N0:?}\n"
       echo
       read -r -p "Press Enter to continue" </dev/tty
       echo
@@ -299,23 +319,17 @@ while true; do
 
     2)
 
-      # preparing
-      sudo apt update && sudo apt upgrade
-      # install all the required packages to build CMaNGOS
-      sudo apt-get install build-essential gcc g++ automake git-core autoconf make patch libmysql++-dev mysql-server libtool libssl-dev grep binutils zlibc libc6 libbz2-dev cmake subversion libboost-all-dev -y
-      cd /home/"$(whoami)"/ || exit    # change to home directory
-      mkdir wow &>/dev/null            # create folder named wow
-      cd /home/"$(whoami)"/wow || exit # change to the wow directory
-      git clone git://github.com/cmangos/mangos-tbc.git
-      git clone git://github.com/cmangos/tbc-db.git
-      cd /home/"$(whoami)"/wow/mangos-tbc || exit # change to the mangos-tbc directory
-      mkdir build &>/dev/null                     # make a new directory in mangos-tbc called build
-      cd build || exit                            # change to the newly created directory called build
+      # prepare make
+      preparing_make
+      # if already cloned
+      if [[ ! -f /home/"$(whoami)"/wow/mangos-tbc/README.md ]]; then
+        # git clone repos
+        git clone git://github.com/cmangos/mangos-tbc.git 2>&1
+        git clone git://github.com/cmangos/tbc-db.git 2>&1
+      fi
+      # change directory into tbc
+      cd /home/"$(whoami)"/wow/mangos-tbc || exit
       build_make
-      # convert seconds
-      TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
-      echo
-      printf '%b' "Build time: ${G1:?}$TIMER${N0:?}\n"
       echo
       read -r -p "Press Enter to continue" </dev/tty
       echo
@@ -327,23 +341,18 @@ while true; do
 
     3)
 
-      # preparing
-      sudo apt update && sudo apt upgrade
-      # install all the required packages to build CMaNGOS
-      sudo apt-get install build-essential gcc g++ automake git-core autoconf make patch libmysql++-dev mysql-server libtool libssl-dev grep binutils zlibc libc6 libbz2-dev cmake subversion libboost-all-dev -y
-      cd /home/"$(whoami)"/ || exit    # change to home directory
-      mkdir wow &>/dev/null            # create folder named wow
-      cd /home/"$(whoami)"/wow || exit # change to the wow directory
-      git clone git://github.com/cmangos/mangos-wotlk.git
-      git clone git://github.com/cmangos/wotlk-db.git
-      cd /home/"$(whoami)"/wow/mangos-wotlk || exit # change to the mangos-wotlk directory
-      mkdir build &>/dev/null                       # make a new directory in mangos-wotlk called build
-      cd build || exit                              # change to the newly created directory called build
+      # prepare make
+      preparing_make
+      # if already cloned
+      if [[ ! -f /home/"$(whoami)"/wow/mangos-wotlk/README.md ]]; then
+        # git clone repos
+        git clone git://github.com/cmangos/mangos-wotlk.git 2>&1
+        git clone git://github.com/cmangos/wotlk-db.git 2>&1
+      fi
+      # change directory into wotlk
+      cd /home/"$(whoami)"/wow/mangos-wotlk || exit
+      # build make
       build_make
-      # convert seconds
-      TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
-      echo
-      printf '%b' "Build time: ${G1:?}$TIMER${N0:?}\n"
       echo
       read -r -p "Press Enter to continue" </dev/tty
       echo
