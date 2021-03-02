@@ -275,14 +275,14 @@ while true; do
       sudo apt update && sudo apt upgrade
       # install all the required packages to build CMaNGOS
       sudo apt-get install build-essential gcc g++ automake git-core autoconf make patch libmysql++-dev mysql-server libtool libssl-dev grep binutils zlibc libc6 libbz2-dev cmake subversion libboost-all-dev -y
-      cd /home/"$(whoami)"/ || exit # change to home directory
-      mkdir wow                     # create folder named wow
-      cd wow || exit                # change to the wow directory
+      cd /home/"$(whoami)"/ || exit    # change to home directory
+      mkdir wow &>/dev/null            # create folder named wow
+      cd /home/"$(whoami)"/wow || exit # change to the wow directory
       git clone git://github.com/cmangos/mangos-classic.git
       git clone git://github.com/cmangos/classic-db.git
-      cd mangos-classic || exit # change to the mangos-classic directory
-      mkdir build               # make a new directory in mangos-classic called build
-      cd build || exit          # change to the newly created directory called build
+      cd /home/"$(whoami)"/wow/mangos-classic || exit # change to the mangos-classic directory
+      mkdir build &>/dev/null                         # make a new directory in mangos-classic called build
+      cd build || exit                                # change to the newly created directory called build
       build_make
       # convert seconds
       TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
@@ -303,14 +303,14 @@ while true; do
       sudo apt update && sudo apt upgrade
       # install all the required packages to build CMaNGOS
       sudo apt-get install build-essential gcc g++ automake git-core autoconf make patch libmysql++-dev mysql-server libtool libssl-dev grep binutils zlibc libc6 libbz2-dev cmake subversion libboost-all-dev -y
-      cd /home/"$(whoami)"/ || exit # change to home directory
-      mkdir wow                     # create folder named wow
-      cd wow || exit                # change to the wow directory
+      cd /home/"$(whoami)"/ || exit    # change to home directory
+      mkdir wow &>/dev/null            # create folder named wow
+      cd /home/"$(whoami)"/wow || exit # change to the wow directory
       git clone git://github.com/cmangos/mangos-tbc.git
       git clone git://github.com/cmangos/tbc-db.git
-      cd mangos-tbc || exit # change to the mangos-tbc directory
-      mkdir build           # make a new directory in mangos-tbc called build
-      cd build || exit      # change to the newly created directory called build
+      cd /home/"$(whoami)"/wow/mangos-tbc || exit # change to the mangos-tbc directory
+      mkdir build &>/dev/null                     # make a new directory in mangos-tbc called build
+      cd build || exit                            # change to the newly created directory called build
       build_make
       # convert seconds
       TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
@@ -331,14 +331,14 @@ while true; do
       sudo apt update && sudo apt upgrade
       # install all the required packages to build CMaNGOS
       sudo apt-get install build-essential gcc g++ automake git-core autoconf make patch libmysql++-dev mysql-server libtool libssl-dev grep binutils zlibc libc6 libbz2-dev cmake subversion libboost-all-dev -y
-      cd /home/"$(whoami)"/ || exit # change to home directory
-      mkdir wow                     # create folder named wow
-      cd wow || exit                # change to the wow directory
+      cd /home/"$(whoami)"/ || exit    # change to home directory
+      mkdir wow &>/dev/null            # create folder named wow
+      cd /home/"$(whoami)"/wow || exit # change to the wow directory
       git clone git://github.com/cmangos/mangos-wotlk.git
       git clone git://github.com/cmangos/wotlk-db.git
-      cd mangos-wotlk || exit # change to the mangos-wotlk directory
-      mkdir build             # make a new directory in mangos-wotlk called build
-      cd build || exit        # change to the newly created directory called build
+      cd /home/"$(whoami)"/wow/mangos-wotlk || exit # change to the mangos-wotlk directory
+      mkdir build &>/dev/null                       # make a new directory in mangos-wotlk called build
+      cd build || exit                              # change to the newly created directory called build
       build_make
       # convert seconds
       TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
