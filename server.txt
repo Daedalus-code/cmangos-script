@@ -18,6 +18,8 @@ REALM_PORT="8085"
 
 # CMAKE ########################################################################
 
+# Please change expansion name (wow/mangos-'expansion'/run) if anything else.
+
 CMAKE="-DCMAKE_INSTALL_PREFIX=/home/$(whoami)/wow/mangos-classic/run
 -DBUILD_EXTRACTORS=ON
 -DPCH=1
@@ -36,8 +38,15 @@ PATCH="CMaNGOS.patch" # please edit if wrong name.
 # GIT ##########################################################################
 
 GITHUB_HELPER="https://github.com/Daedalus-code/cmangos-script.git"
+
 GITHUB_CMANGOS="https://github.com/cmangos/mangos-classic.git"
 GITHUB_DATABASE="https://github.com/cmangos/classic-db.git"
+
+#GITHUB_CMANGOS="https://github.com/cmangos/mangos-tbc.git"
+#GITHUB_DATABASE="https://github.com/cmangos/tbc-db.git"
+
+#GITHUB_CMANGOS="https://github.com/cmangos/mangos-wotlk.git"
+#GITHUB_DATABASE="https://github.com/cmangos/wotlk-db.git"
 
 # RA/NETCAT ####################################################################
 
@@ -49,18 +58,30 @@ PORT_NC="3443"
 # FOLDERS ######################################################################
 
 FOLDER_INSTALL="/home"
+FOLDER_HELPER="/home/cmangos-script"
+
+# Please change expansion name (wow/mangos-'expansion') if anything else.
+
 FOLDER_BUILD="/home/$(whoami)/wow/mangos-classic/build"
+FOLDER_SQL="/home/$(whoami)/wow/mangos-classic/sql"
 FOLDER_CORE="/home/$(whoami)/wow/mangos-classic"
 FOLDER_DB="/home/$(whoami)/wow/classic-db"
-FOLDER_HELPER="/home/cmangos-script"
-FOLDER_SQL="/home/$(whoami)/wow/mangos-classic/sql"
 FOLDER_WOW="/home/$(whoami)/wow"
 
 # MYSQL ########################################################################
 
+SQL_MYCNF="/home/server.cnf"
+
 DB_CHARACTERS="classiccharacters"
 DB_MANGOS="classicmangos"
 DB_REALMD="classicrealmd"
-SQL_MYCNF="/home/server.cnf"
+
+#DB_CHARACTERS="tbccharacters"
+#DB_MANGOS="tbcmangos"
+#DB_REALMD="tbcrealmd"
+
+#DB_CHARACTERS="wotlkcharacters"
+#DB_MANGOS="wotlkmangos"
+#DB_REALMD="wotlkrealmd"
 
 # END
