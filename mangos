@@ -202,7 +202,7 @@ while :; do
   "M")
 
     printf '%b' "${GR:?}[!!] Server_Menu (${Y1:?}Alpha version${GR:?})${N0:?}\n"
-    echo "[YN] This can break stuff! Continue? y/n " -n 1 -r
+    read -p "[YN] This can break stuff! Continue? y/n " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
       sudo bash /usr/local/bin/server_menu 2>&1
