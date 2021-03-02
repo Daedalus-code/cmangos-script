@@ -11,7 +11,7 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20210103
+# V20210203
 # 5.4.5.6
 
 while :; do
@@ -202,7 +202,7 @@ while :; do
   "D")
 
     # fix ownership
-    sudo chown -R "${USER:?}":"${GROUP:?}" /usr/local/bin/mangos
+    sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /usr/local/bin/mangos
     printf '%b' "   ${GR:?}y${N0:?} $GR:$N0 Redo ${GR:?}cmangos-script${N0:?}\n"
     printf '%b' "   ${GR:?}n${N0:?} $GR:$N0 nano ${GR:?}cmangos-script${N0:?}\n"
     echo
@@ -759,7 +759,7 @@ ${N0:?}"
           # create ms folder if not found
           sudo mkdir /var/log/ms/ 2>/dev/null
           # fix ownership
-          sudo chown -R "${USER:?}":"${GROUP:?}" /var/log/ms
+          sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms
         fi
         printf '%b' "${GR:?}Please wait${N0:?}\n"
         # get remote information from transmission, create a file
@@ -971,7 +971,7 @@ ${N0:?}"
             # create ms folder
             sudo mkdir /var/log/ms/ 2>/dev/null
             # fix ownership
-            sudo chown -R "${USER:?}":"${GROUP:?}" /var/log/ms
+            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms
             # is transmission-daemon installed?
             if ! [ -x "$(command -v transmission-daemon)" ]; then
               # check for updates regardless
@@ -1692,7 +1692,7 @@ $RA_TIP"
         printf '%b' "[${G1:?}OK${N0:?}] Cloning repository! Please wait this might take a while
 (${G1:?}${GITHUB_CMANGOS:?}${N0:?})\n"
         sudo mkdir "$FOLDER_WOW" &>/dev/null
-        sudo chown -R "${USER:?}":"${GROUP:?}" "$FOLDER_WOW"
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW"
         cd "$FOLDER_WOW" || exit
         read -r -p "[YN] --recursive? y/n " -n 1 -r
         echo
@@ -1749,7 +1749,7 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
         printf '%b' "[${G1:?}OK${N0:?}] Cloning repository! Please wait this might take a while
 (${G1:?}${GITHUB_DATABASE:?}${N0:?})\n"
         sudo mkdir "$FOLDER_WOW" &>/dev/null
-        sudo chown -R "${USER:?}":"${GROUP:?}" "$FOLDER_WOW"
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW"
         cd "$FOLDER_WOW" || exit
         git clone "${GITHUB_DATABASE:?}"
         cd "$FOLDER_DB" || exit
@@ -1802,7 +1802,7 @@ ${GR:?}(d) Update Database > Update classic-db${N0:?}\n"
       # fresh install?
       echo "Cloning repository 'cmangos-script' Please wait"
       sudo mkdir "$FOLDER_HELPER" &>/dev/null
-      sudo chown -R "${USER:?}":"${GROUP:?}" "$FOLDER_HELPER"
+      sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_HELPER"
       cd "$FOLDER_HELPER" || exit
       git clone "${GITHUB_HELPER:?}"
       echo "Done"
@@ -1935,7 +1935,7 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
           esac
         fi
 
-        sudo chown -R "${USER:?}":"${GROUP:?}" "$FOLDER_WOW"
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW"
         mkdir "$FOLDER_CORE"/run &>/dev/null
         mkdir "$FOLDER_CORE"/run/logs &>/dev/null
         mkdir "$FOLDER_CORE"/run/logs/old &>/dev/null
@@ -2060,7 +2060,7 @@ ${GR:?}$CPU_MODEL${N0:?}")
             # create ms folder
             sudo mkdir /var/log/ms/ 2>/dev/null
             # fix ownership
-            sudo chown -R "${USER:?}":"${GROUP:?}" /var/log/ms
+            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms
             # create installed mark
             echo "Core was installed at ${NOW:?}" >/var/log/ms/installed_core
             BUILD_BUTTON="${G1:?}OK${N0:?}"
@@ -2351,7 +2351,7 @@ Select install operation"
             # create ms folder
             sudo mkdir /var/log/ms/ 2>/dev/null
             # fix ownership
-            sudo chown -R "${USER:?}":"${GROUP:?}" /var/log/ms
+            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms
             # create installed mark
             echo "Core was installed at ${NOW:?}" >/var/log/ms/installed_core
 
@@ -2367,7 +2367,7 @@ Select install operation"
             # create ms folder
             sudo mkdir /var/log/ms/ 2>/dev/null
             # fix ownership
-            sudo chown -R "${USER:?}":"${GROUP:?}" /var/log/ms
+            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms
             # create installed mark
             echo "Core was installed at ${NOW:?} with backup" >/var/log/ms/installed_core
 
@@ -2503,12 +2503,12 @@ Check if correct information, or just restart server."
 
         cd || exit
         sudo mkdir wow &>/dev/null
-        sudo chown -R "${USER:?}":"${GROUP:?}" "$FOLDER_WOW"
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW"
         sudo rm -r "$FOLDER_CORE"/build/ &>/dev/null
         cd "$FOLDER_WOW" || exit
         git clone "$GITHUB_CMANGOS" 2>/dev/null
         sudo mkdir "$FOLDER_CORE"/build &>/dev/null
-        sudo chown -R "${USER:?}":"${GROUP:?}" "$FOLDER_WOW"
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW"
         mkdir "$FOLDER_CORE"/run &>/dev/null
         mkdir "$FOLDER_CORE"/run/logs &>/dev/null
         mkdir "$FOLDER_CORE"/run/logs/old &>/dev/null
@@ -3027,7 +3027,7 @@ Select install operation"
         # create configurations directory
         cd "$FOLDER_WOW"/backup || exit
         sudo mkdir configurations &>/dev/null
-        sudo chown -R "${USER:?}":"${GROUP:?}" "$FOLDER_WOW"
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW"
         cd || exit
         cp "$FOLDER_DB"/InstallFullDB.config "${FOLDER_WOW:?}"/backup/configurations 2>/dev/null
         cp "$FOLDER_CORE"/run/etc/*.conf "${FOLDER_WOW:?}"/backup/configurations 2>/dev/null
@@ -3319,7 +3319,7 @@ Database User, Client/Server is needed."
         # create ms folder
         sudo mkdir /var/log/ms/ 2>/dev/null
         # fix ownership
-        sudo chown -R "${USER:?}":"${GROUP:?}" /var/log/ms
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms
         # create installed mark
         echo "Database was installed at ${NOW:?}" >/var/log/ms/installed_db
         printf '%b' "[${G1:?}OK${N0:?}] "
@@ -4914,7 +4914,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           # create ms folder
           sudo mkdir /var/log/ms/ 2>/dev/null
           # fix ownership
-          sudo chown -R "${USER:?}":"${GROUP:?}" /var/log/ms
+          sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms
           # create installed mark
           echo "CMaNGOS Script was installed at ${NOW:?}" >/var/log/ms/installed_ms
           sleep 1 && exit
