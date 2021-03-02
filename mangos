@@ -1357,11 +1357,11 @@ EOF
         fi
         # non responsive/responsive
         if [ ! -f "$FOLDER_CORE"/run/logs/Server.log ]; then
-          DIVE_SERVER_OLD_EMPTY="0"
-          DIVE_SERVER_OLD_ERROR="0"
-          DIVE_SERVER_OLD_SERIO="0"
-          DIVE_SERVER_OLD_IGNOR="0"
-          DIVE_SERVER_OLD_POLYR="0"
+          DIVE_SERVER_EMPTY="0"
+          DIVE_SERVER_ERROR="0"
+          DIVE_SERVER_SERIO="0"
+          DIVE_SERVER_IGNOR="0"
+          DIVE_SERVER_POLYR="0"
         else
           # server.log
           DIVE_SERVER_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "$FOLDER_CORE"/run/logs/Server.log 2>&1 | grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty.|.*empty*." 2>&1)
