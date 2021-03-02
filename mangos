@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210203
-# 5.5.2.4
+# 5.5.2.3
 
 while :; do
 
@@ -1832,7 +1832,7 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
         # check if 'InstallFullDB.config' exist done
       fi
       # restore InstallFullDB.config backup
-      cp "${FOLDER_WOW:?}"/backup/configurations/InstallFullDB.config "$FOLDER_DB"/InstallFullDB.config 2>&1
+      cp "${FOLDER_WOW:?}"/backup/configurations/InstallFullDB.config "$FOLDER_DB"/InstallFullDB.config &>/dev/null
     else
 
       # check for updates
@@ -3096,8 +3096,8 @@ Select install operation"
         sudo mkdir configurations &>/dev/null
         sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW"
         cd || exit
-        cp "$FOLDER_DB"/InstallFullDB.config "${FOLDER_WOW:?}"/backup/configurations 2>&1
-        cp "$FOLDER_CORE"/run/etc/*.conf "${FOLDER_WOW:?}"/backup/configurations 2>&1
+        cp "$FOLDER_DB"/InstallFullDB.config "${FOLDER_WOW:?}"/backup/configurations &>/dev/null
+        cp "$FOLDER_CORE"/run/etc/*.conf "${FOLDER_WOW:?}"/backup/configurations &>/dev/null
         sudo rm -R "$FOLDER_DB" &>/dev/null
       fi
 
@@ -3654,7 +3654,6 @@ Database User, Client/Server is needed."
       read -t 5 -r -p "[YN] Reinstall (Delete /classic-db)? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
-
         sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
         cp "$FOLDER_DB"/InstallFullDB.config "$FOLDER_WOW" &>/dev/null
         sudo rm -r "$FOLDER_DB" &>/dev/null
