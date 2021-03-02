@@ -18,7 +18,7 @@ REALM_PORT="8085"
 
 # CMAKE ########################################################################
 
-CMAKE="-DCMAKE_INSTALL_PREFIX=/home/ubuntu/wow/mangos-classic/run
+CMAKE="-DCMAKE_INSTALL_PREFIX=/home/$(whoami)/wow/mangos-classic/run
 -DBUILD_EXTRACTORS=ON
 -DPCH=1
 -DDEBUG=0
@@ -29,8 +29,6 @@ AUTO_BUILD="0" # auto detect cores (default 0/off)
 
 # SYSTEM #######################################################################
 
-GROUP="ubuntu"
-USER="ubuntu"
 REALM_SERVICE=realmd
 WORLD_SERVICE=mangosd
 PATCH="CMaNGOS.patch" # please edit if wrong name.
@@ -51,12 +49,12 @@ PORT_NC="3443"
 # FOLDERS ######################################################################
 
 FOLDER_INSTALL="/home"
-FOLDER_BUILD="/home/ubuntu/wow/mangos-classic/build"
-FOLDER_CORE="/home/ubuntu/wow/mangos-classic"
-FOLDER_DB="/home/ubuntu/wow/classic-db"
+FOLDER_BUILD="/home/$(whoami)/wow/mangos-classic/build"
+FOLDER_CORE="/home/$(whoami)/wow/mangos-classic"
+FOLDER_DB="/home/$(whoami)/wow/classic-db"
 FOLDER_HELPER="/home/cmangos-script"
-FOLDER_SQL="/home/ubuntu/wow/mangos-classic/sql"
-FOLDER_WOW="/home/ubuntu/wow"
+FOLDER_SQL="/home/$(whoami)/wow/mangos-classic/sql"
+FOLDER_WOW="/home/$(whoami)/wow"
 
 # MYSQL ########################################################################
 
