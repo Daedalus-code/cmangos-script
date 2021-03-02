@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210203
-# 5.4.7.2
+# 5.5.2.4
 
 while :; do
 
@@ -99,24 +99,33 @@ while :; do
   export NCURSES_NO_UTF8_ACS=1
 
   # get online players
-  if mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT SUM(online) FROM ${DB_CHARACTERS:?}.characters;" &>/dev/null; then
-    MENU_ON_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT SUM(online) FROM ${DB_CHARACTERS:?}.characters;" 2>&1)
-  else
-    MENU_ON_COUNT=$(printf '%b' "${R0:?}0${N0:?}")
-  fi
+  MENU_ON_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT SUM(online) FROM ${DB_CHARACTERS:?}.characters;" 2>&1)
   # get guild count
-  if mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM ${DB_CHARACTERS:?}.guild;" &>/dev/null; then
-    MENU_GU_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM ${DB_CHARACTERS:?}.guild;" 2>&1)
-  else
-    MENU_GU_COUNT=$(printf '%b' "${R0:?}0${N0:?}")
-  fi
+  MENU_GU_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM ${DB_CHARACTERS:?}.guild;" 2>&1)
 
-  # non responsive
-  if [[ "$MENU_GU_COUNT" -eq "NULL" ]]; then
-    MENU_GU_COUNT="0"
+  # non responsive, sql access denied
+  if echo "$MENU_ON_COUNT" 2>&1 | grep -q -E "Access denied" 2>&1; then
+    MENU_ON_COUNT="!"
   fi
-  if [[ "$MENU_ON_COUNT" -eq "NULL" ]]; then
+  # non responsive, sql access denied
+  if echo "$MENU_GU_COUNT" 2>&1 | grep -q -E "Access denied" 2>&1; then
+    MENU_GU_COUNT="!"
+  fi
+  # non responsive, null
+  if echo "$MENU_ON_COUNT" 2>&1 | grep -q -E "NULL" 2>&1; then
+    MENU_ON_COUNT="?"
+  fi
+  # non responsive, null
+  if echo "$MENU_GU_COUNT" 2>&1 | grep -q -E "NULL" 2>&1; then
+    MENU_GU_COUNT="?"
+  fi
+  # non responsive, zero
+  if [ -z "$MENU_ON_COUNT" ]; then
     MENU_ON_COUNT="0"
+  fi
+  # non responsive, zero
+  if [ -z "$MENU_GU_COUNT" ]; then
+    MENU_GU_COUNT="0"
   fi
 
   # get date, month, day, year
@@ -440,17 +449,15 @@ ${PASS_NC:?}
           sleep 1
           echo
           echo " kek!"
-          printf '%b' "(∩ ᐛ )⊃━━ "
-          sleep 3
+          printf '%b' "${Y1:?}(∩ ᐛ )⊃${N0:?}━━ "
+          sleep 1
           printf '%b' "^${Y0:?}｡·.·${N0:?}ﾟ${Y0:?}★☆ﾟ.｡*${N0:?}(つ﹏⊂)${Y0:?}?･ ｡★·"
           sleep 2
-          printf '%b' ".${N0:?}..poof!"
+          printf '%b' ".${N0:?}..PoOf${Y1:?}!$N0\n"
           sleep 1
           echo
-          echo
-          printf '%b' "$ID ${N0:?}..vanished!"
+          printf '%b' "$ID ${N0:?}..Vanished!\n"
           sleep 1
-          echo
           echo
         fi
       fi
@@ -477,6 +484,40 @@ ${PASS_NC:?}
     # * f★★ck; b7122@rd >> @ct1vlz1★n && chln@.
 
   "A")
+
+    # look for ms folder
+    if [ -z "$(ls -A "$FOLDER_CORE"/run 2>&1)" ]; then
+      # create ms folder if not found
+      sudo mkdir "$FOLDER_CORE"/run &>/dev/null
+      if [ -z "$(ls -A "$FOLDER_CORE"/run/logs 2>&1)" ]; then
+        # create ms folder if not found
+        sudo mkdir "$FOLDER_CORE"/run/logs &>/dev/null
+        # fix ownership
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_CORE"
+      fi
+    fi
+
+    if [ ! -f "$FOLDER_CORE"/run/logs/Server.log ]; then
+      # non responsive
+      touch "$FOLDER_CORE"/run/logs/Server.log
+    fi
+    if [ ! -f "$FOLDER_CORE"/run/logs/Realmd.log ]; then
+      # non responsive
+      touch "$FOLDER_CORE"/run/logs/Realmd.log
+    fi
+
+    if [[ -z $(grep '[^[:space:]]' "$FOLDER_CORE"/run/logs/Server.log) ]]; then
+      # non responsive
+      CM_SERVER_LOG_STAT="${GR:?}✗${N0:?}"
+    else
+      CM_SERVER_LOG_STAT="${G1:?}✓${N0:?}"
+    fi
+    if [[ -z $(grep '[^[:space:]]' "$FOLDER_CORE"/run/logs/Realmd.log) ]]; then
+      # non responsive
+      CM_REALMD_LOG_STAT="${GR:?}✗${N0:?}"
+    else
+      CM_REALMD_LOG_STAT="${G1:?}✓${N0:?}"
+    fi
 
     while :; do
       clear
@@ -553,15 +594,15 @@ ${PASS_NC:?}
       # Realmd.log
 
       # look for error
-      if grep -E -q ".*ERROR*." "${FOLDER_CORE:?}"/run/logs/Realmd.log &>/dev/null; then
+      if grep -q -E ".*ERROR*." "${FOLDER_CORE:?}"/run/logs/Realmd.log &>/dev/null; then
         # if any, print "error"
-        CM_REALMD_LOG="${R1:?}E${N0:?}"
+        CM_REALMD_LOG="$CM_REALMD_LOG_STAT${R1:?}E${N0:?}"
       else
         # if nothing, print "ok"
-        CM_REALMD_LOG="${G1:?}✓${N0:?}"
+        CM_REALMD_LOG="$CM_REALMD_LOG_STAT${G1:?}✓${N0:?}"
       fi
       # look for empty tables
-      if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log &>/dev/null; then
+      if grep -q -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log &>/dev/null; then
         # if any, print "empty"
         CM_REALMD_LOG_EMPTY="${Y1:?}E${N0:?}"
       fi
@@ -570,31 +611,22 @@ ${PASS_NC:?}
       # Server.log
 
       # look for error
-      if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
+      if grep -q -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
         # if any, print "error"
-        CM_SERVER_LOG="${R1:?}E${N0:?}"
+        CM_SERVER_LOG="$CM_SERVER_LOG_STAT${R1:?}E${N0:?}"
       else
         # if nothing, print "ok"
-        CM_SERVER_LOG="${G1:?}✓${N0:?}"
+        CM_SERVER_LOG="$CM_SERVER_LOG_STAT${G1:?}✓${N0:?}"
       fi
       # look for empty tables
-      if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
+      if grep -q -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
         # if any, print "empty"
         CM_SERVER_LOG_EMPTY="${Y1:?}E${N0:?}"
       fi
       # look for serious error
-      if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
+      if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
         # if any, print "serious"
         CM_SERVER_LOG_SERIOUS="${R1:?}S${N0:?}"
-      fi
-
-      if [ ! -f "$FOLDER_CORE"/run/logs/Server.log ]; then
-        # non responsive
-        CM_SERVER_LOG="${GR:?}✗${N0:?}"
-      fi
-      if [ ! -f "$FOLDER_CORE"/run/logs/Realmd.log ]; then
-        # non responsive
-        CM_REALMD_LOG="${GR:?}✗${N0:?}"
       fi
 
       # Server.log done
@@ -664,7 +696,7 @@ ${PASS_NC:?}
         MENU_PRINT_CPU_TEMP="CPU Freq${G0:?}........:${N0:?} $MENU_PRINT_CPU_TEMP"
       fi
       # commit
-      if grep -E "Using commit.*(.*)" "${FOLDER_CORE:?}"/run/logs/Server.log &>/dev/null; then
+      if grep -q -E "Using commit.*(.*)" "${FOLDER_CORE:?}"/run/logs/Server.log &>/dev/null; then
         COMMIT_HASH=$(grep -E "Using commit.*(.*)" "${FOLDER_CORE:?}"/run/logs/Server.log 2>&1 |
           grep -o "(.*)" 2>&1 | tr -d '()' 2>&1 | sed 's/^ *//' 2>&1)
       else
@@ -672,9 +704,9 @@ ${PASS_NC:?}
       fi
 
       # free Space, mmc block device #0, partition #2, partition #2, dev/root, overlay
-      MENU_USED_HDD=$(df -h 2>&1 | grep -E "mmcblk0p2|mmcblk0p3|/dev/root|overlay" 2>&1 |
+      MENU_USED_HDD=$(df -h 2>&1 | grep -E "mmcblk0p2|mmcblk0p3|/dev/root|overlay|sda1" 2>&1 |
         awk '{ print $3 }' 2>&1)
-      MENU_USED_HDD_P=$(df -h | grep -E "mmcblk0p2|mmcblk0p3|/dev/root|overlay" 2>&1 |
+      MENU_USED_HDD_P=$(df -h | grep -E "mmcblk0p2|mmcblk0p3|/dev/root|overlay|sda1" 2>&1 |
         awk '{ print $5 }' 2>&1)
 
       # free Memory
@@ -684,12 +716,18 @@ ${PASS_NC:?}
       MENU_TOTAL_MEM=$(free --mega 2>&1 | grep "Mem" 2>&1 |
         awk '{ print $2 }' 2>&1)
 
-      # total uptime
-      TOTAL_UPTIME=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT SUM(uptime) FROM ${DB_REALMD:?}.uptime;" 2>&1)
-      # calculate seconds
-      UPTIME_TIMER=$(printf '%dh:%dm:%ds\n' $(("$TOTAL_UPTIME/3600")) $(("$TOTAL_UPTIME%3600/60")) $(("$TOTAL_UPTIME%60")))
-      # calculate days
-      TOTAL_UPTIME_DAYS=$(echo "$TOTAL_UPTIME/3600/24" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
+      if ! mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="USE ${DB_REALMD:?};" &>/dev/null; then
+        # non responsive
+        UPTIME_TIMER="0h:0m:0s"
+        TOTAL_UPTIME_DAYS="0"
+      else
+        # total uptime (seconds)
+        TOTAL_UPTIME=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT SUM(uptime) FROM ${DB_REALMD:?}.uptime;" 2>&1)
+        # calculate seconds
+        UPTIME_TIMER=$(printf '%dh:%dm:%ds\n' $(("$TOTAL_UPTIME/3600")) $(("$TOTAL_UPTIME%3600/60")) $(("$TOTAL_UPTIME%60")))
+        # calculate days
+        TOTAL_UPTIME_DAYS=$(echo "$TOTAL_UPTIME/3600/24" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
+      fi
 
       printf '%b' "
    Realm${G0:?}.......:${G1:?} ${SERVER_NAME:?} ${GR:?}$UPTIME_TIMER (${TOTAL_UPTIME_DAYS:?} Days)${N0:?}
@@ -1287,89 +1325,103 @@ EOF
 
       "l")
 
-        # server.log.old
-        DIVE_SERVER_OLD_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "$FOLDER_CORE"/run/logs/Server.log.old 2>&1 |
-          grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty.|.*empty*." 2>&1)
-        DIVE_SERVER_OLD_ERROR=$(grep -E -v ".*is empty*." "$FOLDER_CORE"/run/logs/Server.log.old 2>&1 |
-          grep -c -E ".*ERROR*." 2>&1)
-        DIVE_SERVER_OLD_SERIO=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log.old 2>&1)
-        DIVE_SERVER_OLD_IGNOR=$(grep -c -E ".*ignoring*.|.*ignore*.|.*ignored*." "$FOLDER_CORE"/run/logs/Server.log.old 2>&1)
-        DIVE_SERVER_OLD_POLYR=$(grep -c -E "Invalid poly ref" "$FOLDER_CORE"/run/logs/Server.log.old 2>&1)
-        if [[ -z "$DIVE_SERVER_OLD_EMPTY" || -z "$DIVE_SERVER_OLD_ERROR" || -z "$DIVE_SERVER_OLD_SERIO" || -z "$DIVE_SERVER_OLD_IGNOR" || -z "$DIVE_SERVER_OLD_POLYR" ]]; then
-          # non responsive
+        # get lines in files
+        ESLOG="$(cat "$FOLDER_CORE"/run/logs/Server.log 2>&1 | wc -l 2>&1)"
+        ERLOG="$(cat "$FOLDER_CORE"/run/logs/Realmd.log 2>&1 | wc -l 2>&1)"
+        ESLOG_OLD="$(cat "$FOLDER_CORE"/run/logs/Server.log.old 2>&1 | wc -l 2>&1)"
+        ERLOG_OLD="$(cat "$FOLDER_CORE"/run/logs/Realmd.log.old 2>&1 | wc -l 2>&1)"
+        # delete empty files, if any
+        if [[ "$ESLOG" -lt "1" ]]; then
+          sudo rm -R "$FOLDER_CORE"/run/logs/Server.log &>/dev/null
+        elif [[ "$ERLOG" -lt "1" ]]; then
+          sudo rm -R "$FOLDER_CORE"/run/logs/Realmd.log &>/dev/null
+        elif [[ "$ESLOG_OLD" -lt "1" ]]; then
+          sudo rm -R "$FOLDER_CORE"/run/logs/Server.log.old &>/dev/null
+        elif [[ "$ERLOG_OLD" -lt "1" ]]; then
+          sudo rm -R "$FOLDER_CORE"/run/logs/Realmd.log.old &>/dev/null
+        fi
+        # non responsive/responsive
+        if [ ! -f "$FOLDER_CORE"/run/logs/Server.log.old ]; then
           DIVE_SERVER_OLD_EMPTY="0"
           DIVE_SERVER_OLD_ERROR="0"
           DIVE_SERVER_OLD_SERIO="0"
           DIVE_SERVER_OLD_IGNOR="0"
           DIVE_SERVER_OLD_POLYR="0"
+        else
+          # server.log.old
+          DIVE_SERVER_OLD_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "$FOLDER_CORE"/run/logs/Server.log.old 2>&1 | grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty.|.*empty*." 2>&1)
+          DIVE_SERVER_OLD_ERROR=$(grep -E -v ".*is empty*." "$FOLDER_CORE"/run/logs/Server.log.old 2>&1 | grep -c -E ".*ERROR*." 2>&1)
+          DIVE_SERVER_OLD_SERIO=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log.old 2>&1)
+          DIVE_SERVER_OLD_IGNOR=$(grep -c -E ".*ignoring*.|.*ignore*.|.*ignored*." "$FOLDER_CORE"/run/logs/Server.log.old 2>&1)
+          DIVE_SERVER_OLD_POLYR=$(grep -c -E "Invalid poly ref" "$FOLDER_CORE"/run/logs/Server.log.old 2>&1)
         fi
-        # server.log
-        DIVE_SERVER_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "$FOLDER_CORE"/run/logs/Server.log 2>&1 |
-          grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty.|.*empty*." 2>&1)
-        DIVE_SERVER_ERROR=$(grep -E -v ".*is empty*." "$FOLDER_CORE"/run/logs/Server.log 2>&1 |
-          grep -c -E ".*ERROR*." 2>&1)
-        DIVE_SERVER_SERIO=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>&1)
-        DIVE_SERVER_IGNOR=$(grep -c -E ".*ignoring*.|.*ignore*.|.*ignored*." "$FOLDER_CORE"/run/logs/Server.log 2>&1)
-        DIVE_SERVER_POLYR=$(grep -c -E "Invalid poly ref" "$FOLDER_CORE"/run/logs/Server.log 2>&1)
-        if [[ -z "$DIVE_SERVER_EMPTY" || -z "$DIVE_SERVER_ERROR" || -z "$DIVE_SERVER_SERIO" || -z "$DIVE_SERVER_IGNOR" || -z "$DIVE_SERVER_POLYR" ]]; then
-          # non responsive
-          DIVE_SERVER_EMPTY="0"
-          DIVE_SERVER_ERROR="0"
-          DIVE_SERVER_SERIO="0"
-          DIVE_SERVER_IGNOR="0"
-          DIVE_SERVER_POLYR="0"
+        # non responsive/responsive
+        if [ ! -f "$FOLDER_CORE"/run/logs/Server.log ]; then
+          DIVE_SERVER_OLD_EMPTY="0"
+          DIVE_SERVER_OLD_ERROR="0"
+          DIVE_SERVER_OLD_SERIO="0"
+          DIVE_SERVER_OLD_IGNOR="0"
+          DIVE_SERVER_OLD_POLYR="0"
+        else
+          # server.log
+          DIVE_SERVER_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "$FOLDER_CORE"/run/logs/Server.log 2>&1 | grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty.|.*empty*." 2>&1)
+          DIVE_SERVER_ERROR=$(grep -E -v ".*is empty*." "$FOLDER_CORE"/run/logs/Server.log 2>&1 | grep -c -E ".*ERROR*." 2>&1)
+          DIVE_SERVER_SERIO=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>&1)
+          DIVE_SERVER_IGNOR=$(grep -c -E ".*ignoring*.|.*ignore*.|.*ignored*." "$FOLDER_CORE"/run/logs/Server.log 2>&1)
+          DIVE_SERVER_POLYR=$(grep -c -E "Invalid poly ref" "$FOLDER_CORE"/run/logs/Server.log 2>&1)
         fi
-        # realmd.log
-        DIVE_REALMD_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1 |
-          grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." 2>&1)
-        DIVE_REALMD_ERROR=$(grep -E -v ".*is empty*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1 |
-          grep -c -E ".*ERROR*." 2>&1)
-        DIVE_REALMD_SERIO=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Realmd.log 2>&1)
-        if [[ -z "$DIVE_REALMD_EMPTY" || -z "$DIVE_REALMD_ERROR" || -z "$DIVE_REALMD_SERIO" ]]; then
-          # non responsive
+        if [ ! -f "$FOLDER_CORE"/run/logs/Realmd.log ]; then
+          # non responsive/responsive
           DIVE_REALMD_EMPTY="0"
           DIVE_REALMD_ERROR="0"
           DIVE_REALMD_SERIO="0"
+        else
+          # realmd.log
+          DIVE_REALMD_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1 | grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." 2>&1)
+          DIVE_REALMD_ERROR=$(grep -E -v ".*is empty*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1 | grep -c -E ".*ERROR*." 2>&1)
+          DIVE_REALMD_SERIO=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Realmd.log 2>&1)
         fi
-        # DBErrors.log
-        DIVE_DBERROR_CORR=$(grep -c -E "does\snot\shave\scorresponding" "$FOLDER_CORE"/run/logs/DBErrors.log 2>&1)
-        DIVE_DBERROR_EXIS=$(grep -c -E "doesn't\sexist" "$FOLDER_CORE"/run/logs/DBErrors.log 2>&1)
-        DIVE_DBERROR_QUER=$(grep -c -E "query\sERROR" "$FOLDER_CORE"/run/logs/DBErrors.log 2>&1)
-        DIVE_DBERROR_USED=$(grep -c -E "Option\swill\snever\sbe\sused" "$FOLDER_CORE"/run/logs/DBErrors.log 2>&1)
-        DIVE_DBERROR_CRAS=$(grep -c -E "can\scrash\sclient" "$FOLDER_CORE"/run/logs/DBErrors.log 2>&1)
-        if [[ -z "$DIVE_DBERROR_CORR" || -z "$DIVE_DBERROR_EXIS" || -z "$DIVE_DBERROR_QUER" || -z "$DIVE_DBERROR_USED" || -z "$DIVE_DBERROR_CRAS" ]]; then
-          # non responsive
+        if [ ! -f "$FOLDER_CORE"/run/logs/DBErrors.log ]; then
+          # non responsive/responsive
           DIVE_DBERROR_CORR="0"
           DIVE_DBERROR_EXIS="0"
           DIVE_DBERROR_QUER="0"
           DIVE_DBERROR_USED="0"
           DIVE_DBERROR_CRAS="0"
+        else
+          # DBErrors.log
+          DIVE_DBERROR_CORR=$(grep -c -E "does\snot\shave\scorresponding" "$FOLDER_CORE"/run/logs/DBErrors.log 2>&1)
+          DIVE_DBERROR_EXIS=$(grep -c -E "doesn't\sexist" "$FOLDER_CORE"/run/logs/DBErrors.log 2>&1)
+          DIVE_DBERROR_QUER=$(grep -c -E "query\sERROR" "$FOLDER_CORE"/run/logs/DBErrors.log 2>&1)
+          DIVE_DBERROR_USED=$(grep -c -E "Option\swill\snever\sbe\sused" "$FOLDER_CORE"/run/logs/DBErrors.log 2>&1)
+          DIVE_DBERROR_CRAS=$(grep -c -E "can\scrash\sclient" "$FOLDER_CORE"/run/logs/DBErrors.log 2>&1)
         fi
-        # char.log
-        DIVE_CHAR_CREATED=$(grep -c -E "Create\sCharacter" "$FOLDER_CORE"/run/logs/Char.log 2>&1)
-        DIVE_CHAR_LOGIN_C=$(grep -c -E "Login" "$FOLDER_CORE"/run/logs/Char.log 2>&1)
-        DIVE_CHAR_LOGOUTS=$(grep -c -E "Logout" "$FOLDER_CORE"/run/logs/Char.log 2>&1)
-        if [[ -z "$DIVE_CHAR_CREATED" || -z "$DIVE_CHAR_LOGIN_C" || -z "$DIVE_CHAR_LOGOUTS" ]]; then
-          # non responsive
+        if [ ! -f "$FOLDER_CORE"/run/logs/Char.log ]; then
+          # non responsive/responsive
           DIVE_CHAR_CREATED="0"
           DIVE_CHAR_LOGIN_C="0"
           DIVE_CHAR_LOGOUTS="0"
+        else
+          # char.log
+          DIVE_CHAR_CREATED=$(grep -c -E "Create\sCharacter" "$FOLDER_CORE"/run/logs/Char.log 2>&1)
+          DIVE_CHAR_LOGIN_C=$(grep -c -E "Login" "$FOLDER_CORE"/run/logs/Char.log 2>&1)
+          DIVE_CHAR_LOGOUTS=$(grep -c -E "Logout" "$FOLDER_CORE"/run/logs/Char.log 2>&1)
         fi
-        # EventAIErrors.log
-        DIVE_EVENTAIERROR=$(grep -c -E "skipping" "$FOLDER_CORE"/run/logs/EventAIErrors.log 2>&1)
-        DIVE_EVENTAINOEFF=$(grep -c -E "Action\swill\snot\shave\sany\seffect." "$FOLDER_CORE"/run/logs/EventAIErrors.log 2>&1)
-        DIVE_EVENTAINONEX=$(grep -c -E "nonexistent|non-existing" "$FOLDER_CORE"/run/logs/EventAIErrors.log 2>&1)
-        DIVE_EVENTAI_NULL=$(grep -c -E ".*NULL*." "$FOLDER_CORE"/run/logs/EventAIErrors.log 2>&1)
-        DIVE_EVENTAINOTUS=$(grep -c -E "but\snot\sused" "$FOLDER_CORE"/run/logs/EventAIErrors.log 2>&1)
-        if [[ -z "$DIVE_EVENTAIERROR" || -z "$DIVE_EVENTAINOEFF" || -z "$DIVE_EVENTAINONEX" || -z "$DIVE_EVENTAI_NULL" || -z "$DIVE_EVENTAINOTUS" ]]; then
-          # non responsive
+        if [ ! -f "$FOLDER_CORE"/run/logs/EventAIErrors.log ]; then
+          # non responsive/responsive
           DIVE_EVENTAIERROR="0"
           DIVE_EVENTAINOEFF="0"
           DIVE_EVENTAINONEX="0"
           DIVE_EVENTAI_NULL="0"
           DIVE_EVENTAINOTUS="0"
+        else
+          # EventAIErrors.log
+          DIVE_EVENTAIERROR=$(grep -c -E "skipping" "$FOLDER_CORE"/run/logs/EventAIErrors.log 2>&1)
+          DIVE_EVENTAINOEFF=$(grep -c -E "Action\swill\snot\shave\sany\seffect." "$FOLDER_CORE"/run/logs/EventAIErrors.log 2>&1)
+          DIVE_EVENTAINONEX=$(grep -c -E "nonexistent|non-existing" "$FOLDER_CORE"/run/logs/EventAIErrors.log 2>&1)
+          DIVE_EVENTAI_NULL=$(grep -c -E ".*NULL*." "$FOLDER_CORE"/run/logs/EventAIErrors.log 2>&1)
+          DIVE_EVENTAINOTUS=$(grep -c -E "but\snot\sused" "$FOLDER_CORE"/run/logs/EventAIErrors.log 2>&1)
         fi
-
         # Server.log, .old, Realmd.log
         DIVE_LOG_EMPTY=$(printf '%b' "${Y0:?}Empty..${N0:?}")
         DIVE_LOG_ERROR=$(printf '%b' "${R0:?}Error..${N0:?}")
@@ -1400,7 +1452,7 @@ EOF
         echo
         printline "$DIVE_LOG_EMPTY" "$DIVE_SERVER_EMPTY" "$DIVE_LOG_EMPTY" "$DIVE_SERVER_OLD_EMPTY" "$DIVE_LOG_EMPTY" "$DIVE_REALMD_EMPTY"
         printline "$DIVE_LOG_ERROR" "$DIVE_SERVER_ERROR" "$DIVE_LOG_ERROR" "$DIVE_SERVER_OLD_ERROR" "$DIVE_LOG_ERROR" "$DIVE_REALMD_ERROR"
-        printline "$DIVE_LOG_IGNOR" "$DIVE_SERVER_IGNOR" "$DIVE_LOG_IGNOR=" "$DIVE_SERVER_OLD_IGNOR" "$DIVE_LOG_IGNOR" "$DIVE_REALMD_SERIO"
+        printline "$DIVE_LOG_IGNOR" "$DIVE_SERVER_IGNOR" "$DIVE_LOG_IGNOR" "$DIVE_SERVER_OLD_IGNOR" "$DIVE_LOG_IGNOR" "$DIVE_REALMD_SERIO"
         printline "$DIVE_LOG_POLYR" "$DIVE_SERVER_POLYR" "$DIVE_LOG_POLYR" "$DIVE_SERVER_OLD_POLYR" "$DIVE_LOG_NONE" "$DIVE_LOG_ZERO"
         printline "$DIVE_LOG_SERIO" "$DIVE_SERVER_SERIO" "$DIVE_LOG_SERIO" "$DIVE_SERVER_OLD_SERIO" "$DIVE_LOG_SERIO" "$DIVE_LOG_ZERO"
         echo
@@ -4541,12 +4593,12 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             # realmd.log #######################################################
 
             # if realm failed
-            if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+            if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
               # if any, print "Realm failed or halted"
               printf '%b' "[${R1:?}0H${N0:?}] Realm failed or halted!\n"
             else
               # look for empty tables
-              if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+              if grep -q -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
                 # count empty inside log
                 COUNT_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1 |
                   grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." 2>&1)
@@ -4554,7 +4606,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
                 printf '%b' "[${Y1:?}0E${N0:?}] Realm: ${Y1:?}$COUNT_EMPTY${N0:?} Tables are empty, doesn't exist!\n"
               fi
               # look for error
-              if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+              if grep -q -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
                 # count errors inside log
                 COUNT_ERROR_REALM=$(grep -E -v ".*is empty*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1 |
                   grep -c -E ".*ERROR*." 2>&1)
@@ -4570,24 +4622,24 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
                 printf '%b' "[${G1:?}OK${N0:?}] Realm: OK!\n"
               fi
               # this database (realmd) is out of date!
-              if grep -E -q "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+              if grep -q -E "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
                 printf '%b' "[${Y1:?}0D${N0:?}] Realm database is out of date!\n"
                 printf '%b' "[${G0:?}1D${N0:?}] Menu: 'd' > Apply all updates [A]-[B]"
               fi
               # databases is missing or corrupt.
-              if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+              if grep -q -E "\sdatabase\sis\smissing\sor\scorrupt." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
                 printf '%b' "[${R1:?}X0${N0:?}] Realm database is missing or corrupt!\n"
               fi
               # reinstall your (realmd) database
-              if grep -E -q "reinstall\syour|\sUnknown\sdatabase\s|Reinstall\syour\s[REALMD]\sdatabase\s" "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+              if grep -q -E "reinstall\syour|\sUnknown\sdatabase\s|Reinstall\syour\s[REALMD]\sdatabase\s" "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
                 printf '%b' "[${R1:?}X1${N0:?}] Reinstall your realm database!\n"
               fi
               # can't connect to local mysql through socket
-              if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+              if grep -q -E ".*Can't\sconnect\sto\slocal\sMySQL*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
                 printf '%b' "[${R1:?}X2${N0:?}] Realm can't connect to local MySQL!\n"
               fi
               # your realmd.conf version indicates your conf file is out of date
-              if grep -E -q ".*Your\srealmd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+              if grep -q -E ".*Your\srealmd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
                 printf '%b' "[${R1:?}X3${N0:?}] realmd.conf is out of date!\n"
               fi
             fi
@@ -4595,12 +4647,12 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             # server.log #######################################################
 
             # if world failed
-            if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+            if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
               # if any, print "World failed or halted"
               printf '%b' "[${R1:?}0H${N0:?}] World failed or halted!\n"
             else
               # look for empty tables
-              if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+              if grep -q -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
                 # count empty inside log
                 COUNT_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "$FOLDER_CORE"/run/logs/Server.log 2>&1 |
                   grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." 2>&1)
@@ -4608,7 +4660,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
                 printf '%b' "[${Y1:?}0E${N0:?}] World: ${Y1:?}$COUNT_EMPTY${N0:?} Tables are empty or doesn't exist!\n"
               fi
               # look for error
-              if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+              if grep -q -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
                 # count errors inside log
                 COUNT_ERROR_SERVER=$(grep -E -v ".*is empty*." "$FOLDER_CORE"/run/logs/Server.log 2>&1 |
                   grep -c -E ".*ERROR*." 2>&1)
@@ -4620,7 +4672,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
                 # if any, print "error"
                 printf '%b' "[${R1:?}1E${N0:?}] World: ${R1:?}$COUNT_ERROR_SERVER${N0:?} Error! ${GR:?}${ERROR_RATE_SERVER:?}${N0:?}\n"
                 # look for serious error
-                if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+                if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
                   # count serious errors inside log
                   COUNT_ERROR_SERIOUS=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>&1)
                   # if any, print "serious"
@@ -4631,36 +4683,36 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
                 printf '%b' "[${G1:?}OK${N0:?}] World OK!\n"
               fi
               # world failed
-              if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+              if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
                 # if any, print "World failed"
                 echo
                 printf '%b' "$SERVER_LOG_FAILED"
                 echo
               fi
               # this database (mangosd) is out of date!
-              if grep -E -q "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+              if grep -q -E "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
                 printf '%b' "[${GR:?}0D${N0:?}] World database is out of date!\n"
                 printf '%b' "[${GR:?}1D${N0:?}] Menu: 'd' > Apply all updates [A]-[B]"
               fi
               # databases is missing or corrupt.
-              if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+              if grep -q -E "\sdatabase\sis\smissing\sor\scorrupt." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
                 printf '%b' "[${R1:?}X0${N0:?}] World database is missing or corrupt!\n"
               fi
               # reinstall your (mangosd) database
-              if grep -E -q "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+              if grep -q -E "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
                 printf '%b' "[${R1:?}X1${N0:?}] Reinstall your world database!\n"
               fi
               # can't connect to local mysql through socket
-              if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+              if grep -q -E ".*Can't\sconnect\sto\slocal\sMySQL*." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
                 printf '%b' "[${R1:?}X2${N0:?}] World can't connect to local MySQL!\n"
               fi
               # your mangosd.conf version indicates your conf file is out of date
-              if grep -E -q ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+              if grep -q -E ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
                 printf '%b' "[${R1:?}X3${N0:?}] realmd.conf is out of date!\n"
               fi
 
               # Playerbot loaded
-              if grep -E -q "Playerbot: Using configuration file" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+              if grep -q -E "Playerbot: Using configuration file" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
                 # if any, print "Playerbot ok"
                 printf '%b' "[${G1:?}OK${N0:?}] Playerbot\n"
               else
@@ -4668,7 +4720,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
                 printf '%b' "[${GR:?}NO${N0:?}] Playerbot\n"
               fi
               # ahbot loaded and initialized
-              if grep -E -q "Initialize AuctionHouseBot..." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+              if grep -q -E "Initialize AuctionHouseBot..." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
                 # if any, print "AHbot ok"
                 printf '%b' "[${G1:?}OK${N0:?}] AHbot\n"
               else
@@ -5011,12 +5063,12 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
     if [[ "$PIDOFMANGOSD" -eq "1" ]]; then
       # if realm failed
-      if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+      if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
         # if any, print "Realm failed or halted"
         printf '%b' "[${R1:?}0H${N0:?}] Realm failed or halted!\n"
       else
         # look for empty tables
-        if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+        if grep -q -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
           # count empty inside log
           COUNT_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1 |
             grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." 2>&1)
@@ -5024,7 +5076,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           printf '%b' "[${Y1:?}0E${N0:?}] Realm: ${Y1:?}$COUNT_EMPTY${N0:?} Tables are empty, doesn't exist!\n"
         fi
         # look for error
-        if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+        if grep -q -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
           # count errors inside log
           COUNT_ERROR_REALM=$(grep -E -v ".*is empty*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1 |
             grep -c -E ".*ERROR*." 2>&1)
@@ -5040,24 +5092,24 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           printf '%b' "[${G1:?}OK${N0:?}] Realm: OK!\n"
         fi
         # this database (realmd) is out of date!
-        if grep -E -q "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+        if grep -q -E "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
           printf '%b' "[${Y1:?}0D${N0:?}] Realm database is out of date!\n"
           printf '%b' "[${G0:?}1D${N0:?}] Menu: 'd' > Apply all updates [A]-[B]"
         fi
         # databases is missing or corrupt.
-        if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+        if grep -q -E "\sdatabase\sis\smissing\sor\scorrupt." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
           printf '%b' "[${R1:?}X0${N0:?}] Realm database is missing or corrupt!\n"
         fi
         # reinstall your (realmd) database
-        if grep -E -q "reinstall\syour|\sUnknown\sdatabase\s|Reinstall\syour\s[REALMD]\sdatabase\s" "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+        if grep -q -E "reinstall\syour|\sUnknown\sdatabase\s|Reinstall\syour\s[REALMD]\sdatabase\s" "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
           printf '%b' "[${R1:?}X1${N0:?}] Reinstall your realm database!\n"
         fi
         # can't connect to local mysql through socket
-        if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+        if grep -q -E ".*Can't\sconnect\sto\slocal\sMySQL*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
           printf '%b' "[${R1:?}X2${N0:?}] Realm can't connect to local MySQL!\n"
         fi
         # your realmd.conf version indicates your conf file is out of date
-        if grep -E -q ".*Your\srealmd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+        if grep -q -E ".*Your\srealmd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
           printf '%b' "[${R1:?}X3${N0:?}] realmd.conf is out of date!\n"
         fi
       fi
@@ -5065,12 +5117,12 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       # server.log ###############################################################
 
       # if world failed
-      if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+      if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
         # if any, print "World failed or halted"
         printf '%b' "[${R1:?}0H${N0:?}] World failed or halted!\n"
       else
         # look for empty tables
-        if grep -E -q "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+        if grep -q -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
           # count empty inside log
           COUNT_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "$FOLDER_CORE"/run/logs/Server.log 2>&1 |
             grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." 2>&1)
@@ -5078,7 +5130,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           printf '%b' "[${Y1:?}0E${N0:?}] World: ${Y1:?}$COUNT_EMPTY${N0:?} Tables are empty or doesn't exist!\n"
         fi
         # look for error
-        if grep -E -q ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+        if grep -q -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
           # count errors inside log
           COUNT_ERROR_SERVER=$(grep -E -v ".*is empty*." "$FOLDER_CORE"/run/logs/Server.log 2>&1 |
             grep -c -E ".*ERROR*." 2>&1)
@@ -5090,7 +5142,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           # if any, print "error"
           printf '%b' "[${R1:?}1E${N0:?}] World: ${R1:?}$COUNT_ERROR_SERVER${N0:?} Error! ${GR:?}${ERROR_RATE_SERVER:?}${N0:?}\n"
           # look for serious error
-          if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+          if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
             # count serious errors inside log
             COUNT_ERROR_SERIOUS=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>&1)
             # if any, print "serious"
@@ -5101,36 +5153,36 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           printf '%b' "[${G1:?}OK${N0:?}] World OK!\n"
         fi
         # world failed
-        if grep -E -q "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+        if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
           # if any, print "World failed"
           echo
           printf '%b' "$SERVER_LOG_FAILED"
           echo
         fi
         # this database (mangosd) is out of date!
-        if grep -E -q "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+        if grep -q -E "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
           printf '%b' "[${GR:?}0D${N0:?}] World database is out of date!\n"
           printf '%b' "[${GR:?}1D${N0:?}] Menu: 'd' > Apply all updates [A]-[B]"
         fi
         # databases is missing or corrupt.
-        if grep -E -q "\sdatabase\sis\smissing\sor\scorrupt." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+        if grep -q -E "\sdatabase\sis\smissing\sor\scorrupt." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
           printf '%b' "[${R1:?}X0${N0:?}] World database is missing or corrupt!\n"
         fi
         # reinstall your (mangosd) database
-        if grep -E -q "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+        if grep -q -E "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
           printf '%b' "[${R1:?}X1${N0:?}] Reinstall your world database!\n"
         fi
         # can't connect to local mysql through socket
-        if grep -E -q ".*Can't\sconnect\sto\slocal\sMySQL*." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+        if grep -q -E ".*Can't\sconnect\sto\slocal\sMySQL*." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
           printf '%b' "[${R1:?}X2${N0:?}] World can't connect to local MySQL!\n"
         fi
         # your mangosd.conf version indicates your conf file is out of date
-        if grep -E -q ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+        if grep -q -E ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
           printf '%b' "[${R1:?}X3${N0:?}] realmd.conf is out of date!\n"
         fi
 
         # Playerbot loaded
-        if grep -E -q "Playerbot: Using configuration file" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+        if grep -q -E "Playerbot: Using configuration file" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
           # if any, print "Playerbot ok"
           printf '%b' "[${G1:?}OK${N0:?}] Playerbot\n"
         else
@@ -5138,7 +5190,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           printf '%b' "[${GR:?}NO${N0:?}] Playerbot\n"
         fi
         # ahbot loaded and initialized
-        if grep -E -q "Initialize AuctionHouseBot..." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+        if grep -q -E "Initialize AuctionHouseBot..." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
           # if any, print "AHbot ok"
           printf '%b' "[${G1:?}OK${N0:?}] AHbot\n"
         else
