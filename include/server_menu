@@ -6,7 +6,7 @@
 
 # By Rainman
 # V20210303-barebone
-# 0.7.7.0
+# 0.7.7.9
 
 # https://www.linuxatemyram.com, num num num
 
@@ -565,6 +565,8 @@ Peers....: $P2P_PEERS_CO$P2P_SLASH_SM$P2P_PEERS_S2$P2P_SLASH_SM$P2P_PEERS_DL
 
     2)
 
+      # remove old files
+      rm /var/tmp/optional.out &>/dev/null
       dialog --backtitle "Start, Import, Seed Maps" \
         --title "Maps Checkbox " \
         --checklist "Choose from following" 0 0 0 \
@@ -581,35 +583,42 @@ Peers....: $P2P_PEERS_CO$P2P_SLASH_SM$P2P_PEERS_S2$P2P_SLASH_SM$P2P_PEERS_DL
       # options
       if [[ "$OPTIONAL" -eq "1" ]]; then
         echo "$CLASSIC_MAPS"
+        rm /var/tmp/optional.out &>/dev/null
         # CODE MISSING !!
         continue
       elif [[ "$OPTIONAL" -eq "2" ]]; then
         echo "$TBC_MAPS"
+        rm /var/tmp/optional.out &>/dev/null
         # CODE MISSING !!
         continue
       elif [[ "$OPTIONAL" -eq "3" ]]; then
         echo "$WOTLK_MAPS"
+        rm /var/tmp/optional.out &>/dev/null
         # CODE MISSING !!
         continue
       elif [[ "$OPTIONAL" -eq "12" ]]; then
         echo "$CLASSIC_MAPS"
+        rm /var/tmp/optional.out &>/dev/null
         echo "$TBC_MAPS"
         # CODE MISSING !!
         continue
       elif [[ "$OPTIONAL" -eq "13" ]]; then
         echo "$CLASSIC_MAPS"
         echo "$WOTLK_MAPS"
+        rm /var/tmp/optional.out &>/dev/null
         # CODE MISSING !!
         continue
       elif [[ "$OPTIONAL" -eq "23" ]]; then
         echo "$TBC_MAPS"
         echo "$WOTLK_MAPS"
+        rm /var/tmp/optional.out &>/dev/null
         # CODE MISSING !!
         continue
       elif [[ "$OPTIONAL" -eq "123" ]]; then
         echo "$CLASSIC_MAPS"
         echo "$TBC_MAPS"
         echo "$WOTLK_MAPS"
+        rm /var/tmp/optional.out &>/dev/null
         # CODE MISSING !!
         continue
       fi
