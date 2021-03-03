@@ -565,8 +565,8 @@ Peers....: $P2P_PEERS_CO$P2P_SLASH_SM$P2P_PEERS_S2$P2P_SLASH_SM$P2P_PEERS_DL
 
     2)
 
-      dialog --backtitle "Test" \
-        --title "Checkbox test " \
+      dialog --backtitle "Start, Import, Seed Maps" \
+        --title "Maps Checkbox " \
         --checklist "Choose from following" 0 0 0 \
         1 "CMaNGOS Classic" off \
         2 "CMaNGOS The Burning Crusade" off \
