@@ -8,11 +8,11 @@
 # Built on a Linux ubuntu 5.4.0-1028-raspi - (Raspberry Pi4)
 # https://ubuntu.com/download/raspberry-pi
 
-# C(ontinued)-MaNGOS (Classic fork)
+# C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
 # V20210403
-# 5.5.2.8
+# 5.5.6.6
 
 while :; do
 
@@ -819,6 +819,24 @@ ${N0:?}"
           # fix ownership
           sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms
         fi
+
+        # check if expansion_maps.zip exist
+        if [ -f /seedbox/vanilla_maps.zip ]; then
+          V_MAPS="${G1:?}Vanilla${N0:?}"
+        else
+          V_MAPS="${GR:?}Vanilla${N0:?}"
+        fi
+        if [ -f /seedbox/tbc_maps.zip ]; then
+          T_MAPS="${G1:?}TBC${N0:?}"
+        else
+          T_MAPS="${GR:?}TBC${N0:?}"
+        fi
+        if [ -f /seedbox/wotlk_maps.zip ]; then
+          W_MAPS="${G1:?}Wotlk${N0:?}"
+        else
+          W_MAPS="${GR:?}Wotlk${N0:?}"
+        fi
+
         printf '%b' "${GR:?}Please wait${N0:?}\n"
         # get remote information from transmission, create a file
         transmission-remote -t all -i >/var/log/ms/transmission_list 2>&1
@@ -830,7 +848,7 @@ ${N0:?}"
         if ! [ -x "$(command -v transmission-cli)" ]; then
           SEED_TRANSMISSION="${GR:?}Not installed!${N0:?}"
           INTRANET_SEED="${GR:?}0.0.0.0:9091${N0:?}"
-          P2P_FILE_NAME="${GR:?}vanilla_maps.zip${N0:?}"
+          P2P_FILE_NAME="${GR:?}$V_MAPS $T_MAPS $W_MAPS${N0:?}"
           P2P_PEERS_CONNECTED="${GR:?}N/A${N0:?}"
           P2P_DWNS="${GR:?}N/A${N0:?} "
           P2P_UPLS="${GR:?}N/A${N0:?} "
@@ -848,12 +866,7 @@ ${N0:?}"
             P2P_PEERS_CONNECTED=$(echo "$P2P_INFO" 2>&1 | grep "Peers" 2>&1 | awk '{ print $4 }' 2>&1 | awk -F, '{ print $1 }' 2>&1)
             P2P_PEERS_SEEDINGTO=$(echo "$P2P_INFO" 2>&1 | grep "Peers" 2>&1 | awk '{ print $7 }' 2>&1 | awk -F, '{ print $1 }' 2>&1)
             P2P_PEERS_DOWN_LOAD=$(echo "$P2P_INFO" 2>&1 | grep "Peers" 2>&1 | awk '{ print $10 }' 2>&1)
-            # get progress
-            if echo "$P2P_INFO" 2>&1 | grep -q -o "Percent Done: 100%" 2>&1; then
-              P2P_FILE_NAME="${N0:?}vanilla_maps.zip${N0:?}"
-            else
-              P2P_FILE_NAME="${GR:?}vanilla_maps.zip${N0:?}"
-            fi
+
             # get progress
             if echo "$P2P_INFO" 2>&1 | grep -q -o "Percent Done: 100%" 2>&1; then
               P2P_PROG="${G1:?}100%${N0:?}"
@@ -882,7 +895,7 @@ ${N0:?}"
 
             SEED_TRANSMISSION="${GR:?}Offline${N0:?}"
             INTRANET_SEED="${GR:?}0.0.0.0:9091${N0:?}"
-            P2P_FILE_NAME="${GR:?}vanilla_maps.zip${N0:?}"
+            P2P_FILE_NAME="${GR:?}$V_MAPS$T_MAPS$W_MAPS${N0:?}"
             P2P_PEERS_CONNECTED="${GR:?}N/A${N0:?}"
             P2P_DWNS="${GR:?}N/A${N0:?} "
             P2P_UPLS="${GR:?}N/A${N0:?} "
@@ -899,7 +912,7 @@ ${N0:?}"
 
             SEED_TRANSMISSION="${G1:?}Online${N0:?}"
             INTRANET_SEED="${N0:?}${INTRANET:?}:9091${N0:?}"
-            P2P_FILE_NAME="${N0:?}vanilla_maps.zip${N0:?}"
+            P2P_FILE_NAME="${GR:?}$V_MAPS$T_MAPS$W_MAPS${N0:?}"
             SLASH="/"
 
             ;;
@@ -922,11 +935,11 @@ ${N0:?}"
 
         clear
         echo
-        printf '%b' "${N0:?}   CMaNGOS${N0:?} - ${THEME_ALL:?}Vanilla Maps ${N0:?}SeedBox
+        printf '%b' "${N0:?}   CMaNGOS${N0:?} - ${THEME_ALL:?}Expansion Maps ${N0:?}SeedBox
 
    SeedBox${G0:?}..:${N0:?} $SEED_TRANSMISSION
    Access${G0:?}...:${N0:?} $INTRANET_SEED
-   Filename${G0:?}.:${N0:?} $P2P_FILE_NAME
+   Exp Maps${G0:?}.:${N0:?} $P2P_FILE_NAME
    Download${G0:?}.:${N0:?} $P2P_DWNS${GR:?}Unlimited${N0:?}
    Upload${G0:?}...:${N0:?} $P2P_UPLS${GR:?}128kb/s${N0:?}
    Status${G0:?}...:${N0:?} $P2P_STAT
@@ -1133,9 +1146,34 @@ EOF
               sudo service transmission-daemon start &>/dev/null
               printf '%b' "[${G1:?}OK${N0:?}] Starting SeedBox ${GR:?}transmission-daemon${N0:?}\n"
               sleep 1
-              # add magnet link: vanilla.maps.zip.torrent
-              transmission-remote -a "magnet:?xt=urn:btih:1cdcaa3d77a7f4df79935d885e639903e37dda24&dn=vanilla%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
-              printf '%b' "[${G1:?}OK${N0:?}] Torrent added\n"
+              echo
+              echo "   Maps Download (torrent):"
+              echo
+              echo "   v : vanilla_maps.zip"
+              echo "   t : tbc_maps.zip"
+              echo "   w : wotlk_maps.zip"
+              echo
+              read -r -s -n1
+              case "$REPLY" in
+
+              "v")
+                R_MAPS="${GR:?}vanilla_maps.zip${N0:?}"
+                # add magnet link: vanilla.maps.zip.torrent
+                transmission-remote -a "magnet:?xt=urn:btih:1cdcaa3d77a7f4df79935d885e639903e37dda24&dn=vanilla%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
+                ;;
+              "t")
+                R_MAPS="${GR:?}tbc_maps.zip${N0:?}"
+                # add magnet link: tbc_maps.zip.torrent
+                transmission-remote -a "magnet:?xt=urn:btih:1d62ecb9e7832bdcccc57560bc73e68b3c3b07a9&dn=tbc%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
+                ;;
+              "w")
+                R_MAPS="${GR:?}wotlk_maps.zip${N0:?}"
+                # add magnet link: wotlk_maps.zip.torrent
+                # transmission-remote -a "magnet:?xt=urn:btih:12345678909876543212345678909876543212345=wotlk%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
+                ;;
+
+              esac
+              printf '%b' "[${G1:?}OK${N0:?}] Torrent added $R_MAPS\n"
               # try to verify torrent data
               P2P_VERIFY=$(transmission-remote -t all -v 2>&1)
               printf '%b' "[${Y1:?}OK${N0:?}] Verifying data..\n"
@@ -1747,7 +1785,7 @@ $RA_TIP"
       OK_MS="[${Y1:?}ok${N0:?}]"
     fi
 
-    # check if 'mangos-classic' exist
+    # check if mangos-core exist
     FILE="$FOLDER_CORE/README.md"
     if [ ! -f "$FILE" ]; then
       # look for directory
@@ -1780,7 +1818,7 @@ $RA_TIP"
     else
       # check for updates
 
-      # CMaNGOS Core (mangos-classic)
+      # CMaNGOS Core (mangos-core)
       printf '%b' "[ Checking for ${G0:?}+${R0:?}-${N0:?} Updates${N0:?} ] .. "
       echo
       echo
@@ -1801,10 +1839,10 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
         printf '%b' "$OK_CORE (${G0:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) Core Updated - $LATEST_DATE"
         echo
       fi
-    # check if 'mangos-classic' exist done
+    # check if mangos-core exist done
     fi
 
-    # check if 'classic-db' exist
+    # check if core-db exist
     FILE="$FOLDER_DB/README.md"
     if [ ! -f "$FILE" ]; then
       # look for directory
@@ -1828,13 +1866,13 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
         ./InstallFullDB.sh
         printf '%b' "[${G1:?}OK${N0:?}] Done!\n"
         sleep 1
-        # check if 'InstallFullDB.config' exist
+        # check if InstallFullDB.config exist
         FILE="$FOLDER_DB/InstallFullDB.config"
         if [ -z "$FILE" ]; then
           cd "$FOLDER_DB" || exit
           ./InstallFullDB.sh &>/dev/null
         fi
-        # check if 'InstallFullDB.config' exist done
+        # check if InstallFullDB.config exist done
       fi
       # restore InstallFullDB.config backup
       cp "${FOLDER_WOW:?}"/backup/configurations/InstallFullDB.config "$FOLDER_DB"/InstallFullDB.config &>/dev/null
@@ -1842,9 +1880,9 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
 
       # check for updates
 
-      # check if 'classic-db' exist
+      # check if core-db exist
 
-      # Classic Database (classic-db)
+      # Core Database (core-db)
 
       cd "${FOLDER_DB:?}" || exit
       if git checkout master &>/dev/null &&
@@ -1856,17 +1894,17 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         LATEST_HEAD=$(git rev-parse --short HEAD)
         printf '%b' "[${G1:?}NEW${N0:?}] (${G1:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) ${G1:?}${UND:?}New Updates For Database${DEF:?}${N0:?}! - $LATEST_DATE
-${GR:?}(d) Update Database > Update classic-db${N0:?}\n"
+${GR:?}(d) Update Database > Update core-db${N0:?}\n"
       else
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         LATEST_HEAD=$(git rev-parse --short HEAD)
         printf '%b' "$OK_DB (${G0:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) Database Updated - $LATEST_DATE"
         echo
       fi
-    # check if 'classic-db' exist done
+    # check if core-db exist done
     fi
 
-    # check if 'cmangos-script' exist
+    # check if cmangos-script exist
     FILE="$FOLDER_HELPER/README.md"
     if [ ! -f "$FILE" ]; then
       # remove old file
@@ -1901,7 +1939,7 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
         printf '%b' "$OK_MS (${G0:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) Helper Updated - $LATEST_DATE"
         echo
       fi
-    # check if 'cmangos-script' exist done
+    # check if cmangos-script exist done
     fi
     echo
     read -r -p "Press Enter to continue" </dev/tty
@@ -1948,14 +1986,14 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
     WIDTH=38
     CHOICE_HEIGHT=6
     BACKTITLE="update CMaNGOS"
-    TITLE="Update mangos-classic [core]"
+    TITLE="Update mangos [core]"
     MENU="Choose one of the following options:"
 
     OPTIONS=(1 "Compile latest build"
       2 "Install systemd unit files"
       3 "Reinstall (delete /build)"
       4 "Reset --hard origin/master"
-      5 "Delete Core /mangos-classic"
+      5 "Delete Core /mangos-core"
       6 "Backup configurations")
 
     CHOICE=$(dialog --clear \
@@ -3058,13 +3096,13 @@ Select install operation"
     WIDTH=42
     CHOICE_HEIGHT=12
     BACKTITLE="update Database"
-    TITLE="Update classic-db [database]"
+    TITLE="Update core-db [database]"
     MENU="Choose one of the following options:"
 
-    OPTIONS=(1 "Update classic-db"
+    OPTIONS=(1 "Update core-db"
       2 "Drop/Import databases"
       3 "myisam -> innodb (MariaDB)"
-      4 "Reinstall (delete /classic-db)"
+      4 "Reinstall (delete /core-db)"
       5 "Reset --hard origin/master"
       6 "Restart MySQL Server (service)"
       7 "Stop MySQL Server (service)"
@@ -3072,7 +3110,7 @@ Select install operation"
       9 "Apply all updates [A]-[B]"
       10 "Install database client"
       11 "Install database system"
-      12 "Delete /classic-db")
+      12 "Delete /core-db")
 
     CHOICE=$(dialog --clear \
       --backtitle "$BACKTITLE" \
@@ -3114,7 +3152,7 @@ Select install operation"
 
     "11")
 
-      # check if 'mangos' user exist
+      # check if mangos user exist
       # mariadb
       PACKAGELIST_MARIA=(mariadb-client
         mariadb-server)
@@ -3205,7 +3243,7 @@ This is needed to operate local/remote database"
 
       # install database client done
 
-      # update classic-db
+      # update core-db
 
     "1")
 
@@ -3405,7 +3443,7 @@ Database User, Client/Server is needed."
 
       # backup done
 
-      # update classic-db done
+      # update core-db done
 
       # drop/import databases
 
@@ -3652,11 +3690,11 @@ Database User, Client/Server is needed."
 
       # convert_mysql_engine = myisam -> innodb done
 
-      # reinstall (delete /classic-db)
+      # reinstall (delete /core-db)
 
     "4")
 
-      read -t 5 -r -p "[YN] Reinstall (Delete /classic-db)? y/n " -n 1 -r
+      read -t 5 -r -p "[YN] Reinstall (Delete /core-db)? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
@@ -3673,7 +3711,7 @@ Database User, Client/Server is needed."
 
       ;;
 
-      # reinstall (delete /classic-db) done
+      # reinstall (delete /core-db) done
 
       # reset --hard origin/master
 
