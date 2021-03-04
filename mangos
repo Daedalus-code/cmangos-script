@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS (Classic fork)
 
 # By Rainman
-# V20210203
-# 5.5.2.3
+# V20210403
+# 5.5.2.8
 
 while :; do
 
@@ -667,19 +667,18 @@ ${PASS_NC:?}
         BUILT_FOR="${GR:?}Built for Linux_x00 (next-to-nothing)${N0:?}"
       fi
       # EventAI
-      if grep -q -o -a "\sACID\s1.12.x\s*.*" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+      if grep -q -o -a "Using creature EventAI:.*" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
         # if any, print "EventAI"
-        EVENTAI=$(grep -o -a "\sACID\s1.12.x\s*.*" "$FOLDER_CORE"/run/logs/Server.log 2>&1 |
+        EVENTAI=$(grep -Eo "Using creature EventAI:.*" "$FOLDER_CORE"/run/logs/Server.log 2>&1 |
           sed 's/^ *//' 2>&1)
       # if nothing, print "Restart server please.."
       else
         EVENTAI="${GR:?}ACID 0.00.x (Expansion) for CMaNGOS-Expansion (0.01.X Client)${N0:?}"
       fi
       # World DB
-      if grep -q -o -a "\s1.11\s*.*" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+      if grep -q -o -a "Using World DB:.*" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
         # if any, print "World DB"
-        WORLD_DB=$(grep -Eo "Classic DB version.*" "$FOLDER_CORE"/run/logs/Server.log 2>&1 |
-          sed 's/^ *//' 2>&1)
+        WORLD_DB=$(grep -Eo "Using World DB:.*" "$FOLDER_CORE"/run/logs/Server.log 2>&1)
       # if nothing, print "Restart server please.."
       else
         WORLD_DB="${GR:?}Expansion DB version 0.01 'Into the Abyss of nothing.' For Expansion core z0000.${N0:?}"
@@ -727,6 +726,10 @@ ${PASS_NC:?}
         UPTIME_TIMER=$(printf '%dh:%dm:%ds\n' $(("$TOTAL_UPTIME/3600")) $(("$TOTAL_UPTIME%3600/60")) $(("$TOTAL_UPTIME%60")))
         # calculate days
         TOTAL_UPTIME_DAYS=$(echo "$TOTAL_UPTIME/3600/24" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
+        if [ -z "$TOTAL_UPTIME_DAYS" ]; then
+          # non responsive
+          TOTAL_UPTIME_DAYS="1"
+        fi
       fi
 
       printf '%b' "
@@ -762,35 +765,37 @@ ${PASS_NC:?}
     \_____|   |_|  |_| (_| |_| \_|\_____|\____/ \____/
     http://cmangos.net\__,_|     Doing things right!
 
-   ${G0:?}C(ontinued)-MaNGOS (Classic fork)${N0:?}
+   ${G0:?}C(ontinued)-MaNGOS - https://github.com/cmangos${N0:?}
 
-   EventAI
    ${GR:?}$EVENTAI${N0:?}
-   World DB
    ${GR:?}$WORLD_DB${N0:?}
 
-   ${THEME_DSC:?}https://github.com/cmangos/mangos-classic${N0:?}
-   ${THEME_DSC:?}https://github.com/cmangos/classic-db${N0:?}
+   https://github.com/cmangos/mangos-classic
+   https://github.com/cmangos/classic-db
+   https://github.com/cmangos/mangos-tbc
+   https://github.com/cmangos/tbc-db
+   https://github.com/cmangos/mangos-wotlk
+   https://github.com/cmangos/wotlk-db
 
    ${G0:?}C(ontinued)-MaNGOS - Helper${N0:?}
 
    ${THEME_DSC:?}https://github.com/Daedalus-code/cmangos-script${N0:?}
 
-   This script was built on a ubuntu system - (Raspberry Pi4)
+   This script was built on a Ubuntu System - (Raspberry Pi4)
    https://ubuntu.com/download/raspberry-pi
 
-   Functions and features for admins running a WoW Vanilla server.
+   Functions and features for admins running a WoW server.
 
    Planned Features: Time will tell.
 
    ---What
 
-   * Install this script on a ubuntu system, make everything more easy.
-   * Connect to a MySQL server outside or localhost
-   * Download latest core/database updates
+   * Install this script on a Ubuntu System, make everything more easy.
+   * Connect to a MySQL server outside or LOCALHOST
+   * Download latest Core/Database updates
    * Upgrade Database with latest fixes
    * Compile CMaNGOS with latest fixes
-   * Download/Install classic maps
+   * Download/Import Maps: ${G0:?}Vanilla${N0:?},${G0:?} TBC${N0:?}, ${GR:?}WOTLK${N0:?}
    * Setup RA for account tools
    * Profit
 
@@ -4612,7 +4617,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
                 # error rate (total)
                 LOG_LINES=$(wc -l "$FOLDER_CORE"/run/logs/Realmd.log 2>&1 | awk '{ print $1 }' 2>&1)
                 # calculate error rate
-                CALC_ERROR_REALM=$(echo "100/$LOG_LINES*$COUNT_ERROR_REALM" 2>&1 | bc -l 2>&1 | awk '{ printf "%.2f%\n", $1 }' 2>&1)
+                CALC_ERROR_REALM=$(echo "scale=4; 100/$LOG_LINES*$COUNT_ERROR_REALM" 2>&1 | bc -l 2>&1)
                 ERROR_RATE_REALM=$(echo "${CALC_ERROR_REALM:?}%")
                 # if any, print "error"
                 printf '%b' "[${R1:?}1E${N0:?}] Realm: ${R1:?}$COUNT_ERROR_REALM${N0:?} Error! ${GR:?}$ERROR_RATE_REALM${N0:?}\n"
@@ -4666,8 +4671,8 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
                 # error rate (total)
                 LOG_LINES=$(wc -l "$FOLDER_CORE"/run/logs/Server.log 2>&1 | awk '{ print $1 }' 2>&1)
                 # calculate error rate
-                CALC_ERROR_SERVER=$(echo "100/$LOG_LINES*$COUNT_ERROR_SERVER" 2>&1 | bc -l 2>&1 | awk '{ printf "%.2f%\n", $1 }' 2>&1)
-                ERROR_RATE_SERVER=$(echo "${CALC_ERROR_SERVER:?}")
+                CALC_ERROR_SERVER=$(echo "scale=4; 100/$LOG_LINES*$COUNT_ERROR_SERVER" 2>&1 | bc -l 2>&1)
+                ERROR_RATE_SERVER=$(echo "${CALC_ERROR_SERVER:?}%" 2>&1)
                 # if any, print "error"
                 printf '%b' "[${R1:?}1E${N0:?}] World: ${R1:?}$COUNT_ERROR_SERVER${N0:?} Error! ${GR:?}${ERROR_RATE_SERVER:?}${N0:?}\n"
                 # look for serious error
@@ -4727,9 +4732,9 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
                 printf '%b' "[${GR:?}NO${N0:?}] AHbot\n"
               fi
               # get startup time
-              STARTUP_TIME=$(grep "SERVER\sSTARTUP\sTIME*." wow/mangos-classic/run/logs/Server.log 2>&1 |
+              STARTUP_TIME=$(grep "SERVER\sSTARTUP\sTIME*." "$FOLDER_CORE"/run/logs/Server.log 2>&1 |
                 cut -d\  -f6-9 2>&1)
-              printf '%b' "[${G1:?}OK${N0:?}] World initialized! $STARTUP_TIME\n"
+              printf '%b' "[${G1:?}OK${N0:?}] World initialized! ${G1:?}$STARTUP_TIME${N0:?}\n"
             fi
             echo
             printf '%b' "${G0:?}>${N0:?} hit Any key to go back."
@@ -5082,7 +5087,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           # error rate (total)
           LOG_LINES=$(wc -l "$FOLDER_CORE"/run/logs/Realmd.log 2>&1 | awk '{ print $1 }' 2>&1)
           # calculate error rate
-          CALC_ERROR_REALM=$(echo "100/$LOG_LINES*$COUNT_ERROR_REALM" 2>&1 | bc -l 2>&1 | awk '{ printf "%.2f%\n", $1 }' 2>&1)
+          CALC_ERROR_REALM=$(echo "scale=4; 100/$LOG_LINES*$COUNT_ERROR_REALM" 2>&1 | bc -l 2>&1)
           ERROR_RATE_REALM=$(echo "${CALC_ERROR_REALM:?}%")
           # if any, print "error"
           printf '%b' "[${R1:?}1E${N0:?}] Realm: ${R1:?}$COUNT_ERROR_REALM${N0:?} Error! ${GR:?}$ERROR_RATE_REALM${N0:?}\n"
@@ -5136,8 +5141,8 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           # error rate (total)
           LOG_LINES=$(wc -l "$FOLDER_CORE"/run/logs/Server.log 2>&1 | awk '{ print $1 }' 2>&1)
           # calculate error rate
-          CALC_ERROR_SERVER=$(echo "100/$LOG_LINES*$COUNT_ERROR_SERVER" 2>&1 | bc -l 2>&1 | awk '{ printf "%.2f%\n", $1 }' 2>&1)
-          ERROR_RATE_SERVER=$(echo "${CALC_ERROR_SERVER:?}")
+          CALC_ERROR_SERVER=$(echo "scale=4; 100/$LOG_LINES*$COUNT_ERROR_SERVER" 2>&1 | bc -l 2>&1)
+          ERROR_RATE_SERVER=$(echo "${CALC_ERROR_SERVER:?}%" 2>&1)
           # if any, print "error"
           printf '%b' "[${R1:?}1E${N0:?}] World: ${R1:?}$COUNT_ERROR_SERVER${N0:?} Error! ${GR:?}${ERROR_RATE_SERVER:?}${N0:?}\n"
           # look for serious error
@@ -5197,9 +5202,9 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           printf '%b' "[${GR:?}NO${N0:?}] AHbot\n"
         fi
         # get startup time
-        if STARTUP_TIME=$(grep "SERVER\sSTARTUP\sTIME*." wow/mangos-classic/run/logs/Server.log 2>&1 |
+        if STARTUP_TIME=$(grep "SERVER\sSTARTUP\sTIME*." "$FOLDER_CORE"/run/logs/Server.log 2>&1 |
           cut -d\  -f6-9 2>&1); then
-          printf '%b' "[${G1:?}OK${N0:?}] World initialized! $STARTUP_TIME\n"
+          printf '%b' "[${G1:?}OK${N0:?}] World initialized! ${G1:?}$STARTUP_TIME${N0:?}\n"
         fi
       fi
     fi
