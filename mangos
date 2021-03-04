@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210403
-# 5.5.6.6
+# 5.5.6.8
 
 while :; do
 
@@ -895,7 +895,7 @@ ${N0:?}"
 
             SEED_TRANSMISSION="${GR:?}Offline${N0:?}"
             INTRANET_SEED="${GR:?}0.0.0.0:9091${N0:?}"
-            P2P_FILE_NAME="${GR:?}$V_MAPS$T_MAPS$W_MAPS${N0:?}"
+            P2P_FILE_NAME="${GR:?}$V_MAPS $T_MAPS $W_MAPS${N0:?}"
             P2P_PEERS_CONNECTED="${GR:?}N/A${N0:?}"
             P2P_DWNS="${GR:?}N/A${N0:?} "
             P2P_UPLS="${GR:?}N/A${N0:?} "
@@ -912,7 +912,7 @@ ${N0:?}"
 
             SEED_TRANSMISSION="${G1:?}Online${N0:?}"
             INTRANET_SEED="${N0:?}${INTRANET:?}:9091${N0:?}"
-            P2P_FILE_NAME="${GR:?}$V_MAPS$T_MAPS$W_MAPS${N0:?}"
+            P2P_FILE_NAME="${GR:?}$V_MAPS $T_MAPS $W_MAPS${N0:?}"
             SLASH="/"
 
             ;;
@@ -1146,33 +1146,48 @@ EOF
               sudo service transmission-daemon start &>/dev/null
               printf '%b' "[${G1:?}OK${N0:?}] Starting SeedBox ${GR:?}transmission-daemon${N0:?}\n"
               sleep 1
-              echo
-              echo "   Maps Download (torrent):"
-              echo
-              echo "   v : vanilla_maps.zip"
-              echo "   t : tbc_maps.zip"
-              echo "   w : wotlk_maps.zip"
-              echo
-              read -r -s -n1
-              case "$REPLY" in
 
-              "v")
+              HEIGHT=10
+              WIDTH=28
+              CHOICE_HEIGHT=4
+              BACKTITLE="Expansion Maps Download (torrent)"
+              TITLE="Download/Import Maps"
+              MENU="Choose one options"
+
+              OPTIONS=(1 "vanilla_maps.zip"
+                2 "tbc_maps.zip"
+                3 "wotlk_maps.zip")
+
+              CHOICE=$(dialog --clear \
+                --backtitle "$BACKTITLE" \
+                --title "$TITLE" \
+                --menu "$MENU" \
+                $HEIGHT $WIDTH $CHOICE_HEIGHT \
+                "${OPTIONS[@]}" \
+                2>&1 >/dev/tty)
+
+              clear
+              case $CHOICE in
+
+              1)
                 R_MAPS="${GR:?}vanilla_maps.zip${N0:?}"
                 # add magnet link: vanilla.maps.zip.torrent
                 transmission-remote -a "magnet:?xt=urn:btih:1cdcaa3d77a7f4df79935d885e639903e37dda24&dn=vanilla%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
                 ;;
-              "t")
+              2)
                 R_MAPS="${GR:?}tbc_maps.zip${N0:?}"
                 # add magnet link: tbc_maps.zip.torrent
                 transmission-remote -a "magnet:?xt=urn:btih:1d62ecb9e7832bdcccc57560bc73e68b3c3b07a9&dn=tbc%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
+
                 ;;
-              "w")
+              3)
                 R_MAPS="${GR:?}wotlk_maps.zip${N0:?}"
                 # add magnet link: wotlk_maps.zip.torrent
                 # transmission-remote -a "magnet:?xt=urn:btih:12345678909876543212345678909876543212345=wotlk%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
                 ;;
 
               esac
+
               printf '%b' "[${G1:?}OK${N0:?}] Torrent added $R_MAPS\n"
               # try to verify torrent data
               P2P_VERIFY=$(transmission-remote -t all -v 2>&1)
@@ -1275,28 +1290,115 @@ EOF
           read -t 5 -r -p "[YN] Import Maps? y/n " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
-            # start counting (seconds)
-            START="$SECONDS"
-            MAPS="$FOLDER_CORE"/run/maps/5332742.map
-            MMAPS="$FOLDER_CORE"/run/mmaps/5332742.mmtile
-            VMAPS="$FOLDER_CORE"/run/vmaps/Zulgurub_Ziggurat.wmo.vmo
-            if [ -f "$MAPS" ] && [ -f "$MMAPS" ] && [ -f "$VMAPS" ]; then
-              printf '%b' "[${G1:?}OK${N0:?}] Maps already installed!\n"
-              sleep 2
-            else
-              sudo unzip /seedbox/vanilla_maps.zip -d "$FOLDER_CORE"/run
-              # get seconds since start
-              DURATION=$(echo "$SECONDS-$START" 2>&1 | bc 2>&1)
-              # convert seconds
-              TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
-              echo
-              printf '%b' "Import time: ${G1:?}$TIMER${N0:?}\n"
-              printf '%b' "[${G1:?}OK${N0:?}] Maps installed!\n"
-              sleep 1
-              echo
-              read -r -p "Press Enter to continue" </dev/tty
-              echo
-            fi
+
+            HEIGHT=10
+            WIDTH=30
+            CHOICE_HEIGHT=4
+            BACKTITLE="Install Expansion Maps"
+            TITLE="Import Downloaded Maps"
+            MENU="Choose one options"
+
+            OPTIONS=(1 "vanilla_maps.zip"
+              2 "tbc_maps.zip"
+              3 "wotlk_maps.zip")
+
+            CHOICE=$(dialog --clear \
+              --backtitle "$BACKTITLE" \
+              --title "$TITLE" \
+              --menu "$MENU" \
+              $HEIGHT $WIDTH $CHOICE_HEIGHT \
+              "${OPTIONS[@]}" \
+              2>&1 >/dev/tty)
+
+            clear
+            case $CHOICE in
+
+            ### Vanilla Maps ###################################################
+
+            1)
+
+              # start counting (seconds)
+              START="$SECONDS"
+              MAPS="$FOLDER_CORE"/run/maps/5332742.map
+              MMAPS="$FOLDER_CORE"/run/mmaps/5332742.mmtile
+              VMAPS="$FOLDER_CORE"/run/vmaps/Zulgurub_Ziggurat.wmo.vmo
+              if [ -f "$MAPS" ] && [ -f "$MMAPS" ] && [ -f "$VMAPS" ]; then
+                printf '%b' "[${G1:?}OK${N0:?}] Maps already installed!\n"
+                sleep 2
+              else
+                sudo unzip /seedbox/vanilla_maps.zip -d "$FOLDER_CORE"/run
+                sudo mv "$FOLDER_CORE"/run/dump/* "$FOLDER_CORE"/run/ &>/dev/null
+                sudo rm -R "$FOLDER_CORE"/run/dump/ &>/dev/null
+                # get seconds since start
+                DURATION=$(echo "$SECONDS-$START" 2>&1 | bc 2>&1)
+                # convert seconds
+                TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
+                echo
+                printf '%b' "Import time: ${G1:?}$TIMER${N0:?}\n"
+                printf '%b' "[${G1:?}OK${N0:?}] Maps installed!\n"
+                sleep 1
+                echo
+                read -r -p "Press Enter to continue" </dev/tty
+                echo
+              fi
+
+              ;;
+
+              ### TBC Maps #####################################################
+
+            2)
+
+              if [ -f /seedbox/tbc_maps.zip ]; then
+                # start counting (seconds)
+                START="$SECONDS"
+                sudo unzip /seedbox/tbc_maps.zip -d "$FOLDER_CORE"/run
+                sudo mv "$FOLDER_CORE"/run/dump/* "$FOLDER_CORE"/run/ &>/dev/null
+                sudo rm -R "$FOLDER_CORE"/run/dump/ &>/dev/null
+                # get seconds since start
+                DURATION=$(echo "$SECONDS-$START" 2>&1 | bc 2>&1)
+                # convert seconds
+                TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
+                echo
+                printf '%b' "Import time: ${G1:?}$TIMER${N0:?}\n"
+                printf '%b' "[${G1:?}OK${N0:?}] Maps installed!\n"
+                sleep 1
+                echo
+                read -r -p "Press Enter to continue" </dev/tty
+                echo
+              else
+                echo "Not Found, Download/Extract Maps first Please!"
+              fi
+
+              ;;
+
+              ### Wotlk Maps ###################################################
+
+            3)
+
+              if [ -f /seedbox/wotlk_maps.zip ]; then
+                # start counting (seconds)
+                START="$SECONDS"
+                sudo unzip /seedbox/wotlk_maps.zip -d "$FOLDER_CORE"/run
+                sudo mv "$FOLDER_CORE"/run/dump/* "$FOLDER_CORE"/run/ &>/dev/null
+                sudo rm -R "$FOLDER_CORE"/run/dump/ &>/dev/null
+                # get seconds since start
+                DURATION=$(echo "$SECONDS-$START" 2>&1 | bc 2>&1)
+                # convert seconds
+                TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
+                echo
+                printf '%b' "Import time: ${G1:?}$TIMER${N0:?}\n"
+                printf '%b' "[${G1:?}OK${N0:?}] Maps installed!\n"
+                sleep 1
+                echo
+                read -r -p "Press Enter to continue" </dev/tty
+                echo
+              else
+                echo "Not Found, Download/Extract Maps first Please!"
+              fi
+
+              ;;
+
+            esac
           fi
 
           ;;
