@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210803
-# 5.7.8.6
+# 5.7.9.8
 
 while :; do
 
@@ -903,6 +903,7 @@ ${N0:?}"
             # get progress, vanilla_maps
             if echo "$P2P_ID1" 2>&1 | grep -q -o "Percent Done: 100%" 2>&1; then
               P2P_PROG_ID1="${G1:?}100%${N0:?}"
+              rm /var/log/ms/vanilla_maps.zip.tmp &>/dev/null
             else
               P2P_PROG_ID1=$(echo "$P2P_ID1" 2>&1 | grep -Eo "Percent Done:.*" 2>&1 |
                 awk '{ print $3 }' 2>&1)
@@ -911,6 +912,7 @@ ${N0:?}"
             # get progress, tbc_maps
             if echo "$P2P_ID2" 2>&1 | grep -q -o "Percent Done: 100%" 2>&1; then
               P2P_PROG_ID2="${G1:?}100%${N0:?}"
+              rm /var/log/ms/tbc_maps.zip.tmp &>/dev/null
             else
               P2P_PROG_ID2=$(echo "$P2P_ID2" 2>&1 | grep -Eo "Percent Done:.*" 2>&1 |
                 awk '{ print $3 }' 2>&1)
@@ -919,6 +921,7 @@ ${N0:?}"
             # get progress, wotlk_maps
             if echo "$P2P_ID3" 2>&1 | grep -q -o "Percent Done: 100%" 2>&1; then
               P2P_PROG_ID3="${G1:?}100%${N0:?}"
+              rm /var/log/ms/wotlk_maps.zip.tmp &>/dev/null
             else
               P2P_PROG_ID3=$(echo "$P2P_ID3" 2>&1 | grep -Eo "Percent Done:.*" 2>&1 |
                 awk '{ print $3 }' 2>&1)
@@ -926,27 +929,31 @@ ${N0:?}"
 
             # id 1 (vanilla_maps)
             # get download stats
-            P2P_DWNS_ID1=$(echo "$P2P_ID1" 2>&1 | grep -o "Downloaded:.*" 2>&1 |
+            P2P_DWNS_ID1=$(echo "$P2P_ID1" 2>&1 |
+              grep -Eo "Downloaded: [0-9]+.[0-9]+|Downloaded: None" 2>&1 |
               awk '{ print $2 }' 2>&1)
             # get upload stats
-            P2P_UPLS_ID1=$(echo "$P2P_ID1" 2>&1 | grep -o "Uploaded:.*" 2>&1 |
+            P2P_UPLS_ID1=$(echo "$P2P_ID1" 2>&1 |
+              grep -Eo "Uploaded: [0-9]+.[0-9]+|Uploaded: None" 2>&1 |
               awk '{ print $2 }' 2>&1)
             # get ratio
-            P2P_RATI_ID1=$(echo "$P2P_ID1" 2>&1 | grep -o "Ratio:.*" 2>&1 |
+            P2P_RATI_ID1=$(echo "$P2P_ID1" 2>&1 | grep -Eo "Ratio: [0-9]+.[0-9]+" 2>&1 |
               awk '{ print $2 }' 2>&1)
             # get status
             P2P_STAT_ID1=$(echo "$P2P_ID1" 2>&1 | grep -o "State:.*" 2>&1 |
-              awk '{ print $2 }' 2>&1)
+              grep -E "([0-9]+%)|Idle|Seeding|Downloading" 2>&1 | awk '{ print $2 }' 2>&1)
 
             # id 2 (tbc_maps)
             # get download stats
-            P2P_DWNS_ID2=$(echo "$P2P_ID2" 2>&1 | grep -o "Downloaded:.*" 2>&1 |
+            P2P_DWNS_ID2=$(echo "$P2P_ID2" 2>&1 |
+              grep -Eo "Downloaded: [0-9]+.[0-9]+|Downloaded: None" 2>&1 |
               awk '{ print $2 }' 2>&1)
             # get upload stats
-            P2P_UPLS_ID2=$(echo "$P2P_ID2" 2>&1 | grep -o "Uploaded:.*" 2>&1 |
+            P2P_UPLS_ID2=$(echo "$P2P_ID2" 2>&1 |
+              grep -Eo "Uploaded: [0-9]+.[0-9]+|Uploaded: None" 2>&1 |
               awk '{ print $2 }' 2>&1)
             # get ratio
-            P2P_RATI_ID2=$(echo "$P2P_ID2" 2>&1 | grep -o "Ratio:.*" 2>&1 |
+            P2P_RATI_ID2=$(echo "$P2P_ID2" 2>&1 | grep -Eo "Ratio: [0-9]+.[0-9]+" 2>&1 |
               awk '{ print $2 }' 2>&1)
             # get status
             P2P_STAT_ID2=$(echo "$P2P_ID2" 2>&1 | grep -o "State:.*" 2>&1 |
@@ -954,15 +961,17 @@ ${N0:?}"
 
             # id 3 (wotlk_maps)
             # get download stats
-            P2P_DWNS_ID3=$(echo "$P2P_ID3" 2>&1 | grep -o "Downloaded:.*" 2>&1 |
+            P2P_DWNS_ID3=$(echo "$P2P_ID3" 2>&1 |
+              grep -Eo "Downloaded: [0-9]+.[0-9]+|Downloaded: None" 2>&1 |
               awk '{ print $2 }' 2>&1)
             P2P_DWNS_ID3=$(echo "$P2P_DWNS_ID3 ")
             # get upload stats
-            P2P_UPLS_ID3=$(echo "$P2P_ID3" 2>&1 | grep -o "Uploaded:.*" 2>&1 |
+            P2P_UPLS_ID3=$(echo "$P2P_ID3" 2>&1 |
+              grep -Eo "Uploaded: [0-9]+.[0-9]+|Uploaded: None" 2>&1 |
               awk '{ print $2 }' 2>&1)
             P2P_UPLS_ID3=$(echo "$P2P_UPLS_ID3 ")
             # get ratio
-            P2P_RATI_ID3=$(echo "$P2P_ID3" 2>&1 | grep -o "Ratio:.*" 2>&1 |
+            P2P_RATI_ID3=$(echo "$P2P_ID3" 2>&1 | grep -Eo "Ratio: [0-9]+.[0-9]+" 2>&1 |
               awk '{ print $2 }' 2>&1)
             # get status
             P2P_STAT_ID3=$(echo "$P2P_ID3" 2>&1 | grep -o "State:.*" 2>&1 |
@@ -1047,7 +1056,7 @@ ${N0:?}"
    Status${G0:?}...:${N0:?} $P2P_STAT_ID1 $P2P_STAT_ID2 $P2P_STAT_ID3
    Progress${G0:?}.:${N0:?} $P2P_PROG_ID1 $P2P_PROG_ID2 $P2P_PROG_ID3
    Ratio${G0:?}....:${N0:?} $P2P_RATI_ID1 $P2P_RATI_ID2 $P2P_RATI_ID3
-   Peers${G0:?}....:${G1:?} $P2P_PEERS_CONNECTED_ID1${GR:?}$SLASH${G0:?}$P2P_PEERS_CONNECTED_ID2${GR:?}$SLASH${G0:?}$P2P_PEERS_CONNECTED_ID3$P2P_PEERS_SEEDINGTO_ID1${GR:?}$SLASH${G0:?}$P2P_PEERS_SEEDINGTO_ID2${GR:?}$SLASH${G0:?}$P2P_PEERS_SEEDINGTO_ID3$P2P_PEERS_DOWN_LOAD_ID1${GR:?}$SLASH${G0:?}$P2P_PEERS_DOWN_LOAD_ID2${GR:?}$SLASH${G0:?}$P2P_PEERS_DOWN_LOAD_ID3${N0:?}
+   Peers${G0:?}....:${G1:?} ${G1:?}$P2P_PEERS_CONNECTED_ID1${Y1:?}$P2P_PEERS_SEEDINGTO_ID1${G0:?}$P2P_PEERS_DOWN_LOAD_ID1${GR:?}$SLASH${G0:?}${G1:?}$P2P_PEERS_CONNECTED_ID2${Y1:?}$P2P_PEERS_SEEDINGTO_ID2${G0:?}$P2P_PEERS_DOWN_LOAD_ID2${GR:?}$SLASH${G0:?}${G1:?}$P2P_PEERS_CONNECTED_ID3${Y1:?}$P2P_PEERS_SEEDINGTO_ID3${G0:?}$P2P_PEERS_DOWN_LOAD_ID3${N0:?}
 
    t $GR: ${THEME_TXT:?}Install${N0:?} - ${THEME_DSC:?}Setup Maps$N0
    u $GR: ${THEME_TXT:?}Remove${N0:?}  - ${THEME_DSC:?}Uninstall$N0
@@ -1164,6 +1173,7 @@ ${N0:?}"
             # create maps.tmp file
             touch /var/log/ms/vanilla_maps.zip.tmp
             R_MAPS="${G1:?}vanilla_maps.zip${N0:?}"
+            R_MAPS_MOD="vanilla_maps"
             # add magnet link: vanilla.maps.zip.torrent
             transmission-remote -a "magnet:?xt=urn:btih:1cdcaa3d77a7f4df79935d885e639903e37dda24&dn=vanilla%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
             ;;
@@ -1171,6 +1181,7 @@ ${N0:?}"
             # create maps.tmp file
             touch /var/log/ms/tbc_maps.zip.tmp
             R_MAPS="${G1:?}tbc_maps.zip${N0:?}"
+            R_MAPS_MOD="tbc_maps"
             # add magnet link: tbc_maps.zip.torrent
             transmission-remote -a "magnet:?xt=urn:btih:1d62ecb9e7832bdcccc57560bc73e68b3c3b07a9&dn=tbc%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
             ;;
@@ -1178,6 +1189,7 @@ ${N0:?}"
             # create maps.tmp file
             touch /var/log/ms/wotlk_maps.zip.tmp
             R_MAPS="${G1:?}wotlk_maps.zip${N0:?}"
+            R_MAPS_MOD="wotlk_maps"
             # add magnet link: wotlk_maps.zip.torrent
             # transmission-remote -a "magnet:?xt=urn:btih:12345678909876543212345678909876543212345=wotlk%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
             ;;
@@ -1194,9 +1206,9 @@ ${N0:?}"
               echo "Removing torrent ($P2P_STOPPED_ID) from list, State: Stopped!"
               transmission-remote -t "$P2P_STOPPED_ID" --remove-and-delete 2>&1
             fi
-            if [ -f /seedbox/"$R_MAPS".zip ]; then
-              printf '%b' "Redo (Delete $R_MAPS.zip)? y/n "
-              read -t 5 -r -p "" -n 1 -r -s
+            if [ -f /seedbox/"$R_MAPS_MOD".zip ]; then
+              printf '%b' "[YN] Redo (Delete $R_MAPS.zip)? y/n "
+              read -t 10 -r -p "" -n 1 -r -s
               echo
               if [[ $REPLY =~ ^[Yy]$ ]]; then
                 rm /var/log/ms/"$R_MAPS".zip.tmp &>/dev/null
