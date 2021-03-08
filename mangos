@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210803
-# 5.7.5.7
+# 5.7.8.6
 
 while :; do
 
@@ -824,31 +824,55 @@ ${N0:?}"
         if [ -f /seedbox/vanilla_maps.zip ]; then
           V_MAPS="${G1:?}Vanilla${N0:?}"
         else
-          V_MAPS="${GR:?}Vanilla${N0:?}"
+          V_MAPS="Vanilla"
         fi
         if [ -f /seedbox/tbc_maps.zip ]; then
           T_MAPS="${G1:?}TBC${N0:?}"
         else
-          T_MAPS="${GR:?}TBC${N0:?}"
+          T_MAPS="TBC"
         fi
         if [ -f /seedbox/wotlk_maps.zip ]; then
           W_MAPS="${G1:?}Wotlk${N0:?}"
         else
-          W_MAPS="${GR:?}Wotlk${N0:?}"
+          W_MAPS="Wotlk"
         fi
 
         printf '%b' "${GR:?}Please wait${N0:?}\n"
         # get remote information from transmission, create a file
         transmission-remote -t all -i >/var/log/ms/transmission_list 2>&1
+        # cat that file
+        P2P_INFO=$(cat /var/log/ms/transmission_list 2>&1)
+        transmission-remote -l >/var/log/ms/transmission_torrent_list 2>&1
+        # cat that file
+        P2P_LIST=$(cat /var/log/ms/transmission_torrent_list 2>&1)
         # pidof transmission-daemon, cli, pid/status
         PIDOFP2P_CLI=$(pidof transmission-cli 2>&1)
         PIDOFP2P_DAE=$(pidof transmission-daemon 2>&1)
+
+        if [ -f /var/log/ms/vanilla_maps.zip.tmp ]; then
+          # downloading, vanilla_maps.zip
+          P2P_AV="${Y1:?}"
+        else
+          P2P_AV="${GR:?}"
+        fi
+        if [ -f /var/log/ms/tbc_maps.zip.tmp ]; then
+          # downloading, tbc_maps.zip
+          P2P_AT="${Y1:?}"
+        else
+          P2P_AT="${GR:?}"
+        fi
+        if [ -f /var/log/ms/wotlk_maps.zip.tmp ]; then
+          # downloading, wotlk_maps.zip
+          P2P_AW="${Y1:?}"
+        else
+          P2P_AW="${GR:?}"
+        fi
 
         # is transmission-cli installed?
         if ! [ -x "$(command -v transmission-cli)" ]; then
           SEED_TRANSMISSION="${GR:?}Not installed!${N0:?}"
           INTRANET_SEED="${GR:?}0.0.0.0:9091${N0:?}"
-          P2P_FILE_NAME="${GR:?}$V_MAPS $T_MAPS $W_MAPS${N0:?}"
+          P2P_FILE_NAME="$P2P_AV$V_MAPS $P2P_AT$T_MAPS $P2P_AW$W_MAPS${N0:?}"
           P2P_PEERS_CONNECTED_ID1="${GR:?}N/A${N0:?}"
           P2P_DWNS_ID1="${GR:?}N/A${N0:?} "
           P2P_UPLS_ID1="${GR:?}N/A${N0:?} "
@@ -860,11 +884,9 @@ ${N0:?}"
           SLASH=""
         else
           if [ -f /var/log/ms/transmission_list ]; then
-            # cat that file
-            P2P_INFO=$(cat /var/log/ms/transmission_list 2>&1)
-            P2P_ID1=$(echo "$P2P_INFO" 2>&1 | grep -A 42 "Id: 1" 2>&1 | grep -E -v "Id: 2|Id: 3|NAME" 2>&1)
-            P2P_ID2=$(echo "$P2P_INFO" 2>&1 | grep -A 42 "Id: 2" 2>&1 | grep -E -v "Id: 1|Id: 3|NAME" 2>&1)
-            P2P_ID3=$(echo "$P2P_INFO" 2>&1 | grep -A 42 "Id: 3" 2>&1 | grep -E -v "Id: 1|Id: 2|NAME" 2>&1)
+            P2P_ID1=$(echo "$P2P_INFO" 2>&1 | grep -A 36 "vanilla" 2>&1)
+            P2P_ID2=$(echo "$P2P_INFO" 2>&1 | grep -A 36 "tbc" 2>&1)
+            P2P_ID3=$(echo "$P2P_INFO" 2>&1 | grep -A 36 "wotlk" 2>&1)
             # peers, connected, seeding to, downloading from, vanilla_maps
             P2P_PEERS_CONNECTED_ID1=$(echo "$P2P_ID1" 2>&1 | grep "Peers" 2>&1 | awk '{ print $4 }' 2>&1 | awk -F, '{ print $1 }' 2>&1)
             P2P_PEERS_SEEDINGTO_ID1=$(echo "$P2P_ID1" 2>&1 | grep "Peers" 2>&1 | awk '{ print $7 }' 2>&1 | awk -F, '{ print $1 }' 2>&1)
@@ -906,11 +928,9 @@ ${N0:?}"
             # get download stats
             P2P_DWNS_ID1=$(echo "$P2P_ID1" 2>&1 | grep -o "Downloaded:.*" 2>&1 |
               awk '{ print $2 }' 2>&1)
-            P2P_DWNS_ID1=$(echo "$P2P_DWNS_ID1 ")
             # get upload stats
             P2P_UPLS_ID1=$(echo "$P2P_ID1" 2>&1 | grep -o "Uploaded:.*" 2>&1 |
               awk '{ print $2 }' 2>&1)
-            P2P_UPLS_ID1=$(echo "$P2P_UPLS_ID1 ")
             # get ratio
             P2P_RATI_ID1=$(echo "$P2P_ID1" 2>&1 | grep -o "Ratio:.*" 2>&1 |
               awk '{ print $2 }' 2>&1)
@@ -922,11 +942,9 @@ ${N0:?}"
             # get download stats
             P2P_DWNS_ID2=$(echo "$P2P_ID2" 2>&1 | grep -o "Downloaded:.*" 2>&1 |
               awk '{ print $2 }' 2>&1)
-            P2P_DWNS_ID2=$(echo "$P2P_DWNS_ID2 ")
             # get upload stats
             P2P_UPLS_ID2=$(echo "$P2P_ID2" 2>&1 | grep -o "Uploaded:.*" 2>&1 |
               awk '{ print $2 }' 2>&1)
-            P2P_UPLS_ID2=$(echo "$P2P_UPLS_ID2 ")
             # get ratio
             P2P_RATI_ID2=$(echo "$P2P_ID2" 2>&1 | grep -o "Ratio:.*" 2>&1 |
               awk '{ print $2 }' 2>&1)
@@ -957,7 +975,7 @@ ${N0:?}"
 
             SEED_TRANSMISSION="${GR:?}Offline${N0:?}"
             INTRANET_SEED="${GR:?}0.0.0.0:9091${N0:?}"
-            P2P_FILE_NAME="${GR:?}$V_MAPS $T_MAPS $W_MAPS${N0:?}"
+            P2P_FILE_NAME="$P2P_AV$V_MAPS $P2P_AT$T_MAPS $P2P_AW$W_MAPS${N0:?}"
             P2P_PEERS_CONNECTED_ID1="${GR:?}N/A${N0:?}"
             P2P_PEERS_CONNECTED_ID2="${GR:?}N/A${N0:?}"
             P2P_PEERS_CONNECTED_ID3="${GR:?}N/A${N0:?}"
@@ -990,7 +1008,7 @@ ${N0:?}"
 
             SEED_TRANSMISSION="${G1:?}Online${N0:?}"
             INTRANET_SEED="${N0:?}${INTRANET:?}:9091${N0:?}"
-            P2P_FILE_NAME="${GR:?}$V_MAPS $T_MAPS $W_MAPS${N0:?}"
+            P2P_FILE_NAME="$P2P_AV$V_MAPS $P2P_AT$T_MAPS $P2P_AW$W_MAPS${N0:?}"
             SLASH="/"
 
             ;;
@@ -1024,12 +1042,12 @@ ${N0:?}"
    SeedBox${G0:?}..:${N0:?} $SEED_TRANSMISSION
    Access${G0:?}...:${N0:?} $INTRANET_SEED
    Exp Maps${G0:?}.:${N0:?} $P2P_FILE_NAME
-   Download${G0:?}.:${N0:?} $P2P_DWNS_ID1$P2P_DWNS_ID2$P2P_DWNS_ID3
-   Upload${G0:?}...:${N0:?} $P2P_UPLS_ID1$P2P_UPLS_ID2$P2P_UPLS_ID3
+   Download${G0:?}.:${N0:?} $P2P_DWNS_ID1 $P2P_DWNS_ID2 $P2P_DWNS_ID3
+   Upload${G0:?}...:${N0:?} $P2P_UPLS_ID1 $P2P_UPLS_ID2 $P2P_UPLS_ID3
    Status${G0:?}...:${N0:?} $P2P_STAT_ID1 $P2P_STAT_ID2 $P2P_STAT_ID3
    Progress${G0:?}.:${N0:?} $P2P_PROG_ID1 $P2P_PROG_ID2 $P2P_PROG_ID3
    Ratio${G0:?}....:${N0:?} $P2P_RATI_ID1 $P2P_RATI_ID2 $P2P_RATI_ID3
-   Peers${G0:?}....:${G1:?} $P2P_PEERS_CONNECTED_ID1$P2P_PEERS_CONNECTED_ID2$P2P_PEERS_CONNECTED_ID3${N0:?}$SLASH${G0:?}$P2P_PEERS_SEEDINGTO_ID1$P2P_PEERS_SEEDINGTO_ID2$P2P_PEERS_SEEDINGTO_ID3${N0:?}$SLASH${Y1:?}$P2P_PEERS_DOWN_LOAD_ID1$P2P_PEERS_DOWN_LOAD_ID2$P2P_PEERS_DOWN_LOAD_ID3${N0:?}
+   Peers${G0:?}....:${G1:?} $P2P_PEERS_CONNECTED_ID1${GR:?}$SLASH${G0:?}$P2P_PEERS_CONNECTED_ID2${GR:?}$SLASH${G0:?}$P2P_PEERS_CONNECTED_ID3$P2P_PEERS_SEEDINGTO_ID1${GR:?}$SLASH${G0:?}$P2P_PEERS_SEEDINGTO_ID2${GR:?}$SLASH${G0:?}$P2P_PEERS_SEEDINGTO_ID3$P2P_PEERS_DOWN_LOAD_ID1${GR:?}$SLASH${G0:?}$P2P_PEERS_DOWN_LOAD_ID2${GR:?}$SLASH${G0:?}$P2P_PEERS_DOWN_LOAD_ID3${N0:?}
 
    t $GR: ${THEME_TXT:?}Install${N0:?} - ${THEME_DSC:?}Setup Maps$N0
    u $GR: ${THEME_TXT:?}Remove${N0:?}  - ${THEME_DSC:?}Uninstall$N0
@@ -1143,21 +1161,23 @@ ${N0:?}"
           case $CHOICE in
 
           1)
-            touch /seedbox/vanilla_maps.zip.tmp_file
-            R_MAPS="${GR:?}vanilla_maps.zip${N0:?}"
+            # create maps.tmp file
+            touch /var/log/ms/vanilla_maps.zip.tmp
+            R_MAPS="${G1:?}vanilla_maps.zip${N0:?}"
             # add magnet link: vanilla.maps.zip.torrent
             transmission-remote -a "magnet:?xt=urn:btih:1cdcaa3d77a7f4df79935d885e639903e37dda24&dn=vanilla%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
             ;;
           2)
-            touch /seedbox/tbc_maps.zip.tmp_file
-            R_MAPS="${GR:?}tbc_maps.zip${N0:?}"
+            # create maps.tmp file
+            touch /var/log/ms/tbc_maps.zip.tmp
+            R_MAPS="${G1:?}tbc_maps.zip${N0:?}"
             # add magnet link: tbc_maps.zip.torrent
             transmission-remote -a "magnet:?xt=urn:btih:1d62ecb9e7832bdcccc57560bc73e68b3c3b07a9&dn=tbc%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
-
             ;;
           3)
-            touch /seedbox/wotlk_maps.zip.tmp_file
-            R_MAPS="${GR:?}wotlk_maps.zip${N0:?}"
+            # create maps.tmp file
+            touch /var/log/ms/wotlk_maps.zip.tmp
+            R_MAPS="${G1:?}wotlk_maps.zip${N0:?}"
             # add magnet link: wotlk_maps.zip.torrent
             # transmission-remote -a "magnet:?xt=urn:btih:12345678909876543212345678909876543212345=wotlk%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
             ;;
@@ -1167,37 +1187,50 @@ ${N0:?}"
           read -t 5 -r -p "" -n 1 -r -s
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
+            P2P_STOPPED_ID=$(echo "$P2P_LIST" 2>&1 | grep "Stopped" 2>&1 |
+              awk '{ print $1 }' 2>&1 | grep -Eo "[1-3]" 2>&1)
+            P2P_STOPPED=$(echo "$P2P_STOPPED_ID" 2>&1 | wc -w 2>&1)
+            if [[ "$P2P_STOPPED" -eq "1" ]]; then
+              echo "Removing torrent ($P2P_STOPPED_ID) from list, State: Stopped!"
+              transmission-remote -t "$P2P_STOPPED_ID" --remove-and-delete 2>&1
+            fi
+            if [ -f /seedbox/"$R_MAPS".zip ]; then
+              printf '%b' "Redo (Delete $R_MAPS.zip)? y/n "
+              read -t 5 -r -p "" -n 1 -r -s
+              echo
+              if [[ $REPLY =~ ^[Yy]$ ]]; then
+                rm /var/log/ms/"$R_MAPS".zip.tmp &>/dev/null
+                sudo rm /seedbox/"$R_MAPS".zip
+              fi
+            fi
             # create ms folder
             sudo mkdir /var/log/ms/ &>/dev/null
             # fix ownership
             sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
-            # is transmission-daemon installed?
-            if ! [ -x "$(command -v transmission-daemon)" ]; then
-              # check for updates regardless
-              printf '%b' "[${G1:?}OK${N0:?}] Please wait\n"
-              sudo apt-get update &>/dev/null
-              # clear the local repository of retrieved package files that are left in /var/cache.
-              sudo apt-get clean 2>&1
-              # clear the local repository of retrieved package files
-              sudo apt-get autoclean 2>&1
-              # remove packages that were automatically installed because some other package required them
-              sudo apt-get -y --purge autoremove 2>&1
-              # make sure unzip exist
+
+            # check for updates regardless
+            printf '%b' "[${G1:?}OK${N0:?}] Please wait\n"
+            sudo apt-get update &>/dev/null
+            # make sure unzip exist
+            if ! [ -x "$(command -v unzip)" ]; then
               sudo apt-get install unzip -y 2>&1
-              # install transmission-daemon
+            fi
+            # install transmission-daemon
+            if ! [ -x "$(command -v transmission-daemon)" ]; then
               sudo apt-get install transmission-daemon -y 2>&1
-              # temporary stop ^
-              sudo service transmission-daemon stop &>/dev/null
-              # remove old config
-              sudo rm /var/lib/transmission-daemon/.config/transmission-daemon/settings.json &>/dev/null
-              # create 'seedbox' directory
-              cd || exit
-              sudo mkdir "/seedbox" &>/dev/null
-              # fix folder owner
-              sudo chown -R debian-transmission:debian-transmission /seedbox/ &>/dev/null
-              # setup transmission-daemon configuration file
-              # settings.json
-              cat >"$FOLDER_WOW"/settings.json <<'EOF'
+            fi
+            # temporary stop ^
+            sudo service transmission-daemon stop &>/dev/null
+            # remove old config
+            sudo rm /var/lib/transmission-daemon/.config/transmission-daemon/settings.json &>/dev/null
+            # create 'seedbox' directory
+            cd || exit
+            sudo mkdir "/seedbox" &>/dev/null
+            # fix folder owner
+            sudo chown -R debian-transmission:debian-transmission /seedbox/ &>/dev/null
+            # setup transmission-daemon configuration file
+            # settings.json
+            cat >"$FOLDER_WOW"/settings.json <<'EOF'
 {
     "alt-speed-down": 50,
     "alt-speed-enabled": false,
@@ -1267,28 +1300,24 @@ ${N0:?}"
     "utp-enabled": true
 }
 EOF
-              # install to correct folder
-              sudo mv "$FOLDER_WOW"/settings.json /var/lib/transmission-daemon/.config/transmission-daemon/settings.json &>/dev/null
-              sleep 1
-              # start transmission-daemon
-              sudo service transmission-daemon start &>/dev/null
-              printf '%b' "[${G1:?}OK${N0:?}] Starting SeedBox ${GR:?}transmission-daemon${N0:?}\n"
-              sleep 1
+            # install to correct folder
+            sudo mv "$FOLDER_WOW"/settings.json /var/lib/transmission-daemon/.config/transmission-daemon/settings.json &>/dev/null
+            sleep 1
+            # start transmission-daemon
+            sudo service transmission-daemon start &>/dev/null
+            printf '%b' "[${G1:?}OK${N0:?}] Starting SeedBox ${GR:?}transmission-daemon${N0:?}\n"
+            sleep 1
 
-              printf '%b' "[${G1:?}OK${N0:?}] Torrent added $R_MAPS\n"
-              # try to verify torrent data
-              P2P_VERIFY=$(transmission-remote -t all -v 2>&1)
-              printf '%b' "[${Y1:?}OK${N0:?}] Verifying data..\n"
-              sleep 1
-              printf '%b' "[${G1:?}OK${N0:?}] $P2P_VERIFY\n"
-              sleep 1
-              # reload
-              sudo systemctl daemon-reload 2>&1
-              sleep 1
-            else
-              printf '%b' "[${G1:?}OK${N0:?}] SeedBox already installed!\n"
-              sleep 2
-            fi
+            printf '%b' "[${G1:?}OK${N0:?}] Torrent added $R_MAPS\n"
+            # try to verify torrent data
+            P2P_VERIFY=$(transmission-remote -t all -v 2>&1)
+            printf '%b' "[${Y1:?}OK${N0:?}] Verifying data..\n"
+            sleep 1
+            printf '%b' "[${G1:?}OK${N0:?}] $P2P_VERIFY\n"
+            sleep 1
+            # reload
+            sudo systemctl daemon-reload 2>&1
+            sleep 1
             echo
             read -r -p "Press Enter to continue" </dev/tty
             echo
