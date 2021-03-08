@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210803
-# 5.7.9.8
+# 5.8.2.0
 
 while :; do
 
@@ -849,6 +849,17 @@ ${N0:?}"
         PIDOFP2P_CLI=$(pidof transmission-cli 2>&1)
         PIDOFP2P_DAE=$(pidof transmission-daemon 2>&1)
 
+        P2P_STOPPED_ID=$(echo "$P2P_LIST" 2>&1 | grep "Stopped" 2>&1 |
+          awk '{ print $1 }' 2>&1 | grep -Eo "[1-3]" 2>&1)
+        P2P_STOPPED=$(echo "$P2P_STOPPED_ID" 2>&1 | wc -w 2>&1)
+        if [[ "$P2P_STOPPED" -eq "1" ]]; then
+          echo "Removing torrent ($P2P_STOPPED_ID) from list, State: Stopped!"
+          transmission-remote -t "$P2P_STOPPED_ID" --remove-and-delete 2>&1
+          echo
+          read -r -p "Press Enter to continue" </dev/tty
+          echo
+        fi
+
         if [ -f /var/log/ms/vanilla_maps.zip.tmp ]; then
           # downloading, vanilla_maps.zip
           P2P_AV="${Y1:?}"
@@ -881,7 +892,7 @@ ${N0:?}"
           P2P_RATI_ID1="${GR:?}N/A${N0:?}"
           P2P_PEERS_SEEDINGTO_ID1=""
           P2P_PEERS_DOWN_LOAD_ID1=""
-          SLASH=""
+          SLASH=" "
         else
           if [ -f /var/log/ms/transmission_list ]; then
             P2P_ID1=$(echo "$P2P_INFO" 2>&1 | grep -A 36 "vanilla" 2>&1)
@@ -903,28 +914,34 @@ ${N0:?}"
             # get progress, vanilla_maps
             if echo "$P2P_ID1" 2>&1 | grep -q -o "Percent Done: 100%" 2>&1; then
               P2P_PROG_ID1="${G1:?}100%${N0:?}"
+              P2P_PROG_ID1=$(echo "$P2P_PROG_ID1 ")
               rm /var/log/ms/vanilla_maps.zip.tmp &>/dev/null
             else
               P2P_PROG_ID1=$(echo "$P2P_ID1" 2>&1 | grep -Eo "Percent Done:.*" 2>&1 |
                 awk '{ print $3 }' 2>&1)
+              P2P_PROG_ID1=$(echo "$P2P_PROG_ID1 ")
             fi
 
             # get progress, tbc_maps
             if echo "$P2P_ID2" 2>&1 | grep -q -o "Percent Done: 100%" 2>&1; then
               P2P_PROG_ID2="${G1:?}100%${N0:?}"
+              P2P_PROG_ID2=$(echo "$P2P_PROG_ID2 ")
               rm /var/log/ms/tbc_maps.zip.tmp &>/dev/null
             else
               P2P_PROG_ID2=$(echo "$P2P_ID2" 2>&1 | grep -Eo "Percent Done:.*" 2>&1 |
                 awk '{ print $3 }' 2>&1)
+              P2P_PROG_ID2=$(echo "$P2P_PROG_ID2 ")
             fi
 
             # get progress, wotlk_maps
             if echo "$P2P_ID3" 2>&1 | grep -q -o "Percent Done: 100%" 2>&1; then
               P2P_PROG_ID3="${G1:?}100%${N0:?}"
+              P2P_PROG_ID3=$(echo "$P2P_PROG_ID3 ")
               rm /var/log/ms/wotlk_maps.zip.tmp &>/dev/null
             else
               P2P_PROG_ID3=$(echo "$P2P_ID3" 2>&1 | grep -Eo "Percent Done:.*" 2>&1 |
                 awk '{ print $3 }' 2>&1)
+              P2P_PROG_ID3=$(echo "$P2P_PROG_ID3 ")
             fi
 
             # id 1 (vanilla_maps)
@@ -932,52 +949,56 @@ ${N0:?}"
             P2P_DWNS_ID1=$(echo "$P2P_ID1" 2>&1 |
               grep -Eo "Downloaded: [0-9]+.[0-9]+|Downloaded: None" 2>&1 |
               awk '{ print $2 }' 2>&1)
+            P2P_DWNS_ID1=$(echo "$P2P_DWNS_ID1 ")
             # get upload stats
             P2P_UPLS_ID1=$(echo "$P2P_ID1" 2>&1 |
               grep -Eo "Uploaded: [0-9]+.[0-9]+|Uploaded: None" 2>&1 |
               awk '{ print $2 }' 2>&1)
+            P2P_UPLS_ID1=$(echo "$P2P_UPLS_ID1 ")
             # get ratio
-            P2P_RATI_ID1=$(echo "$P2P_ID1" 2>&1 | grep -Eo "Ratio: [0-9]+.[0-9]+" 2>&1 |
-              awk '{ print $2 }' 2>&1)
+            P2P_RATI_ID1=$(echo "$P2P_ID1" 2>&1 | grep "Ratio" | grep -v "Ratio Limit:" 2>&1 | awk '{ print $2 }' 2>&1)
+            P2P_RATI_ID1=$(echo "$P2P_RATI_ID1 ")
             # get status
-            P2P_STAT_ID1=$(echo "$P2P_ID1" 2>&1 | grep -o "State:.*" 2>&1 |
-              grep -E "([0-9]+%)|Idle|Seeding|Downloading" 2>&1 | awk '{ print $2 }' 2>&1)
+            P2P_STAT_ID1=$(echo "$P2P_ID1" 2>&1 | grep "State" 2>&1 | awk '{ print $2 }' 2>&1)
+            P2P_STAT_ID1=$(echo "$P2P_STAT_ID1 ")
 
             # id 2 (tbc_maps)
             # get download stats
             P2P_DWNS_ID2=$(echo "$P2P_ID2" 2>&1 |
               grep -Eo "Downloaded: [0-9]+.[0-9]+|Downloaded: None" 2>&1 |
               awk '{ print $2 }' 2>&1)
+            P2P_DWNS_ID2=$(echo "$P2P_DWNS_ID2 ")
             # get upload stats
             P2P_UPLS_ID2=$(echo "$P2P_ID2" 2>&1 |
               grep -Eo "Uploaded: [0-9]+.[0-9]+|Uploaded: None" 2>&1 |
               awk '{ print $2 }' 2>&1)
+            P2P_UPLS_ID2=$(echo "$P2P_UPLS_ID2 ")
             # get ratio
-            P2P_RATI_ID2=$(echo "$P2P_ID2" 2>&1 | grep -Eo "Ratio: [0-9]+.[0-9]+" 2>&1 |
-              awk '{ print $2 }' 2>&1)
+            P2P_RATI_ID2=$(echo "$P2P_ID2" 2>&1 | grep "Ratio" | grep -v "Ratio Limit:" 2>&1 | awk '{ print $2 }' 2>&1)
+            P2P_RATI_ID2=$(echo "$P2P_RATI_ID2 ")
             # get status
-            P2P_STAT_ID2=$(echo "$P2P_ID2" 2>&1 | grep -o "State:.*" 2>&1 |
-              awk '{ print $2 }' 2>&1)
+            P2P_STAT_ID2=$(echo "$P2P_ID2" 2>&1 | grep "State" 2>&1 | awk '{ print $2 }' 2>&1)
+            P2P_STAT_ID2=$(echo "$P2P_STAT_ID2 ")
 
             # id 3 (wotlk_maps)
             # get download stats
             P2P_DWNS_ID3=$(echo "$P2P_ID3" 2>&1 |
               grep -Eo "Downloaded: [0-9]+.[0-9]+|Downloaded: None" 2>&1 |
               awk '{ print $2 }' 2>&1)
-            P2P_DWNS_ID3=$(echo "$P2P_DWNS_ID3 ")
+            P2P_DWNS_ID3=$(echo "$P2P_DWNS_ID3")
             # get upload stats
             P2P_UPLS_ID3=$(echo "$P2P_ID3" 2>&1 |
               grep -Eo "Uploaded: [0-9]+.[0-9]+|Uploaded: None" 2>&1 |
               awk '{ print $2 }' 2>&1)
-            P2P_UPLS_ID3=$(echo "$P2P_UPLS_ID3 ")
+            P2P_UPLS_ID3=$(echo "$P2P_UPLS_ID3")
             # get ratio
-            P2P_RATI_ID3=$(echo "$P2P_ID3" 2>&1 | grep -Eo "Ratio: [0-9]+.[0-9]+" 2>&1 |
-              awk '{ print $2 }' 2>&1)
+            P2P_RATI_ID3=$(echo "$P2P_ID3" 2>&1 | grep "Ratio" | grep -v "Ratio Limit:" 2>&1 | awk '{ print $2 }' 2>&1)
+            P2P_RATI_ID3=$(echo "$P2P_RATI_ID3")
             # get status
-            P2P_STAT_ID3=$(echo "$P2P_ID3" 2>&1 | grep -o "State:.*" 2>&1 |
-              awk '{ print $2 }' 2>&1)
-
+            P2P_STAT_ID3=$(echo "$P2P_ID3" 2>&1 | grep "State" 2>&1 | awk '{ print $2 }' 2>&1)
+            P2P_STAT_ID3=$(echo "$P2P_STAT_ID3")
           fi
+
           # transmission-daemon status
           case "$(pidof transmission-daemon 2>&1 | wc -w 2>&1)" in
           "0")
@@ -1009,7 +1030,7 @@ ${N0:?}"
             P2P_PEERS_DOWN_LOAD_ID2=""
             P2P_PEERS_SEEDINGTO_ID3=""
             P2P_PEERS_DOWN_LOAD_ID3=""
-            SLASH=""
+            SLASH=" "
 
             ;;
 
@@ -1018,7 +1039,7 @@ ${N0:?}"
             SEED_TRANSMISSION="${G1:?}Online${N0:?}"
             INTRANET_SEED="${N0:?}${INTRANET:?}:9091${N0:?}"
             P2P_FILE_NAME="$P2P_AV$V_MAPS $P2P_AT$T_MAPS $P2P_AW$W_MAPS${N0:?}"
-            SLASH="/"
+            SLASH=" "
 
             ;;
 
@@ -1042,6 +1063,13 @@ ${N0:?}"
           esac
         fi
 
+        C_T=$(transmission-remote -l 2>&1 | grep -c ".zip" 2>&1)
+        if [[ "$C_T" -ge "2" ]]; then
+          SPACE=" "
+        else
+          SPACE=""
+        fi
+
         # seedbox menu
 
         clear
@@ -1051,12 +1079,12 @@ ${N0:?}"
    SeedBox${G0:?}..:${N0:?} $SEED_TRANSMISSION
    Access${G0:?}...:${N0:?} $INTRANET_SEED
    Exp Maps${G0:?}.:${N0:?} $P2P_FILE_NAME
-   Download${G0:?}.:${N0:?} $P2P_DWNS_ID1 $P2P_DWNS_ID2 $P2P_DWNS_ID3
-   Upload${G0:?}...:${N0:?} $P2P_UPLS_ID1 $P2P_UPLS_ID2 $P2P_UPLS_ID3
-   Status${G0:?}...:${N0:?} $P2P_STAT_ID1 $P2P_STAT_ID2 $P2P_STAT_ID3
-   Progress${G0:?}.:${N0:?} $P2P_PROG_ID1 $P2P_PROG_ID2 $P2P_PROG_ID3
-   Ratio${G0:?}....:${N0:?} $P2P_RATI_ID1 $P2P_RATI_ID2 $P2P_RATI_ID3
-   Peers${G0:?}....:${G1:?} ${G1:?}$P2P_PEERS_CONNECTED_ID1${Y1:?}$P2P_PEERS_SEEDINGTO_ID1${G0:?}$P2P_PEERS_DOWN_LOAD_ID1${GR:?}$SLASH${G0:?}${G1:?}$P2P_PEERS_CONNECTED_ID2${Y1:?}$P2P_PEERS_SEEDINGTO_ID2${G0:?}$P2P_PEERS_DOWN_LOAD_ID2${GR:?}$SLASH${G0:?}${G1:?}$P2P_PEERS_CONNECTED_ID3${Y1:?}$P2P_PEERS_SEEDINGTO_ID3${G0:?}$P2P_PEERS_DOWN_LOAD_ID3${N0:?}
+   Download${G0:?}.:${N0:?}$SPACE$P2P_DWNS_ID1$P2P_DWNS_ID2$P2P_DWNS_ID3
+   Upload${G0:?}...:${N0:?}$SPACE$P2P_UPLS_ID1$P2P_UPLS_ID2$P2P_UPLS_ID3
+   Status${G0:?}...:${N0:?}$SPACE$P2P_STAT_ID1$P2P_STAT_ID2$P2P_STAT_ID3
+   Progress${G0:?}.:${N0:?}$SPACE$P2P_PROG_ID1$P2P_PROG_ID2$P2P_PROG_ID3
+   Ratio${G0:?}....:${N0:?}$SPACE$P2P_RATI_ID1$P2P_RATI_ID2$P2P_RATI_ID3
+   Peers${G0:?}....:${G1:?}$SPACE${G0:?}${G1:?}$P2P_PEERS_CONNECTED_ID1${Y1:?}$P2P_PEERS_SEEDINGTO_ID1${G0:?}$P2P_PEERS_DOWN_LOAD_ID1$SLASH${G0:?}${G1:?}$P2P_PEERS_CONNECTED_ID2${Y1:?}$P2P_PEERS_SEEDINGTO_ID2${G0:?}$P2P_PEERS_DOWN_LOAD_ID2$SLASH${G0:?}${G1:?}$P2P_PEERS_CONNECTED_ID3${Y1:?}$P2P_PEERS_SEEDINGTO_ID3${G0:?}$P2P_PEERS_DOWN_LOAD_ID3${N0:?}
 
    t $GR: ${THEME_TXT:?}Install${N0:?} - ${THEME_DSC:?}Setup Maps$N0
    u $GR: ${THEME_TXT:?}Remove${N0:?}  - ${THEME_DSC:?}Uninstall$N0
@@ -1199,15 +1227,8 @@ ${N0:?}"
           read -t 5 -r -p "" -n 1 -r -s
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
-            P2P_STOPPED_ID=$(echo "$P2P_LIST" 2>&1 | grep "Stopped" 2>&1 |
-              awk '{ print $1 }' 2>&1 | grep -Eo "[1-3]" 2>&1)
-            P2P_STOPPED=$(echo "$P2P_STOPPED_ID" 2>&1 | wc -w 2>&1)
-            if [[ "$P2P_STOPPED" -eq "1" ]]; then
-              echo "Removing torrent ($P2P_STOPPED_ID) from list, State: Stopped!"
-              transmission-remote -t "$P2P_STOPPED_ID" --remove-and-delete 2>&1
-            fi
             if [ -f /seedbox/"$R_MAPS_MOD".zip ]; then
-              printf '%b' "[YN] Redo (Delete $R_MAPS.zip)? y/n "
+              printf '%b' "${GR:?}[YN] Redo delete $R_MAPS${GR:?}.zip? y/n ${N0:?}"
               read -t 10 -r -p "" -n 1 -r -s
               echo
               if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -1312,6 +1333,7 @@ ${N0:?}"
     "utp-enabled": true
 }
 EOF
+
             # install to correct folder
             sudo mv "$FOLDER_WOW"/settings.json /var/lib/transmission-daemon/.config/transmission-daemon/settings.json &>/dev/null
             sleep 1
