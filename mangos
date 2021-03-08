@@ -1211,8 +1211,8 @@ ${N0:?}"
               read -t 10 -r -p "" -n 1 -r -s
               echo
               if [[ $REPLY =~ ^[Yy]$ ]]; then
-                rm /var/log/ms/"$R_MAPS".zip.tmp &>/dev/null
-                sudo rm /seedbox/"$R_MAPS".zip
+                rm /var/log/ms/"$R_MAPS_MOD".zip.tmp &>/dev/null
+                sudo rm /seedbox/"$R_MAPS_MOD".zip &>/dev/null
               fi
             fi
             # create ms folder
