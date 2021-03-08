@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20210403
-# 5.5.6.8
+# V20210803
+# 5.7.5.7
 
 while :; do
 
@@ -98,25 +98,33 @@ while :; do
   # ! -> https://github.com/scarygliders/X11RDP-o-Matic/issues/45
   export NCURSES_NO_UTF8_ACS=1
 
+  # look for ms folder
+  if [ ! -z "$(ls -A /var/log/ms/ 2>&1)" ]; then
+    # create ms folder if not found
+    sudo mkdir /var/log/ms/ &>/dev/null
+    # fix ownership
+    sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
+  fi
+
   # get online players
   MENU_ON_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT SUM(online) FROM ${DB_CHARACTERS:?}.characters;" 2>&1)
   # get guild count
   MENU_GU_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM ${DB_CHARACTERS:?}.guild;" 2>&1)
 
   # non responsive, sql access denied
-  if echo "$MENU_ON_COUNT" 2>&1 | grep -q -E "Access denied" 2>&1; then
+  if echo "$MENU_ON_COUNT" 2>&1 | grep -q -E "Access denied" &>/dev/null; then
     MENU_ON_COUNT="!"
   fi
   # non responsive, sql access denied
-  if echo "$MENU_GU_COUNT" 2>&1 | grep -q -E "Access denied" 2>&1; then
+  if echo "$MENU_GU_COUNT" 2>&1 | grep -q -E "Access denied" &>/dev/null; then
     MENU_GU_COUNT="!"
   fi
   # non responsive, null
-  if echo "$MENU_ON_COUNT" 2>&1 | grep -q -E "NULL" 2>&1; then
+  if echo "$MENU_ON_COUNT" 2>&1 | grep -q -E "NULL" &>/dev/null; then
     MENU_ON_COUNT="?"
   fi
   # non responsive, null
-  if echo "$MENU_GU_COUNT" 2>&1 | grep -q -E "NULL" 2>&1; then
+  if echo "$MENU_GU_COUNT" 2>&1 | grep -q -E "NULL" &>/dev/null; then
     MENU_GU_COUNT="?"
   fi
   # non responsive, zero
@@ -226,7 +234,7 @@ while :; do
   "D")
 
     # fix ownership
-    sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /usr/local/bin/mangos
+    sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /usr/local/bin/mangos &>/dev/null
     printf '%b' "   ${GR:?}y${N0:?} $GR:$N0 Redo ${GR:?}cmangos-script${N0:?}\n"
     printf '%b' "   ${GR:?}n${N0:?} $GR:$N0 nano ${GR:?}cmangos-script${N0:?}\n"
     echo
@@ -493,7 +501,7 @@ ${PASS_NC:?}
         # create ms folder if not found
         sudo mkdir "$FOLDER_CORE"/run/logs &>/dev/null
         # fix ownership
-        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_CORE"
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_CORE" &>/dev/null
       fi
     fi
 
@@ -649,7 +657,7 @@ ${PASS_NC:?}
       fi
 
       # world server latest build
-      if grep -q -o -a "\sBuilt\son\s*.*" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+      if grep -q -o -a "\sBuilt\son\s*.*" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
         # if any, print "built date"
         LATEST_WORLD_BUILT=$(grep -o -a "\sBuilt\son\s*.*" "$FOLDER_CORE"/run/logs/Server.log 2>&1 |
           sed 's/^ *//' 2>&1)
@@ -658,7 +666,7 @@ ${PASS_NC:?}
         LATEST_WORLD_BUILT="${GR:?}Built on Nov 23 2004 at 10:00:01${N0:?}"
       fi
       # built for
-      if grep -q -o -a "\sBuilt\sfor\s*.*" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+      if grep -q -o -a "\sBuilt\sfor\s*.*" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
         # if any, print "built for"
         BUILT_FOR=$(grep -o -a "\sBuilt\sfor\s*.*" "$FOLDER_CORE"/run/logs/Server.log 2>&1 |
           sed 's/^ *//' 2>&1)
@@ -667,7 +675,7 @@ ${PASS_NC:?}
         BUILT_FOR="${GR:?}Built for Linux_x00 (next-to-nothing)${N0:?}"
       fi
       # EventAI
-      if grep -q -o -a "Using creature EventAI:.*" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+      if grep -q -o -a "Using creature EventAI:.*" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
         # if any, print "EventAI"
         EVENTAI=$(grep -Eo "Using creature EventAI:.*" "$FOLDER_CORE"/run/logs/Server.log 2>&1 |
           sed 's/^ *//' 2>&1)
@@ -676,7 +684,7 @@ ${PASS_NC:?}
         EVENTAI="${GR:?}ACID 0.00.x (Expansion) for CMaNGOS-Expansion (0.01.X Client)${N0:?}"
       fi
       # World DB
-      if grep -q -o -a "Using World DB:.*" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+      if grep -q -o -a "Using World DB:.*" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
         # if any, print "World DB"
         WORLD_DB=$(grep -Eo "Using World DB:.*" "$FOLDER_CORE"/run/logs/Server.log 2>&1)
       # if nothing, print "Restart server please.."
@@ -812,14 +820,6 @@ ${N0:?}"
 
       "m")
 
-        # look for ms folder
-        if [ -z "$(ls -A /var/log/ms/ 2>&1)" ]; then
-          # create ms folder if not found
-          sudo mkdir /var/log/ms/ &>/dev/null
-          # fix ownership
-          sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms
-        fi
-
         # check if expansion_maps.zip exist
         if [ -f /seedbox/vanilla_maps.zip ]; then
           V_MAPS="${G1:?}Vanilla${N0:?}"
@@ -849,45 +849,107 @@ ${N0:?}"
           SEED_TRANSMISSION="${GR:?}Not installed!${N0:?}"
           INTRANET_SEED="${GR:?}0.0.0.0:9091${N0:?}"
           P2P_FILE_NAME="${GR:?}$V_MAPS $T_MAPS $W_MAPS${N0:?}"
-          P2P_PEERS_CONNECTED="${GR:?}N/A${N0:?}"
-          P2P_DWNS="${GR:?}N/A${N0:?} "
-          P2P_UPLS="${GR:?}N/A${N0:?} "
-          P2P_STAT="${GR:?}N/A${N0:?}"
-          P2P_PROG="${GR:?}N/A${N0:?}"
-          P2P_RATI="${GR:?}N/A${N0:?}"
-          P2P_PEERS_SEEDINGTO=""
-          P2P_PEERS_DOWN_LOAD=""
+          P2P_PEERS_CONNECTED_ID1="${GR:?}N/A${N0:?}"
+          P2P_DWNS_ID1="${GR:?}N/A${N0:?} "
+          P2P_UPLS_ID1="${GR:?}N/A${N0:?} "
+          P2P_STAT_ID1="${GR:?}N/A${N0:?}"
+          P2P_PROG_ID1="${GR:?}N/A${N0:?}"
+          P2P_RATI_ID1="${GR:?}N/A${N0:?}"
+          P2P_PEERS_SEEDINGTO_ID1=""
+          P2P_PEERS_DOWN_LOAD_ID1=""
           SLASH=""
         else
           if [ -f /var/log/ms/transmission_list ]; then
             # cat that file
             P2P_INFO=$(cat /var/log/ms/transmission_list 2>&1)
-            # peers, connected, seeding to, downloading from
-            P2P_PEERS_CONNECTED=$(echo "$P2P_INFO" 2>&1 | grep "Peers" 2>&1 | awk '{ print $4 }' 2>&1 | awk -F, '{ print $1 }' 2>&1)
-            P2P_PEERS_SEEDINGTO=$(echo "$P2P_INFO" 2>&1 | grep "Peers" 2>&1 | awk '{ print $7 }' 2>&1 | awk -F, '{ print $1 }' 2>&1)
-            P2P_PEERS_DOWN_LOAD=$(echo "$P2P_INFO" 2>&1 | grep "Peers" 2>&1 | awk '{ print $10 }' 2>&1)
+            P2P_ID1=$(echo "$P2P_INFO" 2>&1 | grep -A 42 "Id: 1" 2>&1 | grep -E -v "Id: 2|Id: 3|NAME" 2>&1)
+            P2P_ID2=$(echo "$P2P_INFO" 2>&1 | grep -A 42 "Id: 2" 2>&1 | grep -E -v "Id: 1|Id: 3|NAME" 2>&1)
+            P2P_ID3=$(echo "$P2P_INFO" 2>&1 | grep -A 42 "Id: 3" 2>&1 | grep -E -v "Id: 1|Id: 2|NAME" 2>&1)
+            # peers, connected, seeding to, downloading from, vanilla_maps
+            P2P_PEERS_CONNECTED_ID1=$(echo "$P2P_ID1" 2>&1 | grep "Peers" 2>&1 | awk '{ print $4 }' 2>&1 | awk -F, '{ print $1 }' 2>&1)
+            P2P_PEERS_SEEDINGTO_ID1=$(echo "$P2P_ID1" 2>&1 | grep "Peers" 2>&1 | awk '{ print $7 }' 2>&1 | awk -F, '{ print $1 }' 2>&1)
+            P2P_PEERS_DOWN_LOAD_ID1=$(echo "$P2P_ID1" 2>&1 | grep "Peers" 2>&1 | awk '{ print $10 }' 2>&1)
+            # peers, connected, seeding to, downloading from, tbc_maps
+            P2P_PEERS_CONNECTED_ID2=$(echo "$P2P_ID2" 2>&1 | grep "Peers" 2>&1 | awk '{ print $4 }' 2>&1 | awk -F, '{ print $1 }' 2>&1)
+            P2P_PEERS_SEEDINGTO_ID2=$(echo "$P2P_ID2" 2>&1 | grep "Peers" 2>&1 | awk '{ print $7 }' 2>&1 | awk -F, '{ print $1 }' 2>&1)
+            P2P_PEERS_DOWN_LOAD_ID2=$(echo "$P2P_ID2" 2>&1 | grep "Peers" 2>&1 | awk '{ print $10 }' 2>&1)
+            # peers, connected, seeding to, downloading from, wotlk_maps
+            P2P_PEERS_CONNECTED_ID3=$(echo "$P2P_ID3" 2>&1 | grep "Peers" 2>&1 | awk '{ print $4 }' 2>&1 | awk -F, '{ print $1 }' 2>&1)
+            P2P_PEERS_SEEDINGTO_ID3=$(echo "$P2P_ID3" 2>&1 | grep "Peers" 2>&1 | awk '{ print $7 }' 2>&1 | awk -F, '{ print $1 }' 2>&1)
+            P2P_PEERS_DOWN_LOAD_ID3=$(echo "$P2P_ID3" 2>&1 | grep "Peers" 2>&1 | awk '{ print $10 }' 2>&1)
 
-            # get progress
-            if echo "$P2P_INFO" 2>&1 | grep -q -o "Percent Done: 100%" 2>&1; then
-              P2P_PROG="${G1:?}100%${N0:?}"
+            # get progress, vanilla_maps
+            if echo "$P2P_ID1" 2>&1 | grep -q -o "Percent Done: 100%" 2>&1; then
+              P2P_PROG_ID1="${G1:?}100%${N0:?}"
             else
-              P2P_PROG=$(echo "$P2P_INFO" 2>&1 | grep -Eo "Percent Done:.*" 2>&1 |
+              P2P_PROG_ID1=$(echo "$P2P_ID1" 2>&1 | grep -Eo "Percent Done:.*" 2>&1 |
                 awk '{ print $3 }' 2>&1)
             fi
+
+            # get progress, tbc_maps
+            if echo "$P2P_ID2" 2>&1 | grep -q -o "Percent Done: 100%" 2>&1; then
+              P2P_PROG_ID2="${G1:?}100%${N0:?}"
+            else
+              P2P_PROG_ID2=$(echo "$P2P_ID2" 2>&1 | grep -Eo "Percent Done:.*" 2>&1 |
+                awk '{ print $3 }' 2>&1)
+            fi
+
+            # get progress, wotlk_maps
+            if echo "$P2P_ID3" 2>&1 | grep -q -o "Percent Done: 100%" 2>&1; then
+              P2P_PROG_ID3="${G1:?}100%${N0:?}"
+            else
+              P2P_PROG_ID3=$(echo "$P2P_ID3" 2>&1 | grep -Eo "Percent Done:.*" 2>&1 |
+                awk '{ print $3 }' 2>&1)
+            fi
+
+            # id 1 (vanilla_maps)
             # get download stats
-            P2P_DWNS=$(echo "$P2P_INFO" 2>&1 | grep -o "Downloaded:.*" 2>&1 |
+            P2P_DWNS_ID1=$(echo "$P2P_ID1" 2>&1 | grep -o "Downloaded:.*" 2>&1 |
               awk '{ print $2 }' 2>&1)
-            P2P_DWNS=$(echo "$P2P_DWNS ")
+            P2P_DWNS_ID1=$(echo "$P2P_DWNS_ID1 ")
             # get upload stats
-            P2P_UPLS=$(echo "$P2P_INFO" 2>&1 | grep -o "Uploaded:.*" 2>&1 |
+            P2P_UPLS_ID1=$(echo "$P2P_ID1" 2>&1 | grep -o "Uploaded:.*" 2>&1 |
               awk '{ print $2 }' 2>&1)
-            P2P_UPLS=$(echo "$P2P_UPLS ")
+            P2P_UPLS_ID1=$(echo "$P2P_UPLS_ID1 ")
             # get ratio
-            P2P_RATI=$(echo "$P2P_INFO" 2>&1 | grep -o "Ratio:.*" 2>&1 |
+            P2P_RATI_ID1=$(echo "$P2P_ID1" 2>&1 | grep -o "Ratio:.*" 2>&1 |
               awk '{ print $2 }' 2>&1)
             # get status
-            P2P_STAT=$(echo "$P2P_INFO" 2>&1 | grep -o "State:.*" 2>&1 |
+            P2P_STAT_ID1=$(echo "$P2P_ID1" 2>&1 | grep -o "State:.*" 2>&1 |
               awk '{ print $2 }' 2>&1)
+
+            # id 2 (tbc_maps)
+            # get download stats
+            P2P_DWNS_ID2=$(echo "$P2P_ID2" 2>&1 | grep -o "Downloaded:.*" 2>&1 |
+              awk '{ print $2 }' 2>&1)
+            P2P_DWNS_ID2=$(echo "$P2P_DWNS_ID2 ")
+            # get upload stats
+            P2P_UPLS_ID2=$(echo "$P2P_ID2" 2>&1 | grep -o "Uploaded:.*" 2>&1 |
+              awk '{ print $2 }' 2>&1)
+            P2P_UPLS_ID2=$(echo "$P2P_UPLS_ID2 ")
+            # get ratio
+            P2P_RATI_ID2=$(echo "$P2P_ID2" 2>&1 | grep -o "Ratio:.*" 2>&1 |
+              awk '{ print $2 }' 2>&1)
+            # get status
+            P2P_STAT_ID2=$(echo "$P2P_ID2" 2>&1 | grep -o "State:.*" 2>&1 |
+              awk '{ print $2 }' 2>&1)
+
+            # id 3 (wotlk_maps)
+            # get download stats
+            P2P_DWNS_ID3=$(echo "$P2P_ID3" 2>&1 | grep -o "Downloaded:.*" 2>&1 |
+              awk '{ print $2 }' 2>&1)
+            P2P_DWNS_ID3=$(echo "$P2P_DWNS_ID3 ")
+            # get upload stats
+            P2P_UPLS_ID3=$(echo "$P2P_ID3" 2>&1 | grep -o "Uploaded:.*" 2>&1 |
+              awk '{ print $2 }' 2>&1)
+            P2P_UPLS_ID3=$(echo "$P2P_UPLS_ID3 ")
+            # get ratio
+            P2P_RATI_ID3=$(echo "$P2P_ID3" 2>&1 | grep -o "Ratio:.*" 2>&1 |
+              awk '{ print $2 }' 2>&1)
+            # get status
+            P2P_STAT_ID3=$(echo "$P2P_ID3" 2>&1 | grep -o "State:.*" 2>&1 |
+              awk '{ print $2 }' 2>&1)
+
           fi
           # transmission-daemon status
           case "$(pidof transmission-daemon 2>&1 | wc -w 2>&1)" in
@@ -896,14 +958,30 @@ ${N0:?}"
             SEED_TRANSMISSION="${GR:?}Offline${N0:?}"
             INTRANET_SEED="${GR:?}0.0.0.0:9091${N0:?}"
             P2P_FILE_NAME="${GR:?}$V_MAPS $T_MAPS $W_MAPS${N0:?}"
-            P2P_PEERS_CONNECTED="${GR:?}N/A${N0:?}"
-            P2P_DWNS="${GR:?}N/A${N0:?} "
-            P2P_UPLS="${GR:?}N/A${N0:?} "
-            P2P_STAT="${GR:?}N/A${N0:?}"
-            P2P_PROG="${GR:?}N/A${N0:?}"
-            P2P_RATI="${GR:?}N/A${N0:?}"
-            P2P_PEERS_SEEDINGTO=""
-            P2P_PEERS_DOWN_LOAD=""
+            P2P_PEERS_CONNECTED_ID1="${GR:?}N/A${N0:?}"
+            P2P_PEERS_CONNECTED_ID2="${GR:?}N/A${N0:?}"
+            P2P_PEERS_CONNECTED_ID3="${GR:?}N/A${N0:?}"
+            P2P_DWNS_ID1="${GR:?}N/A${N0:?} "
+            P2P_UPLS_ID1="${GR:?}N/A${N0:?} "
+            P2P_STAT_ID1="${GR:?}N/A${N0:?}"
+            P2P_PROG_ID1="${GR:?}N/A${N0:?}"
+            P2P_RATI_ID1="${GR:?}N/A${N0:?}"
+            P2P_DWNS_ID2="${GR:?}N/A${N0:?} "
+            P2P_UPLS_ID2="${GR:?}N/A${N0:?} "
+            P2P_STAT_ID2="${GR:?}N/A${N0:?}"
+            P2P_PROG_ID2="${GR:?}N/A${N0:?}"
+            P2P_RATI_ID2="${GR:?}N/A${N0:?}"
+            P2P_DWNS_ID3="${GR:?}N/A${N0:?} "
+            P2P_UPLS_ID3="${GR:?}N/A${N0:?} "
+            P2P_STAT_ID3="${GR:?}N/A${N0:?}"
+            P2P_PROG_ID3="${GR:?}N/A${N0:?}"
+            P2P_RATI_ID3="${GR:?}N/A${N0:?}"
+            P2P_PEERS_SEEDINGTO_ID1=""
+            P2P_PEERS_DOWN_LOAD_ID1=""
+            P2P_PEERS_SEEDINGTO_ID2=""
+            P2P_PEERS_DOWN_LOAD_ID2=""
+            P2P_PEERS_SEEDINGTO_ID3=""
+            P2P_PEERS_DOWN_LOAD_ID3=""
             SLASH=""
 
             ;;
@@ -921,9 +999,15 @@ ${N0:?}"
 
             SEED_TRANSMISSION="${Y1:?}Online+${N0:?}"
             INTRANET_SEED="${Y1:?}${INTRANET:?}:9091${N0:?}"
-            P2P_PEERS_CONNECTED="${GR:?}N/A${N0:?}"
-            P2P_PEERS_SEEDINGTO="${GR:?}N/A${N0:?}"
-            P2P_PEERS_DOWN_LOAD="${GR:?}N/A${N0:?}"
+            P2P_PEERS_CONNECTED_ID1="${GR:?}N/A${N0:?}"
+            P2P_PEERS_SEEDINGTO_ID1="${GR:?}N/A${N0:?}"
+            P2P_PEERS_DOWN_LOAD_ID1="${GR:?}N/A${N0:?}"
+            P2P_PEERS_CONNECTED_ID2="${GR:?}N/A${N0:?}"
+            P2P_PEERS_SEEDINGTO_ID2="${GR:?}N/A${N0:?}"
+            P2P_PEERS_DOWN_LOAD_ID2="${GR:?}N/A${N0:?}"
+            P2P_PEERS_CONNECTED_ID3="${GR:?}N/A${N0:?}"
+            P2P_PEERS_SEEDINGTO_ID3="${GR:?}N/A${N0:?}"
+            P2P_PEERS_DOWN_LOAD_ID3="${GR:?}N/A${N0:?}"
             SLASH=""
 
             ;;
@@ -940,14 +1024,14 @@ ${N0:?}"
    SeedBox${G0:?}..:${N0:?} $SEED_TRANSMISSION
    Access${G0:?}...:${N0:?} $INTRANET_SEED
    Exp Maps${G0:?}.:${N0:?} $P2P_FILE_NAME
-   Download${G0:?}.:${N0:?} $P2P_DWNS${GR:?}Unlimited${N0:?}
-   Upload${G0:?}...:${N0:?} $P2P_UPLS${GR:?}128kb/s${N0:?}
-   Status${G0:?}...:${N0:?} $P2P_STAT
-   Progress${G0:?}.:${N0:?} $P2P_PROG
-   Ratio${G0:?}....:${N0:?} $P2P_RATI
-   Peers${G0:?}....:${G1:?} $P2P_PEERS_CONNECTED${N0:?}$SLASH${G0:?}$P2P_PEERS_SEEDINGTO${N0:?}$SLASH${Y1:?}$P2P_PEERS_DOWN_LOAD${N0:?}
+   Download${G0:?}.:${N0:?} $P2P_DWNS_ID1$P2P_DWNS_ID2$P2P_DWNS_ID3
+   Upload${G0:?}...:${N0:?} $P2P_UPLS_ID1$P2P_UPLS_ID2$P2P_UPLS_ID3
+   Status${G0:?}...:${N0:?} $P2P_STAT_ID1 $P2P_STAT_ID2 $P2P_STAT_ID3
+   Progress${G0:?}.:${N0:?} $P2P_PROG_ID1 $P2P_PROG_ID2 $P2P_PROG_ID3
+   Ratio${G0:?}....:${N0:?} $P2P_RATI_ID1 $P2P_RATI_ID2 $P2P_RATI_ID3
+   Peers${G0:?}....:${G1:?} $P2P_PEERS_CONNECTED_ID1$P2P_PEERS_CONNECTED_ID2$P2P_PEERS_CONNECTED_ID3${N0:?}$SLASH${G0:?}$P2P_PEERS_SEEDINGTO_ID1$P2P_PEERS_SEEDINGTO_ID2$P2P_PEERS_SEEDINGTO_ID3${N0:?}$SLASH${Y1:?}$P2P_PEERS_DOWN_LOAD_ID1$P2P_PEERS_DOWN_LOAD_ID2$P2P_PEERS_DOWN_LOAD_ID3${N0:?}
 
-   t $GR: ${THEME_TXT:?}Install${N0:?} - ${THEME_DSC:?}Setup$N0
+   t $GR: ${THEME_TXT:?}Install${N0:?} - ${THEME_DSC:?}Setup Maps$N0
    u $GR: ${THEME_TXT:?}Remove${N0:?}  - ${THEME_DSC:?}Uninstall$N0
    r $GR: ${THEME_TXT:?}Start${N0:?}   - ${THEME_DSC:?}Start p2p$N0
    s $GR: ${THEME_TXT:?}Stop${N0:?}    - ${THEME_DSC:?}Stop p2p$N0
@@ -1036,13 +1120,57 @@ ${N0:?}"
 
         "t")
 
-          read -t 5 -r -p "[YN] Setup Seedbox? y/n " -n 1 -r -s
+          HEIGHT=10
+          WIDTH=28
+          CHOICE_HEIGHT=4
+          BACKTITLE="Expansion Maps Download (torrent)"
+          TITLE="Download/Import Maps"
+          MENU="Choose one options"
+
+          OPTIONS=(1 "vanilla_maps.zip"
+            2 "tbc_maps.zip"
+            3 "wotlk_maps.zip")
+
+          CHOICE=$(dialog --clear \
+            --backtitle "$BACKTITLE" \
+            --title "$TITLE" \
+            --menu "$MENU" \
+            $HEIGHT $WIDTH $CHOICE_HEIGHT \
+            "${OPTIONS[@]}" \
+            2>&1 >/dev/tty)
+
+          clear
+          case $CHOICE in
+
+          1)
+            touch /seedbox/vanilla_maps.zip.tmp_file
+            R_MAPS="${GR:?}vanilla_maps.zip${N0:?}"
+            # add magnet link: vanilla.maps.zip.torrent
+            transmission-remote -a "magnet:?xt=urn:btih:1cdcaa3d77a7f4df79935d885e639903e37dda24&dn=vanilla%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
+            ;;
+          2)
+            touch /seedbox/tbc_maps.zip.tmp_file
+            R_MAPS="${GR:?}tbc_maps.zip${N0:?}"
+            # add magnet link: tbc_maps.zip.torrent
+            transmission-remote -a "magnet:?xt=urn:btih:1d62ecb9e7832bdcccc57560bc73e68b3c3b07a9&dn=tbc%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
+
+            ;;
+          3)
+            touch /seedbox/wotlk_maps.zip.tmp_file
+            R_MAPS="${GR:?}wotlk_maps.zip${N0:?}"
+            # add magnet link: wotlk_maps.zip.torrent
+            # transmission-remote -a "magnet:?xt=urn:btih:12345678909876543212345678909876543212345=wotlk%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
+            ;;
+
+          esac
+          printf '%b' "[YN] Download $R_MAPS? y/n "
+          read -t 5 -r -p "" -n 1 -r -s
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             # create ms folder
             sudo mkdir /var/log/ms/ &>/dev/null
             # fix ownership
-            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms
+            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
             # is transmission-daemon installed?
             if ! [ -x "$(command -v transmission-daemon)" ]; then
               # check for updates regardless
@@ -1146,47 +1274,6 @@ EOF
               sudo service transmission-daemon start &>/dev/null
               printf '%b' "[${G1:?}OK${N0:?}] Starting SeedBox ${GR:?}transmission-daemon${N0:?}\n"
               sleep 1
-
-              HEIGHT=10
-              WIDTH=28
-              CHOICE_HEIGHT=4
-              BACKTITLE="Expansion Maps Download (torrent)"
-              TITLE="Download/Import Maps"
-              MENU="Choose one options"
-
-              OPTIONS=(1 "vanilla_maps.zip"
-                2 "tbc_maps.zip"
-                3 "wotlk_maps.zip")
-
-              CHOICE=$(dialog --clear \
-                --backtitle "$BACKTITLE" \
-                --title "$TITLE" \
-                --menu "$MENU" \
-                $HEIGHT $WIDTH $CHOICE_HEIGHT \
-                "${OPTIONS[@]}" \
-                2>&1 >/dev/tty)
-
-              clear
-              case $CHOICE in
-
-              1)
-                R_MAPS="${GR:?}vanilla_maps.zip${N0:?}"
-                # add magnet link: vanilla.maps.zip.torrent
-                transmission-remote -a "magnet:?xt=urn:btih:1cdcaa3d77a7f4df79935d885e639903e37dda24&dn=vanilla%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
-                ;;
-              2)
-                R_MAPS="${GR:?}tbc_maps.zip${N0:?}"
-                # add magnet link: tbc_maps.zip.torrent
-                transmission-remote -a "magnet:?xt=urn:btih:1d62ecb9e7832bdcccc57560bc73e68b3c3b07a9&dn=tbc%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
-
-                ;;
-              3)
-                R_MAPS="${GR:?}wotlk_maps.zip${N0:?}"
-                # add magnet link: wotlk_maps.zip.torrent
-                # transmission-remote -a "magnet:?xt=urn:btih:12345678909876543212345678909876543212345=wotlk%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
-                ;;
-
-              esac
 
               printf '%b' "[${G1:?}OK${N0:?}] Torrent added $R_MAPS\n"
               # try to verify torrent data
@@ -1697,8 +1784,10 @@ EOF
         GI_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.character_gifts;" 2>&1)
 
         # log data
-        # empty mail, returning old mails...
-        MA_CYCLE=$(grep -c -E "Returning old mails" "$FOLDER_CORE"/run/logs/Server.log.old 2>&1)
+        if [ -f "$FOLDER_CORE"/run/logs/Server.log ]; then
+          # empty mail, returning old mails...
+          MA_CYCLE=$(grep -c -E "Returning old mails" "$FOLDER_CORE"/run/logs/Server.log 2>&1)
+        fi
 
         # non responsive
         if [ -z "$MA_CYCLE" ]; then
@@ -1712,7 +1801,7 @@ EOF
         printline "MailCycle" "$MA_CYCLE" "Petition" "$PT_COUNT" "PetitionSign" "$PS_COUNT"
         printline "MailItems" "$MI_COUNT" "BugReport" "$BG_COUNT" "Groups" "$GP_COUNT"
         printline "Realms" "$RL_COUNT" "Social" "$CS_COUNT" "Logons" "$AL_COUNT"
-        printline "Cooldowns" "$CC_COUNT" "<GM>Surveys" "$GM_COUNT" "Auctions" "$AU_COUNT"
+        printline "Cooldowns" "$CC_COUNT" "GM_Surveys" "$GM_COUNT" "Auctions" "$AU_COUNT"
 
         echo
         read -r -p "Press Enter to continue" </dev/tty
@@ -1904,7 +1993,7 @@ $RA_TIP"
         printf '%b' "[${G1:?}OK${N0:?}] Cloning repository! Please wait this might take a while
 (${G1:?}${GITHUB_CMANGOS:?}${N0:?})\n"
         sudo mkdir "$FOLDER_WOW" &>/dev/null
-        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW"
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
         cd "$FOLDER_WOW" || exit
         read -r -p "[YN] --recursive? y/n " -n 1 -r
         echo
@@ -1961,7 +2050,7 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
         printf '%b' "[${G1:?}OK${N0:?}] Cloning repository! Please wait this might take a while
 (${G1:?}${GITHUB_DATABASE:?}${N0:?})\n"
         sudo mkdir "$FOLDER_WOW" &>/dev/null
-        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW"
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
         cd "$FOLDER_WOW" || exit
         git clone "${GITHUB_DATABASE:?}"
         cd "$FOLDER_DB" || exit
@@ -2014,7 +2103,7 @@ ${GR:?}(d) Update Database > Update core-db${N0:?}\n"
       # fresh install?
       echo "Cloning repository 'cmangos-script' Please wait"
       sudo mkdir "$FOLDER_HELPER" &>/dev/null
-      sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_HELPER"
+      sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_HELPER" &>/dev/null
       cd "$FOLDER_HELPER" || exit
       git clone "${GITHUB_HELPER:?}"
       echo "Done"
@@ -2147,7 +2236,7 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
           esac
         fi
 
-        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW"
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
         mkdir "$FOLDER_CORE"/run &>/dev/null
         mkdir "$FOLDER_CORE"/run/logs &>/dev/null
         mkdir "$FOLDER_CORE"/run/logs/old &>/dev/null
@@ -2159,7 +2248,7 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
         cd "$FOLDER_CORE"/run/logs || exit &>/dev/null
         mv -t "$FOLDER_CORE"/run/logs/old/ Realmd.log Server.log Server.log.old DBErrors.log EventAIErrors.log &>/dev/null
         # done
-        sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
         mkdir "$FOLDER_CORE"/build &>/dev/null
         cd "${FOLDER_BUILD:?}" || exit
         # double quotes ("") and single quotes ('') around > $cmake < will mess things up.
@@ -2262,7 +2351,7 @@ ${GR:?}$CPU_MODEL${N0:?}")
           START="$SECONDS"
           make -j"$SYS_CORES" # max system cores
           sudo make install 2>&1 | sudo tee /var/log/ms/build &>/dev/null
-          if grep -q -o "100" /var/log/ms/build 2>&1; then
+          if grep -q -o "100" /var/log/ms/build &>/dev/null; then
             # get seconds since start
             DURATION=$(echo "$SECONDS-$START" 2>&1 | bc 2>&1)
             # convert seconds
@@ -2272,7 +2361,7 @@ ${GR:?}$CPU_MODEL${N0:?}")
             # create ms folder
             sudo mkdir /var/log/ms/ &>/dev/null
             # fix ownership
-            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms
+            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
             # create installed mark
             echo "Core was installed at ${NOW:?}" >/var/log/ms/installed_core
             BUILD_BUTTON="${G1:?}OK${N0:?}"
@@ -2563,7 +2652,7 @@ Select install operation"
             # create ms folder
             sudo mkdir /var/log/ms/ &>/dev/null
             # fix ownership
-            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms
+            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
             # create installed mark
             echo "Core was installed at ${NOW:?}" >/var/log/ms/installed_core
 
@@ -2579,7 +2668,7 @@ Select install operation"
             # create ms folder
             sudo mkdir /var/log/ms/ &>/dev/null
             # fix ownership
-            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms
+            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
             # create installed mark
             echo "Core was installed at ${NOW:?} with backup" >/var/log/ms/installed_core
 
@@ -2598,7 +2687,7 @@ Select install operation"
           esac
         fi
 
-        sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
         echo
         printf '%b' "[$BUILD_BUTTON] "
         read -r -p "Press Enter to continue" </dev/tty
@@ -2715,12 +2804,12 @@ Check if correct information, or just restart server."
 
         cd || exit
         sudo mkdir wow &>/dev/null
-        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW"
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
         sudo rm -r "$FOLDER_CORE"/build/ &>/dev/null
         cd "$FOLDER_WOW" || exit
         git clone "$GITHUB_CMANGOS" 2>&1
         sudo mkdir "$FOLDER_CORE"/build &>/dev/null
-        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW"
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
         mkdir "$FOLDER_CORE"/run &>/dev/null
         mkdir "$FOLDER_CORE"/run/logs &>/dev/null
         mkdir "$FOLDER_CORE"/run/logs/old &>/dev/null
@@ -2732,7 +2821,7 @@ Check if correct information, or just restart server."
         cd "$FOLDER_CORE"/run/logs || exit &>/dev/null
         mv -t "$FOLDER_CORE"/run/logs/old/ Realmd.log Server.log Server.log.old DBErrors.log EventAIErrors.log &>/dev/null
         # done
-        sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
         mkdir "$FOLDER_CORE"/build &>/dev/null
         cd "${FOLDER_BUILD:?}" || exit
         # double quotes ("") and single quotes ('') around > $cmake < will mess things up.
@@ -3114,7 +3203,7 @@ Select install operation"
 
         esac
 
-        sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
         echo
         printf '%b' "[${G1:?}OK${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
@@ -3155,7 +3244,7 @@ Select install operation"
         sudo mkdir "${FOLDER_WOW:?}"/backup 2>&1
         sudo mkdir "${FOLDER_WOW:?}"/backup/configurations 2>&1
         sudo cp -R "$FOLDER_CORE"/run/etc/* "${FOLDER_WOW:?}"/backup/configurations 2>&1
-        sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
       fi
       read -r -p "[YN] Delete Core Directory? y/n " -n 1 -r
       echo
@@ -3172,7 +3261,7 @@ Select install operation"
 
     "6")
 
-      sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
+      sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
       sudo cp -R "$FOLDER_CORE"/run/etc/* "${FOLDER_WOW:?}"/backup/configurations 2>&1
 
       ;;
@@ -3239,7 +3328,7 @@ Select install operation"
         # create configurations directory
         cd "$FOLDER_WOW"/backup || exit
         sudo mkdir configurations &>/dev/null
-        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW"
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
         cd || exit
         cp "$FOLDER_DB"/InstallFullDB.config "${FOLDER_WOW:?}"/backup/configurations &>/dev/null
         cp "$FOLDER_CORE"/run/etc/*.conf "${FOLDER_WOW:?}"/backup/configurations &>/dev/null
@@ -3451,7 +3540,7 @@ Database User, Client/Server is needed."
           esac
         fi
 
-        sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
 
         # backup
         mkdir "$FOLDER_WOW"/backup &>/dev/null
@@ -3516,7 +3605,7 @@ Database User, Client/Server is needed."
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           if [ ! -z "$(ls -A "$FOLDER_DB" 2>&1)" ]; then
-            sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
+            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
             cd "$FOLDER_DB" || exit
             ./InstallFullDB.sh
             sudo service mariadb stop &>/dev/null
@@ -3531,7 +3620,7 @@ Database User, Client/Server is needed."
         # create ms folder
         sudo mkdir /var/log/ms/ &>/dev/null
         # fix ownership
-        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
         # create installed mark
         echo "Database was installed at ${NOW:?}" >/var/log/ms/installed_db
         printf '%b' "[${G1:?}OK${N0:?}] "
@@ -3580,7 +3669,7 @@ Database User, Client/Server is needed."
             ;;
           esac
         fi
-        sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
         sleep 1
         # backup <- characters.sql
         FILE="$FOLDER_WOW/backup/$DB_CHARACTERS-$NOW.sql"
@@ -3666,7 +3755,7 @@ Database User, Client/Server is needed."
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           if [ ! -z "$(ls -A "$FOLDER_DB" 2>&1)" ]; then
-            sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
+            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
             cd "$FOLDER_DB" || exit
             ./InstallFullDB.sh
           else
@@ -3744,7 +3833,7 @@ Database User, Client/Server is needed."
             ;;
           esac
         fi
-        sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
         echo -ne '(0%)\r'
         sleep 1
         echo -ne '(10%)\r'
@@ -3799,13 +3888,13 @@ Database User, Client/Server is needed."
       read -t 5 -r -p "[YN] Reinstall (Delete /core-db)? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
-        sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
         cp "$FOLDER_DB"/InstallFullDB.config "$FOLDER_WOW" &>/dev/null
         sudo rm -r "$FOLDER_DB" &>/dev/null
         cd "$FOLDER_WOW" || exit
         git clone "$GITHUB_DATABASE"
         mv "$FOLDER_WOW"/*.config "$FOLDER_DB" &>/dev/null
-        sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
         printf '%b' "[${G1:?}OK${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
@@ -4038,7 +4127,7 @@ EOF
 
     "9")
 
-      sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
+      sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
       printf '%b' "[!!] [${R0:?}Warning${N0:?}]: Only update whats missing.
 Check log for which database needs 'applying updates'"
       echo
@@ -4192,7 +4281,7 @@ Check log for which database needs 'applying updates'"
           esac
           printf '%b' "[${G1:?}OK${N0:?}]"
           echo
-          sudo chown -R "$USER":"$GROUP" "$FOLDER_WOW"
+          sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
           cd "$FOLDER_DB" || exit
           ./InstallFullDB.sh
           sudo service mariadb stop &>/dev/null
@@ -4476,7 +4565,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           # this is for docker users
           if [ -f /.dockerenv ]; then
             if screen -list 2>&1 |
-              grep -q "realmd"; then
+              grep -q "realmd" &>/dev/null; then
               # get realmd screen id
               REALMD_ID=$(screen -list 2>&1 | grep -Eo "[0-9]+.realmd" 2>&1 |
                 awk -F. '{ print $1 }' 2>&1)
@@ -4532,7 +4621,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           # this is for docker users
           if [ -f /.dockerenv ]; then
             if screen -list 2>&1 |
-              grep -q "mangosd"; then
+              grep -q "mangosd" &>/dev/null; then
               # get mangosd screen id
               MANGOSD_ID=$(screen -list 2>&1 | grep -Eo "[0-9]+.mangosd" 2>&1 |
                 awk -F. '{ print $1 }' 2>&1)
@@ -4654,7 +4743,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           if [ -f /.dockerenv ]; then
             # running screen named realmd
             if screen -list 2>&1 |
-              grep -q "realmd" 2>&1; then
+              grep -q "realmd" &>/dev/null; then
               # get realmd screen id
               REALMD_ID=$(screen -list 2>&1 | grep -Eo "[0-9]+.realmd" 2>&1 |
                 awk -F. '{ print $1 }' 2>&1)
@@ -4728,7 +4817,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             echo
             if [[ ! $REPLY =~ ^[Nn]$ ]]; then
               # wait on mangosd
-              until grep -q -o "World initialized" "$FOLDER_CORE"/run/logs/Server.log; do
+              until grep -q -o "World initialized" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; do
                 printf '%b' "[${GR:?}OK${N0:?}] ${GR:?}Waiting 5 seconds..${N0:?}\n"
                 sleep 5
               done
@@ -4737,12 +4826,12 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             # realmd.log #######################################################
 
             # if realm failed
-            if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+            if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Realmd.log &>/dev/null; then
               # if any, print "Realm failed or halted"
               printf '%b' "[${R1:?}0H${N0:?}] Realm failed or halted!\n"
             else
               # look for empty tables
-              if grep -q -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+              if grep -q -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log &>/dev/null; then
                 # count empty inside log
                 COUNT_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1 |
                   grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." 2>&1)
@@ -4750,7 +4839,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
                 printf '%b' "[${Y1:?}0E${N0:?}] Realm: ${Y1:?}$COUNT_EMPTY${N0:?} Tables are empty, doesn't exist!\n"
               fi
               # look for error
-              if grep -q -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+              if grep -q -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log &>/dev/null; then
                 # count errors inside log
                 COUNT_ERROR_REALM=$(grep -E -v ".*is empty*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1 |
                   grep -c -E ".*ERROR*." 2>&1)
@@ -4766,24 +4855,24 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
                 printf '%b' "[${G1:?}OK${N0:?}] Realm: OK!\n"
               fi
               # this database (realmd) is out of date!
-              if grep -q -E "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+              if grep -q -E "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Realmd.log &>/dev/null; then
                 printf '%b' "[${Y1:?}0D${N0:?}] Realm database is out of date!\n"
                 printf '%b' "[${G0:?}1D${N0:?}] Menu: 'd' > Apply all updates [A]-[B]"
               fi
               # databases is missing or corrupt.
-              if grep -q -E "\sdatabase\sis\smissing\sor\scorrupt." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+              if grep -q -E "\sdatabase\sis\smissing\sor\scorrupt." "$FOLDER_CORE"/run/logs/Realmd.log &>/dev/null; then
                 printf '%b' "[${R1:?}X0${N0:?}] Realm database is missing or corrupt!\n"
               fi
               # reinstall your (realmd) database
-              if grep -q -E "reinstall\syour|\sUnknown\sdatabase\s|Reinstall\syour\s[REALMD]\sdatabase\s" "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+              if grep -q -E "reinstall\syour|\sUnknown\sdatabase\s|Reinstall\syour\s[REALMD]\sdatabase\s" "$FOLDER_CORE"/run/logs/Realmd.log &>/dev/null; then
                 printf '%b' "[${R1:?}X1${N0:?}] Reinstall your realm database!\n"
               fi
               # can't connect to local mysql through socket
-              if grep -q -E ".*Can't\sconnect\sto\slocal\sMySQL*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+              if grep -q -E ".*Can't\sconnect\sto\slocal\sMySQL*." "$FOLDER_CORE"/run/logs/Realmd.log &>/dev/null; then
                 printf '%b' "[${R1:?}X2${N0:?}] Realm can't connect to local MySQL!\n"
               fi
               # your realmd.conf version indicates your conf file is out of date
-              if grep -q -E ".*Your\srealmd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+              if grep -q -E ".*Your\srealmd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Realmd.log &>/dev/null; then
                 printf '%b' "[${R1:?}X3${N0:?}] realmd.conf is out of date!\n"
               fi
             fi
@@ -4791,12 +4880,12 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             # server.log #######################################################
 
             # if world failed
-            if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+            if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
               # if any, print "World failed or halted"
               printf '%b' "[${R1:?}0H${N0:?}] World failed or halted!\n"
             else
               # look for empty tables
-              if grep -q -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+              if grep -q -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
                 # count empty inside log
                 COUNT_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "$FOLDER_CORE"/run/logs/Server.log 2>&1 |
                   grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." 2>&1)
@@ -4804,7 +4893,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
                 printf '%b' "[${Y1:?}0E${N0:?}] World: ${Y1:?}$COUNT_EMPTY${N0:?} Tables are empty or doesn't exist!\n"
               fi
               # look for error
-              if grep -q -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+              if grep -q -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
                 # count errors inside log
                 COUNT_ERROR_SERVER=$(grep -E -v ".*is empty*." "$FOLDER_CORE"/run/logs/Server.log 2>&1 |
                   grep -c -E ".*ERROR*." 2>&1)
@@ -4816,7 +4905,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
                 # if any, print "error"
                 printf '%b' "[${R1:?}1E${N0:?}] World: ${R1:?}$COUNT_ERROR_SERVER${N0:?} Error! ${GR:?}${ERROR_RATE_SERVER:?}${N0:?}\n"
                 # look for serious error
-                if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+                if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
                   # count serious errors inside log
                   COUNT_ERROR_SERIOUS=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>&1)
                   # if any, print "serious"
@@ -4827,36 +4916,36 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
                 printf '%b' "[${G1:?}OK${N0:?}] World OK!\n"
               fi
               # world failed
-              if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+              if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
                 # if any, print "World failed"
                 echo
                 printf '%b' "$SERVER_LOG_FAILED"
                 echo
               fi
               # this database (mangosd) is out of date!
-              if grep -q -E "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+              if grep -q -E "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
                 printf '%b' "[${GR:?}0D${N0:?}] World database is out of date!\n"
                 printf '%b' "[${GR:?}1D${N0:?}] Menu: 'd' > Apply all updates [A]-[B]"
               fi
               # databases is missing or corrupt.
-              if grep -q -E "\sdatabase\sis\smissing\sor\scorrupt." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+              if grep -q -E "\sdatabase\sis\smissing\sor\scorrupt." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
                 printf '%b' "[${R1:?}X0${N0:?}] World database is missing or corrupt!\n"
               fi
               # reinstall your (mangosd) database
-              if grep -q -E "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+              if grep -q -E "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
                 printf '%b' "[${R1:?}X1${N0:?}] Reinstall your world database!\n"
               fi
               # can't connect to local mysql through socket
-              if grep -q -E ".*Can't\sconnect\sto\slocal\sMySQL*." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+              if grep -q -E ".*Can't\sconnect\sto\slocal\sMySQL*." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
                 printf '%b' "[${R1:?}X2${N0:?}] World can't connect to local MySQL!\n"
               fi
               # your mangosd.conf version indicates your conf file is out of date
-              if grep -q -E ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+              if grep -q -E ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
                 printf '%b' "[${R1:?}X3${N0:?}] realmd.conf is out of date!\n"
               fi
 
               # Playerbot loaded
-              if grep -q -E "Playerbot: Using configuration file" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+              if grep -q -E "Playerbot: Using configuration file" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
                 # if any, print "Playerbot ok"
                 printf '%b' "[${G1:?}OK${N0:?}] Playerbot\n"
               else
@@ -4864,7 +4953,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
                 printf '%b' "[${GR:?}NO${N0:?}] Playerbot\n"
               fi
               # ahbot loaded and initialized
-              if grep -q -E "Initialize AuctionHouseBot..." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+              if grep -q -E "Initialize AuctionHouseBot..." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
                 # if any, print "AHbot ok"
                 printf '%b' "[${G1:?}OK${N0:?}] AHbot\n"
               else
@@ -5065,7 +5154,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       FILE="${FOLDER_INSTALL:?}/cmangos-script/README.md"
       if [ ! -f "$FILE" ]; then
         # not installed
-        sudo chown -R "$USER":"$GROUP" "$FOLDER_INSTALL"
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_INSTALL" &>/dev/null
         cd "$FOLDER_INSTALL" || exit
         git clone "${GITHUB_HELPER:?}"
       else
@@ -5073,7 +5162,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         read -t 5 -r -p "[YN] Update/Install Helper? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
-          sudo chown -R "$USER":"$GROUP" "$FOLDER_INSTALL"
+          sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_INSTALL" &>/dev/null
           printf '%b' "[${G1:?}OK${N0:?}] Checking your current release\n"
           sleep 1
           cd "$FOLDER_HELPER" || exit
@@ -5097,7 +5186,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             printf '%b' "[${G1:?}OK${N0:?}] Stripping executable on 'mangos.old'\n"
             sleep 1
             sudo chmod -x /usr/local/bin/mangos.old
-            sudo chown -R "$USER":"$GROUP" "$FOLDER_HELPER"
+            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_HELPER" &>/dev/null
             cd "$FOLDER_HELPER" || exit
             printf '%b' "[${G1:?}OK${N0:?}] Installing new release\n"
             sleep 1
@@ -5126,7 +5215,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           # create ms folder
           sudo mkdir /var/log/ms/ &>/dev/null
           # fix ownership
-          sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms
+          sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
           # create installed mark
           echo "CMaNGOS Script was installed at ${NOW:?}" >/var/log/ms/installed_ms
           sleep 1 && exit
@@ -5207,12 +5296,12 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
     if [[ "$PIDOFMANGOSD" -eq "1" ]]; then
       # if realm failed
-      if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+      if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Realmd.log &>/dev/null; then
         # if any, print "Realm failed or halted"
         printf '%b' "[${R1:?}0H${N0:?}] Realm failed or halted!\n"
       else
         # look for empty tables
-        if grep -q -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+        if grep -q -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log &>/dev/null; then
           # count empty inside log
           COUNT_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1 |
             grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." 2>&1)
@@ -5220,7 +5309,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           printf '%b' "[${Y1:?}0E${N0:?}] Realm: ${Y1:?}$COUNT_EMPTY${N0:?} Tables are empty, doesn't exist!\n"
         fi
         # look for error
-        if grep -q -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+        if grep -q -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Realmd.log &>/dev/null; then
           # count errors inside log
           COUNT_ERROR_REALM=$(grep -E -v ".*is empty*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1 |
             grep -c -E ".*ERROR*." 2>&1)
@@ -5236,24 +5325,24 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           printf '%b' "[${G1:?}OK${N0:?}] Realm: OK!\n"
         fi
         # this database (realmd) is out of date!
-        if grep -q -E "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+        if grep -q -E "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Realmd.log &>/dev/null; then
           printf '%b' "[${Y1:?}0D${N0:?}] Realm database is out of date!\n"
           printf '%b' "[${G0:?}1D${N0:?}] Menu: 'd' > Apply all updates [A]-[B]"
         fi
         # databases is missing or corrupt.
-        if grep -q -E "\sdatabase\sis\smissing\sor\scorrupt." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+        if grep -q -E "\sdatabase\sis\smissing\sor\scorrupt." "$FOLDER_CORE"/run/logs/Realmd.log &>/dev/null; then
           printf '%b' "[${R1:?}X0${N0:?}] Realm database is missing or corrupt!\n"
         fi
         # reinstall your (realmd) database
-        if grep -q -E "reinstall\syour|\sUnknown\sdatabase\s|Reinstall\syour\s[REALMD]\sdatabase\s" "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+        if grep -q -E "reinstall\syour|\sUnknown\sdatabase\s|Reinstall\syour\s[REALMD]\sdatabase\s" "$FOLDER_CORE"/run/logs/Realmd.log &>/dev/null; then
           printf '%b' "[${R1:?}X1${N0:?}] Reinstall your realm database!\n"
         fi
         # can't connect to local mysql through socket
-        if grep -q -E ".*Can't\sconnect\sto\slocal\sMySQL*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+        if grep -q -E ".*Can't\sconnect\sto\slocal\sMySQL*." "$FOLDER_CORE"/run/logs/Realmd.log &>/dev/null; then
           printf '%b' "[${R1:?}X2${N0:?}] Realm can't connect to local MySQL!\n"
         fi
         # your realmd.conf version indicates your conf file is out of date
-        if grep -q -E ".*Your\srealmd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Realmd.log 2>&1; then
+        if grep -q -E ".*Your\srealmd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Realmd.log &>/dev/null; then
           printf '%b' "[${R1:?}X3${N0:?}] realmd.conf is out of date!\n"
         fi
       fi
@@ -5261,12 +5350,12 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       # server.log ###############################################################
 
       # if world failed
-      if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+      if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
         # if any, print "World failed or halted"
         printf '%b' "[${R1:?}0H${N0:?}] World failed or halted!\n"
       else
         # look for empty tables
-        if grep -q -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+        if grep -q -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
           # count empty inside log
           COUNT_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "$FOLDER_CORE"/run/logs/Server.log 2>&1 |
             grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." 2>&1)
@@ -5274,7 +5363,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           printf '%b' "[${Y1:?}0E${N0:?}] World: ${Y1:?}$COUNT_EMPTY${N0:?} Tables are empty or doesn't exist!\n"
         fi
         # look for error
-        if grep -q -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+        if grep -q -E ".*ERROR*." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
           # count errors inside log
           COUNT_ERROR_SERVER=$(grep -E -v ".*is empty*." "$FOLDER_CORE"/run/logs/Server.log 2>&1 |
             grep -c -E ".*ERROR*." 2>&1)
@@ -5286,7 +5375,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           # if any, print "error"
           printf '%b' "[${R1:?}1E${N0:?}] World: ${R1:?}$COUNT_ERROR_SERVER${N0:?} Error! ${GR:?}${ERROR_RATE_SERVER:?}${N0:?}\n"
           # look for serious error
-          if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+          if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
             # count serious errors inside log
             COUNT_ERROR_SERIOUS=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log 2>&1)
             # if any, print "serious"
@@ -5297,36 +5386,36 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           printf '%b' "[${G1:?}OK${N0:?}] World OK!\n"
         fi
         # world failed
-        if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+        if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
           # if any, print "World failed"
           echo
           printf '%b' "$SERVER_LOG_FAILED"
           echo
         fi
         # this database (mangosd) is out of date!
-        if grep -q -E "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+        if grep -q -E "You\shave:\s-->" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
           printf '%b' "[${GR:?}0D${N0:?}] World database is out of date!\n"
           printf '%b' "[${GR:?}1D${N0:?}] Menu: 'd' > Apply all updates [A]-[B]"
         fi
         # databases is missing or corrupt.
-        if grep -q -E "\sdatabase\sis\smissing\sor\scorrupt." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+        if grep -q -E "\sdatabase\sis\smissing\sor\scorrupt." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
           printf '%b' "[${R1:?}X0${N0:?}] World database is missing or corrupt!\n"
         fi
         # reinstall your (mangosd) database
-        if grep -q -E "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+        if grep -q -E "reinstall\syour|Reinstall\syour\s[MANGOS]\sdatabase\s" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
           printf '%b' "[${R1:?}X1${N0:?}] Reinstall your world database!\n"
         fi
         # can't connect to local mysql through socket
-        if grep -q -E ".*Can't\sconnect\sto\slocal\sMySQL*." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+        if grep -q -E ".*Can't\sconnect\sto\slocal\sMySQL*." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
           printf '%b' "[${R1:?}X2${N0:?}] World can't connect to local MySQL!\n"
         fi
         # your mangosd.conf version indicates your conf file is out of date
-        if grep -q -E ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+        if grep -q -E ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
           printf '%b' "[${R1:?}X3${N0:?}] realmd.conf is out of date!\n"
         fi
 
         # Playerbot loaded
-        if grep -q -E "Playerbot: Using configuration file" "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+        if grep -q -E "Playerbot: Using configuration file" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
           # if any, print "Playerbot ok"
           printf '%b' "[${G1:?}OK${N0:?}] Playerbot\n"
         else
@@ -5334,7 +5423,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           printf '%b' "[${GR:?}NO${N0:?}] Playerbot\n"
         fi
         # ahbot loaded and initialized
-        if grep -q -E "Initialize AuctionHouseBot..." "$FOLDER_CORE"/run/logs/Server.log 2>&1; then
+        if grep -q -E "Initialize AuctionHouseBot..." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
           # if any, print "AHbot ok"
           printf '%b' "[${G1:?}OK${N0:?}] AHbot\n"
         else
@@ -5427,7 +5516,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
     "1")
 
       echo "Please wait"
-      sudo chown -R "$USER":"$GROUP" "$FOLDER_CORE"
+      sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_CORE" &>/dev/null
       # change directory, core
       cd "$FOLDER_CORE" || exit
       git checkout sql/create/db_create_mysql.sql 2>&1
@@ -5536,7 +5625,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
     "5")
 
       if [ ! -f "$FOLDER_CORE"/my_bool.patch ]; then
-        sudo chown -R "$USER":"$GROUP" "$FOLDER_CORE"
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_CORE" &>/dev/null
         cd "$FOLDER_CORE" || exit
         # download patch file
         wget https://raw.githubusercontent.com/Daedalus-code/cmangos-arm/master/arm_pi4.patch
