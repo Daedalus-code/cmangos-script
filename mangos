@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210903
-# 5.8.9.0
+# 5.8.4.3
 
 while :; do
 
@@ -840,7 +840,7 @@ ${N0:?}"
         printf '%b' "${GR:?}Please wait${N0:?}\n"
         # get remote information from transmission, create a file
         transmission-remote -t all -i >/var/log/ms/transmission_list 2>&1
-        # cat that file
+        # cat that file, update everytime
         P2P_INFO=$(cat /var/log/ms/transmission_list 2>&1)
         transmission-remote -l >/var/log/ms/transmission_torrent_list 2>&1
         # cat that file
@@ -858,6 +858,7 @@ ${N0:?}"
           echo
           read -r -p "Press Enter to continue" </dev/tty
           echo
+          break
         fi
 
         if [ -f /var/log/ms/vanilla_maps.zip.tmp ]; then
@@ -945,12 +946,6 @@ ${N0:?}"
             fi
 
             # id 1 (vanilla_maps)
-            # get download speed
-            P2P_DWNB_ID1=$(echo "$P2P_ID1" 2>&1 | grep -E "Download Speed: [0-9]+ kB/s" 2>&1 | awk '{ print $3 }' 2>&1 | xargs 2>&1)
-            P2P_DWNB_ID1=$(echo "$P2P_DWNB_ID1")
-            # get upload speed
-            P2P_UPLB_ID1=$(echo "$P2P_ID1" 2>&1 | grep -E "Upload Speed: [0-9]+ kB/s" 2>&1 | awk '{ print $3 }' 2>&1 | xargs 2>&1)
-            P2P_UPLB_ID1=$(echo "$P2P_UPLB_ID1 ")
             # get download stats
             P2P_DWNS_ID1=$(echo "$P2P_ID1" 2>&1 | grep "Downloaded: " 2>&1 | awk '{ print $2,$3 }' 2>&1 | xargs 2>&1)
             P2P_DWNS_ID1=$(echo "$P2P_DWNS_ID1 ")
@@ -965,12 +960,6 @@ ${N0:?}"
             P2P_STAT_ID1=$(echo "$P2P_STAT_ID1 ")
 
             # id 2 (tbc_maps)
-            # get download speed
-            P2P_DWNB_ID2=$(echo "$P2P_ID2" 2>&1 | grep -E "Download Speed: [0-9]+ kB/s" 2>&1 | awk '{ print $3 }' 2>&1 | xargs 2>&1)
-            P2P_DWNB_ID2=$(echo "$P2P_DWNB_ID2")
-            # get upload speed
-            P2P_UPLB_ID2=$(echo "$P2P_ID2" 2>&1 | grep -E "Upload Speed: [0-9]+ kB/s" 2>&1 | awk '{ print $3 }' 2>&1 | xargs 2>&1)
-            P2P_UPLB_ID2=$(echo "$P2P_UPLB_ID2 ")
             # get download stats
             P2P_DWNS_ID2=$(echo "$P2P_ID2" 2>&1 | grep "Downloaded: " 2>&1 | awk '{ print $2,$3 }' 2>&1 | xargs 2>&1)
             P2P_DWNS_ID2=$(echo "$P2P_DWNS_ID2 ")
@@ -985,12 +974,6 @@ ${N0:?}"
             P2P_STAT_ID2=$(echo "$P2P_STAT_ID2 ")
 
             # id 3 (wotlk_maps)
-            # get download speed
-            P2P_DWNB_ID3=$(echo "$P2P_ID3" 2>&1 | grep -E "Download Speed: [0-9]+ kB/s" 2>&1 | awk '{ print $3 }' 2>&1 | xargs 2>&1)
-            P2P_DWNB_ID3=$(echo "$P2P_DWNB_ID3")
-            # get upload speed
-            P2P_UPLB_ID3=$(echo "$P2P_ID3" 2>&1 | grep -E "Upload Speed: [0-9]+ kB/s" 2>&1 | awk '{ print $3 }' 2>&1 | xargs 2>&1)
-            P2P_UPLB_ID3=$(echo "$P2P_UPLB_ID3")
             # get download stats
             P2P_DWNS_ID3=$(echo "$P2P_ID3" 2>&1 | grep "Downloaded: " 2>&1 | awk '{ print $2,$3 }' 2>&1 | xargs 2>&1)
             P2P_DWNS_ID3=$(echo "$P2P_DWNS_ID3")
@@ -1003,26 +986,6 @@ ${N0:?}"
             # get status
             P2P_STAT_ID3=$(echo "$P2P_ID3" 2>&1 | grep "State" 2>&1 | awk '{ print $2,$3,$4 }' 2>&1 | xargs 2>&1)
             P2P_STAT_ID3=$(echo "$P2P_STAT_ID3")
-          fi
-
-          if [ -z "$P2P_DWNB_ID1" ]; then
-            P2P_DWNB_ID1="0"
-          fi
-          if [ -z "$P2P_DWNB_ID2" ]; then
-            P2P_DWNB_ID2="0"
-          fi
-          if [ -z "$P2P_DWNB_ID3" ]; then
-            P2P_DWNB_ID3="0"
-          fi
-
-          if [ -z "$P2P_UPLB_ID1" ]; then
-            P2P_UPLB_ID1="0"
-          fi
-          if [ -z "$P2P_UPLB_ID2" ]; then
-            P2P_UPLB_ID2="0"
-          fi
-          if [ -z "$P2P_UPLB_ID3" ]; then
-            P2P_UPLB_ID3="0"
           fi
 
           # transmission-daemon status
@@ -1040,21 +1003,16 @@ ${N0:?}"
             P2P_STAT_ID1="${GR:?} N/A${N0:?}"
             P2P_PROG_ID1="${GR:?} N/A${N0:?}"
             P2P_RATI_ID1="${GR:?} N/A${N0:?}"
-            P2P_DWNB_ID1="${GR:?} N/A${N0:?}"
-            P2P_DOWNLOAD="${GR:?}N/A${N0:?}"
-            P2P_UPLOAD="${GR:?}N/A${N0:?}"
             P2P_DWNS_ID2=""
             P2P_UPLS_ID2=""
             P2P_STAT_ID2=""
             P2P_PROG_ID2=""
             P2P_RATI_ID2=""
-            P2P_DWNB_ID2=""
             P2P_DWNS_ID3=""
             P2P_UPLS_ID3=""
             P2P_STAT_ID3=""
             P2P_PROG_ID3=""
             P2P_RATI_ID3=""
-            P2P_DWNB_ID1=""
             P2P_PEERS_SEEDINGTO_ID1=""
             P2P_PEERS_DOWN_LOAD_ID1=""
             P2P_PEERS_SEEDINGTO_ID2=""
@@ -1070,10 +1028,6 @@ ${N0:?}"
             SEED_TRANSMISSION="${G1:?}Online${N0:?}"
             INTRANET_SEED="${N0:?}${INTRANET:?}:9091${N0:?}"
             P2P_FILE_NAME="$P2P_AV$V_MAPS${GR:?},${N0:?} $P2P_AT$T_MAPS${GR:?},${N0:?} $P2P_AW$W_MAPS${N0:?}"
-            P2P_DOWNLOAD=$(echo "${P2P_DWNB_ID1:?}+${P2P_DWNB_ID2:?}+${P2P_DWNB_ID3:?}" 2>&1 | bc 2>&1)
-            P2P_UPLOAD=$(echo "${P2P_UPLB_ID1:?}+${P2P_UPLB_ID2:?}+${P2P_UPLB_ID3:?}" 2>&1 | bc 2>&1)
-            P2P_DOWNLOAD=$(echo "$P2P_DOWNLOAD kB/s" 2>&1)
-            P2P_UPLOAD=$(echo "$P2P_UPLOAD kB/s" 2>&1)
             SLASH=" "
 
             ;;
@@ -1111,6 +1065,7 @@ ${N0:?}"
         printf '%b' "${N0:?}   CMaNGOS${N0:?} - ${THEME_ALL:?}Expansion Maps ${N0:?}SeedBox
 
    SeedBox${G0:?}..:${N0:?} $SEED_TRANSMISSION
+   Load${G0:?}.....:${N0:?} ${GR:?}$LOAD${N0:?}
    Access${G0:?}...:${N0:?} $INTRANET_SEED
    Exp Maps${G0:?}.:${N0:?} $P2P_FILE_NAME
    Download${G0:?}.:${N0:?}$SPACE$P2P_DWNS_ID1$P2P_DWNS_ID2$P2P_DWNS_ID3
@@ -1119,8 +1074,6 @@ ${N0:?}"
    Progress${G0:?}.:${N0:?}$SPACE$P2P_PROG_ID1$P2P_PROG_ID2$P2P_PROG_ID3
    Ratio${G0:?}....:${N0:?}$SPACE$P2P_RATI_ID1$P2P_RATI_ID2$P2P_RATI_ID3
    Peers${G0:?}....:${G1:?}$SPACE${G0:?}${G1:?}$P2P_PEERS_CONNECTED_ID1${Y1:?}$P2P_PEERS_SEEDINGTO_ID1${G0:?}$P2P_PEERS_DOWN_LOAD_ID1$SLASH${G0:?}${G1:?}$P2P_PEERS_CONNECTED_ID2${Y1:?}$P2P_PEERS_SEEDINGTO_ID2${G0:?}$P2P_PEERS_DOWN_LOAD_ID2$SLASH${G0:?}${G1:?}$P2P_PEERS_CONNECTED_ID3${Y1:?}$P2P_PEERS_SEEDINGTO_ID3${G0:?}$P2P_PEERS_DOWN_LOAD_ID3${N0:?}
-   Download${G0:?}.:${N0:?} ${P2P_DOWNLOAD:?}
-   Upload${G0:?}...:${N0:?} ${P2P_UPLOAD:?}
 
    t $GR: ${THEME_TXT:?}Install${N0:?} - ${THEME_DSC:?}Setup Maps$N0
    u $GR: ${THEME_TXT:?}Remove${N0:?}  - ${THEME_DSC:?}Uninstall$N0
@@ -1217,7 +1170,7 @@ ${N0:?}"
             echo
             if [[ $REPLY =~ ^[Yy]$ ]]; then
               if [ -f /seedbox/"$R_MAPS_MOD".zip ]; then
-                printf '%b' "${GR:?}[YN] Redo $R_MAPS${GR:?}.zip?${N0:?} y/n "
+                printf '%b' "${GR:?}[YN] Redo Expansion.zip?${N0:?} y/n "
                 read -t 10 -r -p "" -n 1 -r -s
                 echo
                 if [[ $REPLY =~ ^[Yy]$ ]]; then
