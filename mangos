@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210903
-# 5.8.8.8
+# 5.8.9.0
 
 while :; do
 
@@ -1005,6 +1005,26 @@ ${N0:?}"
             P2P_STAT_ID3=$(echo "$P2P_STAT_ID3")
           fi
 
+          if [ -z "$P2P_DWNB_ID1" ]; then
+            P2P_DWNB_ID1="0"
+          fi
+          if [ -z "$P2P_DWNB_ID2" ]; then
+            P2P_DWNB_ID2="0"
+          fi
+          if [ -z "$P2P_DWNB_ID3" ]; then
+            P2P_DWNB_ID3="0"
+          fi
+
+          if [ -z "$P2P_UPLB_ID1" ]; then
+            P2P_UPLB_ID1="0"
+          fi
+          if [ -z "$P2P_UPLB_ID2" ]; then
+            P2P_UPLB_ID2="0"
+          fi
+          if [ -z "$P2P_UPLB_ID3" ]; then
+            P2P_UPLB_ID3="0"
+          fi
+
           # transmission-daemon status
           case "$(pidof transmission-daemon 2>&1 | wc -w 2>&1)" in
           "0")
@@ -1021,6 +1041,8 @@ ${N0:?}"
             P2P_PROG_ID1="${GR:?} N/A${N0:?}"
             P2P_RATI_ID1="${GR:?} N/A${N0:?}"
             P2P_DWNB_ID1="${GR:?} N/A${N0:?}"
+            P2P_DOWNLOAD="${GR:?}N/A${N0:?}"
+            P2P_UPLOAD="${GR:?}N/A${N0:?}"
             P2P_DWNS_ID2=""
             P2P_UPLS_ID2=""
             P2P_STAT_ID2=""
@@ -1048,6 +1070,10 @@ ${N0:?}"
             SEED_TRANSMISSION="${G1:?}Online${N0:?}"
             INTRANET_SEED="${N0:?}${INTRANET:?}:9091${N0:?}"
             P2P_FILE_NAME="$P2P_AV$V_MAPS${GR:?},${N0:?} $P2P_AT$T_MAPS${GR:?},${N0:?} $P2P_AW$W_MAPS${N0:?}"
+            P2P_DOWNLOAD=$(echo "${P2P_DWNB_ID1:?}+${P2P_DWNB_ID2:?}+${P2P_DWNB_ID3:?}" 2>&1 | bc 2>&1)
+            P2P_UPLOAD=$(echo "${P2P_UPLB_ID1:?}+${P2P_UPLB_ID2:?}+${P2P_UPLB_ID3:?}" 2>&1 | bc 2>&1)
+            P2P_DOWNLOAD=$(echo "$P2P_DOWNLOAD kB/s" 2>&1)
+            P2P_UPLOAD=$(echo "$P2P_UPLOAD kB/s" 2>&1)
             SLASH=" "
 
             ;;
@@ -1079,30 +1105,6 @@ ${N0:?}"
           SPACE=""
         fi
 
-        if [ -z "$P2P_DWNB_ID1" ]; then
-          P2P_DWNB_ID1="0"
-        fi
-        if [ -z "$P2P_DWNB_ID2" ]; then
-          P2P_DWNB_ID2="0"
-        fi
-        if [ -z "$P2P_DWNB_ID3" ]; then
-          P2P_DWNB_ID3="0"
-        fi
-
-        if [ -z "$P2P_UPLB_ID1" ]; then
-          P2P_UPLB_ID1="0"
-        fi
-        if [ -z "$P2P_UPLB_ID2" ]; then
-          P2P_UPLB_ID2="0"
-        fi
-        if [ -z "$P2P_UPLB_ID3" ]; then
-          P2P_UPLB_ID3="0"
-        fi
-
-        # bandwith
-        P2P_DOWNLOAD=$(echo "${P2P_DWNB_ID1:?}+${P2P_DWNB_ID2:?}+${P2P_DWNB_ID3:?}" | bc 2>&1)
-        P2P_UPLOAD=$(echo "${P2P_UPLB_ID1:?}+${P2P_UPLB_ID2:?}+${P2P_UPLB_ID3:?}" | bc 2>&1)
-
         # seedbox menu
         clear
         echo
@@ -1117,8 +1119,8 @@ ${N0:?}"
    Progress${G0:?}.:${N0:?}$SPACE$P2P_PROG_ID1$P2P_PROG_ID2$P2P_PROG_ID3
    Ratio${G0:?}....:${N0:?}$SPACE$P2P_RATI_ID1$P2P_RATI_ID2$P2P_RATI_ID3
    Peers${G0:?}....:${G1:?}$SPACE${G0:?}${G1:?}$P2P_PEERS_CONNECTED_ID1${Y1:?}$P2P_PEERS_SEEDINGTO_ID1${G0:?}$P2P_PEERS_DOWN_LOAD_ID1$SLASH${G0:?}${G1:?}$P2P_PEERS_CONNECTED_ID2${Y1:?}$P2P_PEERS_SEEDINGTO_ID2${G0:?}$P2P_PEERS_DOWN_LOAD_ID2$SLASH${G0:?}${G1:?}$P2P_PEERS_CONNECTED_ID3${Y1:?}$P2P_PEERS_SEEDINGTO_ID3${G0:?}$P2P_PEERS_DOWN_LOAD_ID3${N0:?}
-   Download${G0:?}.:${N0:?} ${P2P_DOWNLOAD:?} kB/s
-   Upload${G0:?}...:${N0:?} ${P2P_UPLOAD:?} kB/s
+   Download${G0:?}.:${N0:?} ${P2P_DOWNLOAD:?}
+   Upload${G0:?}...:${N0:?} ${P2P_UPLOAD:?}
 
    t $GR: ${THEME_TXT:?}Install${N0:?} - ${THEME_DSC:?}Setup Maps$N0
    u $GR: ${THEME_TXT:?}Remove${N0:?}  - ${THEME_DSC:?}Uninstall$N0
