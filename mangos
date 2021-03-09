@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210903
-# 5.8.5.8
+# 5.8.6.4
 
 while :; do
 
@@ -947,8 +947,10 @@ ${N0:?}"
             # id 1 (vanilla_maps)
             # get download speed
             P2P_DWNB_ID1=$(echo "$P2P_ID1" 2>&1 | grep -E "Download Speed: [0-9]+ kB/s" | awk '{ print $3 }' 2>&1 | xargs 2>&1)
+            P2P_DWNB_ID1=$(echo "$P2P_DWNB_ID1 ")
             # get upload speed
             P2P_UPLB_ID1=$(echo "$P2P_ID1" 2>&1 | grep -E "Upload Speed: [0-9]+ kB/s" | awk '{ print $3 }' 2>&1 | xargs 2>&1)
+            P2P_UPLB_ID1=$(echo "$P2P_UPLB_ID1 ")
             # get download stats
             P2P_DWNS_ID1=$(echo "$P2P_ID1" 2>&1 | grep "Downloaded: " 2>&1 | awk '{ print $2,$3 }' 2>&1 | xargs 2>&1)
             P2P_DWNS_ID1=$(echo "$P2P_DWNS_ID1 ")
@@ -965,8 +967,10 @@ ${N0:?}"
             # id 2 (tbc_maps)
             # get download speed
             P2P_DWNB_ID2=$(echo "$P2P_ID2" 2>&1 | grep -E "Download Speed: [0-9]+ kB/s" | awk '{ print $3 }' 2>&1 | xargs 2>&1)
+            P2P_DWNB_ID2=$(echo "$P2P_DWNB_ID2 ")
             # get upload speed
             P2P_UPLB_ID2=$(echo "$P2P_ID2" 2>&1 | grep -E "Upload Speed: [0-9]+ kB/s" | awk '{ print $3 }' 2>&1 | xargs 2>&1)
+            P2P_UPLB_ID2=$(echo "$P2P_UPLB_ID2 ")
             # get download stats
             P2P_DWNS_ID2=$(echo "$P2P_ID2" 2>&1 | grep "Downloaded: " 2>&1 | awk '{ print $2,$3 }' 2>&1 | xargs 2>&1)
             P2P_DWNS_ID2=$(echo "$P2P_DWNS_ID2 ")
@@ -983,8 +987,10 @@ ${N0:?}"
             # id 3 (wotlk_maps)
             # get download speed
             P2P_DWNB_ID3=$(echo "$P2P_ID3" 2>&1 | grep -E "Download Speed: [0-9]+ kB/s" | awk '{ print $3 }' 2>&1 | xargs 2>&1)
+            P2P_DWNB_ID3=$(echo "$P2P_DWNB_ID3 ")
             # get upload speed
             P2P_UPLB_ID3=$(echo "$P2P_ID3" 2>&1 | grep -E "Upload Speed: [0-9]+ kB/s" | awk '{ print $3 }' 2>&1 | xargs 2>&1)
+            P2P_UPLB_ID3=$(echo "$P2P_UPLB_ID3 ")
             # get download stats
             P2P_DWNS_ID3=$(echo "$P2P_ID3" 2>&1 | grep "Downloaded: " 2>&1 | awk '{ print $2,$3 }' 2>&1 | xargs 2>&1)
             P2P_DWNS_ID3=$(echo "$P2P_DWNS_ID3")
