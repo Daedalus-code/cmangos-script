@@ -946,10 +946,10 @@ ${N0:?}"
 
             # id 1 (vanilla_maps)
             # get download speed
-            P2P_DWNB_ID1=$(echo "$P2P_ID1" 2>&1 | grep -E "Download Speed: [0-9]+ kB/s" | awk '{ print $3 }' 2>&1 | xargs 2>&1)
-            P2P_DWNB_ID1=$(echo "$P2P_DWNB_ID1 ")
+            P2P_DWNB_ID1=$(echo "$P2P_ID1" 2>&1 | grep -E "Download Speed: [0-9]+ kB/s" 2>&1 | awk '{ print $3 }' 2>&1 | xargs 2>&1)
+            P2P_DWNB_ID1=$(echo "$P2P_DWNB_ID1")
             # get upload speed
-            P2P_UPLB_ID1=$(echo "$P2P_ID1" 2>&1 | grep -E "Upload Speed: [0-9]+ kB/s" | awk '{ print $3 }' 2>&1 | xargs 2>&1)
+            P2P_UPLB_ID1=$(echo "$P2P_ID1" 2>&1 | grep -E "Upload Speed: [0-9]+ kB/s" 2>&1 | awk '{ print $3 }' 2>&1 | xargs 2>&1)
             P2P_UPLB_ID1=$(echo "$P2P_UPLB_ID1 ")
             # get download stats
             P2P_DWNS_ID1=$(echo "$P2P_ID1" 2>&1 | grep "Downloaded: " 2>&1 | awk '{ print $2,$3 }' 2>&1 | xargs 2>&1)
@@ -958,7 +958,7 @@ ${N0:?}"
             P2P_UPLS_ID1=$(echo "$P2P_ID1" 2>&1 | grep "Uploaded: " 2>&1 | awk '{ print $2,$3 }' 2>&1 | xargs 2>&1)
             P2P_UPLS_ID1=$(echo "$P2P_UPLS_ID1 ")
             # get ratio
-            P2P_RATI_ID1=$(echo "$P2P_ID1" 2>&1 | grep "Ratio" | grep -v "Ratio Limit:" | awk '{ print $2 }' 2>&1)
+            P2P_RATI_ID1=$(echo "$P2P_ID1" 2>&1 | grep "Ratio" 2>&1 | grep -v "Ratio Limit:" 2>&1 | awk '{ print $2 }' 2>&1)
             P2P_RATI_ID1=$(echo "$P2P_RATI_ID1 ")
             # get status
             P2P_STAT_ID1=$(echo "$P2P_ID1" 2>&1 | grep "State" 2>&1 | awk '{ print $2,$3,$4 }' 2>&1 | xargs 2>&1)
@@ -966,10 +966,10 @@ ${N0:?}"
 
             # id 2 (tbc_maps)
             # get download speed
-            P2P_DWNB_ID2=$(echo "$P2P_ID2" 2>&1 | grep -E "Download Speed: [0-9]+ kB/s" | awk '{ print $3 }' 2>&1 | xargs 2>&1)
-            P2P_DWNB_ID2=$(echo "$P2P_DWNB_ID2 ")
+            P2P_DWNB_ID2=$(echo "$P2P_ID2" 2>&1 | grep -E "Download Speed: [0-9]+ kB/s" 2>&1 | awk '{ print $3 }' 2>&1 | xargs 2>&1)
+            P2P_DWNB_ID2=$(echo "$P2P_DWNB_ID2")
             # get upload speed
-            P2P_UPLB_ID2=$(echo "$P2P_ID2" 2>&1 | grep -E "Upload Speed: [0-9]+ kB/s" | awk '{ print $3 }' 2>&1 | xargs 2>&1)
+            P2P_UPLB_ID2=$(echo "$P2P_ID2" 2>&1 | grep -E "Upload Speed: [0-9]+ kB/s" 2>&1 | awk '{ print $3 }' 2>&1 | xargs 2>&1)
             P2P_UPLB_ID2=$(echo "$P2P_UPLB_ID2 ")
             # get download stats
             P2P_DWNS_ID2=$(echo "$P2P_ID2" 2>&1 | grep "Downloaded: " 2>&1 | awk '{ print $2,$3 }' 2>&1 | xargs 2>&1)
@@ -978,7 +978,7 @@ ${N0:?}"
             P2P_UPLS_ID2=$(echo "$P2P_ID2" 2>&1 | grep "Uploaded: " 2>&1 | awk '{ print $2,$3 }' 2>&1 | xargs 2>&1)
             P2P_UPLS_ID2=$(echo "$P2P_UPLS_ID2 ")
             # get ratio
-            P2P_RATI_ID2=$(echo "$P2P_ID2" 2>&1 | grep "Ratio" | grep -v "Ratio Limit:" | awk '{ print $2 }' 2>&1)
+            P2P_RATI_ID2=$(echo "$P2P_ID2" 2>&1 | grep "Ratio" 2>&1 | grep -v "Ratio Limit:" 2>&1 | awk '{ print $2 }' 2>&1)
             P2P_RATI_ID2=$(echo "$P2P_RATI_ID2 ")
             # get status
             P2P_STAT_ID2=$(echo "$P2P_ID2" 2>&1 | grep "State" 2>&1 | awk '{ print $2,$3,$4 }' 2>&1 | xargs 2>&1)
@@ -986,11 +986,11 @@ ${N0:?}"
 
             # id 3 (wotlk_maps)
             # get download speed
-            P2P_DWNB_ID3=$(echo "$P2P_ID3" 2>&1 | grep -E "Download Speed: [0-9]+ kB/s" | awk '{ print $3 }' 2>&1 | xargs 2>&1)
-            P2P_DWNB_ID3=$(echo "$P2P_DWNB_ID3 ")
+            P2P_DWNB_ID3=$(echo "$P2P_ID3" 2>&1 | grep -E "Download Speed: [0-9]+ kB/s" 2>&1 | awk '{ print $3 }' 2>&1 | xargs 2>&1)
+            P2P_DWNB_ID3=$(echo "$P2P_DWNB_ID3")
             # get upload speed
-            P2P_UPLB_ID3=$(echo "$P2P_ID3" 2>&1 | grep -E "Upload Speed: [0-9]+ kB/s" | awk '{ print $3 }' 2>&1 | xargs 2>&1)
-            P2P_UPLB_ID3=$(echo "$P2P_UPLB_ID3 ")
+            P2P_UPLB_ID3=$(echo "$P2P_ID3" 2>&1 | grep -E "Upload Speed: [0-9]+ kB/s" 2>&1 | awk '{ print $3 }' 2>&1 | xargs 2>&1)
+            P2P_UPLB_ID3=$(echo "$P2P_UPLB_ID3")
             # get download stats
             P2P_DWNS_ID3=$(echo "$P2P_ID3" 2>&1 | grep "Downloaded: " 2>&1 | awk '{ print $2,$3 }' 2>&1 | xargs 2>&1)
             P2P_DWNS_ID3=$(echo "$P2P_DWNS_ID3")
@@ -998,7 +998,7 @@ ${N0:?}"
             P2P_UPLS_ID3=$(echo "$P2P_ID3" 2>&1 | grep "Uploaded: " 2>&1 | awk '{ print $2,$3 }' 2>&1 | xargs 2>&1)
             P2P_UPLS_ID3=$(echo "$P2P_UPLS_ID3")
             # get ratio
-            P2P_RATI_ID3=$(echo "$P2P_ID3" 2>&1 | grep "Ratio" | grep -v "Ratio Limit:" | awk '{ print $2 }' 2>&1)
+            P2P_RATI_ID3=$(echo "$P2P_ID3" 2>&1 | grep "Ratio" 2>&1 | grep -v "Ratio Limit:" 2>&1 | awk '{ print $2 }' 2>&1)
             P2P_RATI_ID3=$(echo "$P2P_RATI_ID3")
             # get status
             P2P_STAT_ID3=$(echo "$P2P_ID3" 2>&1 | grep "State" 2>&1 | awk '{ print $2,$3,$4 }' 2>&1 | xargs 2>&1)
