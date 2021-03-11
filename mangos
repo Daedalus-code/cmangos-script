@@ -803,7 +803,7 @@ ${PASS_NC:?}
    * Download latest Core/Database updates
    * Upgrade Database with latest fixes
    * Compile CMaNGOS with latest fixes
-   * Download/Import Maps: ${G0:?}Vanilla${N0:?},${G0:?} TBC${N0:?}, ${GR:?}WOTLK${N0:?}
+   * Download/Import Maps: ${G0:?}Vanilla${N0:?},${G0:?} TBC${N0:?}, ${GR:?}WoTLK${N0:?}
    * Setup RA for account tools
    * Profit
 
@@ -832,7 +832,7 @@ ${N0:?}"
           T_MAPS="TBC"
         fi
         if [ -f /seedbox/wotlk_maps.zip ]; then
-          W_MAPS="${G1:?}Wotlk${N0:?}"
+          W_MAPS="${G1:?}WoTLK${N0:?}"
         else
           W_MAPS="Wotlk"
         fi
@@ -1307,9 +1307,9 @@ EOF
           TITLE="Download/Import Maps"
           MENU="Choose one options"
 
-          OPTIONS=(1 "vanilla_maps.zip"
-            2 "tbc_maps.zip"
-            3 "wotlk_maps.zip")
+          OPTIONS=(1 "Vanilla_Maps.zip"
+            2 "TBC_Maps.zip"
+            3 "WoTLK_Maps.zip")
 
           CHOICE=$(dialog --clear \
             --backtitle "$BACKTITLE" \
@@ -1459,9 +1459,9 @@ EOF
             TITLE="Import Downloaded Maps"
             MENU="Choose one options"
 
-            OPTIONS=(1 "vanilla_maps.zip"
-              2 "tbc_maps.zip"
-              3 "wotlk_maps.zip")
+            OPTIONS=(1 "Vanilla_Maps.zip"
+              2 "TBC_Maps.zip"
+              3 "WoTLK_Maps.zip")
 
             CHOICE=$(dialog --clear \
               --backtitle "$BACKTITLE" \
@@ -1532,7 +1532,7 @@ EOF
 
               ;;
 
-              ### Wotlk Maps ###################################################
+              ### WoTLK Maps ###################################################
 
             3)
 
