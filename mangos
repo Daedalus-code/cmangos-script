@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211103
-# 5.8.6.0
+# 5.8.6.4
 
 while :; do
 
@@ -2361,7 +2361,7 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
         if [[ "${SYS_CORES:?}" -ge "1" ]]; then
           # report count
           CORES_COUNT=$(printf '%b' "${GR:?}$KERNAL_RE${N0:?}
-${N0:?}This system has ${G1:?}$SYS_CORES${N0:?} Core(s)!
+${N0:?}This system has ${G1:?}$SYS_CORES${N0:?} Core(s) !
 ${GR:?}$CPU_MODEL${N0:?}")
         else
           CORES_COUNT=""
@@ -2495,12 +2495,16 @@ Compiling using multiple cores:
             printf '%b' "${R1:?}[  0%] USE AT YOUR OWN RISK${Y1:?} !\n"
             printf '%b' "${Y1:?}[  0%] ENTER CORE AMOUNT: ${Y1:?}"
             read -r NOLIMIT
+            if [ -z "$NOLIMIT" ]; then
+              # run 1 if empty
+              NOLIMIT="1"
+            fi
             CORES=("$NOLIMIT")
-            printf '%b' "${R1:?}[  0%] BUILDING WITH ${Y1:?}${CORES[0]} ${R1:?}CORES ${Y1:?}!${N0:?}\n"
+            printf '%b' "${R1:?}[  0%] BUILDING WITH ${Y1:?}${CORES[0]} ${R1:?}CORE(S) ${Y1:?}!${N0:?}\n"
             CORES_BUILD=$(echo "$NOLIMIT")
             # start counting (seconds)
             START="$SECONDS"
-            echo "[  0%] Good luck!"
+            echo "[  0%] Build with $NOLIMIT Core(s), Good luck!"
             make -j"$NOLIMIT" # custom n cores
 
             ;;
@@ -2963,7 +2967,7 @@ Check if correct information, or just restart server."
         if [[ "${SYS_CORES:?}" -ge "1" ]]; then
           # report count
           CORES_COUNT=$(printf '%b' "${GR:?}$KERNAL_RE${N0:?}
-${N0:?}This system has ${G1:?}$SYS_CORES${N0:?} Core(s)!
+${N0:?}This system has ${G1:?}$SYS_CORES${N0:?} Core(s) !
 ${GR:?}$CPU_MODEL${N0:?}")
         else
           CORES_COUNT=""
@@ -3308,8 +3312,8 @@ Select install operation"
 
         sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
         echo
-        printf '%b' "[${G1:?}OK${N0:?}] "
-        read -r -p "Press Enter to continue" </dev/tty
+        printf '%b' "[${G1:?}OK${N0:?}] Press Enter to continue"
+        read -r -p "" </dev/tty
         echo
       fi
 
