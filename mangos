@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20210903
-# 5.8.4.3
+# V20211103
+# 5.8.6.0
 
 while :; do
 
@@ -2361,7 +2361,7 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
         if [[ "${SYS_CORES:?}" -ge "1" ]]; then
           # report count
           CORES_COUNT=$(printf '%b' "${GR:?}$KERNAL_RE${N0:?}
-${N0:?}This system has ${G1:?}$SYS_CORES${N0:?} Cores!
+${N0:?}This system has ${G1:?}$SYS_CORES${N0:?} Core(s)!
 ${GR:?}$CPU_MODEL${N0:?}")
         else
           CORES_COUNT=""
@@ -2487,6 +2487,23 @@ Compiling using multiple cores:
 
           read -r -n1 -s
           case "$REPLY" in
+
+          # force build, use at your own risk!
+
+          "F")
+
+            printf '%b' "${R1:?}[  0%] USE AT YOUR OWN RISK${Y1:?} !\n"
+            printf '%b' "${Y1:?}[  0%] ENTER CORE AMOUNT: ${Y1:?}"
+            read -r NOLIMIT
+            CORES=("$NOLIMIT")
+            printf '%b' "${R1:?}[  0%] BUILDING WITH ${Y1:?}${CORES[0]} ${R1:?}CORES ${Y1:?}!${N0:?}\n"
+            CORES_BUILD=$(echo "$NOLIMIT")
+            # start counting (seconds)
+            START="$SECONDS"
+            echo "[  0%] Good luck!"
+            make -j"$NOLIMIT" # custom n cores
+
+            ;;
 
           "c")
 
@@ -2946,7 +2963,7 @@ Check if correct information, or just restart server."
         if [[ "${SYS_CORES:?}" -ge "1" ]]; then
           # report count
           CORES_COUNT=$(printf '%b' "${GR:?}$KERNAL_RE${N0:?}
-${N0:?}This system has ${G1:?}$SYS_CORES${N0:?} Cores!
+${N0:?}This system has ${G1:?}$SYS_CORES${N0:?} Core(s)!
 ${GR:?}$CPU_MODEL${N0:?}")
         else
           CORES_COUNT=""
