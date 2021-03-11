@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211103
-# 5.8.6.4
+# 5.8.6.8
 
 while :; do
 
@@ -2504,7 +2504,7 @@ Compiling using multiple cores:
             CORES_BUILD=$(echo "$NOLIMIT")
             # start counting (seconds)
             START="$SECONDS"
-            echo "[  0%] Build with $NOLIMIT Core(s), Good luck!"
+            echo "[  0%] Build target with $NOLIMIT Core(s), Good luck!"
             make -j"$NOLIMIT" # custom n cores
 
             ;;
@@ -2762,11 +2762,10 @@ Select install operation"
             sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
             # create installed mark
             echo "Core was installed at ${NOW:?}" >/var/log/ms/installed_core
-
             echo "make install"
-
             cd "$FOLDER_BUILD" || exit
-            sudo make install
+            sudo make install 2>&1 | sudo tee /var/log/ms/build &>/dev/null
+            cat /var/log/ms/build 2>&1
 
             ;;
 
@@ -2778,11 +2777,10 @@ Select install operation"
             sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
             # create installed mark
             echo "Core was installed at ${NOW:?} with backup" >/var/log/ms/installed_core
-
             echo "checkinstall"
-
             cd "$FOLDER_BUILD" || exit
-            sudo checkinstall
+            sudo checkinstall 2>&1 | sudo tee /var/log/ms/build &>/dev/null
+            cat /var/log/ms/build 2>&1
 
             ;;
 
@@ -2792,6 +2790,12 @@ Select install operation"
             ;;
 
           esac
+        fi
+
+        if grep -q -o "100" /var/log/ms/build &>/dev/null; then
+          BUILD_BUTTON="${G1:?}OK${N0:?}"
+        else
+          BUILD_BUTTON="${R1:?}!!${N0:?}"
         fi
 
         sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
