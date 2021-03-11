@@ -834,7 +834,7 @@ ${N0:?}"
         if [ -f /seedbox/wotlk_maps.zip ]; then
           W_MAPS="${G1:?}WoTLK${N0:?}"
         else
-          W_MAPS="Wotlk"
+          W_MAPS="WoTLK"
         fi
 
         printf '%b' "${GR:?}Please wait${N0:?}\n"
