@@ -1393,8 +1393,6 @@ EOF
 
           "1")
 
-            # create maps.tmp file
-            touch /var/log/ms/classic_maps.zip.tmp
             R_MAPS="${G1:?}classic_maps.zip${N0:?}"
             R_MAPS_MOD="classic_maps"
             # add magnet link: classic_maps.zip.torrent
@@ -1402,13 +1400,13 @@ EOF
               transmission-remote -a "magnet:?xt=urn:btih:53c783abd984eacb990e18f2b6a783a3086d09fc&dn=classic%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
             }
             p2p_install_option
+            # create maps.tmp file
+            touch /var/log/ms/classic_maps.zip.tmp
 
             ;;
 
           "2")
 
-            # create maps.tmp file
-            touch /var/log/ms/tbc_maps.zip.tmp
             R_MAPS="${G1:?}tbc_maps.zip${N0:?}"
             R_MAPS_MOD="tbc_maps"
             # add magnet link: tbc_maps.zip.torrent
@@ -1416,13 +1414,13 @@ EOF
               transmission-remote -a "magnet:?xt=urn:btih:0edafa830fd9fe25234285c33f67a0c263e0c90d&dn=tbc%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
             }
             p2p_install_option
+            # create maps.tmp file
+            touch /var/log/ms/tbc_maps.zip.tmp
 
             ;;
 
           "3")
 
-            # create maps.tmp file
-            touch /var/log/ms/wotlk_maps.zip.tmp
             R_MAPS="${G1:?}wotlk_maps.zip${N0:?}"
             R_MAPS_MOD="wotlk_maps"
             add magnet link: wotlk_maps.zip.torrent
@@ -1430,6 +1428,8 @@ EOF
               transmission-remote -a "magnet:?xt=urn:btih:e4f2e2989313f71a13400da93bde4ff577d0b255&dn=wotlk%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
             }
             p2p_install_option
+            # create maps.tmp file
+            touch /var/log/ms/wotlk_maps.zip.tmp
 
             ;;
 
