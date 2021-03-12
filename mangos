@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211203
-# 5.9.0.7
+# 5.9.0.8
 
 while :; do
 
@@ -253,14 +253,15 @@ while :; do
   fi
 
   # installed repos
-  CORE_HEAD=$(grep -o "Head:.*" /var/log/ms/installed_core 2>&1 | awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)
-  DATA_HEAD=$(grep -o "Head:.*" /var/log/ms/installed_db 2>&1 | awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)
+  SERVER_TYPE_INSTALLED=$(echo "$SERVER_TYPE_CMAKE")
+  CORE_HEAD=$(grep -o "Head:.*" /var/log/ms/installed_core_"$SERVER_TYPE_INSTALLED" 2>&1 | awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)
+  DATA_HEAD=$(grep -o "Head:.*" /var/log/ms/installed_db_"$SERVER_TYPE_INSTALLED" 2>&1 | awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)
   TOOL_HEAD=$(grep -o "Head:.*" /var/log/ms/installed_ms 2>&1 | awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)
 
-  if [ "$(cat /var/log/ms/installed_core 2>&1 | wc -l 2>&1)" -eq "0" ]; then
+  if [ "$(cat /var/log/ms/installed_core_"$SERVER_TYPE_INSTALLED" 2>&1 | wc -l 2>&1)" -eq "0" ]; then
     CORE_HEAD="0000000"
   fi
-  if [ "$(cat /var/log/ms/installed_db 2>&1 | wc -l 2>&1)" -eq "0" ]; then
+  if [ "$(cat /var/log/ms/installed_db_"$SERVER_TYPE_INSTALLED" 2>&1 | wc -l 2>&1)" -eq "0" ]; then
     DATA_HEAD="0000000"
   fi
   if [ "$(cat /var/log/ms/installed_ms 2>&1 | wc -l 2>&1)" -eq "0" ]; then
@@ -2015,19 +2016,19 @@ $RA_TIP"
   "c")
 
     # updated and installed
-    FILE_CORE="/var/log/ms/installed_core"
+    FILE_CORE="/var/log/ms/installed_core_$SERVER_TYPE_INSTALLED"
     if [ -f "$FILE_CORE" ]; then
       OK_CORE="[${G1:?}OK${N0:?}]"
     fi
-    FILE_CORE="/var/log/ms/installed_core"
+    FILE_CORE="/var/log/ms/installed_core_$SERVER_TYPE_INSTALLED"
     if [ ! -f "$FILE_CORE" ]; then
       OK_CORE="[${Y1:?}ok${N0:?}]"
     fi
-    FILE_DB="/var/log/ms/installed_db"
+    FILE_DB="/var/log/ms/installed_db_$SERVER_TYPE_INSTALLED"
     if [ -f "$FILE_DB" ]; then
       OK_DB="[${G1:?}OK${N0:?}]"
     fi
-    FILE_DB="/var/log/ms/installed_db"
+    FILE_DB="/var/log/ms/installed_db_$SERVER_TYPE_INSTALLED"
     if [ ! -f "$FILE_DB" ]; then
       OK_DB="[${Y1:?}ok${N0:?}]"
     fi
@@ -2047,7 +2048,7 @@ $RA_TIP"
       echo -ne '[!!] Please wait, looking for core directory!\r'
       sleep 2
       # remove old file
-      rm /var/log/ms/installed_core &>/dev/null
+      rm /var/log/ms/installed_core_"$SERVER_TYPE_INSTALLED" &>/dev/null
       # fresh install?
       DOWN_CORE=$(echo -e "\033[5m?\033[0m" 2>&1)
       printf '%b' "[YN]${GR:?} ${N0:?}(${GR:?}${UND:?}0000000${DEF:?}${N0:?})${GR:?} Download Core$DOWN_CORE y/n ${GR:?}skip in 5s ${N0:?}"
@@ -2083,7 +2084,7 @@ $RA_TIP"
         [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
         git merge origin/master; then
         # remove old file
-        rm /var/log/ms/installed_core &>/dev/null
+        rm /var/log/ms/installed_core_"$SERVER_TYPE_INSTALLED" &>/dev/null
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         LATEST_HEAD=$(git rev-parse --short HEAD)
         printf '%b' "[${G1:?}NEW${N0:?}] (${G1:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) ${G1:?}${UND:?}New Updates For Core${DEF:?}${N0:?}! - $LATEST_DATE
@@ -2104,7 +2105,7 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
       echo -ne '[!!] Please wait, looking for database directory!\r'
       sleep 2
       # remove old file
-      rm /var/log/ms/installed_db &>/dev/null
+      rm /var/log/ms/installed_db_"$SERVER_TYPE_INSTALLED" &>/dev/null
       # fresh install?
       DOWN_DB=$(echo -e "\033[5m?\033[0m" 2>&1)
       printf '%b' "[YN]${GR:?} ${N0:?}(${GR:?}${UND:?}0000000${DEF:?}${N0:?})${GR:?} Download Database$DOWN_DB y/n ${GR:?}skip in 5s ${N0:?}"
@@ -2145,7 +2146,7 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
         [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
         git merge origin/master; then
         # remove old file
-        rm /var/log/ms/installed_db &>/dev/null
+        rm /var/log/ms/installed_db_"$SERVER_TYPE_INSTALLED" &>/dev/null
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         LATEST_HEAD=$(git rev-parse --short HEAD)
         printf '%b' "[${G1:?}NEW${N0:?}] (${G1:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) ${G1:?}${UND:?}New Updates For Database${DEF:?}${N0:?}! - $LATEST_DATE
@@ -2470,7 +2471,7 @@ ${GR:?}$CPU_MODEL${N0:?}")
             # create installed mark
             cd "$FOLDER_CORE" || exit
             LATEST_HEAD=$(git rev-parse --short HEAD)
-            echo "Core was installed at ${NOW:?} Head: $LATEST_HEAD" >/var/log/ms/installed_core
+            echo "Core was installed at ${NOW:?} Head: $LATEST_HEAD" >/var/log/ms/installed_core_"$SERVER_TYPE_INSTALLED"
             BUILD_BUTTON="${G1:?}OK${N0:?}"
           else
             echo
@@ -2482,7 +2483,7 @@ ${GR:?}$CPU_MODEL${N0:?}")
             echo
             printf '%b' "Build time: ${R1:?}$TIMER${N0:?} with ${R1:?}$CORES_BUILD${N0:?} Core(s)\n"
             # remove old file
-            rm /var/log/ms/installed_core &>/dev/null
+            rm /var/log/ms/installed_core_"$SERVER_TYPE_INSTALLED" &>/dev/null
             BUILD_BUTTON="${R1:?}!!${N0:?}"
           fi
         else
@@ -2785,7 +2786,7 @@ Select install operation"
             # create installed mark
             cd "$FOLDER_CORE" || exit
             LATEST_HEAD=$(git rev-parse --short HEAD)
-            echo "Core was installed at ${NOW:?} Head: $LATEST_HEAD" >/var/log/ms/installed_core
+            echo "Core was installed at ${NOW:?} Head: $LATEST_HEAD" >/var/log/ms/installed_core_"$SERVER_TYPE_INSTALLED"
             echo "make install"
             cd "$FOLDER_BUILD" || exit
             sudo make install 2>&1 | sudo tee /var/log/ms/build &>/dev/null
@@ -2802,7 +2803,7 @@ Select install operation"
             # create installed mark
             cd "$FOLDER_CORE" || exit
             LATEST_HEAD=$(git rev-parse --short HEAD)
-            echo "Core was installed at ${NOW:?} Head: $LATEST_HEAD with backup" >/var/log/ms/installed_core
+            echo "Core was installed at ${NOW:?} Head: $LATEST_HEAD with backup" >/var/log/ms/installed_core_"$SERVER_TYPE_INSTALLED"
             echo "checkinstall"
             cd "$FOLDER_BUILD" || exit
             sudo checkinstall 2>&1 | sudo tee /var/log/ms/build &>/dev/null
@@ -3764,7 +3765,7 @@ Database User, Client/Server is needed."
         # create installed mark
         cd "$FOLDER_DB" || exit
         LATEST_HEAD=$(git rev-parse --short HEAD)
-        echo "Database was installed at ${NOW:?} Head: $LATEST_HEAD" >/var/log/ms/installed_db
+        echo "Database was installed at ${NOW:?} Head: $LATEST_HEAD" >/var/log/ms/installed_db_"$SERVER_TYPE_INSTALLED"
         printf '%b' "[${G1:?}OK${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
