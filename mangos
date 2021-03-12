@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211203
-# 5.9.7.1
+# 5.9.6.8
 
 while :; do
 
@@ -1399,7 +1399,7 @@ EOF
             R_MAPS_MOD="classic_maps"
             # add magnet link: classic_maps.zip.torrent
             function p2p_install_maps {
-              transmission-remote -a "magnet:?xt=urn:btih:1cdcaa3d77a7f4df79935d885e639903e37dda24&dn=classic%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
+              transmission-remote -a "magnet:?xt=urn:btih:53c783abd984eacb990e18f2b6a783a3086d09fc&dn=classic%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
             }
             p2p_install_option
 
@@ -1413,7 +1413,7 @@ EOF
             R_MAPS_MOD="tbc_maps"
             # add magnet link: tbc_maps.zip.torrent
             function p2p_install_maps {
-              transmission-remote -a "magnet:?xt=urn:btih:1d62ecb9e7832bdcccc57560bc73e68b3c3b07a9&dn=tbc%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
+              transmission-remote -a "magnet:?xt=urn:btih:0edafa830fd9fe25234285c33f67a0c263e0c90d&dn=tbc%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
             }
             p2p_install_option
 
@@ -1421,17 +1421,15 @@ EOF
 
           "3")
 
-            echo "Nothing here! OO"
             # create maps.tmp file
-            # touch /var/log/ms/wotlk_maps.zip.tmp
-            # R_MAPS="${G1:?}wotlk_maps.zip${N0:?}"
-            # R_MAPS_MOD="wotlk_maps"
-            # add magnet link: wotlk_maps.zip.torrent
-            # function p2p_install_maps {
-            # transmission-remote -a "magnet:?xt=urn:btih:12345678909876543212345678909876543212345=wotlk%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
-            # }
-            # p2p_install_option
-            exit
+            touch /var/log/ms/wotlk_maps.zip.tmp
+            R_MAPS="${G1:?}wotlk_maps.zip${N0:?}"
+            R_MAPS_MOD="wotlk_maps"
+            add magnet link: wotlk_maps.zip.torrent
+            function p2p_install_maps {
+              transmission-remote -a "magnet:?xt=urn:btih:e4f2e2989313f71a13400da93bde4ff577d0b255&dn=wotlk%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
+            }
+            p2p_install_option
 
             ;;
 
@@ -1557,8 +1555,6 @@ EOF
                 sleep 2
               else
                 sudo unzip /seedbox/classic_maps.zip -d "$FOLDER_CORE"/run
-                sudo mv "$FOLDER_CORE"/run/dump/* "$FOLDER_CORE"/run/ &>/dev/null
-                sudo rm -R "$FOLDER_CORE"/run/dump/ &>/dev/null
                 # get seconds since start
                 DURATION=$(echo "$SECONDS-$START" 2>&1 | bc 2>&1)
                 # convert seconds
@@ -1582,8 +1578,6 @@ EOF
                 # start counting (seconds)
                 START="$SECONDS"
                 sudo unzip /seedbox/tbc_maps.zip -d "$FOLDER_CORE"/run
-                sudo mv "$FOLDER_CORE"/run/dump/* "$FOLDER_CORE"/run/ &>/dev/null
-                sudo rm -R "$FOLDER_CORE"/run/dump/ &>/dev/null
                 # get seconds since start
                 DURATION=$(echo "$SECONDS-$START" 2>&1 | bc 2>&1)
                 # convert seconds
@@ -1609,8 +1603,6 @@ EOF
                 # start counting (seconds)
                 START="$SECONDS"
                 sudo unzip /seedbox/wotlk_maps.zip -d "$FOLDER_CORE"/run
-                sudo mv "$FOLDER_CORE"/run/dump/* "$FOLDER_CORE"/run/ &>/dev/null
-                sudo rm -R "$FOLDER_CORE"/run/dump/ &>/dev/null
                 # get seconds since start
                 DURATION=$(echo "$SECONDS-$START" 2>&1 | bc 2>&1)
                 # convert seconds
@@ -2511,6 +2503,8 @@ ${GR:?}$CPU_MODEL${N0:?}")
         # auto build, ruled by configuration
         if [[ "$AUTO_BUILD" -eq "1" ]]; then
           CPU_TCSC=$(lscpu 2>&1 | grep -E '^Thread|^Core|^Socket|^CPU\(' 2>&1)
+          printf '%b' "-- Core $SERVER_BUILD\n"
+          echo
           printf '%b' "[  0%]${Y1:?} Auto detecting Core(s)${N0:?}\n"
           echo "$CPU_TCSC"
           printf '%b' "[  0%]${G0:?} Building with ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
@@ -2520,6 +2514,7 @@ ${GR:?}$CPU_MODEL${N0:?}")
           make -j"$SYS_CORES" # max system cores
           CORES_BUILD=$(echo "$SYS_CORES")
           sudo make install 2>&1 | sudo tee /var/log/ms/build &>/dev/null
+          cat /var/log/ms/build 2>&1
           if grep -q -o "100" /var/log/ms/build &>/dev/null; then
             # cpu temp
             if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
@@ -2561,7 +2556,8 @@ ${GR:?}$CPU_MODEL${N0:?}")
           fi
         else
 
-          printf '%b' "$SERVER_BUILD
+          printf '%b' "-- Core $SERVER_BUILD
+
 $CORES_COUNT $CMAKE_TEMP
 
 Compiling using multiple cores:
@@ -3119,7 +3115,8 @@ ${GR:?}$CPU_MODEL${N0:?}")
           SYS_CPU128=""
         fi
 
-        printf '%b' "$SERVER_BUILD
+        printf '%b' "-- Core $SERVER_BUILD
+
 $CORES_COUNT $CMAKE_TEMP
 
 Compiling using multiple cores:
