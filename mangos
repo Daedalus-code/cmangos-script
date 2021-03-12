@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211303
-# 5.8.8.9
+# 5.9.0.2
 
 while :; do
 
@@ -235,9 +235,12 @@ while :; do
 
   # installed repos
   SERVER_TYPE_INSTALLED=$(echo "$SERVER_TYPE_CMAKE")
-  CORE_HEAD=$(grep -o "Head:.*" /var/log/ms/Installed_core_"$SERVER_TYPE_INSTALLED" 2>&1 | awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)
-  DATA_HEAD=$(grep -o "Head:.*" /var/log/ms/Installed_db_"$SERVER_TYPE_INSTALLED" 2>&1 | awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)
-  TOOL_HEAD=$(grep -o "Head:.*" /var/log/ms/Installed_ms 2>&1 | awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)
+  CORE_HEAD="$(grep -Eo "Head:.*" /var/log/ms/Installed_core_"$SERVER_TYPE_INSTALLED" 2>&1 | grep -v 'No such file or directory' >&2 |
+    awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)"
+  DATA_HEAD="$(grep -Eo "Head:.*" /var/log/ms/Installed_db_"$SERVER_TYPE_INSTALLED" 2>&1 | grep -v 'No such file or directory' >&2 |
+    awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)"
+  TOOL_HEAD="$(grep -Eo "Head:.*" /var/log/ms/Installed_ms 2>&1 |
+    awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)"
 
   if [ "$(cat /var/log/ms/Installed_core_"$SERVER_TYPE_INSTALLED" 2>&1 | wc -l 2>&1)" -eq "0" ]; then
     CORE_HEAD="0000000"
@@ -247,6 +250,16 @@ while :; do
   fi
   if [ "$(cat /var/log/ms/Installed_ms 2>&1 | wc -l 2>&1)" -eq "0" ]; then
     TOOL_HEAD="0000000"
+  fi
+
+  if [ -z "$CORE_HEAD" ]; then
+    CORE_HEAD="${N0:?}Install"
+  fi
+  if [ -z "$DATA_HEAD" ]; then
+    DATA_HEAD="${N0:?}Install"
+  fi
+  if [ -z "$TOOL_HEAD" ]; then
+    TOOL_HEAD="${N0:?}Install"
   fi
 
   # menu
