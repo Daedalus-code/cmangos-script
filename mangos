@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211203
-# 5.8.8.7
+# 5.8.9.1
 
 while :; do
 
@@ -160,17 +160,17 @@ while :; do
   # ! -> https://github.com/scarygliders/X11RDP-o-Matic/issues/45
   export NCURSES_NO_UTF8_ACS=1
 
-  # look for ms folder
-  if [ ! -z "$(ls -A /var/log/ms/ 2>&1)" ]; then
+  # look for empty dir
+  if ! [ "$(ls -A /var/log/ms/ 2>&1)" ]; then
     # create ms folder if not found
     sudo mkdir /var/log/ms/ &>/dev/null
     # fix ownership
     sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
   fi
 
-  # get online players
+  # online players
   MENU_ON_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT SUM(online) FROM ${DB_CHARACTERS:?}.characters;" 2>&1)
-  # get guild count
+  # guild count
   MENU_GU_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM ${DB_CHARACTERS:?}.guild;" 2>&1)
 
   # non responsive, sql table doesn't exist
@@ -206,13 +206,13 @@ while :; do
     MENU_GU_COUNT="0"
   fi
 
-  # get date, month, day, year
+  # date, month, day, year
   NOW="$(date +"%m.%d.%Y")"
 
-  # get load
-  LOAD="$(while IFS= read -r i; do echo "${i%?}"; done </proc/loadavg 2>&1 | awk '{ print $1,$2,$3 }')"
+  # load
+  LOAD="$(cat /proc/loadavg 2>&1 | awk '{ print $1,$2,$3 }')"
 
-  # get pid of realmd, mangosd
+  # pid of realmd, mangosd
   PIDOF_REALMD=$(pidof $REALM_SERVICE 2>&1 | wc -w 2>&1)
   PIDOFMANGOSD=$(pidof $WORLD_SERVICE 2>&1 | wc -w 2>&1)
 
@@ -872,7 +872,7 @@ ${PASS_NC:?}
    * Download latest Core/Database updates
    * Upgrade Database with latest fixes
    * Compile CMaNGOS with latest fixes
-   * Download/Import Maps: ${G0:?}Classic${N0:?},${G0:?} TBC${N0:?}, ${GR:?}WoTLK${N0:?}
+   * Download/Import Maps: ${G0:?}Classic${N0:?},${G0:?} TBC${N0:?}, ${G0:?}WoTLK${N0:?}
    * Setup RA for account tools
    * Profit
 
@@ -907,7 +907,7 @@ ${N0:?}"
         fi
 
         printf '%b' "${GR:?}Please wait${N0:?}\n"
-        # get remote information from transmission, create a file
+        # remote information from transmission, create a file
         transmission-remote -t all -i >/var/log/ms/transmission_list 2>&1
         # cat that file, update everytime
         P2P_INFO=$(cat /var/log/ms/transmission_list 2>&1)
@@ -951,9 +951,9 @@ ${N0:?}"
 
         # is transmission-cli installed?
         if ! [ -x "$(command -v transmission-cli)" ]; then
-          SEED_TRANSMISSION="${GR:?}Not installed!${N0:?}"
+          SEED_TRANSMISSION="${GR:?}None${N0:?}"
           INTRANET_SEED="${GR:?}0.0.0.0:9091${N0:?}"
-          P2P_FILE_NAME="$P2P_AV$V_MAPS${GR:?},${N0:?} $P2P_AT$T_MAPS${GR:?},${N0:?} $P2P_AW$W_MAPS${N0:?}"
+          P2P_FILE_NAME="$P2P_AV$V_MAPS $P2P_AT$T_MAPS $P2P_AW$W_MAPS${N0:?}"
           P2P_PEERS_CONNECTED_ID1="${GR:?}N/A${N0:?}"
           P2P_PEERS_SEEDINGTO_ID1="${GR:?}N/A${N0:?}"
           P2P_PEERS_DOWN_LOAD_ID1="${GR:?}N/A${N0:?}"
@@ -1009,9 +1009,9 @@ ${N0:?}"
           case "$(pidof transmission-daemon 2>&1 | wc -w 2>&1)" in
           "0")
 
-            SEED_TRANSMISSION="${GR:?}Offline${N0:?}"
+            SEED_TRANSMISSION="${GR:?}Off${N0:?}"
             INTRANET_SEED="${GR:?}0.0.0.0:9091${N0:?}"
-            P2P_FILE_NAME="$P2P_AV$V_MAPS${GR:?},${N0:?} $P2P_AT$T_MAPS${GR:?},${N0:?} $P2P_AW$W_MAPS${N0:?}"
+            P2P_FILE_NAME="$P2P_AV$V_MAPS $P2P_AT$T_MAPS $P2P_AW$W_MAPS${N0:?}"
             P2P_PEERS_CONNECTED_ID1="${GR:?}N/A${N0:?}"
             P2P_PEERS_CONNECTED_ID2="${GR:?}N/A${N0:?}"
             P2P_PEERS_CONNECTED_ID3="${GR:?}N/A${N0:?}"
@@ -1026,15 +1026,15 @@ ${N0:?}"
 
           "1")
 
-            SEED_TRANSMISSION="${G1:?}Online${N0:?}"
+            SEED_TRANSMISSION="${G1:?}OK${N0:?}"
             INTRANET_SEED="${N0:?}${INTRANET:?}:9091${N0:?}"
-            P2P_FILE_NAME="$P2P_AV$V_MAPS${GR:?},${N0:?} $P2P_AT$T_MAPS${GR:?},${N0:?} $P2P_AW$W_MAPS${N0:?}"
+            P2P_FILE_NAME="$P2P_AV$V_MAPS $P2P_AT$T_MAPS $P2P_AW$W_MAPS${N0:?}"
 
             ;;
 
           "*")
 
-            SEED_TRANSMISSION="${Y1:?}Online+${N0:?}"
+            SEED_TRANSMISSION="${Y1:?}OK+${N0:?}"
             INTRANET_SEED="${Y1:?}${INTRANET:?}:9091${N0:?}"
             P2P_PEERS_CONNECTED_ID1="${GR:?}N/A${N0:?}"
             P2P_PEERS_SEEDINGTO_ID1="${GR:?}N/A${N0:?}"
@@ -1051,6 +1051,9 @@ ${N0:?}"
           esac
         fi
 
+        # load
+        LOAD="$(cat /proc/loadavg 2>&1 | awk '{ print $1,$2,$3 }')"
+
         # seedbox menu
         clear
         echo
@@ -1061,7 +1064,8 @@ ${N0:?}"
    Load${G0:?}.....:${N0:?} ${GR:?}$LOAD${N0:?}
    Access${G0:?}...:${N0:?} $INTRANET_SEED
    Exp Maps${G0:?}.:${N0:?} $P2P_FILE_NAME
-   Peers${G0:?}....:${G1:?} ${G0:?}${G1:?}$P2P_PEERS_CONNECTED_ID1${R0:?}$P2P_PEERS_SEEDINGTO_ID1${G0:?}$P2P_PEERS_DOWN_LOAD_ID1${G0:?} ${G1:?}$P2P_PEERS_CONNECTED_ID2${R0:?}$P2P_PEERS_SEEDINGTO_ID2${G0:?}$P2P_PEERS_DOWN_LOAD_ID2${G0:?} ${G1:?}$P2P_PEERS_CONNECTED_ID3${R0:?}$P2P_PEERS_SEEDINGTO_ID3${G0:?}$P2P_PEERS_DOWN_LOAD_ID3 ${N0:?}
+   Peers${G0:?}....:${G1:?} ${G0:?}${G1:?}$P2P_PEERS_CONNECTED_ID1${Y1:?}$P2P_PEERS_SEEDINGTO_ID1${G0:?}$P2P_PEERS_DOWN_LOAD_ID1${G0:?} ${G1:?}$P2P_PEERS_CONNECTED_ID2${Y1:?}$P2P_PEERS_SEEDINGTO_ID2${G0:?}$P2P_PEERS_DOWN_LOAD_ID2${G0:?} ${G1:?}$P2P_PEERS_CONNECTED_ID3${Y1:?}$P2P_PEERS_SEEDINGTO_ID3${G0:?}$P2P_PEERS_DOWN_LOAD_ID3 ${N0:?}
+   Upload${G0:?}...:${G1:?} ${GR:?}128 kB/s (default)$N0
 
    t $GR: ${THEME_TXT:?}Install${N0:?} - ${THEME_DSC:?}Setup Maps$N0
    u $GR: ${THEME_TXT:?}Remove${N0:?}  - ${THEME_DSC:?}Uninstall$N0
@@ -1474,7 +1478,7 @@ EOF
                 sleep 2
               else
                 sudo unzip /seedbox/classic_maps.zip -d "$FOLDER_CORE"/run
-                # get seconds since start
+                # seconds since start
                 DURATION=$(echo "$SECONDS-$START" 2>&1 | bc 2>&1)
                 # convert seconds
                 TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
@@ -1497,7 +1501,7 @@ EOF
                 # start counting (seconds)
                 START="$SECONDS"
                 sudo unzip /seedbox/tbc_maps.zip -d "$FOLDER_CORE"/run
-                # get seconds since start
+                # seconds since start
                 DURATION=$(echo "$SECONDS-$START" 2>&1 | bc 2>&1)
                 # convert seconds
                 TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
@@ -1522,7 +1526,7 @@ EOF
                 # start counting (seconds)
                 START="$SECONDS"
                 sudo unzip /seedbox/wotlk_maps.zip -d "$FOLDER_CORE"/run
-                # get seconds since start
+                # seconds since start
                 DURATION=$(echo "$SECONDS-$START" 2>&1 | bc 2>&1)
                 # convert seconds
                 TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
@@ -1611,7 +1615,7 @@ EOF
 
       "l")
 
-        # get lines in files
+        # lines in files
         ESLOG="$(cat "$FOLDER_CORE"/run/logs/Server.log 2>&1 | wc -l 2>&1)"
         ERLOG="$(cat "$FOLDER_CORE"/run/logs/Realmd.log 2>&1 | wc -l 2>&1)"
         ESLOG_OLD="$(cat "$FOLDER_CORE"/run/logs/Server.log.old 2>&1 | wc -l 2>&1)"
@@ -1759,10 +1763,10 @@ EOF
         "1")
 
           if [ -f "$FOLDER_CORE/run/logs/Server.log" ]; then
-            # get raw error from logs
+            # raw error from logs
             ERROR_ERROR=$(grep --no-filename -Eo "ERROR:.*" "$FOLDER_CORE"/run/logs/*.log 2>&1 |
               grep -E -v ".*is empty*." 2>&1)
-            # get raw empty from logs
+            # raw empty from logs
             EMPTY_ERROR=$(grep --no-filename -Eo ".*empty*." "$FOLDER_CORE"/run/logs/*.log 2>&1 |
               grep -E -v "ERROR:.*|Only expired mails*" 2>&1)
             printf '%b' "${Y1:?}$EMPTY_ERROR${N0:?}\n"
@@ -1804,7 +1808,7 @@ EOF
 
         # dive into logs done
 
-        # Get info from mysql database and logs
+        # info from mysql database and logs
 
       "w")
 
@@ -1863,7 +1867,7 @@ EOF
 
         ;;
 
-        # Get info from mysql database and logs done
+        # info from mysql database and logs done
 
         # backup sql
 
@@ -1932,7 +1936,7 @@ EOF
             RA_IDLE=" "
             RA_IDLE_DOWN="${THEME_ALL:?}_${N0:?}"
           else
-            # get configuration
+            # configuration
             RA_STATUS=$(cat "$FOLDER_CORE"/run/etc/mangosd.conf 2>&1 2>&1 |
               grep "Ra.Enable =.*" 2>&1)
             # no configuration, use backup
@@ -2350,7 +2354,7 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
           CMAKE_TEMP=$(printf '%b' "")
         fi
 
-        # get cpu model name
+        # cpu model name
         KERNAL_RE=$(uname -r 2>&1)
         PROCESSOR=$(uname -p 2>&1)
         CPU_MODEL=$(lscpu 2>&1 | grep 'Model name' 2>&1 |
@@ -2446,7 +2450,7 @@ ${GR:?}$CPU_MODEL${N0:?}")
                 grep -Eo "@.*" 2>&1 | tr -d '@' 2>&1 | tr -d ' ' 2>&1)
               MENU_PRINT_CPU_TEMP="CPU Freq${G0:?}..:${N0:?} $MENU_PRINT_CPU_TEMP"
             fi
-            # get seconds since start
+            # seconds since start
             DURATION=$(echo "$SECONDS-$START" 2>&1 | bc 2>&1)
             # convert seconds
             TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
@@ -2463,7 +2467,7 @@ ${GR:?}$CPU_MODEL${N0:?}")
           else
             echo
             printf '%b' "${R1:?}Something went wrong!${N0:?}\n"
-            # get seconds since start
+            # seconds since start
             DURATION=$(echo "$SECONDS-$START" 2>&1 | bc 2>&1)
             # convert seconds
             TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
@@ -2748,7 +2752,7 @@ Compiling using multiple cores:
           else
             CMAKE_TEMP=""
           fi
-          # get seconds since start
+          # seconds since start
           DURATION=$(echo "$SECONDS-$START" 2>&1 | bc 2>&1)
           # convert seconds
           TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
@@ -2965,7 +2969,7 @@ Check if correct information, or just restart server."
           CMAKE_TEMP=$(printf '%b' "")
         fi
 
-        # get cpu model name
+        # cpu model name
         KERNAL_RE=$(uname -r 2>&1)
         PROCESSOR=$(uname -p 2>&1)
         CPU_MODEL=$(lscpu 2>&1 | grep 'Model name' 2>&1 |
@@ -3286,7 +3290,7 @@ Compiling using multiple cores:
         else
           CMAKE_TEMP=""
         fi
-        # get seconds since start
+        # seconds since start
         DURATION=$(echo "$SECONDS-$START" 2>&1 | bc 2>&1)
         # convert seconds
         TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
@@ -4456,12 +4460,12 @@ Check log for which database needs 'applying updates'"
 
   "t")
 
-    # get class count
+    # class count
     FILE_CLASSES="/var/log/ms/classes.$NOW"
     if [ ! -f $FILE_CLASSES ]; then
       # remove old file
       rm /var/log/ms/classes.* &>/dev/null
-      # get classes from table characters
+      # classes from table characters
       mysql --defaults-extra-file="$SQL_MYCNF" --execute="SELECT class FROM $DB_CHARACTERS.characters;" 2>&1 |
         tr -d 'class' >/var/log/ms/classes."$NOW" # update this everyday
     fi
@@ -4605,7 +4609,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             # running screen named realmd
             if screen -list 2>&1 |
               grep -q "realmd" &>/dev/null; then
-              # get realmd screen id
+              # realmd screen id
               REALMD_ID=$(screen -list 2>&1 | grep -Eo "[0-9]+.realmd" 2>&1 |
                 awk -F. '{ print $1 }' 2>&1)
               printf '%b' "[${G0:?}OK${N0:?}] Killing screen (${GR:?}$REALMD_ID${N0:?})\n"
@@ -4619,7 +4623,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             fi
             if screen -list 2>&1 |
               grep -q "mangosd" &>/dev/null; then
-              # get mangosd screen id
+              # mangosd screen id
               MANGOSD_ID=$(screen -list 2>&1 | grep -Eo "[0-9]+.mangosd" 2>&1 |
                 awk -F. '{ print $1 }' 2>&1)
               printf '%b' "[${G0:?}OK${N0:?}] Killing screen (${GR:?}$MANGOSD_ID${N0:?})\n"
@@ -4696,7 +4700,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           if [ -f /.dockerenv ]; then
             if screen -list 2>&1 |
               grep -q "realmd" &>/dev/null; then
-              # get realmd screen id
+              # realmd screen id
               REALMD_ID=$(screen -list 2>&1 | grep -Eo "[0-9]+.realmd" 2>&1 |
                 awk -F. '{ print $1 }' 2>&1)
               printf '%b' "[${G0:?}OK${N0:?}] Killing screen (${GR:?}$REALMD_ID${N0:?})\n"
@@ -4752,7 +4756,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           if [ -f /.dockerenv ]; then
             if screen -list 2>&1 |
               grep -q "mangosd" &>/dev/null; then
-              # get mangosd screen id
+              # mangosd screen id
               MANGOSD_ID=$(screen -list 2>&1 | grep -Eo "[0-9]+.mangosd" 2>&1 |
                 awk -F. '{ print $1 }' 2>&1)
               printf '%b' "[${G1:?}OK${N0:?}] Killing screen (${GR:?}$MANGOSD_ID${N0:?})\n"
@@ -4874,7 +4878,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             # running screen named realmd
             if screen -list 2>&1 |
               grep -q "realmd" &>/dev/null; then
-              # get realmd screen id
+              # realmd screen id
               REALMD_ID=$(screen -list 2>&1 | grep -Eo "[0-9]+.realmd" 2>&1 |
                 awk -F. '{ print $1 }' 2>&1)
               printf '%b' "[${G0:?}OK${N0:?}] Killing screen (${GR:?}$REALMD_ID${N0:?})\n"
@@ -4889,7 +4893,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             # running screen named mangosd
             if screen -list 2>&1 |
               grep -q "mangosd" &>/dev/null; then
-              # get mangosd screen id
+              # mangosd screen id
               MANGOSD_ID=$(screen -list 2>&1 | grep -Eo "[0-9]+.mangosd" 2>&1 |
                 awk -F. '{ print $1 }' 2>&1)
               printf '%b' "[${G0:?}OK${N0:?}] Killing screen (${GR:?}$MANGOSD_ID${N0:?})\n"
@@ -5090,7 +5094,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
                 # off
                 printf '%b' "[${GR:?}NO${N0:?}] AHbot\n"
               fi
-              # get startup time
+              # startup time
               STARTUP_TIME=$(grep "SERVER\sSTARTUP\sTIME*." "$FOLDER_CORE"/run/logs/Server.log 2>&1 |
                 cut -d\  -f6-9 2>&1)
               printf '%b' "[${G1:?}OK${N0:?}] World initialized! ${G1:?}$STARTUP_TIME${N0:?}\n"
@@ -5560,7 +5564,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           # off
           printf '%b' "[${GR:?}NO${N0:?}] AHbot\n"
         fi
-        # get startup time
+        # startup time
         if STARTUP_TIME=$(grep "SERVER\sSTARTUP\sTIME*." "$FOLDER_CORE"/run/logs/Server.log 2>&1 |
           cut -d\  -f6-9 2>&1); then
           printf '%b' "[${G1:?}OK${N0:?}] World initialized! ${G1:?}$STARTUP_TIME${N0:?}\n"
