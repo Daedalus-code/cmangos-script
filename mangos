@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211203
-# 5.9.1.5
+# 5.9.0.7
 
 while :; do
 
@@ -353,25 +353,17 @@ while :; do
     # menu
 
     clear
-    printf '%b' "${GR:?} - - - - - - - - - - - - - - - - - - - - - - -
-${N0:?}                                       __
-   .---.-.----.----.-----.--.--.-----.|  |_
-   |  _  |  __|  __|  _  |  |  |     ||   _|${THEME_ALL:?}
-   |___._|____|____|_____|_____|__|__||____|
-           ${N0:?}C(ontinued)-MaNGOS Helper
-             ${GR:?}- - - - - - - - - -${N0:?}
+    printf '%b' "${GR:?} - - - - - - - - - - - - - - - - - - - - - - -$N0
 
-                Accounts${G0:?}...:${N0:?} $AC_COUNT
-                Banned${G0:?}.....:${N0:?} $BN_COUNT
+   Accounts${G0:?}...:${N0:?} $AC_COUNT
+   Banned${G0:?}.....:${N0:?} $BN_COUNT
 
-                    ${THEME_ALL:?}Info:
+   ${G0:?}Select account operation${N0:?}
 
-           ${G0:?}Select account operation${N0:?}
+   c $GR:$N0 Create account
+   d $GR:$N0 Delete account
 
-              c $GR:$N0 Create account
-              d $GR:$N0 Delete account
-
->"
+"
 
     read -r -n1 -s
     case "$REPLY" in
@@ -383,22 +375,22 @@ ${N0:?}                                       __
       clear
       printf '%b' "${GR:?} - - - - - - - - - - - - - - - - - - - - - - -${N0:?}
 
-           0 $GR:$N0 Classic
-           1 $GR:$N0 The Burning Crusade
-           2 $GR:$N0 Wrath of the Lich King
+   0 $GR:$N0 Classic
+   1 $GR:$N0 The Burning Crusade
+   2 $GR:$N0 Wrath of the Lich King
 
-           0 $GR:$N0 Player
-           1 $GR:$N0 Moderator
-           2 $GR:$N0 Game Master
-           3 $GR:$N0 Administrator
+   0 $GR:$N0 Player
+   1 $GR:$N0 Moderator
+   2 $GR:$N0 Game Master
+   3 $GR:$N0 Administrator
 
-      Minimum 5 characters account name.
+   Minimum 5 characters account name.
 
-        Create new account (${THEME_ALL:?}username${N0:?})
-        Set the (${THEME_ALL:?}expansion${N0:?}) version.
-        Set the (${THEME_ALL:?}account${N0:?}) privilege.
+   Create new account (${THEME_ALL:?}username${N0:?})
+   Set the (${THEME_ALL:?}expansion${N0:?}) version.
+   Set the (${THEME_ALL:?}account${N0:?}) privilege.
 
-        ${THEME_ALL:?}Example${N0:?}: 'username' '0' '0'"
+   ${THEME_ALL:?}Example${N0:?}: 'username' '0' '0'"
 
       # menu done
 
@@ -406,17 +398,19 @@ ${N0:?}                                       __
 
       echo
       echo
-      echo "Username"
+      printf '%b' "Username: "
       read -r USR
       if [[ -z "$USR" ]]; then
+        echo
         printf '%b' "empty"
         echo
       else
         printf '%b' "[${G1:?}OK${N0:?}] $USR"
         echo
-        echo "Password"
+        printf '%b' "Password: "
         read -r -s PWD
         if [[ -z "$PWD" ]]; then
+          echo
           printf '%b' "empty"
           echo
         else
@@ -513,9 +507,7 @@ ${PASS_NC:?}
       echo
       printf '%b' " Delete directly from '${CY:?}$DB_REALMD.account${N0:?}'"
       echo
-
       printf '%b' "
-
 >"
       read -r ID
       echo
