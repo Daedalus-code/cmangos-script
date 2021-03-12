@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211203
-# 5.9.7.1
+# 5.9.6.9
 
 while :; do
 
@@ -3801,7 +3801,7 @@ Database User, Client/Server is needed."
             mysqldump --defaults-extra-file="$SQL_MYCNF" "$DB_REALMD" >"$FOLDER_WOW"/backup/"$DB_REALMD"-"$NOW".sql
             printf '%b' "${G0:?}.${N0:?}\n"
             sleep 1
-            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}$DB_REALMD-$NOW.sql${N0:?}"
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}$DB_REALMD-$NOW.sql${N0:?}\n"
             sleep 1
           fi
         fi
@@ -4416,8 +4416,7 @@ Check log for which database needs 'applying updates'"
         sleep 1
         sudo service mariadb restart &>/dev/null
         sudo service mysql restart &>/dev/null
-        printf '%b' "[${G1:?}OK${N0:?}]"
-        echo
+        printf '%b' "[${G1:?}OK${N0:?}]\n"
       fi
       # apply all updates [A] to [B] realmd?
       read -t 5 -r -p "[YN] Realmd? y/n " -n 1 -r
@@ -4454,14 +4453,13 @@ Check log for which database needs 'applying updates'"
         sleep 1
         sudo service mariadb restart &>/dev/null
         sudo service mysql restart &>/dev/null
-        printf '%b' "[${G1:?}OK${N0:?}]"
-        echo
+        printf '%b' "[${G1:?}OK${N0:?}]\n"
       fi
       # remove old 'combined updates' sql files
       rm "$FOLDER_WOW"/.*.sql 2>&1
       # InstallFullDB?
       echo
-      printf '%b' "${G0:?}Recommended if you applied anything${N0:?}"
+      printf '%b' "${G0:?}Recommended if you applied anything${N0:?}\n"
       printf '%b' "[CD] $SERVER_BUILD\n"
       read -r -p "[YN] InstallFullDB? y/n " -n 1 -r
       echo
