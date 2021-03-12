@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211203
-# 5.8.9.1
+# 5.9.1.5
 
 while :; do
 
@@ -218,16 +218,16 @@ while :; do
 
   # realmd service
   case "$(echo "$PIDOF_REALMD")" in
-  0) MENU_REALMD="${GR:?}Realm${N0:?}" ;;
-  1) MENU_REALMD="${G0:?}Realm${N0:?}" ;;
-  *) MENU_REALMD="${Y0:?}Realm${N0:?}" ;;
+  0) MENU_REALMD="${GR:?}RLM${N0:?}" ;;
+  1) MENU_REALMD="${G0:?}RLM${N0:?}" ;;
+  *) MENU_REALMD="${Y0:?}RLM${N0:?}" ;;
   esac
 
   # mangosd service
   case "$(echo "$PIDOFMANGOSD")" in
-  0) MENU_MANGOSD="${GR:?}MaNGOS${N0:?}" ;;
-  1) MENU_MANGOSD="${G0:?}MaNGOS${N0:?}" ;;
-  *) MENU_MANGOSD="${Y0:?}MaNGOS${N0:?}" ;;
+  0) MENU_MANGOSD="${GR:?}CMS${N0:?}" ;;
+  1) MENU_MANGOSD="${G0:?}CMS${N0:?}" ;;
+  *) MENU_MANGOSD="${Y0:?}CMS${N0:?}" ;;
   esac
 
   # this is for docker users
@@ -235,21 +235,36 @@ while :; do
     # docker realmd status
     if screen -list 2>&1 |
       grep -q "realmd" &>/dev/null; then
-      MENU_REALMD="${G0:?}Realm${N0:?}"
+      MENU_REALMD="${G0:?}R${N0:?}"
       PIDOFMANGOSD="1"
     else
-      MENU_REALMD="${GR:?}Realm${N0:?}"
+      MENU_REALMD="${GR:?}R${N0:?}"
       PIDOFMANGOSD="0"
     fi
     # docker mangosd status
     if screen -list 2>&1 |
       grep -q "mangosd" &>/dev/null; then
-      MENU_MANGOSD="${G0:?}MaNGOS${N0:?}"
+      MENU_MANGOSD="${G0:?}M${N0:?}"
       PIDOFMANGOSD="1"
     else
-      MENU_MANGOSD="${GR:?}MaNGOS${N0:?}"
+      MENU_MANGOSD="${GR:?}M${N0:?}"
       PIDOFMANGOSD="0"
     fi
+  fi
+
+  # installed repos
+  CORE_HEAD=$(grep -o "Head:.*" /var/log/ms/installed_core 2>&1 | awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)
+  DATA_HEAD=$(grep -o "Head:.*" /var/log/ms/installed_db 2>&1 | awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)
+  TOOL_HEAD=$(grep -o "Head:.*" /var/log/ms/installed_ms 2>&1 | awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)
+
+  if [ "$(cat /var/log/ms/installed_core 2>&1 | wc -l 2>&1)" -eq "0" ]; then
+    CORE_HEAD="0000000"
+  fi
+  if [ "$(cat /var/log/ms/installed_db 2>&1 | wc -l 2>&1)" -eq "0" ]; then
+    DATA_HEAD="0000000"
+  fi
+  if [ "$(cat /var/log/ms/installed_ms 2>&1 | wc -l 2>&1)" -eq "0" ]; then
+    TOOL_HEAD="0000000"
   fi
 
   # menu
@@ -259,22 +274,21 @@ while :; do
    |     |     |___|   | |   __|     |   __|
    |   --| | | | .'| | | |  |  |  |  |__   |${THEME_ALL:?}
    |_____|_|_|_|__,|_|___|_____|_____|_____|${N0:?}
-           C(ontinued)-MaNGOS Helper${GR:?}
-              - - - - - - - - - -${N0:?}
-                Online $MENU_ON_COUNT
-                Guilds $MENU_GU_COUNT
-                Core $SERVER_BUILD
-                $LOAD
-                $MENU_MANGOSD $GR|$N0 $MENU_REALMD
+    C(ontinued)-MaNGOS ${GR:?}Tool$N0
 
-   A $GR: ${THEME_TXT:?}Login (command)      ${N0:?}t $GR: ${THEME_TXT:?}Characters${N0:?}
-   a $GR: ${THEME_TXT:?}Create account       ${N0:?}u $GR: ${THEME_TXT:?}Accounts${N0:?}
-   c $GR: ${THEME_TXT:?}Check for updates    ${N0:?}g $GR: ${THEME_TXT:?}Guilds${N0:?}
-   m $GR: ${THEME_TXT:?}Update CMaNGOS       ${N0:?}e $GR: ${THEME_TXT:?}Config${N0:?}
-   d $GR: ${THEME_TXT:?}Update Database      ${N0:?}p $GR: ${THEME_TXT:?}Patch${N0:?}
-   w $GR: ${THEME_TXT:?}Update Helper        ${N0:?}o $GR: ${THEME_TXT:?}Ping${N0:?}
-   s $GR: ${THEME_TXT:?}Shutdown server      ${N0:?}l $GR: ${THEME_TXT:?}Logs${N0:?}
-   r $GR: ${THEME_TXT:?}Restart server       ${N0:?}q $GR: ${THEME_TXT:?}Quit${N0:?}
+   Core ${GR:?}$CORE_HEAD$N0  Online $MENU_ON_COUNT
+   Data ${GR:?}$DATA_HEAD$N0  Guilds $MENU_GU_COUNT
+   Tool ${GR:?}$TOOL_HEAD$N0  Core $SERVER_BUILD$N0
+   Host ${GR:?}$MENU_MANGOSD$GR|$N0$MENU_REALMD  $LOAD$N0
+
+   A $GR: ${THEME_TXT:?}Admin      ${N0:?}t $GR: ${THEME_TXT:?}Characters${N0:?}
+   a $GR: ${THEME_TXT:?}Account    ${N0:?}u $GR: ${THEME_TXT:?}Accounts${N0:?}
+   c $GR: ${THEME_TXT:?}Updates    ${N0:?}g $GR: ${THEME_TXT:?}Guilds${N0:?}
+   m $GR: ${THEME_TXT:?}CMaNGOS    ${N0:?}e $GR: ${THEME_TXT:?}Config${N0:?}
+   d $GR: ${THEME_TXT:?}Database   ${N0:?}p $GR: ${THEME_TXT:?}Patch${N0:?}
+   w $GR: ${THEME_TXT:?}Helper     ${N0:?}o $GR: ${THEME_TXT:?}Ping${N0:?}
+   s $GR: ${THEME_TXT:?}Shutdown   ${N0:?}l $GR: ${THEME_TXT:?}Logs${N0:?}
+   r $GR: ${THEME_TXT:?}Restart    ${N0:?}q $GR: ${THEME_TXT:?}Quit${N0:?}
 
 "
 
@@ -2462,7 +2476,9 @@ ${GR:?}$CPU_MODEL${N0:?}")
             # fix ownership
             sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
             # create installed mark
-            echo "Core was installed at ${NOW:?}" >/var/log/ms/installed_core
+            cd "$FOLDER_CORE" || exit
+            LATEST_HEAD=$(git rev-parse --short HEAD)
+            echo "Core was installed at ${NOW:?} Head: $LATEST_HEAD" >/var/log/ms/installed_core
             BUILD_BUTTON="${G1:?}OK${N0:?}"
           else
             echo
@@ -2775,7 +2791,9 @@ Select install operation"
             # fix ownership
             sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
             # create installed mark
-            echo "Core was installed at ${NOW:?}" >/var/log/ms/installed_core
+            cd "$FOLDER_CORE" || exit
+            LATEST_HEAD=$(git rev-parse --short HEAD)
+            echo "Core was installed at ${NOW:?} Head: $LATEST_HEAD" >/var/log/ms/installed_core
             echo "make install"
             cd "$FOLDER_BUILD" || exit
             sudo make install 2>&1 | sudo tee /var/log/ms/build &>/dev/null
@@ -2790,7 +2808,9 @@ Select install operation"
             # fix ownership
             sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
             # create installed mark
-            echo "Core was installed at ${NOW:?} with backup" >/var/log/ms/installed_core
+            cd "$FOLDER_CORE" || exit
+            LATEST_HEAD=$(git rev-parse --short HEAD)
+            echo "Core was installed at ${NOW:?} Head: $LATEST_HEAD with backup" >/var/log/ms/installed_core
             echo "checkinstall"
             cd "$FOLDER_BUILD" || exit
             sudo checkinstall 2>&1 | sudo tee /var/log/ms/build &>/dev/null
@@ -3750,7 +3770,9 @@ Database User, Client/Server is needed."
         # fix ownership
         sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
         # create installed mark
-        echo "Database was installed at ${NOW:?}" >/var/log/ms/installed_db
+        cd "$FOLDER_DB" || exit
+        LATEST_HEAD=$(git rev-parse --short HEAD)
+        echo "Database was installed at ${NOW:?} Head: $LATEST_HEAD" >/var/log/ms/installed_db
         printf '%b' "[${G1:?}OK${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
@@ -5351,7 +5373,9 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           # fix ownership
           sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
           # create installed mark
-          echo "CMaNGOS Script was installed at ${NOW:?}" >/var/log/ms/installed_ms
+          cd "$FOLDER_HELPER" || exit
+          LATEST_HEAD=$(git rev-parse --short HEAD)
+          echo "CMaNGOS Script was installed at ${NOW:?} Head: $LATEST_HEAD" >/var/log/ms/installed_ms
           sleep 1 && exit
         fi
       fi
