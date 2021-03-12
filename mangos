@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211203
-# 5.9.0.8
+# 5.8.8.3
 
 while :; do
 
@@ -50,51 +50,32 @@ while :; do
   WORLD_SERVICE="mangosd"
   PATCH="CMaNGOS.patch" # please edit if wrong name.
 
-  # server type, core, database
+  # server type
   if echo "${SERVER_TYPE:?}" 2>&1 | grep -q -E "c|C|v|V|classic|Classic|vanilla|Vanilla" 2>&1; then
-    GITHUB_CMANGOS="https://github.com/cmangos/mangos-classic.git"
-    GITHUB_DATABASE="https://github.com/cmangos/classic-db.git"
-    FOLDER_BUILD="/home/$(whoami)/wow/mangos-classic/build"
-    FOLDER_SQL="/home/$(whoami)/wow/mangos-classic/sql"
-    FOLDER_CORE="/home/$(whoami)/wow/mangos-classic"
-    FOLDER_DB="/home/$(whoami)/wow/classic-db"
-    FOLDER_WOW="/home/$(whoami)/wow"
-    DB_CHARACTERS="classic_characters$DBEXTRA"
-    DB_MANGOS="classic_mangos$DBEXTRA"
-    DB_REALMD="classic_realmd$DBEXTRA"
-    SERVER_TYPE_CMAKE="classic"
+    TYPE_CORE="classic"
     SERVER_BUILD=$(printf '%b' "${CY:?}Classic${N0:?}\n")
   fi
-
   if echo "${SERVER_TYPE:?}" 2>&1 | grep -q -E "t|T|tbc|TBC" 2>&1; then
-    GITHUB_CMANGOS="https://github.com/cmangos/mangos-tbc.git"
-    GITHUB_DATABASE="https://github.com/cmangos/tbc-db.git"
-    FOLDER_BUILD="/home/$(whoami)/wow/mangos-tbc/build"
-    FOLDER_SQL="/home/$(whoami)/wow/mangos-tbc/sql"
-    FOLDER_CORE="/home/$(whoami)/wow/mangos-tbc"
-    FOLDER_DB="/home/$(whoami)/wow/tbc-db"
-    FOLDER_WOW="/home/$(whoami)/wow"
-    DB_CHARACTERS="tbc_characters$DBEXTRA"
-    DB_MANGOS="tbc_mangos$DBEXTRA"
-    DB_REALMD="tbc_realmd$DBEXTRA"
-    SERVER_TYPE_CMAKE="tbc"
+    TYPE_CORE="tbc"
     SERVER_BUILD=$(printf '%b' "${CY:?}TBC${N0:?}\n")
   fi
-
   if echo "${SERVER_TYPE:?}" 2>&1 | grep -q -E "w|W|wotlk|WoTLK" 2>&1; then
-    GITHUB_CMANGOS="https://github.com/cmangos/mangos-wotlk.git"
-    GITHUB_DATABASE="https://github.com/cmangos/wotlk-db.git"
-    FOLDER_BUILD="/home/$(whoami)/wow/mangos-wotlk/build"
-    FOLDER_SQL="/home/$(whoami)/wow/mangos-wotlk/sql"
-    FOLDER_CORE="/home/$(whoami)/wow/mangos-wotlk"
-    FOLDER_DB="/home/$(whoami)/wow/wotlk-db"
-    FOLDER_WOW="/home/$(whoami)/wow"
-    DB_CHARACTERS="wotlk_characters"
-    DB_MANGOS="wotlk_mangos$DBEXTRA"
-    DB_REALMD="wotlk_realmd$DBEXTRA"
-    SERVER_TYPE_CMAKE="wotlk"
+    TYPE_CORE="wotlk"
     SERVER_BUILD=$(printf '%b' "${CY:?}WoTLK${N0:?}\n")
   fi
+
+  # server type, core, database
+  GITHUB_CMANGOS="https://github.com/cmangos/mangos-${TYPE_CORE:?}.git"
+  GITHUB_DATABASE="https://github.com/cmangos/${TYPE_CORE:?}-db.git"
+  FOLDER_BUILD="/home/$(whoami)/wow/mangos-${TYPE_CORE:?}/build"
+  FOLDER_SQL="/home/$(whoami)/wow/mangos-${TYPE_CORE:?}/sql"
+  FOLDER_CORE="/home/$(whoami)/wow/mangos-${TYPE_CORE:?}"
+  FOLDER_DB="/home/$(whoami)/wow/${TYPE_CORE:?}-db"
+  FOLDER_WOW="/home/$(whoami)/wow"
+  DB_CHARACTERS="${TYPE_CORE:?}_characters$DBEXTRA"
+  DB_MANGOS="${TYPE_CORE:?}_mangos$DBEXTRA"
+  DB_REALMD="${TYPE_CORE:?}_realmd$DBEXTRA"
+  SERVER_TYPE_CMAKE="${TYPE_CORE:?}"
 
   # custom git repos
   if echo "${CUSTOM_SERVER:?}" 2>&1 | grep -q -E "c|C|custom|Custom" 2>&1; then
@@ -2083,8 +2064,6 @@ $RA_TIP"
         git fetch origin master &>/dev/null &&
         [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
         git merge origin/master; then
-        # remove old file
-        rm /var/log/ms/installed_core_"$SERVER_TYPE_INSTALLED" &>/dev/null
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         LATEST_HEAD=$(git rev-parse --short HEAD)
         printf '%b' "[${G1:?}NEW${N0:?}] (${G1:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) ${G1:?}${UND:?}New Updates For Core${DEF:?}${N0:?}! - $LATEST_DATE
@@ -2145,8 +2124,6 @@ ${GR:?}(m) Update CMaNGOS > Compile latest${N0:?}\n"
         git fetch origin master &>/dev/null &&
         [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
         git merge origin/master; then
-        # remove old file
-        rm /var/log/ms/installed_db_"$SERVER_TYPE_INSTALLED" &>/dev/null
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         LATEST_HEAD=$(git rev-parse --short HEAD)
         printf '%b' "[${G1:?}NEW${N0:?}] (${G1:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) ${G1:?}${UND:?}New Updates For Database${DEF:?}${N0:?}! - $LATEST_DATE
@@ -2183,8 +2160,6 @@ ${GR:?}(d) Update Database > Update core-db${N0:?}\n"
         git fetch origin master &>/dev/null &&
         [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
         git merge origin/master; then
-        # remove old file
-        rm /var/log/ms/installed_ms &>/dev/null
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         LATEST_HEAD=$(git rev-parse --short HEAD)
         printf '%b' "[${G1:?}NEW${N0:?}] (${G1:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) ${G1:?}${UND:?}New Updates For Helper${DEF:?}${N0:?}! - $LATEST_DATE
