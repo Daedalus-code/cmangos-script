@@ -25,7 +25,7 @@ Admin Helper Tool in bash
 "Update Database" Converting myisam -> innodb? Works on MariaDB.  
 
 #### What's the purpose of this tool?  
-This tool introduce helping functions and features for admins running a WoW Vanilla server.
+This tool introduce helping functions and features for admins running a WoW server.
 #### How do you get it to work?
 ##### First time install
 ```mkdir /home/```  
