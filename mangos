@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211203
-# 5.9.6.9
+# 5.9.7.1
 
 while :; do
 
@@ -3697,6 +3697,7 @@ Database User, Client/Server is needed."
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         read -t 5 -r -p "[YN] Restart localhost SQL Server? y/n " -n 1 -r
+        echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           echo "[!!] Restarting service!"
           # restart mysql service, if it exists
@@ -3718,7 +3719,7 @@ Database User, Client/Server is needed."
             sudo service mariadb restart &>/dev/null
           fi
         fi
-        echo "Please wait"
+        echo "[!!] Please wait"
         # this is for docker users
         if [ -f /.dockerenv ]; then
           printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}"
@@ -3806,6 +3807,7 @@ Database User, Client/Server is needed."
           fi
         fi
         # InstallFullDB?
+        echo
         printf '%b' "[CD] $SERVER_BUILD\n"
         read -r -p "[YN] InstallFullDB? y/n " -n 1 -r
         echo
