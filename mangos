@@ -235,9 +235,9 @@ while :; do
 
   # installed repos
   SERVER_TYPE_INSTALLED=$(echo "$SERVER_TYPE_CMAKE")
-  CORE_HEAD="$(grep -Eo "Head:.*" /var/log/ms/Installed_core_"$SERVER_TYPE_INSTALLED" 2>&1 | grep -v 'No such file or directory' >&2 |
+  CORE_HEAD="$(grep -Eo "Head:.*" /var/log/ms/Installed_core_"$SERVER_TYPE_INSTALLED" 2>&1 | grep -v 'No such file or directory' 2>&1 |
     awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)"
-  DATA_HEAD="$(grep -Eo "Head:.*" /var/log/ms/Installed_db_"$SERVER_TYPE_INSTALLED" 2>&1 | grep -v 'No such file or directory' >&2 |
+  DATA_HEAD="$(grep -Eo "Head:.*" /var/log/ms/Installed_db_"$SERVER_TYPE_INSTALLED" 2>&1 | grep -v 'No such file or directory' 2>&1 |
     awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)"
   TOOL_HEAD="$(grep -Eo "Head:.*" /var/log/ms/Installed_ms 2>&1 |
     awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)"
