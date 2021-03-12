@@ -1,52 +1,30 @@
-# THEME COLOR ##################################################################
+# SERVER # Classic, TBC, WoTLK #################################################
 
-# 0 White, 1 Red light, 2 Red, 3 Blue light, 4 Blue, 5 Cyan light, 6 Cyan
-# 7 Purple light, 8 Purple, 9 Yellow light, 10 Yellow, 11 Green light, 12 Green
-# 13 Grey
-
-THEME_ALL="6"
-THEME_TXT="0"
-THEME_DSC="13"
-
-# SERVER #######################################################################
+SERVER_TYPE="Classic"
 
 SERVER_NAME="REALM_NAME"
 SERVER_NAME_LAN="REALM_NAME(lan)"
+
 INTERNET="HOSTNAME"
 INTRANET="LOCALHOST"
 REALM_PORT="8085"
 
 # CMAKE ########################################################################
 
-# Please change expansion name (wow/mangos-'expansion'/run) if anything else.
-
-CMAKE="-DCMAKE_INSTALL_PREFIX=/home/$(whoami)/wow/mangos-classic/run
--DBUILD_EXTRACTORS=ON
--DPCH=1
--DDEBUG=0
--DBUILD_PLAYERBOT=OFF
--DBUILD_AHBOT=OFF"
+DBUILD_AHBOT="0"
+DBUILD_EXTRACTORS="1"
+DBUILD_PLAYERBOT="0"
+DDEBUG="0"
+DPCH="1"
+DEXTRA=""
 
 AUTO_BUILD="0" # auto detect cores (default 0/off)
 
-# SYSTEM #######################################################################
+# custom server/repos (default 0/off)
+CUSTOM_SERVER="0"
 
-REALM_SERVICE=realmd
-WORLD_SERVICE=mangosd
-PATCH="CMaNGOS.patch" # please edit if wrong name.
-
-# GIT ##########################################################################
-
-GITHUB_HELPER="https://github.com/Daedalus-code/cmangos-script.git"
-
-GITHUB_CMANGOS="https://github.com/cmangos/mangos-classic.git"
-GITHUB_DATABASE="https://github.com/cmangos/classic-db.git"
-
-#GITHUB_CMANGOS="https://github.com/cmangos/mangos-tbc.git"
-#GITHUB_DATABASE="https://github.com/cmangos/tbc-db.git"
-
-#GITHUB_CMANGOS="https://github.com/cmangos/mangos-wotlk.git"
-#GITHUB_DATABASE="https://github.com/cmangos/wotlk-db.git"
+GITHUB_CMANGOS_CUSTOM=""
+GITHUB_DATABASE_CUSTOM=""
 
 # RA/NETCAT ####################################################################
 
@@ -60,28 +38,19 @@ PORT_NC="3443"
 FOLDER_INSTALL="/home"
 FOLDER_HELPER="/home/cmangos-script"
 
-# Please change expansion name (wow/mangos-'expansion') if anything else.
-
-FOLDER_BUILD="/home/$(whoami)/wow/mangos-classic/build"
-FOLDER_SQL="/home/$(whoami)/wow/mangos-classic/sql"
-FOLDER_CORE="/home/$(whoami)/wow/mangos-classic"
-FOLDER_DB="/home/$(whoami)/wow/classic-db"
-FOLDER_WOW="/home/$(whoami)/wow"
-
 # MYSQL ########################################################################
 
 SQL_MYCNF="/home/server.cnf"
+DBEXTRA=""
 
-DB_CHARACTERS="classiccharacters"
-DB_MANGOS="classicmangos"
-DB_REALMD="classicrealmd"
+# THEME COLOR ##################################################################
 
-#DB_CHARACTERS="tbccharacters"
-#DB_MANGOS="tbcmangos"
-#DB_REALMD="tbcrealmd"
+# 0 White, 1 Red light, 2 Red, 3 Blue light, 4 Blue, 5 Cyan light, 6 Cyan
+# 7 Purple light, 8 Purple, 9 Yellow light, 10 Yellow, 11 Green light, 12 Green
+# 13 Grey
 
-#DB_CHARACTERS="wotlkcharacters"
-#DB_MANGOS="wotlkmangos"
-#DB_REALMD="wotlkrealmd"
+THEME_ALL="6"
+THEME_TXT="0"
+THEME_DSC="13"
 
 # END
