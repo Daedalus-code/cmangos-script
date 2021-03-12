@@ -1423,7 +1423,7 @@ EOF
 
             R_MAPS="${G1:?}wotlk_maps.zip${N0:?}"
             R_MAPS_MOD="wotlk_maps"
-            add magnet link: wotlk_maps.zip.torrent
+            # add magnet link: wotlk_maps.zip.torrent
             function p2p_install_maps {
               transmission-remote -a "magnet:?xt=urn:btih:e4f2e2989313f71a13400da93bde4ff577d0b255&dn=wotlk%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
             }
