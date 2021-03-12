@@ -270,11 +270,11 @@ while :; do
   # menu
   clear
   printf '%b' "${GR:?} - - - - - - - - - - - - - - - - - - - - - - -${N0:?}
-    _____ _____     _____ _____ _____ _____
-   |     |     |___|   | |   __|     |   __|
-   |   --| | | | .'| | | |  |  |  |  |__   |${THEME_ALL:?}
-   |_____|_|_|_|__,|_|___|_____|_____|_____|${N0:?}
-    C(ontinued)-MaNGOS ${GR:?}Tool$N0
+   _____ _____     _____ _____ _____ _____
+  |     |     |___|   | |   __|     |   __|
+  |   --| | | | .'| | | |  |  |  |  |__   |${THEME_ALL:?}
+  |_____|_|_|_|__,|_|___|_____|_____|_____|${N0:?}
+   C(ontinued)-MaNGOS ${GR:?}Tool$N0
 
    Core ${GR:?}$CORE_HEAD$N0  Online $MENU_ON_COUNT
    Data ${GR:?}$DATA_HEAD$N0  Guilds $MENU_GU_COUNT
