@@ -21,8 +21,6 @@ Admin Helper Tool in bash
 * ping                -  Ping server. (internet/intranet)
 * logs                -  Show logs. (Realmd.log, Server.log)
 * quit                -  Exit the script.  
-##### Note  
-"Update Database" Converting myisam -> innodb? Works on MariaDB.  
 
 #### What's the purpose of this tool?  
 This tool introduce helping functions and features for admins running a WoW server.
