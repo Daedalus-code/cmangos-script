@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20211103
-# 5.8.6.8
+# V20211203
+# 5.9.7.0
 
 while :; do
 
@@ -39,6 +39,67 @@ while :; do
   # effects
   UND='\e[4m' # Underline
   DEF='\e[0m' # Default color and effects
+
+  # GIT ########################################################################
+
+  GITHUB_HELPER="https://github.com/Daedalus-code/cmangos-script.git"
+
+  # SYSTEM #####################################################################
+
+  REALM_SERVICE="realmd"
+  WORLD_SERVICE="mangosd"
+  PATCH="CMaNGOS.patch" # please edit if wrong name.
+
+  # server type, core, database
+  if echo "${SERVER_TYPE:?}" 2>&1 | grep -q -E "c|C|v|V|classic|Classic|vanilla|Vanilla" 2>&1; then
+    GITHUB_CMANGOS="https://github.com/cmangos/mangos-classic.git"
+    GITHUB_DATABASE="https://github.com/cmangos/classic-db.git"
+    FOLDER_BUILD="/home/$(whoami)/wow/mangos-classic/build"
+    FOLDER_SQL="/home/$(whoami)/wow/mangos-classic/sql"
+    FOLDER_CORE="/home/$(whoami)/wow/mangos-classic"
+    FOLDER_DB="/home/$(whoami)/wow/classic-db"
+    FOLDER_WOW="/home/$(whoami)/wow"
+    DB_CHARACTERS="classic_characters$DBEXTRA"
+    DB_MANGOS="classic_mangos$DBEXTRA"
+    DB_REALMD="classic_realmd$DBEXTRA"
+    SERVER_TYPE_CMAKE="classic"
+    SERVER_BUILD="${CY:?}Classic$N0"
+  elif echo "${SERVER_TYPE:?}" 2>&1 | grep -q -E "t|T|tbc|TBC" 2>&1; then
+    GITHUB_CMANGOS="https://github.com/cmangos/mangos-tbc.git"
+    GITHUB_DATABASE="https://github.com/cmangos/tbc-db.git"
+    FOLDER_BUILD="/home/$(whoami)/wow/mangos-tbc/build"
+    FOLDER_SQL="/home/$(whoami)/wow/mangos-tbc/sql"
+    FOLDER_CORE="/home/$(whoami)/wow/mangos-tbc"
+    FOLDER_DB="/home/$(whoami)/wow/tbc-db"
+    FOLDER_WOW="/home/$(whoami)/wow"
+    DB_CHARACTERS="tbc_characters$DBEXTRA"
+    DB_MANGOS="tbc_mangos$DBEXTRA"
+    DB_REALMD="tbc_realmd$DBEXTRA"
+    SERVER_TYPE_CMAKE="tbc"
+    SERVER_BUILD="${CY:?}The Burning Crusade$N0"
+  elif echo "${SERVER_TYPE:?}" 2>&1 | grep -q -E "w|W|wotlk|WoTLK" 2>&1; then
+    GITHUB_CMANGOS="https://github.com/cmangos/mangos-wotlk.git"
+    GITHUB_DATABASE="https://github.com/cmangos/wotlk-db.git"
+    FOLDER_BUILD="/home/$(whoami)/wow/mangos-wotlk/build"
+    FOLDER_SQL="/home/$(whoami)/wow/mangos-wotlk/sql"
+    FOLDER_CORE="/home/$(whoami)/wow/mangos-wotlk"
+    FOLDER_DB="/home/$(whoami)/wow/wotlk-db"
+    FOLDER_WOW="/home/$(whoami)/wow"
+    DB_CHARACTERS="wotlk_characters"
+    DB_MANGOS="wotlk_mangos$DBEXTRA"
+    DB_REALMD="wotlk_realmd$DBEXTRA"
+    SERVER_TYPE_CMAKE="wotlk"
+    SERVER_BUILD="${CY:?}Wrath of the Lich King$N0"
+  else
+    echo "Configuration failed!"
+    exit
+  fi
+
+  # custom git repos
+  if echo "${SERVER_TYPE:?}" 2>&1 | grep -q -E "c|C|custom|Custom" 2>&1; then
+    GITHUB_CMANGOS=$(echo "$GITHUB_CMANGOS_CUSTOM")
+    GITHUB_DATABASE=$(echo "$GITHUB_DATABASE_CUSTOM")
+  fi
 
   # helper description color
   case "${THEME_DSC:?}" in
@@ -111,21 +172,29 @@ while :; do
   # get guild count
   MENU_GU_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM ${DB_CHARACTERS:?}.guild;" 2>&1)
 
+  # non responsive, sql table doesn't exist
+  if echo "$MENU_ON_COUNT" 2>&1 | grep -q -E "ERROR 1146" &>/dev/null; then
+    MENU_ON_COUNT="${R1:?}Empty${N0:?}"
+  fi
+  # non responsive, sql table doesn't exist
+  if echo "$MENU_GU_COUNT" 2>&1 | grep -q -E "ERROR 1146" &>/dev/null; then
+    MENU_GU_COUNT="${R1:?}Empty${N0:?}"
+  fi
   # non responsive, sql access denied
   if echo "$MENU_ON_COUNT" 2>&1 | grep -q -E "Access denied" &>/dev/null; then
-    MENU_ON_COUNT="!"
+    MENU_ON_COUNT="${R1:?}Denied${N0:?}"
   fi
   # non responsive, sql access denied
   if echo "$MENU_GU_COUNT" 2>&1 | grep -q -E "Access denied" &>/dev/null; then
-    MENU_GU_COUNT="!"
+    MENU_GU_COUNT="${R1:?}Denied${N0:?}"
   fi
   # non responsive, null
   if echo "$MENU_ON_COUNT" 2>&1 | grep -q -E "NULL" &>/dev/null; then
-    MENU_ON_COUNT="?"
+    MENU_ON_COUNT="Empty"
   fi
   # non responsive, null
   if echo "$MENU_GU_COUNT" 2>&1 | grep -q -E "NULL" &>/dev/null; then
-    MENU_GU_COUNT="?"
+    MENU_GU_COUNT="Empty"
   fi
   # non responsive, zero
   if [ -z "$MENU_ON_COUNT" ]; then
@@ -300,14 +369,14 @@ ${N0:?}                                       __
       clear
       printf '%b' "${GR:?} - - - - - - - - - - - - - - - - - - - - - - -${N0:?}
 
-           ${N0:?}0 $GR:$N0 Vanilla${G0:?}
+           0 $GR:$N0 Classic
            1 $GR:$N0 The Burning Crusade
            2 $GR:$N0 Wrath of the Lich King
 
-           ${N0:?}0 $GR:$N0 Player${G0:?}
+           0 $GR:$N0 Player
            1 $GR:$N0 Moderator
            2 $GR:$N0 Game Master
-           3 $GR:$N0 Administrator${N0:?}
+           3 $GR:$N0 Administrator
 
       Minimum 5 characters account name.
 
@@ -803,7 +872,7 @@ ${PASS_NC:?}
    * Download latest Core/Database updates
    * Upgrade Database with latest fixes
    * Compile CMaNGOS with latest fixes
-   * Download/Import Maps: ${G0:?}Vanilla${N0:?},${G0:?} TBC${N0:?}, ${GR:?}WoTLK${N0:?}
+   * Download/Import Maps: ${G0:?}Classic${N0:?},${G0:?} TBC${N0:?}, ${GR:?}WoTLK${N0:?}
    * Setup RA for account tools
    * Profit
 
@@ -821,10 +890,10 @@ ${N0:?}"
       "m")
 
         # check if expansion_maps.zip exist
-        if [ -f /seedbox/vanilla_maps.zip ]; then
-          V_MAPS="${G1:?}Vanilla${N0:?}"
+        if [ -f /seedbox/classic_maps.zip ]; then
+          V_MAPS="${G1:?}Classic${N0:?}"
         else
-          V_MAPS="Vanilla"
+          V_MAPS="Classic"
         fi
         if [ -f /seedbox/tbc_maps.zip ]; then
           T_MAPS="${G1:?}TBC${N0:?}"
@@ -861,8 +930,8 @@ ${N0:?}"
           break
         fi
 
-        if [ -f /var/log/ms/vanilla_maps.zip.tmp ]; then
-          # downloading, vanilla_maps.zip
+        if [ -f /var/log/ms/classic_maps.zip.tmp ]; then
+          # downloading, classic_maps.zip
           P2P_AV="${Y1:?}"
         else
           P2P_AV="${GR:?}"
@@ -896,10 +965,10 @@ ${N0:?}"
           SLASH=" "
         else
           if [ -f /var/log/ms/transmission_list ]; then
-            P2P_ID1=$(echo "$P2P_INFO" 2>&1 | grep -A 36 "vanilla" 2>&1)
+            P2P_ID1=$(echo "$P2P_INFO" 2>&1 | grep -A 36 "classic" 2>&1)
             P2P_ID2=$(echo "$P2P_INFO" 2>&1 | grep -A 36 "tbc" 2>&1)
             P2P_ID3=$(echo "$P2P_INFO" 2>&1 | grep -A 36 "wotlk" 2>&1)
-            # peers, connected, seeding to, downloading from, vanilla_maps
+            # peers, connected, seeding to, downloading from, classic_maps
             P2P_PEERS_CONNECTED_ID1=$(echo "$P2P_ID1" 2>&1 | grep "Peers" 2>&1 | awk '{ print $4 }' 2>&1 | awk -F, '{ print $1 }' 2>&1)
             P2P_PEERS_SEEDINGTO_ID1=$(echo "$P2P_ID1" 2>&1 | grep "Peers" 2>&1 | awk '{ print $7 }' 2>&1 | awk -F, '{ print $1 }' 2>&1)
             P2P_PEERS_DOWN_LOAD_ID1=$(echo "$P2P_ID1" 2>&1 | grep "Peers" 2>&1 | awk '{ print $10 }' 2>&1)
@@ -912,11 +981,11 @@ ${N0:?}"
             P2P_PEERS_SEEDINGTO_ID3=$(echo "$P2P_ID3" 2>&1 | grep "Peers" 2>&1 | awk '{ print $7 }' 2>&1 | awk -F, '{ print $1 }' 2>&1)
             P2P_PEERS_DOWN_LOAD_ID3=$(echo "$P2P_ID3" 2>&1 | grep "Peers" 2>&1 | awk '{ print $10 }' 2>&1)
 
-            # get progress, vanilla_maps
+            # get progress, classic_maps
             if echo "$P2P_ID1" 2>&1 | grep -q -o "Percent Done: 100%" 2>&1; then
               P2P_PROG_ID1="${G1:?}100%${N0:?}"
               P2P_PROG_ID1=$(echo "$P2P_PROG_ID1 ")
-              rm /var/log/ms/vanilla_maps.zip.tmp &>/dev/null
+              rm /var/log/ms/classic_maps.zip.tmp &>/dev/null
             else
               P2P_PROG_ID1=$(echo "$P2P_ID1" 2>&1 | grep -Eo "Percent Done:.*" 2>&1 |
                 awk '{ print $3 }' 2>&1)
@@ -945,7 +1014,7 @@ ${N0:?}"
               P2P_PROG_ID3=$(echo "$P2P_PROG_ID3 ")
             fi
 
-            # id 1 (vanilla_maps)
+            # id 1 (classic_maps)
             # get download stats
             P2P_DWNS_ID1=$(echo "$P2P_ID1" 2>&1 | grep "Downloaded: " 2>&1 | awk '{ print $2,$3 }' 2>&1 | xargs 2>&1)
             P2P_DWNS_ID1=$(echo "$P2P_DWNS_ID1 ")
@@ -1307,7 +1376,7 @@ EOF
           TITLE="Download/Import Maps"
           MENU="Choose one options"
 
-          OPTIONS=(1 "Vanilla_Maps.zip"
+          OPTIONS=(1 "Classic_Maps.zip"
             2 "TBC_Maps.zip"
             3 "WoTLK_Maps.zip")
 
@@ -1325,12 +1394,12 @@ EOF
           "1")
 
             # create maps.tmp file
-            touch /var/log/ms/vanilla_maps.zip.tmp
-            R_MAPS="${G1:?}vanilla_maps.zip${N0:?}"
-            R_MAPS_MOD="vanilla_maps"
-            # add magnet link: vanilla.maps.zip.torrent
+            touch /var/log/ms/classic_maps.zip.tmp
+            R_MAPS="${G1:?}classic_maps.zip${N0:?}"
+            R_MAPS_MOD="classic_maps"
+            # add magnet link: classic_maps.zip.torrent
             function p2p_install_maps {
-              transmission-remote -a "magnet:?xt=urn:btih:1cdcaa3d77a7f4df79935d885e639903e37dda24&dn=vanilla%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
+              transmission-remote -a "magnet:?xt=urn:btih:1cdcaa3d77a7f4df79935d885e639903e37dda24&dn=classic%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
             }
             p2p_install_option
 
@@ -1459,7 +1528,7 @@ EOF
             TITLE="Import Downloaded Maps"
             MENU="Choose one options"
 
-            OPTIONS=(1 "Vanilla_Maps.zip"
+            OPTIONS=(1 "Classic_Maps.zip"
               2 "TBC_Maps.zip"
               3 "WoTLK_Maps.zip")
 
@@ -1474,7 +1543,7 @@ EOF
             clear
             case $CHOICE in
 
-            ### Vanilla Maps ###################################################
+            ### Classic Maps ###################################################
 
             1)
 
@@ -1487,7 +1556,7 @@ EOF
                 printf '%b' "[${G1:?}OK${N0:?}] Maps already installed!\n"
                 sleep 2
               else
-                sudo unzip /seedbox/vanilla_maps.zip -d "$FOLDER_CORE"/run
+                sudo unzip /seedbox/classic_maps.zip -d "$FOLDER_CORE"/run
                 sudo mv "$FOLDER_CORE"/run/dump/* "$FOLDER_CORE"/run/ &>/dev/null
                 sudo rm -R "$FOLDER_CORE"/run/dump/ &>/dev/null
                 # get seconds since start
@@ -2325,6 +2394,31 @@ ${GR:?}(w) Update Helper > Update Helper${N0:?}\n"
         sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
         mkdir "$FOLDER_CORE"/build &>/dev/null
         cd "${FOLDER_BUILD:?}" || exit
+
+        if [[ "$DBUILD_AHBOT" -eq "1" ]]; then
+          DBUILD_AHBOT="ON"
+        else
+          DBUILD_AHBOT="OFF"
+        fi
+        if [[ "$DBUILD_EXTRACTORS" -eq "1" ]]; then
+          DBUILD_EXTRACTORS="ON"
+        else
+          DBUILD_EXTRACTORS="OFF"
+        fi
+        if [[ "$DBUILD_PLAYERBOT" -eq "1" ]]; then
+          DBUILD_PLAYERBOT="ON"
+        else
+          DBUILD_PLAYERBOT="OFF"
+        fi
+
+        CMAKE="-DCMAKE_INSTALL_PREFIX=/home/$(whoami)/wow/mangos-$SERVER_TYPE_CMAKE/run
+        -DBUILD_EXTRACTORS=$DBUILD_EXTRACTORS
+        -DPCH=$DPCH
+        -DDEBUG=$DDEBUG
+        -DBUILD_PLAYERBOT=$DBUILD_PLAYERBOT
+        -DBUILD_AHBOT=$DBUILD_AHBOT
+        $DEXTRA"
+
         # double quotes ("") and single quotes ('') around > $cmake < will mess things up.
         # shellcheck disable=SC2086
         echo
@@ -2466,7 +2560,7 @@ ${GR:?}$CPU_MODEL${N0:?}")
           fi
         else
 
-          printf '%b' "
+          printf '%b' "$SERVER_BUILD
 $CORES_COUNT $CMAKE_TEMP
 
 Compiling using multiple cores:
@@ -2820,7 +2914,7 @@ Select install operation"
 
         # /etc/systemd/system/realmd.service
         echo "[Unit]
-Description=WoW Vanilla realmd service
+Description=WoW $SERVER_TYPE realmd service
 After=network.target mysql.service
 
 [Service]
@@ -2833,7 +2927,7 @@ Restart=on-abort
 WantedBy=multi-user.target" >"$FOLDER_WOW"/realmd.service 2>&1
         # /etc/systemd/system/mangosd.service
         echo "[Unit]
-Description=WoW Vanilla mangosd service
+Description=WoW $SERVER_TYPE mangosd service
 After=network.target mysql.service realmd.service getty@tty3.service
 
 [Service]
@@ -3024,7 +3118,7 @@ ${GR:?}$CPU_MODEL${N0:?}")
           SYS_CPU128=""
         fi
 
-        printf '%b' "
+        printf '%b' "$SERVER_BUILD
 $CORES_COUNT $CMAKE_TEMP
 
 Compiling using multiple cores:
@@ -3711,7 +3805,7 @@ Database User, Client/Server is needed."
           fi
         fi
         # InstallFullDB?
-        echo
+        printf '%b' "[CD] $SERVER_BUILD\n"
         read -r -p "[YN] InstallFullDB? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -3861,7 +3955,7 @@ Database User, Client/Server is needed."
         # delete and start over done
 
         # InstallFullDB?
-
+        printf '%b' "[CD] $SERVER_BUILD\n"
         read -r -p "[YN] InstallFullDB? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -4367,7 +4461,7 @@ Check log for which database needs 'applying updates'"
       # InstallFullDB?
       echo
       printf '%b' "${G0:?}Recommended if you applied anything${N0:?}"
-      echo
+      printf '%b' "[CD] $SERVER_BUILD\n"
       read -r -p "[YN] InstallFullDB? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -4453,6 +4547,14 @@ Check log for which database needs 'applying updates'"
       # get classes from table characters
       mysql --defaults-extra-file="$SQL_MYCNF" --execute="SELECT class FROM $DB_CHARACTERS.characters;" 2>&1 |
         tr -d 'class' >/var/log/ms/classes."$NOW" # update this everyday
+    fi
+
+    # count lines in classes
+    COUNT_LINES_CLASSES=$(wc -l /var/log/ms/classes.* 2>&1 | awk '{ print $1 }' 2>&1)
+
+    if [ "$COUNT_LINES_CLASSES" -eq "0" ]; then
+      # remove old empty file
+      rm /var/log/ms/classes.* &>/dev/null
     fi
 
     # index class, count each one
