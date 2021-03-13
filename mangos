@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211303
-# 5.9.0.5
+# 5.9.1.9
 
 while :; do
 
@@ -269,7 +269,7 @@ while :; do
 
      Core ${GR:?}$CORE_HEAD$N0  Online $MENU_ON_COUNT
      Data ${GR:?}$DATA_HEAD$N0  Guilds $MENU_GU_COUNT
-     Tool ${GR:?}$TOOL_HEAD$N0  Core $SERVER_BUILD$N0
+     Tool ${GR:?}$TOOL_HEAD$N0  WoW $SERVER_BUILD$N0
 
          $LOAD$N0
          $MENU_MANGOSD$GR | $N0$MENU_REALMD
@@ -2888,7 +2888,7 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/mangosd.service 2>&1
 /etc/systemd/system/'${THEME_ALL:?}realmd.service${N0:?}'
 /etc/systemd/system/'${THEME_ALL:?}mangosd.service${N0:?}'
 
-Check if correct information, or just restart server."
+Check if correct information, or just restart server.\n"
         echo
         printf '%b' "[${G1:?}OK${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
@@ -4823,6 +4823,20 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
   "r")
 
+    if [ -f /etc/systemd/system/mangosd.service ]; then
+      MSERVICE_SET=$(sudo grep "WoW" /etc/systemd/system/mangosd.service 2>&1 |
+        awk '{ print $2 }' 2>&1)
+    else
+      MSERVICE_SET="Screen?"
+    fi
+    if [ -f /etc/systemd/system/realmd.service ]; then
+      RSERVICE_SET=$(sudo grep "WoW" /etc/systemd/system/realmd.service 2>&1 |
+        awk '{ print $2 }' 2>&1)
+    else
+      RSERVICE_SET="Screen?"
+    fi
+    printf '%b' "   Service ${GR:?}$MSERVICE_SET / $RSERVICE_SET${N0:?}\n"
+    sleep 1
     # check if 'mangosd.conf' are installed
     FILE="$FOLDER_CORE/run/etc/mangosd.conf"
     if [ ! -f "$FILE" ]; then
