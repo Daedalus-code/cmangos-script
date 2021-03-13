@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211303
-# 5.9.1.9
+# 5.9.0.9
 
 while :; do
 
@@ -20,7 +20,8 @@ while :; do
   # shellcheck disable=SC1091
   source /home/server.txt # please edit if wrong.
 
-  # color
+  # Color ######################################################################
+
   B0='\e[34m'   # Blue
   B1='\e[94m'   # Blue light
   CY='\e[36m'   # Cyan
@@ -46,8 +47,6 @@ while :; do
 
   # SYSTEM #####################################################################
 
-  REALM_SERVICE="realmd"
-  WORLD_SERVICE="mangosd"
   PATCH="CMaNGOS.patch" # please edit if wrong name.
 
   # server type
@@ -64,18 +63,19 @@ while :; do
     SERVER_BUILD=$(printf '%b' "${CY:?}WoTLK${N0:?}\n")
   fi
 
-  # server type, core, database
+  # github repos
   GITHUB_CMANGOS="https://github.com/cmangos/mangos-${TYPE_CORE:?}.git"
   GITHUB_DATABASE="https://github.com/cmangos/${TYPE_CORE:?}-db.git"
+  # folders
   FOLDER_BUILD="/home/$(whoami)/wow/mangos-${TYPE_CORE:?}/build"
   FOLDER_SQL="/home/$(whoami)/wow/mangos-${TYPE_CORE:?}/sql"
   FOLDER_CORE="/home/$(whoami)/wow/mangos-${TYPE_CORE:?}"
   FOLDER_DB="/home/$(whoami)/wow/${TYPE_CORE:?}-db"
   FOLDER_WOW="/home/$(whoami)/wow"
+  # database
   DB_CHARACTERS="${TYPE_CORE:?}_characters$DBEXTRA"
   DB_MANGOS="${TYPE_CORE:?}_mangos$DBEXTRA"
   DB_REALMD="${TYPE_CORE:?}_realmd$DBEXTRA"
-  SERVER_TYPE_CMAKE="${TYPE_CORE:?}"
 
   # custom git repos
   if echo "${CUSTOM_SERVER:?}" 2>&1 | grep -q -E "c|C|custom|Custom" 2>&1; then
@@ -158,7 +158,6 @@ while :; do
   if echo "$MENU_ON_COUNT" 2>&1 | grep -q -E "ERROR 1146" &>/dev/null; then
     MENU_ON_COUNT="${R1:?}Empty${N0:?}"
   fi
-  # non responsive, sql table doesn't exist
   if echo "$MENU_GU_COUNT" 2>&1 | grep -q -E "ERROR 1146" &>/dev/null; then
     MENU_GU_COUNT="${R1:?}Empty${N0:?}"
   fi
@@ -166,7 +165,6 @@ while :; do
   if echo "$MENU_ON_COUNT" 2>&1 | grep -q -E "Access denied" &>/dev/null; then
     MENU_ON_COUNT="${R1:?}Denied${N0:?}"
   fi
-  # non responsive, sql access denied
   if echo "$MENU_GU_COUNT" 2>&1 | grep -q -E "Access denied" &>/dev/null; then
     MENU_GU_COUNT="${R1:?}Denied${N0:?}"
   fi
@@ -174,7 +172,6 @@ while :; do
   if echo "$MENU_ON_COUNT" 2>&1 | grep -q -E "NULL" &>/dev/null; then
     MENU_ON_COUNT="Empty"
   fi
-  # non responsive, null
   if echo "$MENU_GU_COUNT" 2>&1 | grep -q -E "NULL" &>/dev/null; then
     MENU_GU_COUNT="Empty"
   fi
@@ -182,7 +179,6 @@ while :; do
   if [ -z "$MENU_ON_COUNT" ]; then
     MENU_ON_COUNT="0"
   fi
-  # non responsive, zero
   if [ -z "$MENU_GU_COUNT" ]; then
     MENU_GU_COUNT="0"
   fi
@@ -192,6 +188,10 @@ while :; do
 
   # load
   LOAD="$(cat /proc/loadavg 2>&1 | awk '{ print $1,$2,$3 }')"
+
+  # services
+  REALM_SERVICE="realmd"
+  WORLD_SERVICE="mangosd"
 
   # pid of realmd, mangosd
   PIDOF_REALMD=$(pidof $REALM_SERVICE 2>&1 | wc -w 2>&1)
@@ -233,19 +233,17 @@ while :; do
     fi
   fi
 
-  # installed repos
-  SERVER_TYPE_INSTALLED=$(echo "$SERVER_TYPE_CMAKE")
-  CORE_HEAD="$(grep -Eo "Head:.*" /var/log/ms/Installed_core_"$SERVER_TYPE_INSTALLED" 2>&1 | grep -v 'No such file or directory' 2>&1 |
+  CORE_HEAD="$(grep -Eo "Head:.*" /var/log/ms/Installed_core_"$TYPE_CORE" 2>&1 | grep -v 'No such file or directory' 2>&1 |
     awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)"
-  DATA_HEAD="$(grep -Eo "Head:.*" /var/log/ms/Installed_db_"$SERVER_TYPE_INSTALLED" 2>&1 | grep -v 'No such file or directory' 2>&1 |
+  DATA_HEAD="$(grep -Eo "Head:.*" /var/log/ms/Installed_db_"$TYPE_CORE" 2>&1 | grep -v 'No such file or directory' 2>&1 |
     awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)"
   TOOL_HEAD="$(grep -Eo "Head:.*" /var/log/ms/Installed_ms 2>&1 |
     awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)"
 
-  if [ "$(cat /var/log/ms/Installed_core_"$SERVER_TYPE_INSTALLED" 2>&1 | wc -l 2>&1)" -eq "0" ]; then
+  if [ "$(cat /var/log/ms/Installed_core_"$TYPE_CORE" 2>&1 | wc -l 2>&1)" -eq "0" ]; then
     CORE_HEAD="0000000"
   fi
-  if [ "$(cat /var/log/ms/Installed_db_"$SERVER_TYPE_INSTALLED" 2>&1 | wc -l 2>&1)" -eq "0" ]; then
+  if [ "$(cat /var/log/ms/Installed_db_"$TYPE_CORE" 2>&1 | wc -l 2>&1)" -eq "0" ]; then
     DATA_HEAD="0000000"
   fi
   if [ "$(cat /var/log/ms/Installed_ms 2>&1 | wc -l 2>&1)" -eq "0" ]; then
@@ -269,7 +267,7 @@ while :; do
 
      Core ${GR:?}$CORE_HEAD$N0  Online $MENU_ON_COUNT
      Data ${GR:?}$DATA_HEAD$N0  Guilds $MENU_GU_COUNT
-     Tool ${GR:?}$TOOL_HEAD$N0  WoW $SERVER_BUILD$N0
+     Tool ${GR:?}$TOOL_HEAD$N0  $SERVER_BUILD$N0
 
          $LOAD$N0
          $MENU_MANGOSD$GR | $N0$MENU_REALMD
@@ -317,7 +315,7 @@ while :; do
     printf '%b' "   [${P0:?}Y${R1:?}N${N0:?}] Debug helper? ${GR:?}mangos${N0:?} y/n \n"
     read -r -p "" -n 1 -r -s
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-      printf '%b' "   [$Y1!!$N0] Redo helper? ${GR:?}empty${N0:?} y/n \n"
+      printf '%b' "   [$P0!!$N0] Redo helper? ${GR:?}empty${N0:?} y/n \n"
       read -r -p "" -n 1 -r -s
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         sudo rm /usr/local/bin/mangos 2>&1
@@ -2010,19 +2008,19 @@ $RA_TIP"
   "c")
 
     # updated and installed
-    FILE_CORE="/var/log/ms/Installed_core_$SERVER_TYPE_INSTALLED"
+    FILE_CORE="/var/log/ms/Installed_core_$TYPE_CORE"
     if [ -f "$FILE_CORE" ]; then
       OK_CORE="[${G1:?}OK${N0:?}]"
     fi
-    FILE_CORE="/var/log/ms/Installed_core_$SERVER_TYPE_INSTALLED"
+    FILE_CORE="/var/log/ms/Installed_core_$TYPE_CORE"
     if [ ! -f "$FILE_CORE" ]; then
       OK_CORE="[${Y1:?}ok${N0:?}]"
     fi
-    FILE_DB="/var/log/ms/Installed_db_$SERVER_TYPE_INSTALLED"
+    FILE_DB="/var/log/ms/Installed_db_$TYPE_CORE"
     if [ -f "$FILE_DB" ]; then
       OK_DB="[${G1:?}OK${N0:?}]"
     fi
-    FILE_DB="/var/log/ms/Installed_db_$SERVER_TYPE_INSTALLED"
+    FILE_DB="/var/log/ms/Installed_db_$TYPE_CORE"
     if [ ! -f "$FILE_DB" ]; then
       OK_DB="[${Y1:?}ok${N0:?}]"
     fi
@@ -2042,7 +2040,7 @@ $RA_TIP"
       echo -ne '[!!] Please wait, looking for core directory!\r'
       sleep 2
       # remove old file
-      rm /var/log/ms/Installed_core_"$SERVER_TYPE_INSTALLED" &>/dev/null
+      rm /var/log/ms/Installed_core_"$TYPE_CORE" &>/dev/null
       # fresh install?
       DOWN_CORE=$(echo -e "\033[5m?\033[0m" 2>&1)
       printf '%b' "[YN]${GR:?} ${N0:?}(${GR:?}${UND:?}0000000${DEF:?}${N0:?})${GR:?} Download Core$DOWN_CORE y/n ${GR:?}skip in 5s ${N0:?}"
@@ -2078,7 +2076,7 @@ $RA_TIP"
         [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
         git merge origin/master; then
         # remove old file
-        rm /var/log/ms/Installed_core_"$SERVER_TYPE_INSTALLED" &>/dev/null
+        rm /var/log/ms/Installed_core_"$TYPE_CORE" &>/dev/null
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         LATEST_HEAD=$(git rev-parse --short HEAD 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)
         printf '%b' "[${G1:?}NEW${N0:?}] (${G1:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) ${G1:?}${UND:?}New Updates For Core${DEF:?}${N0:?}! $LATEST_DATE
@@ -2100,7 +2098,7 @@ ${GR:?}(m) CMaNGOS > Compile latest${N0:?}\n"
       echo -ne '[!!] Please wait, looking for database directory!\r'
       sleep 2
       # remove old file
-      rm /var/log/ms/Installed_db_"$SERVER_TYPE_INSTALLED" &>/dev/null
+      rm /var/log/ms/Installed_db_"$TYPE_CORE" &>/dev/null
       # fresh install?
       DOWN_DB=$(echo -e "\033[5m?\033[0m" 2>&1)
       printf '%b' "[YN]${GR:?} ${N0:?}(${GR:?}${UND:?}0000000${DEF:?}${N0:?})${GR:?} Download Database$DOWN_DB y/n ${GR:?}skip in 5s ${N0:?}"
@@ -2141,7 +2139,7 @@ ${GR:?}(m) CMaNGOS > Compile latest${N0:?}\n"
         [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
         git merge origin/master; then
         # remove old file
-        rm /var/log/ms/Installed_db_"$SERVER_TYPE_INSTALLED" &>/dev/null
+        rm /var/log/ms/Installed_db_"$TYPE_CORE" &>/dev/null
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         LATEST_HEAD=$(git rev-parse --short HEAD 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)
         printf '%b' "[${G1:?}NEW${N0:?}] (${G1:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) ${G1:?}${UND:?}New Updates For Database${DEF:?}${N0:?}! $LATEST_DATE
@@ -2180,7 +2178,7 @@ ${GR:?}(d) Database > Update core-db${N0:?}\n"
         [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
         git merge origin/master; then
         # remove old file
-        rm /var/log/ms/Installed_ms_"$SERVER_TYPE_INSTALLED" &>/dev/null
+        rm /var/log/ms/Installed_ms_"$TYPE_CORE" &>/dev/null
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         LATEST_HEAD=$(git rev-parse --short HEAD 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)
         printf '%b' "[${G1:?}NEW${N0:?}] (${G1:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) ${G1:?}${UND:?}New Updates For Tool${DEF:?}${N0:?}! $LATEST_DATE
@@ -2285,7 +2283,7 @@ ${GR:?}(w) Helper > Update Helper${N0:?}\n"
           0) ;;
           *)
             printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
-            sudo service realmd stop
+            sudo service "$TYPE_CORE"_realmd stop
             ;;
           esac
           # mangosd service
@@ -2293,7 +2291,7 @@ ${GR:?}(w) Helper > Update Helper${N0:?}\n"
           0) ;;
           *)
             printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
-            sudo service mangosd stop
+            sudo service "$TYPE_CORE"_mangosd stop
             ;;
           esac
         fi
@@ -2330,7 +2328,7 @@ ${GR:?}(w) Helper > Update Helper${N0:?}\n"
           DBUILD_PLAYERBOT="OFF"
         fi
 
-        CMAKE="-DCMAKE_INSTALL_PREFIX=/home/$(whoami)/wow/mangos-$SERVER_TYPE_CMAKE/run
+        CMAKE="-DCMAKE_INSTALL_PREFIX=/home/$(whoami)/wow/mangos-$TYPE_CORE/run
         -DBUILD_EXTRACTORS=$DBUILD_EXTRACTORS
         -DPCH=$DPCH
         -DDEBUG=$DDEBUG
@@ -2468,7 +2466,7 @@ ${GR:?}$CPU_MODEL${N0:?}")
             # create installed mark
             cd "$FOLDER_CORE" || exit
             LATEST_HEAD=$(git rev-parse --short HEAD)
-            echo "Core was installed at ${NOW:?} Head: $LATEST_HEAD" >/var/log/ms/Installed_core_"$SERVER_TYPE_INSTALLED"
+            echo "Core was installed at ${NOW:?} Head: $LATEST_HEAD" >/var/log/ms/Installed_core_"$TYPE_CORE"
             BUILD_BUTTON="${G1:?}OK${N0:?}"
           else
             echo
@@ -2480,7 +2478,7 @@ ${GR:?}$CPU_MODEL${N0:?}")
             echo
             printf '%b' "Build time: ${R1:?}$TIMER${N0:?} with ${R1:?}$CORES_BUILD${N0:?} Core(s)\n"
             # remove old file
-            rm /var/log/ms/Installed_core_"$SERVER_TYPE_INSTALLED" &>/dev/null
+            rm /var/log/ms/Installed_core_"$TYPE_CORE" &>/dev/null
             BUILD_BUTTON="${R1:?}!!${N0:?}"
           fi
         else
@@ -2783,7 +2781,7 @@ Select install operation"
             # create installed mark
             cd "$FOLDER_CORE" || exit
             LATEST_HEAD=$(git rev-parse --short HEAD)
-            echo "Core was installed at ${NOW:?} Head: $LATEST_HEAD" >/var/log/ms/Installed_core_"$SERVER_TYPE_INSTALLED"
+            echo "Core was installed at ${NOW:?} Head: $LATEST_HEAD" >/var/log/ms/Installed_core_"$TYPE_CORE"
             echo "make install"
             cd "$FOLDER_BUILD" || exit
             sudo make install 2>&1 | sudo tee /var/log/ms/build &>/dev/null
@@ -2800,7 +2798,7 @@ Select install operation"
             # create installed mark
             cd "$FOLDER_CORE" || exit
             LATEST_HEAD=$(git rev-parse --short HEAD)
-            echo "Core was installed at ${NOW:?} Head: $LATEST_HEAD with backup" >/var/log/ms/Installed_core_"$SERVER_TYPE_INSTALLED"
+            echo "Core was installed at ${NOW:?} Head: $LATEST_HEAD with backup" >/var/log/ms/Installed_core_"$TYPE_CORE"
             echo "checkinstall"
             cd "$FOLDER_BUILD" || exit
             sudo checkinstall 2>&1 | sudo tee /var/log/ms/build &>/dev/null
@@ -2841,10 +2839,16 @@ Select install operation"
       read -t 5 -r -p "[YN] Install systemd Services? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
-
+        # remove old files (old hierarchy), regardless
+        sudo systemctl disable mangosd.service &>/dev/null
+        sudo systemctl disable realmd.service &>/dev/null
+        sudo rm /etc/systemd/system/mangosd.service &>/dev/null
+        sudo rm /etc/systemd/system/realmd.service &>/dev/null
+        # this user
+        USER=$(whoami)
         # /etc/systemd/system/realmd.service
         echo "[Unit]
-Description=WoW $SERVER_TYPE realmd service
+Description=WoW $TYPE_CORE realmd service
 After=network.target mysql.service
 
 [Service]
@@ -2854,11 +2858,11 @@ ExecStart=$FOLDER_CORE/run/bin/realmd -c $FOLDER_CORE/run/etc/realmd.conf
 Restart=on-abort
 
 [Install]
-WantedBy=multi-user.target" >"$FOLDER_WOW"/realmd.service 2>&1
+WantedBy=multi-user.target" >"$FOLDER_WOW"/"$TYPE_CORE"_realmd.service 2>&1
         # /etc/systemd/system/mangosd.service
         echo "[Unit]
 Description=WoW $SERVER_TYPE mangosd service
-After=network.target mysql.service realmd.service getty@tty3.service
+After=network.target mysql.service ${TYPE_CORE:?}_realmd.service getty@tty3.service
 
 [Service]
 Type=simple
@@ -2872,21 +2876,19 @@ ExecStart=$FOLDER_CORE/run/bin/mangosd -c $FOLDER_CORE/run/etc/mangosd.conf -a $
 Restart=on-abort
 
 [Install]
-WantedBy=multi-user.target" >"$FOLDER_WOW"/mangosd.service 2>&1
+WantedBy=multi-user.target" >"$FOLDER_WOW"/"$TYPE_CORE"_mangosd.service 2>&1
         # install services
         sudo mv "$FOLDER_WOW"/*.service /etc/systemd/system/ &>/dev/null
         # enable services
-        sudo systemctl enable realmd
+        sudo systemctl enable "$TYPE_CORE"_realmd
         sleep 1
-        sudo systemctl enable mangosd
+        sudo systemctl enable "$TYPE_CORE"_mangosd
         # reload
         sudo systemctl daemon-reload 2>&1
         sleep 1
-        echo
-        printf '%b' "[${G1:?}OK${N0:?}]
-
-/etc/systemd/system/'${THEME_ALL:?}realmd.service${N0:?}'
-/etc/systemd/system/'${THEME_ALL:?}mangosd.service${N0:?}'
+        printf '%b' "
+/etc/systemd/system/${THEME_ALL:?}${TYPE_CORE:?}_realmd.service${N0:?}
+/etc/systemd/system/${THEME_ALL:?}${TYPE_CORE:?}_mangosd.service${N0:?}
 
 Check if correct information, or just restart server.\n"
         echo
@@ -2924,7 +2926,7 @@ Check if correct information, or just restart server.\n"
           0) ;;
           *)
             printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
-            sudo service realmd stop
+            sudo service "$TYPE_CORE"_realmd stop
             ;;
           esac
           # mangosd service
@@ -2932,7 +2934,7 @@ Check if correct information, or just restart server.\n"
           0) ;;
           *)
             printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
-            sudo service mangosd stop
+            sudo service "$TYPE_CORE"_mangosd stop
             ;;
           esac
         fi
@@ -3664,7 +3666,7 @@ Database User, Client/Server is needed."
           0) ;;
           *)
             printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
-            sudo service realmd stop
+            sudo service "$TYPE_CORE"_realmd stop
             ;;
           esac
           # mangosd service
@@ -3672,7 +3674,7 @@ Database User, Client/Server is needed."
           0) ;;
           *)
             printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
-            sudo service mangosd stop
+            sudo service "$TYPE_CORE"_mangosd stop
             ;;
           esac
         fi
@@ -3762,7 +3764,7 @@ Database User, Client/Server is needed."
         # create installed mark
         cd "$FOLDER_DB" || exit
         LATEST_HEAD=$(git rev-parse --short HEAD)
-        echo "Database was installed at ${NOW:?} Head: $LATEST_HEAD" >/var/log/ms/Installed_db_"$SERVER_TYPE_INSTALLED"
+        echo "Database was installed at ${NOW:?} Head: $LATEST_HEAD" >/var/log/ms/Installed_db_"$TYPE_CORE"
         printf '%b' "[${G1:?}OK${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
@@ -3797,7 +3799,7 @@ Database User, Client/Server is needed."
           0) ;;
           *)
             printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
-            sudo service realmd stop
+            sudo service "$TYPE_CORE"_realmd stop
             ;;
           esac
           # mangosd service
@@ -3805,7 +3807,7 @@ Database User, Client/Server is needed."
           0) ;;
           *)
             printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
-            sudo service mangosd stop
+            sudo service "$TYPE_CORE"_mangosd stop
             ;;
           esac
         fi
@@ -3961,7 +3963,7 @@ Database User, Client/Server is needed."
           0) ;;
           *)
             printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
-            sudo service realmd stop
+            sudo service "$TYPE_CORE"_realmd stop
             ;;
           esac
           # mangosd service
@@ -3969,7 +3971,7 @@ Database User, Client/Server is needed."
           0) ;;
           *)
             printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
-            sudo service mangosd stop
+            sudo service "$TYPE_CORE"_mangosd stop
             ;;
           esac
         fi
@@ -4288,7 +4290,7 @@ Check log for which database needs 'applying updates'"
         0) ;;
         *)
           printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
-          sudo service realmd stop
+          sudo service "$TYPE_CORE"_realmd stop
           ;;
         esac
         # mangosd service
@@ -4296,7 +4298,7 @@ Check log for which database needs 'applying updates'"
         0) ;;
         *)
           printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
-          sudo service mangosd stop
+          sudo service "$TYPE_CORE"_mangosd stop
           ;;
         esac
         echo
@@ -4326,7 +4328,7 @@ Check log for which database needs 'applying updates'"
         0) ;;
         *)
           printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
-          sudo service realmd stop
+          sudo service "$TYPE_CORE"_realmd stop
           ;;
         esac
         # mangosd service
@@ -4334,7 +4336,7 @@ Check log for which database needs 'applying updates'"
         0) ;;
         *)
           printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
-          sudo service mangosd stop
+          sudo service "$TYPE_CORE"_mangosd stop
           ;;
         esac
         echo
@@ -4363,7 +4365,7 @@ Check log for which database needs 'applying updates'"
         0) ;;
         *)
           printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
-          sudo service realmd stop
+          sudo service "$TYPE_CORE"_realmd stop
           ;;
         esac
         # mangosd service
@@ -4371,7 +4373,7 @@ Check log for which database needs 'applying updates'"
         0) ;;
         *)
           printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
-          sudo service mangosd stop
+          sudo service "$TYPE_CORE"_mangosd stop
           ;;
         esac
         echo
@@ -4406,7 +4408,7 @@ Check log for which database needs 'applying updates'"
           0) ;;
           *)
             printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
-            sudo service realmd stop
+            sudo service "$TYPE_CORE"_realmd stop
             ;;
           esac
           # mangosd service
@@ -4414,7 +4416,7 @@ Check log for which database needs 'applying updates'"
           0) ;;
           *)
             printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
-            sudo service mangosd stop
+            sudo service "$TYPE_CORE"_mangosd stop
             ;;
           esac
           printf '%b' "[${G1:?}OK${N0:?}]"
@@ -4669,7 +4671,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               *)
                 printf '%b' "[${Y1:?}OK${N0:?}] Stopping realmd.service\n"
                 sleep 1
-                sudo service realmd stop
+                sudo service "$TYPE_CORE"_realmd stop
                 sudo kill -9 "$PIDOF_REALMD" &>/dev/null
                 sleep 1
                 printf '%b' "[${G1:?}OK${N0:?}] Stopped! realmd.service!\n"
@@ -4684,7 +4686,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               *)
                 printf '%b' "[${Y1:?}OK${N0:?}] Stopping mangosd.service\n"
                 sleep 1
-                sudo service mangosd stop
+                sudo service "${TYPE_CORE:?}"_mangosd stop
                 sudo kill -9 "$PIDOFMANGOSD" &>/dev/null
                 sleep 1
                 printf '%b' "[${G1:?}OK${N0:?}] Stopped! mangosd.service\n"
@@ -4740,7 +4742,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             *)
               printf '%b' "[${Y1:?}OK${N0:?}] Stopping realmd.service\n"
               sleep 1
-              sudo service realmd stop
+              sudo service "$TYPE_CORE"_realmd stop
               sudo kill -9 "$PIDOF_REALMD" &>/dev/null
               sleep 1
               printf '%b' "[${G1:?}OK${N0:?}] Stopped! realmd.service!\n"
@@ -4796,7 +4798,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             *)
               printf '%b' "[${Y1:?}OK${N0:?}] Stopping mangosd.service\n"
               sleep 1
-              sudo service mangosd stop
+              sudo service "$TYPE_CORE"_mangosd stop
               sudo kill -9 "$PIDOFMANGOSD" &>/dev/null
               sleep 1
               printf '%b' "[${G1:?}OK${N0:?}] Stopped! mangosd.service\n"
@@ -4823,20 +4825,6 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
   "r")
 
-    if [ -f /etc/systemd/system/mangosd.service ]; then
-      MSERVICE_SET=$(sudo grep "WoW" /etc/systemd/system/mangosd.service 2>&1 |
-        awk '{ print $2 }' 2>&1)
-    else
-      MSERVICE_SET="Screen?"
-    fi
-    if [ -f /etc/systemd/system/realmd.service ]; then
-      RSERVICE_SET=$(sudo grep "WoW" /etc/systemd/system/realmd.service 2>&1 |
-        awk '{ print $2 }' 2>&1)
-    else
-      RSERVICE_SET="Screen?"
-    fi
-    printf '%b' "   Service ${GR:?}$MSERVICE_SET / $RSERVICE_SET${N0:?}\n"
-    sleep 1
     # check if 'mangosd.conf' are installed
     FILE="$FOLDER_CORE/run/etc/mangosd.conf"
     if [ ! -f "$FILE" ]; then
@@ -4957,7 +4945,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             # done
             printf '%b' "[${G1:?}OK${N0:?}] Restarting realmd, mangos service..\n"
             sleep 1
-            sudo service realmd restart &>/dev/null
+            sudo service "$TYPE_CORE"_realmd restart &>/dev/null
             # realmd service
             case "$(echo "$PIDOF_REALMD")" in
             0) printf '%b' "[${G0:?}OK${N0:?}] realmd.service starting\n" ;;
@@ -4965,7 +4953,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             *) printf '%b' "[${Y1:?}0!${N0:?}] realmd.service running?\n" ;;
             esac
             sleep 1
-            sudo service mangosd restart &>/dev/null
+            sudo service "$TYPE_CORE"_mangosd restart &>/dev/null
             # mangosd service
             case "$(echo "$PIDOFMANGOSD")" in
             0) printf '%b' "[${G0:?}OK${N0:?}] mangosd.service starting\n" ;;
@@ -5207,7 +5195,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             # restart service (realmd)
             printf '%b' "[${Y1:?}OK${N0:?}] Restarting realmd.service\n"
             sleep 1
-            sudo service realmd restart &>/dev/null
+            sudo service "$TYPE_CORE"_realmd restart &>/dev/null
             printf '%b' "[${G1:?}OK${N0:?}] realmd.service started!\n"
             sleep 2
           fi
@@ -5254,7 +5242,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             # restart service (mangosd)
             printf '%b' "[${Y1:?}OK${N0:?}] Restarting mangos.service\n"
             sleep 1
-            sudo service mangosd restart &>/dev/null
+            sudo service "${TYPE_CORE:?}"_mangosd restart &>/dev/null
             printf '%b' "[${G1:?}OK${N0:?}] mangosd service started!\n"
             sleep 2
           fi
