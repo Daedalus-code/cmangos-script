@@ -12,13 +12,13 @@
 
 # By Rainman
 # V20211303
-# 5.9.0.8
+# 5.9.1.0
 
 while :; do
 
   # config directory
   # shellcheck disable=SC1091
-  source /home/server.txt # please edit if wrong.
+  source /home/server.txt # please edit if anything else.
 
   # Color ######################################################################
 
@@ -47,7 +47,12 @@ while :; do
 
   # SYSTEM #####################################################################
 
-  PATCH="CMaNGOS.patch" # please edit if wrong name.
+  # default patch name
+  PATCH="CMaNGOS.patch"
+
+  # dialog, ncurses no utf8 acs
+  # ! -> https://github.com/scarygliders/X11RDP-o-Matic/issues/45
+  export NCURSES_NO_UTF8_ACS=1
 
   # server type
   if echo "${SERVER_TYPE:?}" 2>&1 | grep -q -E "c|C|v|V|classic|Classic|vanilla|Vanilla" 2>&1; then
@@ -137,10 +142,6 @@ while :; do
   "13") THEME_ALL="${GR:?}" ;; # Black light (grey)
   esac
 
-  # dialog, ncurses no utf8 acs
-  # ! -> https://github.com/scarygliders/X11RDP-o-Matic/issues/45
-  export NCURSES_NO_UTF8_ACS=1
-
   # look for empty dir
   if ! [ "$(ls -A /var/log/ms/ 2>&1)" ]; then
     # create ms folder if not found
@@ -187,7 +188,7 @@ while :; do
   NOW="$(date +"%m.%d.%Y")"
 
   # load
-  LOAD="$(cat /proc/loadavg 2>&1 | awk '{ print $1,$2,$3 }')"
+  LOAD="$(cat /proc/loadavg 2>&1 | awk '{ print $1,$2,$3 }' 2>&1)"
 
   # services
   REALM_SERVICE="realmd"
@@ -233,21 +234,26 @@ while :; do
     fi
   fi
 
-  CORE_HEAD="$(grep -Eo "Head:.*" /var/log/ms/Installed_core_"$TYPE_CORE" 2>&1 | grep -v 'No such file or directory' 2>&1 |
-    awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)"
-  DATA_HEAD="$(grep -Eo "Head:.*" /var/log/ms/Installed_db_"$TYPE_CORE" 2>&1 | grep -v 'No such file or directory' 2>&1 |
-    awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)"
+  # git head core
+  CORE_HEAD="$(grep -Eo "Head:.*" /var/log/ms/Installed_core_"$TYPE_CORE" 2>&1 |
+    grep -v 'No such file or directory' 2>&1 | awk '{ print $2 }' 2>&1 |
+    grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)"
+  # git head database
+  DATA_HEAD="$(grep -Eo "Head:.*" /var/log/ms/Installed_db_"$TYPE_CORE" 2>&1 |
+    grep -v 'No such file or directory' 2>&1 | awk '{ print $2 }' 2>&1 |
+    grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)"
+  # git head helper/tool
   TOOL_HEAD="$(grep -Eo "Head:.*" /var/log/ms/Installed_ms 2>&1 |
     awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)"
 
   if [ "$(cat /var/log/ms/Installed_core_"$TYPE_CORE" 2>&1 | wc -l 2>&1)" -eq "0" ]; then
-    CORE_HEAD="${GR:?}0000000${N0:?}"
+    CORE_HEAD="${GR:?}000000a${N0:?}"
   fi
   if [ "$(cat /var/log/ms/Installed_db_"$TYPE_CORE" 2>&1 | wc -l 2>&1)" -eq "0" ]; then
-    DATA_HEAD="${GR:?}0000000${N0:?}"
+    DATA_HEAD="${GR:?}000000b${N0:?}"
   fi
   if [ "$(cat /var/log/ms/Installed_ms 2>&1 | wc -l 2>&1)" -eq "0" ]; then
-    TOOL_HEAD="${GR:?}0000000${N0:?}"
+    TOOL_HEAD="${GR:?}000000c${N0:?}"
   fi
 
   if [ -z "$CORE_HEAD" ]; then
@@ -263,11 +269,11 @@ while :; do
   # menu
   clear
   printf '%b' "
-     C(ontinued)-MaNGOS ${GR:?}Tool$N0
+      C(ontinued)-MaNGOS ${GR:?}Tool$N0
 
-     Core ${G0:?}$CORE_HEAD$N0  Online $MENU_ON_COUNT
-     Data ${G0:?}$DATA_HEAD$N0  Guilds $MENU_GU_COUNT
-     Tool ${G0:?}$TOOL_HEAD$N0  $SERVER_BUILD$N0
+      Core ${G0:?}$CORE_HEAD$N0  $SERVER_BUILD$N0
+      Data ${G0:?}$DATA_HEAD$N0  Online $MENU_ON_COUNT
+      Tool ${G0:?}$TOOL_HEAD$N0  Guilds $MENU_GU_COUNT
 
          $LOAD$N0
          $MENU_MANGOSD$GR | $N0$MENU_REALMD
@@ -292,8 +298,8 @@ while :; do
 
   "M")
 
-    printf '%b' "${GR:?}[!!] Server_Menu (${Y1:?}Alpha version${GR:?})${N0:?}\n"
-    read -p "[YN] This can break stuff! Continue? y/n " -n 1 -r
+    printf '%b' "${GR:?}[!!] Server_Menu (${Y1:?}ALPHA Version! (${GR:?}junk${Y1:?})${GR:?})${N0:?}\n"
+    read -p "[YN] This Can Break Stuff! Continue? y/n " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
       sudo bash /usr/local/bin/server_menu 2>&1
@@ -342,19 +348,17 @@ while :; do
     BN_COUNT=$(mysql --defaults-extra-file="$SQL_MYCNF" -N --execute="SELECT count(*) FROM $DB_REALMD.account_banned;" 2>&1)
 
     # menu
-
     clear
     printf '%b' "
-   Accounts${G0:?}...:${N0:?} $AC_COUNT
-   Banned${G0:?}.....:${N0:?} $BN_COUNT
+      Accounts${G0:?}...:${N0:?} $AC_COUNT
+      Banned${G0:?}.....:${N0:?} $BN_COUNT
 
-   ${G0:?}Select account operation${N0:?}
+      ${G0:?}Select account operation${N0:?}
 
-   c $GR:$N0 Create account
-   d $GR:$N0 Delete account
+      c $GR:$N0 Create account
+      d $GR:$N0 Delete account
 
 "
-
     read -r -n1 -s
     case "$REPLY" in
 
@@ -364,22 +368,22 @@ while :; do
 
       clear
       printf '%b' "
-   0 $GR:$N0 Classic
-   1 $GR:$N0 The Burning Crusade
-   2 $GR:$N0 Wrath of the Lich King
+      0 $GR:$N0 Classic
+      1 $GR:$N0 The Burning Crusade
+      2 $GR:$N0 Wrath of the Lich King
 
-   0 $GR:$N0 Player
-   1 $GR:$N0 Moderator
-   2 $GR:$N0 Game Master
-   3 $GR:$N0 Administrator
+      0 $GR:$N0 Player
+      1 $GR:$N0 Moderator
+      2 $GR:$N0 Game Master
+      3 $GR:$N0 Administrator
 
-   Minimum 5 characters account name.
+      Minimum 5 characters account name.
 
-   Create new account (${THEME_ALL:?}username${N0:?})
-   Set the (${THEME_ALL:?}expansion${N0:?}) version.
-   Set the (${THEME_ALL:?}account${N0:?}) privilege.
+      Create new account (${THEME_ALL:?}username${N0:?})
+      Set the (${THEME_ALL:?}expansion${N0:?}) version.
+      Set the (${THEME_ALL:?}account${N0:?}) privilege.
 
-   ${THEME_ALL:?}Example${N0:?}: 'username' '0' '0'"
+      ${THEME_ALL:?}Example${N0:?}: 'username' '0' '0'"
 
       # menu done
 
@@ -469,7 +473,6 @@ ${PASS_NC:?}
       fi
 
       # menu
-
       clear
       echo
       printf '%b' "${R0:?}
@@ -487,7 +490,6 @@ ${PASS_NC:?}
  Delete by username ->
  ${CY:?}Examples${N0:?}: 'username' - 'username1,username2'
  Select (${G0:?}username${N0:?}) or (${G0:?}id${N0:?}) - Press Enter To Confirm"
-
       echo
       echo
       read -r -p " Show list" </dev/tty
@@ -506,11 +508,9 @@ ${PASS_NC:?}
         DELETED=$(printf '%b' "${R1:?}DELETE${N0:?} '$ID' ${R1:?}?!${N0:?}")
         echo
         read -r -p "$DELETED
-
 [YN] Are You Sure? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
-
           # delete by id -> examples: ('id') (id1,id2,) & (id1 AND id5)
           mysql --defaults-extra-file="$SQL_MYCNF" --execute="DELETE FROM $DB_REALMD.account WHERE id = $ID;" &>/dev/null
           mysql --defaults-extra-file="$SQL_MYCNF" --execute="DELETE FROM $DB_REALMD.account WHERE id IN ($ID);" &>/dev/null
@@ -557,35 +557,33 @@ ${PASS_NC:?}
 
   "A")
 
-    # look for ms folder
+    # look for run folder
     if [ -z "$(ls -A "$FOLDER_CORE"/run 2>&1)" ]; then
-      # create ms folder if not found
+      # create run folder if not found
       sudo mkdir "$FOLDER_CORE"/run &>/dev/null
       if [ -z "$(ls -A "$FOLDER_CORE"/run/logs 2>&1)" ]; then
-        # create ms folder if not found
+        # create run/logs folder if not found
         sudo mkdir "$FOLDER_CORE"/run/logs &>/dev/null
         # fix ownership
         sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_CORE" &>/dev/null
       fi
     fi
 
+    # non responsive
     if [ ! -f "$FOLDER_CORE"/run/logs/Server.log ]; then
-      # non responsive
       touch "$FOLDER_CORE"/run/logs/Server.log
     fi
     if [ ! -f "$FOLDER_CORE"/run/logs/Realmd.log ]; then
-      # non responsive
       touch "$FOLDER_CORE"/run/logs/Realmd.log
     fi
 
+    # non responsive
     if [[ -z $(grep '[^[:space:]]' "$FOLDER_CORE"/run/logs/Server.log) ]]; then
-      # non responsive
       CM_SERVER_LOG_STAT="${GR:?}✗${N0:?}"
     else
       CM_SERVER_LOG_STAT="${G1:?}✓${N0:?}"
     fi
     if [[ -z $(grep '[^[:space:]]' "$FOLDER_CORE"/run/logs/Realmd.log) ]]; then
-      # non responsive
       CM_REALMD_LOG_STAT="${GR:?}✗${N0:?}"
     else
       CM_REALMD_LOG_STAT="${G1:?}✓${N0:?}"
@@ -853,8 +851,8 @@ ${PASS_NC:?}
   |     |     |___|   | |   __|     |   __|
   |   --| | | | .'| | | |  |  |  |  |__   |${CY:?}
   |_____|_|_|_|__,|_|___|_____|_____|_____|${N0:?}
-   ${G0:?}C(ontinued)-MaNGOS - Helper/Tool${N0:?}
-   ${GR:?}2019-2021${N0:?}
+   C(ontinued)-MaNGOS - ${GR:?}Helper/Tool
+   2019-2021${N0:?}
 
    ${GR:?}https://github.com/Daedalus-code/cmangos-script${N0:?}
 
@@ -877,9 +875,9 @@ ${PASS_NC:?}
    * Profit
 
 ${G0:?}>${N0:?} hit Enter to go back.
-${N0:?}"
+"
         echo
-        read -r -p ">" </dev/tty
+        read -r -p "" </dev/tty
 
         ;;
 
@@ -917,7 +915,7 @@ ${N0:?}"
         # pidof transmission-daemon, cli, pid/status
         PIDOFP2P_CLI=$(pidof transmission-cli 2>&1)
         PIDOFP2P_DAE=$(pidof transmission-daemon 2>&1)
-
+        # clean up stopped torrents
         P2P_STOPPED_ID=$(echo "$P2P_LIST" 2>&1 | grep "Stopped" 2>&1 |
           awk '{ print $1 }' 2>&1 | grep -Eo "[1-3]" 2>&1)
         P2P_STOPPED=$(echo "$P2P_STOPPED_ID" 2>&1 | wc -w 2>&1)
@@ -959,6 +957,7 @@ ${N0:?}"
           P2P_PEERS_DOWN_LOAD_ID1="${GR:?}0${N0:?}"
         else
           if [ -f /var/log/ms/transmission_list ]; then
+            # stats from each core
             P2P_ID1=$(echo "$P2P_INFO" 2>&1 | grep -A 36 "classic" 2>&1)
             P2P_ID2=$(echo "$P2P_INFO" 2>&1 | grep -A 36 "tbc" 2>&1)
             P2P_ID3=$(echo "$P2P_INFO" 2>&1 | grep -A 36 "wotlk" 2>&1)
@@ -1009,6 +1008,7 @@ ${N0:?}"
           case "$(pidof transmission-daemon 2>&1 | wc -w 2>&1)" in
           "0")
 
+            # offline
             SEED_TRANSMISSION="${GR:?}Off${N0:?}"
             INTRANET_SEED="${GR:?}0.0.0.0:9091${N0:?}"
             P2P_FILE_NAME="$P2P_AV$V_MAPS $P2P_AT$T_MAPS $P2P_AW$W_MAPS${N0:?}"
@@ -1026,6 +1026,7 @@ ${N0:?}"
 
           "1")
 
+            # online
             SEED_TRANSMISSION="${G1:?}OK${N0:?}"
             INTRANET_SEED="${N0:?}${INTRANET:?}:9091${N0:?}"
             P2P_FILE_NAME="$P2P_AV$V_MAPS $P2P_AT$T_MAPS $P2P_AW$W_MAPS${N0:?}"
@@ -1034,17 +1035,18 @@ ${N0:?}"
 
           "*")
 
+            # overtime
             SEED_TRANSMISSION="${Y1:?}OK+${N0:?}"
             INTRANET_SEED="${Y1:?}${INTRANET:?}:9091${N0:?}"
-            P2P_PEERS_CONNECTED_ID1="${GR:?}0${N0:?}"
-            P2P_PEERS_SEEDINGTO_ID1="${GR:?}0${N0:?}"
-            P2P_PEERS_DOWN_LOAD_ID1="${GR:?}0${N0:?}"
-            P2P_PEERS_CONNECTED_ID2="${GR:?}0${N0:?}"
-            P2P_PEERS_SEEDINGTO_ID2="${GR:?}0${N0:?}"
-            P2P_PEERS_DOWN_LOAD_ID2="${GR:?}0${N0:?}"
-            P2P_PEERS_CONNECTED_ID3="${GR:?}0${N0:?}"
-            P2P_PEERS_SEEDINGTO_ID3="${GR:?}0${N0:?}"
-            P2P_PEERS_DOWN_LOAD_ID3="${GR:?}0${N0:?}"
+            P2P_PEERS_CONNECTED_ID1="${GR:?}+${N0:?}"
+            P2P_PEERS_SEEDINGTO_ID1="${GR:?}+${N0:?}"
+            P2P_PEERS_DOWN_LOAD_ID1="${GR:?}+${N0:?}"
+            P2P_PEERS_CONNECTED_ID2="${GR:?}+${N0:?}"
+            P2P_PEERS_SEEDINGTO_ID2="${GR:?}+${N0:?}"
+            P2P_PEERS_DOWN_LOAD_ID2="${GR:?}+${N0:?}"
+            P2P_PEERS_CONNECTED_ID3="${GR:?}+${N0:?}"
+            P2P_PEERS_SEEDINGTO_ID3="${GR:?}+${N0:?}"
+            P2P_PEERS_DOWN_LOAD_ID3="${GR:?}+${N0:?}"
 
             ;;
 
@@ -1052,7 +1054,7 @@ ${N0:?}"
         fi
 
         # load
-        LOAD="$(cat /proc/loadavg 2>&1 | awk '{ print $1,$2,$3 }')"
+        LOAD="$(cat /proc/loadavg 2>&1 | awk '{ print $1,$2,$3 }' 2>&1)"
 
         # seedbox menu
         clear
@@ -2015,7 +2017,7 @@ $RA_TIP"
     fi
     FILE_CORE="/var/log/ms/Installed_core_$TYPE_CORE"
     if [ ! -f "$FILE_CORE" ]; then
-      OK_CORE="[${Y1:?}+-${N0:?}]"
+      OK_CORE="[${Y1:?}+${G1:?}+${N0:?}]"
     fi
     FILE_DB="/var/log/ms/Installed_db_$TYPE_CORE"
     if [ -f "$FILE_DB" ]; then
@@ -2023,7 +2025,7 @@ $RA_TIP"
     fi
     FILE_DB="/var/log/ms/Installed_db_$TYPE_CORE"
     if [ ! -f "$FILE_DB" ]; then
-      OK_DB="[${Y1:?}+-${N0:?}]"
+      OK_DB="[${Y1:?}+${G1:?}+${N0:?}]"
     fi
     FILE_MS="/var/log/ms/Installed_ms"
     if [ -f "$FILE_MS" ]; then
@@ -2031,7 +2033,7 @@ $RA_TIP"
     fi
     FILE_MS="/var/log/ms/Installed_ms"
     if [ ! -f "$FILE_MS" ]; then
-      OK_MS="[${Y1:?}+-${N0:?}]"
+      OK_MS="[${Y1:?}+${G1:?}+${N0:?}]"
     fi
 
     # check if mangos-core exist
