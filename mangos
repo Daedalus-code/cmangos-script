@@ -265,9 +265,9 @@ while :; do
   printf '%b' "
      C(ontinued)-MaNGOS ${GR:?}Tool$N0
 
-      Core ${G0:?}$CORE_HEAD$N0  Online $MENU_ON_COUNT
-      Data ${G0:?}$DATA_HEAD$N0  Guilds $MENU_GU_COUNT
-      Tool ${G0:?}$TOOL_HEAD$N0  $SERVER_BUILD$N0
+     Core ${G0:?}$CORE_HEAD$N0  Online $MENU_ON_COUNT
+     Data ${G0:?}$DATA_HEAD$N0  Guilds $MENU_GU_COUNT
+     Tool ${G0:?}$TOOL_HEAD$N0  $SERVER_BUILD$N0
 
          $LOAD$N0
          $MENU_MANGOSD$GR | $N0$MENU_REALMD
