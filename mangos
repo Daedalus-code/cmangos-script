@@ -265,9 +265,9 @@ while :; do
   printf '%b' "
      C(ontinued)-MaNGOS ${GR:?}Tool$N0
 
-     Core ${GR:?}$CORE_HEAD$N0  Online $MENU_ON_COUNT
-     Data ${GR:?}$DATA_HEAD$N0  Guilds $MENU_GU_COUNT
-     Tool ${GR:?}$TOOL_HEAD$N0  $SERVER_BUILD$N0
+      Core ${GR:?}$CORE_HEAD$N0  Online $MENU_ON_COUNT
+      Data ${GR:?}$DATA_HEAD$N0  Guilds $MENU_GU_COUNT
+      Tool ${GR:?}$TOOL_HEAD$N0  $SERVER_BUILD$N0
 
          $LOAD$N0
          $MENU_MANGOSD$GR | $N0$MENU_REALMD
@@ -851,11 +851,11 @@ ${PASS_NC:?}
 
    _____ _____     _____ _____ _____ _____
   |     |     |___|   | |   __|     |   __|
-  |   --| | | | .'| | | |  |  |  |  |__   |${THEME_ALL:?}
+  |   --| | | | .'| | | |  |  |  |  |__   |${CY:?}
   |_____|_|_|_|__,|_|___|_____|_____|_____|${N0:?}
    ${G0:?}C(ontinued)-MaNGOS - Helper/Tool${N0:?}
 
-   ${THEME_DSC:?}https://github.com/Daedalus-code/cmangos-script${N0:?}
+   ${GR:?}https://github.com/Daedalus-code/cmangos-script${N0:?}
 
    This script was built on a Ubuntu System - (Raspberry Pi4)
    https://ubuntu.com/download/raspberry-pi
@@ -871,7 +871,7 @@ ${PASS_NC:?}
    * Download latest Core/Database updates
    * Upgrade Database with latest fixes
    * Compile CMaNGOS with latest fixes
-   * Download/Import Maps: ${G0:?}Classic${N0:?},${G0:?} TBC${N0:?}, ${G0:?}WoTLK${N0:?}
+   * Download/Import Maps: ${G0:?}Classic, TBC, WoTLK.${N0:?}
    * Setup RA for account tools
    * Profit
 
@@ -2014,7 +2014,7 @@ $RA_TIP"
     fi
     FILE_CORE="/var/log/ms/Installed_core_$TYPE_CORE"
     if [ ! -f "$FILE_CORE" ]; then
-      OK_CORE="[${Y1:?}ok${N0:?}]"
+      OK_CORE="[${G0:?}+${R0:?}-${N0:?}]"
     fi
     FILE_DB="/var/log/ms/Installed_db_$TYPE_CORE"
     if [ -f "$FILE_DB" ]; then
@@ -2022,7 +2022,7 @@ $RA_TIP"
     fi
     FILE_DB="/var/log/ms/Installed_db_$TYPE_CORE"
     if [ ! -f "$FILE_DB" ]; then
-      OK_DB="[${Y1:?}ok${N0:?}]"
+      OK_DB="[${G0:?}+${R0:?}-${N0:?}]"
     fi
     FILE_MS="/var/log/ms/Installed_ms"
     if [ -f "$FILE_MS" ]; then
@@ -2030,7 +2030,7 @@ $RA_TIP"
     fi
     FILE_MS="/var/log/ms/Installed_ms"
     if [ ! -f "$FILE_MS" ]; then
-      OK_MS="[${Y1:?}ok${N0:?}]"
+      OK_MS="[${G0:?}+${R0:?}-${N0:?}]"
     fi
 
     # check if mangos-core exist
