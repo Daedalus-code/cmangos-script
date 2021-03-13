@@ -2179,7 +2179,7 @@ ${GR:?}(d) Database > Update core-db${N0:?}\n"
         [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
         git merge origin/master; then
         # remove old file
-        rm /var/log/ms/Installed_ms_"$TYPE_CORE" &>/dev/null
+        rm /var/log/ms/Installed_ms &>/dev/null
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         LATEST_HEAD=$(git rev-parse --short HEAD 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)
         printf '%b' "[${G1:?}NEW${N0:?}] (${G1:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) ${G1:?}${UND:?}New Updates For Tool${DEF:?}${N0:?}! $LATEST_DATE
