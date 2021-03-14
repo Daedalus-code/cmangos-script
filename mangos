@@ -280,8 +280,8 @@ while :; do
       Data ${G0:?}$DATA_HEAD$N0  Online $MENU_ON_COUNT
       Tool ${G0:?}$TOOL_HEAD$N0  Guilds $MENU_GU_COUNT
 
-         $LOAD$N0
-         $MENU_MANGOSD$GR | $N0$MENU_REALMD
+          $LOAD$N0
+          $MENU_MANGOSD$GR | $N0$MENU_REALMD
 
    A $GR: ${THEME_TXT:?}Admin      ${N0:?}t $GR: ${THEME_TXT:?}Characters${N0:?}
    a $GR: ${THEME_TXT:?}Account    ${N0:?}u $GR: ${THEME_TXT:?}Accounts${N0:?}
