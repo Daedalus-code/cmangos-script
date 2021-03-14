@@ -83,7 +83,7 @@ while :; do
   DB_REALMD="${TYPE_CORE:?}_realmd$DBEXTRA"
 
   # custom git repos
-  if echo "${CUSTOM_SERVER:?}" 2>&1 | grep -q -E "c|C|custom|Custom" 2>&1; then
+  if echo "${CUSTOM_SERVER:?}" 2>&1 | grep -q -E "c|C|custom|Custom|1" 2>&1; then
     GITHUB_CMANGOS=$(echo "$GITHUB_CMANGOS_CUSTOM")
     GITHUB_DATABASE=$(echo "$GITHUB_DATABASE_CUSTOM")
   fi
