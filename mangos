@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211403
-# 5.9.7.7
+# 5.9.4.8
 
 while :; do
 
@@ -57,15 +57,20 @@ while :; do
   # server type
   if echo "${SERVER_TYPE:?}" 2>&1 | grep -q -E "c|C|v|V|classic|Classic|vanilla|Vanilla" 2>&1; then
     TYPE_CORE="classic"
-    SERVER_BUILD=$(printf '%b' "${CY:?}Classic${N0:?}\n")
+    SERVER_BUILD="Classic"
   fi
   if echo "${SERVER_TYPE:?}" 2>&1 | grep -q -E "t|T|tbc|TBC" 2>&1; then
     TYPE_CORE="tbc"
-    SERVER_BUILD=$(printf '%b' "${CY:?}TBC${N0:?}\n")
+    SERVER_BUILD="TBC"
   fi
   if echo "${SERVER_TYPE:?}" 2>&1 | grep -q -E "w|W|wotlk|WoTLK" 2>&1; then
     TYPE_CORE="wotlk"
-    SERVER_BUILD=$(printf '%b' "${CY:?}WoTLK${N0:?}\n")
+    SERVER_BUILD="WoTLK"
+  fi
+
+  if [ -z "${SERVER_TYPE:?}" ]; then
+    TYPE_CORE="Error"
+    SERVER_BUILD="Error"
   fi
 
   # github repos
@@ -157,31 +162,31 @@ while :; do
 
   # non responsive, sql table doesn't exist
   if echo "$MENU_ON_COUNT" 2>&1 | grep -q -E "ERROR 1146" &>/dev/null; then
-    MENU_ON_COUNT="${R1:?}Empty${N0:?}"
+    MENU_ON_COUNT="${Y1:?}E${N0:?}"
   fi
   if echo "$MENU_GU_COUNT" 2>&1 | grep -q -E "ERROR 1146" &>/dev/null; then
-    MENU_GU_COUNT="${R1:?}Empty${N0:?}"
+    MENU_GU_COUNT="${Y1:?}E${N0:?}"
   fi
   # non responsive, sql access denied
   if echo "$MENU_ON_COUNT" 2>&1 | grep -q -E "Access denied" &>/dev/null; then
-    MENU_ON_COUNT="${R1:?}Denied${N0:?}"
+    MENU_ON_COUNT="${R1:?}D${N0:?}"
   fi
   if echo "$MENU_GU_COUNT" 2>&1 | grep -q -E "Access denied" &>/dev/null; then
-    MENU_GU_COUNT="${R1:?}Denied${N0:?}"
+    MENU_GU_COUNT="${R1:?}D${N0:?}"
   fi
   # non responsive, null
   if echo "$MENU_ON_COUNT" 2>&1 | grep -q -E "NULL" &>/dev/null; then
-    MENU_ON_COUNT="Empty"
+    MENU_ON_COUNT="${GR:?}E${N0:?}"
   fi
   if echo "$MENU_GU_COUNT" 2>&1 | grep -q -E "NULL" &>/dev/null; then
-    MENU_GU_COUNT="Empty"
+    MENU_GU_COUNT="${GR:?}E${N0:?}"
   fi
   # non responsive, zero
   if [ -z "$MENU_ON_COUNT" ]; then
-    MENU_ON_COUNT="0"
+    MENU_ON_COUNT="${GR:?}0${N0:?}"
   fi
   if [ -z "$MENU_GU_COUNT" ]; then
-    MENU_GU_COUNT="0"
+    MENU_GU_COUNT="${GR:?}0${N0:?}"
   fi
 
   # date, month, day, year
@@ -270,8 +275,8 @@ while :; do
   clear
   printf '%b' "
       C(ontinued)-MaNGOS ${GR:?}Tool$N0
-
-      Core ${G0:?}$CORE_HEAD$N0  $SERVER_BUILD$N0
+   ${GR:?} - - - - - - - - - - - - - -${N0:?}
+      Core ${G0:?}$CORE_HEAD$N0  $THEME_ALL$SERVER_BUILD$N0
       Data ${G0:?}$DATA_HEAD$N0  Online $MENU_ON_COUNT
       Tool ${G0:?}$TOOL_HEAD$N0  Guilds $MENU_GU_COUNT
 
@@ -2040,13 +2045,13 @@ $RA_TIP"
     FILE="$FOLDER_CORE/README.md"
     if [ ! -f "$FILE" ]; then
       # look for directory
-      echo -ne '[!!] Please wait, looking for core directory!\r'
+      echo -ne '[!!] No Install Found!\r'
       sleep 2
       # remove old file
       rm /var/log/ms/Installed_core_"$TYPE_CORE" &>/dev/null
       # fresh install?
       DOWN_CORE=$(echo -e "\033[5m?\033[0m" 2>&1)
-      printf '%b' "[YN]${GR:?} ${N0:?}(${GR:?}${UND:?}0000000${DEF:?}${N0:?})${GR:?} Download Core$DOWN_CORE y/n ${GR:?}skip in 5s ${N0:?}"
+      printf '%b' "[YN]${GR:?} ${N0:?}(${GR:?}${UND:?}0000000${DEF:?}${N0:?}) Core${GR:?} Download $DOWN_CORE y/n ${N0:?}"
       read -t 4 -r -p "" -n 1 -r -s
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -2098,13 +2103,13 @@ ${GR:?}(m) CMaNGOS > Compile latest${N0:?}\n"
     FILE="$FOLDER_DB/README.md"
     if [ ! -f "$FILE" ]; then
       # look for directory
-      echo -ne '[!!] Please wait, looking for database directory!\r'
+      echo -ne '[!!] No Install Found!\r'
       sleep 2
       # remove old file
       rm /var/log/ms/Installed_db_"$TYPE_CORE" &>/dev/null
       # fresh install?
       DOWN_DB=$(echo -e "\033[5m?\033[0m" 2>&1)
-      printf '%b' "[YN]${GR:?} ${N0:?}(${GR:?}${UND:?}0000000${DEF:?}${N0:?})${GR:?} Download Database$DOWN_DB y/n ${GR:?}skip in 5s ${N0:?}"
+      printf '%b' "[YN]${GR:?} ${N0:?}(${GR:?}${UND:?}0000000${DEF:?}${N0:?}) Data${GR:?} Download $DOWN_DB y/n ${N0:?}"
       read -t 4 -r -p "" -n 1 -r -s
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -5709,7 +5714,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
     HEIGHT=13
     WIDTH=34
-    CHOICE_HEIGHT=5
+    CHOICE_HEIGHT=4
     BACKTITLE="Patch"
     TITLE="Patch operations"
     MENU="Choose one of the following options:"
@@ -5717,8 +5722,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
     OPTIONS=(1 "Create new patch"
       2 "Apply existing patch"
       3 "Search for .patch files"
-      4 "Delete all .patch files"
-      5 "my_bool fix (Daedalus)")
+      4 "Delete all .patch files")
 
     CHOICE=$(dialog --clear \
       --backtitle "$BACKTITLE" \
@@ -5839,39 +5843,6 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       ;;
 
       # remove patch files (all of them) done
-
-      # my_bool fix - https://github.com/cmangos/issues/issues/2187
-
-    "5")
-
-      if [ ! -f "$FOLDER_CORE"/my_bool.patch ]; then
-        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_CORE" &>/dev/null
-        cd "$FOLDER_CORE" || exit
-        # download patch file
-        wget https://raw.githubusercontent.com/Daedalus-code/cmangos-arm/master/arm_pi4.patch
-        printf '%b' "${G1:?}Patch downloaded!${N0:?}\n"
-        sleep 1
-        printf '%b' "${G0:?}Renaming patch into '${G1:?}my_bool.patch${G0:?}'${N0:?}\n"
-        # rename patch file
-        mv arm_pi4.patch "$FOLDER_CORE"/my_bool.patch
-        sleep 1
-        # run patch inside core folder
-        patch -p1 <my_bool.patch
-        printf '%b' "${G1:?}Done!${N0:?}\n"
-        echo
-        read -r -p "Press Enter to continue" </dev/tty
-        echo
-      else
-        # already did this
-        printf '%b' "${G0:?}my_bool.patch ${Y1:?}Already patched, this will reverse it!${N0:?}\n"
-        # patching reversed
-        cd "$FOLDER_CORE" || exit
-        patch -p1 <my_bool.patch
-      fi
-
-      ;;
-
-      # my_bool fix done
 
     esac
 
