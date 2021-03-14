@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20211303
-# 5.9.1.0
+# V20211403
+# 5.9.7.7
 
 while :; do
 
@@ -1564,7 +1564,7 @@ EOF
 
         # is htop installed?
         if ! [ -x "$(command -v htop)" ]; then
-          echo "Please wait"
+          echo "[!!] Please wait"
           sudo apt-get install htop -y 2>&1
         fi
         htop
@@ -2236,9 +2236,9 @@ ${GR:?}(w) Helper > Update Helper${N0:?}\n"
       zip
       zlibc
       psmisc)
-    HEIGHT=14
+    HEIGHT=15
     WIDTH=38
-    CHOICE_HEIGHT=6
+    CHOICE_HEIGHT=7
     BACKTITLE="update CMaNGOS"
     TITLE="Update mangos [core]"
     MENU="Choose one of the following options:"
@@ -2248,7 +2248,8 @@ ${GR:?}(w) Helper > Update Helper${N0:?}\n"
       3 "Reinstall (delete /build)"
       4 "Reset --hard origin/master"
       5 "Delete Core /mangos-core"
-      6 "Backup configurations")
+      6 "Backup configurations"
+      7 "Disable systemd")
 
     CHOICE=$(dialog --clear \
       --backtitle "$BACKTITLE" \
@@ -2842,6 +2843,49 @@ Select install operation"
       read -t 5 -r -p "[YN] Install systemd Services? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
+        # server type, change enabled services
+        if echo "${SERVER_TYPE:?}" 2>&1 | grep -q -E "c|C|v|V|classic|Classic|vanilla|Vanilla" 2>&1; then
+          printf '%b' "[${G1:?}OK${N0:?}] Enable $SERVER_BUILD Service\n"
+          # enable classic
+          sudo systemctl enable classic_mangosd.service &>/dev/null
+          sudo systemctl enable classic_realmd.service &>/dev/null
+          printf '%b' "[${R1:?}!!${N0:?}] Disable TBC Service\n"
+          # disable tbc
+          sudo systemctl disable tbc_mangosd.service &>/dev/null
+          sudo systemctl disable tbc_realmd.service &>/dev/null
+          printf '%b' "[${R1:?}!!${N0:?}] Disable WoTLK Service\n"
+          # disable wotlk
+          sudo systemctl disable tbc_mangosd.service &>/dev/null
+          sudo systemctl disable tbc_realmd.service &>/dev/null
+        fi
+        if echo "${SERVER_TYPE:?}" 2>&1 | grep -q -E "t|T|tbc|TBC" 2>&1; then
+          printf '%b' "[${R1:?}!!${N0:?}] Disable Classic Service\n"
+          # disable classic service
+          sudo systemctl disable classic_mangosd.service &>/dev/null
+          sudo systemctl disable classic_realmd.service &>/dev/null
+          printf '%b' "[${G1:?}OK${N0:?}] Enable $SERVER_BUILD Service\n"
+          # enable tbc service
+          sudo systemctl enable tbc_mangosd.service &>/dev/null
+          sudo systemctl enable tbc_realmd.service &>/dev/null
+          printf '%b' "[${R1:?}!!${N0:?}] Disable WoTLK Service\n"
+          # disable wotlk service
+          sudo systemctl disable wotlk_mangosd.service &>/dev/null
+          sudo systemctl disable wotlk_realmd.service &>/dev/null
+        fi
+        if echo "${SERVER_TYPE:?}" 2>&1 | grep -q -E "w|W|wotlk|WoTLK" 2>&1; then
+          printf '%b' "[${R1:?}!!${N0:?}] Disable Classic Service\n"
+          # disable classic service
+          sudo systemctl disable classic_mangosd.service &>/dev/null
+          sudo systemctl disable classic_realmd.service &>/dev/null
+          printf '%b' "[${R1:?}!!${N0:?}] Disable TBC Service\n"
+          # disable tbc service
+          sudo systemctl disable tbc_mangosd.service &>/dev/null
+          sudo systemctl disable tbc_realmd.service &>/dev/null
+          printf '%b' "[${G1:?}OK${N0:?}] Enable $SERVER_BUILD Service\n"
+          # enable wotlk service
+          sudo systemctl enable wotlk_mangosd.service &>/dev/null
+          sudo systemctl enable wotlk_realmd.service &>/dev/null
+        fi
         # remove old files (old hierarchy), regardless
         sudo systemctl disable mangosd.service &>/dev/null
         sudo systemctl disable realmd.service &>/dev/null
@@ -3407,9 +3451,32 @@ Select install operation"
 
       ;;
 
-    esac
+      # backup configurations done
 
-    # backup configurations
+      # disable current service
+
+    "7")
+
+      printf '%b' "[${R1:?}!!${N0:?}] Disable $SERVER_BUILD Service\n"
+      sleep 1
+      sudo systemctl disable "$TYPE_CORE"_mangosd.service &>/dev/null
+      sudo systemctl disable "$TYPE_CORE"_realmd.service &>/dev/null
+      sleep 1
+      printf '%b' "
+/etc/systemd/system/${THEME_ALL:?}${TYPE_CORE:?}_realmd.service${N0:?}
+/etc/systemd/system/${THEME_ALL:?}${TYPE_CORE:?}_mangosd.service${N0:?}
+
+$SERVER_BUILD Disabled.\n"
+      echo
+      printf '%b' "[${G1:?}OK${N0:?}] "
+      read -r -p "Press Enter to continue" </dev/tty
+      echo
+
+      ;;
+
+      # disable current service done
+
+    esac
 
     # update CMaNGOS done
 
@@ -3498,7 +3565,7 @@ Select install operation"
       echo " 2) MySQL"
       echo
       read -r -n1 -s n
-      echo "Please wait"
+      echo "[!!] Please wait"
       case $n in
 
       "1") # install mariadb
@@ -3544,7 +3611,7 @@ This is needed to operate local/remote database"
       echo " q : Quit"
       echo
       read -r -n1 -s n
-      echo "Please wait"
+      echo "[!!] Please wait"
       case $n in
 
       "1") # install mariadb-client
@@ -5668,7 +5735,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
     "1")
 
-      echo "Please wait"
+      echo "[!!] Please wait"
       sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_CORE" &>/dev/null
       # change directory, core
       cd "$FOLDER_CORE" || exit
