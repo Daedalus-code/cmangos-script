@@ -5712,7 +5712,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
   "p")
 
-    HEIGHT=13
+    HEIGHT=12
     WIDTH=34
     CHOICE_HEIGHT=4
     BACKTITLE="Patch"
