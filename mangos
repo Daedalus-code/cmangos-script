@@ -1084,13 +1084,13 @@ ${G0:?}>${N0:?} hit Enter to go back.
 
         # non responsive
         if [ -z "$INTRANET_SEED" ]; then
-          INTRANET_SEED="?.?.?.?:9091"
+          INTRANET_SEED="${GR:?}?.?.?.?:9091${N0:?}"
         fi
         if [ -z "$SEED_TRANSMISSION" ]; then
-          SEED_TRANSMISSION="??"
+          SEED_TRANSMISSION="${GR:?}??${N0:?}"
         fi
         if [ -z "$P2P_FILE_NAME" ]; then
-          P2P_FILE_NAME="?? ?? ??"
+          P2P_FILE_NAME="${GR:?}?? ?? ??${N0:?}"
         fi
 
         # load
