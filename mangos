@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20211403
-# 5.9.4.8
+# V20211503
+# 6.0.0.9
 
 while :; do
 
@@ -353,42 +353,52 @@ while :; do
     BN_COUNT=$(mysql --defaults-extra-file="$SQL_MYCNF" -N --execute="SELECT count(*) FROM $DB_REALMD.account_banned;" 2>&1)
 
     # menu
+
+    HEIGHT=11
+    WIDTH=26
+    CHOICE_HEIGHT=4
+    BACKTITLE="Accounts"
+    TITLE="Create/Delete/Ban/Kick"
+    MENU="Choose one option:"
+
+    OPTIONS=(1 "Create account"
+      2 "Delete account"
+      3 "Hall of Fame"
+      4 "Hall of Shame")
+
+    CHOICE=$(dialog --clear \
+      --backtitle "$BACKTITLE" \
+      --title "$TITLE" \
+      --menu "$MENU" \
+      $HEIGHT $WIDTH $CHOICE_HEIGHT \
+      "${OPTIONS[@]}" \
+      2>&1 >/dev/tty)
+
     clear
-    printf '%b' "
-      Accounts${G0:?}...:${N0:?} $AC_COUNT
-      Banned${G0:?}.....:${N0:?} $BN_COUNT
-
-      ${G0:?}Select account operation${N0:?}
-
-      c $GR:$N0 Create account
-      d $GR:$N0 Delete account
-
-"
-    read -r -n1 -s
-    case "$REPLY" in
+    case $CHOICE in
 
     # create account
 
-    "c")
+    "1")
 
       clear
       printf '%b' "
-      0 $GR:$N0 Classic
-      1 $GR:$N0 The Burning Crusade
-      2 $GR:$N0 Wrath of the Lich King
+   0 $GR:$N0 Classic
+   1 $GR:$N0 The Burning Crusade
+   2 $GR:$N0 Wrath of the Lich King
 
-      0 $GR:$N0 Player
-      1 $GR:$N0 Moderator
-      2 $GR:$N0 Game Master
-      3 $GR:$N0 Administrator
+   0 $GR:$N0 Player
+   1 $GR:$N0 Moderator
+   2 $GR:$N0 Game Master
+   3 $GR:$N0 Administrator
 
-      Minimum 5 characters account name.
+   Minimum 5 characters account name.
 
-      Create new account (${THEME_ALL:?}username${N0:?})
-      Set the (${THEME_ALL:?}expansion${N0:?}) version.
-      Set the (${THEME_ALL:?}account${N0:?}) privilege.
+   Create new account (${THEME_ALL:?}username${N0:?})
+   Set the (${THEME_ALL:?}expansion${N0:?}) version.
+   Set the (${THEME_ALL:?}account${N0:?}) privilege.
 
-      ${THEME_ALL:?}Example${N0:?}: 'username' '0' '0'"
+   ${THEME_ALL:?}Example${N0:?}: 'username' '0' '0'"
 
       # menu done
 
@@ -430,10 +440,10 @@ while :; do
             else
               printf '%b' "[${G1:?}OK${N0:?}] GMlevel ($LVL)"
               echo "${USER_NC:?}
-${PASS_NC:?}
-.account create $USR $PWD
-.account set addon $USR $XPV
-.account set gmlevel $USR $LVL" >"${FOLDER_WOW:?}"/tmp.txt
+  ${PASS_NC:?}
+  .account create $USR $PWD
+  .account set addon $USR $XPV
+  .account set gmlevel $USR $LVL" >"${FOLDER_WOW:?}"/tmp.txt
               nc -q 1 "${host_nc:?}" "${port_nc:?}" <"${FOLDER_WOW:?}"/tmp.txt
               rm "${FOLDER_WOW:?}"/tmp.txt
               echo
@@ -451,11 +461,9 @@ ${PASS_NC:?}
 
       # username, password, expansion, gmlevel done
 
-      # create account done
-
       # delete account
 
-    "d")
+    "2")
 
       # check for backup
       # realmd backup
@@ -481,20 +489,20 @@ ${PASS_NC:?}
       clear
       echo
       printf '%b' "${R0:?}
- @@@@@@@  @@@@@@@@ @@@      @@@@@@@@ @@@@@@@ @@@@@@@@
- @@!  @@@ @@!      @@!      @@.        @@!   @@!
- @!@  !@! @!!!.:   @!!      @!!.:!     @!!   @!!!:.
- .!.  .!! !.:      !!.      .!:        !.:   !!.
- .: :  .  : .:  .. : .: : . . :. :.:    .    : .: .:.${N0:?}
+   @@@@@@@  @@@@@@@@ @@@      @@@@@@@@ @@@@@@@ @@@@@@@@
+   @@!  @@@ @@!      @@!      @@.        @@!   @@!
+   @!@  !@! @!!!.:   @!!      @!!.:!     @!!   @!!!:.
+   .!.  .!! !.:      !!.      .!:        !.:   !!.
+   .: :  .  : .:  .. : .: : . . :. :.:    .    : .: .:.${N0:?}
 
- Note: Make sure you have backup laying around!
- $REALMD_BACKUP$CHARAC_BACKUP
+   Note: Make sure you have backup laying around!
+   $REALMD_BACKUP$CHARAC_BACKUP
 
- Delete by id ->
- ${CY:?}Examples${N0:?}: 'id' - 'id1,id2' - 'id1 AND id5'
- Delete by username ->
- ${CY:?}Examples${N0:?}: 'username' - 'username1,username2'
- Select (${G0:?}username${N0:?}) or (${G0:?}id${N0:?}) - Press Enter To Confirm"
+   Delete by id ->
+   ${CY:?}Examples${N0:?}: 'id' - 'id1,id2' - 'id1 AND id5'
+   Delete by username ->
+   ${CY:?}Examples${N0:?}: 'username' - 'username1,username2'
+   Select (${G0:?}username${N0:?}) or (${G0:?}id${N0:?}) - Press Enter To Confirm"
       echo
       echo
       read -r -p " Show list" </dev/tty
@@ -504,7 +512,7 @@ ${PASS_NC:?}
       printf '%b' " Delete directly from '${CY:?}$DB_REALMD.account${N0:?}'"
       echo
       printf '%b' "
->"
+  >"
       read -r ID
       echo
       if [[ -z "$ID" ]]; then
@@ -542,19 +550,35 @@ ${PASS_NC:?}
 
       ;;
 
-    *)
-      echo "empty"
-      echo
+      # delete account done
+
+      # hall of fame
+
+    "3")
+
+      printf '%b' "${GR:?}Nothing Here! 00${N0:?}\n"
+      exit
+
       ;;
+
+      # hall of fame done
+
+      # hall of shame
+
+    "4")
+
+      printf '%b' "${GR:?}Nothing Here! 00${N0:?}\n"
+      exit
+
+      ;;
+
+      # hall of shame done
+
     esac
-    read -r -p "Press Enter to continue" </dev/tty
-    echo
 
     ;;
 
     # menu done
-
-    # delete account done
 
     # Login (command)
 
@@ -1041,8 +1065,8 @@ ${G0:?}>${N0:?} hit Enter to go back.
           "*")
 
             # overtime
-            SEED_TRANSMISSION="${Y1:?}OK+${N0:?}"
-            INTRANET_SEED="${Y1:?}${INTRANET:?}:9091${N0:?}"
+            SEED_TRANSMISSION="${Y1:?}++${N0:?}"
+            INTRANET_SEED="${Y1:?}+.+.+.+:9091${N0:?}"
             P2P_PEERS_CONNECTED_ID1="${GR:?}+${N0:?}"
             P2P_PEERS_SEEDINGTO_ID1="${GR:?}+${N0:?}"
             P2P_PEERS_DOWN_LOAD_ID1="${GR:?}+${N0:?}"
@@ -1056,6 +1080,17 @@ ${G0:?}>${N0:?} hit Enter to go back.
             ;;
 
           esac
+        fi
+
+        # non responsive
+        if [ -z "$INTRANET_SEED" ]; then
+          INTRANET_SEED="?.?.?.?:9091"
+        fi
+        if [ -z "$SEED_TRANSMISSION" ]; then
+          SEED_TRANSMISSION="??"
+        fi
+        if [ -z "$P2P_FILE_NAME" ]; then
+          P2P_FILE_NAME="?? ?? ??"
         fi
 
         # load
@@ -1090,8 +1125,10 @@ ${N0:?}"
 
         "i")
 
+          PIDOFP2P_DAE_MOD=$(echo "$PIDOFP2P_DAE" 2>&1 | wc -w 2>&1)
+
           # is seedbox running?
-          if [[ "$PIDOFP2P_DAE" -ge "1" ]]; then
+          if [[ "$PIDOFP2P_DAE_MOD" -ge "1" ]]; then
             printf '%b' "[${G1:?}OK${N0:?}] Torrent information\n"
             # list statistical information from the server
             P2P_ST=$(transmission-remote -st 2>&1)
@@ -1108,6 +1145,9 @@ ${N0:?}"
             # list peers, if any
             P2P_PI=$(transmission-remote -t all -pi 2>&1)
             printf '%b' "${N0:?}$P2P_PI${N0:?}\n"
+            echo
+            P2P_TI=$(cat /var/log/ms/transmission_torrent_list)
+            echo "$P2P_TI"
             echo
             read -r -p "Press Enter to continue" </dev/tty
             echo
@@ -1138,6 +1178,7 @@ ${N0:?}"
             # go over it again, kill daemon, cli
             sudo kill -9 "$PIDOFP2P_DAE" &>/dev/null
             sudo kill -9 "$PIDOFP2P_CLI" &>/dev/null
+            sudo killall transmission-daemon &>/dev/null
             printf '%b' "[${G1:?}OK${N0:?}] Please wait\n"
             # remove old file
             sudo rm -R /var/log/ms/transmission_list &>/dev/null
@@ -1177,10 +1218,13 @@ ${N0:?}"
                   sudo rm /seedbox/"$R_MAPS_MOD".zip &>/dev/null
                 fi
               fi
-              # create ms folder
-              sudo mkdir /var/log/ms/ &>/dev/null
-              # fix ownership
-              sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
+              # look for empty dir
+              if ! [ "$(ls -A /var/log/ms/ 2>&1)" ]; then
+                # create ms folder if not found
+                sudo mkdir /var/log/ms/ &>/dev/null
+                # fix ownership
+                sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
+              fi
               # check for updates regardless
               printf '%b' "[${G1:?}OK${N0:?}] Please wait\n"
               sudo apt-get update &>/dev/null
@@ -1387,6 +1431,7 @@ EOF
               # go over it again, kill daemon, cli
               sudo kill -9 "$PIDOFP2P_DAE" &>/dev/null
               sudo kill -9 "$PIDOFP2P_CLI" &>/dev/null
+              sudo killall transmission-daemon &>/dev/null
               sleep 1
               sudo service transmission-daemon start &>/dev/null
               sleep 1
@@ -1424,6 +1469,7 @@ EOF
               # go over it again, kill daemon, cli
               sudo kill -9 "$PIDOFP2P_DAE" &>/dev/null
               sudo kill -9 "$PIDOFP2P_CLI" &>/dev/null
+              sudo killall transmission-daemon &>/dev/null
               sleep 1
               # disable service
               sudo systemctl disable transmission-daemon &>/dev/null
@@ -1450,7 +1496,7 @@ EOF
           if [[ $REPLY =~ ^[Yy]$ ]]; then
 
             HEIGHT=10
-            WIDTH=30
+            WIDTH=28
             CHOICE_HEIGHT=4
             BACKTITLE="Install Expansion Maps"
             TITLE="Import Downloaded Maps"
@@ -2241,12 +2287,12 @@ ${GR:?}(w) Helper > Update Helper${N0:?}\n"
       zip
       zlibc
       psmisc)
-    HEIGHT=15
+    HEIGHT=14
     WIDTH=38
     CHOICE_HEIGHT=7
-    BACKTITLE="update CMaNGOS"
+    BACKTITLE="Update CMaNGOS"
     TITLE="Update mangos [core]"
-    MENU="Choose one of the following options:"
+    MENU="Choose one option:"
 
     OPTIONS=(1 "Compile latest build"
       2 "Install systemd unit files"
@@ -2274,6 +2320,8 @@ ${GR:?}(w) Helper > Update Helper${N0:?}\n"
       read -t 5 -r -p "[YN] Compile latest build? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
+        # count system cores
+        SYS_CORES=$(grep -c ^processor /proc/cpuinfo 2>&1)
         # this is for docker users
         if [ -f /.dockerenv ]; then
           printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}"
@@ -2376,8 +2424,6 @@ ${GR:?}(w) Helper > Update Helper${N0:?}\n"
           CPU_MODEL=""
         fi
 
-        # count system cores
-        SYS_CORES=$(grep -c ^processor /proc/cpuinfo 2>&1)
         if [[ "${SYS_CORES:?}" -ge "1" ]]; then
           # report count
           CORES_COUNT=$(printf '%b' "${GR:?}$KERNAL_RE${N0:?}
@@ -2439,14 +2485,14 @@ ${GR:?}$CPU_MODEL${N0:?}")
           CPU_TCSC=$(lscpu 2>&1 | grep -E '^Thread|^Core|^Socket|^CPU\(' 2>&1)
           printf '%b' "-- Core $SERVER_BUILD\n"
           echo
-          printf '%b' "[  0%]${Y1:?} Auto detecting Core(s)${N0:?}\n"
+          printf '%b' "[  0%]${Y1:?} Auto detecting Core(s)${N0:?} ($CPU_TCSC)\n"
           echo "$CPU_TCSC"
           printf '%b' "[  0%]${G0:?} Building with ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
           cd "$FOLDER_BUILD" || exit
+          CORES_BUILD=$(echo "$SYS_CORES")
           # start counting (seconds)
           START="$SECONDS"
           make -j"$SYS_CORES" # max system cores
-          CORES_BUILD=$(echo "$SYS_CORES")
           sudo make install 2>&1 | sudo tee /var/log/ms/build &>/dev/null
           cat /var/log/ms/build 2>&1
           if grep -q -o "100" /var/log/ms/build &>/dev/null; then
@@ -2468,10 +2514,13 @@ ${GR:?}$CPU_MODEL${N0:?}")
             echo
             printf '%b' "$MENU_PRINT_CPU_TEMP\n"
             printf '%b' "Build time: ${G1:?}$TIMER${N0:?} with ${G1:?}$CORES_BUILD${N0:?} Core(s)\n"
-            # create ms folder
-            sudo mkdir /var/log/ms/ &>/dev/null
-            # fix ownership
-            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
+            # look for empty dir
+            if ! [ "$(ls -A /var/log/ms/ 2>&1)" ]; then
+              # create ms folder if not found
+              sudo mkdir /var/log/ms/ &>/dev/null
+              # fix ownership
+              sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
+            fi
             # create installed mark
             cd "$FOLDER_CORE" || exit
             LATEST_HEAD=$(git rev-parse --short HEAD)
@@ -2783,10 +2832,13 @@ Select install operation"
 
           "1")
 
-            # create ms folder
-            sudo mkdir /var/log/ms/ &>/dev/null
-            # fix ownership
-            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
+            # look for empty dir
+            if ! [ "$(ls -A /var/log/ms/ 2>&1)" ]; then
+              # create ms folder if not found
+              sudo mkdir /var/log/ms/ &>/dev/null
+              # fix ownership
+              sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
+            fi
             # create installed mark
             cd "$FOLDER_CORE" || exit
             LATEST_HEAD=$(git rev-parse --short HEAD)
@@ -2800,10 +2852,13 @@ Select install operation"
 
           "2")
 
-            # create ms folder
-            sudo mkdir /var/log/ms/ &>/dev/null
-            # fix ownership
-            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
+            # look for empty dir
+            if ! [ "$(ls -A /var/log/ms/ 2>&1)" ]; then
+              # create ms folder if not found
+              sudo mkdir /var/log/ms/ &>/dev/null
+              # fix ownership
+              sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
+            fi
             # create installed mark
             cd "$FOLDER_CORE" || exit
             LATEST_HEAD=$(git rev-parse --short HEAD)
@@ -2960,6 +3015,8 @@ Check if correct information, or just restart server.\n"
       read -t 5 -r -p "[YN] Reinstall (delete /build)? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
+        # count system cores
+        SYS_CORES=$(grep -c ^processor /proc/cpuinfo 2>&1)
         # this is for docker users
         if [ -f /.dockerenv ]; then
           printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}"
@@ -3044,8 +3101,6 @@ Check if correct information, or just restart server.\n"
           CPU_MODEL=""
         fi
 
-        # count system cores
-        SYS_CORES=$(grep -c ^processor /proc/cpuinfo 2>&1)
         if [[ "${SYS_CORES:?}" -ge "1" ]]; then
           # report count
           CORES_COUNT=$(printf '%b' "${GR:?}$KERNAL_RE${N0:?}
@@ -3499,9 +3554,9 @@ $SERVER_BUILD Disabled.\n"
     HEIGHT=19
     WIDTH=42
     CHOICE_HEIGHT=12
-    BACKTITLE="update Database"
+    BACKTITLE="Update Database"
     TITLE="Update core-db [database]"
-    MENU="Choose one of the following options:"
+    MENU="Choose one option:"
 
     OPTIONS=(1 "Update core-db"
       2 "Drop/Import databases"
@@ -3832,10 +3887,13 @@ Database User, Client/Server is needed."
             printf '%b' "[!!] ${GR:?}$FOLDER_DB${N0:?} Not Found!\n"
           fi
         fi
-        # create ms folder
-        sudo mkdir /var/log/ms/ &>/dev/null
-        # fix ownership
-        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
+        # look for empty dir
+        if ! [ "$(ls -A /var/log/ms/ 2>&1)" ]; then
+          # create ms folder if not found
+          sudo mkdir /var/log/ms/ &>/dev/null
+          # fix ownership
+          sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
+        fi
         # create installed mark
         cd "$FOLDER_DB" || exit
         LATEST_HEAD=$(git rev-parse --short HEAD)
@@ -4667,7 +4725,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       HEIGHT=10
       WIDTH=27
       CHOICE_HEIGHT=4
-      BACKTITLE="shutdown server"
+      BACKTITLE="Shutdown server"
       TITLE="Service Control"
       MENU="Choose one option:"
 
@@ -4936,7 +4994,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       HEIGHT=10
       WIDTH=26
       CHOICE_HEIGHT=4
-      BACKTITLE="restart server"
+      BACKTITLE="Restart server"
       TITLE="Service Control"
       MENU="Choose one option:"
 
@@ -5348,12 +5406,12 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       sudo apt-get install dialog -y
     fi
 
-    HEIGHT=11
+    HEIGHT=10
     WIDTH=37
     CHOICE_HEIGHT=3
-    BACKTITLE="update Helper"
+    BACKTITLE="Update Helper"
     TITLE="Update cmangos-script [Helper]"
-    MENU="Choose one of the following options:"
+    MENU="Choose one option:"
 
     OPTIONS=(1 "Update helper"
       2 "Reinstall /cmangos-script"
@@ -5435,10 +5493,13 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             echo
             echo
           fi
-          # create ms folder
-          sudo mkdir /var/log/ms/ &>/dev/null
-          # fix ownership
-          sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
+          # look for empty dir
+          if ! [ "$(ls -A /var/log/ms/ 2>&1)" ]; then
+            # create ms folder if not found
+            sudo mkdir /var/log/ms/ &>/dev/null
+            # fix ownership
+            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
+          fi
           # create installed mark
           cd "$FOLDER_HELPER" || exit
           LATEST_HEAD=$(git rev-parse --short HEAD)
@@ -5712,12 +5773,12 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
   "p")
 
-    HEIGHT=12
+    HEIGHT=11
     WIDTH=34
     CHOICE_HEIGHT=4
     BACKTITLE="Patch"
     TITLE="Patch operations"
-    MENU="Choose one of the following options:"
+    MENU="Choose one option:"
 
     OPTIONS=(1 "Create new patch"
       2 "Apply existing patch"
@@ -5893,24 +5954,24 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
   "e")
 
-    HEIGHT=19
+    HEIGHT=18
     WIDTH=31
     CHOICE_HEIGHT=11
     BACKTITLE="Server configuration"
     TITLE="Configurations"
-    MENU="Choose one of the following options:"
+    MENU="Choose one option:"
 
     OPTIONS=(1 "server.txt"
       2 "server.cnf"
-      3 "mangos.conf.dist"
-      4 "mangos.conf"
-      5 "realmd.conf.dist"
-      6 "realmd.conf"
-      7 "ahbot.conf.dist"
-      8 "ahbot.conf"
-      9 "playerbot.conf.dist"
-      10 "playerbot.conf"
-      11 "InstallFullDB")
+      3 "mangos.conf"
+      4 "realmd.conf"
+      5 "ahbot.conf"
+      6 "playerbot.conf"
+      7 "InstallFullDB"
+      8 "mangos.conf.dist"
+      9 "realmd.conf.dist"
+      10 "ahbot.conf.dist"
+      11 "playerbot.conf.dist")
 
     CHOICE=$(dialog --clear \
       --backtitle "$BACKTITLE" \
@@ -5924,15 +5985,15 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
     case $CHOICE in
     "1") nano "$FOLDER_INSTALL"/server.txt ;;
     "2") nano "$FOLDER_INSTALL"/server.cnf ;;
-    "3") nano "$FOLDER_CORE"/run/etc/mangosd.conf.dist ;;
-    "4") nano "$FOLDER_CORE"/run/etc/mangosd.conf ;;
-    "5") nano "$FOLDER_CORE"/run/etc/realmd.conf.dist ;;
-    "6") nano "$FOLDER_CORE"/run/etc/realmd.conf ;;
-    "7") nano "$FOLDER_CORE"/run/etc/ahbot.conf.dist ;;
-    "8") nano "$FOLDER_CORE"/run/etc/ahbot.conf ;;
-    "9") nano "$FOLDER_CORE"/run/etc/playerbot.conf.dist ;;
-    "10") nano "$FOLDER_CORE"/run/etc/playerbot.conf ;;
-    "11") nano "$FOLDER_DB"/InstallFullDB.config ;;
+    "3") nano "$FOLDER_CORE"/run/etc/mangosd.conf ;;
+    "4") nano "$FOLDER_CORE"/run/etc/realmd.conf ;;
+    "5") nano "$FOLDER_CORE"/run/etc/ahbot.conf ;;
+    "6") nano "$FOLDER_CORE"/run/etc/playerbot.conf ;;
+    "7") nano "$FOLDER_DB"/InstallFullDB.config ;;
+    "8") nano "$FOLDER_CORE"/run/etc/mangosd.conf.dist ;;
+    "9") nano "$FOLDER_CORE"/run/etc/realmd.conf.dist ;;
+    "10") nano "$FOLDER_CORE"/run/etc/ahbot.conf.dist ;;
+    "11") nano "$FOLDER_CORE"/run/etc/playerbot.conf.dist ;;
     esac
 
     ;;
