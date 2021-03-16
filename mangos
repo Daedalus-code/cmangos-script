@@ -1350,7 +1350,7 @@ After=network.target
 
 [Service]
 User=debian-transmission
-Environment=HTTP_PROXY=socks4h://127.0.0.1:9050
+Environment=HTTP_PROXY=socks5://127.0.0.1:9050
 Type=notify
 ExecStart=/usr/bin/transmission-daemon -f --log-error
 ExecStop=/bin/kill -s STOP $MAINPID
