@@ -1322,7 +1322,7 @@ EOF
               # install to correct folder
               sudo mv "$FOLDER_WOW"/settings.json /var/lib/transmission-daemon/.config/transmission-daemon/settings.json &>/dev/null
               sleep 1
-              printf '%b' "[YN] Download with proxy (${GR:?}tor$N0)? y/n \n"
+              printf '%b' "[YN] Download with proxy (tor)? y/n \n"
               printf '%b' "${GR:?}Note: (ALPHA) Probably not working.$N0\n"
               read -r -p "" -n 1 -r -s
               # install proxy (tor)
@@ -1350,7 +1350,7 @@ After=network.target
 
 [Service]
 User=debian-transmission
-Environment=HTTP_PROXY=socks4h://127.0.0.1:9050 HTTP_PROXY=http://127.0.0.1:9050
+Environment=HTTP_PROXY=socks4h://127.0.0.1:9050
 Type=notify
 ExecStart=/usr/bin/transmission-daemon -f --log-error
 ExecStop=/bin/kill -s STOP $MAINPID
