@@ -920,16 +920,19 @@ ${G0:?}>${N0:?} hit Enter to go back.
         if [ -f /seedbox/classic_maps.zip ]; then
           V_MAPS="${G1:?}Classic${N0:?}"
         else
+          rm /var/log/ms/classic_maps.zip.tmp &>/dev/null
           V_MAPS="Classic"
         fi
         if [ -f /seedbox/tbc_maps.zip ]; then
           T_MAPS="${G1:?}TBC${N0:?}"
         else
+          rm /var/log/ms/tbc_maps.zip.tmp &>/dev/null
           T_MAPS="TBC"
         fi
         if [ -f /seedbox/wotlk_maps.zip ]; then
           W_MAPS="${G1:?}WoTLK${N0:?}"
         else
+          rm /var/log/ms/wotlk_maps.zip.tmp &>/dev/null
           W_MAPS="WoTLK"
         fi
 
@@ -957,20 +960,18 @@ ${G0:?}>${N0:?} hit Enter to go back.
           break
         fi
 
+        # downloading, expansion_maps.zip
         if [ -f /var/log/ms/classic_maps.zip.tmp ]; then
-          # downloading, classic_maps.zip
           P2P_AV="${Y1:?}"
         else
           P2P_AV="${GR:?}"
         fi
         if [ -f /var/log/ms/tbc_maps.zip.tmp ]; then
-          # downloading, tbc_maps.zip
           P2P_AT="${Y1:?}"
         else
           P2P_AT="${GR:?}"
         fi
         if [ -f /var/log/ms/wotlk_maps.zip.tmp ]; then
-          # downloading, wotlk_maps.zip
           P2P_AW="${Y1:?}"
         else
           P2P_AW="${GR:?}"
@@ -1147,7 +1148,7 @@ ${N0:?}"
             printf '%b' "${N0:?}$P2P_PI${N0:?}\n"
             echo
             P2P_TI=$(cat /var/log/ms/transmission_torrent_list)
-            echo "$P2P_TI"
+            printf '%b' "${GR:?}$P2P_TI${N0:?}\n"
             echo
             read -r -p "Press Enter to continue" </dev/tty
             echo
@@ -1322,8 +1323,8 @@ EOF
               # install to correct folder
               sudo mv "$FOLDER_WOW"/settings.json /var/lib/transmission-daemon/.config/transmission-daemon/settings.json &>/dev/null
               sleep 1
-              printf '%b' "[YN] Download with proxy (tor)? y/n \n"
-              printf '%b' "${GR:?}Note: (ALPHA) Probably not working.$N0\n"
+              printf '%b' "${Y1:?}[YN] Download with proxy (tor)? y/n $N0\n"
+              printf '%b' "${GR:?}[!!] Probably slow & not working.$N0 "
               read -r -p "" -n 1 -r -s
               # install proxy (tor)
               if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -3517,7 +3518,6 @@ Select install operation"
       read -t 5 -r -p "[YN] Reset --hard origin/master? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
-
         cd "$FOLDER_CORE" || exit
         git reset --hard origin/master
         printf '%b' "[${G1:?}OK${N0:?}] "
