@@ -1263,7 +1263,7 @@ ${N0:?}"
 "blocklist-enabled": true,
 "blocklist-url": "http://john.bitsurge.net/public/biglist.p2p.gz",
 "cache-size-mb": 16,
-"dht-enabled": true,
+"dht-enabled": false,
 "download-dir": "/seedbox",
 "download-queue-enabled": true,
 "download-queue-size": 3,
@@ -1272,7 +1272,7 @@ ${N0:?}"
 "idle-seeding-limit-enabled": false,
 "incomplete-dir": "/seedbox",
 "incomplete-dir-enabled": false,
-"lpd-enabled": true,
+"lpd-enabled": false,
 "message-level": 1,
 "peer-congestion-algorithm": "",
 "peer-id-ttl-hours": 6,
@@ -1283,7 +1283,7 @@ ${N0:?}"
 "peer-port-random-low": 49152,
 "peer-port-random-on-start": false,
 "peer-socket-tos": "default",
-"pex-enabled": true,
+"pex-enabled": false,
 "port-forwarding-enabled": true,
 "preallocation": 1,
 "prefetch-enabled": true,
@@ -1316,7 +1316,7 @@ ${N0:?}"
 "trash-original-torrent-files": false,
 "umask": 2,
 "upload-slots-per-torrent": 2,
-"utp-enabled": true
+"utp-enabled": false
 }
 EOF
 
@@ -1349,7 +1349,7 @@ After=network.target
 
 [Service]
 User=debian-transmission
-Environment="HTTP_PROXY=http://127.0.0.1:9050" "HTTPS_PROXY=http://127.0.0.1:9050" "ALL_PROXY=socks5://127.0.0.1:9050"
+Environment="HTTP_PROXY=socks4h://127.0.0.1:9050" "HTTPS_PROXY=socks4h://127.0.0.1:9050"
 Type=notify
 ExecStart=/usr/bin/transmission-daemon -f --log-error
 ExecStop=/bin/kill -s STOP $MAINPID
