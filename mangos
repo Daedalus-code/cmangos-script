@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211603
-# 6.0.6.3
+# 6.0.6.7
 
 while :; do
 
@@ -1323,11 +1323,13 @@ EOF
               # install to correct folder
               sudo mv "$FOLDER_WOW"/settings.json /var/lib/transmission-daemon/.config/transmission-daemon/settings.json &>/dev/null
               sleep 1
-              printf '%b' "${Y1:?}[YN] Download with proxy (tor)? y/n $N0\n"
-              printf '%b' "${GR:?}[!!] Probably slow & not working.$N0 \n"
+              printf '%b' "${Y1:?}[YN] Download with proxy (tor)$N0\n"
+              printf '%b' "${GR:?}[!!] Probably slow & not working.$N0\n"
+              echo "[YN] Install proxy and continue? y/n"
               read -r -p "" -n 1 -r -s
               # install proxy (tor)
               if [[ $REPLY =~ ^[Yy]$ ]]; then
+                echo "[!!] Please wait"
                 # is tor installed?
                 if ! [ -x "$(command -v tor)" ]; then
                   printf '%b' "[${Y1:?}OK${N0:?}] Installing proxy..\n"
@@ -1351,8 +1353,10 @@ HiddenServicePort 52525 127.0.0.1:52525" >"$FOLDER_WOW"/THService.tmp
                 # reload
                 sudo systemctl daemon-reload &>/dev/null
                 sleep 1
+                TOR_SOMETHING="restart"
                 PROXY_P2P="HTTP_PROXY=socks5://127.0.0.1:9050"
               else
+                TOR_SOMETHING="stop"
                 PROXY_P2P=""
               fi
               # create service file for transmission
@@ -1375,8 +1379,8 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
               # reload regardless
               sudo systemctl daemon-reload &>/dev/null
               sleep 1
-              # restart tor regardless
-              sudo service tor restart &>/dev/null
+              # do something with tor
+              sudo service tor "$TOR_SOMETHING" &>/dev/null
               sleep 1
               # restart transmission-daemon
               printf '%b' "[${G1:?}OK${N0:?}] Starting transmission\n"
