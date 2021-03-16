@@ -1263,7 +1263,7 @@ ${N0:?}"
 "blocklist-enabled": true,
 "blocklist-url": "http://john.bitsurge.net/public/biglist.p2p.gz",
 "cache-size-mb": 16,
-"dht-enabled": false,
+"dht-enabled": true,
 "download-dir": "/seedbox",
 "download-queue-enabled": true,
 "download-queue-size": 3,
@@ -1272,7 +1272,7 @@ ${N0:?}"
 "idle-seeding-limit-enabled": false,
 "incomplete-dir": "/seedbox",
 "incomplete-dir-enabled": false,
-"lpd-enabled": false,
+"lpd-enabled": true,
 "message-level": 1,
 "peer-congestion-algorithm": "",
 "peer-id-ttl-hours": 6,
@@ -1283,7 +1283,7 @@ ${N0:?}"
 "peer-port-random-low": 49152,
 "peer-port-random-on-start": false,
 "peer-socket-tos": "default",
-"pex-enabled": false,
+"pex-enabled": true,
 "port-forwarding-enabled": true,
 "preallocation": 1,
 "prefetch-enabled": true,
@@ -1316,24 +1316,25 @@ ${N0:?}"
 "trash-original-torrent-files": false,
 "umask": 2,
 "upload-slots-per-torrent": 2,
-"utp-enabled": false
+"utp-enabled": true
 }
 EOF
-
               # install to correct folder
               sudo mv "$FOLDER_WOW"/settings.json /var/lib/transmission-daemon/.config/transmission-daemon/settings.json &>/dev/null
               sleep 1
-
-              printf '%b' "[YN] Download with proxy (tor)? y/n "
+              printf '%b' "[YN] Download with proxy (${GR:?}tor$N0)? y/n \n"
+              printf '%b' "${GR:?}Note: (ALPHA) Probably not working.$N0\n"
               read -r -p "" -n 1 -r -s
-              echo
+              # install proxy (tor)
               if [[ $REPLY =~ ^[Yy]$ ]]; then
                 # is tor installed?
                 if ! [ -x "$(command -v tor)" ]; then
                   printf '%b' "[${Y1:?}OK${N0:?}] Installing proxy..\n"
                   sudo apt-get install tor -y 2>&1
                 fi
-                # create torrc file for tor
+                # stop tor while configuration
+                sudo service tor stop &>/dev/null
+                # create torrc file
                 echo "ControlPort 9051
 CookieAuthentication 1
 CookieAuthFileGroupReadable 1
@@ -1349,7 +1350,7 @@ After=network.target
 
 [Service]
 User=debian-transmission
-Environment="HTTP_PROXY=socks4h://127.0.0.1:9050" "HTTPS_PROXY=socks4h://127.0.0.1:9050"
+Environment=HTTP_PROXY=socks4h://127.0.0.1:9050 HTTP_PROXY=http://127.0.0.1:9050
 Type=notify
 ExecStart=/usr/bin/transmission-daemon -f --log-error
 ExecStop=/bin/kill -s STOP $MAINPID
@@ -1964,7 +1965,6 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
         printline "MailItems" "$MI_COUNT" "BugReport" "$BG_COUNT" "Groups" "$GP_COUNT"
         printline "Realms" "$RL_COUNT" "Social" "$CS_COUNT" "Logons" "$AL_COUNT"
         printline "Cooldowns" "$CC_COUNT" "GM_Surveys" "$GM_COUNT" "Auctions" "$AU_COUNT"
-
         echo
         read -r -p "Press Enter to continue" </dev/tty
         echo
