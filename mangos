@@ -11,7 +11,7 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20211503
+# V20211603
 # 6.0.0.9
 
 while :; do
@@ -2485,7 +2485,7 @@ ${GR:?}$CPU_MODEL${N0:?}")
           CPU_TCSC=$(lscpu 2>&1 | grep -E '^Thread|^Core|^Socket|^CPU\(' 2>&1)
           printf '%b' "-- Core $SERVER_BUILD\n"
           echo
-          printf '%b' "[  0%]${Y1:?} Auto detecting Core(s)${N0:?} ($CPU_TCSC)\n"
+          printf '%b' "[  0%]${Y1:?} Auto detecting Core(s)${N0:?} ($SYS_CORES)\n"
           echo "$CPU_TCSC"
           printf '%b' "[  0%]${G0:?} Building with ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
           cd "$FOLDER_BUILD" || exit
