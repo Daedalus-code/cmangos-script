@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211603
-# 6.0.6.0
+# 6.0.6.3
 
 while :; do
 
@@ -1324,7 +1324,7 @@ EOF
               sudo mv "$FOLDER_WOW"/settings.json /var/lib/transmission-daemon/.config/transmission-daemon/settings.json &>/dev/null
               sleep 1
               printf '%b' "${Y1:?}[YN] Download with proxy (tor)? y/n $N0\n"
-              printf '%b' "${GR:?}[!!] Probably slow & not working.$N0 "
+              printf '%b' "${GR:?}[!!] Probably slow & not working.$N0 \n"
               read -r -p "" -n 1 -r -s
               # install proxy (tor)
               if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -1344,23 +1344,6 @@ HiddenServiceDir /var/lib/tor/transmission/
 HiddenServicePort 52525 127.0.0.1:52525" >"$FOLDER_WOW"/THService.tmp
                 # move tor hidden service file into place as root
                 sudo mv "$FOLDER_WOW"/THService.tmp /etc/tor/torrc 2>&1
-                # create service file for transmission
-                echo "[Unit]
-Description=Transmission BitTorrent Daemon
-After=network.target
-
-[Service]
-User=debian-transmission
-Environment=HTTP_PROXY=socks5://127.0.0.1:9050
-Type=notify
-ExecStart=/usr/bin/transmission-daemon -f --log-error
-ExecStop=/bin/kill -s STOP $MAINPID
-ExecReload=/bin/kill -s HUP $MAINPID
-
-[Install]
-WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
-                # move service file into place as root
-                sudo mv "$FOLDER_WOW"/TService.tmp /lib/systemd/system/transmission-daemon.service 2>&1
                 # restart tor
                 printf '%b' "[${G1:?}OK${N0:?}] Starting proxy (tor)\n"
                 sudo service tor restart &>/dev/null
@@ -1368,7 +1351,27 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
                 # reload
                 sudo systemctl daemon-reload &>/dev/null
                 sleep 1
+                PROXY_P2P="HTTP_PROXY=socks5://127.0.0.1:9050"
+              else
+                PROXY_P2P=""
               fi
+              # create service file for transmission
+              echo "[Unit]
+Description=Transmission BitTorrent Daemon
+After=network.target
+
+[Service]
+User=debian-transmission
+$PROXY_P2P
+Type=notify
+ExecStart=/usr/bin/transmission-daemon -f --log-error
+ExecStop=/bin/kill -s STOP $MAINPID
+ExecReload=/bin/kill -s HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
+              # move service file into place as root
+              sudo mv "$FOLDER_WOW"/TService.tmp /lib/systemd/system/transmission-daemon.service 2>&1
               # reload regardless
               sudo systemctl daemon-reload &>/dev/null
               sleep 1
