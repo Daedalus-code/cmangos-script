@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211703
-# 6.0.5.2
+# 6.0.6.6
 
 while :; do
 
@@ -1178,7 +1178,7 @@ ${N0:?}"
             # clear the local repository of retrieved package files
             sudo apt-get autoclean 2>&1
             # remove packages that were automatically installed because some other package required them
-            sudo apt-get -y --purge autoremove 2>&1
+            sudo apt-get autoremove 2>&1
             echo
             read -r -p "Press Enter to continue" </dev/tty
             echo
@@ -2526,12 +2526,26 @@ ${GR:?}$CPU_MODEL${N0:?}")
 
         # auto build, ruled by configuration
         if [[ "$AUTO_BUILD" -eq "1" ]]; then
-          CPU_TCSC=$(lscpu 2>&1 | grep -E '^Thread|^Core|^Socket|^CPU\(' 2>&1)
-          printf '%b' "-- Core $SERVER_BUILD\n"
+          if awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp &>/dev/null; then
+            MENU_CPU_TEMP=$(awk '{print $cpu/1000}' /sys/class/thermal/thermal_zone0/temp 2>&1 |
+              cut -c -4 2>&1)
+            MENU_CPU_TEMP=$(echo "${MENU_CPU_TEMP:?}c")
+          else
+            MENU_CPU_TEMP=""
+          fi
+          nproc 2>&1 >/var/log/ms/cpu_hw 2>&1
+          CPU_PROC=$(cat /var/log/ms/cpu_hw 2>&1)
+          lscpu 2>&1 | grep -E '^Thread|^Core|^Socket|^CPU\(' >/var/log/ms/cpu_hw 2>&1
+          CPU_TCSC=$(cat /var/log/ms/cpu_hw 2>&1)
+          echo "-- Core $SERVER_BUILD"
+          echo "-- CPU ($CPU_PROC)"
           echo
-          printf '%b' "[  0%]${Y1:?} Auto detecting Core(s)${N0:?} ($SYS_CORES)\n"
+          echo "System CPU"
           echo "$CPU_TCSC"
-          printf '%b' "[  0%]${G0:?} Building with ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
+          echo
+          printf '%b' "[  0%]${Y1:?} Auto detecting ${N0:?}$SYS_CORES${Y1:?} Core(s)${N0:?}\n"
+          printf '%b' "[  0%]${N0:?} $CPU_MODEL${N0:?} ${G1:?}$MENU_CPU_TEMP${N0:?}\n"
+          printf '%b' "[  0%]${G1:?} Building with ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
           cd "$FOLDER_BUILD" || exit
           CORES_BUILD=$(echo "$SYS_CORES")
           # start counting (seconds)
