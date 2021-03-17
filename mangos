@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20211603
-# 6.0.6.7
+# V20211703
+# 6.0.5.2
 
 while :; do
 
@@ -299,22 +299,7 @@ while :; do
   read -r -n1 -s
   case "$REPLY" in
 
-  # server_menu
-
-  "M")
-
-    printf '%b' "${GR:?}[!!] Server_Menu (${Y1:?}ALPHA Version! (${GR:?}junk${Y1:?})${GR:?})${N0:?}\n"
-    read -p "[YN] This Can Break Stuff! Continue? y/n " -n 1 -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-      sudo bash /usr/local/bin/server_menu 2>&1
-    fi
-
-    ;;
-
-    # server_menu
-
-    # debug mangos_script
+  # debug mangos_script
 
   "D")
 
