@@ -2543,7 +2543,7 @@ ${GR:?}$CPU_MODEL${N0:?}")
           echo "System CPU"
           echo "$CPU_TCSC"
           echo
-          printf '%b' "[  0%]${Y1:?} Auto detecting ${N0:?}$SYS_CORES${Y1:?} Core(s)${N0:?}\n"
+          printf '%b' "[  0%]${Y1:?} Auto detecting Core(s)${N0:?}\n"
           printf '%b' "[  0%]${N0:?} $CPU_MODEL${N0:?} ${G1:?}$MENU_CPU_TEMP${N0:?}\n"
           printf '%b' "[  0%]${G1:?} Building with ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
           cd "$FOLDER_BUILD" || exit
