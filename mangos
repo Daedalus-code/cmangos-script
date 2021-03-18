@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20211703
-# 6.0.6.3
+# V20211803
+# 6.0.8.4
 
 while :; do
 
@@ -2544,7 +2544,7 @@ ${GR:?}$CPU_MODEL${N0:?}")
           echo "$CPU_TCSC"
           echo
           printf '%b' "[  0%]${Y1:?} Auto detecting Core(s)${N0:?}\n"
-          printf '%b' "[  0%]${N0:?} $CPU_MODEL${N0:?} ${G1:?}$MENU_CPU_TEMP${N0:?}\n"
+          printf '%b' "[  0%]${N0:?} $CPU_MODEL${N0:?} $MENU_CPU_TEMP\n"
           printf '%b' "[  0%]${G1:?} Building with ${N0:?}${SYS_CORES[0]}${G0:?} Core(s)${N0:?}\n"
           cd "$FOLDER_BUILD" || exit
           CORES_BUILD=$(echo "$SYS_CORES")
@@ -5753,7 +5753,6 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         if grep -q -E ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
           printf '%b' "[${R1:?}X3${N0:?}] realmd.conf is out of date!\n"
         fi
-
         # Playerbot loaded
         if grep -q -E "Playerbot: Using configuration file" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
           # if any, print "Playerbot ok"
@@ -5777,11 +5776,33 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         fi
       fi
     fi
+
+    # table db_version in your [REALMD] database indicates that this database is out of date!
+    if grep -q -E "You need.*|You have.*" "$FOLDER_CORE"/run/logs/Realmd.log &>/dev/null; then
+      A2B_W=$(grep -Eo "You have.*" "$FOLDER_CORE"/run/logs/Realmd.log 2>&1)
+      B2A_W=$(grep -Eo "You need.*" "$FOLDER_CORE"/run/logs/Realmd.log 2>&1)
+      A2B_W=$(echo "$A2B_W" 2>&1 | tr -d '`' 2>&1)
+      B2A_W=$(echo "$B2A_W" 2>&1 | tr -d '`' 2>&1)
+      printf '%b' "[${R1:?}X3${N0:?}] Realm: ${GR:?}$A2B_W${N0:?}\n" # cat doing some coding today = ==/////0,
+      printf '%b' "[${R1:?}X3${N0:?}] Realm: ${G1:?}$B2A_W${N0:?}\n"
+      printf '%b' "[${R1:?}!!${N0:?}] Realm: ${GR:?}(d) Database > Apply all updates${N0:?}\n"
+    fi
+
+    # table db_version in your [WORLD] database indicates that this database is out of date!
+    if grep -q -E "You need.*|You have.*" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
+      A2B_R=$(grep -Eo "You have.*" "$FOLDER_CORE"/run/logs/Server.log 2>&1)
+      B2A_R=$(grep -Eo "You need.*" "$FOLDER_CORE"/run/logs/Server.log 2>&1)
+      A2B_R=$(echo "$A2B_R" 2>&1 | tr -d '`' 2>&1)
+      B2A_R=$(echo "$B2A_R" 2>&1 | tr -d '`' 2>&1)
+      printf '%b' "[${R1:?}X3${N0:?}] World: ${GR:?}$A2B_R${N0:?}\n"
+      printf '%b' "[${R1:?}X3${N0:?}] World: ${G1:?}$B2A_R${N0:?}\n"
+      printf '%b' "[${R1:?}!!${N0:?}] World: ${GR:?}(d) Database > Apply all updates${N0:?}\n"
+    fi
+
     echo
     printf '%b' "${G0:?}>${N0:?} hit Any key to go back."
     echo
     read -r -n 1 -p "Server.log (tail/follow/nano) / Realmd.log (Nano) / logs (lnav)" ans
-    echo
     echo
     case $ans in
     "t")
