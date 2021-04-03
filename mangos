@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20211803
-# 6.0.8.4
+# V20210304
+# 6.2.4.9
 
 while :; do
 
@@ -1192,50 +1192,76 @@ ${N0:?}"
 
         "t")
 
-          function p2p_install_option {
-            printf '%b' "[YN] Download $R_MAPS? y/n "
-            read -t 5 -r -p "" -n 1 -r -s
-            echo
-            if [[ $REPLY =~ ^[Yy]$ ]]; then
-              if [ -f /seedbox/"$R_MAPS_MOD".zip ]; then
-                printf '%b' "${GR:?}[YN] Redo Expansion.zip?${N0:?} y/n "
-                read -t 10 -r -p "" -n 1 -r -s
-                echo
-                if [[ $REPLY =~ ^[Yy]$ ]]; then
-                  rm /var/log/ms/"$R_MAPS_MOD".zip.tmp &>/dev/null
-                  sudo rm /seedbox/"$R_MAPS_MOD".zip &>/dev/null
+          # maps menu
+
+          HEIGHT=10
+          WIDTH=28
+          CHOICE_HEIGHT=4
+          BACKTITLE="Setup Maps"
+          TITLE="Maps Options"
+          MENU="Choose one option:"
+
+          OPTIONS=(1 "Download Maps"
+            2 "Extract Maps"
+            3 "Download Client")
+
+          CHOICE=$(dialog --clear \
+            --backtitle "$BACKTITLE" \
+            --title "$TITLE" \
+            --menu "$MENU" \
+            $HEIGHT $WIDTH $CHOICE_HEIGHT \
+            "${OPTIONS[@]}" \
+            2>&1 >/dev/tty)
+
+          clear
+          case $CHOICE in
+
+          1)
+
+            function p2p_install_option {
+              printf '%b' "[YN] Download $R_MAPS? y/n "
+              read -t 5 -r -p "" -n 1 -r -s
+              echo
+              if [[ $REPLY =~ ^[Yy]$ ]]; then
+                if [ -f /seedbox/"$R_MAPS_MOD".zip ]; then
+                  printf '%b' "${GR:?}[YN] Redo Expansion.zip?${N0:?} y/n "
+                  read -t 10 -r -p "" -n 1 -r -s
+                  echo
+                  if [[ $REPLY =~ ^[Yy]$ ]]; then
+                    rm /var/log/ms/"$R_MAPS_MOD".zip.tmp &>/dev/null
+                    sudo rm /seedbox/"$R_MAPS_MOD".zip &>/dev/null
+                  fi
                 fi
-              fi
-              # look for empty dir
-              if ! [ "$(ls -A /var/log/ms/ 2>&1)" ]; then
-                # create ms folder if not found
-                sudo mkdir /var/log/ms/ &>/dev/null
-                # fix ownership
-                sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
-              fi
-              # check for updates regardless
-              printf '%b' "[${G1:?}OK${N0:?}] Please wait\n"
-              sudo apt-get update &>/dev/null
-              # make sure unzip exist
-              if ! [ -x "$(command -v unzip)" ]; then
-                sudo apt-get install unzip -y 2>&1
-              fi
-              # install transmission-daemon
-              if ! [ -x "$(command -v transmission-daemon)" ]; then
-                sudo apt-get install transmission-daemon -y 2>&1
-              fi
-              # temporary stop ^
-              sudo service transmission-daemon stop &>/dev/null
-              # remove old config
-              sudo rm /var/lib/transmission-daemon/.config/transmission-daemon/settings.json &>/dev/null
-              # create 'seedbox' directory
-              cd || exit
-              sudo mkdir "/seedbox" &>/dev/null
-              # fix folder owner
-              sudo chown -R debian-transmission:debian-transmission /seedbox/ &>/dev/null
-              # setup transmission-daemon configuration file
-              # settings.json
-              cat >"$FOLDER_WOW"/settings.json <<'EOF'
+                # look for empty dir
+                if ! [ "$(ls -A /var/log/ms/ 2>&1)" ]; then
+                  # create ms folder if not found
+                  sudo mkdir /var/log/ms/ &>/dev/null
+                  # fix ownership
+                  sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
+                fi
+                # check for updates regardless
+                printf '%b' "[${G1:?}OK${N0:?}] Please wait\n"
+                sudo apt-get update &>/dev/null
+                # make sure unzip exist
+                if ! [ -x "$(command -v unzip)" ]; then
+                  sudo apt-get install unzip -y 2>&1
+                fi
+                # install transmission-daemon
+                if ! [ -x "$(command -v transmission-daemon)" ]; then
+                  sudo apt-get install transmission-daemon -y 2>&1
+                fi
+                # temporary stop ^
+                sudo service transmission-daemon stop &>/dev/null
+                # remove old config
+                sudo rm /var/lib/transmission-daemon/.config/transmission-daemon/settings.json &>/dev/null
+                # create 'seedbox' directory
+                cd || exit
+                sudo mkdir "/seedbox" &>/dev/null
+                # fix folder owner
+                sudo chown -R debian-transmission:debian-transmission /seedbox/ &>/dev/null
+                # setup transmission-daemon configuration file
+                # settings.json
+                cat >"$FOLDER_WOW"/settings.json <<'EOF'
 {
 "alt-speed-down": 128,
 "alt-speed-enabled": false,
@@ -1305,47 +1331,47 @@ ${N0:?}"
 "utp-enabled": true
 }
 EOF
-              # install to correct folder
-              sudo mv "$FOLDER_WOW"/settings.json /var/lib/transmission-daemon/.config/transmission-daemon/settings.json &>/dev/null
-              sleep 1
-              printf '%b' "${Y1:?}[YN] Download with proxy (tor)$N0\n"
-              printf '%b' "${GR:?}[!!] Probably slow & not working.$N0\n"
-              echo "[YN] Install proxy and continue? y/n"
-              read -r -p "" -n 1 -r -s
-              # install proxy (tor)
-              if [[ $REPLY =~ ^[Yy]$ ]]; then
-                echo "[!!] Please wait"
-                # is tor installed?
-                if ! [ -x "$(command -v tor)" ]; then
-                  printf '%b' "[${Y1:?}OK${N0:?}] Installing proxy..\n"
-                  sudo apt-get install tor -y 2>&1
-                fi
-                # stop tor while configuration
-                sudo service tor stop &>/dev/null
-                # create torrc file
-                echo "ControlPort 9051
+                # install to correct folder
+                sudo mv "$FOLDER_WOW"/settings.json /var/lib/transmission-daemon/.config/transmission-daemon/settings.json &>/dev/null
+                sleep 1
+                printf '%b' "${Y1:?}[YN] Download with proxy (tor)$N0\n"
+                printf '%b' "${GR:?}[!!] Probably slow & not working.$N0\n"
+                echo "[YN] Install proxy and continue? y/n"
+                read -r -p "" -n 1 -r -s
+                # install proxy (tor)
+                if [[ $REPLY =~ ^[Yy]$ ]]; then
+                  echo "[!!] Please wait"
+                  # is tor installed?
+                  if ! [ -x "$(command -v tor)" ]; then
+                    printf '%b' "[${Y1:?}OK${N0:?}] Installing proxy..\n"
+                    sudo apt-get install tor -y 2>&1
+                  fi
+                  # stop tor while configuration
+                  sudo service tor stop &>/dev/null
+                  # create torrc file
+                  echo "ControlPort 9051
 CookieAuthentication 1
 CookieAuthFileGroupReadable 1
 
 HiddenServiceDir /var/lib/tor/transmission/
 HiddenServicePort 52525 127.0.0.1:52525" >"$FOLDER_WOW"/THService.tmp
-                # move tor hidden service file into place as root
-                sudo mv "$FOLDER_WOW"/THService.tmp /etc/tor/torrc 2>&1
-                # restart tor
-                printf '%b' "[${G1:?}OK${N0:?}] Starting proxy (tor)\n"
-                sudo service tor restart &>/dev/null
-                sleep 1
-                # reload
-                sudo systemctl daemon-reload &>/dev/null
-                sleep 1
-                TOR_SOMETHING="restart"
-                PROXY_P2P="HTTP_PROXY=socks5://127.0.0.1:9050"
-              else
-                TOR_SOMETHING="stop"
-                PROXY_P2P=""
-              fi
-              # create service file for transmission
-              echo "[Unit]
+                  # move tor hidden service file into place as root
+                  sudo mv "$FOLDER_WOW"/THService.tmp /etc/tor/torrc 2>&1
+                  # restart tor
+                  printf '%b' "[${G1:?}OK${N0:?}] Starting proxy (tor)\n"
+                  sudo service tor restart &>/dev/null
+                  sleep 1
+                  # reload
+                  sudo systemctl daemon-reload &>/dev/null
+                  sleep 1
+                  TOR_SOMETHING="restart"
+                  PROXY_P2P="HTTP_PROXY=socks5://127.0.0.1:9050"
+                else
+                  TOR_SOMETHING="stop"
+                  PROXY_P2P=""
+                fi
+                # create service file for transmission
+                echo "[Unit]
 Description=Transmission BitTorrent Daemon
 After=network.target
 
@@ -1359,138 +1385,277 @@ ExecReload=/bin/kill -s HUP $MAINPID
 
 [Install]
 WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
-              # move service file into place as root
-              sudo mv "$FOLDER_WOW"/TService.tmp /lib/systemd/system/transmission-daemon.service 2>&1
-              # reload regardless
-              sudo systemctl daemon-reload &>/dev/null
-              sleep 1
-              # do something with tor
-              sudo service tor "$TOR_SOMETHING" &>/dev/null
-              sleep 1
-              # restart transmission-daemon
-              printf '%b' "[${G1:?}OK${N0:?}] Starting transmission\n"
-              sudo service transmission-daemon restart &>/dev/null
-              sleep 1
-              # add torrent
-              p2p_install_maps
-              printf '%b' "[${G1:?}OK${N0:?}] Torrent added $R_MAPS\n"
-              # try to verify torrent data
-              P2P_VERIFY=$(transmission-remote -t all -v 2>&1)
-              printf '%b' "[${Y1:?}OK${N0:?}] Verifying data..\n"
-              sleep 1
-              # output torrent verification
-              printf '%b' "[${G1:?}OK${N0:?}] $P2P_VERIFY\n"
-              sleep 1
-              printf '%b' "[${G1:?}OK${N0:?}] Starting..\n"
+                # move service file into place as root
+                sudo mv "$FOLDER_WOW"/TService.tmp /lib/systemd/system/transmission-daemon.service 2>&1
+                # reload regardless
+                sudo systemctl daemon-reload &>/dev/null
+                sleep 1
+                # do something with tor
+                sudo service tor "$TOR_SOMETHING" &>/dev/null
+                sleep 1
+                # restart transmission-daemon
+                printf '%b' "[${G1:?}OK${N0:?}] Starting transmission\n"
+                sudo service transmission-daemon restart &>/dev/null
+                sleep 1
+                # add torrent
+                p2p_install_maps
+                printf '%b' "[${G1:?}OK${N0:?}] Torrent added $R_MAPS\n"
+                # try to verify torrent data
+                P2P_VERIFY=$(transmission-remote -t all -v 2>&1)
+                printf '%b' "[${Y1:?}OK${N0:?}] Verifying data..\n"
+                sleep 1
+                # output torrent verification
+                printf '%b' "[${G1:?}OK${N0:?}] $P2P_VERIFY\n"
+                sleep 1
+                printf '%b' "[${G1:?}OK${N0:?}] Starting..\n"
+                echo
+                read -r -p "Press Enter to continue" </dev/tty
+                echo
+              fi
+            }
+
+            HEIGHT=10
+            WIDTH=28
+            CHOICE_HEIGHT=4
+            BACKTITLE="Expansion Maps Download (torrent)"
+            TITLE="Download/Import Maps"
+            MENU="Choose one options"
+
+            OPTIONS=(1 "Classic_Maps.zip"
+              2 "TBC_Maps.zip"
+              3 "WoTLK_Maps.zip")
+
+            CHOICE=$(dialog --clear \
+              --backtitle "$BACKTITLE" \
+              --title "$TITLE" \
+              --menu "$MENU" \
+              $HEIGHT $WIDTH $CHOICE_HEIGHT \
+              "${OPTIONS[@]}" \
+              2>&1 >/dev/tty)
+
+            clear
+            case $CHOICE in
+
+            "1")
+
+              R_MAPS="${G1:?}classic_maps.zip${N0:?}"
+              R_MAPS_MOD="classic_maps"
+              # add magnet link: classic_maps.zip.torrent
+              function p2p_install_maps {
+                transmission-remote -a "magnet:?xt=urn:btih:53c783abd984eacb990e18f2b6a783a3086d09fc&dn=classic%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
+              }
+              p2p_install_option
+              # create maps.tmp file
+              touch /var/log/ms/classic_maps.zip.tmp
+
+              ;;
+
+            "2")
+
+              R_MAPS="${G1:?}tbc_maps.zip${N0:?}"
+              R_MAPS_MOD="tbc_maps"
+              # add magnet link: tbc_maps.zip.torrent
+              function p2p_install_maps {
+                transmission-remote -a "magnet:?xt=urn:btih:0edafa830fd9fe25234285c33f67a0c263e0c90d&dn=tbc%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
+              }
+              p2p_install_option
+              # create maps.tmp file
+              touch /var/log/ms/tbc_maps.zip.tmp
+
+              ;;
+
+            "3")
+
+              R_MAPS="${G1:?}wotlk_maps.zip${N0:?}"
+              R_MAPS_MOD="wotlk_maps"
+              # add magnet link: wotlk_maps.zip.torrent
+              function p2p_install_maps {
+                transmission-remote -a "magnet:?xt=urn:btih:e4f2e2989313f71a13400da93bde4ff577d0b255&dn=wotlk%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
+              }
+              p2p_install_option
+              # create maps.tmp file
+              touch /var/log/ms/wotlk_maps.zip.tmp
+
+              ;;
+
+            esac
+
+            ;;
+
+            # setup seedbox (transmission) done
+
+            # start seedbox (transmission)
+
+          "r")
+
+            read -t 5 -r -p "[YN] Re/start SeedBox? y/n " -n 1 -r
+            echo
+            if [[ $REPLY =~ ^[Yy]$ ]]; then
+              # is transmission-daemon installed?
+              if [ -x "$(command -v transmission-daemon)" ]; then
+                printf '%b' "[${G1:?}OK${N0:?}] Please wait\n"
+                # stop transmission service
+                sudo service transmission-daemon stop &>/dev/null
+                # find it, shut it down
+                for PID in $(ps -ef 2>&1 | grep -E "transmission-cli|transmission-daemon" 2>&1 |
+                  awk '{print $2}'); do kill -9 $PID &>/dev/null; done
+                # go over it again, kill daemon, cli
+                sudo kill -9 "$PIDOFP2P_DAE" &>/dev/null
+                sudo kill -9 "$PIDOFP2P_CLI" &>/dev/null
+                sudo killall transmission-daemon &>/dev/null
+                sleep 1
+                sudo service transmission-daemon start &>/dev/null
+                sleep 1
+                # enable service
+                sudo systemctl enable transmission-daemon &>/dev/null
+                # reload
+                sudo systemctl daemon-reload &>/dev/null
+                printf '%b' "[${G1:?}OK${N0:?}] SeedBox started!\n"
+                sleep 2
+              else
+                echo "[!!] Install/Start SeedBox first!"
+                sleep 1
+              fi
+            fi
+
+            ;;
+
+            # maps menu done
+
+          2)
+
+            # create wow-client directory
+            sudo mkdir "$FOLDER_WOW"/wow-client &>/dev/null
+            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
+            echo "[Ok] Permissions"
+            sleep 1
+            echo "[oO] Make sure a client exist! ($FOLDER_WOW/wow-client)"
+            sleep 1
+            echo "[oO] Make sure Core is compiled!"
+            sleep 1
+            echo "[ok] Continuing!"
+            sleep 1
+            printf '%b' "${GR:?}[oO] Make some coffee.. (:${N0:?}"
+            sleep 3
+            clear
+            # copy extractor scripts to client folder
+            cp "$FOLDER_WOW"/mangos-"$TYPE_CORE"/contrib/extractor_scripts/* "$FOLDER_WOW"/wow-client
+            echo "[Ok] Scripts"
+            # copy extractor tools to client folder
+            cp "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/bin/tools/* "$FOLDER_WOW"/wow-client
+            echo "[Ok] Tools"
+            cd "$FOLDER_WOW"/wow-client || exit
+            chmod u+x ExtractResources.sh
+            echo "[Ok] Ready!"
+            # run extractor script
+            ./ExtractResources.sh
+
+            ;;
+
+          3)
+
+            HEIGHT=10
+            WIDTH=33
+            CHOICE_HEIGHT=4
+            BACKTITLE="Download Client"
+            TITLE="Client Options"
+            MENU="Choose one option:"
+
+            OPTIONS=(1 "Classic (Vanilla)"
+              2 "The Burning Crusade"
+              3 "Wrath of the Lich King")
+
+            CHOICE=$(dialog --clear \
+              --backtitle "$BACKTITLE" \
+              --title "$TITLE" \
+              --menu "$MENU" \
+              $HEIGHT $WIDTH $CHOICE_HEIGHT \
+              "${OPTIONS[@]}" \
+              2>&1 >/dev/tty)
+
+            clear
+            case $CHOICE in
+
+            1)
+
+              #              echo "[!!] Downloading Classic (Vanilla) Client"
+              #              sleep 1
+              #              transmission-remote -a "" &>/dev/null
+              #              sleep 1
+              #              echo "[Ok] Torrent starting!"
+              #              sleep 3
+
+              echo "https://duckduckgo.com/?q=wow+classic+client&t=h_&ia=web"
+              echo
+              printf '%b' "${GR:?}Note: that there have been many reports lately,"
+              echo "that Blizzard does file copyright strike with ISPs,"
+              echo "for people using torrents to download their older clients."
+              echo "There are a couple of different options to help with this,"
+              echo "Recommended using either a cloud based torrent client,"
+              echo "such as Bitport or a VPN (Proton VPN is a solid choice,"
+              printf '%b' "they have a decent free tier also).${N0:?}\n"
+              sleep 5
               echo
               read -r -p "Press Enter to continue" </dev/tty
               echo
-            fi
-          }
 
-          HEIGHT=10
-          WIDTH=28
-          CHOICE_HEIGHT=4
-          BACKTITLE="Expansion Maps Download (torrent)"
-          TITLE="Download/Import Maps"
-          MENU="Choose one options"
+              ;;
 
-          OPTIONS=(1 "Classic_Maps.zip"
-            2 "TBC_Maps.zip"
-            3 "WoTLK_Maps.zip")
+            2)
 
-          CHOICE=$(dialog --clear \
-            --backtitle "$BACKTITLE" \
-            --title "$TITLE" \
-            --menu "$MENU" \
-            $HEIGHT $WIDTH $CHOICE_HEIGHT \
-            "${OPTIONS[@]}" \
-            2>&1 >/dev/tty)
+              #              echo "[!!] Downloading The Burning Crusade"
+              #              sleep 1
+              #              transmission-remote -a "" &>/dev/null
+              #              sleep 1
+              #              echo "[Ok] Torrent starting!"
+              #              sleep 3
 
-          clear
-          case $CHOICE in
+              echo "https://duckduckgo.com/?q=wow+tbc+client&t=h_&ia=web"
+              echo
+              printf '%b' "${GR:?}Note: that there have been many reports lately,"
+              echo "that Blizzard does file copyright strike with ISPs,"
+              echo "for people using torrents to download their older clients."
+              echo "There are a couple of different options to help with this,"
+              echo "Recommended using either a cloud based torrent client,"
+              echo "such as Bitport or a VPN (Proton VPN is a solid choice,"
+              printf '%b' "they have a decent free tier also).${N0:?}\n"
+              sleep 5
+              echo
+              read -r -p "Press Enter to continue" </dev/tty
+              echo
 
-          "1")
+              ;;
 
-            R_MAPS="${G1:?}classic_maps.zip${N0:?}"
-            R_MAPS_MOD="classic_maps"
-            # add magnet link: classic_maps.zip.torrent
-            function p2p_install_maps {
-              transmission-remote -a "magnet:?xt=urn:btih:53c783abd984eacb990e18f2b6a783a3086d09fc&dn=classic%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
-            }
-            p2p_install_option
-            # create maps.tmp file
-            touch /var/log/ms/classic_maps.zip.tmp
+            3)
 
-            ;;
+              #              echo "[!!] Downloading Wrath of the Lich King"
+              #              sleep 1
+              #              transmission-remote -a "" &>/dev/null
+              #              sleep 1
+              #              echo "[Ok] Torrent starting!"
+              #              sleep 3
 
-          "2")
+              echo "https://duckduckgo.com/?q=wow+wotlk+client&t=h_&ia=web"
+              echo
+              printf '%b' "${GR:?}Note: that there have been many reports lately,"
+              echo "that Blizzard does file copyright strike with ISPs,"
+              echo "for people using torrents to download their older clients."
+              echo "There are a couple of different options to help with this,"
+              echo "Recommended using either a cloud based torrent client,"
+              echo "such as Bitport or a VPN (Proton VPN is a solid choice,"
+              printf '%b' "they have a decent free tier also).${N0:?}\n"
+              sleep 5
+              echo
+              read -r -p "Press Enter to continue" </dev/tty
+              echo
 
-            R_MAPS="${G1:?}tbc_maps.zip${N0:?}"
-            R_MAPS_MOD="tbc_maps"
-            # add magnet link: tbc_maps.zip.torrent
-            function p2p_install_maps {
-              transmission-remote -a "magnet:?xt=urn:btih:0edafa830fd9fe25234285c33f67a0c263e0c90d&dn=tbc%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
-            }
-            p2p_install_option
-            # create maps.tmp file
-            touch /var/log/ms/tbc_maps.zip.tmp
+              ;;
 
-            ;;
-
-          "3")
-
-            R_MAPS="${G1:?}wotlk_maps.zip${N0:?}"
-            R_MAPS_MOD="wotlk_maps"
-            # add magnet link: wotlk_maps.zip.torrent
-            function p2p_install_maps {
-              transmission-remote -a "magnet:?xt=urn:btih:e4f2e2989313f71a13400da93bde4ff577d0b255&dn=wotlk%5Fmaps.zip&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" &>/dev/null
-            }
-            p2p_install_option
-            # create maps.tmp file
-            touch /var/log/ms/wotlk_maps.zip.tmp
+            esac
 
             ;;
 
           esac
-
-          ;;
-
-          # setup seedbox (transmission) done
-
-          # start seedbox (transmission)
-
-        "r")
-
-          read -t 5 -r -p "[YN] Re/start SeedBox? y/n " -n 1 -r
-          echo
-          if [[ $REPLY =~ ^[Yy]$ ]]; then
-            # is transmission-daemon installed?
-            if [ -x "$(command -v transmission-daemon)" ]; then
-              printf '%b' "[${G1:?}OK${N0:?}] Please wait\n"
-              # stop transmission service
-              sudo service transmission-daemon stop &>/dev/null
-              # find it, shut it down
-              for PID in $(ps -ef 2>&1 | grep -E "transmission-cli|transmission-daemon" 2>&1 |
-                awk '{print $2}'); do kill -9 $PID &>/dev/null; done
-              # go over it again, kill daemon, cli
-              sudo kill -9 "$PIDOFP2P_DAE" &>/dev/null
-              sudo kill -9 "$PIDOFP2P_CLI" &>/dev/null
-              sudo killall transmission-daemon &>/dev/null
-              sleep 1
-              sudo service transmission-daemon start &>/dev/null
-              sleep 1
-              # enable service
-              sudo systemctl enable transmission-daemon &>/dev/null
-              # reload
-              sudo systemctl daemon-reload &>/dev/null
-              printf '%b' "[${G1:?}OK${N0:?}] SeedBox started!\n"
-              sleep 2
-            else
-              echo "[!!] Install/Start SeedBox first!"
-              sleep 1
-            fi
-          fi
 
           ;;
 
