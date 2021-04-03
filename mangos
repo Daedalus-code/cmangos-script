@@ -1587,7 +1587,7 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
 
               echo "https://duckduckgo.com/?q=wow+classic+client&t=h_&ia=web"
               echo
-              printf '%b' "${GR:?}Note: that there have been many reports lately,"
+              printf '%b' "${GR:?}Note: that there have been many reports lately,\n"
               echo "that Blizzard does file copyright strike with ISPs,"
               echo "for people using torrents to download their older clients."
               echo "There are a couple of different options to help with this,"
@@ -1612,7 +1612,7 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
 
               echo "https://duckduckgo.com/?q=wow+tbc+client&t=h_&ia=web"
               echo
-              printf '%b' "${GR:?}Note: that there have been many reports lately,"
+              printf '%b' "${GR:?}Note: that there have been many reports lately,\n"
               echo "that Blizzard does file copyright strike with ISPs,"
               echo "for people using torrents to download their older clients."
               echo "There are a couple of different options to help with this,"
@@ -1637,7 +1637,7 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
 
               echo "https://duckduckgo.com/?q=wow+wotlk+client&t=h_&ia=web"
               echo
-              printf '%b' "${GR:?}Note: that there have been many reports lately,"
+              printf '%b' "${GR:?}Note: that there have been many reports lately,\n"
               echo "that Blizzard does file copyright strike with ISPs,"
               echo "for people using torrents to download their older clients."
               echo "There are a couple of different options to help with this,"
