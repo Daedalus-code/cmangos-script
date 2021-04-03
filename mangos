@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20210304
-# 6.2.4.9
+# V20210404
+# 6.2.7.1
 
 while :; do
 
@@ -271,6 +271,15 @@ while :; do
     TOOL_HEAD="${G1:?}Updates${N0:?}"
   fi
 
+  if pidof MoveMapGen 2>&1; then
+    # extracting maps
+    EXTRACTING_MAPS="${G1:?}Extracting Maps${N0:?}"
+    EXTRACTING_MAPS_INFO=" Please Wait."
+  elif pidof ExtractResources 2>&1; then
+    EXTRACTING_MAPS="${G1:?}Extracting Maps${N0:?}"
+    EXTRACTING_MAPS_INFO="${R1:?} Please Wait.${N0:?}"
+  fi
+
   # menu
   clear
   printf '%b' "
@@ -279,10 +288,10 @@ while :; do
      Core ${G0:?}$CORE_HEAD$N0  $THEME_ALL$SERVER_BUILD$N0
      Data ${G0:?}$DATA_HEAD$N0  Online $MENU_ON_COUNT
      Tool ${G0:?}$TOOL_HEAD$N0  Guilds $MENU_GU_COUNT
-
+         $EXTRACTING_MAPS
          $LOAD$N0
          $MENU_MANGOSD$GR | $N0$MENU_REALMD
-
+         $EXTRACTING_MAPS_INFO
    A $GR: ${THEME_TXT:?}Admin      ${N0:?}t $GR: ${THEME_TXT:?}Heroes${N0:?}
    a $GR: ${THEME_TXT:?}Account    ${N0:?}g $GR: ${THEME_TXT:?}Guilds${N0:?}
    c $GR: ${THEME_TXT:?}Updates    ${N0:?}u $GR: ${THEME_TXT:?}Users${N0:?}
@@ -839,6 +848,19 @@ while :; do
 
       "i")
 
+        # random logo color
+        RLC=$(echo "$RANDOM" 2>&1 | grep -Eo "[1-2]" 2>&1 | head -1 2>&1)
+
+        # back in the day
+        if [[ "$RLC" -eq "1" ]]; then
+          RC0="${N0:?}"
+          RC1="${CY:?}"
+          # updates
+        else
+          RC0="${R1:?}"
+          RC1="${R1:?}"
+        fi
+
         clear
         printf '%b' "${N0:?}
      _____     __  __       _   _  _____  ____   _____
@@ -859,11 +881,11 @@ while :; do
    https://github.com/cmangos/mangos-tbc
    https://github.com/cmangos/tbc-db
    https://github.com/cmangos/mangos-wotlk
-   https://github.com/cmangos/wotlk-db
+   https://github.com/cmangos/wotlk-db${RC0:?}
 
    _____ _____     _____ _____ _____ _____
-  |     |     |___|   | |   __|     |   __|
-  |   --| | | | .'| | | |  |  |  |  |__   |${CY:?}
+  |     |     |___|   | |   __|     |   __|${RC0:?}
+  |   --| | | | .'| | | |  |  |  |  |__   |${RC1:?}
   |_____|_|_|_|__,|_|___|_____|_____|_____|${N0:?}
    C(ontinued)-MaNGOS - ${GR:?}Helper/Tool
    2019-2021${N0:?}
