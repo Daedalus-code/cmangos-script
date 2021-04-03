@@ -283,9 +283,9 @@ while :; do
          $LOAD$N0
          $MENU_MANGOSD$GR | $N0$MENU_REALMD
 
-   A $GR: ${THEME_TXT:?}Admin      ${N0:?}t $GR: ${THEME_TXT:?}Characters${N0:?}
-   a $GR: ${THEME_TXT:?}Account    ${N0:?}u $GR: ${THEME_TXT:?}Accounts${N0:?}
-   c $GR: ${THEME_TXT:?}Updates    ${N0:?}g $GR: ${THEME_TXT:?}Guilds${N0:?}
+   A $GR: ${THEME_TXT:?}Admin      ${N0:?}t $GR: ${THEME_TXT:?}Heroes${N0:?}
+   a $GR: ${THEME_TXT:?}Account    ${N0:?}g $GR: ${THEME_TXT:?}Guilds${N0:?}
+   c $GR: ${THEME_TXT:?}Updates    ${N0:?}u $GR: ${THEME_TXT:?}Users${N0:?}
    m $GR: ${THEME_TXT:?}CMaNGOS    ${N0:?}e $GR: ${THEME_TXT:?}Config${N0:?}
    d $GR: ${THEME_TXT:?}Database   ${N0:?}p $GR: ${THEME_TXT:?}Patch${N0:?}
    w $GR: ${THEME_TXT:?}Helper     ${N0:?}o $GR: ${THEME_TXT:?}Ping${N0:?}
@@ -788,9 +788,9 @@ while :; do
 
       # free Space, mmc block device #0, partition #2, partition #2, dev/root, overlay
       MENU_USED_HDD=$(df -h 2>&1 | grep -E "mmcblk0p2|mmcblk0p3|/dev/root|overlay|sda1" 2>&1 |
-        awk '{ print $3 }' 2>&1)
+        awk '{ print $3 }' 2>&1 | head -1 2>&1)
       MENU_USED_HDD_P=$(df -h | grep -E "mmcblk0p2|mmcblk0p3|/dev/root|overlay|sda1" 2>&1 |
-        awk '{ print $5 }' 2>&1)
+        awk '{ print $5 }' 2>&1 | head -1 2>&1)
 
       # free Memory
       MENU_FREE_MEM=$(free --mega 2>&1 | grep "Mem" 2>&1 |
