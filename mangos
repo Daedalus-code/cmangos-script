@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210404
-# 6.3.2.7
+# 6.3.2.8
 
 while :; do
 
@@ -1581,6 +1581,7 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
             sudo cp "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/bin/tools/* "$MAPS_EXTRACTING_DIR"
             printf '%b' "[${G1:?}Ok${N0:?}] Tools\n"
             cd "$MAPS_EXTRACTING_DIR" || exit
+            sudo unzip -o zipped.zip
             sudo chmod u+x ExtractResources.sh
             printf '%b' "[${G1:?}Ok${N0:?}] Ready\n"
             read -r -p "[!!] Remove old maps first? y/n " -n 1 -r
