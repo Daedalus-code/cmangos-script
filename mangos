@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210404
-# 6.3.2.5
+# 6.3.2.7
 
 while :; do
 
@@ -1565,15 +1565,14 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
             read -r -p "[!!] Enter client directory? y/n " -n 1 -r
             echo
             if [[ $REPLY =~ ^[Yy]$ ]]; then
+              printf '%b' "[!!] >"
               read -r MAP_DIR
               MAPS_EXTRACTING_DIR="$MAP_DIR"
-              printf '%b' "[${G1:?}Ok${N0:?}] Using $MAPS_EXTRACTING_DIR!\n"
+              printf '%b' "[${G1:?}Ok${N0:?}] Using ${GR?:}$MAPS_EXTRACTING_DIR${N0:?}\n"
             else
               MAPS_EXTRACTING_DIR="$FOLDER_WOW/wow-client"
-              printf '%b' "[${G1:?}Ok${N0:?}] Using $MAPS_EXTRACTING_DIR! (default)\n"
+              printf '%b' "[${G1:?}Ok${N0:?}] Using ${GR?:}$MAPS_EXTRACTING_DIR${N0:?} (default)\n"
             fi
-            sleep 1
-            echo "[ok] Continuing extracting process"
             sleep 1
             # copy extractor scripts to client folder
             sudo cp "$FOLDER_WOW"/mangos-"$TYPE_CORE"/contrib/extractor_scripts/* "$MAPS_EXTRACTING_DIR"
@@ -1587,6 +1586,19 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
             read -r -p "[!!] Remove old maps first? y/n " -n 1 -r
             echo
             if [[ $REPLY =~ ^[Yy]$ ]]; then
+              echo
+              # remove old maps from client directory
+              echo "Removing maps from Client directory"
+              printf '%b' "[${G1:?}Ok${N0:?}] ${GR:?}Removing dbc, "
+              sudo rm -R "$MAPS_EXTRACTING_DIR"/dbc &>/dev/null
+              printf '%b' "maps, "
+              sudo rm -R "$MAPS_EXTRACTING_DIR"/maps &>/dev/null
+              printf '%b' "mmaps, "
+              sudo rm -R "$MAPS_EXTRACTING_DIR"/mmaps &>/dev/null
+              printf '%b' "vmaps, ${N0:?}"
+              sudo rm -R "$MAPS_EXTRACTING_DIR"/vmaps &>/dev/null
+              echo
+              echo "Removing maps from Core directory"
               printf '%b' "[${G1:?}Ok${N0:?}] Removing dbc, "
               # remove old maps from core directory
               sudo rm -R "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/dbc &>/dev/null
@@ -1596,16 +1608,6 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
               sudo rm -R "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/mmaps &>/dev/null
               printf '%b' "vmaps, "
               sudo rm -R "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/vmaps &>/dev/null
-              echo
-              # remove old maps from client directory
-              printf '%b' "[${G1:?}Ok${N0:?}] Removing dbc, "
-              sudo rm -R "$MAPS_EXTRACTING_DIR"/dbc &>/dev/null
-              printf '%b' "maps, "
-              sudo rm -R "$MAPS_EXTRACTING_DIR"/maps &>/dev/null
-              printf '%b' "mmaps, "
-              sudo rm -R "$MAPS_EXTRACTING_DIR"/mmaps &>/dev/null
-              printf '%b' "vmaps, "
-              sudo rm -R "$MAPS_EXTRACTING_DIR"/vmaps &>/dev/null
               echo
             fi
             # run extractor script
