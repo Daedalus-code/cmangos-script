@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210404
-# 6.3.1.3
+# 6.3.1.1
 
 while :; do
 
@@ -1568,8 +1568,6 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
               read -r MAP_DIR
               MAPS_EXTRACTING_DIR="$MAP_DIR"
               echo "[Ok] Using $MAPS_EXTRACTING_DIR!"
-              sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$MAPS_EXTRACTING_DIR" &>/dev/null
-              echo "[Ok] Fixing permissions"
             else
               MAPS_EXTRACTING_DIR="$FOLDER_WOW/wow-client"
               echo "[Ok] Using $MAPS_EXTRACTING_DIR! (default)"
