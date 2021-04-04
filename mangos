@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210404
-# 6.3.0.2
+# 6.3.0.1
 
 while :; do
 
@@ -1562,6 +1562,8 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
               read -r MAP_DIR
               MAPS_EXTRACTING_DIR="$MAP_DIR"
               echo "[Ok] Using $MAPS_EXTRACTING_DIR!"
+              sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$MAPS_EXTRACTING_DIR" &>/dev/null
+              echo "[Ok] Fixing permissions"
             else
               MAPS_EXTRACTING_DIR="$FOLDER_WOW/wow-client"
               echo "[Ok] Using $MAPS_EXTRACTING_DIR! (default)"
@@ -1571,21 +1573,18 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
             sleep 1
             echo "[ok] Continuing extracting process"
             sleep 1
-            printf '%b' "${GR:?}[oO] Make some coffee.. (:${N0:?}"
-            sleep 3
-            clear
             # copy extractor scripts to client folder
-            cp "$FOLDER_WOW"/mangos-"$TYPE_CORE"/contrib/extractor_scripts/* "$MAPS_EXTRACTING_DIR"
+            sudo cp "$FOLDER_WOW"/mangos-"$TYPE_CORE"/contrib/extractor_scripts/* "$MAPS_EXTRACTING_DIR"
             echo "[Ok] Scripts"
             # copy extractor tools to client folder
-            cp "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/bin/tools/* "$MAPS_EXTRACTING_DIR"
+            sudo cp "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/bin/tools/* "$MAPS_EXTRACTING_DIR"
             echo "[Ok] Tools"
             cd "$MAPS_EXTRACTING_DIR" || exit
-            chmod u+x ExtractResources.sh
+            sudo chmod u+x ExtractResources.sh
             echo "[Ok] Ready"
             # run extractor script
             echo "[!!] Run ExtractResources.sh"
-            ./ExtractResources.sh
+            sudo ./ExtractResources.sh
             read -r -p "[!!] Install extracted maps? y/n " -n 1 -r
             echo
             if [[ $REPLY =~ ^[Yy]$ ]]; then
