@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210404
-# 6.3.1.1
+# 6.3.0.8
 
 while :; do
 
@@ -5774,13 +5774,10 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             echo
             echo
           fi
-          # look for empty dir
-          if ! [ "$(ls -A /var/log/ms/ 2>&1)" ]; then
-            # create ms folder if not found
-            sudo mkdir /var/log/ms/ &>/dev/null
-            # fix ownership
-            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
-          fi
+          # create ms folder if not found
+          sudo mkdir /var/log/ms/ &>/dev/null
+          # fix ownership
+          sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
           # create installed mark
           cd "$FOLDER_HELPER" || exit
           LATEST_HEAD=$(git rev-parse --short HEAD)
