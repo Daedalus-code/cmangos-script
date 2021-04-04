@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210404
-# 6.2.8.6
+# 6.3.0.2
 
 while :; do
 
@@ -1556,7 +1556,7 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
             echo "[Ok] Fixing permissions"
             sleep 1
             printf '%b' "${GR:?}Default $FOLDER_WOW/mangos-$SERVER_TYPE/run ${N0:?}\n"
-            read -t 5 -r -p "[!!] Enter map directory? y/n " -n 1 -r
+            read -r -p "[!!] Enter map directory? y/n " -n 1 -r
             echo
             if [[ $REPLY =~ ^[Yy]$ ]]; then
               read -r MAP_DIR
@@ -1586,7 +1586,23 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
             # run extractor script
             echo "[!!] Run ExtractResources.sh"
             ./ExtractResources.sh
-
+            read -r -p "[!!] Install extracted maps? y/n " -n 1 -r
+            echo
+            if [[ $REPLY =~ ^[Yy]$ ]]; then
+              read -r -p "[!!] Remove old maps first? y/n " -n 1 -r
+              echo
+              if [[ $REPLY =~ ^[Yy]$ ]]; then
+                sudo rm -R "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/dbc &>/dev/null
+                sudo rm -R "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/maps &>/dev/null
+                sudo rm -R "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/mmaps &>/dev/null
+                sudo rm -R "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/vmaps &>/dev/null
+              fi
+              # install maps
+              cp -R "$MAPS_EXTRACTING_DIR"/dbc "$FOLDER_WOW"/mangos-"$SERVER_TYPE"/run
+              cp -R "$MAPS_EXTRACTING_DIR"/maps "$FOLDER_WOW"/mangos-"$SERVER_TYPE"/run
+              cp -R "$MAPS_EXTRACTING_DIR"/mmaps "$FOLDER_WOW"/mangos-"$SERVER_TYPE"/run
+              cp -R "$MAPS_EXTRACTING_DIR"/vmaps "$FOLDER_WOW"/mangos-"$SERVER_TYPE"/run
+            fi
             ;;
 
           3)
