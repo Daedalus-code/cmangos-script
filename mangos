@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210404
-# 6.3.0.4
+# 6.3.1.0
 
 while :; do
 
@@ -1588,10 +1588,16 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
             read -r -p "[!!] Remove old maps first? y/n " -n 1 -r
             echo
             if [[ $REPLY =~ ^[Yy]$ ]]; then
+              # remove old maps from core directory
               sudo rm -R "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/dbc &>/dev/null
               sudo rm -R "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/maps &>/dev/null
               sudo rm -R "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/mmaps &>/dev/null
               sudo rm -R "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/vmaps &>/dev/null
+              # remove old maps from client directory
+              sudo rm -R "$MAPS_EXTRACTING_DIR"/dbc &>/dev/null
+              sudo rm -R "$MAPS_EXTRACTING_DIR"/maps &>/dev/null
+              sudo rm -R "$MAPS_EXTRACTING_DIR"/mmaps &>/dev/null
+              sudo rm -R "$MAPS_EXTRACTING_DIR"/vmaps &>/dev/null
             fi
             # run extractor script
             echo "[!!] Run ExtractResources.sh"
