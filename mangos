@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210404
-# 6.2.7.1
+# 6.2.8.6
 
 while :; do
 
@@ -274,10 +274,13 @@ while :; do
   if pidof MoveMapGen 2>&1; then
     # extracting maps
     EXTRACTING_MAPS="${G1:?}Extracting Maps${N0:?}"
-    EXTRACTING_MAPS_INFO=" Please Wait."
+    EXTRACTING_MAPS_INFO="${GR:?} Please Wait!${N0:?}"
   elif pidof ExtractResources 2>&1; then
     EXTRACTING_MAPS="${G1:?}Extracting Maps${N0:?}"
-    EXTRACTING_MAPS_INFO="${R1:?} Please Wait.${N0:?}"
+    EXTRACTING_MAPS_INFO="${GR:?} Please Wait!${N0:?}"
+  else # non responsive
+    EXTRACTING_MAPS=""
+    EXTRACTING_MAPS_INFO=""
   fi
 
   # menu
@@ -855,7 +858,7 @@ while :; do
         if [[ "$RLC" -eq "1" ]]; then
           RC0="${N0:?}"
           RC1="${CY:?}"
-          # updates
+          # new era emerge
         else
           RC0="${R1:?}"
           RC1="${R1:?}"
@@ -1547,29 +1550,41 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
           2)
 
             # create wow-client directory
+            echo "[!!] Creating 'wow-client' directory"
             sudo mkdir "$FOLDER_WOW"/wow-client &>/dev/null
             sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
-            echo "[Ok] Permissions"
+            echo "[Ok] Fixing permissions"
             sleep 1
-            echo "[oO] Make sure a client exist! ($FOLDER_WOW/wow-client)"
+            printf '%b' "${GR:?}Default $FOLDER_WOW/mangos-$SERVER_TYPE/run ${N0:?}\n"
+            read -t 5 -r -p "[!!] Enter map directory? y/n " -n 1 -r
+            echo
+            if [[ $REPLY =~ ^[Yy]$ ]]; then
+              read -r MAP_DIR
+              MAPS_EXTRACTING_DIR="$MAP_DIR"
+              echo "[Ok] Using $MAPS_EXTRACTING_DIR!"
+            else
+              MAPS_EXTRACTING_DIR="$FOLDER_WOW/wow-client"
+              echo "[Ok] Using $MAPS_EXTRACTING_DIR! (default)"
+            fi
             sleep 1
-            echo "[oO] Make sure Core is compiled!"
+            echo "[oO] Make sure Core is already compiled"
             sleep 1
-            echo "[ok] Continuing!"
+            echo "[ok] Continuing extracting process"
             sleep 1
             printf '%b' "${GR:?}[oO] Make some coffee.. (:${N0:?}"
             sleep 3
             clear
             # copy extractor scripts to client folder
-            cp "$FOLDER_WOW"/mangos-"$TYPE_CORE"/contrib/extractor_scripts/* "$FOLDER_WOW"/wow-client
+            cp "$FOLDER_WOW"/mangos-"$TYPE_CORE"/contrib/extractor_scripts/* "$MAPS_EXTRACTING_DIR"
             echo "[Ok] Scripts"
             # copy extractor tools to client folder
-            cp "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/bin/tools/* "$FOLDER_WOW"/wow-client
+            cp "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/bin/tools/* "$MAPS_EXTRACTING_DIR"
             echo "[Ok] Tools"
-            cd "$FOLDER_WOW"/wow-client || exit
+            cd "$MAPS_EXTRACTING_DIR" || exit
             chmod u+x ExtractResources.sh
-            echo "[Ok] Ready!"
+            echo "[Ok] Ready"
             # run extractor script
+            echo "[!!] Run ExtractResources.sh"
             ./ExtractResources.sh
 
             ;;
