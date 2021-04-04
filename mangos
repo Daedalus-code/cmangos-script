@@ -1561,7 +1561,7 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
             sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
             printf '%b' "[${G1:?}Ok${N0:?}] Fixing permissions\n"
             sleep 1
-            printf '%b' "${GR:?}Default $FOLDER_WOW/mangos-$SERVER_TYPE/run ${N0:?}\n"
+            printf '%b' "${GR:?}Default $FOLDER_WOW/mangos-$TYPE_CORE/run ${N0:?}\n"
             read -r -p "[!!] Enter client directory? y/n " -n 1 -r
             echo
             if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -1624,10 +1624,10 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
             echo
             if [[ $REPLY =~ ^[Yy]$ ]]; then
               # install maps
-              cp -R "$MAPS_EXTRACTING_DIR"/dbc "$FOLDER_WOW"/mangos-"$SERVER_TYPE"/run
-              cp -R "$MAPS_EXTRACTING_DIR"/maps "$FOLDER_WOW"/mangos-"$SERVER_TYPE"/run
-              cp -R "$MAPS_EXTRACTING_DIR"/mmaps "$FOLDER_WOW"/mangos-"$SERVER_TYPE"/run
-              cp -R "$MAPS_EXTRACTING_DIR"/vmaps "$FOLDER_WOW"/mangos-"$SERVER_TYPE"/run
+              cp -R "$MAPS_EXTRACTING_DIR"/dbc "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run
+              cp -R "$MAPS_EXTRACTING_DIR"/maps "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run
+              cp -R "$MAPS_EXTRACTING_DIR"/mmaps "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run
+              cp -R "$MAPS_EXTRACTING_DIR"/vmaps "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run
             fi
             ;;
 
