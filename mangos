@@ -1585,20 +1585,20 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
             cd "$MAPS_EXTRACTING_DIR" || exit
             sudo chmod u+x ExtractResources.sh
             echo "[Ok] Ready"
+            read -r -p "[!!] Remove old maps first? y/n " -n 1 -r
+            echo
+            if [[ $REPLY =~ ^[Yy]$ ]]; then
+              sudo rm -R "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/dbc &>/dev/null
+              sudo rm -R "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/maps &>/dev/null
+              sudo rm -R "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/mmaps &>/dev/null
+              sudo rm -R "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/vmaps &>/dev/null
+            fi
             # run extractor script
             echo "[!!] Run ExtractResources.sh"
             sudo ./ExtractResources.sh
             read -r -p "[!!] Install extracted maps? y/n " -n 1 -r
             echo
             if [[ $REPLY =~ ^[Yy]$ ]]; then
-              read -r -p "[!!] Remove old maps first? y/n " -n 1 -r
-              echo
-              if [[ $REPLY =~ ^[Yy]$ ]]; then
-                sudo rm -R "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/dbc &>/dev/null
-                sudo rm -R "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/maps &>/dev/null
-                sudo rm -R "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/mmaps &>/dev/null
-                sudo rm -R "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/vmaps &>/dev/null
-              fi
               # install maps
               cp -R "$MAPS_EXTRACTING_DIR"/dbc "$FOLDER_WOW"/mangos-"$SERVER_TYPE"/run
               cp -R "$MAPS_EXTRACTING_DIR"/maps "$FOLDER_WOW"/mangos-"$SERVER_TYPE"/run
