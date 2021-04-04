@@ -1561,11 +1561,11 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
             sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
             printf '%b' "[${G1:?}Ok${N0:?}] Fixing permissions\n"
             sleep 1
-            printf '%b' "${GR:?}Default $FOLDER_WOW/mangos-$TYPE_CORE/run ${N0:?}\n"
+            printf '%b' "${GR:?}Default: $FOLDER_WOW/wow-client ${N0:?}\n"
             read -r -p "[!!] Enter client directory? y/n " -n 1 -r
             echo
             if [[ $REPLY =~ ^[Yy]$ ]]; then
-              printf '%b' "[!!] >"
+              printf '%b' "[!!] ${GR:?}> ${N0:?}"
               read -r MAP_DIR
               MAPS_EXTRACTING_DIR="$MAP_DIR"
               printf '%b' "[${G1:?}Ok${N0:?}] Using ${GR?:}$MAPS_EXTRACTING_DIR${N0:?}\n"
@@ -1581,7 +1581,6 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
             sudo cp "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/bin/tools/* "$MAPS_EXTRACTING_DIR"
             printf '%b' "[${G1:?}Ok${N0:?}] Tools\n"
             cd "$MAPS_EXTRACTING_DIR" || exit
-            sudo unzip -o zipped.zip
             sudo chmod u+x ExtractResources.sh
             printf '%b' "[${G1:?}Ok${N0:?}] Ready\n"
             read -r -p "[!!] Remove old maps first? y/n " -n 1 -r
@@ -1632,6 +1631,7 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
               cp -R "$MAPS_EXTRACTING_DIR"/mmaps "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run
               cp -R "$MAPS_EXTRACTING_DIR"/vmaps "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run
             fi
+
             ;;
 
           3)
