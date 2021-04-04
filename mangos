@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210404
-# 6.3.0.1
+# 6.3.0.4
 
 while :; do
 
@@ -276,6 +276,9 @@ while :; do
     EXTRACTING_MAPS="${G1:?}Extracting Maps${N0:?}"
     EXTRACTING_MAPS_INFO="${GR:?} Please Wait!${N0:?}"
   elif pidof ExtractResources 2>&1; then
+    EXTRACTING_MAPS="${G1:?}Extracting Maps${N0:?}"
+    EXTRACTING_MAPS_INFO="${GR:?} Please Wait!${N0:?}"
+  elif pidof vmap_extractor 2>&1; then
     EXTRACTING_MAPS="${G1:?}Extracting Maps${N0:?}"
     EXTRACTING_MAPS_INFO="${GR:?} Please Wait!${N0:?}"
   else # non responsive
