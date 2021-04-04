@@ -1556,7 +1556,7 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
           2)
 
             # create wow-client directory
-            echo "[!!] Creating 'wow-client' directory"
+            printf '%b' "[!!] ${GR:?}Creating 'wow-client' directory${N0:?}\n"
             sudo mkdir "$FOLDER_WOW"/wow-client &>/dev/null
             sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
             printf '%b' "[${G1:?}Ok${N0:?}] Fixing permissions\n"
@@ -1600,19 +1600,19 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
               sudo rm -R "$MAPS_EXTRACTING_DIR"/vmaps &>/dev/null
               echo
               echo "Removing maps from Core directory"
-              printf '%b' "[${G1:?}Ok${N0:?}] Removing dbc, "
+              printf '%b' "[${G1:?}Ok${N0:?}] ${GR:?}Removing dbc, "
               # remove old maps from core directory
               sudo rm -R "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/dbc &>/dev/null
               printf '%b' "maps, "
               sudo rm -R "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/maps &>/dev/null
               printf '%b' "mmaps, "
               sudo rm -R "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/mmaps &>/dev/null
-              printf '%b' "vmaps, "
+              printf '%b' "vmaps, ${N0:?}"
               sudo rm -R "$FOLDER_WOW"/mangos-"$TYPE_CORE"/run/vmaps &>/dev/null
               echo
             fi
             # run extractor script
-            echo "[!!] Run ExtractResources.sh"
+            printf '%b' "[!!] ${CY:?}Run ExtractResources.sh${N0:?}\n"
             # start counting (seconds)
             START="$SECONDS"
             sudo ./ExtractResources.sh
