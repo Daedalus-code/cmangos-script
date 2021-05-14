@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20210404
-# 6.3.2.8
+# V20211405
+# 6.3.4.3
 
 while :; do
 
@@ -5719,7 +5719,8 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
     OPTIONS=(1 "Update helper"
       2 "Reinstall /cmangos-script"
-      3 "Reset --hard origin/master")
+      3 "Reset --hard origin/master"
+      4 "Setup missing directories")
 
     CHOICE=$(dialog --clear \
       --backtitle "$BACKTITLE" \
@@ -5863,6 +5864,20 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       ;;
 
       # reset --hard origin/master done
+
+      # setup missing directories
+
+    "4")
+
+      # create ms folder
+      sudo mkdir /var/log/ms/ &>/dev/null
+      # fix ownership
+      sudo chown -R "$(whoami)":"$(groups 2>&1 |
+        awk '{ print $1 }')" /var/log/ms &>/dev/null
+
+      ;;
+
+      # setup missing directories done
 
       # update cmangos-script done
 
