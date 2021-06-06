@@ -11,7 +11,7 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20211405
+# V20210606
 # 6.3.4.3
 
 while :; do
@@ -626,16 +626,16 @@ while :; do
 
       # realmd service
       case "$(echo "$PIDOF_REALMD")" in
-      0) COMMAND_REALMD="${GR:?}Offline${N0:?}" ;;
-      1) COMMAND_REALMD="${G1:?}Online${N0:?}" ;;
-      *) COMMAND_REALMD="${Y1:?}Online${N0:?}" ;;
+      0) COMMAND_REALMD="${GR:?}No${N0:?}" ;;
+      1) COMMAND_REALMD="${G1:?}OK${N0:?}" ;;
+      *) COMMAND_REALMD="${Y1:?}OK${N0:?}" ;;
       esac
 
       # mangosd service
       case "$(echo "$PIDOFMANGOSD")" in
-      0) COMMAND_MANGOSD="${GR:?}Offline${N0:?}" ;;
-      1) COMMAND_MANGOSD="${G1:?}Online${N0:?}" ;;
-      *) COMMAND_MANGOSD="${Y1:?}Online${N0:?}" ;;
+      0) COMMAND_MANGOSD="${GR:?}No${N0:?}" ;;
+      1) COMMAND_MANGOSD="${G1:?}OK${N0:?}" ;;
+      *) COMMAND_MANGOSD="${Y1:?}OK${N0:?}" ;;
       esac
 
       # Thank you! -> https://stackoverflow.com/questions/59862020
@@ -754,7 +754,7 @@ while :; do
       if grep -q -o -a "\sBuilt\son\s*.*" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
         # if any, print "built date"
         LATEST_WORLD_BUILT=$(grep -o -a "\sBuilt\son\s*.*" "$FOLDER_CORE"/run/logs/Server.log 2>&1 |
-          sed 's/^ *//' 2>&1)
+          sed 's/^ *//' 2>&1 | xargs 2>&1)
       # if nothing, print "Restart server please.."
       else
         LATEST_WORLD_BUILT="${GR:?}Built on Nov 23 2004 at 10:00:01${N0:?}"
@@ -844,8 +844,8 @@ while :; do
    l $GR: ${THEME_TXT:?}Logs${N0:?}    - ${THEME_DSC:?}Analyze logs   ${N0:?}realmd.service${G0:?}..:${N0:?} $COMMAND_REALMD
    b $GR: ${THEME_TXT:?}Backup${N0:?}  - ${THEME_DSC:?}New backup     ${N0:?}characters.sql${G0:?}..:${N0:?} $CHARAC_BACKUP
    h $GR: ${THEME_TXT:?}Reset${N0:?}   - ${THEME_DSC:?}Reset --hard   ${N0:?}realmd.sql${G0:?}......:${N0:?} $REALMD_BACKUP
-   p $GR: ${THEME_TXT:?}htop${N0:?}    - ${THEME_DSC:?}Process view   ${N0:?}Realmd.log${G0:?}......:${N0:?} $CM_REALMD_LOG_STAT$CM_REALMD_LOG_EMPTY$CM_REALMD_LOG
-   m $GR: ${THEME_TXT:?}Maps${N0:?}    - ${THEME_DSC:?}Download maps  ${N0:?}Server.log${G0:?}......:${N0:?} $CM_SERVER_LOG_STAT$CM_SERVER_LOG_EMPTY$CM_SERVER_LOG$CM_SERVER_LOG_SERIOUS
+   p $GR: ${THEME_TXT:?}htop${N0:?}    - ${THEME_DSC:?}Process view   ${N0:?}Realmd.log${G0:?}......:${N0:?} $CM_REALMD_LOG_STAT $CM_REALMD_LOG_EMPTY $CM_REALMD_LOG
+   m $GR: ${THEME_TXT:?}Maps${N0:?}    - ${THEME_DSC:?}Download maps  ${N0:?}Server.log${G0:?}......:${N0:?} $CM_SERVER_LOG_STAT $CM_SERVER_LOG_EMPTY $CM_SERVER_LOG $CM_SERVER_LOG_SERIOUS
    w $GR: ${THEME_TXT:?}Stats${N0:?}   - ${THEME_DSC:?}World stats    ${N0:?}$MENU_PRINT_CPU_TEMP
    i $GR: ${THEME_TXT:?}Info${N0:?}    - ${THEME_DSC:?}Helper info    ${N0:?}HDDuse${G0:?}..........:${N0:?} $MENU_USED_HDD ${GR:?}$MENU_USED_HDD_P${N0:?}
    q $GR: ${THEME_TXT:?}Quit${N0:?}    - ${THEME_DSC:?}Back to menu   ${N0:?}Memory${G0:?}..........:${N0:?} ${G1:?}${MENU_FREE_MEM:?}M${GR:?}/${G0:?}${MENU_TOTAL_MEM:?}M${N0:?}
