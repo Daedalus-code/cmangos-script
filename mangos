@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210606
-# 6.3.4.3
+# 6.3.4.9
 
 while :; do
 
@@ -707,6 +707,8 @@ while :; do
       if grep -q -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Realmd.log &>/dev/null; then
         # if any, print "empty"
         CM_REALMD_LOG_EMPTY="${Y1:?}E${N0:?}"
+      else
+        CM_REALMD_LOG_EMPTY=" "
       fi
       # Realmd.log done
 
@@ -724,11 +726,15 @@ while :; do
       if grep -q -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
         # if any, print "empty"
         CM_SERVER_LOG_EMPTY="${Y1:?}E${N0:?}"
+      else
+        CM_SERVER_LOG_EMPTY=" "
       fi
       # look for serious error
       if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
         # if any, print "serious"
         CM_SERVER_LOG_SERIOUS="${R1:?}S${N0:?}"
+      else
+        CM_SERVER_LOG_SERIOUS=" "
       fi
 
       # Server.log done
