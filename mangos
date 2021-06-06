@@ -708,7 +708,7 @@ while :; do
         # if any, print "empty"
         CM_REALMD_LOG_EMPTY="${Y1:?}E${N0:?}"
       else
-        CM_REALMD_LOG_EMPTY=" "
+        CM_REALMD_LOG_EMPTY="${G1:?}✓${N0:?}"
       fi
       # Realmd.log done
 
@@ -727,7 +727,7 @@ while :; do
         # if any, print "empty"
         CM_SERVER_LOG_EMPTY="${Y1:?}E${N0:?}"
       else
-        CM_SERVER_LOG_EMPTY=" "
+        CM_SERVER_LOG_EMPTY="${G1:?}✓${N0:?}"
       fi
       # look for serious error
       if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
