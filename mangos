@@ -4969,7 +4969,7 @@ Check log for which database needs 'applying updates'"
     WARLOCK=$(cat /var/log/ms/classes."$NOW" 2>&1 | grep "9" 2>&1 | wc -l 2>&1)
     DRUID=$(cat /var/log/ms/classes."$NOW" 2>&1 | egrep -x '.{2}' 2>&1 | grep "11" 2>&1 | wc -l 2>&1)
     # after vanilla
-    DEATH_KNIGHT=$(cat /var/log/ms/classes."$NOW" 2>&1 | grep "6" 2>&1 | wc -l 2>&1)
+    DK=$(cat /var/log/ms/classes."$NOW" 2>&1 | grep "6" 2>&1 | wc -l 2>&1)
 
     # total count
     CLASS_TOTAL=$(cat /var/log/ms/classes."$NOW" 2>&1 | grep "[1-9]" 2>&1 | wc -l 2>&1)
@@ -4980,11 +4980,11 @@ Check log for which database needs 'applying updates'"
     HUNTER_P=$(echo "100/$CLASS_TOTAL*$HUNTER" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
     ROGUE_P=$(echo "100/$CLASS_TOTAL*$ROGUE" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
     PRIEST_P=$(echo "100/$CLASS_TOTAL*$PRIEST" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
+    DK_P=$(echo "100/$CLASS_TOTAL*$DK" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
     SHAMAN_P=$(echo "100/$CLASS_TOTAL*$SHAMAN" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
     MAGE_P=$(echo "100/$CLASS_TOTAL*$MAGE" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
     WARLOCK_P=$(echo "100/$CLASS_TOTAL*$WARLOCK" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
     DRUID_P=$(echo "100/$CLASS_TOTAL*$DRUID" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
-    DEATH_KNIGHT_P=$(echo "100/$CLASS_TOTAL*$DEATH_KNIGHT" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
 
     echo "Characters"
     echo
@@ -4997,7 +4997,7 @@ ${GR:?}2 ${N0:?} Paladin\e[32m.:${N0:?} $PALADIN ${GR:?}$PALADIN_P%${N0:?}
 ${GR:?}3 ${N0:?} Hunter\e[32m..:${N0:?} $HUNTER ${GR:?}$HUNTER_P%${N0:?}
 ${GR:?}4 ${N0:?} Rogue\e[32m...:${N0:?} $ROGUE ${GR:?}$ROGUE_P%${N0:?}
 ${GR:?}5 ${N0:?} Priest\e[32m..:${N0:?} $PRIEST ${GR:?}$PRIEST_P%${N0:?}
-${GR:?}6 ${N0:?} DK\e[32m......:${N0:?} $DEATH_KNIGHT ${GR:?}$DEATH_KNIGHT_P%${N0:?}
+${GR:?}6 ${N0:?} DK\e[32m......:${N0:?} $DK ${GR:?}$DK_P%${N0:?}
 ${GR:?}7 ${N0:?} Shaman\e[32m..:${N0:?} $SHAMAN ${GR:?}$SHAMAN_P%${N0:?}
 ${GR:?}8 ${N0:?} Mage\e[32m....:${N0:?} $MAGE ${GR:?}$MAGE_P%${N0:?}
 ${GR:?}9 ${N0:?} Warlock\e[32m.:${N0:?} $WARLOCK ${GR:?}$WARLOCK_P%${N0:?}
