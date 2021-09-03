@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210309
-# 6.3.7.6
+# 6.3.8.0
 
 while :; do
 
@@ -368,7 +368,7 @@ while :; do
     OPTIONS=(1 "Create account"
       2 "Delete account"
       3 "Hall of Shame"
-      4 "Sys fingerprint")
+      4 "Fingerprint (SFU)")
 
     CHOICE=$(dialog --clear \
       --backtitle "$BACKTITLE" \
@@ -4968,6 +4968,8 @@ Check log for which database needs 'applying updates'"
     MAGE=$(cat /var/log/ms/classes."$NOW" 2>&1 | grep "8" 2>&1 | wc -l 2>&1)
     WARLOCK=$(cat /var/log/ms/classes."$NOW" 2>&1 | grep "9" 2>&1 | wc -l 2>&1)
     DRUID=$(cat /var/log/ms/classes."$NOW" 2>&1 | egrep -x '.{2}' 2>&1 | grep "11" 2>&1 | wc -l 2>&1)
+    # after vanilla
+    DEATH_KNIGHT=$(cat /var/log/ms/classes."$NOW" 2>&1 | grep "12" 2>&1 | wc -l 2>&1)
 
     # total count
     CLASS_TOTAL=$(cat /var/log/ms/classes."$NOW" 2>&1 | grep "[1-9]" 2>&1 | wc -l 2>&1)
@@ -4982,6 +4984,7 @@ Check log for which database needs 'applying updates'"
     MAGE_P=$(echo "100/$CLASS_TOTAL*$MAGE" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
     WARLOCK_P=$(echo "100/$CLASS_TOTAL*$WARLOCK" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
     DRUID_P=$(echo "100/$CLASS_TOTAL*$DRUID" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
+    DEATH_KNIGHT_P=$(echo "100/$CLASS_TOTAL*$DEATH_KNIGHT" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
 
     echo "Characters"
     echo
@@ -4989,15 +4992,16 @@ Check log for which database needs 'applying updates'"
     printf '%b' "
 Classes
 
-${GR:?}1 ${N0:?} Warrior\e[32m.:${N0:?} $WARRIOR ${GR:?}$WARRIOR_P%${N0:?}
-${GR:?}2 ${N0:?} Paladin\e[32m.:${N0:?} $PALADIN ${GR:?}$PALADIN_P%${N0:?}
-${GR:?}3 ${N0:?} Hunter\e[32m..:${N0:?} $HUNTER ${GR:?}$HUNTER_P%${N0:?}
-${GR:?}4 ${N0:?} Rogue\e[32m...:${N0:?} $ROGUE ${GR:?}$ROGUE_P%${N0:?}
-${GR:?}5 ${N0:?} Priest\e[32m..:${N0:?} $PRIEST ${GR:?}$PRIEST_P%${N0:?}
-${GR:?}7 ${N0:?} Shaman\e[32m..:${N0:?} $SHAMAN ${GR:?}$SHAMAN_P%${N0:?}
-${GR:?}8 ${N0:?} Mage\e[32m....:${N0:?} $MAGE ${GR:?}$MAGE_P%${N0:?}
-${GR:?}9 ${N0:?} Warlock\e[32m.:${N0:?} $WARLOCK ${GR:?}$WARLOCK_P%${N0:?}
-${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
+${GR:?}1 ${N0:?} Warrior\e[32m......:${N0:?} $WARRIOR ${GR:?}$WARRIOR_P%${N0:?}
+${GR:?}2 ${N0:?} Paladin\e[32m......:${N0:?} $PALADIN ${GR:?}$PALADIN_P%${N0:?}
+${GR:?}3 ${N0:?} Hunter\e[32m.......:${N0:?} $HUNTER ${GR:?}$HUNTER_P%${N0:?}
+${GR:?}4 ${N0:?} Rogue\e[32m........:${N0:?} $ROGUE ${GR:?}$ROGUE_P%${N0:?}
+${GR:?}5 ${N0:?} Priest\e[32m.......:${N0:?} $PRIEST ${GR:?}$PRIEST_P%${N0:?}
+${GR:?}7 ${N0:?} Shaman\e[32m.......:${N0:?} $SHAMAN ${GR:?}$SHAMAN_P%${N0:?}
+${GR:?}8 ${N0:?} Mage\e[32m.........:${N0:?} $MAGE ${GR:?}$MAGE_P%${N0:?}
+${GR:?}9 ${N0:?} Warlock\e[32m......:${N0:?} $WARLOCK ${GR:?}$WARLOCK_P%${N0:?}
+${GR:?}11${N0:?} Druid\e[32m........:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}
+${GR:?}11${N0:?} Death Knight\e[32m.:${N0:?} $DEATH_KNIGHT ${GR:?}$DEATH_KNIGHT_P%${N0:?}\n"
     echo
     read -r -p "[YN] Check database size? y/n " -n 1 -r
     echo
