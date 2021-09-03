@@ -359,7 +359,7 @@ while :; do
     # menu
 
     HEIGHT=11
-    WIDTH=26
+    WIDTH=27
     CHOICE_HEIGHT=4
     BACKTITLE="Accounts"
     TITLE="Create/Delete/Ban/Kick"
