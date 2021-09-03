@@ -5001,7 +5001,7 @@ ${GR:?}7 ${N0:?} Shaman\e[32m.......:${N0:?} $SHAMAN ${GR:?}$SHAMAN_P%${N0:?}
 ${GR:?}8 ${N0:?} Mage\e[32m.........:${N0:?} $MAGE ${GR:?}$MAGE_P%${N0:?}
 ${GR:?}9 ${N0:?} Warlock\e[32m......:${N0:?} $WARLOCK ${GR:?}$WARLOCK_P%${N0:?}
 ${GR:?}11${N0:?} Druid\e[32m........:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}
-${GR:?}11${N0:?} Death Knight\e[32m.:${N0:?} $DEATH_KNIGHT ${GR:?}$DEATH_KNIGHT_P%${N0:?}\n"
+${GR:?}12${N0:?} Death Knight\e[32m.:${N0:?} $DEATH_KNIGHT ${GR:?}$DEATH_KNIGHT_P%${N0:?}\n"
     echo
     read -r -p "[YN] Check database size? y/n " -n 1 -r
     echo
