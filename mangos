@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20210606
-# 6.3.4.9
+# V20210309
+# 6.3.6.8
 
 while :; do
 
@@ -86,6 +86,7 @@ while :; do
   DB_CHARACTERS="${TYPE_CORE:?}_characters$DBEXTRA"
   DB_MANGOS="${TYPE_CORE:?}_mangos$DBEXTRA"
   DB_REALMD="${TYPE_CORE:?}_realmd$DBEXTRA"
+  DB_LOGS="${TYPE_CORE:?}_logs$DBEXTRA"
 
   # custom git repos
   if echo "${CUSTOM_SERVER:?}" 2>&1 | grep -q -E "c|C|custom|Custom|1" 2>&1; then
@@ -4296,6 +4297,11 @@ Database User, Client/Server is needed."
           if [ "$RESULT" == "$DB_REALMD" ]; then
             mysqladmin --defaults-extra-file="$SQL_MYCNF" -f DROP "$DB_REALMD"
           fi
+          # drop database 'logs'
+          RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "$DB_LOGS")
+          if [ "$RESULT" == "$DB_LOGS" ]; then
+            mysqladmin --defaults-extra-file="$SQL_MYCNF" -f DROP "$DB_LOGS"
+          fi
         fi
 
         # drop databases done
@@ -4328,6 +4334,15 @@ Database User, Client/Server is needed."
           printf '%b' "[${Y1:?}ok${N0:?}] Importing 'Realmd'\n"
           mysql --defaults-extra-file="$SQL_MYCNF" -e "CREATE DATABASE $DB_REALMD CHARACTER SET utf8 COLLATE utf8_general_ci"
           mysql --defaults-extra-file="$SQL_MYCNF" --database="$DB_REALMD" <"$FOLDER_SQL"/base/realmd.sql
+        fi
+        # create database 'logs'
+        RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "$DB_LOGS")
+        if [ "$RESULT" == "$DB_LOGS" ]; then
+          printf '%b' "[${G1:?}OK${N0:?}] 'Logs' database installed!\n"
+        else
+          printf '%b' "[${Y1:?}ok${N0:?}] Importing 'Logs'\n"
+          mysql --defaults-extra-file="$SQL_MYCNF" -e "CREATE DATABASE $DB_LOGS CHARACTER SET utf8 COLLATE utf8_general_ci"
+          mysql --defaults-extra-file="$SQL_MYCNF" --database="$DB_LOGS" <"$FOLDER_SQL"/base/logs.sql
         fi
 
         # create databases done
@@ -5718,7 +5733,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
     HEIGHT=10
     WIDTH=37
-    CHOICE_HEIGHT=3
+    CHOICE_HEIGHT=4
     BACKTITLE="Update Helper"
     TITLE="Update cmangos-script [Helper]"
     MENU="Choose one option:"
@@ -6294,9 +6309,9 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
   "e")
 
-    HEIGHT=18
+    HEIGHT=19
     WIDTH=31
-    CHOICE_HEIGHT=11
+    CHOICE_HEIGHT=13
     BACKTITLE="Server configuration"
     TITLE="Configurations"
     MENU="Choose one option:"
@@ -6307,11 +6322,13 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       4 "realmd.conf"
       5 "ahbot.conf"
       6 "playerbot.conf"
-      7 "InstallFullDB"
-      8 "mangos.conf.dist"
-      9 "realmd.conf.dist"
-      10 "ahbot.conf.dist"
-      11 "playerbot.conf.dist")
+      7 "anticheat.conf"
+      8 "InstallFullDB"
+      9 "mangos.conf.dist"
+      10 "realmd.conf.dist"
+      11 "ahbot.conf.dist"
+      12 "anticheat.conf.dist"
+      13 "playerbot.conf.dist")
 
     CHOICE=$(dialog --clear \
       --backtitle "$BACKTITLE" \
@@ -6330,10 +6347,12 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
     "5") nano "$FOLDER_CORE"/run/etc/ahbot.conf ;;
     "6") nano "$FOLDER_CORE"/run/etc/playerbot.conf ;;
     "7") nano "$FOLDER_DB"/InstallFullDB.config ;;
-    "8") nano "$FOLDER_CORE"/run/etc/mangosd.conf.dist ;;
-    "9") nano "$FOLDER_CORE"/run/etc/realmd.conf.dist ;;
-    "10") nano "$FOLDER_CORE"/run/etc/ahbot.conf.dist ;;
-    "11") nano "$FOLDER_CORE"/run/etc/playerbot.conf.dist ;;
+    "8") nano "$FOLDER_CORE"/run/etc/anticheat.conf.dist ;;
+    "9") nano "$FOLDER_CORE"/run/etc/mangosd.conf.dist ;;
+    "10") nano "$FOLDER_CORE"/run/etc/realmd.conf.dist ;;
+    "11") nano "$FOLDER_CORE"/run/etc/ahbot.conf.dist ;;
+    "12") nano "$FOLDER_CORE"/run/etc/anticheat.conf.dist ;;
+    "13") nano "$FOLDER_CORE"/run/etc/playerbot.conf.dist ;;
     esac
 
     ;;
