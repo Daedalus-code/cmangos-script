@@ -6309,7 +6309,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
   "e")
 
-    HEIGHT=19
+    HEIGHT=20
     WIDTH=31
     CHOICE_HEIGHT=13
     BACKTITLE="Server configuration"
