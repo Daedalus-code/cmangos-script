@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210309
-# 6.3.8.7
+# 6.3.8.8
 
 while :; do
 
@@ -4297,7 +4297,8 @@ Database User, Client/Server is needed."
         if [ "$RESULT" == "$DB_MANGOS" ]; then
           mysqladmin --defaults-extra-file="$SQL_MYCNF" -f DROP "$DB_MANGOS"
         fi
-        read -r -p "[YN] Drop realmd database? y/n \n" -n 1 -r
+        read -r -p "[YN] Drop realmd database? y/n " -n 1 -r
+        echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           echo
           # drop database 'realmd'
