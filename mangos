@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210309
-# 6.3.7.0
+# 6.3.7.6
 
 while :; do
 
@@ -571,9 +571,15 @@ while :; do
 
     "4")
 
-      printf '%b' "${GR:?}Accounts Ban${N0:?}\n"
+      printf '%b' "${GR:?}Banned Accounts${N0:?}\n"
       echo
-      mysql --defaults-extra-file="$SQL_MYCNF" --execute="SELECT id, account_id, banned_at, banned_by, reason, active FROM $DB_REALMD.account_banned;"
+      mysql --defaults-extra-file="$SQL_MYCNF" --execute="SELECT id, account_id, banned_at, expires_at, banned_by, reason, active FROM $DB_REALMD.account_banned;"
+      echo
+      printf '%b' "${GR:?}Banned IP Adresses${N0:?}\n"
+      echo
+      mysql --defaults-extra-file="$SQL_MYCNF" --execute="SELECT ip, banned_at, expires_at, banned_by, reason FROM $DB_REALMD.ip_banned;"
+      echo
+      read -r -p "Press Enter to continue" </dev/tty
       echo
 
       ;;
