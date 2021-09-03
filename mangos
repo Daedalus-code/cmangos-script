@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210309
-# 6.3.8.0
+# 6.3.8.5
 
 while :; do
 
@@ -5770,6 +5770,17 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
     "1")
 
+      function install_mark() {
+        # create ms folder if not found
+        sudo mkdir /var/log/ms/ &>/dev/null
+        # fix ownership
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
+        # create installed mark
+        cd "$FOLDER_HELPER" || exit
+        LATEST_HEAD=$(git rev-parse --short HEAD)
+        echo "CMaNGOS Script was installed at ${NOW:?} Head: $LATEST_HEAD" >/var/log/ms/Installed_ms
+      }
+
       FILE="${FOLDER_INSTALL:?}/cmangos-script/README.md"
       if [ ! -f "$FILE" ]; then
         # not installed
@@ -5813,6 +5824,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             sudo chmod +x /usr/local/bin/mangos
             sleep 1
             printf '%b' "[${G1:?}OK${N0:?}] Installed!\n"
+            install_mark
             sleep 1 && exit
           else
             # install new upgrades
@@ -5828,14 +5840,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             echo
             echo
           fi
-          # create ms folder if not found
-          sudo mkdir /var/log/ms/ &>/dev/null
-          # fix ownership
-          sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
-          # create installed mark
-          cd "$FOLDER_HELPER" || exit
-          LATEST_HEAD=$(git rev-parse --short HEAD)
-          echo "CMaNGOS Script was installed at ${NOW:?} Head: $LATEST_HEAD" >/var/log/ms/Installed_ms
+          install_mark
           sleep 1 && exit
         fi
       fi
