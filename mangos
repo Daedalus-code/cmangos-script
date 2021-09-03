@@ -359,7 +359,7 @@ while :; do
     # menu
 
     HEIGHT=11
-    WIDTH=27
+    WIDTH=26
     CHOICE_HEIGHT=4
     BACKTITLE="Accounts"
     TITLE="Create/Delete/Ban/Kick"
@@ -368,7 +368,7 @@ while :; do
     OPTIONS=(1 "Create account"
       2 "Delete account"
       3 "Hall of Shame"
-      4 "System fingerprint")
+      4 "Sys fingerprint")
 
     CHOICE=$(dialog --clear \
       --backtitle "$BACKTITLE" \
@@ -579,7 +579,7 @@ while :; do
 
       printf '%b' "${CY:?}System Fingerprint Usage (SFU)${N0:?}\n"
       echo
-      mysql --defaults-extra-file="$SQL_MYCNF" --execute="SELECT DISTINCT ip, fingerprint, account, realm, time, architecture, cputype, activecpus, totalcpus, pagesize FROM $DB_REALMD.system_fingerprint_usage;"
+      mysql --defaults-extra-file="$SQL_MYCNF" --execute="SELECT DISTINCT fingerprint, ip, account, realm, time, architecture, cputype, activecpus, totalcpus, pagesize FROM $DB_REALMD.system_fingerprint_usage;"
       echo
       read -r -p "Press Enter to continue" </dev/tty
       echo
