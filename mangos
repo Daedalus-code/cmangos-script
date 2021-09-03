@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210309
-# 6.3.6.8
+# 6.3.7.0
 
 while :; do
 
@@ -571,8 +571,10 @@ while :; do
 
     "4")
 
-      printf '%b' "${GR:?}Nothing Here! 00${N0:?}\n"
-      exit
+      printf '%b' "${GR:?}Accounts Ban${N0:?}\n"
+      echo
+      mysql --defaults-extra-file="$SQL_MYCNF" --execute="SELECT id, account_id, banned_at, banned_by, reason, active FROM $DB_REALMD.account_banned;"
+      echo
 
       ;;
 
