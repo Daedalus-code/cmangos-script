@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210309
-# 6.3.8.5
+# 6.3.8.7
 
 while :; do
 
@@ -5824,6 +5824,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             sudo chmod +x /usr/local/bin/mangos
             sleep 1
             printf '%b' "[${G1:?}OK${N0:?}] Installed!\n"
+            # create installed mark
             install_mark
             sleep 1 && exit
           else
@@ -5840,6 +5841,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             echo
             echo
           fi
+          # create installed mark
           install_mark
           sleep 1 && exit
         fi
