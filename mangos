@@ -5731,7 +5731,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       sudo apt-get install dialog -y
     fi
 
-    HEIGHT=10
+    HEIGHT=11
     WIDTH=37
     CHOICE_HEIGHT=4
     BACKTITLE="Update Helper"
