@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20210309
-# 6.3.7.6
+# 6.3.6.4
 
 while :; do
 
@@ -367,8 +367,7 @@ while :; do
 
     OPTIONS=(1 "Create account"
       2 "Delete account"
-      3 "Hall of Fame"
-      4 "Hall of Shame")
+      3 "Hall of Shame")
 
     CHOICE=$(dialog --clear \
       --backtitle "$BACKTITLE" \
@@ -556,20 +555,9 @@ while :; do
 
       # delete account done
 
-      # hall of fame
-
-    "3")
-
-      printf '%b' "${GR:?}Nothing Here! 00${N0:?}\n"
-      exit
-
-      ;;
-
-      # hall of fame done
-
       # hall of shame
 
-    "4")
+    "3")
 
       printf '%b' "${GR:?}Banned Accounts${N0:?}\n"
       echo
