@@ -473,7 +473,7 @@ while :; do
       # realmd backup
       FILE="$FOLDER_WOW/backup/$DB_REALMD-$NOW.sql"
       if [ ! -f "$FILE" ]; then
-        REALMD_BACKUP="[${R1:?}!!${N0:?}] No backup!"
+        REALMD_BACKUP="[${R1:?}NO${N0:?}]"
         echo
       else
         REALMD_BACKUP="[${G1:?}OK${N0:?}]"
@@ -482,7 +482,7 @@ while :; do
       # characters backup
       FILE="$FOLDER_WOW/backup/$DB_CHARACTERS-$NOW.sql"
       if [ ! -f "$FILE" ]; then
-        CHARAC_BACKUP="[${R1:?}!!${N0:?}] No backup!"
+        CHARAC_BACKUP="[${R1:?}NO${N0:?}]"
         echo
       else
         CHARAC_BACKUP="[${G1:?}OK${N0:?}]"
