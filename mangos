@@ -635,14 +635,14 @@ while :; do
 
       # realmd service
       case "$(echo "$PIDOF_REALMD")" in
-      0) COMMAND_REALMD="${GR:?}No${N0:?}" ;;
+      0) COMMAND_REALMD="${GR:?}NO${N0:?}" ;;
       1) COMMAND_REALMD="${G1:?}OK${N0:?}" ;;
       *) COMMAND_REALMD="${Y1:?}OK${N0:?}" ;;
       esac
 
       # mangosd service
       case "$(echo "$PIDOFMANGOSD")" in
-      0) COMMAND_MANGOSD="${GR:?}No${N0:?}" ;;
+      0) COMMAND_MANGOSD="${GR:?}NO${N0:?}" ;;
       1) COMMAND_MANGOSD="${G1:?}OK${N0:?}" ;;
       *) COMMAND_MANGOSD="${Y1:?}OK${N0:?}" ;;
       esac
