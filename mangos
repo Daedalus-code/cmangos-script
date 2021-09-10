@@ -5573,7 +5573,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               fi
               # warden loaded
               if grep -q -E "Loading Warden scan database..." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
-                # if any, print "AHbot ok"
+                # if any, print "Warden ok"
                 printf '%b' "[${G1:?}OK${N0:?}] Warden\n"
               else
                 # off
@@ -6072,7 +6072,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         fi
         # warden loaded
         if grep -q -E "Loading Warden scan database..." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
-          # if any, print "AHbot ok"
+          # if any, print "Warden ok"
           printf '%b' "[${G1:?}OK${N0:?}] Warden\n"
         else
           # off
