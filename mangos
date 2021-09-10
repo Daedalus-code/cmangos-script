@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20211009
-# 6.4.0.4
+# 6.4.0.5
 
 while :; do
 
@@ -5563,14 +5563,6 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
                 printf '%b' "[${R1:?}X3${N0:?}] realmd.conf is out of date!\n"
               fi
 
-              # Playerbot loaded
-              if grep -q -E "Playerbot: Using configuration file" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
-                # if any, print "Playerbot ok"
-                printf '%b' "[${G1:?}OK${N0:?}] Playerbot\n"
-              else
-                # offline
-                printf '%b' "[${GR:?}NO${N0:?}] Playerbot\n"
-              fi
               # ahbot loaded and initialized
               if grep -q -E "Initialize AuctionHouseBot..." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
                 # if any, print "AHbot ok"
@@ -5586,6 +5578,14 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               else
                 # off
                 printf '%b' "[${GR:?}NO${N0:?}] Warden\n"
+              fi
+              # Playerbot loaded
+              if grep -q -E "Playerbot: Using configuration file" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
+                # if any, print "Playerbot ok"
+                printf '%b' "[${G1:?}OK${N0:?}] Playerbot\n"
+              else
+                # offline
+                printf '%b' "[${GR:?}NO${N0:?}] Playerbot\n"
               fi
               # startup time
               STARTUP_TIME=$(grep "SERVER\sSTARTUP\sTIME*." "$FOLDER_CORE"/run/logs/Server.log 2>&1 |
@@ -6061,14 +6061,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         if grep -q -E ".*Your\smangosd.conf\sversion\sindicates\syour\sconf\sfile\sis\sout\sof\sdate*." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
           printf '%b' "[${R1:?}X3${N0:?}] realmd.conf is out of date!\n"
         fi
-        # Playerbot loaded
-        if grep -q -E "Playerbot: Using configuration file" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
-          # if any, print "Playerbot ok"
-          printf '%b' "[${G1:?}OK${N0:?}] Playerbot\n"
-        else
-          # offline
-          printf '%b' "[${GR:?}NO${N0:?}] Playerbot\n"
-        fi
+
         # ahbot loaded and initialized
         if grep -q -E "Initialize AuctionHouseBot..." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
           # if any, print "AHbot ok"
@@ -6084,6 +6077,14 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         else
           # off
           printf '%b' "[${GR:?}NO${N0:?}] Warden\n"
+        fi
+        # Playerbot loaded
+        if grep -q -E "Playerbot: Using configuration file" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
+          # if any, print "Playerbot ok"
+          printf '%b' "[${G1:?}OK${N0:?}] Playerbot\n"
+        else
+          # offline
+          printf '%b' "[${GR:?}NO${N0:?}] Playerbot\n"
         fi
         # startup time
         if STARTUP_TIME=$(grep "SERVER\sSTARTUP\sTIME*." "$FOLDER_CORE"/run/logs/Server.log 2>&1 |
