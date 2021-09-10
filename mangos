@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20210309
-# 6.3.8.8
+# V20211009
+# 6.4.0.4
 
 while :; do
 
@@ -5579,6 +5579,14 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
                 # off
                 printf '%b' "[${GR:?}NO${N0:?}] AHbot\n"
               fi
+              # warden loaded
+              if grep -q -E "Loading Warden scan database..." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
+                # if any, print "AHbot ok"
+                printf '%b' "[${G1:?}OK${N0:?}] Warden\n"
+              else
+                # off
+                printf '%b' "[${GR:?}NO${N0:?}] Warden\n"
+              fi
               # startup time
               STARTUP_TIME=$(grep "SERVER\sSTARTUP\sTIME*." "$FOLDER_CORE"/run/logs/Server.log 2>&1 |
                 cut -d\  -f6-9 2>&1)
@@ -6068,6 +6076,14 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         else
           # off
           printf '%b' "[${GR:?}NO${N0:?}] AHbot\n"
+        fi
+        # warden loaded
+        if grep -q -E "Loading Warden scan database..." "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
+          # if any, print "AHbot ok"
+          printf '%b' "[${G1:?}OK${N0:?}] Warden\n"
+        else
+          # off
+          printf '%b' "[${GR:?}NO${N0:?}] Warden\n"
         fi
         # startup time
         if STARTUP_TIME=$(grep "SERVER\sSTARTUP\sTIME*." "$FOLDER_CORE"/run/logs/Server.log 2>&1 |
