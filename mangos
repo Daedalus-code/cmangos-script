@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20211009
-# 6.4.0.5
+# V20212909
+# 6.4.1.7
 
 while :; do
 
@@ -2124,11 +2124,11 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
 
           if [ -f "$FOLDER_CORE/run/logs/Server.log" ]; then
             # raw error from logs
-            ERROR_ERROR=$(grep --no-filename -Eo "ERROR:.*" "$FOLDER_CORE"/run/logs/*.log 2>&1 |
+            ERROR_ERROR=$(grep --no-filename -Eo "Error.*|ERROR:.*" "$FOLDER_CORE"/run/logs/*.log 2>&1 |
               grep -E -v ".*is empty*." 2>&1)
             # raw empty from logs
             EMPTY_ERROR=$(grep --no-filename -Eo ".*empty*." "$FOLDER_CORE"/run/logs/*.log 2>&1 |
-              grep -E -v "ERROR:.*|Only expired mails*" 2>&1)
+              grep -E -v "Error.*|ERROR:.*|Only expired mails*" 2>&1)
             printf '%b' "${Y1:?}$EMPTY_ERROR${N0:?}\n"
             printf '%b' "${R0:?}$ERROR_ERROR${N0:?}\n"
             echo
@@ -5634,6 +5634,10 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
             esac
           fi
+          # save genesis realm error rate
+          echo "$CALC_ERROR_REALM" >"$FOLDER_CORE"/run/logs/RealmERRORrate.log 2>&1
+          # save genesis server error rate
+          echo "$CALC_ERROR_SERVER" >"$FOLDER_CORE"/run/logs/ServerERRORrate.log 2>&1
         fi
 
         ;;
@@ -5678,6 +5682,8 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             printf '%b' "[${G1:?}OK${N0:?}] realmd.service started!\n"
             sleep 2
           fi
+          # save genesis realm error rate
+          echo "$CALC_ERROR_REALM" >"$FOLDER_CORE"/run/logs/RealmERRORrate.log 2>&1
         fi
         echo
         read -r -p "Press Enter to continue" </dev/tty
@@ -5725,6 +5731,8 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             printf '%b' "[${G1:?}OK${N0:?}] mangosd service started!\n"
             sleep 2
           fi
+          # save genesis server error rate
+          echo "$CALC_ERROR_SERVER" >"$FOLDER_CORE"/run/logs/ServerERRORrate.log 2>&1
         fi
         echo
         read -r -p "Press Enter to continue" </dev/tty
@@ -5966,8 +5974,10 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           # calculate error rate
           CALC_ERROR_REALM=$(echo "scale=4; 100/$LOG_LINES*$COUNT_ERROR_REALM" 2>&1 | bc -l 2>&1)
           ERROR_RATE_REALM=$(echo "${CALC_ERROR_REALM:?}%")
+          # genesis realm error rate
+          GEN_R_ER=$(cat "$FOLDER_CORE"/run/logs/RealmERRORrate.log 2>&1)
           # if any, print "error"
-          printf '%b' "[${R1:?}1E${N0:?}] Realm: ${R1:?}$COUNT_ERROR_REALM${N0:?} Error! ${GR:?}$ERROR_RATE_REALM${N0:?}\n"
+          printf '%b' "[${R1:?}1E${N0:?}] Realm: ${R1:?}$COUNT_ERROR_REALM${N0:?} Error! ${GR:?}$ERROR_RATE_REALM ${N0:?}$GEN_R_ER${N0:?}\n"
         else
           # if nothing, print "ok"
           printf '%b' "[${G1:?}OK${N0:?}] Realm: OK!\n"
@@ -6020,8 +6030,10 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           # calculate error rate
           CALC_ERROR_SERVER=$(echo "scale=4; 100/$LOG_LINES*$COUNT_ERROR_SERVER" 2>&1 | bc -l 2>&1)
           ERROR_RATE_SERVER=$(echo "${CALC_ERROR_SERVER:?}%" 2>&1)
+          # genesis server error rate
+          GEN_S_ER=$(cat "$FOLDER_CORE"/run/logs/ServerERRORrate.log 2>&1)
           # if any, print "error"
-          printf '%b' "[${R1:?}1E${N0:?}] World: ${R1:?}$COUNT_ERROR_SERVER${N0:?} Error! ${GR:?}${ERROR_RATE_SERVER:?}${N0:?}\n"
+          printf '%b' "[${R1:?}1E${N0:?}] World: ${R1:?}$COUNT_ERROR_SERVER${N0:?} Error! ${GR:?}${ERROR_RATE_SERVER:?} ${N0:?}$GEN_S_ER${N0:?}\n"
           # look for serious error
           if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "$FOLDER_CORE"/run/logs/Server.log &>/dev/null; then
             # count serious errors inside log
