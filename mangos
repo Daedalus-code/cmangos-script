@@ -2147,7 +2147,7 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
             echo "Tailing logs!"
             printf '%b' "${GR:?}CTRL+C to exit${N0:?}\n"
             tail -f "$FOLDER_CORE"/run/logs/*.log 2>&1 |
-              grep -Eo "Error.*|ERROR:.*|.*empty*." 2>&1
+              grep -Eo ".*Error.*|.*ERROR:.*|.*empty*." 2>&1
             echo
           else
             # no files, nothing to grep
