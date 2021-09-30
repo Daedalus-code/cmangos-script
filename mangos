@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20213009
-# 6.4.3.2
+# 6.4.3.3
 
 while :; do
 
@@ -4282,10 +4282,11 @@ Database User, Client/Server is needed."
 
         # only drop databases, no importing
 
-        read -t 5 -r -p "[YN] Only Drop Databases? y/n " -n 1 -r
+        read -r -p "[YN] Only Drop Databases? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           read -r -p "[YN] Drop realmd database? y/n " -n 1 -r
+          echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             mysqladmin --defaults-extra-file="$SQL_MYCNF" -f DROP "$DB_REALMD"
           fi
