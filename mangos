@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20213009
-# 6.4.2.0
+# 6.4.1.5
 
 while :; do
 
@@ -2174,43 +2174,38 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
       "w")
 
         # mysql data
-        ON_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT SUM(online) FROM ${DB_CHARACTERS:?}.characters;" 2>&1)
-        GU_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM ${DB_CHARACTERS:?}.guild;" 2>&1)
-        AC_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_REALMD.account;" 2>&1)
-        AU_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.auction;" 2>&1)
-        BG_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.bugreport;" 2>&1)
-        BN_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_REALMD.account_banned;" 2>&1)
-        MI_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.mail_items;" 2>&1)
-        PT_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.petition;" 2>&1)
-        PS_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.petition_sign;" 2>&1)
-        RL_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_REALMD.realmlist;" 2>&1)
-        AL_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_REALMD.account_logons;" 2>&1)
-        CS_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.character_social;" 2>&1)
-        CC_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.character_spell_cooldown;" 2>&1)
-        GM_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.gm_surveys;" 2>&1)
-        GP_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.groups;" 2>&1)
+        ON_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT SUM(online) FROM ${DB_CHARACTERS:?}.characters;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
+        GU_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM ${DB_CHARACTERS:?}.guild;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
+        AC_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_REALMD.account;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
+        AU_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.auction;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
+        BG_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.bugreport;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
+        BN_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_REALMD.account_banned;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
+        MI_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.mail_items;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
+        PT_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.petition;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
+        PS_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.petition_sign;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
+        RL_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_REALMD.realmlist;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
+        AL_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_REALMD.account_logons;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
+        CS_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.character_social;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
+        CC_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.character_spell_cooldown;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
+        GM_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.gm_surveys;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
+        GP_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.groups;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
         # on_count at TOP ^
-        CH_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.characters;" 2>&1)
+        CH_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.characters;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
 
         # gu_count at TOP ^
-        ME_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.guild_member;" 2>&1)
-        MA_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.mail;" 2>&1)
-        PE_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.character_pet;" 2>&1)
+        ME_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.guild_member;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
+        MA_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.mail;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
+        PE_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.character_pet;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
 
-        TI_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.gm_tickets;" 2>&1)
-        CO_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.corpse;" 2>&1)
-        PV_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.pvpstats_players;" 2>&1)
-        GI_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.character_gifts;" 2>&1)
+        TI_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.gm_tickets;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
+        CO_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.corpse;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
+        PV_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.pvpstats_players;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
+        GI_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.character_gifts;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
 
         # log data
         if [ -f "$FOLDER_CORE"/run/logs/Server.log ]; then
           # empty mail, returning old mails...
-          MA_CYCLE=$(grep -c -E "Returning old mails" "$FOLDER_CORE"/run/logs/Server.log 2>&1)
-        fi
-
-        # non responsive
-        if [ -z "$MA_CYCLE" ]; then
-          MA_CYCLE="0"
+          MA_CYCLE=$(grep -c -E "Returning old mails" "$FOLDER_CORE"/run/logs/Server.log 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
         fi
 
         printline "Accounts" "$AC_COUNT" "Guilds" "$GU_COUNT" "Tickets" "$TI_COUNT"
