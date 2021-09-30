@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20212909
-# 6.4.1.9
+# V20213009
+# 6.4.2.0
 
 while :; do
 
@@ -250,7 +250,8 @@ while :; do
     grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)"
   # git head helper/tool
   TOOL_HEAD="$(grep -Eo "Head:.*" /var/log/ms/Installed_ms 2>&1 |
-    awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)"
+    grep -v 'No such file or directory' 2>&1 | awk '{ print $2 }' 2>&1 |
+    grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)"
 
   if [ "$(cat /var/log/ms/Installed_core_"$TYPE_CORE" 2>&1 | wc -l 2>&1)" -eq "0" ]; then
     CORE_HEAD="${GR:?}000000a${N0:?}"
