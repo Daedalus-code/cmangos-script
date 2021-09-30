@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20213009
-# 6.4.1.5
+# 6.4.3.3
 
 while :; do
 
@@ -4230,7 +4230,7 @@ Database User, Client/Server is needed."
 
     "2")
 
-      read -t 5 -r -p "[YN] Drop/Import Databases? y/n " -n 1 -r
+      read -t 5 -r -p "[YN] Drop & Import Databases? y/n " -n 1 -r
       if [[ $REPLY =~ ^[Yy]$ ]]; then
         echo
         # this is for docker users
@@ -4279,6 +4279,24 @@ Database User, Client/Server is needed."
         fi
 
         # backup done
+
+        # only drop databases, no importing
+
+        read -t 5 -r -p "[YN] Only Drop Databases? y/n " -n 1 -r
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+          echo
+          mysqladmin --defaults-extra-file="$SQL_MYCNF" -f DROP "$DB_CHARACTERS"
+          mysqladmin --defaults-extra-file="$SQL_MYCNF" -f DROP "$DB_MANGOS"
+          read -r -p "[YN] Drop realmd database? y/n " -n 1 -r
+          echo
+          if [[ $REPLY =~ ^[Yy]$ ]]; then
+            mysqladmin --defaults-extra-file="$SQL_MYCNF" -f DROP "$DB_REALMD"
+          fi
+          mysqladmin --defaults-extra-file="$SQL_MYCNF" -f DROP "$DB_LOGS"
+          return
+        fi
+
+        # only drop databases, no importing done
 
         # drop databases
 
