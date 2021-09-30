@@ -4285,128 +4285,128 @@ Database User, Client/Server is needed."
         read -t 5 -r -p "[YN] Only Drop Databases? y/n " -n 1 -r
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           echo
-          mysqladmin --defaults-extra-file="$SQL_MYCNF" -f DROP "$DB_CHARACTERS"
-          mysqladmin --defaults-extra-file="$SQL_MYCNF" -f DROP "$DB_MANGOS"
           read -r -p "[YN] Drop realmd database? y/n " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             mysqladmin --defaults-extra-file="$SQL_MYCNF" -f DROP "$DB_REALMD"
           fi
-          mysqladmin --defaults-extra-file="$SQL_MYCNF" -f DROP "$DB_LOGS"
-          return
-        fi
-
-        # only drop databases, no importing done
-
-        # drop databases
-
-        # drop database 'characters'
-
-        RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "$DB_CHARACTERS")
-        if [ "$RESULT" == "$DB_CHARACTERS" ]; then
           mysqladmin --defaults-extra-file="$SQL_MYCNF" -f DROP "$DB_CHARACTERS"
-        fi
-        # drop database 'mangos'
-        RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "${DB_MANGOS:?}")
-        if [ "$RESULT" == "$DB_MANGOS" ]; then
           mysqladmin --defaults-extra-file="$SQL_MYCNF" -f DROP "$DB_MANGOS"
-        fi
-        read -r -p "[YN] Drop realmd database? y/n " -n 1 -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
+          mysqladmin --defaults-extra-file="$SQL_MYCNF" -f DROP "$DB_LOGS"
+        else
+
+          # only drop databases, no importing done
+
+          # drop databases
+
+          # drop database 'characters'
+
+          RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "$DB_CHARACTERS")
+          if [ "$RESULT" == "$DB_CHARACTERS" ]; then
+            mysqladmin --defaults-extra-file="$SQL_MYCNF" -f DROP "$DB_CHARACTERS"
+          fi
+          # drop database 'mangos'
+          RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "${DB_MANGOS:?}")
+          if [ "$RESULT" == "$DB_MANGOS" ]; then
+            mysqladmin --defaults-extra-file="$SQL_MYCNF" -f DROP "$DB_MANGOS"
+          fi
+          read -r -p "[YN] Drop realmd database? y/n " -n 1 -r
           echo
-          # drop database 'realmd'
+          if [[ $REPLY =~ ^[Yy]$ ]]; then
+            echo
+            # drop database 'realmd'
+            RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "$DB_REALMD")
+            if [ "$RESULT" == "$DB_REALMD" ]; then
+              mysqladmin --defaults-extra-file="$SQL_MYCNF" -f DROP "$DB_REALMD"
+            fi
+            # drop database 'logs'
+            RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "$DB_LOGS")
+            if [ "$RESULT" == "$DB_LOGS" ]; then
+              mysqladmin --defaults-extra-file="$SQL_MYCNF" -f DROP "$DB_LOGS"
+            fi
+          fi
+
+          # drop databases done
+
+          # create databases
+
+          # create database 'characters'
+          RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "$DB_CHARACTERS")
+          if [ "$RESULT" == "$DB_CHARACTERS" ]; then
+            printf '%b' "[${G1:?}OK${N0:?}] 'Characters' database installed!\n"
+          else
+            printf '%b' "[${Y1:?}ok${N0:?}] Importing 'Characters'\n"
+            mysql --defaults-extra-file="$SQL_MYCNF" -e "CREATE DATABASE $DB_CHARACTERS CHARACTER SET utf8 COLLATE utf8_general_ci"
+            mysql --defaults-extra-file="$SQL_MYCNF" --database="$DB_CHARACTERS" <"${FOLDER_SQL:?}"/base/characters.sql
+          fi
+          # create database 'mangos'
+          RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "$DB_MANGOS")
+          if [ "$RESULT" == "$DB_MANGOS" ]; then
+            printf '%b' "[${G1:?}OK${N0:?}] 'Mangos' database installed!\n"
+          else
+            printf '%b' "[${Y1:?}ok${N0:?}] Importing 'Mangos'\n"
+            mysql --defaults-extra-file="$SQL_MYCNF" -e "CREATE DATABASE $DB_MANGOS CHARACTER SET utf8 COLLATE utf8_general_ci"
+            mysql --defaults-extra-file="$SQL_MYCNF" --database="$DB_MANGOS" <"$FOLDER_SQL"/base/mangos.sql
+          fi
+          # create database 'realmd'
           RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "$DB_REALMD")
           if [ "$RESULT" == "$DB_REALMD" ]; then
-            mysqladmin --defaults-extra-file="$SQL_MYCNF" -f DROP "$DB_REALMD"
+            printf '%b' "[${G1:?}OK${N0:?}] 'Realmd' database installed!\n"
+          else
+            printf '%b' "[${Y1:?}ok${N0:?}] Importing 'Realmd'\n"
+            mysql --defaults-extra-file="$SQL_MYCNF" -e "CREATE DATABASE $DB_REALMD CHARACTER SET utf8 COLLATE utf8_general_ci"
+            mysql --defaults-extra-file="$SQL_MYCNF" --database="$DB_REALMD" <"$FOLDER_SQL"/base/realmd.sql
           fi
-          # drop database 'logs'
+          # create database 'logs'
           RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "$DB_LOGS")
           if [ "$RESULT" == "$DB_LOGS" ]; then
-            mysqladmin --defaults-extra-file="$SQL_MYCNF" -f DROP "$DB_LOGS"
-          fi
-        fi
-
-        # drop databases done
-
-        # create databases
-
-        # create database 'characters'
-        RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "$DB_CHARACTERS")
-        if [ "$RESULT" == "$DB_CHARACTERS" ]; then
-          printf '%b' "[${G1:?}OK${N0:?}] 'Characters' database installed!\n"
-        else
-          printf '%b' "[${Y1:?}ok${N0:?}] Importing 'Characters'\n"
-          mysql --defaults-extra-file="$SQL_MYCNF" -e "CREATE DATABASE $DB_CHARACTERS CHARACTER SET utf8 COLLATE utf8_general_ci"
-          mysql --defaults-extra-file="$SQL_MYCNF" --database="$DB_CHARACTERS" <"${FOLDER_SQL:?}"/base/characters.sql
-        fi
-        # create database 'mangos'
-        RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "$DB_MANGOS")
-        if [ "$RESULT" == "$DB_MANGOS" ]; then
-          printf '%b' "[${G1:?}OK${N0:?}] 'Mangos' database installed!\n"
-        else
-          printf '%b' "[${Y1:?}ok${N0:?}] Importing 'Mangos'\n"
-          mysql --defaults-extra-file="$SQL_MYCNF" -e "CREATE DATABASE $DB_MANGOS CHARACTER SET utf8 COLLATE utf8_general_ci"
-          mysql --defaults-extra-file="$SQL_MYCNF" --database="$DB_MANGOS" <"$FOLDER_SQL"/base/mangos.sql
-        fi
-        # create database 'realmd'
-        RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "$DB_REALMD")
-        if [ "$RESULT" == "$DB_REALMD" ]; then
-          printf '%b' "[${G1:?}OK${N0:?}] 'Realmd' database installed!\n"
-        else
-          printf '%b' "[${Y1:?}ok${N0:?}] Importing 'Realmd'\n"
-          mysql --defaults-extra-file="$SQL_MYCNF" -e "CREATE DATABASE $DB_REALMD CHARACTER SET utf8 COLLATE utf8_general_ci"
-          mysql --defaults-extra-file="$SQL_MYCNF" --database="$DB_REALMD" <"$FOLDER_SQL"/base/realmd.sql
-        fi
-        # create database 'logs'
-        RESULT=$(mysql --defaults-extra-file="$SQL_MYCNF" -e "SHOW DATABASES" | grep "$DB_LOGS")
-        if [ "$RESULT" == "$DB_LOGS" ]; then
-          printf '%b' "[${G1:?}OK${N0:?}] 'Logs' database installed!\n"
-        else
-          printf '%b' "[${Y1:?}ok${N0:?}] Importing 'Logs'\n"
-          mysql --defaults-extra-file="$SQL_MYCNF" -e "CREATE DATABASE $DB_LOGS CHARACTER SET utf8 COLLATE utf8_general_ci"
-          mysql --defaults-extra-file="$SQL_MYCNF" --database="$DB_LOGS" <"$FOLDER_SQL"/base/logs.sql
-        fi
-
-        # create databases done
-
-        # delete and start over done
-
-        # InstallFullDB?
-        printf '%b' "[CD] $SERVER_BUILD\n"
-        read -r -p "[YN] InstallFullDB? y/n " -n 1 -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
-          if [ ! -z "$(ls -A "$FOLDER_DB" 2>&1)" ]; then
-            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
-            cd "$FOLDER_DB" || exit
-            ./InstallFullDB.sh
+            printf '%b' "[${G1:?}OK${N0:?}] 'Logs' database installed!\n"
           else
-            printf '%b' "[!!] ${GR:?}$FOLDER_DB${N0:?} Not Found!\n"
+            printf '%b' "[${Y1:?}ok${N0:?}] Importing 'Logs'\n"
+            mysql --defaults-extra-file="$SQL_MYCNF" -e "CREATE DATABASE $DB_LOGS CHARACTER SET utf8 COLLATE utf8_general_ci"
+            mysql --defaults-extra-file="$SQL_MYCNF" --database="$DB_LOGS" <"$FOLDER_SQL"/base/logs.sql
           fi
-        fi
 
-        # InstallFullDB done
+          # create databases done
 
-        # list backup?
-        read -t 5 -r -p "[YN] List backup? y/n " -n 1 -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
-          echo "[!!] Backup files ($FOLDER_WOW/backup)"
-          ls -lQS "$FOLDER_WOW"/backup
-        fi
-        # import backup?
-        read -r -p "[YN] Import latest backup? y/n " -n 1 -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
-          sleep 1
-          echo -ne '[00] Importing characters backup!\r'
-          mysql --defaults-extra-file="$SQL_MYCNF" "$DB_CHARACTERS" <"$FOLDER_WOW"/backup/"$DB_CHARACTERS"-"$NOW".sql
-          sleep 1
-          echo -ne '[50] Importing realmd backup!    \r'
-          mysql --defaults-extra-file="$SQL_MYCNF" "$DB_REALMD" <"$FOLDER_WOW"/backup/"$DB_REALMD"-"$NOW".sql
-          sleep 1
-          echo -ne '[OK] Done!                       \r'
+          # delete and start over done
+
+          # InstallFullDB?
+          printf '%b' "[CD] $SERVER_BUILD\n"
+          read -r -p "[YN] InstallFullDB? y/n " -n 1 -r
+          echo
+          if [[ $REPLY =~ ^[Yy]$ ]]; then
+            if [ ! -z "$(ls -A "$FOLDER_DB" 2>&1)" ]; then
+              sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
+              cd "$FOLDER_DB" || exit
+              ./InstallFullDB.sh
+            else
+              printf '%b' "[!!] ${GR:?}$FOLDER_DB${N0:?} Not Found!\n"
+            fi
+          fi
+
+          # InstallFullDB done
+
+          # list backup?
+          read -t 5 -r -p "[YN] List backup? y/n " -n 1 -r
+          echo
+          if [[ $REPLY =~ ^[Yy]$ ]]; then
+            echo "[!!] Backup files ($FOLDER_WOW/backup)"
+            ls -lQS "$FOLDER_WOW"/backup
+          fi
+          # import backup?
+          read -r -p "[YN] Import latest backup? y/n " -n 1 -r
+          echo
+          if [[ $REPLY =~ ^[Yy]$ ]]; then
+            sleep 1
+            echo -ne '[00] Importing characters backup!\r'
+            mysql --defaults-extra-file="$SQL_MYCNF" "$DB_CHARACTERS" <"$FOLDER_WOW"/backup/"$DB_CHARACTERS"-"$NOW".sql
+            sleep 1
+            echo -ne '[50] Importing realmd backup!    \r'
+            mysql --defaults-extra-file="$SQL_MYCNF" "$DB_REALMD" <"$FOLDER_WOW"/backup/"$DB_REALMD"-"$NOW".sql
+            sleep 1
+            echo -ne '[OK] Done!                       \r'
+          fi
         fi
         printf '%b' "[${G1:?}OK${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
