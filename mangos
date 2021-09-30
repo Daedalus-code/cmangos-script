@@ -177,10 +177,10 @@ while :; do
   fi
   # non responsive, null
   if echo "$MENU_ON_COUNT" 2>&1 | grep -q -E "NULL" &>/dev/null; then
-    MENU_ON_COUNT="${GR:?}E${N0:?}"
+    MENU_ON_COUNT="${GR:?}N${N0:?}"
   fi
   if echo "$MENU_GU_COUNT" 2>&1 | grep -q -E "NULL" &>/dev/null; then
-    MENU_GU_COUNT="${GR:?}E${N0:?}"
+    MENU_GU_COUNT="${GR:?}N${N0:?}"
   fi
   # non responsive, zero
   if [ -z "$MENU_ON_COUNT" ]; then
