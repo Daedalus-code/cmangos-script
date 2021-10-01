@@ -11,7 +11,7 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20213009
+# V20210110
 # 6.4.3.3
 
 while :; do
@@ -6411,7 +6411,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
     "4") nano "$FOLDER_CORE"/run/etc/realmd.conf ;;
     "5") nano "$FOLDER_CORE"/run/etc/ahbot.conf ;;
     "6") nano "$FOLDER_CORE"/run/etc/playerbot.conf ;;
-    "7") nano "$FOLDER_CORE"/run/etc/anticheat.conf.dist ;;
+    "7") nano "$FOLDER_CORE"/run/etc/anticheat.conf ;;
     "8") nano "$FOLDER_DB"/InstallFullDB.config ;;
     "9") nano "$FOLDER_CORE"/run/etc/mangosd.conf.dist ;;
     "10") nano "$FOLDER_CORE"/run/etc/realmd.conf.dist ;;
