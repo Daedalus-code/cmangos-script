@@ -4788,7 +4788,7 @@ Check log for which database needs 'applying updates'"
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           mysql --defaults-extra-file="$SQL_MYCNF" -f --database="$DB_CHARACTERS" <"$FOLDER_WOW"/.all_characters.sql 2>&1
         else
-          mysql --defaults-extra-file="$SQL_MYCNF" -f --database="$DB_CHARACTERS" <"$FOLDER_WOW"/.all_characters.sql
+          mysql --defaults-extra-file="$SQL_MYCNF" -f --database="$DB_CHARACTERS" <"$FOLDER_WOW"/.all_characters.sql &>/dev/null
         fi
         sudo service mariadb stop &>/dev/null
         sudo service mysql stop &>/dev/null
@@ -4826,7 +4826,7 @@ Check log for which database needs 'applying updates'"
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           mysql --defaults-extra-file="$SQL_MYCNF" -f --database="$DB_MANGOS" <"$FOLDER_WOW"/.all_mangos.sql 2>&1
         else
-          mysql --defaults-extra-file="$SQL_MYCNF" -f --database="$DB_MANGOS" <"$FOLDER_WOW"/.all_mangos.sql
+          mysql --defaults-extra-file="$SQL_MYCNF" -f --database="$DB_MANGOS" <"$FOLDER_WOW"/.all_mangos.sql &>/dev/null
         fi
         sudo service mariadb stop &>/dev/null
         sudo service mysql stop &>/dev/null
@@ -4863,7 +4863,7 @@ Check log for which database needs 'applying updates'"
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           mysql --defaults-extra-file="$SQL_MYCNF" -f --database="$DB_REALMD" <"$FOLDER_WOW"/.all_realmd.sql 2>&1
         else
-          mysql --defaults-extra-file="$SQL_MYCNF" -f --database="$DB_REALMD" <"$FOLDER_WOW"/.all_realmd.sql
+          mysql --defaults-extra-file="$SQL_MYCNF" -f --database="$DB_REALMD" <"$FOLDER_WOW"/.all_realmd.sql &>/dev/null
         fi
         sudo service mariadb stop &>/dev/null
         sudo service mysql stop &>/dev/null
