@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20210110
-# 6.4.3.3
+# V20210310
+# 6.4.3.6
 
 while :; do
 
@@ -5650,7 +5650,6 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           fi
           # save genesis realm error rate
           echo "$CALC_ERROR_REALM" >"$FOLDER_CORE"/run/logs/RealmERRORrate.log 2>&1
-          # save genesis server error rate
           echo "$CALC_ERROR_SERVER" >"$FOLDER_CORE"/run/logs/ServerERRORrate.log 2>&1
         fi
 
@@ -5988,6 +5987,8 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           # calculate error rate
           CALC_ERROR_REALM=$(echo "scale=4; 100/$LOG_LINES*$COUNT_ERROR_REALM" 2>&1 | bc -l 2>&1)
           ERROR_RATE_REALM=$(echo "${CALC_ERROR_REALM:?}%")
+          # save genesis realm error rate
+          echo "$CALC_ERROR_REALM" >"$FOLDER_CORE"/run/logs/RealmERRORrate.log 2>&1
           # genesis realm error rate
           GEN_R_ER=$(cat "$FOLDER_CORE"/run/logs/RealmERRORrate.log 2>&1 | awk '{ printf "%.2f\n", $1 }' 2>&1)
           GEN_R_ER="${GEN_R_ER:?}%"
@@ -6045,6 +6046,8 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           # calculate error rate
           CALC_ERROR_SERVER=$(echo "scale=4; 100/$LOG_LINES*$COUNT_ERROR_SERVER" 2>&1 | bc -l 2>&1)
           ERROR_RATE_SERVER=$(echo "${CALC_ERROR_SERVER:?}%" 2>&1)
+          # save genesis realm error rate
+          echo "$CALC_ERROR_SERVER" >"$FOLDER_CORE"/run/logs/ServerERRORrate.log 2>&1
           # genesis server error rate
           GEN_S_ER=$(cat "$FOLDER_CORE"/run/logs/ServerERRORrate.log 2>&1 | awk '{ printf "%.2f\n", $1 }' 2>&1)
           GEN_S_ER="${GEN_S_ER:?}%"
