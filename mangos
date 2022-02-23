@@ -11,7 +11,7 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20210310
+# V20222302
 # 6.4.3.6
 
 while :; do
@@ -4186,7 +4186,7 @@ Database User, Client/Server is needed."
         # InstallFullDB?
         echo
         printf '%b' "[CD] $SERVER_BUILD\n"
-        read -r -p "[YN] InstallFullDB? y/n " -n 1 -r
+        read -t 10 -r -p "[YN] InstallFullDB? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           if [ ! -z "$(ls -A "$FOLDER_DB" 2>&1)" ]; then
