@@ -4186,7 +4186,7 @@ Database User, Client/Server is needed."
         # InstallFullDB?
         echo
         printf '%b' "[CD] $SERVER_BUILD\n"
-        read -t 10 -r -p "[YN] InstallFullDB? y/n " -n 1 -r
+        read -r -p "[YN] InstallFullDB? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           if [ ! -z "$(ls -A "$FOLDER_DB" 2>&1)" ]; then
@@ -4201,21 +4201,21 @@ Database User, Client/Server is needed."
           else
             printf '%b' "[!!] ${GR:?}$FOLDER_DB${N0:?} Not Found!\n"
           fi
+          # look for empty dir
+          if ! [ "$(ls -A /var/log/ms/ 2>&1)" ]; then
+            # create ms folder if not found
+            sudo mkdir /var/log/ms/ &>/dev/null
+            # fix ownership
+            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
+          fi
+          # create installed mark
+          cd "$FOLDER_DB" || exit
+          LATEST_HEAD=$(git rev-parse --short HEAD)
+          echo "Database was installed at ${NOW:?} Head: $LATEST_HEAD" >/var/log/ms/Installed_db_"$TYPE_CORE"
+          printf '%b' "[${G1:?}OK${N0:?}] "
+          read -r -p "Press Enter to continue" </dev/tty
+          echo
         fi
-        # look for empty dir
-        if ! [ "$(ls -A /var/log/ms/ 2>&1)" ]; then
-          # create ms folder if not found
-          sudo mkdir /var/log/ms/ &>/dev/null
-          # fix ownership
-          sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
-        fi
-        # create installed mark
-        cd "$FOLDER_DB" || exit
-        LATEST_HEAD=$(git rev-parse --short HEAD)
-        echo "Database was installed at ${NOW:?} Head: $LATEST_HEAD" >/var/log/ms/Installed_db_"$TYPE_CORE"
-        printf '%b' "[${G1:?}OK${N0:?}] "
-        read -r -p "Press Enter to continue" </dev/tty
-        echo
       fi
 
       ;;
