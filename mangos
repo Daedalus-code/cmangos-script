@@ -1531,42 +1531,6 @@ WantedBy=multi-user.target" >"$FOLDER_WOW"/TService.tmp 2>&1
 
             # setup seedbox (transmission) done
 
-            # start seedbox (transmission)
-
-          "r")
-
-            read -t 5 -r -p "[YN] Re/start SeedBox? y/n " -n 1 -r
-            echo
-            if [[ $REPLY =~ ^[Yy]$ ]]; then
-              # is transmission-daemon installed?
-              if [ -x "$(command -v transmission-daemon)" ]; then
-                printf '%b' "[${G1:?}OK${N0:?}] Please wait\n"
-                # stop transmission service
-                sudo service transmission-daemon stop &>/dev/null
-                # find it, shut it down
-                for PID in $(ps -ef 2>&1 | grep -E "transmission-cli|transmission-daemon" 2>&1 |
-                  awk '{print $2}'); do kill -9 $PID &>/dev/null; done
-                # go over it again, kill daemon, cli
-                sudo kill -9 "$PIDOFP2P_DAE" &>/dev/null
-                sudo kill -9 "$PIDOFP2P_CLI" &>/dev/null
-                sudo killall transmission-daemon &>/dev/null
-                sleep 1
-                sudo service transmission-daemon start &>/dev/null
-                sleep 1
-                # enable service
-                sudo systemctl enable transmission-daemon &>/dev/null
-                # reload
-                sudo systemctl daemon-reload &>/dev/null
-                printf '%b' "[${G1:?}OK${N0:?}] SeedBox started!\n"
-                sleep 2
-              else
-                echo "[!!] Install/Start SeedBox first!"
-                sleep 1
-              fi
-            fi
-
-            ;;
-
             # maps menu done
 
           2)
@@ -4951,6 +4915,42 @@ Check log for which database needs 'applying updates'"
     ;;
 
     # accounts done
+
+    # start seedbox (transmission)
+
+  "r")
+
+    read -t 5 -r -p "[YN] Re/start SeedBox? y/n " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+      # is transmission-daemon installed?
+      if [ -x "$(command -v transmission-daemon)" ]; then
+        printf '%b' "[${G1:?}OK${N0:?}] Please wait\n"
+        # stop transmission service
+        sudo service transmission-daemon stop &>/dev/null
+        # find it, shut it down
+        for PID in $(ps -ef 2>&1 | grep -E "transmission-cli|transmission-daemon" 2>&1 |
+          awk '{print $2}'); do kill -9 $PID &>/dev/null; done
+        # go over it again, kill daemon, cli
+        sudo kill -9 "$PIDOFP2P_DAE" &>/dev/null
+        sudo kill -9 "$PIDOFP2P_CLI" &>/dev/null
+        sudo killall transmission-daemon &>/dev/null
+        sleep 1
+        sudo service transmission-daemon start &>/dev/null
+        sleep 1
+        # enable service
+        sudo systemctl enable transmission-daemon &>/dev/null
+        # reload
+        sudo systemctl daemon-reload &>/dev/null
+        printf '%b' "[${G1:?}OK${N0:?}] SeedBox started!\n"
+        sleep 2
+      else
+        echo "[!!] Install/Start SeedBox first!"
+        sleep 1
+      fi
+    fi
+
+    ;;
 
     # characters
 
