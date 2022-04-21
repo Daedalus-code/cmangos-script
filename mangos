@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20222302
-# 6.4.3.6
+# V20222104
+# 6.4.3.7
 
 while :; do
 
@@ -4193,6 +4193,14 @@ Database User, Client/Server is needed."
             sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "$FOLDER_WOW" &>/dev/null
             cd "$FOLDER_DB" || exit
             ./InstallFullDB.sh
+            # create installed mark
+            cd "$FOLDER_DB" || exit
+            LATEST_HEAD=$(git rev-parse --short HEAD)
+            echo "Database was installed at ${NOW:?} Head: $LATEST_HEAD" >/var/log/ms/Installed_db_"$TYPE_CORE"
+            printf '%b' "[${G1:?}OK${N0:?}] "
+            read -r -p "Press Enter to continue" </dev/tty
+            echo
+            # stop, restart services
             sudo service mariadb stop &>/dev/null
             sudo service mysql stop &>/dev/null
             sleep 1
@@ -4208,13 +4216,6 @@ Database User, Client/Server is needed."
             # fix ownership
             sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
           fi
-          # create installed mark
-          cd "$FOLDER_DB" || exit
-          LATEST_HEAD=$(git rev-parse --short HEAD)
-          echo "Database was installed at ${NOW:?} Head: $LATEST_HEAD" >/var/log/ms/Installed_db_"$TYPE_CORE"
-          printf '%b' "[${G1:?}OK${N0:?}] "
-          read -r -p "Press Enter to continue" </dev/tty
-          echo
         fi
       fi
 
