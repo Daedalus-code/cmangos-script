@@ -1,3 +1,7 @@
+![GitHub Maintained](https://img.shields.io/badge/Open%20Source-Yes-green)
+![GitHub repo size](https://img.shields.io/github/repo-size/daedalus-code/cmangos-script)
+![GitHub last activity](https://img.shields.io/github/last-commit/daedalus-code/cmangos-script)
+
 # C(ontinued)-MaNGOS - Helper  
 
 Admin Helper Tool in bash  
