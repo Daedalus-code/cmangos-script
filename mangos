@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20222704
-# 6.3.7.7
+# 6.3.7.9
 
 while :; do
 
@@ -4929,8 +4929,7 @@ Check log for which database needs 'applying updates'"
       # remove old file
       rm /var/log/ms/classes.* &>/dev/null
       # classes from table characters
-      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT class FROM $DB_CHARACTERS.characters;" 2>&1 |
-        tr -d 'class' >/var/log/ms/classes."${NOW:?}" # update this everyday
+      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT class FROM $DB_CHARACTERS.characters;" 2>&1 | tr -d 'class' >/var/log/ms/classes."${NOW:?}" # update this everyday
     fi
 
     # count lines in classes
@@ -4968,6 +4967,9 @@ Check log for which database needs 'applying updates'"
     MAGE_P=$(echo "100/$CLASS_TOTAL*$MAGE" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
     WARLOCK_P=$(echo "100/$CLASS_TOTAL*$WARLOCK" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
     DRUID_P=$(echo "100/$CLASS_TOTAL*$DRUID" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
+
+    echo "Online"
+    mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1 | grep -v "0" 2>&1
 
     echo "Characters"
     echo
