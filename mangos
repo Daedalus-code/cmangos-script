@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20222704
-# 6.3.7.9
+# V20222804
+# 6.3.8.7
 
 while :; do
 
@@ -4968,13 +4968,20 @@ Check log for which database needs 'applying updates'"
     WARLOCK_P=$(echo "100/$CLASS_TOTAL*$WARLOCK" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
     DRUID_P=$(echo "100/$CLASS_TOTAL*$DRUID" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
 
-    echo "Online"
-    mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1 | grep -v "0" 2>&1
+    echo "Player(s) online
 
-    echo "Characters"
+$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1 | grep -v "0" 2>&1)"
+
     echo
-    mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1
-    printf '%b' "
+    read -r -p "[YN] Show list? y/n " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
+
+      echo "Character list
+
+$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1)"
+
+      printf '%b' "
 Classes
 
 ${GR:?}1 ${N0:?} Warrior\e[32m.:${N0:?} $WARRIOR ${GR:?}$WARRIOR_P%${N0:?}
@@ -4987,12 +4994,13 @@ ${GR:?}7 ${N0:?} Shaman\e[32m..:${N0:?} $SHAMAN ${GR:?}$SHAMAN_P%${N0:?}
 ${GR:?}8 ${N0:?} Mage\e[32m....:${N0:?} $MAGE ${GR:?}$MAGE_P%${N0:?}
 ${GR:?}9 ${N0:?} Warlock\e[32m.:${N0:?} $WARLOCK ${GR:?}$WARLOCK_P%${N0:?}
 ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
-    echo
-    read -r -p "[YN] Check database size? y/n " -n 1 -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
-      mysql --defaults-extra-file="${SQL_MYCNF:?}" <<<"SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in MB' FROM information_schema.TABLES WHERE table_schema = \"$DB_CHARACTERS\" ORDER BY (data_length + index_length) DESC;" | head
-      read -r -p "Press Enter to continue" </dev/tty
+      echo
+      read -r -p "[YN] Check database size? y/n " -n 1 -r
+      echo
+      if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
+        mysql --defaults-extra-file="${SQL_MYCNF:?}" <<<"SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in MB' FROM information_schema.TABLES WHERE table_schema = \"$DB_CHARACTERS\" ORDER BY (data_length + index_length) DESC;" | head
+        read -r -p "Press Enter to continue" </dev/tty
+      fi
     fi
 
     ;;
@@ -5084,7 +5092,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               printf '%b' "[${Y1:?}OK${N0:?}] Stopping realmd screen\n"
               screen -S "$REALMD_ID" -X quit &>/dev/null
               screen -S realmd -X quit &>/dev/null
-              printf '%b' "[${G1:?}OK${N0:?}] Stopped! $REALMD_ID.realmd\n"
+              printf '%b' "[${G1:?}OK${N0:?}] Stopped $REALMD_ID.realmd!\n"
             else
               printf '%b' "[!!] realmd not running!\n"
             fi
@@ -5096,7 +5104,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               printf '%b' "[${Y1:?}OK${N0:?}] Stopping mangosd screen\n"
               screen -S "$MANGOSD_ID" -X quit &>/dev/null
               screen -S mangosd -X quit &>/dev/null
-              printf '%b' "[${G1:?}OK${N0:?}] Stopped! $MANGOSD_ID.mangosd\n"
+              printf '%b' "[${G1:?}OK${N0:?}] Stopped $MANGOSD_ID.mangosd!\n"
             else
               printf '%b' "[!!] mangosd not running!\n"
             fi
@@ -5125,7 +5133,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
                 sudo service "$TYPE_CORE"_realmd stop
                 sudo kill -9 "$PIDOF_REALMD" &>/dev/null
                 sleep 1
-                printf '%b' "[${G1:?}OK${N0:?}] Stopped! realmd.service!\n"
+                printf '%b' "[${G1:?}OK${N0:?}] Stopped realmd.service!\n"
                 ;;
               esac
               # mangosd service
@@ -5140,7 +5148,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
                 sudo service "${TYPE_CORE:?}"_mangosd stop
                 sudo kill -9 "$PIDOFMANGOSD" &>/dev/null
                 sleep 1
-                printf '%b' "[${G1:?}OK${N0:?}] Stopped! mangosd.service\n"
+                printf '%b' "[${G1:?}OK${N0:?}] Stopped mangosd.service!\n"
                 ;;
               esac
             fi
@@ -5171,7 +5179,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               printf '%b' "[${Y1:?}OK${N0:?}] Stopping realmd screen\n"
               screen -S "$REALMD_ID" -X quit &>/dev/null
               screen -S realmd -X quit &>/dev/null
-              printf '%b' "[${G1:?}OK${N0:?}] Stopped! $REALMD_ID.realmd\n"
+              printf '%b' "[${G1:?}OK${N0:?}] Stopped $REALMD_ID.realmd!\n"
               # keep old logs
               cp "${FOLDER_CORE:?}"/run/logs/Server.log "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
               cp "${FOLDER_CORE:?}"/run/logs/Realmd.log "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
@@ -5194,7 +5202,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               sudo service "$TYPE_CORE"_realmd stop
               sudo kill -9 "$PIDOF_REALMD" &>/dev/null
               sleep 1
-              printf '%b' "[${G1:?}OK${N0:?}] Stopped! realmd.service!\n"
+              printf '%b' "[${G1:?}OK${N0:?}] Stopped realmd.service!\n"
               sleep 2
               ;;
             esac
@@ -5225,7 +5233,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               printf '%b' "[${Y1:?}OK${N0:?}] Stopping mangosd screen\n"
               screen -S "$MANGOSD_ID" -X quit &>/dev/null
               screen -S mangosd -X quit &>/dev/null
-              printf '%b' "[${G1:?}OK${N0:?}] Stopped! $MANGOSD_ID.mangosd\n"
+              printf '%b' "[${G1:?}OK${N0:?}] Stopped $MANGOSD_ID.mangosd!\n"
               # keep old logs
               cp "${FOLDER_CORE:?}"/run/logs/Server.log "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
               cp "${FOLDER_CORE:?}"/run/logs/Realmd.log "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
@@ -5248,7 +5256,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               sudo service "$TYPE_CORE"_mangosd stop
               sudo kill -9 "$PIDOFMANGOSD" &>/dev/null
               sleep 1
-              printf '%b' "[${G1:?}OK${N0:?}] Stopped! mangosd.service\n"
+              printf '%b' "[${G1:?}OK${N0:?}] Stopped mangosd.service!\n"
               ;;
             esac
           fi
@@ -5345,7 +5353,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               printf '%b' "[${Y1:?}OK${N0:?}] Stopping realmd screen\n"
               screen -S "$REALMD_ID" -X quit &>/dev/null
               screen -S realmd -X quit &>/dev/null
-              printf '%b' "[${G1:?}OK${N0:?}] Stopped! $REALMD_ID.realmd\n"
+              printf '%b' "[${G1:?}OK${N0:?}] Stopped $REALMD_ID.realmd!\n"
             else
               printf '%b' "[!!] realmd not running!\n"
             fi
@@ -5358,7 +5366,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
               printf '%b' "[${Y1:?}OK${N0:?}] Stopping mangosd screen\n"
               screen -S "$MANGOSD_ID" -X quit &>/dev/null
               screen -S mangosd -X quit &>/dev/null
-              printf '%b' "[${G1:?}OK${N0:?}] Stopped! $MANGOSD_ID.mangosd\n"
+              printf '%b' "[${G1:?}OK${N0:?}] Stopped $MANGOSD_ID.mangosd!\n"
             else
               printf '%b' "[!!] mangosd not running!\n"
             fi
