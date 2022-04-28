@@ -5004,7 +5004,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       echo
       if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
         echo
-        mysql --defaults-extra-file="${SQL_MYCNF:?}" <<<"SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in MB' FROM information_schema.TABLES WHERE table_schema = \"$DB_CHARACTERS\" ORDER BY (data_length + index_length) DESC;"
+        mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in MB' FROM information_schema.TABLES WHERE table_schema = \"${DB_CHARACTERS:?}\" ORDER BY (data_length + index_length) DESC;"
         echo
         read -r -p "Press Enter to continue" </dev/tty
       fi
