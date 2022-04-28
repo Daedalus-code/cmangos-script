@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20222804
-# 6.3.8.9
+# 6.3.9.5
 
 while :; do
 
@@ -4903,15 +4903,20 @@ Check log for which database needs 'applying updates'"
     echo "User Accounts"
     echo
     mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT username, gmlevel, lockedIp, active_realm_id, id FROM ${DB_REALMD:?}.account;" 2>&1
+    echo
     read -r -p "[YN] Last Logins? y/n " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
+      echo
       mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT id, accountId, ip, loginTime, loginSource, id FROM ${DB_REALMD:?}.account_logons;" 2>&1
     fi
-    read -r -p "[YN] Check database size? y/n " -n 1 -r
+    echo
+    read -r -p "[YN] Database size? y/n " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
-      mysql --defaults-extra-file="${SQL_MYCNF:?}" <<<"SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in MB' FROM information_schema.TABLES WHERE table_schema = \"${DB_REALMD:?}\" ORDER BY (data_length + index_length) DESC;" | head
+      echo
+      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in (MB)' FROM information_schema.TABLES WHERE table_schema = \"${DB_REALMD:?}\" ORDER BY (data_length + index_length) DESC;"
+      echo
       read -r -p "Press Enter to continue" </dev/tty
     fi
 
@@ -4995,11 +5000,11 @@ ${GR:?}8 ${N0:?} Mage\e[32m....:${N0:?} $MAGE ${GR:?}$MAGE_P%${N0:?}
 ${GR:?}9 ${N0:?} Warlock\e[32m.:${N0:?} $WARLOCK ${GR:?}$WARLOCK_P%${N0:?}
 ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       echo
-      read -r -p "[YN] Check database size? y/n " -n 1 -r
+      read -r -p "[YN] Database size? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
         echo
-        mysql --defaults-extra-file="${SQL_MYCNF:?}" <<<"SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in MB' FROM information_schema.TABLES WHERE table_schema = \"$DB_CHARACTERS\" ORDER BY (data_length + index_length) DESC;" | head
+        mysql --defaults-extra-file="${SQL_MYCNF:?}" <<<"SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in MB' FROM information_schema.TABLES WHERE table_schema = \"$DB_CHARACTERS\" ORDER BY (data_length + index_length) DESC;"
         echo
         read -r -p "Press Enter to continue" </dev/tty
       fi
@@ -5016,6 +5021,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
     echo "Guilds"
     echo
     mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, motd FROM $DB_CHARACTERS.guild;" 2>&1
+    echo
     read -r -p "Press Enter to continue" </dev/tty
 
     ;;
