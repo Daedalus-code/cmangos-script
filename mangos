@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20222804
-# 6.3.8.7
+# 6.3.8.9
 
 while :; do
 
@@ -4968,18 +4968,18 @@ Check log for which database needs 'applying updates'"
     WARLOCK_P=$(echo "100/$CLASS_TOTAL*$WARLOCK" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
     DRUID_P=$(echo "100/$CLASS_TOTAL*$DRUID" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
 
-    echo "Player(s) online
-
-$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1 | grep -v "0" 2>&1)"
+    echo "Player(s) online"
+    echo
+    mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1 | grep -v "0" 2>&1
 
     echo
     read -r -p "[YN] Show list? y/n " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
-
-      echo "Character list
-
-$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1)"
+      echo
+      echo "Character list"
+      echo
+      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1
 
       printf '%b' "
 Classes
@@ -4998,7 +4998,9 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       read -r -p "[YN] Check database size? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
+        echo
         mysql --defaults-extra-file="${SQL_MYCNF:?}" <<<"SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in MB' FROM information_schema.TABLES WHERE table_schema = \"$DB_CHARACTERS\" ORDER BY (data_length + index_length) DESC;" | head
+        echo
         read -r -p "Press Enter to continue" </dev/tty
       fi
     fi
