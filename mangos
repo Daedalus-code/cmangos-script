@@ -5511,7 +5511,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
                 echo "$CALC_ERROR_SERVER" >"${FOLDER_CORE:?}"/run/logs/ServerERRORrate.log 2>&1
                 # calculate error rate
                 CALC_ERROR_SERVER=$(echo "scale=4; 100/$LOG_LINES*$COUNT_ERROR_SERVER" 2>&1 | bc -l 2>&1)
-                ERROR_RATE_SERVER=$(echo "${CALC_ERROR_SERVER:?}%" 2>&1)
+                ERROR_RATE_SERVER=$(echo "${CALC_ERROR_SERVER:?}%" 2>&1 | awk '{ printf "%.2f\n", $1 }' 2>&1)
                 # if any, print "error"
                 printf '%b' "[${R1:?}1E${N0:?}] World: ${R1:?}$COUNT_ERROR_SERVER${N0:?} Error! ${N0:?}${ERROR_RATE_SERVER:?}${N0:?}\n"
                 # look for serious error
@@ -6012,7 +6012,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           LOG_LINES=$(wc -l "${FOLDER_CORE:?}"/run/logs/Server.log 2>&1 | awk '{ print $1 }' 2>&1)
           # calculate error rate
           CALC_ERROR_SERVER=$(echo "scale=4; 100/$LOG_LINES*$COUNT_ERROR_SERVER" 2>&1 | bc -l 2>&1)
-          ERROR_RATE_SERVER=$(echo "${CALC_ERROR_SERVER:?}%" 2>&1)
+          ERROR_RATE_SERVER=$(echo "${CALC_ERROR_SERVER:?}%" 2>&1 | awk '{ printf "%.2f\n", $1 }' 2>&1)
           # genesis server error rate
           GEN_S_ER=$(cat "${FOLDER_CORE:?}"/run/logs/ServerERRORrate.log 2>&1 | awk '{ printf "%.2f\n", $1 }' 2>&1)
           GEN_S_ER="${GEN_S_ER:?}%"
