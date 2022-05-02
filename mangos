@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220205
-# 6.3.9.7
+# 6.3.9.8
 
 while :; do
 
@@ -3993,199 +3993,200 @@ This is needed to operate local/remote database"
       if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
         cd "$FOLDER_DB" || exit
         ./InstallFullDB.sh
-      fi
-
-      # checking depends
-
-      # mysql
-      if sudo dpkg -s mysql-server &>/dev/null; then
-        MYSQL_SERVER_INSTALLED=$(printf '%b' "[${G1:?}OK${N0:?}]")
       else
-        MYSQL_SERVER_INSTALLED=$(printf '%b' "[${GR:?}NO${N0:?}]")
-      fi
 
-      # mysql-client
-      if sudo dpkg -s mysql-client &>/dev/null; then
-        MYSQL_CLIENT_INSTALLED=$(printf '%b' "[${G1:?}OK${N0:?}]")
-      else
-        MYSQL_CLIENT_INSTALLED=$(printf '%b' "[${GR:?}NO${N0:?}]")
-      fi
+        # checking depends
 
-      # mariadb
-      if sudo dpkg -s mariadb-server &>/dev/null; then
-        MARIADB_SERVER_INSTALLED=$(printf '%b' "[${G1:?}OK${N0:?}]")
-      else
-        MARIADB_SERVER_INSTALLED=$(printf '%b' "[${GR:?}NO${N0:?}]")
-      fi
+        # mysql
+        if sudo dpkg -s mysql-server &>/dev/null; then
+          MYSQL_SERVER_INSTALLED=$(printf '%b' "[${G1:?}OK${N0:?}]")
+        else
+          MYSQL_SERVER_INSTALLED=$(printf '%b' "[${GR:?}NO${N0:?}]")
+        fi
 
-      # mariadb-client
-      if sudo dpkg -s mariadb-client &>/dev/null; then
-        MARIADB_CLIENT_INSTALLED=$(printf '%b' "[${G1:?}OK${N0:?}]")
-      else
-        MARIADB_CLIENT_INSTALLED=$(printf '%b' "[${GR:?}NO${N0:?}]")
-      fi
+        # mysql-client
+        if sudo dpkg -s mysql-client &>/dev/null; then
+          MYSQL_CLIENT_INSTALLED=$(printf '%b' "[${G1:?}OK${N0:?}]")
+        else
+          MYSQL_CLIENT_INSTALLED=$(printf '%b' "[${GR:?}NO${N0:?}]")
+        fi
 
-      MYSQL_USER=$(sudo mysql --defaults-extra-file="${SQL_MYCNF:?}" -sse "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = 'mangos')" 2>&1)
-      if [ "$MYSQL_USER" = 1 ] &>/dev/null; then
-        MYSQL_USER=$(printf '%b' "[${G1:?}OK${N0:?}]")
-      else
-        MYSQL_USER=$(printf '%b' "[${GR:?}NO${N0:?}]")
-      fi
+        # mariadb
+        if sudo dpkg -s mariadb-server &>/dev/null; then
+          MARIADB_SERVER_INSTALLED=$(printf '%b' "[${G1:?}OK${N0:?}]")
+        else
+          MARIADB_SERVER_INSTALLED=$(printf '%b' "[${GR:?}NO${N0:?}]")
+        fi
 
-      echo
-      echo "$MYSQL_SERVER_INSTALLED - mysql-server
+        # mariadb-client
+        if sudo dpkg -s mariadb-client &>/dev/null; then
+          MARIADB_CLIENT_INSTALLED=$(printf '%b' "[${G1:?}OK${N0:?}]")
+        else
+          MARIADB_CLIENT_INSTALLED=$(printf '%b' "[${GR:?}NO${N0:?}]")
+        fi
+
+        MYSQL_USER=$(sudo mysql --defaults-extra-file="${SQL_MYCNF:?}" -sse "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = 'mangos')" 2>&1)
+        if [ "$MYSQL_USER" = 1 ] &>/dev/null; then
+          MYSQL_USER=$(printf '%b' "[${G1:?}OK${N0:?}]")
+        else
+          MYSQL_USER=$(printf '%b' "[${GR:?}NO${N0:?}]")
+        fi
+
+        echo
+        echo "$MYSQL_SERVER_INSTALLED - mysql-server
 $MYSQL_CLIENT_INSTALLED - mysql-client
 $MARIADB_SERVER_INSTALLED - mariadb-server
 $MARIADB_CLIENT_INSTALLED - mariadb-client
 $MYSQL_USER - database user 'mangos'
 
 Database User, Client/Server is needed."
-      echo
+        echo
 
-      # checking depends done
+        # checking depends done
 
-      read -r -p "[YN] Continue? y/n " -n 1 -r
-      echo
-      if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
-        read -t 5 -r -p "[YN] Restart localhost SQL Server? y/n " -n 1 -r
+        read -r -p "[YN] Continue? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
-          echo "[!!] Restarting service!"
-          # restart mysql service, if it exists
-          if sudo service mysql status 2>&1 | grep -E 'mysql'; then
-            echo "[!!] No database system found"
-            echo "[!!] Please install mysql or mariadb database/client"
-            exit
-          else
-            sudo service mysql stop &>/dev/null
-            sudo service mysql restart &>/dev/null
-          fi
-          # restart mariadb service, if it exists
-          if sudo service mariadb status 2>&1 | grep -E 'mariadb'; then
-            echo "[!!] No database system found"
-            echo "[!!] Please install mysql or mariadb database/client"
-            exit
-          else
-            sudo service mariadb stop &>/dev/null
-            sudo service mariadb restart &>/dev/null
-          fi
-        fi
-        echo "[!!] Please wait"
-        # this is for docker users
-        if [ -f /.dockerenv ] &>/dev/null; then
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}"
-          sleep 3
-          sudo killall screen &>/dev/null
-          # keep old logs
-          cp "${FOLDER_CORE:?}"/run/logs/Server.log "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
-          cp "${FOLDER_CORE:?}"/run/logs/Realmd.log "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
-        else
-          # realmd service
-          case "$(echo "$PIDOF_REALMD")" in
-          0) ;;
-          *)
-            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
-            sudo service "$TYPE_CORE"_realmd stop
-            ;;
-          esac
-          # mangosd service
-          case "$(echo "$PIDOFMANGOSD")" in
-          0) ;;
-          *)
-            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
-            sudo service "$TYPE_CORE"_mangosd stop
-            ;;
-          esac
-        fi
-
-        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "${FOLDER_WOW:?}" &>/dev/null
-
-        # backup
-        mkdir "${FOLDER_WOW:?}"/backup &>/dev/null
-        mkdir "${FOLDER_WOW:?}"/backup/old &>/dev/null
-        cp "${FOLDER_WOW:?}"/backup/*.sql "${FOLDER_WOW:?}"/backup/old &>/dev/null
-        cd "${FOLDER_WOW:?}"/backup/old/ || exit
-        zip "$SERVER_NAME.zip" "${FOLDER_WOW:?}"/backup/*.sql &>/dev/null
-        find "${FOLDER_WOW:?}"/backup/*.sql -mtime +7 -exec rm {} \; &>/dev/null
-        find "${FOLDER_WOW:?}"/backup/old/*.sql -mtime +14 -exec rm {} \; &>/dev/null
-        sleep 1
-        # backup <- characters.sql
-        echo
-        FILE="${FOLDER_WOW:?}/backup/$DB_CHARACTERS-${NOW:?}.sql"
-        if [ ! -f "$FILE" ] &>/dev/null; then
-          printf '%b' "[!!] '${G1:?}Characters${N0:?}' Creating backup!"
-          mysqldump --defaults-extra-file="${SQL_MYCNF:?}" "$DB_CHARACTERS" >"${FOLDER_WOW:?}"/backup/"$DB_CHARACTERS"-"${NOW:?}".sql
+          read -t 5 -r -p "[YN] Restart localhost SQL Server? y/n " -n 1 -r
           echo
-        else
-          printf '%b' "[${G1:?}OK${N0:?}] $DB_CHARACTERS-${NOW:?}.sql exist"
-          echo
-          read -t 5 -r -p "[YN] New backup? ($DB_CHARACTERS) y/n " -n 1 -r
           if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
-            # backup characters sql
-            echo
-            printf '%b' "[${Y1:?}ok${N0:?}] Making fresh backup${G0:?}.${N0:?}"
-            sleep 1
-            printf '%b' "${G0:?}.${N0:?}"
+            echo "[!!] Restarting service!"
+            # restart mysql service, if it exists
+            if sudo service mysql status 2>&1 | grep -E 'mysql'; then
+              echo "[!!] No database system found"
+              echo "[!!] Please install mysql or mariadb database/client"
+              exit
+            else
+              sudo service mysql stop &>/dev/null
+              sudo service mysql restart &>/dev/null
+            fi
+            # restart mariadb service, if it exists
+            if sudo service mariadb status 2>&1 | grep -E 'mariadb'; then
+              echo "[!!] No database system found"
+              echo "[!!] Please install mysql or mariadb database/client"
+              exit
+            else
+              sudo service mariadb stop &>/dev/null
+              sudo service mariadb restart &>/dev/null
+            fi
+          fi
+          echo "[!!] Please wait"
+          # this is for docker users
+          if [ -f /.dockerenv ] &>/dev/null; then
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}"
+            sleep 3
+            sudo killall screen &>/dev/null
+            # keep old logs
+            cp "${FOLDER_CORE:?}"/run/logs/Server.log "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
+            cp "${FOLDER_CORE:?}"/run/logs/Realmd.log "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
+          else
+            # realmd service
+            case "$(echo "$PIDOF_REALMD")" in
+            0) ;;
+            *)
+              printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
+              sudo service "$TYPE_CORE"_realmd stop
+              ;;
+            esac
+            # mangosd service
+            case "$(echo "$PIDOFMANGOSD")" in
+            0) ;;
+            *)
+              printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
+              sudo service "$TYPE_CORE"_mangosd stop
+              ;;
+            esac
+          fi
+
+          sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "${FOLDER_WOW:?}" &>/dev/null
+
+          # backup
+          mkdir "${FOLDER_WOW:?}"/backup &>/dev/null
+          mkdir "${FOLDER_WOW:?}"/backup/old &>/dev/null
+          cp "${FOLDER_WOW:?}"/backup/*.sql "${FOLDER_WOW:?}"/backup/old &>/dev/null
+          cd "${FOLDER_WOW:?}"/backup/old/ || exit
+          zip "$SERVER_NAME.zip" "${FOLDER_WOW:?}"/backup/*.sql &>/dev/null
+          find "${FOLDER_WOW:?}"/backup/*.sql -mtime +7 -exec rm {} \; &>/dev/null
+          find "${FOLDER_WOW:?}"/backup/old/*.sql -mtime +14 -exec rm {} \; &>/dev/null
+          sleep 1
+          # backup <- characters.sql
+          echo
+          FILE="${FOLDER_WOW:?}/backup/$DB_CHARACTERS-${NOW:?}.sql"
+          if [ ! -f "$FILE" ] &>/dev/null; then
+            printf '%b' "[!!] '${G1:?}Characters${N0:?}' Creating backup!"
             mysqldump --defaults-extra-file="${SQL_MYCNF:?}" "$DB_CHARACTERS" >"${FOLDER_WOW:?}"/backup/"$DB_CHARACTERS"-"${NOW:?}".sql
-            printf '%b' "${G0:?}.${N0:?}\n"
-            sleep 1
-            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}$DB_CHARACTERS-${NOW:?}.sql${N0:?}"
-            sleep 2
-          fi
-        fi
-        echo
-        # backup <- realmd.sql
-        FILE="${FOLDER_WOW:?}/backup/${DB_REALMD:?}-${NOW:?}.sql"
-        if [ ! -f "$FILE" ] &>/dev/null; then
-          printf '%b' "[!!] '${G1:?}Realmd${N0:?}' Creating backup!"
-          mysqldump --defaults-extra-file="${SQL_MYCNF:?}" "${DB_REALMD:?}" >"${FOLDER_WOW:?}"/backup/"${DB_REALMD:?}"-"${NOW:?}".sql
-          echo
-        else
-          printf '%b' "[${G1:?}OK${N0:?}] ${DB_REALMD:?}-${NOW:?}.sql exist"
-          echo
-          read -t 5 -r -p "[YN] New backup? (${DB_REALMD:?}) y/n " -n 1 -r
-          if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
-            # backup characters sql
-            echo
-            printf '%b' "[${Y1:?}ok${N0:?}] Making fresh backup${G0:?}.${N0:?}"
-            sleep 1
-            printf '%b' "${G0:?}.${N0:?}"
-            mysqldump --defaults-extra-file="${SQL_MYCNF:?}" "${DB_REALMD:?}" >"${FOLDER_WOW:?}"/backup/"${DB_REALMD:?}"-"${NOW:?}".sql
-            printf '%b' "${G0:?}.${N0:?}\n"
-            sleep 1
-            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${DB_REALMD:?}-${NOW:?}.sql${N0:?}\n"
-            sleep 1
-          fi
-        fi
-        # InstallFullDB?
-        echo
-        printf '%b' "[CD] $SERVER_BUILD\n"
-        read -r -p "[YN] InstallFullDB? y/n " -n 1 -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
-          if [ ! -z "$(ls -A "$FOLDER_DB" 2>&1)" ] &>/dev/null; then
-            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "${FOLDER_WOW:?}" &>/dev/null
-            cd "$FOLDER_DB" || exit
-            ./InstallFullDB.sh
-            # create installed mark
-            cd "$FOLDER_DB" || exit
-            LATEST_HEAD=$(git rev-parse --short HEAD)
-            echo "Database was installed at ${NOW:?} Head: $LATEST_HEAD" >/home/"$(whoami)"/wow/Installed_db_"$TYPE_CORE"
-            printf '%b' "[${G1:?}OK${N0:?}] "
-            read -r -p "Press Enter to continue" </dev/tty
             echo
           else
-            printf '%b' "[!!] ${GR:?}$FOLDER_DB${N0:?} Not Found!\n"
+            printf '%b' "[${G1:?}OK${N0:?}] $DB_CHARACTERS-${NOW:?}.sql exist"
+            echo
+            read -t 5 -r -p "[YN] New backup? ($DB_CHARACTERS) y/n " -n 1 -r
+            if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
+              # backup characters sql
+              echo
+              printf '%b' "[${Y1:?}ok${N0:?}] Making fresh backup${G0:?}.${N0:?}"
+              sleep 1
+              printf '%b' "${G0:?}.${N0:?}"
+              mysqldump --defaults-extra-file="${SQL_MYCNF:?}" "$DB_CHARACTERS" >"${FOLDER_WOW:?}"/backup/"$DB_CHARACTERS"-"${NOW:?}".sql
+              printf '%b' "${G0:?}.${N0:?}\n"
+              sleep 1
+              printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}$DB_CHARACTERS-${NOW:?}.sql${N0:?}"
+              sleep 2
+            fi
           fi
-          # look for empty dir
-          if ! [ "$(ls -A /var/log/ms/ 2>&1)" ] &>/dev/null; then
-            # create ms folder if not found
-            sudo mkdir /var/log/ms/ &>/dev/null
-            # fix ownership
-            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
+          echo
+          # backup <- realmd.sql
+          FILE="${FOLDER_WOW:?}/backup/${DB_REALMD:?}-${NOW:?}.sql"
+          if [ ! -f "$FILE" ] &>/dev/null; then
+            printf '%b' "[!!] '${G1:?}Realmd${N0:?}' Creating backup!"
+            mysqldump --defaults-extra-file="${SQL_MYCNF:?}" "${DB_REALMD:?}" >"${FOLDER_WOW:?}"/backup/"${DB_REALMD:?}"-"${NOW:?}".sql
+            echo
+          else
+            printf '%b' "[${G1:?}OK${N0:?}] ${DB_REALMD:?}-${NOW:?}.sql exist"
+            echo
+            read -t 5 -r -p "[YN] New backup? (${DB_REALMD:?}) y/n " -n 1 -r
+            if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
+              # backup characters sql
+              echo
+              printf '%b' "[${Y1:?}ok${N0:?}] Making fresh backup${G0:?}.${N0:?}"
+              sleep 1
+              printf '%b' "${G0:?}.${N0:?}"
+              mysqldump --defaults-extra-file="${SQL_MYCNF:?}" "${DB_REALMD:?}" >"${FOLDER_WOW:?}"/backup/"${DB_REALMD:?}"-"${NOW:?}".sql
+              printf '%b' "${G0:?}.${N0:?}\n"
+              sleep 1
+              printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${DB_REALMD:?}-${NOW:?}.sql${N0:?}\n"
+              sleep 1
+            fi
           fi
+          # InstallFullDB?
+          echo
+          printf '%b' "[CD] $SERVER_BUILD\n"
+          read -r -p "[YN] InstallFullDB? y/n " -n 1 -r
+          echo
+          if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
+            if [ ! -z "$(ls -A "$FOLDER_DB" 2>&1)" ] &>/dev/null; then
+              sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "${FOLDER_WOW:?}" &>/dev/null
+              cd "$FOLDER_DB" || exit
+              ./InstallFullDB.sh
+              # create installed mark
+              cd "$FOLDER_DB" || exit
+              LATEST_HEAD=$(git rev-parse --short HEAD)
+              echo "Database was installed at ${NOW:?} Head: $LATEST_HEAD" >/home/"$(whoami)"/wow/Installed_db_"$TYPE_CORE"
+              printf '%b' "[${G1:?}OK${N0:?}] "
+              read -r -p "Press Enter to continue" </dev/tty
+              echo
+            else
+              printf '%b' "[!!] ${GR:?}$FOLDER_DB${N0:?} Not Found!\n"
+            fi
+            # look for empty dir
+            if ! [ "$(ls -A /var/log/ms/ 2>&1)" ] &>/dev/null; then
+              # create ms folder if not found
+              sudo mkdir /var/log/ms/ &>/dev/null
+              # fix ownership
+              sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
+            fi
+          fi
+          printf '%b' "${GR:?}Please wait${N0:?}\n"
         fi
-        printf '%b' "${GR:?}Please wait${N0:?}\n"
       fi
 
       ;;
