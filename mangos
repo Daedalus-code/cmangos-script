@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220205
-# 6.4.0.6
+# 6.4.0.7
 
 while :; do
 
@@ -3991,7 +3991,8 @@ This is needed to operate local/remote database"
       read -r -p "[YN] InstallFullDB.sh? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
-        bash "${FOLDER_DB:?}"/InstallFullDB.sh
+        cd "$FOLDER_DB" || exit
+        ./InstallFullDB.sh &>/dev/null
       fi
 
       # checking depends
