@@ -2451,7 +2451,7 @@ ${GR:?}(m) CMaNGOS > Compile latest${N0:?}\n"
         FILE="$FOLDER_DB/InstallFullDB.config"
         if [ -z "$FILE" ] &>/dev/null; then
           cd "$FOLDER_DB" || exit
-          ./InstallFullDB.sh &>/dev/null
+          ./InstallFullDB.sh
         fi
         # check if InstallFullDB.config exist done
       fi
@@ -3992,7 +3992,7 @@ This is needed to operate local/remote database"
       echo
       if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
         cd "$FOLDER_DB" || exit
-        ./InstallFullDB.sh &>/dev/null
+        ./InstallFullDB.sh
       fi
 
       # checking depends
