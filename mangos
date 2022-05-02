@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20222804
-# 6.3.9.5
+# V20220205
+# 6.4.0.6
 
 while :; do
 
@@ -3988,6 +3988,12 @@ This is needed to operate local/remote database"
 
     "1")
 
+      read -r -p "[YN] InstallFullDB.sh? y/n " -n 1 -r
+      echo
+      if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
+        bash "${FOLDER_DB:?}"/InstallFullDB.sh
+      fi
+
       # checking depends
 
       # mysql
@@ -4167,12 +4173,16 @@ Database User, Client/Server is needed."
             printf '%b' "[${G1:?}OK${N0:?}] "
             read -r -p "Press Enter to continue" </dev/tty
             echo
-            # stop, restart services
-            sudo service mariadb stop &>/dev/null
-            sudo service mysql stop &>/dev/null
-            sleep 1
-            sudo service mariadb restart &>/dev/null
-            sudo service mysql restart &>/dev/null
+            read -r -p "[YN] Restart MySQL/MariaDB? y/n " -n 1 -r
+            echo
+            if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
+              # stop, restart services
+              sudo service mariadb stop &>/dev/null
+              sudo service mysql stop &>/dev/null
+              sleep 1
+              sudo service mariadb restart &>/dev/null
+              sudo service mysql restart &>/dev/null
+            fi
           else
             printf '%b' "[!!] ${GR:?}$FOLDER_DB${N0:?} Not Found!\n"
           fi
@@ -4184,6 +4194,7 @@ Database User, Client/Server is needed."
             sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
           fi
         fi
+        printf '%b' "${GR:?}Please wait${N0:?}\n"
       fi
 
       ;;
