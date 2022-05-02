@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220205
-# 6.4.0.7
+# 6.3.9.7
 
 while :; do
 
@@ -4174,16 +4174,6 @@ Database User, Client/Server is needed."
             printf '%b' "[${G1:?}OK${N0:?}] "
             read -r -p "Press Enter to continue" </dev/tty
             echo
-            read -r -p "[YN] Restart MySQL/MariaDB? y/n " -n 1 -r
-            echo
-            if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
-              # stop, restart services
-              sudo service mariadb stop &>/dev/null
-              sudo service mysql stop &>/dev/null
-              sleep 1
-              sudo service mariadb restart &>/dev/null
-              sudo service mysql restart &>/dev/null
-            fi
           else
             printf '%b' "[!!] ${GR:?}$FOLDER_DB${N0:?} Not Found!\n"
           fi
