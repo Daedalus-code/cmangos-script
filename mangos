@@ -5423,7 +5423,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             *) printf '%b' "[${Y1:?}0!${N0:?}] mangosd.service running?\n" ;;
             esac
             sleep 1
-            read -t 5 -r -p "[YN] Wait on mangosd? y/n " -n 1 -r
+            read -t 2 -r -p "[YN] Wait on mangosd? y/n " -n 1 -r
             echo
             if [[ ! $REPLY =~ ^[Nn]$ ]] &>/dev/null; then
               # wait on mangosd
