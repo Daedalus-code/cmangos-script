@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20220205
-# 6.3.9.8
+# V20220305
+# 6.3.8.4
 
 while :; do
 
@@ -149,8 +149,8 @@ while :; do
   esac
 
   # look for empty dir
-  if ! [ "$(ls -A /var/log/ms/ 2>&1)" ] &>/dev/null; then
-    # create ms folder if not found
+  if [ "$(ls -A /var/log/ms/ 2>&1 | egrep -c "[aA1-zZ9]+" 2>&1)" -lt "1" ] &>/dev/null; then
+    # create ms folder
     sudo mkdir /var/log/ms/ &>/dev/null
     # fix ownership
     sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
@@ -1296,7 +1296,7 @@ ${N0:?}"
                   fi
                 fi
                 # look for empty dir
-                if ! [ "$(ls -A /var/log/ms/ 2>&1)" ] &>/dev/null; then
+                if [ "$(ls -A /var/log/ms/ 2>&1 | egrep -c "[aA1-zZ9]+" 2>&1)" -lt "1" ] &>/dev/null; then
                   # create ms folder if not found
                   sudo mkdir /var/log/ms/ &>/dev/null
                   # fix ownership
@@ -2802,7 +2802,7 @@ ${GR:?}$CPU_MODEL${N0:?}")
             printf '%b' "$MENU_PRINT_CPU_TEMP\n"
             printf '%b' "Build time: ${G1:?}$TIMER${N0:?} with ${G1:?}$CORES_BUILD${N0:?} Core(s)\n"
             # look for empty dir
-            if ! [ "$(ls -A /var/log/ms/ 2>&1)" ] &>/dev/null; then
+            if [ "$(ls -A /var/log/ms/ 2>&1 | egrep -c "[aA1-zZ9]+" 2>&1)" -lt "1" ] &>/dev/null; then
               # create ms folder if not found
               sudo mkdir /var/log/ms/ &>/dev/null
               # fix ownership
@@ -3119,7 +3119,7 @@ Select install operation"
           "1")
 
             # look for empty dir
-            if ! [ "$(ls -A /var/log/ms/ 2>&1)" ] &>/dev/null; then
+            if [ "$(ls -A /var/log/ms/ 2>&1 | egrep -c "[aA1-zZ9]+" 2>&1)" -lt "1" ] &>/dev/null; then
               # create ms folder if not found
               sudo mkdir /var/log/ms/ &>/dev/null
               # fix ownership
@@ -3139,7 +3139,7 @@ Select install operation"
           "2")
 
             # look for empty dir
-            if ! [ "$(ls -A /var/log/ms/ 2>&1)" ] &>/dev/null; then
+            if [ "$(ls -A /var/log/ms/ 2>&1 | egrep -c "[aA1-zZ9]+" 2>&1)" -lt "1" ] &>/dev/null; then
               # create ms folder if not found
               sudo mkdir /var/log/ms/ &>/dev/null
               # fix ownership
@@ -3988,59 +3988,59 @@ This is needed to operate local/remote database"
 
     "1")
 
-      read -r -p "[YN] InstallFullDB.sh? y/n " -n 1 -r
-      echo
-      if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
-        cd "$FOLDER_DB" || exit
-        ./InstallFullDB.sh
+      # checking depends
+
+      # mysql
+      if sudo dpkg -s mysql-server &>/dev/null; then
+        MYSQL_SERVER_INSTALLED=$(printf '%b' "[${G1:?}OK${N0:?}]")
       else
+        MYSQL_SERVER_INSTALLED=$(printf '%b' "[${GR:?}NO${N0:?}]")
+      fi
 
-        # checking depends
+      # mysql-client
+      if sudo dpkg -s mysql-client &>/dev/null; then
+        MYSQL_CLIENT_INSTALLED=$(printf '%b' "[${G1:?}OK${N0:?}]")
+      else
+        MYSQL_CLIENT_INSTALLED=$(printf '%b' "[${GR:?}NO${N0:?}]")
+      fi
 
-        # mysql
-        if sudo dpkg -s mysql-server &>/dev/null; then
-          MYSQL_SERVER_INSTALLED=$(printf '%b' "[${G1:?}OK${N0:?}]")
-        else
-          MYSQL_SERVER_INSTALLED=$(printf '%b' "[${GR:?}NO${N0:?}]")
-        fi
+      # mariadb
+      if sudo dpkg -s mariadb-server &>/dev/null; then
+        MARIADB_SERVER_INSTALLED=$(printf '%b' "[${G1:?}OK${N0:?}]")
+      else
+        MARIADB_SERVER_INSTALLED=$(printf '%b' "[${GR:?}NO${N0:?}]")
+      fi
 
-        # mysql-client
-        if sudo dpkg -s mysql-client &>/dev/null; then
-          MYSQL_CLIENT_INSTALLED=$(printf '%b' "[${G1:?}OK${N0:?}]")
-        else
-          MYSQL_CLIENT_INSTALLED=$(printf '%b' "[${GR:?}NO${N0:?}]")
-        fi
+      # mariadb-client
+      if sudo dpkg -s mariadb-client &>/dev/null; then
+        MARIADB_CLIENT_INSTALLED=$(printf '%b' "[${G1:?}OK${N0:?}]")
+      else
+        MARIADB_CLIENT_INSTALLED=$(printf '%b' "[${GR:?}NO${N0:?}]")
+      fi
 
-        # mariadb
-        if sudo dpkg -s mariadb-server &>/dev/null; then
-          MARIADB_SERVER_INSTALLED=$(printf '%b' "[${G1:?}OK${N0:?}]")
-        else
-          MARIADB_SERVER_INSTALLED=$(printf '%b' "[${GR:?}NO${N0:?}]")
-        fi
+      MYSQL_USER=$(sudo mysql --defaults-extra-file="${SQL_MYCNF:?}" -sse "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = 'mangos')" 2>&1)
+      if [ "$MYSQL_USER" = 1 ] &>/dev/null; then
+        MYSQL_USER=$(printf '%b' "[${G1:?}OK${N0:?}]")
+      else
+        MYSQL_USER=$(printf '%b' "[${GR:?}NO${N0:?}]")
+      fi
 
-        # mariadb-client
-        if sudo dpkg -s mariadb-client &>/dev/null; then
-          MARIADB_CLIENT_INSTALLED=$(printf '%b' "[${G1:?}OK${N0:?}]")
-        else
-          MARIADB_CLIENT_INSTALLED=$(printf '%b' "[${GR:?}NO${N0:?}]")
-        fi
-
-        MYSQL_USER=$(sudo mysql --defaults-extra-file="${SQL_MYCNF:?}" -sse "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = 'mangos')" 2>&1)
-        if [ "$MYSQL_USER" = 1 ] &>/dev/null; then
-          MYSQL_USER=$(printf '%b' "[${G1:?}OK${N0:?}]")
-        else
-          MYSQL_USER=$(printf '%b' "[${GR:?}NO${N0:?}]")
-        fi
-
-        echo
-        echo "$MYSQL_SERVER_INSTALLED - mysql-server
+      echo
+      echo "$MYSQL_SERVER_INSTALLED - mysql-server
 $MYSQL_CLIENT_INSTALLED - mysql-client
 $MARIADB_SERVER_INSTALLED - mariadb-server
 $MARIADB_CLIENT_INSTALLED - mariadb-client
 $MYSQL_USER - database user 'mangos'
 
 Database User, Client/Server is needed."
-        echo
+      echo
+
+      read -r -p "[YN] InstallFullDB.sh? y/n " -n 1 -r
+      echo
+      if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
+        cd "$FOLDER_DB" || exit
+        ./InstallFullDB.sh
+      else
 
         # checking depends done
 
@@ -4167,18 +4167,11 @@ Database User, Client/Server is needed."
               sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "${FOLDER_WOW:?}" &>/dev/null
               cd "$FOLDER_DB" || exit
               ./InstallFullDB.sh
-              # create installed mark
-              cd "$FOLDER_DB" || exit
-              LATEST_HEAD=$(git rev-parse --short HEAD)
-              echo "Database was installed at ${NOW:?} Head: $LATEST_HEAD" >/home/"$(whoami)"/wow/Installed_db_"$TYPE_CORE"
-              printf '%b' "[${G1:?}OK${N0:?}] "
-              read -r -p "Press Enter to continue" </dev/tty
-              echo
             else
               printf '%b' "[!!] ${GR:?}$FOLDER_DB${N0:?} Not Found!\n"
             fi
             # look for empty dir
-            if ! [ "$(ls -A /var/log/ms/ 2>&1)" ] &>/dev/null; then
+            if [ "$(ls -A /var/log/ms/ 2>&1 | egrep -c "[aA1-zZ9]+" 2>&1)" -lt "1" ] &>/dev/null; then
               # create ms folder if not found
               sudo mkdir /var/log/ms/ &>/dev/null
               # fix ownership
@@ -4187,6 +4180,13 @@ Database User, Client/Server is needed."
           fi
           printf '%b' "${GR:?}Please wait${N0:?}\n"
         fi
+        # create installed mark
+        cd "$FOLDER_DB" || exit
+        LATEST_HEAD=$(git rev-parse --short HEAD)
+        echo "Database was installed at ${NOW:?} Head: $LATEST_HEAD" >/home/"$(whoami)"/wow/Installed_db_"$TYPE_CORE"
+        printf '%b' "[${G1:?}OK${N0:?}] "
+        read -r -p "Press Enter to continue" </dev/tty
+        echo
       fi
 
       ;;
@@ -5747,17 +5747,16 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       sudo apt-get install dialog -y
     fi
 
-    HEIGHT=11
+    HEIGHT=10
     WIDTH=37
-    CHOICE_HEIGHT=4
+    CHOICE_HEIGHT=3
     BACKTITLE="Update Helper"
     TITLE="Update cmangos-script [Helper]"
     MENU="Choose one option:"
 
     OPTIONS=(1 "Update helper"
       2 "Reinstall /cmangos-script"
-      3 "Reset --hard origin/master"
-      4 "Setup missing directories")
+      3 "Reset --hard origin/master")
 
     CHOICE=$(dialog --clear \
       --backtitle "$BACKTITLE" \
@@ -5908,19 +5907,6 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       ;;
 
       # reset --hard origin/master done
-
-      # setup missing directories
-
-    "4")
-
-      # create ms folder
-      sudo mkdir /var/log/ms/ &>/dev/null
-      # fix ownership
-      sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
-
-      ;;
-
-      # setup missing directories done
 
       # update cmangos-script done
 
