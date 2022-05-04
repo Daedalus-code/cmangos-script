@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220405
-# 6.4.9.3
+# 6.5.4.5
 
 while :; do
 
@@ -4995,7 +4995,7 @@ Check log for which database needs 'applying updates'"
     fi
 
     # save player list
-    mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" >/var/log/ms/player_list 2>&1
+    mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class, gender, xp, money, map, totaltime, leveltime, is_logout_resting, rest_bonus, zone, honor_highest_rank, honor_standing, stored_honor_rating, stored_dishonorable_kills, stored_honorable_kills, drunk, health, power1 FROM $DB_CHARACTERS.characters;" >/var/log/ms/player_list 2>&1
 
     # show full list of players
     read -r -p "[YN] Show full list? y/n " -n 1 -r
@@ -5047,12 +5047,32 @@ Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           printf '%b' "${GR:?}$(cat /var/log/ms/player_search 2>/dev/null)${N0:?}\n"
         else
 
-          # name, level, online, account, class
+          # name, level, online, account, class, gender, xp, money, map
+          # totaltime, leveltime, is_logout_resting, rest_bonus, zone
+          # honor_highest_rank, honor_standing, stored_honor_rating
+          # stored_dishonorable_kills, stored_honorable_kills
+          # drunk, health, power1
           TOON_NAME=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $1 }' 2>&1)
           TOON_LVL=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $2 }' 2>&1)
           TOON_ON=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $3 }' 2>&1)
           TOON_AC=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $4 }' 2>&1)
           TOON_C=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $5 }' 2>&1)
+          TOON_GE=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $6 }' 2>&1)
+          TOON_XP=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $7 }' 2>&1)
+          TOON_GS=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $8 }' 2>&1)
+          TOON_MAP=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $9 }' 2>&1)
+          TOON_TOT_T=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $10 }' 2>&1)
+          TOON_TOT_LT=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $11 }' 2>&1)
+          TOON_REST_B=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $12 }' 2>&1)
+          TOON_ZONING=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $13 }' 2>&1)
+          TOON_HONOR_HR=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $14 }' 2>&1)
+          TOON_HONOR_S=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $15 }' 2>&1)
+          TOON_STORED_HR=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $16 }' 2>&1)
+          TOON_STORED_DK=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $17 }' 2>&1)
+          TOON_STORED_HK=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $18 }' 2>&1)
+          TOON_DRUNK=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $19 }' 2>&1)
+          TOON_HEALTH=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $20 }' 2>&1)
+          TOON_MANA=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $21 }' 2>&1)
 
           # level range
           if [[ "$TOON_LVL" -lt "10" ]] &>/dev/null; then
@@ -5095,6 +5115,28 @@ Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             TOON_C="Druid"
           fi
 
+          # gender range
+          if [[ "$TOON_GE" -eq "0" ]] &>/dev/null; then
+            TOON_GE="Male"
+          else
+            TOON_GE="Female"
+          fi
+
+          # gold
+          TOON_GS="$(echo "$TOON_GS/1000" 2>&1 | bc -l 2>&1 | awk '{ printf "%.2f\n", $1 }' 2>&1)"
+          if [[ "$(echo "${TOON_GS:?}" 2>&1 | awk -F. '{ print $1 }' 2>&1)" -gt "0" ]] &>/dev/null; then
+            GSC="${Y1:?}"
+          else
+            GSC="${GR:?}"
+          fi
+
+          # resting
+          if [[ "$TOON_REST_B" -eq "1" ]] &>/dev/null; then
+            TOON_REST_B="${G1:?}Yes${N0:?}"
+          else
+            TOON_REST_B="${GR:?}N0${N0:?}"
+          fi
+
           # online/offline status
           if [[ "$TOON_ON" -eq "0" ]] &>/dev/null; then
             TOON_ON="${GR:?}Offline${N0:?}"
@@ -5102,20 +5144,30 @@ Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             TOON_ON="${G1:?}Online${N0:?}"
           fi
 
-          if [[ -z "$TOON_NAME" ]] &>/dev/null; then
-            TOON_NAME="${GR:?}empty${N0:?}"
-            TOON_LVL="${GR:?}empty${N0:?}"
-            TOON_ON="${GR:?}empty${N0:?}"
-            TOON_AC="${GR:?}empty${N0:?}"
-            TOON_C="${GR:?}empty${N0:?}"
-          fi
-
-          printf '%b' "
+          if [[ ! -z "$TOON_NAME" ]] &>/dev/null; then
+            printf '%b' "
 Name${G0:?}....: ${N0:?}${TOON_NAME:?}${N0:?}
 Online${G0:?}..: ${N0:?}${TOON_ON:?}${N0:?}
 Class${G0:?}...: ${N0:?}${TOON_C:?}${N0:?}
 Level${G0:?}...: ${LVLC:?}${TOON_LVL:?}${N0:?}
+HP${G0:?}......: ${G1:?}${TOON_HEALTH:?}${N0:?}
+MP${G0:?}......: ${B1:?}${TOON_MANA:?}${N0:?}
+Gender${G0:?}..: ${N0:?}${TOON_GE:?}${N0:?}
+Gold${G0:?}....: ${GSC:?}${TOON_GS:?}${N0:?}
+XP${G0:?}......: ${N0:?}${TOON_XP:?}${N0:?}
+Map${G0:?}.....: ${N0:?}${TOON_MAP:?}${N0:?}
+/played${G0:?}.: ${N0:?}${TOON_TOT_T:?}${N0:?}
+LVLTime${G0:?}.: ${N0:?}${TOON_TOT_LT:?}${N0:?}
+Resting${G0:?}.: ${N0:?}${TOON_REST_B:?}${N0:?}
+Zone${G0:?}....: ${N0:?}${TOON_ZONING:?}${N0:?}
+Honored${G0:?}.: ${N0:?}${TOON_HONOR_HR:?}${N0:?}
+Ranked${G0:?}..: ${N0:?}${TOON_HONOR_S:?}${N0:?}
+Honor${G0:?}...: ${G1:?}${TOON_STORED_HR:?}${N0:?}
+Kills${G0:?}...: ${N0:?}${TOON_STORED_HK:?}${N0:?}
+DKills${G0:?}..: ${R1:?}${TOON_STORED_DK:?}${N0:?}
+Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}
 Account${G0:?}.: ${N0:?}${TOON_AC:?}${N0:?}\n"
+          fi
         fi
       fi
       echo
