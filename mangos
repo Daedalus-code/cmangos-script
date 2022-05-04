@@ -4068,9 +4068,9 @@ Database User, Client/Server is needed."
       read -r -p "[YN] InstallFullDB.sh? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
+        shutdown_server
         cd "$FOLDER_DB" || exit
         ./InstallFullDB.sh
-        shutdown_server
       else
 
         # checking depends done
