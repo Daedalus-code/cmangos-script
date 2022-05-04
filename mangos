@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220405
-# 6.5.4.6
+# 6.5.4.9
 
 while :; do
 
@@ -5130,6 +5130,9 @@ Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             GSC="${GR:?}"
           fi
 
+          # total time /played
+          TOON_TOT_T_C=$(printf '%dh:%dm:%ds\n' $(("$TOON_TOT_T/3600")) $(("$TOON_TOT_T%3600/60")) $(("$TOON_TOT_T%60")))
+
           # resting
           if [[ "$TOON_REST_B" -eq "1" ]] &>/dev/null; then
             TOON_REST_B="${G1:?}Yes${N0:?}"
@@ -5159,14 +5162,14 @@ Gold${G0:?}....: ${GSC:?}${TOON_GS:?}${N0:?}
 XP${G0:?}......: ${N0:?}${TOON_XP:?}${N0:?}
 Resting${G0:?}.: ${N0:?}${TOON_REST_B:?}${N0:?}
 Map${G0:?}.....: ${N0:?}${TOON_MAP:?}${N0:?}
-/played${G0:?}.: ${N0:?}${TOON_TOT_T:?}${N0:?}
+Played${G0:?}..: ${N0:?}${TOON_TOT_T_C:?}${N0:?}
 LVLTime${G0:?}.: ${N0:?}${TOON_TOT_LT:?}${N0:?}
 Zone${G0:?}....: ${N0:?}${TOON_ZONING:?}${N0:?}
 Honored${G0:?}.: ${N0:?}${TOON_HONOR_HR:?}${N0:?}
 Ranked${G0:?}..: ${N0:?}${TOON_HONOR_S:?}${N0:?}
-Honor${G0:?}...: ${G1:?}${TOON_STORED_HR:?}${N0:?}
+Honor${G0:?}...: ${N0:?}${TOON_STORED_HR:?}${N0:?}
 Kills${G0:?}...: ${N0:?}${TOON_STORED_HK:?}${N0:?}
-DKills${G0:?}..: ${R1:?}${TOON_STORED_DK:?}${N0:?}
+DKills${G0:?}..: ${N0:?}${TOON_STORED_DK:?}${N0:?}
 Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
           fi
         fi
