@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220405
-# 6.3.9.4
+# 6.4.0.7
 
 while :; do
 
@@ -4986,12 +4986,25 @@ Check log for which database needs 'applying updates'"
     WARLOCK_P=$(echo "100/$CLASS_TOTAL*$WARLOCK" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
     DRUID_P=$(echo "100/$CLASS_TOTAL*$DRUID" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
 
-    echo "Player(s) online"
+    if [[ "$MENU_ON_COUNT" -gt "0" ]] &>/dev/null; then
+      # platers online
+      echo "Player(s) online"
+      echo
+      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters ORDER BY online DESC;" 2>&1
+    fi
+
+    # search player list
     echo
-    mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1 | grep -v "0" 2>&1
+    read -r -p "[YN] Search list? y/n " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
+      echo "Search:"
+      read -r SEARCHWORD
+      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1 | egrep "${SEARCHWORD:?}" 2>&1
+    fi
 
     echo
-    read -r -p "[YN] Show list? y/n " -n 1 -r
+    read -r -p "[YN] Show full list? y/n " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
       echo
