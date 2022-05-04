@@ -5039,7 +5039,7 @@ Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       if [[ ! -z "$SEARCHWORD" ]] &>/dev/null; then
 
         # skip if nothing is found
-        if [[ ! -s /var/log/ms/player_search ]] &>/dev/null; then
+        if [[ "$(wc -l /var/log/ms/player_search 2>&1 | awk '{ print $1 }' 2>&1)" -gt "0" ]] &>/dev/null; then
 
           # create player profile out of search
           cat /var/log/ms/player_list 2>/dev/null | egrep "${SEARCHWORD:?}" >/var/log/ms/player_search 2>&1
