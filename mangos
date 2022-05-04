@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220405
-# 6.4.3.0
+# 6.4.4.6
 
 while :; do
 
@@ -5008,16 +5008,16 @@ Check log for which database needs 'applying updates'"
       echo
       printf '%b' "Classes
 
-${GR:?}1 ${N0:?} Warrior\e[32m.:${N0:?} $WARRIOR ${GR:?}$WARRIOR_P%${N0:?}
-${GR:?}2 ${N0:?} Paladin\e[32m.:${N0:?} $PALADIN ${GR:?}$PALADIN_P%${N0:?}
-${GR:?}3 ${N0:?} Hunter\e[32m..:${N0:?} $HUNTER ${GR:?}$HUNTER_P%${N0:?}
-${GR:?}4 ${N0:?} Rogue\e[32m...:${N0:?} $ROGUE ${GR:?}$ROGUE_P%${N0:?}
-${GR:?}5 ${N0:?} Priest\e[32m..:${N0:?} $PRIEST ${GR:?}$PRIEST_P%${N0:?}
-${GR:?}6 ${N0:?} DK\e[32m......:${N0:?} $DK ${GR:?}$DK_P%${N0:?}
-${GR:?}7 ${N0:?} Shaman\e[32m..:${N0:?} $SHAMAN ${GR:?}$SHAMAN_P%${N0:?}
-${GR:?}8 ${N0:?} Mage\e[32m....:${N0:?} $MAGE ${GR:?}$MAGE_P%${N0:?}
-${GR:?}9 ${N0:?} Warlock\e[32m.:${N0:?} $WARLOCK ${GR:?}$WARLOCK_P%${N0:?}
-${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
+${GR:?}1 ${N0:?} Warrior${G0:?}.:${N0:?} $WARRIOR ${GR:?}$WARRIOR_P%${N0:?}
+${GR:?}2 ${N0:?} Paladin${G0:?}.:${N0:?} $PALADIN ${GR:?}$PALADIN_P%${N0:?}
+${GR:?}3 ${N0:?} Hunter${G0:?}..:${N0:?} $HUNTER ${GR:?}$HUNTER_P%${N0:?}
+${GR:?}4 ${N0:?} Rogue${G0:?}...:${N0:?} $ROGUE ${GR:?}$ROGUE_P%${N0:?}
+${GR:?}5 ${N0:?} Priest${G0:?}..:${N0:?} $PRIEST ${GR:?}$PRIEST_P%${N0:?}
+${GR:?}6 ${N0:?} DK${G0:?}......:${N0:?} $DK ${GR:?}$DK_P%${N0:?}
+${GR:?}7 ${N0:?} Shaman${G0:?}..:${N0:?} $SHAMAN ${GR:?}$SHAMAN_P%${N0:?}
+${GR:?}8 ${N0:?} Mage${G0:?}....:${N0:?} $MAGE ${GR:?}$MAGE_P%${N0:?}
+${GR:?}9 ${N0:?} Warlock${G0:?}.:${N0:?} $WARLOCK ${GR:?}$WARLOCK_P%${N0:?}
+${GR:?}11${N0:?} Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       echo
     fi
 
@@ -5048,12 +5048,28 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         TOON_AC=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $4 }' 2>&1)
         TOON_C=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $5 }' 2>&1)
 
+        if [[ "$TOON_LVL" -lt "10" ]] &>/dev/null; then
+          LVLC="${GR:?}"
+        elif [[ "$TOON_LVL" -gt "9" ]] &>/dev/null; then
+          LVLC="${C0:?}"
+        elif [[ "$TOON_LVL" -gt "19" ]] &>/dev/null; then
+          LVLC="${Y1:?}"
+        elif [[ "$TOON_LVL" -gt "29" ]] &>/dev/null; then
+          LVLC="${G0:?}"
+        elif [[ "$TOON_LVL" -gt "39" ]] &>/dev/null; then
+          LVLC="${G1:?}"
+        elif [[ "$TOON_LVL" -gt "49" ]] &>/dev/null; then
+          LVLC="${B1:?}"
+        elif [[ "$TOON_LVL" -gt "59" ]] &>/dev/null; then
+          LVLC="${P1:?}"
+        fi
+
         printf '%b' "
-| Name....: ${G1:?}${TOON_NAME:?}${N0:?}
-| Level...: ${C1:?}${TOON_LVL:?}${N0:?}
-| Online..: ${N0:?}${TOON_ON:?}${N0:?}
-| Account.: ${N0:?}${TOON_AC:?}${N0:?}
-| Class...: ${N0:?}${TOON_C:?}${N0:?}\n"
+| Name${G0:?}....: ${N0:?}${TOON_NAME:?}${N0:?}
+| Level${G0:?}...: ${LVLC:?}${TOON_LVL:?}${N0:?}
+| Online${G0:?}..: ${N0:?}${TOON_ON:?}${N0:?}
+| Account${G0:?}.: ${N0:?}${TOON_AC:?}${N0:?}
+| Class${G0:?}...: ${N0:?}${TOON_C:?}${N0:?}\n"
       fi
       echo
       read -r -p "Press Enter to continue" </dev/tty
