@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220405
-# 6.4.0.7
+# 6.4.0.8
 
 while :; do
 
@@ -4994,13 +4994,14 @@ Check log for which database needs 'applying updates'"
     fi
 
     # search player list
-    echo
     read -r -p "[YN] Search list? y/n " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
-      echo "Search:"
+      echo
+      printf '%b' "Search ${G1:?}>${N0:?} "
       read -r SEARCHWORD
-      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1 | egrep "${SEARCHWORD:?}" 2>&1
+      echo
+      printf '%b' "${CY:?}$(mysql --defaults-extra-file=${SQL_MYCNF:?} --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1 | egrep ${SEARCHWORD:?} 2>&1)${N0:?}"
     fi
 
     echo
