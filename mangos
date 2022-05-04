@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220405
-# 6.3.8.9
+# 6.3.9.3
 
 while :; do
 
@@ -3988,6 +3988,16 @@ This is needed to operate local/remote database"
 
     "1")
 
+      function install_mark_db() {
+        # create installed mark
+        cd "$FOLDER_DB" || exit
+        LATEST_HEAD=$(git rev-parse --short HEAD)
+        echo "Database was installed at ${NOW:?} Head: $LATEST_HEAD" >/home/"$(whoami)"/wow/Installed_db_"$TYPE_CORE"
+        printf '%b' "[${G1:?}OK${N0:?}] "
+        read -r -p "Press Enter to continue" </dev/tty
+        echo
+      }
+
       function shutdown_server() {
         echo "[!!] Please wait"
         # this is for docker users
@@ -4071,6 +4081,7 @@ Database User, Client/Server is needed."
         shutdown_server
         cd "$FOLDER_DB" || exit
         ./InstallFullDB.sh
+        install_mark_db
       else
 
         # checking depends done
@@ -4185,13 +4196,6 @@ Database User, Client/Server is needed."
           fi
           printf '%b' "${GR:?}Please wait${N0:?}\n"
         fi
-        # create installed mark
-        cd "$FOLDER_DB" || exit
-        LATEST_HEAD=$(git rev-parse --short HEAD)
-        echo "Database was installed at ${NOW:?} Head: $LATEST_HEAD" >/home/"$(whoami)"/wow/Installed_db_"$TYPE_CORE"
-        printf '%b' "[${G1:?}OK${N0:?}] "
-        read -r -p "Press Enter to continue" </dev/tty
-        echo
       fi
 
       ;;
@@ -5778,7 +5782,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
     "1")
 
-      function install_mark() {
+      function install_mark_tool() {
         # create ms folder if not found
         sudo mkdir /var/log/ms/ &>/dev/null
         # fix ownership
@@ -5833,7 +5837,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             sleep 1
             printf '%b' "[${G1:?}OK${N0:?}] Installed!\n"
             # create installed mark
-            install_mark
+            install_mark_tool
             sleep 1 && exit
           else
             # install new upgrades
@@ -5850,7 +5854,7 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             echo
           fi
           # create installed mark
-          install_mark
+          install_mark_tool
           sleep 1 && exit
         fi
       fi
