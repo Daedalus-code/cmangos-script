@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220405
-# 6.4.1.2
+# 6.4.1.1
 
 while :; do
 
@@ -5017,7 +5017,6 @@ ${GR:?}9 ${N0:?} Warlock\e[32m.:${N0:?} $WARLOCK ${GR:?}$WARLOCK_P%${N0:?}
 ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
     fi
 
-    echo
     read -r -p "[YN] Database size? y/n " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
