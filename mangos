@@ -5051,7 +5051,7 @@ ${GR:?}11${N0:?} Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         if [[ "$TOON_LVL" -lt "10" ]] &>/dev/null; then
           LVLC="${GR:?}"
         elif [[ "$TOON_LVL" -gt "9" ]] &>/dev/null; then
-          LVLC="${C0:?}"
+          LVLC="${CY:?}"
         elif [[ "$TOON_LVL" -gt "19" ]] &>/dev/null; then
           LVLC="${Y1:?}"
         elif [[ "$TOON_LVL" -gt "29" ]] &>/dev/null; then
