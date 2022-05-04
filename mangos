@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220405
-# 6.5.0.3
+# 6.5.0.2
 
 while :; do
 
@@ -5045,7 +5045,6 @@ ${GR:?}11${N0:?} Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           echo "Found more than one! +$(wc -l /var/log/ms/player_search 2>&1 | awk '{ print $1 }' 2>&1)"
           echo
           printf '%b' "${GR:?}$(cat /var/log/ms/player_search 2>/dev/null)${N0:?}\n"
-          echo
         else
 
           # name, level, online, account, class
