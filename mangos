@@ -5044,7 +5044,7 @@ Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           echo
           echo "Found more than one! +$(wc -l /var/log/ms/player_search 2>&1 | awk '{ print $1 }' 2>&1)"
           echo
-          printf '%b' "${GR:?}$(cat /var/log/ms/player_search 2>/dev/null)${N0:?}\n"
+          printf '%b' "${GR:?}$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $1,$2 }' 2>&1)${N0:?}\n"
         else
 
           # name, level, online, account, class, gender, xp, money, map
