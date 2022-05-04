@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220405
-# 6.4.1.1
+# 6.4.2.0
 
 while :; do
 
@@ -4994,13 +4994,17 @@ Check log for which database needs 'applying updates'"
       echo
     fi
 
+    # save player list
+    mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" >/var/log/ms/player_list 2>&1
+
+    # show full list of players
     read -r -p "[YN] Show full list? y/n " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
       echo
       echo "Character list"
       echo
-      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1
+      cat /var/log/ms/player_list 2>/dev/null
       echo
       printf '%b' "Classes
 
@@ -5032,10 +5036,15 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       echo
       printf '%b' "Search ${G1:?}>${N0:?} "
       read -r SEARCHWORD
-      echo
-      echo "name level online account class"
-      echo
-      printf '%b' "${CY:?}$(mysql --defaults-extra-file=${SQL_MYCNF:?} --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1 | egrep ${SEARCHWORD:?} 2>&1 | xargs 2>&1)${N0:?}\n"
+      if [[ ! -z "$SEARCHWORD" ]]; then
+        echo
+        echo "name level online account class"
+        echo
+        echo "+-------------+-------+--------+---------+-------+"
+        echo "| name        | level | online | account | class |"
+        cat /var/log/ms/player_list 2>/dev/null | egrep "${SEARCHWORD:?}" 2>&1
+        echo "+-------------+-------+--------+---------+-------+"
+      fi
       echo
       read -r -p "Press Enter to continue" </dev/tty
     fi
