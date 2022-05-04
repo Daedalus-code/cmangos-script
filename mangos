@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220405
-# 6.4.4.6
+# 6.4.7.0
 
 while :; do
 
@@ -5048,6 +5048,7 @@ ${GR:?}11${N0:?} Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         TOON_AC=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $4 }' 2>&1)
         TOON_C=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $5 }' 2>&1)
 
+        # level range
         if [[ "$TOON_LVL" -lt "10" ]] &>/dev/null; then
           LVLC="${GR:?}"
         elif [[ "$TOON_LVL" -gt "9" ]] &>/dev/null; then
@@ -5062,6 +5063,29 @@ ${GR:?}11${N0:?} Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           LVLC="${B1:?}"
         elif [[ "$TOON_LVL" -gt "59" ]] &>/dev/null; then
           LVLC="${P1:?}"
+        fi
+
+        # class range
+        if [[ "$TOON_C" -eq "1" ]] &>/dev/null; then
+          TOON_C="Warrior"
+        elif [[ "$TOON_C" -gt "2" ]] &>/dev/null; then
+          TOON_C="Paladin"
+        elif [[ "$TOON_C" -gt "3" ]] &>/dev/null; then
+          TOON_C="Hunter"
+        elif [[ "$TOON_C" -gt "4" ]] &>/dev/null; then
+          TOON_C="Rogue"
+        elif [[ "$TOON_C" -gt "5" ]] &>/dev/null; then
+          TOON_C="Priest"
+        elif [[ "$TOON_C" -gt "6" ]] &>/dev/null; then
+          TOON_C="Death Knight"
+        elif [[ "$TOON_C" -gt "7" ]] &>/dev/null; then
+          TOON_C="Shaman"
+        elif [[ "$TOON_C" -gt "8" ]] &>/dev/null; then
+          TOON_C="Mage"
+        elif [[ "$TOON_C" -gt "9" ]] &>/dev/null; then
+          TOON_C="Warlock"
+        elif [[ "$TOON_C" -gt "10" ]] &>/dev/null; then
+          TOON_C="Druid"
         fi
 
         printf '%b' "
