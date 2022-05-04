@@ -5004,7 +5004,7 @@ Check log for which database needs 'applying updates'"
       echo
       echo "Character list"
       echo
-      cat /var/log/ms/player_list 2>/dev/null
+      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1
       echo
       printf '%b' "Classes
 
@@ -5084,7 +5084,7 @@ ${GR:?}11${N0:?} Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           TOON_C="Mage"
         elif [[ "$TOON_C" -eq "9" ]] &>/dev/null; then
           TOON_C="Warlock"
-        elif [[ "$TOON_C" -eq "10" ]] &>/dev/null; then
+        elif [[ "$TOON_C" -eq "11" ]] &>/dev/null; then
           TOON_C="Druid"
         fi
 
