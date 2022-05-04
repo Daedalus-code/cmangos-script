@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220405
-# 6.5.4.5
+# 6.5.4.6
 
 while :; do
 
@@ -5064,13 +5064,13 @@ Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           TOON_TOT_T=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $10 }' 2>&1)
           TOON_TOT_LT=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $11 }' 2>&1)
           TOON_REST_B=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $12 }' 2>&1)
-          TOON_ZONING=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $13 }' 2>&1)
-          TOON_HONOR_HR=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $14 }' 2>&1)
-          TOON_HONOR_S=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $15 }' 2>&1)
-          TOON_STORED_HR=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $16 }' 2>&1)
-          TOON_STORED_DK=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $17 }' 2>&1)
-          TOON_STORED_HK=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $18 }' 2>&1)
-          TOON_DRUNK=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $19 }' 2>&1)
+          TOON_ZONING=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $14 }' 2>&1)
+          TOON_HONOR_HR=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $15 }' 2>&1)
+          TOON_HONOR_S=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $16 }' 2>&1)
+          TOON_STORED_HR=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $17 }' 2>&1)
+          TOON_STORED_DK=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $18 }' 2>&1)
+          TOON_STORED_HK=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $19 }' 2>&1)
+          TOON_DRUNK=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $20 }' 2>&1)
           TOON_HEALTH=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $21 }' 2>&1)
           TOON_MANA=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $22 }' 2>&1)
 
@@ -5123,7 +5123,7 @@ Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           fi
 
           # gold
-          TOON_GS="$(echo "$TOON_GS/10000" 2>&1 | bc -l 2>&1 | awk '{ printf "%.2f\n", $1 }' 2>&1)"
+          TOON_GS="$(echo "${TOON_GS:?}/10000" 2>&1 | bc -l 2>&1 | awk '{ printf "%.2f\n", $1 }' 2>&1)"
           if [[ "$(echo "${TOON_GS:?}" 2>&1 | awk -F. '{ print $1 }' 2>&1)" -gt "0" ]] &>/dev/null; then
             GSC="${Y1:?}"
           else
@@ -5147,8 +5147,10 @@ Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           if [[ ! -z "$TOON_NAME" ]] &>/dev/null; then
             printf '%b' "
 Account${G0:?}.: ${N0:?}${TOON_AC:?}${N0:?}
-Name${G0:?}....: ${N0:?}${TOON_NAME:?}${N0:?}
 Online${G0:?}..: ${N0:?}${TOON_ON:?}${N0:?}
+Resting${G0:?}.: ${N0:?}${TOON_REST_B:?}${N0:?}
+
+Name${G0:?}....: ${N0:?}${TOON_NAME:?}${N0:?}
 Class${G0:?}...: ${N0:?}${TOON_C:?}${N0:?}
 Level${G0:?}...: ${LVLC:?}${TOON_LVL:?}${N0:?}
 HP${G0:?}......: ${G1:?}${TOON_HEALTH:?}${N0:?}
@@ -5159,7 +5161,6 @@ XP${G0:?}......: ${N0:?}${TOON_XP:?}${N0:?}
 Map${G0:?}.....: ${N0:?}${TOON_MAP:?}${N0:?}
 /played${G0:?}.: ${N0:?}${TOON_TOT_T:?}${N0:?}
 LVLTime${G0:?}.: ${N0:?}${TOON_TOT_LT:?}${N0:?}
-Resting${G0:?}.: ${N0:?}${TOON_REST_B:?}${N0:?}
 Zone${G0:?}....: ${N0:?}${TOON_ZONING:?}${N0:?}
 Honored${G0:?}.: ${N0:?}${TOON_HONOR_HR:?}${N0:?}
 Ranked${G0:?}..: ${N0:?}${TOON_HONOR_S:?}${N0:?}
