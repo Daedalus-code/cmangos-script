@@ -5071,8 +5071,8 @@ Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           TOON_STORED_DK=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $17 }' 2>&1)
           TOON_STORED_HK=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $18 }' 2>&1)
           TOON_DRUNK=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $19 }' 2>&1)
-          TOON_HEALTH=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $20 }' 2>&1)
-          TOON_MANA=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $21 }' 2>&1)
+          TOON_HEALTH=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $21 }' 2>&1)
+          TOON_MANA=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $22 }' 2>&1)
 
           # level range
           if [[ "$TOON_LVL" -lt "10" ]] &>/dev/null; then
@@ -5123,7 +5123,7 @@ Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           fi
 
           # gold
-          TOON_GS="$(echo "$TOON_GS/1000" 2>&1 | bc -l 2>&1 | awk '{ printf "%.2f\n", $1 }' 2>&1)"
+          TOON_GS="$(echo "$TOON_GS/10000" 2>&1 | bc -l 2>&1 | awk '{ printf "%.2f\n", $1 }' 2>&1)"
           if [[ "$(echo "${TOON_GS:?}" 2>&1 | awk -F. '{ print $1 }' 2>&1)" -gt "0" ]] &>/dev/null; then
             GSC="${Y1:?}"
           else
@@ -5146,6 +5146,7 @@ Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
           if [[ ! -z "$TOON_NAME" ]] &>/dev/null; then
             printf '%b' "
+Account${G0:?}.: ${N0:?}${TOON_AC:?}${N0:?}
 Name${G0:?}....: ${N0:?}${TOON_NAME:?}${N0:?}
 Online${G0:?}..: ${N0:?}${TOON_ON:?}${N0:?}
 Class${G0:?}...: ${N0:?}${TOON_C:?}${N0:?}
@@ -5165,8 +5166,7 @@ Ranked${G0:?}..: ${N0:?}${TOON_HONOR_S:?}${N0:?}
 Honor${G0:?}...: ${G1:?}${TOON_STORED_HR:?}${N0:?}
 Kills${G0:?}...: ${N0:?}${TOON_STORED_HK:?}${N0:?}
 DKills${G0:?}..: ${R1:?}${TOON_STORED_DK:?}${N0:?}
-Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}
-Account${G0:?}.: ${N0:?}${TOON_AC:?}${N0:?}\n"
+Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
           fi
         fi
       fi
