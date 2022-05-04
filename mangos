@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220405
-# 6.4.2.0
+# 6.4.3.2
 
 while :; do
 
@@ -5036,14 +5036,26 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       echo
       printf '%b' "Search ${G1:?}>${N0:?} "
       read -r SEARCHWORD
-      if [[ ! -z "$SEARCHWORD" ]]; then
-        echo
-        echo "name level online account class"
-        echo
-        echo "+-------------+-------+--------+---------+-------+"
-        echo "| name        | level | online | account | class |"
-        cat /var/log/ms/player_list 2>/dev/null | egrep "${SEARCHWORD:?}" 2>&1
-        echo "+-------------+-------+--------+---------+-------+"
+      if [[ ! -z "$SEARCHWORD" ]] &>/dev/null; then
+
+        # create player profile out of search
+        cat /var/log/ms/player_list 2>/dev/null | egrep "${SEARCHWORD:?}" >/var/log/ms/player_search 2>&1
+
+        # name, level, online, account, class
+        TOON_NAME=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $1 }' 2>&1)
+        TOON_LVL=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $2 }' 2>&1)
+        TOON_ON=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $3 }' 2>&1)
+        TOON_AC=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $4 }' 2>&1)
+        TOON_C=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $5 }' 2>&1)
+
+        printf '%b' "
++-------------+-------+-----------+
+| Name....: ${TOON_NAME:?}
+| Level...: ${TOON_LVL:?}
+| Online..: ${TOON_ON:?}
+| Account.: ${TOON_AC:?}
+| Class...: ${TOON_C:?}
++-------------+-------+-----------+\n"
       fi
       echo
       read -r -p "Press Enter to continue" </dev/tty
