@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220405
-# 6.5.5.5
+# 6.5.5.3
 
 while :; do
 
@@ -5136,6 +5136,13 @@ Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             # total time /played
             TOON_TOT_T_C=$(printf '%dh:%dm:%ds\n' $(("$TOON_TOT_T/3600")) $(("$TOON_TOT_T%3600/60")) $(("$TOON_TOT_T%60")))
 
+            # map zone
+            if [[ "$TOON_ZONING" -eq "1" ]] &>/dev/null; then
+              TOON_ZONING="Kalimdor"
+            else
+              TOON_ZONING="Eastern Kingdoms"
+            fi
+
             # resting
             if [[ "$TOON_REST_B" -eq "1" ]] &>/dev/null; then
               TOON_REST_B="${G1:?}Yes${N0:?}"
@@ -5177,7 +5184,8 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
             fi
           fi
         else
-          printf '%b' "${GR:?}Nothing found!${GR:?}\n"
+          echo
+          printf '%b' "${GR:?}Nothing was found!${N0:?}\n"
         fi
       fi
       echo
