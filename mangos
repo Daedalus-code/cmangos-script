@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220405
-# 6.4.1.0
+# 6.4.1.1
 
 while :; do
 
@@ -5032,8 +5032,9 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         printf '%b' "Search ${G1:?}>${N0:?} "
         read -r SEARCHWORD
         echo
-        echo "name    level online account class"
-        printf '%b' "${CY:?}$(mysql --defaults-extra-file=${SQL_MYCNF:?} --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1 | egrep ${SEARCHWORD:?} 2>&1)${N0:?}\n"
+        echo "name level online account class"
+        echo
+        printf '%b' "${CY:?}$(mysql --defaults-extra-file=${SQL_MYCNF:?} --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1 | egrep ${SEARCHWORD:?} 2>&1 | xargs 2>&1)${N0:?}\n"
         echo
         read -r -p "Press Enter to continue" </dev/tty
       fi
