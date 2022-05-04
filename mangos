@@ -5035,7 +5035,7 @@ ${GR:?}11${N0:?} Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
     if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
       echo
       printf '%b' "Search ${G1:?}>${N0:?} "
-      read -r -n 3 SEARCHWORD
+      read -r SEARCHWORD
       if [[ ! -z "$SEARCHWORD" ]] &>/dev/null; then
 
         # create player profile out of search
