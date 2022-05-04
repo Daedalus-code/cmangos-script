@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220405
-# 6.3.9.3
+# 6.3.9.4
 
 while :; do
 
@@ -239,16 +239,16 @@ while :; do
   fi
 
   # git head core
-  CORE_HEAD="$(grep -Eo "Head:.*" /home/"$(whoami)"/wow/Installed_core_"$TYPE_CORE" 2>&1 | grep -v 'No such file or directory' 2>&1 | awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)"
+  CORE_HEAD="$(grep -Eo "Head:.*" /home/"$(whoami)"/wow/Installed_core_"${TYPE_CORE:?}" 2>&1 | grep -v 'No such file or directory' 2>&1 | awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)"
   # git head database
-  DATA_HEAD="$(grep -Eo "Head:.*" /home/"$(whoami)"/wow/Installed_db_"$TYPE_CORE" 2>&1 | grep -v 'No such file or directory' 2>&1 | awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)"
+  DATA_HEAD="$(grep -Eo "Head:.*" /home/"$(whoami)"/wow/Installed_db_"${TYPE_CORE:?}" 2>&1 | grep -v 'No such file or directory' 2>&1 | awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)"
   # git head helper/tool
   TOOL_HEAD="$(grep -Eo "Head:.*" /home/"$(whoami)"/wow/Installed_ms 2>&1 | grep -v 'No such file or directory' 2>&1 | awk '{ print $2 }' 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)"
 
-  if [ "$(cat /home/"$(whoami)"/wow/Installed_core_"$TYPE_CORE" 2>&1 | wc -l 2>&1)" -eq "0" ] &>/dev/null; then
+  if [ "$(cat /home/"$(whoami)"/wow/Installed_core_"${TYPE_CORE:?}" 2>&1 | wc -l 2>&1)" -eq "0" ] &>/dev/null; then
     CORE_HEAD="${GR:?}000000a${N0:?}"
   fi
-  if [ "$(cat /home/"$(whoami)"/wow/Installed_db_"$TYPE_CORE" 2>&1 | wc -l 2>&1)" -eq "0" ] &>/dev/null; then
+  if [ "$(cat /home/"$(whoami)"/wow/Installed_db_"${TYPE_CORE:?}" 2>&1 | wc -l 2>&1)" -eq "0" ] &>/dev/null; then
     DATA_HEAD="${GR:?}000000b${N0:?}"
   fi
   if [ "$(cat /home/"$(whoami)"/wow/Installed_ms 2>&1 | wc -l 2>&1)" -eq "0" ] &>/dev/null; then
@@ -2408,7 +2408,7 @@ $RA_TIP"
         [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
         git merge origin/master; then
         # remove old file
-        rm /home/"$(whoami)"/wow/Installed_core_"$TYPE_CORE" &>/dev/null
+        rm /home/"$(whoami)"/wow/Installed_core_"${TYPE_CORE:?}" &>/dev/null
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         LATEST_HEAD=$(git rev-parse --short HEAD 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)
         printf '%b' "[${G1:?}NEW${N0:?}] (${G1:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) ${G1:?}${UND:?}New Updates For Core${DEF:?}${N0:?}! $LATEST_DATE
@@ -2430,7 +2430,7 @@ ${GR:?}(m) CMaNGOS > Compile latest${N0:?}\n"
       echo -ne '[!!] No Install Found!\r'
       sleep 2
       # remove old file
-      rm /home/"$(whoami)"/wow/Installed_db_"$TYPE_CORE" &>/dev/null
+      rm /home/"$(whoami)"/wow/Installed_db_"${TYPE_CORE:?}" &>/dev/null
       # fresh install?
       DOWN_DB=$(echo -e "\033[5m?\033[0m" 2>&1)
       printf '%b' "[YN]${GR:?} ${N0:?}(${GR:?}${UND:?}0000000${DEF:?}${N0:?}) Data${GR:?} Download $DOWN_DB y/n ${N0:?}"
@@ -2471,7 +2471,7 @@ ${GR:?}(m) CMaNGOS > Compile latest${N0:?}\n"
         [ "$(git rev-list HEAD...origin/master --count)" != 0 ] &&
         git merge origin/master; then
         # remove old file
-        rm /home/"$(whoami)"/wow/Installed_db_"$TYPE_CORE" &>/dev/null
+        rm /home/"$(whoami)"/wow/Installed_db_"${TYPE_CORE:?}" &>/dev/null
         LATEST_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} '+%Y/%m/%d %H:%M:%S')
         LATEST_HEAD=$(git rev-parse --short HEAD 2>&1 | grep -Eo '[a0-z9]{7}' 2>&1 | head -1 2>&1)
         printf '%b' "[${G1:?}NEW${N0:?}] (${G1:?}${UND:?}$LATEST_HEAD${DEF:?}${N0:?}) ${G1:?}${UND:?}New Updates For Database${DEF:?}${N0:?}! $LATEST_DATE
@@ -2811,7 +2811,7 @@ ${GR:?}$CPU_MODEL${N0:?}")
             # create installed mark
             cd "${FOLDER_CORE:?}" || exit
             LATEST_HEAD=$(git rev-parse --short HEAD)
-            echo "Core was installed at ${NOW:?} Head: $LATEST_HEAD" >/home/"$(whoami)"/wow/Installed_core_"$TYPE_CORE"
+            echo "Core was installed at ${NOW:?} Head: $LATEST_HEAD" >/home/"$(whoami)"/wow/Installed_core_"${TYPE_CORE:?}"
             BUILD_BUTTON="${G1:?}OK${N0:?}"
           else
             echo
@@ -2823,7 +2823,7 @@ ${GR:?}$CPU_MODEL${N0:?}")
             echo
             printf '%b' "Build time: ${R1:?}$TIMER${N0:?} with ${R1:?}$CORES_BUILD${N0:?} Core(s)\n"
             # remove old file
-            rm /home/"$(whoami)"/wow/Installed_core_"$TYPE_CORE" &>/dev/null
+            rm /home/"$(whoami)"/wow/Installed_core_"${TYPE_CORE:?}" &>/dev/null
             BUILD_BUTTON="${R1:?}!!${N0:?}"
           fi
         else
@@ -3128,7 +3128,7 @@ Select install operation"
             # create installed mark
             cd "${FOLDER_CORE:?}" || exit
             LATEST_HEAD=$(git rev-parse --short HEAD)
-            echo "Core was installed at ${NOW:?} Head: $LATEST_HEAD" >/home/"$(whoami)"/wow/Installed_core_"$TYPE_CORE"
+            echo "Core was installed at ${NOW:?} Head: $LATEST_HEAD" >/home/"$(whoami)"/wow/Installed_core_"${TYPE_CORE:?}"
             echo "make install"
             cd "$FOLDER_BUILD" || exit
             sudo make install 2>&1 | sudo tee /var/log/ms/build &>/dev/null
@@ -3148,7 +3148,7 @@ Select install operation"
             # create installed mark
             cd "${FOLDER_CORE:?}" || exit
             LATEST_HEAD=$(git rev-parse --short HEAD)
-            echo "Core was installed at ${NOW:?} Head: $LATEST_HEAD with backup" >/home/"$(whoami)"/wow/Installed_core_"$TYPE_CORE"
+            echo "Core was installed at ${NOW:?} Head: $LATEST_HEAD with backup" >/home/"$(whoami)"/wow/Installed_core_"${TYPE_CORE:?}"
             echo "checkinstall"
             cd "$FOLDER_BUILD" || exit
             sudo checkinstall 2>&1 | sudo tee /var/log/ms/build &>/dev/null
@@ -3992,7 +3992,7 @@ This is needed to operate local/remote database"
         # create installed mark
         cd "$FOLDER_DB" || exit
         LATEST_HEAD=$(git rev-parse --short HEAD)
-        echo "Database was installed at ${NOW:?} Head: $LATEST_HEAD" >/home/"$(whoami)"/wow/Installed_db_"$TYPE_CORE"
+        echo "Database was installed at ${NOW:?} Head: $LATEST_HEAD" >/home/"$(whoami)"/wow/Installed_db_"${TYPE_CORE:?}"
         printf '%b' "[${G1:?}OK${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
@@ -4196,6 +4196,7 @@ Database User, Client/Server is needed."
           fi
           printf '%b' "${GR:?}Please wait${N0:?}\n"
         fi
+        install_mark_db
       fi
 
       ;;
