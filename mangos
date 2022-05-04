@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20220305
-# 6.3.8.4
+# V20220405
+# 6.3.8.9
 
 while :; do
 
@@ -3988,6 +3988,36 @@ This is needed to operate local/remote database"
 
     "1")
 
+      function shutdown_server() {
+        echo "[!!] Please wait"
+        # this is for docker users
+        if [ -f /.dockerenv ] &>/dev/null; then
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}"
+          sleep 3
+          sudo killall screen &>/dev/null
+          # keep old logs
+          cp "${FOLDER_CORE:?}"/run/logs/Server.log "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
+          cp "${FOLDER_CORE:?}"/run/logs/Realmd.log "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
+        else
+          # realmd service
+          case "$(echo "$PIDOF_REALMD")" in
+          0) ;;
+          *)
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
+            sudo service "$TYPE_CORE"_realmd stop
+            ;;
+          esac
+          # mangosd service
+          case "$(echo "$PIDOFMANGOSD")" in
+          0) ;;
+          *)
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
+            sudo service "$TYPE_CORE"_mangosd stop
+            ;;
+          esac
+        fi
+      }
+
       # checking depends
 
       # mysql
@@ -4040,6 +4070,7 @@ Database User, Client/Server is needed."
       if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
         cd "$FOLDER_DB" || exit
         ./InstallFullDB.sh
+        shutdown_server
       else
 
         # checking depends done
@@ -4070,33 +4101,7 @@ Database User, Client/Server is needed."
               sudo service mariadb restart &>/dev/null
             fi
           fi
-          echo "[!!] Please wait"
-          # this is for docker users
-          if [ -f /.dockerenv ] &>/dev/null; then
-            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}"
-            sleep 3
-            sudo killall screen &>/dev/null
-            # keep old logs
-            cp "${FOLDER_CORE:?}"/run/logs/Server.log "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
-            cp "${FOLDER_CORE:?}"/run/logs/Realmd.log "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
-          else
-            # realmd service
-            case "$(echo "$PIDOF_REALMD")" in
-            0) ;;
-            *)
-              printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
-              sudo service "$TYPE_CORE"_realmd stop
-              ;;
-            esac
-            # mangosd service
-            case "$(echo "$PIDOFMANGOSD")" in
-            0) ;;
-            *)
-              printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
-              sudo service "$TYPE_CORE"_mangosd stop
-              ;;
-            esac
-          fi
+          shutdown_server
 
           sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "${FOLDER_WOW:?}" &>/dev/null
 
