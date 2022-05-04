@@ -5068,23 +5068,23 @@ ${GR:?}11${N0:?} Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         # class range
         if [[ "$TOON_C" -eq "1" ]] &>/dev/null; then
           TOON_C="Warrior"
-        elif [[ "$TOON_C" -gt "2" ]] &>/dev/null; then
+        elif [[ "$TOON_C" -eq "2" ]] &>/dev/null; then
           TOON_C="Paladin"
-        elif [[ "$TOON_C" -gt "3" ]] &>/dev/null; then
+        elif [[ "$TOON_C" -eq "3" ]] &>/dev/null; then
           TOON_C="Hunter"
-        elif [[ "$TOON_C" -gt "4" ]] &>/dev/null; then
+        elif [[ "$TOON_C" -eq "4" ]] &>/dev/null; then
           TOON_C="Rogue"
-        elif [[ "$TOON_C" -gt "5" ]] &>/dev/null; then
+        elif [[ "$TOON_C" -eq "5" ]] &>/dev/null; then
           TOON_C="Priest"
-        elif [[ "$TOON_C" -gt "6" ]] &>/dev/null; then
+        elif [[ "$TOON_C" -eq "6" ]] &>/dev/null; then
           TOON_C="Death Knight"
-        elif [[ "$TOON_C" -gt "7" ]] &>/dev/null; then
+        elif [[ "$TOON_C" -eq "7" ]] &>/dev/null; then
           TOON_C="Shaman"
-        elif [[ "$TOON_C" -gt "8" ]] &>/dev/null; then
+        elif [[ "$TOON_C" -eq "8" ]] &>/dev/null; then
           TOON_C="Mage"
-        elif [[ "$TOON_C" -gt "9" ]] &>/dev/null; then
+        elif [[ "$TOON_C" -eq "9" ]] &>/dev/null; then
           TOON_C="Warlock"
-        elif [[ "$TOON_C" -gt "10" ]] &>/dev/null; then
+        elif [[ "$TOON_C" -eq "10" ]] &>/dev/null; then
           TOON_C="Druid"
         fi
 
