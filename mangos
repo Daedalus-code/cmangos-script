@@ -5034,7 +5034,7 @@ Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
     echo
     if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
       echo
-      printf '%b' "Search ${G1:?}>${N0:?} "
+      printf '%b' "Search ${G1:?}>>${N0:?} "
       read -r SEARCHWORD
       if [[ ! -z "$SEARCHWORD" ]] &>/dev/null; then
 
