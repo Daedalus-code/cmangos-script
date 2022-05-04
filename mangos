@@ -5001,9 +5001,8 @@ Check log for which database needs 'applying updates'"
       echo "Character list"
       echo
       mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1
-
-      printf '%b' "
-Classes
+      echo
+      printf '%b' "Classes
 
 ${GR:?}1 ${N0:?} Warrior\e[32m.:${N0:?} $WARRIOR ${GR:?}$WARRIOR_P%${N0:?}
 ${GR:?}2 ${N0:?} Paladin\e[32m.:${N0:?} $PALADIN ${GR:?}$PALADIN_P%${N0:?}
@@ -5015,6 +5014,7 @@ ${GR:?}7 ${N0:?} Shaman\e[32m..:${N0:?} $SHAMAN ${GR:?}$SHAMAN_P%${N0:?}
 ${GR:?}8 ${N0:?} Mage\e[32m....:${N0:?} $MAGE ${GR:?}$MAGE_P%${N0:?}
 ${GR:?}9 ${N0:?} Warlock\e[32m.:${N0:?} $WARLOCK ${GR:?}$WARLOCK_P%${N0:?}
 ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
+      echo
     fi
 
     read -r -p "[YN] Database size? y/n " -n 1 -r
