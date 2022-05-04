@@ -5001,7 +5001,7 @@ Check log for which database needs 'applying updates'"
       printf '%b' "Search ${G1:?}>${N0:?} "
       read -r SEARCHWORD
       echo
-      printf '%b' "${CY:?}$(mysql --defaults-extra-file=${SQL_MYCNF:?} --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1 | egrep ${SEARCHWORD:?} 2>&1)${N0:?}"
+      printf '%b' "${CY:?}$(mysql --defaults-extra-file=${SQL_MYCNF:?} --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1 | egrep ${SEARCHWORD:?} 2>&1)${N0:?}\n"
       echo
       read -r -p "Press Enter to continue" </dev/tty
     fi
