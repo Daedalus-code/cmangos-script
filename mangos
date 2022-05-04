@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220405
-# 6.5.4.9
+# 6.5.5.2
 
 while :; do
 
@@ -5123,6 +5123,9 @@ Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           fi
 
           # gold
+          if [[ -z "$TOON_GS" ]] &>/dev/null; then
+            TOON_GS="0"
+          fi
           TOON_GS="$(echo "${TOON_GS:?}/10000" 2>&1 | bc -l 2>&1 | awk '{ printf "%.2f\n", $1 }' 2>&1)"
           if [[ "$(echo "${TOON_GS:?}" 2>&1 | awk -F. '{ print $1 }' 2>&1)" -gt "0" ]] &>/dev/null; then
             GSC="${Y1:?}"
