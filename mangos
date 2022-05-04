@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220405
-# 6.4.3.2
+# 6.4.3.0
 
 while :; do
 
@@ -5049,13 +5049,11 @@ ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
         TOON_C=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $5 }' 2>&1)
 
         printf '%b' "
-+-------------+-------+-----------+
-| Name....: ${TOON_NAME:?}
-| Level...: ${TOON_LVL:?}
-| Online..: ${TOON_ON:?}
-| Account.: ${TOON_AC:?}
-| Class...: ${TOON_C:?}
-+-------------+-------+-----------+\n"
+| Name....: ${G1:?}${TOON_NAME:?}${N0:?}
+| Level...: ${C1:?}${TOON_LVL:?}${N0:?}
+| Online..: ${N0:?}${TOON_ON:?}${N0:?}
+| Account.: ${N0:?}${TOON_AC:?}${N0:?}
+| Class...: ${N0:?}${TOON_C:?}${N0:?}\n"
       fi
       echo
       read -r -p "Press Enter to continue" </dev/tty
