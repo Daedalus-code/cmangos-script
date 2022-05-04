@@ -4991,9 +4991,9 @@ Check log for which database needs 'applying updates'"
       echo "Player(s) online"
       echo
       mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters ORDER BY online DESC;" 2>&1
+      echo
     fi
 
-    echo
     read -r -p "[YN] Show full list? y/n " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
