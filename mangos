@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220405
-# 6.4.0.8
+# 6.4.0.9
 
 while :; do
 
@@ -5003,8 +5003,9 @@ Check log for which database needs 'applying updates'"
       echo
       printf '%b' "${CY:?}$(mysql --defaults-extra-file=${SQL_MYCNF:?} --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1 | egrep ${SEARCHWORD:?} 2>&1)${N0:?}"
       echo
+      read -r -p "Press Enter to continue" </dev/tty
     fi
-
+    echo
     read -r -p "[YN] Show full list? y/n " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
