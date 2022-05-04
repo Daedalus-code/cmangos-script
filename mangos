@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220405
-# 6.4.7.7
+# 6.4.8.5
 
 while :; do
 
@@ -5093,6 +5093,14 @@ ${GR:?}11${N0:?} Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           TOON_ON="${GR:?}Offline${N0:?}"
         else
           TOON_ON="${G1:?}Online${N0:?}"
+        fi
+
+        if [[ -z "$TOON_NAME" ]] &>/dev/null; then
+          TOON_NAME="${GR:?}empty${N0:?}"
+          TOON_LVL="${GR:?}empty${N0:?}"
+          TOON_ON="${GR:?}empty${N0:?}"
+          TOON_AC="${GR:?}empty${N0:?}"
+          TOON_C="${GR:?}empty${N0:?}"
         fi
 
         printf '%b' "
