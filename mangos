@@ -4994,7 +4994,7 @@ Check log for which database needs 'applying updates'"
     fi
 
     # search player list
-    read -r -p "[YN] Search list? y/n " -n 1 -r
+    read -r -p "[YN] Search database? y/n " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
       echo
@@ -5002,9 +5002,9 @@ Check log for which database needs 'applying updates'"
       read -r SEARCHWORD
       echo
       printf '%b' "${CY:?}$(mysql --defaults-extra-file=${SQL_MYCNF:?} --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1 | egrep ${SEARCHWORD:?} 2>&1)${N0:?}"
+      echo
     fi
 
-    echo
     read -r -p "[YN] Show full list? y/n " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
