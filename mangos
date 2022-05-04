@@ -4990,7 +4990,7 @@ Check log for which database needs 'applying updates'"
       # platers online
       echo "Player(s) online"
       echo
-      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters ORDER BY online DESC;" 2>&1
+      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters WHERE online = 1;" 2>&1
       echo
     fi
 
