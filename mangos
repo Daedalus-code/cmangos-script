@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220405
-# 6.4.1.1
+# 6.4.1.2
 
 while :; do
 
@@ -5015,29 +5015,30 @@ ${GR:?}7 ${N0:?} Shaman\e[32m..:${N0:?} $SHAMAN ${GR:?}$SHAMAN_P%${N0:?}
 ${GR:?}8 ${N0:?} Mage\e[32m....:${N0:?} $MAGE ${GR:?}$MAGE_P%${N0:?}
 ${GR:?}9 ${N0:?} Warlock\e[32m.:${N0:?} $WARLOCK ${GR:?}$WARLOCK_P%${N0:?}
 ${GR:?}11${N0:?} Druid\e[32m...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
+    fi
 
+    echo
+    read -r -p "[YN] Database size? y/n " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
       echo
-      read -r -p "[YN] Database size? y/n " -n 1 -r
+      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in MB' FROM information_schema.TABLES WHERE table_schema = \"${DB_CHARACTERS:?}\" ORDER BY (data_length + index_length) DESC;"
       echo
-      if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
-        echo
-        mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in MB' FROM information_schema.TABLES WHERE table_schema = \"${DB_CHARACTERS:?}\" ORDER BY (data_length + index_length) DESC;"
-        echo
-      fi
-      # search player list
-      read -r -p "[YN] Search database? y/n " -n 1 -r
+    fi
+
+    # search player list
+    read -r -p "[YN] Search database? y/n " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
       echo
-      if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
-        echo
-        printf '%b' "Search ${G1:?}>${N0:?} "
-        read -r SEARCHWORD
-        echo
-        echo "name level online account class"
-        echo
-        printf '%b' "${CY:?}$(mysql --defaults-extra-file=${SQL_MYCNF:?} --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1 | egrep ${SEARCHWORD:?} 2>&1 | xargs 2>&1)${N0:?}\n"
-        echo
-        read -r -p "Press Enter to continue" </dev/tty
-      fi
+      printf '%b' "Search ${G1:?}>${N0:?} "
+      read -r SEARCHWORD
+      echo
+      echo "name level online account class"
+      echo
+      printf '%b' "${CY:?}$(mysql --defaults-extra-file=${SQL_MYCNF:?} --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1 | egrep ${SEARCHWORD:?} 2>&1 | xargs 2>&1)${N0:?}\n"
+      echo
+      read -r -p "Press Enter to continue" </dev/tty
     fi
 
     ;;
