@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220705
-# 6.6.0.0
+# 6.6.0.9
 
 while :; do
 
@@ -5029,7 +5029,6 @@ Check log for which database needs 'applying updates'"
       mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class, gender, xp, money, map, totaltime, leveltime, is_logout_resting, rest_bonus, zone, honor_highest_rank, honor_standing, stored_honor_rating, stored_dishonorable_kills, stored_honorable_kills, drunk, health, power1 FROM $DB_CHARACTERS.characters;" >/var/log/ms/player_list 2>&1
 
       # get character list from mysql
-      echo
       echo "Character list"
       echo
       mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1
@@ -5055,8 +5054,9 @@ Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
     "3")
 
       # search player list
+      echo "Search database"
       echo
-      printf '%b' "Search ${G1:?}->${N0:?} "
+      printf '%b' "${G1:?}->${N0:?} "
       read -r SEARCHWORD
       if [[ ! -z "$SEARCHWORD" ]] &>/dev/null; then
 
@@ -5067,7 +5067,7 @@ Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
           cat /var/log/ms/player_list 2>/dev/null | egrep "${SEARCHWORD:?}" >/var/log/ms/player_search 2>&1
           if [[ "$(wc -l /var/log/ms/player_search 2>&1 | awk '{ print $1 }' 2>&1)" -gt "1" ]] &>/dev/null; then
             echo
-            echo "Found more than one! +$(wc -l /var/log/ms/player_search 2>&1 | awk '{ print $1 }' 2>&1)"
+            printf '%b' "Found more than one! ${G1:?}+$(wc -l /var/log/ms/player_search 2>&1 | awk '{ print $1 }' 2>&1)${G1:?}\n"
             echo
             printf '%b' "${GR:?}$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $1,$2 }' 2>&1)${N0:?}\n"
           else
@@ -5077,110 +5077,114 @@ Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             # honor_highest_rank, honor_standing, stored_honor_rating
             # stored_dishonorable_kills, stored_honorable_kills
             # drunk, health, power1
-            TOON_NAME=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $1 }' 2>&1)
-            TOON_LVL=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $2 }' 2>&1)
-            TOON_ON=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $3 }' 2>&1)
-            TOON_AC=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $4 }' 2>&1)
-            TOON_C=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $5 }' 2>&1)
-            TOON_GE=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $6 }' 2>&1)
-            TOON_XP=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $7 }' 2>&1)
-            TOON_GS=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $8 }' 2>&1)
-            TOON_MAP=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $9 }' 2>&1)
-            TOON_TOT_T=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $10 }' 2>&1)
-            TOON_TOT_LT=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $11 }' 2>&1)
-            TOON_REST_B=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $12 }' 2>&1)
-            TOON_ZONING=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $14 }' 2>&1)
-            TOON_HONOR_HR=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $15 }' 2>&1)
-            TOON_HONOR_S=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $16 }' 2>&1)
-            TOON_STORED_HR=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $17 }' 2>&1)
-            TOON_STORED_DK=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $18 }' 2>&1)
-            TOON_STORED_HK=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $19 }' 2>&1)
-            TOON_DRUNK=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $20 }' 2>&1)
-            TOON_HEALTH=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $21 }' 2>&1)
-            TOON_MANA=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $22 }' 2>&1)
 
-            # level range
-            if [[ "$TOON_LVL" -lt "10" ]] &>/dev/null; then
-              LVLC="${GR:?}"
-            fi
-            if [[ "$TOON_LVL" -gt "10" ]] &>/dev/null; then
-              LVLC="${G1:?}"
-            fi
-            if [[ "$TOON_LVL" -gt "39" ]] &>/dev/null; then
-              LVLC="${B1:?}"
-            fi
-            if [[ "$TOON_LVL" -gt "59" ]] &>/dev/null; then
-              LVLC="${P1:?}"
-            fi
+            # skip if nothing is found
+            if [[ "$(wc -l /var/log/ms/player_search 2>&1 | awk '{ print $1 }' 2>&1)" -gt "0" ]] &>/dev/null; then
 
-            if [[ -z "$LVLC" ]] &>/dev/null; then
-              LVLC="${GR:?}"
-            fi
+              TOON_NAME=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $1 }' 2>&1)
+              TOON_LVL=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $2 }' 2>&1)
+              TOON_ON=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $3 }' 2>&1)
+              TOON_AC=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $4 }' 2>&1)
+              TOON_C=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $5 }' 2>&1)
+              TOON_GE=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $6 }' 2>&1)
+              TOON_XP=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $7 }' 2>&1)
+              TOON_GS=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $8 }' 2>&1)
+              TOON_MAP=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $9 }' 2>&1)
+              TOON_TOT_T=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $10 }' 2>&1)
+              TOON_TOT_LT=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $11 }' 2>&1)
+              TOON_REST_B=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $12 }' 2>&1)
+              TOON_ZONING=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $14 }' 2>&1)
+              TOON_HONOR_HR=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $15 }' 2>&1)
+              TOON_HONOR_S=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $16 }' 2>&1)
+              TOON_STORED_HR=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $17 }' 2>&1)
+              TOON_STORED_DK=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $18 }' 2>&1)
+              TOON_STORED_HK=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $19 }' 2>&1)
+              TOON_DRUNK=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $20 }' 2>&1)
+              TOON_HEALTH=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $21 }' 2>&1)
+              TOON_MANA=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $22 }' 2>&1)
 
-            # class range
-            if [[ "$TOON_C" -eq "1" ]] &>/dev/null; then
-              TOON_C="Warrior"
-            elif [[ "$TOON_C" -eq "2" ]] &>/dev/null; then
-              TOON_C="Paladin"
-            elif [[ "$TOON_C" -eq "3" ]] &>/dev/null; then
-              TOON_C="Hunter"
-            elif [[ "$TOON_C" -eq "4" ]] &>/dev/null; then
-              TOON_C="Rogue"
-            elif [[ "$TOON_C" -eq "5" ]] &>/dev/null; then
-              TOON_C="Priest"
-            elif [[ "$TOON_C" -eq "6" ]] &>/dev/null; then
-              TOON_C="Death Knight"
-            elif [[ "$TOON_C" -eq "7" ]] &>/dev/null; then
-              TOON_C="Shaman"
-            elif [[ "$TOON_C" -eq "8" ]] &>/dev/null; then
-              TOON_C="Mage"
-            elif [[ "$TOON_C" -eq "9" ]] &>/dev/null; then
-              TOON_C="Warlock"
-            elif [[ "$TOON_C" -eq "11" ]] &>/dev/null; then
-              TOON_C="Druid"
-            fi
+              # level range
+              if [[ "$TOON_LVL" -lt "10" ]] &>/dev/null; then
+                LVLC="${GR:?}"
+              fi
+              if [[ "$TOON_LVL" -gt "10" ]] &>/dev/null; then
+                LVLC="${G1:?}"
+              fi
+              if [[ "$TOON_LVL" -gt "39" ]] &>/dev/null; then
+                LVLC="${B1:?}"
+              fi
+              if [[ "$TOON_LVL" -gt "59" ]] &>/dev/null; then
+                LVLC="${P1:?}"
+              fi
 
-            # gender range
-            if [[ "$TOON_GE" -eq "0" ]] &>/dev/null; then
-              TOON_GE="Male"
-            else
-              TOON_GE="Female"
-            fi
+              if [[ -z "$LVLC" ]] &>/dev/null; then
+                LVLC="${GR:?}"
+              fi
 
-            # gold
-            TOON_GS="$(echo "${TOON_GS:?}/10000" 2>&1 | bc -l 2>&1 | awk '{ printf "%.2f\n", $1 }' 2>&1)"
-            if [[ "$(echo "${TOON_GS:?}" 2>&1 | awk -F. '{ print $1 }' 2>&1)" -gt "0" ]] &>/dev/null; then
-              GSC="${Y1:?}"
-            else
-              GSC="${GR:?}"
-            fi
+              # class range
+              if [[ "$TOON_C" -eq "1" ]] &>/dev/null; then
+                TOON_C="Warrior"
+              elif [[ "$TOON_C" -eq "2" ]] &>/dev/null; then
+                TOON_C="Paladin"
+              elif [[ "$TOON_C" -eq "3" ]] &>/dev/null; then
+                TOON_C="Hunter"
+              elif [[ "$TOON_C" -eq "4" ]] &>/dev/null; then
+                TOON_C="Rogue"
+              elif [[ "$TOON_C" -eq "5" ]] &>/dev/null; then
+                TOON_C="Priest"
+              elif [[ "$TOON_C" -eq "6" ]] &>/dev/null; then
+                TOON_C="Death Knight"
+              elif [[ "$TOON_C" -eq "7" ]] &>/dev/null; then
+                TOON_C="Shaman"
+              elif [[ "$TOON_C" -eq "8" ]] &>/dev/null; then
+                TOON_C="Mage"
+              elif [[ "$TOON_C" -eq "9" ]] &>/dev/null; then
+                TOON_C="Warlock"
+              elif [[ "$TOON_C" -eq "11" ]] &>/dev/null; then
+                TOON_C="Druid"
+              fi
 
-            # total time /played
-            TOON_TOT_T_C=$(printf '%dh:%dm:%ds\n' $(("$TOON_TOT_T/3600")) $(("$TOON_TOT_T%3600/60")) $(("$TOON_TOT_T%60")))
+              # gender range
+              if [[ "$TOON_GE" -eq "0" ]] &>/dev/null; then
+                TOON_GE="Male"
+              else
+                TOON_GE="Female"
+              fi
 
-            # map zone
-            if [[ "$TOON_MAP" -eq "1" ]] &>/dev/null; then
-              TOON_MAP="Kalimdor"
-            else
-              TOON_MAP="Eastern Kingdoms"
-            fi
+              # gold
+              TOON_GS="$(echo "${TOON_GS:?}/10000" 2>&1 | bc -l 2>&1 | awk '{ printf "%.2f\n", $1 }' 2>&1)"
+              if [[ "$(echo "${TOON_GS:?}" 2>&1 | awk -F. '{ print $1 }' 2>&1)" -gt "0" ]] &>/dev/null; then
+                GSC="${Y1:?}"
+              else
+                GSC="${GR:?}"
+              fi
 
-            # resting
-            if [[ "$TOON_REST_B" -eq "1" ]] &>/dev/null; then
-              TOON_REST_B="${G1:?}Yes${N0:?}"
-            else
-              TOON_REST_B="${GR:?}N0${N0:?}"
-            fi
+              # total time /played
+              TOON_TOT_T_C=$(printf '%dh:%dm:%ds\n' $(("$TOON_TOT_T/3600")) $(("$TOON_TOT_T%3600/60")) $(("$TOON_TOT_T%60")))
 
-            # online/offline status
-            if [[ "$TOON_ON" -eq "0" ]] &>/dev/null; then
-              TOON_ON="${GR:?}Offline${N0:?}"
-            else
-              TOON_ON="${G1:?}Online${N0:?}"
-            fi
+              # map zone
+              if [[ "$TOON_MAP" -eq "1" ]] &>/dev/null; then
+                TOON_MAP="Kalimdor"
+              else
+                TOON_MAP="Eastern Kingdoms"
+              fi
 
-            if [[ ! -z "$TOON_NAME" ]] &>/dev/null; then
-              printf '%b' "
+              # resting
+              if [[ "$TOON_REST_B" -eq "1" ]] &>/dev/null; then
+                TOON_REST_B="${G1:?}Yes${N0:?}"
+              else
+                TOON_REST_B="${GR:?}N0${N0:?}"
+              fi
+
+              # online/offline status
+              if [[ "$TOON_ON" -eq "0" ]] &>/dev/null; then
+                TOON_ON="${GR:?}Offline${N0:?}"
+              else
+                TOON_ON="${G1:?}Online${N0:?}"
+              fi
+
+              if [[ ! -z "$TOON_NAME" ]] &>/dev/null; then
+                printf '%b' "
 Account${G0:?}.: ${N0:?}${TOON_AC:?}${N0:?}
 Status${G0:?}..: ${N0:?}${TOON_ON:?}${N0:?}
 
@@ -5203,6 +5207,10 @@ Honor${G0:?}...: ${N0:?}${TOON_STORED_HR:?}${N0:?}
 Kills${G0:?}...: ${N0:?}${TOON_STORED_HK:?}${N0:?}
 DKills${G0:?}..: ${N0:?}${TOON_STORED_DK:?}${N0:?}
 Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
+              else
+                echo
+                printf '%b' "${GR:?}Nothing was found!${N0:?}\n"
+              fi
             fi
           fi
         else
@@ -5219,6 +5227,7 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
     "4")
 
       # get database size from mysql
+      echo "Database size"
       echo
       mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in MB' FROM information_schema.TABLES WHERE table_schema = \"${DB_CHARACTERS:?}\" ORDER BY (data_length + index_length) DESC;"
       echo
