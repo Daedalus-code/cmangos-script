@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220705
-# 6.6.0.6
+# 6.6.0.7
 
 while :; do
 
@@ -5208,12 +5208,13 @@ DKills${G0:?}..: ${N0:?}${TOON_STORED_DK:?}${N0:?}
 Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
             fi
           else
-            echo
+            clear
             printf '%b' "${GR:?}Nothing was found!${N0:?}\n"
           fi
         fi
       else
-        echo "empty"
+        clear
+        printf '%b' "${GR:?}empty${N0:?}\n"
       fi
       echo
       read -r -p "Press Enter to continue" </dev/tty
