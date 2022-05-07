@@ -5056,7 +5056,7 @@ Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       # search player list
       echo "Search database"
       echo
-      printf '%b' "${G1:?}->${N0:?} "
+      printf '%b' "Enter nickname: "
       read -r SEARCHWORD
       if [[ ! -z "$SEARCHWORD" ]] &>/dev/null; then
 
