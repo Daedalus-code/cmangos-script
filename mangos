@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20220705
-# 6.6.0.2
+# 6.6.0.6
 
 while :; do
 
@@ -5181,7 +5181,9 @@ Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             fi
 
             if [[ ! -z "$TOON_NAME" ]] &>/dev/null; then
-              printf '%b' "
+              clear
+              printf '%b' "Looking up ${GR:?}${SEARCHWORD:?}${N0:?}
+
 Account${G0:?}.: ${N0:?}${TOON_AC:?}${N0:?}
 Status${G0:?}..: ${N0:?}${TOON_ON:?}${N0:?}
 
@@ -5204,12 +5206,14 @@ Honor${G0:?}...: ${N0:?}${TOON_STORED_HR:?}${N0:?}
 Kills${G0:?}...: ${N0:?}${TOON_STORED_HK:?}${N0:?}
 DKills${G0:?}..: ${N0:?}${TOON_STORED_DK:?}${N0:?}
 Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
-            else
-              echo
-              printf '%b' "${GR:?}Nothing was found!${N0:?}\n"
             fi
+          else
+            echo
+            printf '%b' "${GR:?}Nothing was found!${N0:?}\n"
           fi
         fi
+      else
+        echo "empty"
       fi
       echo
       read -r -p "Press Enter to continue" </dev/tty
