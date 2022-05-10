@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20220705
-# 6.6.0.7
+# V20221005
+# 6.6.1.6
 
 while :; do
 
@@ -4941,6 +4941,14 @@ Check log for which database needs 'applying updates'"
 
   "t")
 
+    # minute old list, update
+    if [[ ! -f /var/log/ms/player_list."$(date +"%M" 2>&1)" ]] &>/dev/null; then
+      rm /var/log/ms/player_list* &>/dev/null
+      printf '%b' "${N0:?}Loading player list${N0:?}\n"
+      # save player list from mysql
+      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class, gender, xp, money, map, totaltime, leveltime, is_logout_resting, rest_bonus, zone, honor_highest_rank, honor_standing, stored_honor_rating, stored_dishonorable_kills, stored_honorable_kills, drunk, health, power1 FROM $DB_CHARACTERS.characters;" >/var/log/ms/player_list."$(date +"%M" 2>&1)" 2>&1
+    fi
+
     HEIGHT=11
     WIDTH=27
     CHOICE_HEIGHT=4
@@ -5025,9 +5033,6 @@ Check log for which database needs 'applying updates'"
       WARLOCK_P=$(echo "100/$CLASS_TOTAL*$WARLOCK" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
       DRUID_P=$(echo "100/$CLASS_TOTAL*$DRUID" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
 
-      # save player list from mysql
-      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class, gender, xp, money, map, totaltime, leveltime, is_logout_resting, rest_bonus, zone, honor_highest_rank, honor_standing, stored_honor_rating, stored_dishonorable_kills, stored_honorable_kills, drunk, health, power1 FROM $DB_CHARACTERS.characters;" >/var/log/ms/player_list 2>&1
-
       # get character list from mysql
       echo "Character list"
       echo
@@ -5061,12 +5066,16 @@ Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
       if [[ ! -z "$SEARCHWORD" ]] &>/dev/null; then
 
         # create player profile out of search
-        cat /var/log/ms/player_list 2>/dev/null | egrep "${SEARCHWORD:?}" >/var/log/ms/player_search 2>&1
+        cat /var/log/ms/player_list* 2>/dev/null | egrep "${SEARCHWORD:?}" >/var/log/ms/player_search 2>&1
+
+        # one profile on each search, if more list it
         if [[ "$(wc -l /var/log/ms/player_search 2>&1 | awk '{ print $1 }' 2>&1)" -gt "1" ]] &>/dev/null; then
+
           echo
           printf '%b' "Found more than one! ${G1:?}+$(wc -l /var/log/ms/player_search 2>&1 | awk '{ print $1 }' 2>&1)${G1:?}\n"
           echo
           printf '%b' "${GR:?}$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $1,$2 }' 2>&1)${N0:?}\n"
+
         else
 
           # name, level, online, account, class, gender, xp, money, map
