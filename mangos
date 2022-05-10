@@ -5167,6 +5167,7 @@ Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
 
             # total time /played
             TOON_TOT_T_C=$(printf '%dh:%dm:%ds\n' $(("$TOON_TOT_T/3600")) $(("$TOON_TOT_T%3600/60")) $(("$TOON_TOT_T%60")))
+            TOON_TOT_LT_C=$(printf '%dh:%dm:%ds\n' $(("$TOON_TOT_LT/3600")) $(("$TOON_TOT_LT%3600/60")) $(("$TOON_TOT_LT%60")))
 
             # map zone
             if [[ "$TOON_MAP" -eq "1" ]] &>/dev/null; then
@@ -5207,7 +5208,7 @@ XP${G0:?}......: ${N0:?}${TOON_XP:?}${N0:?}
 Resting${G0:?}.: ${N0:?}${TOON_REST_B:?}${N0:?}
 Map${G0:?}.....: ${N0:?}${TOON_MAP:?}${N0:?}
 Played${G0:?}..: ${N0:?}${TOON_TOT_T_C:?}${N0:?}
-LVLTime${G0:?}.: ${N0:?}${TOON_TOT_LT:?}${N0:?}
+LVLTime${G0:?}.: ${N0:?}${TOON_TOT_LT_C:?}${N0:?}
 Zone${G0:?}....: ${N0:?}${TOON_ZONING:?}${N0:?}
 Honored${G0:?}.: ${N0:?}${TOON_HONOR_HR:?}${N0:?}
 Ranked${G0:?}..: ${N0:?}${TOON_HONOR_S:?}${N0:?}
