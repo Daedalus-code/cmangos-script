@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20221005
-# 6.6.1.6
+# V20222105
+# 6.6.0.9
 
 while :; do
 
@@ -148,13 +148,10 @@ while :; do
   "13") THEME_ALL="${GR:?}" ;; # Black light (grey)
   esac
 
-  # look for empty dir
-  if [ "$(ls -A /var/log/ms/ 2>&1 | egrep -c "[aA1-zZ9]+" 2>&1)" -lt "1" ] &>/dev/null; then
-    # create ms folder
-    sudo mkdir /var/log/ms/ &>/dev/null
-    # fix ownership
-    sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
-  fi
+  # create ms folder
+  sudo mkdir /var/log/ms/ &>/dev/null
+  # fix ownership
+  sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }' 2>&1)" /var/log/ms &>/dev/null
 
   # online players
   MENU_ON_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT SUM(online) FROM ${DB_CHARACTERS:?}.characters;" 2>&1)
@@ -1295,13 +1292,12 @@ ${N0:?}"
                     sudo rm /seedbox/"$R_MAPS_MOD".zip &>/dev/null
                   fi
                 fi
-                # look for empty dir
-                if [ "$(ls -A /var/log/ms/ 2>&1 | egrep -c "[aA1-zZ9]+" 2>&1)" -lt "1" ] &>/dev/null; then
-                  # create ms folder if not found
-                  sudo mkdir /var/log/ms/ &>/dev/null
-                  # fix ownership
-                  sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
-                fi
+
+                # create ms folder
+                sudo mkdir /var/log/ms/ &>/dev/null
+                # fix ownership
+                sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }' 2>&1)" /var/log/ms &>/dev/null
+
                 # check for updates regardless
                 printf '%b' "[${G1:?}OK${N0:?}] Please wait\n"
                 sudo apt-get update &>/dev/null
@@ -2168,7 +2164,7 @@ WantedBy=multi-user.target" >"${FOLDER_WOW:?}"/TService.tmp 2>&1
         GM_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.gm_surveys;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
         GP_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.groups;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
         # on_count at TOP ^
-        CH_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.characters;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
+        CH_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM ${DB_CHARACTERS:?}.characters;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
 
         # gu_count at TOP ^
         ME_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT count(*) FROM $DB_CHARACTERS.guild_member;" 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
@@ -2801,13 +2797,12 @@ ${GR:?}$CPU_MODEL${N0:?}")
             echo
             printf '%b' "$MENU_PRINT_CPU_TEMP\n"
             printf '%b' "Build time: ${G1:?}$TIMER${N0:?} with ${G1:?}$CORES_BUILD${N0:?} Core(s)\n"
-            # look for empty dir
-            if [ "$(ls -A /var/log/ms/ 2>&1 | egrep -c "[aA1-zZ9]+" 2>&1)" -lt "1" ] &>/dev/null; then
-              # create ms folder if not found
-              sudo mkdir /var/log/ms/ &>/dev/null
-              # fix ownership
-              sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
-            fi
+
+            # create ms folder
+            sudo mkdir /var/log/ms/ &>/dev/null
+            # fix ownership
+            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }' 2>&1)" /var/log/ms &>/dev/null
+
             # create installed mark
             cd "${FOLDER_CORE:?}" || exit
             LATEST_HEAD=$(git rev-parse --short HEAD)
@@ -3118,13 +3113,11 @@ Select install operation"
 
           "1")
 
-            # look for empty dir
-            if [ "$(ls -A /var/log/ms/ 2>&1 | egrep -c "[aA1-zZ9]+" 2>&1)" -lt "1" ] &>/dev/null; then
-              # create ms folder if not found
-              sudo mkdir /var/log/ms/ &>/dev/null
-              # fix ownership
-              sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
-            fi
+            # create ms folder
+            sudo mkdir /var/log/ms/ &>/dev/null
+            # fix ownership
+            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }' 2>&1)" /var/log/ms &>/dev/null
+
             # create installed mark
             cd "${FOLDER_CORE:?}" || exit
             LATEST_HEAD=$(git rev-parse --short HEAD)
@@ -3138,13 +3131,11 @@ Select install operation"
 
           "2")
 
-            # look for empty dir
-            if [ "$(ls -A /var/log/ms/ 2>&1 | egrep -c "[aA1-zZ9]+" 2>&1)" -lt "1" ] &>/dev/null; then
-              # create ms folder if not found
-              sudo mkdir /var/log/ms/ &>/dev/null
-              # fix ownership
-              sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
-            fi
+            # create ms folder
+            sudo mkdir /var/log/ms/ &>/dev/null
+            # fix ownership
+            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }' 2>&1)" /var/log/ms &>/dev/null
+
             # create installed mark
             cd "${FOLDER_CORE:?}" || exit
             LATEST_HEAD=$(git rev-parse --short HEAD)
@@ -4186,13 +4177,12 @@ Database User, Client/Server is needed."
             else
               printf '%b' "[!!] ${GR:?}$FOLDER_DB${N0:?} Not Found!\n"
             fi
-            # look for empty dir
-            if [ "$(ls -A /var/log/ms/ 2>&1 | egrep -c "[aA1-zZ9]+" 2>&1)" -lt "1" ] &>/dev/null; then
-              # create ms folder if not found
-              sudo mkdir /var/log/ms/ &>/dev/null
-              # fix ownership
-              sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
-            fi
+
+            # create ms folder
+            sudo mkdir /var/log/ms/ &>/dev/null
+            # fix ownership
+            sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }' 2>&1)" /var/log/ms &>/dev/null
+
           fi
           printf '%b' "${GR:?}Please wait${N0:?}\n"
         fi
@@ -4946,7 +4936,7 @@ Check log for which database needs 'applying updates'"
       rm /var/log/ms/player_list* &>/dev/null
       printf '%b' "${N0:?}Loading player list${N0:?}\n"
       # save player list from mysql
-      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class, gender, xp, money, map, totaltime, leveltime, is_logout_resting, rest_bonus, zone, honor_highest_rank, honor_standing, stored_honor_rating, stored_dishonorable_kills, stored_honorable_kills, drunk, health, power1 FROM $DB_CHARACTERS.characters;" >/var/log/ms/player_list."$(date +"%M" 2>&1)" 2>&1
+      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class, gender, xp, money, map, totaltime, leveltime, is_logout_resting, rest_bonus, zone, honor_highest_rank, honor_standing, stored_honor_rating, stored_dishonorable_kills, stored_honorable_kills, drunk, health, power1 FROM ${DB_CHARACTERS:?}.characters;" >/var/log/ms/player_list."$(date +"%M" 2>&1)" 2>&1
     fi
 
     HEIGHT=11
@@ -4978,7 +4968,7 @@ Check log for which database needs 'applying updates'"
         # platers online
         echo "Player(s) online"
         echo
-        mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters WHERE online = 1;" 2>&1
+        mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM ${DB_CHARACTERS:?}.characters WHERE online = 1;" 2>&1
         echo
         read -r -p "Press Enter to continue" </dev/tty
         echo
@@ -4994,7 +4984,7 @@ Check log for which database needs 'applying updates'"
         # remove old file
         rm /var/log/ms/classes.* &>/dev/null
         # classes from table characters
-        mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT class FROM $DB_CHARACTERS.characters;" 2>&1 | tr -d 'class' >/var/log/ms/classes."${NOW:?}" # update this everyday
+        mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT class FROM ${DB_CHARACTERS:?}.characters;" 2>&1 | tr -d 'class' >/var/log/ms/classes."${NOW:?}" 2>&1 # update this everyday
       fi
 
       # count lines in classes
@@ -5036,7 +5026,7 @@ Check log for which database needs 'applying updates'"
       # get character list from mysql
       echo "Character list"
       echo
-      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM $DB_CHARACTERS.characters;" 2>&1
+      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM ${DB_CHARACTERS:?}.characters;" 2>&1
       echo
       printf '%b' "Classes
 
@@ -6007,10 +5997,12 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
     "1")
 
       function install_mark_tool() {
-        # create ms folder if not found
+
+        # create ms folder
         sudo mkdir /var/log/ms/ &>/dev/null
         # fix ownership
-        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" /var/log/ms &>/dev/null
+        sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }' 2>&1)" /var/log/ms &>/dev/null
+
         # create installed mark
         cd "$FOLDER_HELPER" || exit
         LATEST_HEAD=$(git rev-parse --short HEAD)
