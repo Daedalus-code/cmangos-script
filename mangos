@@ -11,7 +11,7 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20222105
+# V20222205
 # 6.6.0.9
 
 while :; do
@@ -5024,7 +5024,7 @@ Check log for which database needs 'applying updates'"
       DRUID_P=$(echo "100/$CLASS_TOTAL*$DRUID" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
 
       # get character list from mysql
-      printf '%b' "Character list ${G1:?}$(cat /var/log/ms/classes."${NOW:?}" 2>&1 | wc -l 2>&1)${N0:?}\n"
+      printf '%b' "Character list ${G1:?}$(cat /var/log/ms/classes."${NOW:?}" 2>/dev/null | xargs 2>&1 | wc -w 2>&1)${N0:?}\n"
       echo
       mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM ${DB_CHARACTERS:?}.characters;" 2>&1
       echo
