@@ -1954,17 +1954,17 @@ WantedBy=multi-user.target" >"${FOLDER_WOW:?}"/TService.tmp 2>&1
         # lines in files
         ESLOG="$(cat "${FOLDER_CORE:?}"/run/logs/Server.log 2>&1 | wc -l 2>&1)"
         ERLOG="$(cat "${FOLDER_CORE:?}"/run/logs/Realmd.log 2>&1 | wc -l 2>&1)"
-        ESLOG_OLD="$(cat "${FOLDER_CORE:?}"/run/logs/Server.log.old 2>&1 | wc -l 2>&1)"
-        ERLOG_OLD="$(cat "${FOLDER_CORE:?}"/run/logs/Realmd.log.old 2>&1 | wc -l 2>&1)"
+        ESLOG_OLD="$(cat "${FOLDER_CORE:?}"/run/logs/old/Server.log.old 2>&1 | wc -l 2>&1)"
+        ERLOG_OLD="$(cat "${FOLDER_CORE:?}"/run/logs/old/Realmd.log.old 2>&1 | wc -l 2>&1)"
         # delete empty files, if any
         if [[ "$ESLOG" -lt "1" ]] &>/dev/null; then
           sudo rm -R "${FOLDER_CORE:?}"/run/logs/Server.log &>/dev/null
         elif [[ "$ERLOG" -lt "1" ]] &>/dev/null; then
           sudo rm -R "${FOLDER_CORE:?}"/run/logs/Realmd.log &>/dev/null
         elif [[ "$ESLOG_OLD" -lt "1" ]] &>/dev/null; then
-          sudo rm -R "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
+          sudo rm -R "${FOLDER_CORE:?}"/run/logs/old/Server.log.old &>/dev/null
         elif [[ "$ERLOG_OLD" -lt "1" ]] &>/dev/null; then
-          sudo rm -R "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
+          sudo rm -R "${FOLDER_CORE:?}"/run/logs/old/Realmd.log.old &>/dev/null
         fi
         # non responsive/responsive
         if [ ! -f "${FOLDER_CORE:?}"/run/logs/Server.log.old ] &>/dev/null; then
@@ -1975,11 +1975,11 @@ WantedBy=multi-user.target" >"${FOLDER_WOW:?}"/TService.tmp 2>&1
           DIVE_SERVER_OLD_POLYR="0"
         else
           # server.log.old
-          DIVE_SERVER_OLD_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "${FOLDER_CORE:?}"/run/logs/Server.log.old 2>&1 | grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty.|.*empty*." 2>&1)
-          DIVE_SERVER_OLD_ERROR=$(grep -E -v ".*is empty*." "${FOLDER_CORE:?}"/run/logs/Server.log.old 2>&1 | grep -c -E ".*ERROR*." 2>&1)
-          DIVE_SERVER_OLD_SERIO=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "${FOLDER_CORE:?}"/run/logs/Server.log.old 2>&1)
-          DIVE_SERVER_OLD_IGNOR=$(grep -c -E ".*ignoring*.|.*ignore*.|.*ignored*." "${FOLDER_CORE:?}"/run/logs/Server.log.old 2>&1)
-          DIVE_SERVER_OLD_POLYR=$(grep -c -E "Invalid poly ref" "${FOLDER_CORE:?}"/run/logs/Server.log.old 2>&1)
+          DIVE_SERVER_OLD_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "${FOLDER_CORE:?}"/run/logs/old/Server.log.old 2>&1 | grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty.|.*empty*." 2>&1)
+          DIVE_SERVER_OLD_ERROR=$(grep -E -v ".*is empty*." "${FOLDER_CORE:?}"/run/logs/old/Server.log.old 2>&1 | grep -c -E ".*ERROR*." 2>&1)
+          DIVE_SERVER_OLD_SERIO=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "${FOLDER_CORE:?}"/run/logs/old/Server.log.old 2>&1)
+          DIVE_SERVER_OLD_IGNOR=$(grep -c -E ".*ignoring*.|.*ignore*.|.*ignored*." "${FOLDER_CORE:?}"/run/logs/old/Server.log.old 2>&1)
+          DIVE_SERVER_OLD_POLYR=$(grep -c -E "Invalid poly ref" "${FOLDER_CORE:?}"/run/logs/old/Server.log.old 2>&1)
         fi
         # non responsive/responsive
         if [ ! -f "${FOLDER_CORE:?}"/run/logs/Server.log ] &>/dev/null; then
