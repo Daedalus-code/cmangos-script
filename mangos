@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20222305
-# 6.6.2.2
+# V20222405
+# 6.6.2.6
 
 while :; do
 
@@ -5170,6 +5170,10 @@ Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             TOON_TOT_T_C=$(printf '%dh:%dm:%ds\n' $(("$TOON_TOT_T/3600")) $(("$TOON_TOT_T%3600/60")) $(("$TOON_TOT_T%60")))
             TOON_TOT_LT_C=$(printf '%dh:%dm:%ds\n' $(("$TOON_TOT_LT/3600")) $(("$TOON_TOT_LT%3600/60")) $(("$TOON_TOT_LT%60")))
 
+            # calculate days elapsed
+            TOON_TOT_DAYS=$(echo "${TOON_TOT_T:?}/3600/24" 2>&1 | bc -l 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
+            TOON_TOT_LVL_DAYS=$(echo "${TOON_TOT_LT:?}/3600/24" 2>&1 | bc -l 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
+
             # map zone
             if [[ "$TOON_MAP" -eq "1" ]] &>/dev/null; then
               TOON_MAP="Kalimdor"
@@ -5208,8 +5212,8 @@ Gold${G0:?}....: ${GSC:?}${TOON_GS:?}${N0:?}
 XP${G0:?}......: ${N0:?}${TOON_XP:?}${N0:?}
 Resting${G0:?}.: ${N0:?}${TOON_REST_B:?}${N0:?}
 Map${G0:?}.....: ${N0:?}${TOON_MAP:?}${N0:?}
-Played${G0:?}..: ${N0:?}${TOON_TOT_T_C:?}${N0:?}
-LVLTime${G0:?}.: ${N0:?}${TOON_TOT_LT_C:?}${N0:?}
+Played${G0:?}..: ${N0:?}${TOON_TOT_T_C:?}${N0:?} - ${TOON_TOT_DAYS:?} days
+LVLTime${G0:?}.: ${N0:?}${TOON_TOT_LT_C:?}${N0:?} - ${TOON_TOT_LVL_DAYS:?} days
 Zone${G0:?}....: ${N0:?}${TOON_ZONING:?}${N0:?}
 Honored${G0:?}.: ${N0:?}${TOON_HONOR_HR:?}${N0:?}
 Ranked${G0:?}..: ${N0:?}${TOON_HONOR_S:?}${N0:?}
