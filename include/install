@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# By Rainman
+# V20222605
+# 0.0.4.5
+
+# what's the purpose of this tool?
+# this tool introduce helping functions and features for admins running a wow server.
+
+# how do you get it to work?
+
+if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
+  # first time install
+  echo "Creating /home directory.."
+  sudo mkdir /home/ &>/dev/null
+  echo "Cloning repo.."
+  cd /home/ || exit && git clone https://github.com/Daedalus-code/cmangos-script.git
+  echo "Installing script (mangos).."
+  sudo cp /home/cmangos-script/mangos /usr/local/bin
+  echo "Making script executable.."
+  sudo chmod +x /usr/local/bin/mangos
+
+  # you will be able to start 'mangos' from anywhere in terminal now.
+
+  # mangos script will look for config files inside your "install folder" (default: /home)
+  # you need to copy config files from cmangos-script folder into your "install folder".
+
+  echo "Copying configuration files.."
+  cp /home/cmangos-script/server.* /home/
+  echo "Done!"
+  echo
+  printf '%b' "[${G1:?}Ok${N0:?}] ${CY:?}mangos${N0:?} installed!!\n"
+  echo "edit config file 'server.cnf' with MySQL credentials."
+  echo "(nano) Save with CTRL+o and Enter"
+  sleep 1
+  nano /home/server.cnf
+  echo "edit config file 'server.txt' with correct information."
+  echo "(nano) Save with CTRL+o and Enter"
+  sleep 1
+  nano /home/server.txt
+else
+  printf '%b' "[${G0:?}Ok${N0:?}] ${CY:?}mangos${N0:?} already installed!!\n"
+fi
+
+# END
