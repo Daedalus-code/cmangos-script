@@ -29,7 +29,7 @@ if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
   cp /home/cmangos-script/server.* /home/
   echo "Done!"
   echo
-  printf '%b' "[${G1:?}Ok${N0:?}] ${CY:?}mangos${N0:?} installed!!\n"
+  echo "[Ok] 'mangos' installed!!\n"
   echo "edit config file 'server.cnf' with MySQL credentials."
   echo "(nano) Save with CTRL+o and Enter"
   sleep 1
@@ -39,7 +39,7 @@ if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
   sleep 1
   nano /home/server.txt
 else
-  printf '%b' "[${G0:?}Ok${N0:?}] ${CY:?}mangos${N0:?} already installed!!\n"
+  echo "[Ok] 'mangos' already installed!!\n"
 fi
 
 # END
