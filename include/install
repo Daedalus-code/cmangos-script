@@ -2,7 +2,7 @@
 
 # By Rainman
 # V20222605
-# 0.0.5.3
+# 0.0.5.6
 
 # what's the purpose of this tool?
 # this tool introduce helping functions and features for admins running a wow server.
@@ -34,10 +34,13 @@ if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
     cp /home/cmangos-script/server.* /home/
 
     echo "edit config file 'server.cnf' with MySQL credentials."
+    echo
     echo "(nano) Save with CTRL+o and Enter"
     sleep 1
+    echo
     nano /home/server.cnf
     echo "edit config file 'server.txt' with correct information."
+    echo
     echo "(nano) Save with CTRL+o and Enter"
     sleep 1
     nano /home/server.txt
