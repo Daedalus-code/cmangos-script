@@ -2,7 +2,7 @@
 
 # By Rainman
 # V20222605
-# 0.0.4.5
+# 0.0.5.3
 
 # what's the purpose of this tool?
 # this tool introduce helping functions and features for admins running a wow server.
@@ -13,8 +13,12 @@ if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
   # first time install
   echo "Creating /home directory.."
   sudo mkdir /home/ &>/dev/null
-  echo "Cloning repo.."
-  cd /home/ || exit && git clone https://github.com/Daedalus-code/cmangos-script.git
+
+  if [[ ! -f /home/cmangos-script/README.md ]] &>/dev/null; then
+    echo "Cloning repo.."
+    cd /home/ || exit && git clone https://github.com/Daedalus-code/cmangos-script.git
+  fi
+
   echo "Installing script (mangos).."
   sudo cp /home/cmangos-script/mangos /usr/local/bin
   echo "Making script executable.."
@@ -25,19 +29,23 @@ if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
   # mangos script will look for config files inside your "install folder" (default: /home)
   # you need to copy config files from cmangos-script folder into your "install folder".
 
-  echo "Copying configuration files.."
-  cp /home/cmangos-script/server.* /home/
-  echo "Done!"
+  if [[ ! -f /home/server.txt ]] &>/dev/null; then
+    echo "Copying configuration files.."
+    cp /home/cmangos-script/server.* /home/
+
+    echo "edit config file 'server.cnf' with MySQL credentials."
+    echo "(nano) Save with CTRL+o and Enter"
+    sleep 1
+    nano /home/server.cnf
+    echo "edit config file 'server.txt' with correct information."
+    echo "(nano) Save with CTRL+o and Enter"
+    sleep 1
+    nano /home/server.txt
+  fi
+
+  echo "[Ok] Done!"
   echo
   echo "[Ok] 'mangos' installed!!"
-  echo "edit config file 'server.cnf' with MySQL credentials."
-  echo "(nano) Save with CTRL+o and Enter"
-  sleep 1
-  nano /home/server.cnf
-  echo "edit config file 'server.txt' with correct information."
-  echo "(nano) Save with CTRL+o and Enter"
-  sleep 1
-  nano /home/server.txt
 else
   echo "[Ok] 'mangos' already installed!!"
 fi
