@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20222405
-# 6.6.2.6
+# V20222705
+# 6.6.3.4
 
 while :; do
 
@@ -552,13 +552,21 @@ while :; do
 
     "3")
 
-      printf '%b' "${GR:?}Banned Accounts${N0:?}\n"
+      printf '%b' "${R1:?}Banned Accounts${N0:?}\n"
       echo
       mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT id, account_id, banned_at, expires_at, banned_by, reason, active FROM ${DB_REALMD:?}.account_banned;"
       echo
-      printf '%b' "${GR:?}Banned IP Adresses${N0:?}\n"
+      printf '%b' "${R0:?}Banned IP Adresses${N0:?}\n"
       echo
       mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT ip, banned_at, expires_at, banned_by, reason FROM ${DB_REALMD:?}.ip_banned;"
+      echo
+      printf '%b' "${P1:?}Dishonorable Kills${N0:?}\n"
+      echo
+      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, stored_dishonorable_kills FROM ${DB_CHARACTERS:?}.characters WHERE stored_dishonorable_kills>=1;" 2>&1
+      echo
+      printf '%b' "${Y1:?}Intoxicated ${GR:?}(drunk)${N0:?}\n"
+      echo
+      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, drunk FROM ${DB_CHARACTERS:?}.characters WHERE drunk>=1;" 2>&1
       echo
       read -r -p "Press Enter to continue" </dev/tty
       echo
