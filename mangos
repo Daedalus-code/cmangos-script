@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20222705
-# 6.6.3.4
+# V20220606
+# 6.6.4.6
 
 while :; do
 
@@ -562,11 +562,11 @@ while :; do
       echo
       printf '%b' "${P1:?}Dishonorable Kills${N0:?}\n"
       echo
-      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, stored_dishonorable_kills FROM ${DB_CHARACTERS:?}.characters WHERE stored_dishonorable_kills>=1;" 2>&1
+      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, stored_dishonorable_kills FROM ${DB_CHARACTERS:?}.characters WHERE stored_dishonorable_kills>=1 ORDER BY name;" 2>&1
       echo
       printf '%b' "${Y1:?}Intoxicated ${GR:?}(drunk)${N0:?}\n"
       echo
-      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, drunk FROM ${DB_CHARACTERS:?}.characters WHERE drunk>=1;" 2>&1
+      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, drunk FROM ${DB_CHARACTERS:?}.characters WHERE drunk>=1 ORDER BY name;" 2>&1
       echo
       read -r -p "Press Enter to continue" </dev/tty
       echo
@@ -4955,7 +4955,7 @@ Check log for which database needs 'applying updates'"
       rm /var/log/ms/player_list* &>/dev/null
       printf '%b' "${N0:?}Loading player list${N0:?}\n"
       # save player list from mysql
-      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class, gender, xp, money, map, totaltime, leveltime, is_logout_resting, rest_bonus, zone, honor_highest_rank, honor_standing, stored_honor_rating, stored_dishonorable_kills, stored_honorable_kills, drunk, health, power1 FROM ${DB_CHARACTERS:?}.characters;" >/var/log/ms/player_list."$(date +"%M" 2>&1)" 2>&1
+      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class, gender, xp, money, map, totaltime, leveltime, is_logout_resting, rest_bonus, zone, honor_highest_rank, honor_standing, stored_honor_rating, stored_dishonorable_kills, stored_honorable_kills, drunk, health, power1 FROM ${DB_CHARACTERS:?}.characters ORDER BY name;" >/var/log/ms/player_list."$(date +"%M" 2>&1)" 2>&1
     fi
 
     HEIGHT=11
@@ -4987,7 +4987,7 @@ Check log for which database needs 'applying updates'"
         # platers online
         echo "Player(s) online"
         echo
-        mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM ${DB_CHARACTERS:?}.characters WHERE online = 1;" 2>&1
+        mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM ${DB_CHARACTERS:?}.characters WHERE online = 1 ORDER BY name;" 2>&1
         echo
         read -r -p "Press Enter to continue" </dev/tty
         echo
@@ -5045,7 +5045,7 @@ Check log for which database needs 'applying updates'"
       # get character list from mysql
       printf '%b' "Character list ${G1:?}$(cat /var/log/ms/classes."${NOW:?}" 2>/dev/null | xargs 2>&1 | wc -w 2>&1)${N0:?}\n"
       echo
-      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM ${DB_CHARACTERS:?}.characters;" 2>&1
+      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM ${DB_CHARACTERS:?}.characters ORDER BY name;" 2>&1
       echo
       printf '%b' "Classes
 
@@ -5118,17 +5118,29 @@ Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
             TOON_HEALTH=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $21 }' 2>&1)
             TOON_MANA=$(cat /var/log/ms/player_search 2>/dev/null | awk '{ print $22 }' 2>&1)
 
-            # level range
-            if [[ "$TOON_LVL" -lt "10" ]] &>/dev/null; then
+            # level range (1 - 60+)
+            if [[ "$TOON_LVL" -ge "1" ]] &>/dev/null; then
               LVLC="${GR:?}"
             fi
-            if [[ "$TOON_LVL" -gt "10" ]] &>/dev/null; then
+            if [[ "$TOON_LVL" -ge "3" ]] &>/dev/null; then
+              LVLC="${Y0:?}"
+            fi
+            if [[ "$TOON_LVL" -ge "9" ]] &>/dev/null; then
+              LVLC="${Y1:?}"
+            fi
+            if [[ "$TOON_LVL" -ge "19" ]] &>/dev/null; then
+              LVLC="${G0:?}"
+            fi
+            if [[ "$TOON_LVL" -ge "29" ]] &>/dev/null; then
               LVLC="${G1:?}"
             fi
-            if [[ "$TOON_LVL" -gt "39" ]] &>/dev/null; then
-              LVLC="${B1:?}"
+            if [[ "$TOON_LVL" -ge "39" ]] &>/dev/null; then
+              LVLC="${CY:?}"
             fi
-            if [[ "$TOON_LVL" -gt "59" ]] &>/dev/null; then
+            if [[ "$TOON_LVL" -ge "49" ]] &>/dev/null; then
+              LVLC="${C1:?}"
+            fi
+            if [[ "$TOON_LVL" -ge "60" ]] &>/dev/null; then
               LVLC="${P1:?}"
             fi
 
