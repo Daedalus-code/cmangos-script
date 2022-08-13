@@ -24,8 +24,6 @@ if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
   echo "Making script executable.."
   sudo chmod +x /usr/local/bin/mangos
 
-  # you will be able to start 'mangos' from anywhere in terminal now.
-
   # mangos script will look for config files inside your "install folder" (default: /home)
   # you need to copy config files from cmangos-script folder into your "install folder".
 
@@ -51,8 +49,11 @@ if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
 
   clear
   echo "[Ok] 'mangos' installed!!"
+  echo "Type 'mangos' to start."
 else
-  echo "[Ok] 'mangos' already installed!!"
+  clear
+  echo "[Ok] 'mangos' already installed!"
+  echo "Type 'mangos' to start."
 fi
 
 # END
