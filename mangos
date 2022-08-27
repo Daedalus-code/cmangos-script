@@ -384,7 +384,6 @@ while :; do
       mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT SUM(money) FROM ${DB_CHARACTERS:?}.characters;" 2>&1 | egrep "[0-9]+" >/var/log/ms/realm_gold 2>&1
       echo "$(cat /var/log/ms/realm_gold 2>/dev/null)/10000" 2>&1 | bc -l 2>&1 | awk '{ printf "%.2f\n", $1 }' >/var/log/ms/realm_gold.tmp 2>&1
       mv /var/log/ms/realm_gold.tmp /var/log/ms/realm_gold &>/dev/null
-      cd || exit && mkdir stats &>/dev/null
     fi
 
     # realm gold database
@@ -451,8 +450,9 @@ rrdtool graph /var/www/html/realm_gold.png \
 
 EOF
 
+    cd || exit && mkdir stats &>/dev/null
     printf '%b' "run by cron (${GR:?}crontab -e${N0:?})
-${G1:?}* * * * * bash /home/"$(whoami)"/goldtracker${N0:?}\n"
+${G1:?}* * * * * bash /home/$(whoami)/goldtracker${N0:?}\n"
     echo
     read -r -p "[Ok] Press Enter to continue" </dev/tty
     echo
