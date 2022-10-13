@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20222808
-# 6.7.7.4
+# V20221310
+# 6.6.4.6
 
 while :; do
 
@@ -340,134 +340,6 @@ while :; do
     ;;
 
     # debug mangos_script done
-
-    # track realm gold
-
-  "G")
-
-    if [[ ! -f /var/log/ms/graph_time ]] &>/dev/null; then
-      # set graph Time
-      echo "Set graph time (example: 24h)"
-      read -r GRAPH_TIME
-      echo "$GRAPH_TIME" >/var/log/ms/graph_time
-    fi
-    GRAPH_TIME="$(cat /var/log/ms/graph_time)"
-
-    if ! [ -x "$(command -v rrdtool)" ] &>/dev/null; then
-      # ask to install rrdtool (database)
-      read -r -p "[YN] Install database? (rrdtool) y/n " -n 1 -r
-      echo
-      if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
-        sudo apt-get install rrdtool -y
-      fi
-    fi
-
-    # ask to install webserver (graphs)
-    if ! [ -x "$(command -v apache2)" ] &>/dev/null; then
-      read -r -p "[YN] Install graphs? (apache2) y/n " -n 1 -r
-      echo
-      if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
-        sudo apt-get install apache2 php libapache2-mod-php -y 2>&1
-        sudo chown -R "$(whoami)":"$(whoami)" /var/www/html
-        rm /var/www/html/index.html &>/dev/null
-        printf '%b' "[${G1:?}OK${N0:?}] Restarting Apache\n"
-        sudo systemctl restart apache2 &>/dev/null
-      fi
-    fi
-
-    if [[ ! -f /var/log/ms/realm_gold ]] &>/dev/null; then
-      touch /var/log/ms/realm_gold &>/dev/null
-    fi
-
-    if [[ "$(echo "$(($(date +%s) - $(date +%s -r /var/log/ms/realm_gold)))")" -gt "60" ]] &>/dev/null; then
-      # total realm gold
-      mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT SUM(money) FROM ${DB_CHARACTERS:?}.characters;" 2>&1 | egrep "[0-9]+" >/var/log/ms/realm_gold 2>&1
-      echo "$(cat /var/log/ms/realm_gold 2>/dev/null)/10000" 2>&1 | bc -l 2>&1 | awk '{ printf "%.2f\n", $1 }' >/var/log/ms/realm_gold.tmp 2>&1
-      mv /var/log/ms/realm_gold.tmp /var/log/ms/realm_gold &>/dev/null
-    fi
-
-    cd || exit && mkdir stats &>/dev/null
-
-    # realm gold database
-    if [ ! -f "/home/$(whoami)/stats/realm_gold.rrd" ] &>/dev/null; then
-      echo "Creating stats/realm_gold.rrd"
-      rrdtool create /home/"$(whoami)"/stats/realm_gold.rrd \
-        --step=60 \
-        DS:gold:GAUGE:300:U:U \
-        RRA:AVERAGE:0.5:1:315360
-    fi
-
-    cat >/var/www/html/index.php <<'EOF'
-
-<div id="content" align="center">
-<?php
-header("refresh: 180;");
-?>
-<?php
-// background color (dark blue)
-echo "<body style='background-color:2D3037'>";
-// realm gold
-echo "<img src='realm_gold.png' alt='Realm Gold' />";
-
-EOF
-
-    cat >/home/"$(whoami)"/goldtracker <<'EOF'
-#!/bin/bash
-
-source /home/server.txt
-TYPE_CORE="$(echo "$SERVER_TYPE" | tr '[:upper:]' '[:lower:]')"
-DB_CHARACTERS="${TYPE_CORE:?}_characters$DBEXTRA"
-DB_REALMD="${TYPE_CORE:?}_realmd$DBEXTRA"
-
-mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT SUM(money) FROM ${DB_CHARACTERS:?}.characters;" 2>&1 | egrep "[0-9]+" >/var/log/ms/realm_gold 2>&1
-echo "$(cat /var/log/ms/realm_gold 2>/dev/null)/10000" 2>&1 | bc -l 2>&1 | awk '{ printf "%.2f\n", $1 }' >/var/log/ms/realm_gold.tmp 2>&1
-mv /var/log/ms/realm_gold.tmp /var/log/ms/realm_gold &>/dev/null
-
-rrdtool update /home/"$(whoami)"/stats/realm_gold.rrd N:"$(cat /var/log/ms/realm_gold 2>/dev/null)" 2>/dev/null
-
-if [[ -z "$GRAPH_TIME" ]] &>/dev/null; then
-  GRAPH_TIME="24h"
-fi
-
-# realm gold graph
-rrdtool graph /var/www/html/realm_gold.png \
- -w 738 -h 369 -a PNG \
- --slope-mode \
- --vertical-label "Realm Gold" \
- --alt-autoscale-max --lower-limit=1 \
- --color BACK#565875 \
- --color FONT#FFFFFF \
- --color CANVAS#42445F \
- --color GRID#565875 \
- --color FRAME#565875 \
- --color SHADEA#565875 \
- --color SHADEB#565875 \
- --end now --start end-"${GRAPH_TIME:?}" \
- DEF:gold=/home/"$(whoami)"/stats/realm_gold.rrd:gold:MAX \
- GPRINT:gold:LAST:%.2lf\ Now \
- GPRINT:gold:AVERAGE:%.2lf\ AVG \
- GPRINT:gold:MAX:%.2lf\ Max \
- GPRINT:gold:MIN:%.2lf\ Min \
- AREA:gold#FFD700:"Gold"
-
-EOF
-
-    if [[ ! "$(sudo cat /var/spool/cron/crontabs/"$(whoami)" | grep -o "goldtracker")" ]] &>/dev/null; then
-      printf '%b' "run by cron (${GR:?}crontab -e${N0:?})
-${G1:?}* * * * * bash /home/$(whoami)/goldtracker${N0:?}\n"
-      echo
-      read -r -p "[Ok] Press Enter to continue" </dev/tty
-      echo
-      crontab -e
-    else
-      echo "Tracking total gold on ${SERVER_NAME:?} ($(cat /var/log/ms/realm_gold 2>/dev/null))"
-      printf '%b' "${CY:?}http://${INTRANET:?}:80${N0:?} <- Graph\n"
-      read -r -p "[Ok] Press Enter to continue" </dev/tty
-    fi
-
-    ;;
-
-    # track realm gold done
 
   "a")
 
