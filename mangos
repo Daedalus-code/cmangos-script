@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20221310
-# 6.6.4.6
+# V20222810
+# 6.6.4.9
 
 while :; do
 
@@ -5068,10 +5068,13 @@ Druid${G0:?}...:${N0:?} $DRUID ${GR:?}$DRUID_P%${N0:?}\n"
     "3")
 
       # search player list
-      echo "Search database"
-      echo
-      printf '%b' "Enter nickname: "
-      read -r SEARCHWORD
+      SEARCHWORD=$(
+        dialog --title "Character database" \
+          --nocancel \
+          --inputbox "Enter player name:" 8 40 \
+          3>&1 1>&2 2>&3 3>&-
+      )
+
       if [[ ! -z "$SEARCHWORD" ]] &>/dev/null; then
 
         # create player profile out of search
