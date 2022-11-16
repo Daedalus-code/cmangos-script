@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20222810
-# 6.6.4.9
+# V20221611
+# 6.6.7.6
 
 while :; do
 
@@ -3860,7 +3860,8 @@ $SERVER_BUILD Disabled.\n"
       9 "Apply all updates [A]-[B]"
       10 "Install database client"
       11 "Install database system"
-      12 "Delete /core-db")
+      12 "DB Updates list"
+      13 "Delete /core-db")
 
     CHOICE=$(dialog --clear \
       --backtitle "$BACKTITLE" \
@@ -3876,6 +3877,32 @@ $SERVER_BUILD Disabled.\n"
     # delete database directory (everything)
 
     "12")
+
+      # updates, Instances count
+      U_UPDATE_COUNT="$(ls -l "$FOLDER_DB"/Updates | awk '{ print $6,$7,$8,$9 }' | egrep "*.sql" | wc -l)"
+      INSTANCES_UPDATE_COUNT="$(ls -l "$FOLDER_DB"/Updates/Instances | awk '{ print $6,$7,$8,$9 }' | egrep "*.sql" | wc -l)"
+
+      # database updates list
+      display_result() {
+        dialog --title "${TYPE_CORE:?}-db -> Updates +$U_UPDATE_COUNT" \
+          --no-collapse \
+          --msgbox "$RESULT" 30 0
+      }
+      RESULT="$(ls -l "$FOLDER_DB"/Updates | awk '{ print $6,$7,$8,$9 }' | egrep "*.sql")"
+      display_result 2>/dev/null
+
+      # database updates list
+      display_result() {
+        dialog --title "${TYPE_CORE:?}-db -> Instances +$INSTANCES_UPDATE_COUNT" \
+          --no-collapse \
+          --msgbox "$RESULT" 30 0
+      }
+      RESULT="$(ls -l "$FOLDER_DB"/Updates/Instances | awk '{ print $6,$7,$8,$9 }' | egrep "*.sql")"
+      display_result 2>/dev/null
+
+      ;;
+
+    "13")
 
       printf '%b' "${GR:?}Deleting Database! $FOLDER_DB${N0:?}\n"
       read -t 5 -r -p "[YN] Delete Database Directory? y/n " -n 1 -r
