@@ -3888,7 +3888,7 @@ $SERVER_BUILD Disabled.\n"
           --no-collapse \
           --msgbox "$RESULT" 30 0
       }
-      RESULT="$(ls -l "$FOLDER_DB"/Updates | awk '{ print $6,$7,$8,$9 }' | egrep "*.sql")"
+      RESULT="$(ls -l "$FOLDER_DB"/Updates | awk '{ print $6,$7,$8,$9 }' | egrep "*.sql" | tac)"
       display_result 2>/dev/null
 
       # database updates/instances list
