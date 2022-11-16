@@ -3842,9 +3842,9 @@ $SERVER_BUILD Disabled.\n"
       sudo apt-get install dialog -y 2>&1
     fi
 
-    HEIGHT=19
+    HEIGHT=20
     WIDTH=42
-    CHOICE_HEIGHT=12
+    CHOICE_HEIGHT=13
     BACKTITLE="Update Database"
     TITLE="Update core-db [database]"
     MENU="Choose one option:"
