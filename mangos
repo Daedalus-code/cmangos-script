@@ -3878,7 +3878,7 @@ $SERVER_BUILD Disabled.\n"
 
     "12")
 
-      # updates, Instances count
+      # updates, instances count
       U_UPDATE_COUNT="$(ls -l "$FOLDER_DB"/Updates | awk '{ print $6,$7,$8,$9 }' | egrep "*.sql" | wc -l)"
       INSTANCES_UPDATE_COUNT="$(ls -l "$FOLDER_DB"/Updates/Instances | awk '{ print $6,$7,$8,$9 }' | egrep "*.sql" | wc -l)"
 
@@ -3891,7 +3891,7 @@ $SERVER_BUILD Disabled.\n"
       RESULT="$(ls -l "$FOLDER_DB"/Updates | awk '{ print $6,$7,$8,$9 }' | egrep "*.sql")"
       display_result 2>/dev/null
 
-      # database updates list
+      # database updates/instances list
       display_result() {
         dialog --title "${TYPE_CORE:?}-db -> Instances +$INSTANCES_UPDATE_COUNT" \
           --no-collapse \
