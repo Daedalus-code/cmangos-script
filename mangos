@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20221611
-# 6.6.7.6
+# V20223011
+# 6.6.8.9
 
 while :; do
 
@@ -5022,15 +5022,13 @@ Check log for which database needs 'applying updates'"
 
     "1")
 
-      if [[ "$MENU_ON_COUNT" -gt "0" ]] &>/dev/null; then
-        # platers online
-        echo "Player(s) online"
-        echo
-        mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM ${DB_CHARACTERS:?}.characters WHERE online = 1 ORDER BY name;" 2>&1
-        echo
-        read -r -p "Press Enter to continue" </dev/tty
-        echo
-      fi
+      display_result() {
+        dialog --title "Player(s) online" \
+          --no-collapse \
+          --msgbox "$RESULT" 15 50
+      }
+      RESULT="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM ${DB_CHARACTERS:?}.characters WHERE online = 1 ORDER BY name;" 2>&1)"
+      display_result 2>/dev/null
 
       ;;
 
@@ -5302,12 +5300,13 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
     "4")
 
       # get database size from mysql
-      echo "Database size"
-      echo
-      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in MB' FROM information_schema.TABLES WHERE table_schema = \"${DB_CHARACTERS:?}\" ORDER BY (data_length + index_length) DESC;"
-      echo
-      read -r -p "Press Enter to continue" </dev/tty
-      echo
+      display_result() {
+        dialog --title "Database size" \
+          --no-collapse \
+          --msgbox "$RESULT" 25 50
+      }
+      RESULT="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in MB' FROM information_schema.TABLES WHERE table_schema = \"${DB_CHARACTERS:?}\" ORDER BY (data_length + index_length) DESC;")"
+      display_result 2>/dev/null
 
       ;;
 
@@ -5321,11 +5320,13 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
 
   "g")
 
-    echo "Guilds"
-    echo
-    mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, motd FROM $DB_CHARACTERS.guild;" 2>&1
-    echo
-    read -r -p "Press Enter to continue" </dev/tty
+    display_result() {
+      dialog --title "Guilds" \
+        --no-collapse \
+        --msgbox "$RESULT" 15 50
+    }
+    RESULT="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, motd FROM $DB_CHARACTERS.guild;" 2>&1)"
+    display_result 2>/dev/null
 
     ;;
 
