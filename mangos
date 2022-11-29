@@ -4949,25 +4949,37 @@ Check log for which database needs 'applying updates'"
 
   "u")
 
-    echo "User Accounts"
-    echo
-    mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT username, gmlevel, lockedIp, active_realm_id, id FROM ${DB_REALMD:?}.account;" 2>&1
-    echo
-    read -r -p "[YN] Last Logins? y/n " -n 1 -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
-      echo
-      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT id, accountId, ip, loginTime, loginSource, id FROM ${DB_REALMD:?}.account_logons;" 2>&1
-    fi
-    echo
-    read -r -p "[YN] Database size? y/n " -n 1 -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
-      echo
-      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in (MB)' FROM information_schema.TABLES WHERE table_schema = \"${DB_REALMD:?}\" ORDER BY (data_length + index_length) DESC;"
-      echo
-      read -r -p "Press Enter to continue" </dev/tty
-    fi
+    mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT id, accountId, ip, loginTime, loginSource, id FROM ${DB_REALMD:?}.account_logons;" >/var/log/ms/last_logins 2>&1
+
+    # user accounts
+    display_result() {
+      dialog --title "User Accounts" \
+        --no-collapse \
+        --msgbox "$RESULT" 15 64
+    }
+    RESULT="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT username, gmlevel, lockedIp, active_realm_id, id FROM ${DB_REALMD:?}.account;" 2>&1)"
+    display_result 2>/dev/null
+
+    # last logins
+    display_result() {
+      dialog --title "Last 100 Logins" \
+        --no-collapse \
+        --msgbox "$RESULT" 25 72
+    }
+    RESULT="$(
+      echo "id    accountId       ip      loginTime       loginSource     id"
+      tail -100 /var/log/ms/last_logins 2>/dev/null | grep -v "id" | tac
+    )"
+    display_result 2>/dev/null
+
+    # database size
+    display_result() {
+      dialog --title "Database size" \
+        --no-collapse \
+        --msgbox "$RESULT" 18 64
+    }
+    RESULT="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in (MB)' FROM information_schema.TABLES WHERE table_schema = \"${DB_REALMD:?}\" ORDER BY (data_length + index_length) DESC;" 2>&1)"
+    display_result 2>/dev/null
 
     ;;
 
