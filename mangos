@@ -807,16 +807,15 @@ while :; do
           grep -Eo "@.*" 2>&1 | tr -d '@' 2>&1 | tr -d ' ' 2>&1)
         MENU_PRINT_CPU_TEMP="CPU Freq${G0:?}........:${N0:?} $MENU_PRINT_CPU_TEMP"
       fi
-      # commit
-      if grep -q -E "Using commit.*(.*)" "${FOLDER_CORE:?}"/run/logs/Server.log &>/dev/null; then
-        CORE_COMMIT_HASH=$(grep -E "Using commit.*(.*)" "${FOLDER_CORE:?}"/run/logs/Server.log 2>&1 | grep -o "(.*)" 2>&1 | tr -d '()' 2>&1 | sed 's/^ *//' 2>&1)
-      else
+
+      # core commit
+      CORE_COMMIT_HASH=$(cd "$FOLDER_CORE" || exit && git rev-parse HEAD)
+      if [[ -z "$CORE_COMMIT_HASH" ]] &>/dev/null; then
         CORE_COMMIT_HASH="0000000000000000000000000000000000000000"
       fi
 
       # database commit
-      DB_COMMIT_HASH="$(cd "$FOLDER_DB" || exit && git rev-parse --short HEAD)"
-
+      DB_COMMIT_HASH="$(cd "$FOLDER_DB" || exit && git rev-parse HEAD)"
       if [[ -z "$DB_COMMIT_HASH" ]] &>/dev/null; then
         DB_COMMIT_HASH="0000000000000000000000000000000000000000"
       fi
