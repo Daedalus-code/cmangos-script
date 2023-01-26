@@ -809,7 +809,7 @@ while :; do
       fi
 
       # core commit
-      CORE_COMMIT_HASH=$(cd "$FOLDER_CORE" || exit && git rev-parse HEAD)
+      CORE_COMMIT_HASH="$(cd "$FOLDER_CORE" || exit && git rev-parse HEAD)"
       if [[ -z "$CORE_COMMIT_HASH" ]] &>/dev/null; then
         CORE_COMMIT_HASH="0000000000000000000000000000000000000000"
       fi
