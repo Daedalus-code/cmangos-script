@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20232601
-# 6.9.2.0
+# 6.9.2.8
 
 while :; do
 
@@ -809,9 +809,16 @@ while :; do
       fi
       # commit
       if grep -q -E "Using commit.*(.*)" "${FOLDER_CORE:?}"/run/logs/Server.log &>/dev/null; then
-        COMMIT_HASH=$(grep -E "Using commit.*(.*)" "${FOLDER_CORE:?}"/run/logs/Server.log 2>&1 | grep -o "(.*)" 2>&1 | tr -d '()' 2>&1 | sed 's/^ *//' 2>&1)
+        CORE_COMMIT_HASH=$(grep -E "Using commit.*(.*)" "${FOLDER_CORE:?}"/run/logs/Server.log 2>&1 | grep -o "(.*)" 2>&1 | tr -d '()' 2>&1 | sed 's/^ *//' 2>&1)
       else
-        COMMIT_HASH="0000000000000000000000000000000000000000"
+        CORE_COMMIT_HASH="0000000000000000000000000000000000000000"
+      fi
+
+      # database commit
+      DB_COMMIT_HASH="$(cd "$FOLDER_DB" || exit && git rev-parse --short HEAD)"
+
+      if [[ -z "$DB_COMMIT_HASH" ]] &>/dev/null; then
+        DB_COMMIT_HASH="0000000000000000000000000000000000000000"
       fi
 
       # free Space, mmc block device #0, partition #2, partition #2, dev/root, overlay
@@ -844,7 +851,8 @@ while :; do
    Realm${G0:?}.......:${G1:?} ${SERVER_NAME:?} ${GR:?}$UPTIME_TIMER (${TOTAL_UPTIME_DAYS:?} Days)${N0:?}
    World${G0:?}.......:${N0:?} $LATEST_WORLD_BUILT
    System${G0:?}......:${N0:?} $BUILT_FOR
-   Commit Hash${G0:?}.:${GR:?} $COMMIT_HASH${N0:?}
+   Core Hash${G0:?}...:${GR:?} $CORE_COMMIT_HASH${N0:?}
+   Data Hash${G0:?}...:${GR:?} $DB_COMMIT_HASH${N0:?}
 
    r $GR: ${THEME_TXT:?}Login${N0:?}   - ${THEME_DSC:?}Remote access  ${N0:?}mangosd.service${G0:?}.:${N0:?} $COMMAND_MANGOSD
    l $GR: ${THEME_TXT:?}Logs${N0:?}    - ${THEME_DSC:?}Analyze logs   ${N0:?}realmd.service${G0:?}..:${N0:?} $COMMAND_REALMD
