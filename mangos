@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20223011
-# 6.6.8.9
+# V20232601
+# 6.8.0.4
 
 while :; do
 
@@ -3842,9 +3842,9 @@ $SERVER_BUILD Disabled.\n"
       sudo apt-get install dialog -y 2>&1
     fi
 
-    HEIGHT=20
+    HEIGHT=21
     WIDTH=42
-    CHOICE_HEIGHT=13
+    CHOICE_HEIGHT=14
     BACKTITLE="Update Database"
     TITLE="Update core-db [database]"
     MENU="Choose one option:"
@@ -3861,7 +3861,8 @@ $SERVER_BUILD Disabled.\n"
       10 "Install database client"
       11 "Install database system"
       12 "DB Updates list"
-      13 "Delete /core-db")
+      13 "Delete /core-db"
+      14 "git checkout")
 
     CHOICE=$(dialog --clear \
       --backtitle "$BACKTITLE" \
@@ -3874,7 +3875,121 @@ $SERVER_BUILD Disabled.\n"
     clear
     case $CHOICE in
 
-    # delete database directory (everything)
+    "14")
+
+      # git checkout list
+      cd "$FOLDER_DB" || exit && git log -10 | egrep "commit [a0-z9]+" | egrep -v "https|cherry" | grep -oP '\b(\w{40})\b' >/var/log/ms/db_git.list
+
+      function continue() {
+        echo "[OK] Please update database (c)"
+        printf '%b' "[OK] "
+        read -r -p "Press Enter to continue" </dev/tty
+      }
+
+      HEIGHT=17
+      WIDTH=52
+      CHOICE_HEIGHT=10
+      BACKTITLE="git checkout"
+      TITLE="Last 10 commits"
+      MENU="Choose checkout (commit):"
+
+      OPTIONS=(1 "$(sed -n 1p /var/log/ms/db_git.list)"
+      2 "$(sed -n 2p /var/log/ms/db_git.list)"
+      3 "$(sed -n 3p /var/log/ms/db_git.list)"
+      4 "$(sed -n 4p /var/log/ms/db_git.list)"
+      5 "$(sed -n 5p /var/log/ms/db_git.list)"
+      6 "$(sed -n 6p /var/log/ms/db_git.list)"
+      7 "$(sed -n 7p /var/log/ms/db_git.list)"
+      8 "$(sed -n 8p /var/log/ms/db_git.list)"
+      9 "$(sed -n 9p /var/log/ms/db_git.list)"
+      10 "$(sed -n 10p /var/log/ms/db_git.list)")
+
+      CHOICE=$(dialog --clear \
+        --backtitle "$BACKTITLE" \
+        --title "$TITLE" \
+        --menu "$MENU" \
+        $HEIGHT $WIDTH $CHOICE_HEIGHT \
+        "${OPTIONS[@]}" \
+        2>&1 >/dev/tty)
+
+      clear
+      case $CHOICE in
+
+      "1")
+
+        cd "$FOLDER_DB" || exit && git checkout "$(sed -n 1p /var/log/ms/db_git.list)"
+        continue
+
+        ;;
+
+      "2")
+
+        cd "$FOLDER_DB" || exit && git checkout "$(sed -n 2p /var/log/ms/db_git.list)"
+        continue
+
+        ;;
+
+      "3")
+
+        cd "$FOLDER_DB" || exit && git checkout "$(sed -n 3p /var/log/ms/db_git.list)"
+        continue
+
+        ;;
+
+      "4")
+
+        cd "$FOLDER_DB" || exit && git checkout "$(sed -n 4p /var/log/ms/db_git.list)"
+        continue
+
+        ;;
+
+      "5")
+
+        cd "$FOLDER_DB" || exit && git checkout "$(sed -n 5p /var/log/ms/db_git.list)"
+        continue
+
+        ;;
+
+      "6")
+
+        cd "$FOLDER_DB" || exit && git checkout "$(sed -n 6p /var/log/ms/db_git.list)"
+        continue
+
+        ;;
+
+      "7")
+
+        cd "$FOLDER_DB" || exit && git checkout "$(sed -n 7p /var/log/ms/db_git.list)"
+        continue
+
+        ;;
+
+      "8")
+
+        cd "$FOLDER_DB" || exit && git checkout "$(sed -n 8p /var/log/ms/db_git.list)"
+        continue
+
+        ;;
+
+      "9")
+
+        cd "$FOLDER_DB" || exit && git checkout "$(sed -n 9p /var/log/ms/db_git.list)"
+        continue
+
+        ;;
+
+      "10")
+
+        cd "$FOLDER_DB" || exit && git checkout "$(sed -n 10p /var/log/ms/db_git.list)"
+        continue
+
+        ;;
+
+      esac
+
+      ;;
+
+      # delete database directory (everything)
 
     "12")
 
