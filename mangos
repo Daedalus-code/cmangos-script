@@ -2650,70 +2650,70 @@ ${GR:?}(w) Helper > Update Helper${N0:?}\n"
 
       "1")
 
-        cd "$FOLDER_DB" || exit && git checkout "$(sed -n 1p /var/log/ms/core_git.list)"
+        cd "$FOLDER_CORE" || exit && git checkout "$(sed -n 1p /var/log/ms/core_git.list)"
         continue
 
         ;;
 
       "2")
 
-        cd "$FOLDER_DB" || exit && git checkout "$(sed -n 2p /var/log/ms/core_git.list)"
+        cd "$FOLDER_CORE" || exit && git checkout "$(sed -n 2p /var/log/ms/core_git.list)"
         continue
 
         ;;
 
       "3")
 
-        cd "$FOLDER_DB" || exit && git checkout "$(sed -n 3p /var/log/ms/core_git.list)"
+        cd "$FOLDER_CORE" || exit && git checkout "$(sed -n 3p /var/log/ms/core_git.list)"
         continue
 
         ;;
 
       "4")
 
-        cd "$FOLDER_DB" || exit && git checkout "$(sed -n 4p /var/log/ms/core_git.list)"
+        cd "$FOLDER_CORE" || exit && git checkout "$(sed -n 4p /var/log/ms/core_git.list)"
         continue
 
         ;;
 
       "5")
 
-        cd "$FOLDER_DB" || exit && git checkout "$(sed -n 5p /var/log/ms/core_git.list)"
+        cd "$FOLDER_CORE" || exit && git checkout "$(sed -n 5p /var/log/ms/core_git.list)"
         continue
 
         ;;
 
       "6")
 
-        cd "$FOLDER_DB" || exit && git checkout "$(sed -n 6p /var/log/ms/core_git.list)"
+        cd "$FOLDER_CORE" || exit && git checkout "$(sed -n 6p /var/log/ms/core_git.list)"
         continue
 
         ;;
 
       "7")
 
-        cd "$FOLDER_DB" || exit && git checkout "$(sed -n 7p /var/log/ms/core_git.list)"
+        cd "$FOLDER_CORE" || exit && git checkout "$(sed -n 7p /var/log/ms/core_git.list)"
         continue
 
         ;;
 
       "8")
 
-        cd "$FOLDER_DB" || exit && git checkout "$(sed -n 8p /var/log/ms/core_git.list)"
+        cd "$FOLDER_CORE" || exit && git checkout "$(sed -n 8p /var/log/ms/core_git.list)"
         continue
 
         ;;
 
       "9")
 
-        cd "$FOLDER_DB" || exit && git checkout "$(sed -n 9p /var/log/ms/core_git.list)"
+        cd "$FOLDER_CORE" || exit && git checkout "$(sed -n 9p /var/log/ms/core_git.list)"
         continue
 
         ;;
 
       "10")
 
-        cd "$FOLDER_DB" || exit && git checkout "$(sed -n 10p /var/log/ms/core_git.list)"
+        cd "$FOLDER_CORE" || exit && git checkout "$(sed -n 10p /var/log/ms/core_git.list)"
         continue
 
         ;;
