@@ -466,7 +466,7 @@ $(cat "${FOLDER_WOW:?}"/tmp.txt)
         display_result() {
           dialog --title "$CA_TITLE" \
             --no-collapse \
-            --msgbox "$RESULT" 0 0
+            --msgbox "$RESULT" 5 40
         }
         RESULT="$(echo "[OK] Account '$CMANGOS_USR' ($CMANGOS_XPV/$CMANGOS_LVL) created.")"
         display_result 2>/dev/null
@@ -474,7 +474,7 @@ $(cat "${FOLDER_WOW:?}"/tmp.txt)
         display_result() {
           dialog --title "$CA_TITLE" \
             --no-collapse \
-            --msgbox "$RESULT" 0 0
+            --msgbox "$RESULT" 5 40
         }
         RESULT="$(echo "[!!] Empty data! Please try again.")"
         display_result 2>/dev/null
