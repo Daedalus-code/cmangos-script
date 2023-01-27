@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20232701
-# 6.9.7.3
+# 6.9.8.1
 
 while :; do
 
@@ -384,7 +384,15 @@ while :; do
           --no-collapse \
           --msgbox "$RESULT" 0 0
       }
-      RESULT="$(echo "   0 : Classic
+      RESULT="$(echo "
+    _____ _____     _____ _____ _____ _____
+   |     |     |___|   | |   __|     |   __|
+   |   --| | | | .'| | | |  |  |  |  |__   |
+   |_____|_|_|_|__,|_|___|_____|_____|_____|
+   C(ontinued)-MaNGOS - Helper/Tool
+   2019-2023
+
+   0 : Classic
    1 : The Burning Crusade
    2 : Wrath of the Lich King
 
