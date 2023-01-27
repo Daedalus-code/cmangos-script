@@ -377,7 +377,7 @@ while :; do
 
     "1")
 
-      CA_TITLE="Account creation"
+      CA_TITLE="Account Creation - $(date | xargs)"
 
       display_result() {
         dialog --title "$CA_TITLE" \
