@@ -11,8 +11,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20232601
-# 6.9.2.8
+# V20232701
+# 6.9.5.4
 
 while :; do
 
@@ -377,81 +377,108 @@ while :; do
 
     "1")
 
-      clear
-      printf '%b' "
-   0 $GR:$N0 Classic
-   1 $GR:$N0 The Burning Crusade
-   2 $GR:$N0 Wrath of the Lich King
+      CA_TITLE="Account creation"
 
-   0 $GR:$N0 Player
-   1 $GR:$N0 Moderator
-   2 $GR:$N0 Game Master
-   3 $GR:$N0 Administrator
+      display_result() {
+        dialog --title "$CA_TITLE" \
+          --no-collapse \
+          --msgbox "$RESULT" 0 0
+      }
+      RESULT="$(echo "   0 : Classic
+   1 : The Burning Crusade
+   2 : Wrath of the Lich King
+
+   0 : Player
+   1 : Moderator
+   2 : Game Master
+   3 : Administrator
 
    Minimum 5 characters account name.
 
-   Create new account (${THEME_ALL:?}username${N0:?})
-   Set the (${THEME_ALL:?}expansion${N0:?}) version.
-   Set the (${THEME_ALL:?}account${N0:?}) privilege.
+   Create new account (username)
+   Set the (expansion) version.
+   Set the (account) privilege.
 
-   ${THEME_ALL:?}Example${N0:?}: 'username' '0' '0'"
-
-      # menu done
+   Example: 'username' '0' '0'")"
+      display_result 2>/dev/null
 
       # username, password, expansion, gmlevel
 
-      echo
-      echo
-      printf '%b' "Username: "
-      read -r USR
-      if [[ -z "$USR" ]] &>/dev/null; then
-        echo
-        printf '%b' "empty"
-        echo
-      else
-        printf '%b' "[${G1:?}OK${N0:?}] $USR"
-        echo
-        printf '%b' "Password: "
-        read -r -s PWD
-        if [[ -z "$PWD" ]] &>/dev/null; then
-          echo
-          printf '%b' "empty"
-          echo
-        else
-          printf '%b' "[${G1:?}OK${N0:?}] Password"
-          echo
-          echo "Expansion - 0"
-          read -r -s XPV
-          if [[ -z "$XPV" ]] &>/dev/null; then
-            printf '%b' "empty"
-            echo
-          else
-            printf '%b' "[${G1:?}OK${N0:?}] Expansion ($XPV)"
-            echo
-            echo "GMlevel - 0-3"
-            read -r -s LVL
-            if [[ -z "$LVL" ]] &>/dev/null; then
-              printf '%b' "empty"
-              echo
-            else
-              printf '%b' "[${G1:?}OK${N0:?}] GMlevel ($LVL)"
-              echo "${USER_NC:?}
-  ${PASS_NC:?}
-  .account create $USR $PWD
-  .account set addon $USR $XPV
-  .account set gmlevel $USR $LVL" >"${FOLDER_WOW:?}"/tmp.txt
-              nc -q 1 "${host_nc:?}" "${port_nc:?}" <"${FOLDER_WOW:?}"/tmp.txt
-              rm "${FOLDER_WOW:?}"/tmp.txt
-              echo
-              echo
-              printf '%b' "[${G1:?}OK${N0:?}] Account '${THEME_ALL:?}$USR${N0:?}' ($XPV/$LVL) created."
-              echo
-              echo
-            fi
-          fi
-        fi
+      # set username
+      CMANGOS_USR=$(
+        dialog --title "$CA_TITLE" \
+          --nocancel \
+          --inputbox "Enter username:" 8 40 \
+          3>&1 1>&2 2>&3 3>&-
+      )
+      # set password
+      CMANGOS_PWD=$(
+        dialog --title "$CA_TITLE" \
+          --nocancel \
+          --inputbox "Enter password:" 8 40 \
+          3>&1 1>&2 2>&3 3>&-
+      )
+      # set expansion
+      CMANGOS_XPV=$(
+        dialog --title "$CA_TITLE" \
+          --nocancel \
+          --inputbox "Enter expansion (0-2):" 8 40 \
+          3>&1 1>&2 2>&3 3>&-
+      )
+      # set gmlevel
+      CMANGOS_LVL=$(
+        dialog --title "$CA_TITLE" \
+          --nocancel \
+          --inputbox "Enter gmlevel (0-3):" 8 40 \
+          3>&1 1>&2 2>&3 3>&-
+      )
+
+      # empty data
+      if [[ -z "$CMANGOS_USR" ]] &>/dev/null; then
+        CMANGOS_EMPTY="1"
+      elif [[ -z "$CMANGOS_PWD" ]] &>/dev/null; then
+        CMANGOS_EMPTY="1"
+      elif [[ -z "$CMANGOS_XPV" ]] &>/dev/null; then
+        CMANGOS_EMPTY="1"
+      elif [[ -z "$CMANGOS_LVL" ]] &>/dev/null; then
+        CMANGOS_EMPTY="1"
       fi
-      echo
+
+      # empty data, skip
+      if [[ "$CMANGOS_EMPTY" -eq "0" ]] &>/dev/null; then
+
+        # create account txt
+        echo "${USER_NC:?}
+      ${PASS_NC:?}
+      .account create $CMANGOS_USR $CMANGOS_PWD
+      .account set addon $CMANGOS_USR $CMANGOS_XPV
+      .account set gmlevel $CMANGOS_USR $CMANGOS_LVL" >"${FOLDER_WOW:?}"/tmp.txt
+        # create receipt
+        echo "$(date)
+- - - - - - - - - - - - - - -
+$(cat "${FOLDER_WOW:?}"/tmp.txt)
+-----------------------------" >>"${FOLDER_WOW:?}"/ac.list 2>/dev/null
+        # remote admin (netcat)
+        nc -q 1 "${HOST_NC:?}" "${PORT_NC:?}" <"${FOLDER_WOW:?}"/tmp.txt
+        # remove old file
+        rm "${FOLDER_WOW:?}"/tmp.txt
+
+        display_result() {
+          dialog --title "$CA_TITLE" \
+            --no-collapse \
+            --msgbox "$RESULT" 0 0
+        }
+        RESULT="$(echo "[OK] Account '$CMANGOS_USR' ($CMANGOS_XPV/$CMANGOS_LVL) created.")"
+        display_result 2>/dev/null
+      else
+        display_result() {
+          dialog --title "$CA_TITLE" \
+            --no-collapse \
+            --msgbox "$RESULT" 0 0
+        }
+        RESULT="$(echo "[!!] Empty data! Please try again.")"
+        display_result 2>/dev/null
+      fi
 
       ;;
 
