@@ -12,7 +12,7 @@
 
 # By Rainman
 # V20232701
-# 6.9.5.4
+# 6.9.7.3
 
 while :; do
 
@@ -466,7 +466,7 @@ $(cat "${FOLDER_WOW:?}"/tmp.txt)
         display_result() {
           dialog --title "$CA_TITLE" \
             --no-collapse \
-            --msgbox "$RESULT" 5 40
+            --msgbox "$RESULT" 5 42
         }
         RESULT="$(echo "[OK] Account '$CMANGOS_USR' ($CMANGOS_XPV/$CMANGOS_LVL) created.")"
         display_result 2>/dev/null
@@ -579,24 +579,41 @@ $(cat "${FOLDER_WOW:?}"/tmp.txt)
 
     "3")
 
-      printf '%b' "${R1:?}Banned Accounts${N0:?}\n"
-      echo
-      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT id, account_id, banned_at, expires_at, banned_by, reason, active FROM ${DB_REALMD:?}.account_banned;"
-      echo
-      printf '%b' "${R0:?}Banned IP Adresses${N0:?}\n"
-      echo
-      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT ip, banned_at, expires_at, banned_by, reason FROM ${DB_REALMD:?}.ip_banned;"
-      echo
-      printf '%b' "${P1:?}Dishonorable Kills${N0:?}\n"
-      echo
-      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, stored_dishonorable_kills FROM ${DB_CHARACTERS:?}.characters WHERE stored_dishonorable_kills>=1 ORDER BY name;" 2>&1
-      echo
-      printf '%b' "${Y1:?}Intoxicated ${GR:?}(drunk)${N0:?}\n"
-      echo
-      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, drunk FROM ${DB_CHARACTERS:?}.characters WHERE drunk>=1 ORDER BY name;" 2>&1
-      echo
-      read -r -p "Press Enter to continue" </dev/tty
-      echo
+      # banned accounts
+      display_result() {
+        dialog --title "Banned Accounts" \
+          --no-collapse \
+          --msgbox "$RESULT" 10 50
+      }
+      RESULT="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT id, account_id, banned_at, expires_at, banned_by, reason, active FROM ${DB_REALMD:?}.account_banned;")"
+      display_result 2>/dev/null
+
+      # banned ip address
+      display_result() {
+        dialog --title "Banned IP Address" \
+          --no-collapse \
+          --msgbox "$RESULT" 10 50
+      }
+      RESULT="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT ip, banned_at, expires_at, banned_by, reason FROM ${DB_REALMD:?}.ip_banned;")"
+      display_result 2>/dev/null
+
+      # dishonorable kills
+      display_result() {
+        dialog --title "Dishonorable Kills" \
+          --no-collapse \
+          --msgbox "$RESULT" 10 50
+      }
+      RESULT="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, stored_dishonorable_kills FROM ${DB_CHARACTERS:?}.characters WHERE stored_dishonorable_kills>=1 ORDER BY name;")"
+      display_result 2>/dev/null
+
+      # intoxicated (drunks)
+      display_result() {
+        dialog --title "Intoxicated (drunks)" \
+          --no-collapse \
+          --msgbox "$RESULT" 10 50
+      }
+      RESULT="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, drunk FROM ${DB_CHARACTERS:?}.characters WHERE drunk>=1 ORDER BY name;")"
+      display_result 2>/dev/null
 
       ;;
 
@@ -604,12 +621,14 @@ $(cat "${FOLDER_WOW:?}"/tmp.txt)
 
     "4")
 
-      printf '%b' "${CY:?}System Fingerprint Usage (SFU)${N0:?}\n"
-      echo
-      mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT fingerprint, ip, account, realm, time, architecture, cputype, activecpus, totalcpus, pagesize FROM ${DB_REALMD:?}.system_fingerprint_usage;"
-      echo
-      read -r -p "Press Enter to continue" </dev/tty
-      echo
+      # system fingerprint usage (sfu)
+      display_result() {
+        dialog --title "System Fingerprint Usage (SFU)" \
+          --no-collapse \
+          --msgbox "$RESULT" 20 145
+      }
+      RESULT="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT fingerprint, ip, account, realm, time, architecture, cputype, activecpus, totalcpus, pagesize FROM ${DB_REALMD:?}.system_fingerprint_usage;")"
+      display_result 2>/dev/null
 
       ;;
 
