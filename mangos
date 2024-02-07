@@ -894,7 +894,7 @@ $(cat "${FOLDER_WOW:?}"/tmp.txt)
         # calculate days
         TOTAL_UPTIME_DAYS=$(echo "$TOTAL_UPTIME/3600/24" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
         # calculate years
-        TOTAL_UPTIME_YEARS=$(echo "$TOTAL_UPTIME/3600/365" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
+        TOTAL_UPTIME_YEARS=$(echo "$TOTAL_UPTIME_DAYS/365" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
         if [ -z "$TOTAL_UPTIME_DAYS" ] &>/dev/null; then
           # non responsive
           TOTAL_UPTIME_DAYS="1"
