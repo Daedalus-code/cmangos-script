@@ -590,36 +590,40 @@ $(cat "${FOLDER_WOW:?}"/tmp.txt)
       display_result() {
         dialog --title "Banned Accounts" \
           --no-collapse \
-          --msgbox "$RESULT" 10 50
+          --msgbox "$RESULT" 0 0
       }
-      RESULT="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT id, account_id, banned_at, expires_at, banned_by, reason, active FROM ${DB_REALMD:?}.account_banned;")"
+      BANNED_ACCOUNTS="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT id, account_id, banned_at, expires_at, banned_by, reason, active FROM ${DB_REALMD:?}.account_banned;")"
+      RESULT="$(echo "$BANNED_ACCOUNTS" | column -t)"
       display_result 2>/dev/null
 
       # banned ip address
       display_result() {
         dialog --title "Banned IP Address" \
           --no-collapse \
-          --msgbox "$RESULT" 10 50
+          --msgbox "$RESULT" 0 0
       }
-      RESULT="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT ip, banned_at, expires_at, banned_by, reason FROM ${DB_REALMD:?}.ip_banned;")"
+      BANNED_IP_ADDRESS="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT ip, banned_at, expires_at, banned_by, reason FROM ${DB_REALMD:?}.ip_banned;")"
+      RESULT="$(echo "$BANNED_IP_ADDRESS" | column -t)"
       display_result 2>/dev/null
 
       # dishonorable kills
       display_result() {
         dialog --title "Dishonorable Kills" \
           --no-collapse \
-          --msgbox "$RESULT" 10 50
+          --msgbox "$RESULT" 0 0
       }
-      RESULT="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, stored_dishonorable_kills FROM ${DB_CHARACTERS:?}.characters WHERE stored_dishonorable_kills>=1 ORDER BY name;")"
+      DISHONORABLE_KILLS="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, stored_dishonorable_kills FROM ${DB_CHARACTERS:?}.characters WHERE stored_dishonorable_kills>=1 ORDER BY name;")"
+      RESULT="$(echo "$DISHONORABLE_KILLS" | column -t)"
       display_result 2>/dev/null
 
       # intoxicated (drunks)
       display_result() {
         dialog --title "Intoxicated (drunks)" \
           --no-collapse \
-          --msgbox "$RESULT" 10 50
+          --msgbox "$RESULT" 0 0
       }
-      RESULT="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, drunk FROM ${DB_CHARACTERS:?}.characters WHERE drunk>=1 ORDER BY name;")"
+      INTOXICATED_DRUNKS="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, drunk FROM ${DB_CHARACTERS:?}.characters WHERE drunk>=1 ORDER BY name;")"
+      RESULT="$(echo "$INTOXICATED_DRUNKS" | column -t)"
       display_result 2>/dev/null
 
       ;;
@@ -632,9 +636,10 @@ $(cat "${FOLDER_WOW:?}"/tmp.txt)
       display_result() {
         dialog --title "System Fingerprint Usage (SFU)" \
           --no-collapse \
-          --msgbox "$RESULT" 20 145
+          --msgbox "$RESULT" 0 0
       }
-      RESULT="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT fingerprint, ip, account, realm, time, architecture, cputype, activecpus, totalcpus, pagesize FROM ${DB_REALMD:?}.system_fingerprint_usage;")"
+      SYSTEM_FINGERPRINT_USAGE="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT fingerprint, ip, account, realm, time, architecture, cputype, activecpus, totalcpus, pagesize FROM ${DB_REALMD:?}.system_fingerprint_usage;")"
+      RESULT="$(echo "$SYSTEM_FINGERPRINT_USAGE" | column -t)"
       display_result 2>/dev/null
 
       ;;
