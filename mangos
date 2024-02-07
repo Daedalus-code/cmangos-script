@@ -893,14 +893,20 @@ $(cat "${FOLDER_WOW:?}"/tmp.txt)
         UPTIME_TIMER=$(printf '%dh:%dm:%ds\n' $(("$TOTAL_UPTIME/3600")) $(("$TOTAL_UPTIME%3600/60")) $(("$TOTAL_UPTIME%60")))
         # calculate days
         TOTAL_UPTIME_DAYS=$(echo "$TOTAL_UPTIME/3600/24" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
+        # calculate years
+        TOTAL_UPTIME_YEARS=$(echo "$TOTAL_UPTIME/3600/365" 2>&1 | bc -l 2>&1 | awk -F. '{ print $1 }' 2>&1)
         if [ -z "$TOTAL_UPTIME_DAYS" ] &>/dev/null; then
           # non responsive
           TOTAL_UPTIME_DAYS="1"
         fi
+        if [ -z "$TOTAL_UPTIME_YEARS" ] &>/dev/null; then
+          # non responsive
+          TOTAL_UPTIME_YEARS="1"
+        fi
       fi
 
       printf '%b' "
-   Realm${G0:?}.......:${G1:?} ${SERVER_NAME:?} ${GR:?}$UPTIME_TIMER (${TOTAL_UPTIME_DAYS:?} Days)${N0:?}
+   Realm${G0:?}.......:${G1:?} ${SERVER_NAME:?} ${GR:?}$UPTIME_TIMER (${TOTAL_UPTIME_DAYS:?} Days) ($TOTAL_UPTIME_YEARS Years)${N0:?}
    World${G0:?}.......:${N0:?} $LATEST_WORLD_BUILT
    System${G0:?}......:${N0:?} $BUILT_FOR
    Core Hash${G0:?}...:${GR:?} $CORE_COMMIT_HASH${N0:?}
