@@ -11,7 +11,7 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20232701
+# V20240702
 # 6.9.8.0
 
 while :; do
@@ -389,7 +389,7 @@ while :; do
    |   --| | | | .'| | | |  |  |  |  |__   |
    |_____|_|_|_|__,|_|___|_____|_____|_____|
    C(ontinued)-MaNGOS - Helper/Tool
-   2019-2023
+   2019-2024
 
    0 : Classic
    1 : The Burning Crusade
@@ -963,7 +963,7 @@ $(cat "${FOLDER_WOW:?}"/tmp.txt)
   |   --| | | | .'| | | |  |  |  |  |__   |${RC1:?}
   |_____|_|_|_|__,|_|___|_____|_____|_____|${N0:?}
    C(ontinued)-MaNGOS - ${GR:?}Helper/Tool
-   2019-2023${N0:?}
+   2019-2024${N0:?}
 
    ${GR:?}https://github.com/Daedalus-code/cmangos-script${N0:?}
 
@@ -5246,30 +5246,36 @@ Check log for which database needs 'applying updates'"
     display_result() {
       dialog --title "User Accounts" \
         --no-collapse \
-        --msgbox "$RESULT" 15 64
+        --msgbox "$RESULT" 0 0
     }
-    RESULT="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT username, gmlevel, lockedIp, active_realm_id, id FROM ${DB_REALMD:?}.account;" 2>&1)"
+
+    USER_ACCOUNTS="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT username, gmlevel, lockedIp, active_realm_id, id FROM ${DB_REALMD:?}.account;" 2>&1)"
+
+    RESULT="$(echo "$USER_ACCOUNTS" | column -t)"
     display_result 2>/dev/null
 
     # last logins
     display_result() {
       dialog --title "Last 100 Logins" \
         --no-collapse \
-        --msgbox "$RESULT" 25 72
+        --msgbox "$RESULT" 0 0
     }
-    RESULT="$(
-      echo "id    accountId       ip      loginTime       loginSource     id"
-      tail -100 /var/log/ms/last_logins 2>/dev/null | grep -v "id" | tac
-    )"
+
+    LAST_LOGINS="$(echo "id accountId ip login Time loginSource id
+$(tail -100 /var/log/ms/last_logins 2>/dev/null | grep -v "id" | tac)")"
+
+    RESULT="$(echo "$LAST_LOGINS" | column -t)"
     display_result 2>/dev/null
 
     # database size
     display_result() {
       dialog --title "Database size" \
         --no-collapse \
-        --msgbox "$RESULT" 18 64
+        --msgbox "$RESULT" 0 0
     }
-    RESULT="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in (MB)' FROM information_schema.TABLES WHERE table_schema = \"${DB_REALMD:?}\" ORDER BY (data_length + index_length) DESC;" 2>&1)"
+    DATABASE_SIZE="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT table_name AS 'Tables', round(((data_length + index_length) / 1024 / 1024), 2) 'Size in (MB)' FROM information_schema.TABLES WHERE table_schema = \"${DB_REALMD:?}\" ORDER BY (data_length + index_length) DESC;" 2>&1)"
+
+    RESULT="$(echo "$DATABASE_SIZE" | column -t)"
     display_result 2>/dev/null
 
     ;;
