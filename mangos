@@ -6941,20 +6941,20 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
   "e")
 
     HEIGHT=20
-    WIDTH=54
+    WIDTH=61
     CHOICE_HEIGHT=13
     BACKTITLE="Server configuration"
     TITLE="Configurations"
     MENU="Choose one option:"
 
-    OPTIONS=(1 "server.txt              Server config"
+    OPTIONS=(1 "server.txt              Helper/Tool config"
       2 "server.cnf              MySQL config"
       3 "mangos.conf             MaNGOS config"
       4 "realmd.conf             Realmd config"
-      5 "ahbot.conf              AH bot config"
-      6 "playerbot.conf          Player config"
+      5 "ahbot.conf              Auction House Bot config"
+      6 "playerbot.conf          Player Bot config"
       7 "anticheat.conf          Anti Cheat config"
-      8 "InstallFullDB           Install config"
+      8 "InstallFullDB           Install Full DB config"
       9 "mangos.conf.dist        original"
       10 "realmd.conf.dist        original"
       11 "ahbot.conf.dist         original"
