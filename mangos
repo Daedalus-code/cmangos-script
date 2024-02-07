@@ -5622,9 +5622,11 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
     display_result() {
       dialog --title "Guilds" \
         --no-collapse \
-        --msgbox "$RESULT" 15 50
+        --msgbox "$RESULT" 0 0
     }
-    RESULT="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, motd FROM $DB_CHARACTERS.guild;" 2>&1)"
+    GUILDS_INFO="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, motd FROM $DB_CHARACTERS.guild;" 2>&1)"
+
+    RESULT="$(echo "$GUILDS_INFO" | column -t)"
     display_result 2>/dev/null
 
     ;;
