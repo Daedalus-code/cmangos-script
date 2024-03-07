@@ -5,6 +5,8 @@
 #               Continued Massive Network Game Object Server               #
 ############################################################################
 
+# shellcheck disable=SC2034  # Unused variables left for readability
+
 # Built on a Linux ubuntu 5.4.0-1029-raspi - aarch64 (Raspberry Pi4)
 # https://ubuntu.com/download/raspberry-pi
 
@@ -2210,14 +2212,14 @@ $DIVE_LOG_CRASH ${GR:?}$DIVE_DBERROR_CRAS${N0:?} $DIVE_LOG_NONE ${GR:?}$DIVE_LOG
           MA_CYCLE=$(grep -c -E "Returning old mails" "${FOLDER_CORE:?}"/run/logs/Server.log 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
         fi
 
-        printf '%b' "Accounts ${CY:?}$AC_COUNT${N0:?} Guilds ${CY:?}$GU_COUNT${N0:?} Tickets ${CY:?}$TI_COUNT${N0:?}
-Banned ${R1:?}$BN_COUNT${N0:?} Members ${CY:?}$ME_COUNT${N0:?} Corpses ${CY:?}$CO_COUNT${N0:?}
-Online ${CY:?}$ON_COUNT${N0:?} Mail ${CY:?}$MA_COUNT${N0:?} PvP ${CY:?}$PV_COUNT${N0:?}
-Characters ${CY:?}$CH_COUNT${N0:?} Pets ${CY:?}$PE_COUNT${N0:?} Gifts ${CY:?}$GI_COUNT${N0:?}
-MailCycle ${CY:?}$MA_CYCLE${N0:?} Petition ${CY:?}$PT_COUNT${N0:?} PetitionSign ${CY:?}$PS_COUNT${N0:?}
-MailItems ${CY:?}$MI_COUNT${N0:?} BugReport ${CY:?}$BG_COUNT${N0:?} Groups ${CY:?}$GP_COUNT${N0:?}
-Realms ${CY:?}$RL_COUNT${N0:?} Social ${CY:?}$CS_COUNT${N0:?} Logons ${CY:?}$AL_COUNT${N0:?}
-Cooldowns ${CY:?}$CC_COUNT${N0:?} GM_Surveys ${CY:?}$GM_COUNT${N0:?} Auctions ${CY:?}$AU_COUNT${N0:?}\n" | column -t
+        printf '%b' "Accounts ${G1:?}$AC_COUNT${N0:?} Guilds ${G1:?}$GU_COUNT${N0:?} Tickets ${G1:?}$TI_COUNT${N0:?}
+Banned ${R1:?}$BN_COUNT${N0:?} Members ${G1:?}$ME_COUNT${N0:?} Corpses ${G1:?}$CO_COUNT${N0:?}
+Online ${G1:?}$ON_COUNT${N0:?} Mail ${G1:?}$MA_COUNT${N0:?} PvP ${G1:?}$PV_COUNT${N0:?}
+Characters ${G1:?}$CH_COUNT${N0:?} Pets ${G1:?}$PE_COUNT${N0:?} Gifts ${G1:?}$GI_COUNT${N0:?}
+MailG1cle ${G1:?}$MA_CYCLE${N0:?} Petition ${G1:?}$PT_COUNT${N0:?} PetitionSign ${G1:?}$PS_COUNT${N0:?}
+MailItems ${G1:?}$MI_COUNT${N0:?} BugReport ${G1:?}$BG_COUNT${N0:?} Groups ${G1:?}$GP_COUNT${N0:?}
+Realms ${G1:?}$RL_COUNT${N0:?} Social ${G1:?}$CS_COUNT${N0:?} Logons ${G1:?}$AL_COUNT${N0:?}
+Cooldowns ${G1:?}$CC_COUNT${N0:?} GM_Surveys ${G1:?}$GM_COUNT${N0:?} Auctions ${G1:?}$AU_COUNT${N0:?}\n" | column -t
         echo
         read -r -p "Press Enter to continue" </dev/tty
         echo
