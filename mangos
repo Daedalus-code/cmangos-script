@@ -2210,14 +2210,14 @@ $DIVE_LOG_CRASH ${GR:?}$DIVE_DBERROR_CRAS${N0:?} $DIVE_LOG_NONE ${GR:?}$DIVE_LOG
           MA_CYCLE=$(grep -c -E "Returning old mails" "${FOLDER_CORE:?}"/run/logs/Server.log 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
         fi
 
-        echo "Accounts $AC_COUNT Guilds $GU_COUNT Tickets $TI_COUNT
-Banned $BN_COUNT Members $ME_COUNT Corpses $CO_COUNT
-Online $ON_COUNT Mail $MA_COUNT PvP $PV_COUNT
-Characters $CH_COUNT Pets $PE_COUNT Gifts $GI_COUNT
-MailCycle $MA_CYCLE Petition $PT_COUNT PetitionSign $PS_COUNT
-MailItems $MI_COUNT BugReport $BG_COUNT Groups $GP_COUNT
-Realms $RL_COUNT Social $CS_COUNT Logons $AL_COUNT
-Cooldowns $CC_COUNT GM_Surveys $GM_COUNT Auctions $AU_COUNT" | column -t
+        echo "Accounts ${CY:?}$AC_COUNT${N0:?} Guilds ${CY:?}$GU_COUNT${N0:?} Tickets ${CY:?}$TI_COUNT${N0:?}
+Banned ${R1:?}$BN_COUNT${N0:?} Members ${CY:?}$ME_COUNT${N0:?} Corpses ${CY:?}$CO_COUNT${N0:?}
+Online ${CY:?}$ON_COUNT${N0:?} Mail ${CY:?}$MA_COUNT${N0:?} PvP ${CY:?}$PV_COUNT${N0:?}
+Characters ${CY:?}$CH_COUNT${N0:?} Pets ${CY:?}$PE_COUNT${N0:?} Gifts ${CY:?}$GI_COUNT${N0:?}
+MailCycle ${CY:?}$MA_CYCLE${N0:?} Petition ${CY:?}$PT_COUNT${N0:?} PetitionSign ${CY:?}$PS_COUNT${N0:?}
+MailItems ${CY:?}$MI_COUNT${N0:?} BugReport ${CY:?}$BG_COUNT${N0:?} Groups ${CY:?}$GP_COUNT${N0:?}
+Realms ${CY:?}$RL_COUNT${N0:?} Social ${CY:?}$CS_COUNT${N0:?} Logons ${CY:?}$AL_COUNT${N0:?}
+Cooldowns ${CY:?}$CC_COUNT${N0:?} GM_Surveys ${CY:?}$GM_COUNT${N0:?} Auctions ${CY:?}$AU_COUNT${N0:?}" | column -t
         echo
         read -r -p "Press Enter to continue" </dev/tty
         echo
