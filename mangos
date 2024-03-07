@@ -705,59 +705,6 @@ $(cat "${FOLDER_WOW:?}"/tmp.txt)
       *) COMMAND_MANGOSD="${Y1:?}OK${N0:?}" ;;
       esac
 
-      # Thank you! -> https://stackoverflow.com/questions/59862020
-
-      # shellcheck disable=SC2034  # Unused variables left for readability
-      # init_colors
-      init_colors() {
-        RESET=$(tput sgr0)
-        BOLD=$(tput bold)
-        BLACK=$(tput setaf 0)
-        RED=$(tput setaf 1)
-        GREEN=$(tput setaf 2)
-        YELLOW=$(tput setaf 3)
-        BLUE=$(tput setaf 4)
-        MAGENTA=$(tput setaf 5)
-        CYAN=$(tput setaf 6)
-        WHITE=$(tput setaf 7)
-        USER_COLOR=$BOLD
-      }
-
-      # colorstring reads from stdin and uses parameter 1 as an escape sequence
-      # with more parameters the first is used as a color, the other as the string to be modified
-      # It will set colors until the last space sqquence
-      colorstring() {
-        case $# in
-        0) # invalid
-          echo "colorstring called without parameters"
-          ;;
-        1)
-          sed -r "s/^.*[^ ]/$1&${RESET}/"
-          ;;
-        *)
-          COLOR="$1"
-          shift
-          sed -r "s/^.*[^ ]/${COLOR}&${RESET}/" <<<"$@"
-          ;;
-        esac
-      }
-      dot_field() {
-        # todo: Change implementation when field can be 2 words with a space in between
-        printf "%-12.12s" "$1" | colorstring "${WHITE}" | tr ' ' '.'
-        # The : must be printed in a second statement when you don't want cyan dots.
-        printf ':'
-      }
-      # todo: Change implementation when field can be 2 words with a space in between
-      space_number() {
-        printf "%-7.7s" "$1" | colorstring "${GREEN}"
-      }
-      # todo: add logic when only 4 parameters are given
-      printline() {
-        echo "   $(dot_field "$1") $(space_number "$2")$(dot_field "$3") $(space_number "$4")$(dot_field "$5") $(space_number "$6")"
-      }
-      # init the color variables
-      init_colors
-
       # log data
 
       # Realmd.log
@@ -2157,21 +2104,20 @@ WantedBy=multi-user.target" >"${FOLDER_WOW:?}"/TService.tmp 2>&1
         DIVE_LOG_NONE=$(printf '%b' "\e[2mempty..${N0:?}")
         DIVE_LOG_ZERO=$(printf '%b' "0")
 
-        printf '%b' "   Server          Server.old      Realmd"
         echo
-        printline "$DIVE_LOG_EMPTY" "$DIVE_SERVER_EMPTY" "$DIVE_LOG_EMPTY" "$DIVE_SERVER_OLD_EMPTY" "$DIVE_LOG_EMPTY" "$DIVE_REALMD_EMPTY"
-        printline "$DIVE_LOG_ERROR" "$DIVE_SERVER_ERROR" "$DIVE_LOG_ERROR" "$DIVE_SERVER_OLD_ERROR" "$DIVE_LOG_ERROR" "$DIVE_REALMD_ERROR"
-        printline "$DIVE_LOG_IGNOR" "$DIVE_SERVER_IGNOR" "$DIVE_LOG_IGNOR" "$DIVE_SERVER_OLD_IGNOR" "$DIVE_LOG_IGNOR" "$DIVE_REALMD_SERIO"
-        printline "$DIVE_LOG_POLYR" "$DIVE_SERVER_POLYR" "$DIVE_LOG_POLYR" "$DIVE_SERVER_OLD_POLYR" "$DIVE_LOG_NONE" "$DIVE_LOG_ZERO"
-        printline "$DIVE_LOG_SERIO" "$DIVE_SERVER_SERIO" "$DIVE_LOG_SERIO" "$DIVE_SERVER_OLD_SERIO" "$DIVE_LOG_SERIO" "$DIVE_LOG_ZERO"
+        echo "Server Server.old Realmd
+$DIVE_LOG_EMPTY $DIVE_SERVER_EMPTY $DIVE_LOG_EMPTY $DIVE_SERVER_OLD_EMPTY $DIVE_LOG_EMPTY $DIVE_REALMD_EMPTY
+$DIVE_LOG_ERROR $DIVE_SERVER_ERROR $DIVE_LOG_ERROR $DIVE_SERVER_OLD_ERROR $DIVE_LOG_ERROR $DIVE_REALMD_ERROR
+$DIVE_LOG_IGNOR $DIVE_SERVER_IGNOR $DIVE_LOG_IGNOR $DIVE_SERVER_OLD_IGNOR $DIVE_LOG_IGNOR $DIVE_REALMD_SERIO
+$DIVE_LOG_POLYR $DIVE_SERVER_POLYR $DIVE_LOG_POLYR $DIVE_SERVER_OLD_POLYR $DIVE_LOG_NONE $DIVE_LOG_ZERO
+$DIVE_LOG_SERIO $DIVE_SERVER_SERIO $DIVE_LOG_SERIO $DIVE_SERVER_OLD_SERIO $DIVE_LOG_SERIO $DIVE_LOG_ZERO"
         echo
-        printf '%b' "   DBErrors        Char            EventAIErrors"
-        echo
-        printline "$DIVE_LOG_CORRE" "$DIVE_DBERROR_CORR" "$DIVE_LOG_CREAT" "$DIVE_CHAR_CREATED" "$DIVE_LOG_SKIPP" "$DIVE_EVENTAIERROR"
-        printline "$DIVE_LOG_EXIST" "$DIVE_DBERROR_EXIS" "$DIVE_LOG_LOGIN" "$DIVE_CHAR_LOGIN_C" "$DIVE_LOG_NOEFF" "$DIVE_EVENTAINOEFF"
-        printline "$DIVE_LOG_QUERY" "$DIVE_DBERROR_QUER" "$DIVE_LOG_LOGOU" "$DIVE_CHAR_LOGOUTS" "$DIVE_LOG_NONEX" "$DIVE_EVENTAINONEX"
-        printline "$DIVE_LOG_NEVER" "$DIVE_DBERROR_USED" "$DIVE_LOG_NONE" "$DIVE_LOG_ZERO" "$DIVE_LOG_NULL0" "$DIVE_EVENTAI_NULL"
-        printline "$DIVE_LOG_CRASH" "$DIVE_DBERROR_CRAS" "$DIVE_LOG_NONE" "$DIVE_LOG_ZERO" "$DIVE_LOG_NOTUS" "$DIVE_EVENTAINOTUS"
+        echo "DBErrors Char EventAIErrors
+$DIVE_LOG_CORRE $DIVE_DBERROR_CORR $DIVE_LOG_CREAT $DIVE_CHAR_CREATED $DIVE_LOG_SKIPP $DIVE_EVENTAIERROR
+$DIVE_LOG_EXIST $DIVE_DBERROR_EXIS $DIVE_LOG_LOGIN $DIVE_CHAR_LOGIN_C $DIVE_LOG_NOEFF $DIVE_EVENTAINOEFF
+$DIVE_LOG_QUERY $DIVE_DBERROR_QUER $DIVE_LOG_LOGOU $DIVE_CHAR_LOGOUTS $DIVE_LOG_NONEX $DIVE_EVENTAINONEX
+$DIVE_LOG_NEVER $DIVE_DBERROR_USED $DIVE_LOG_NONE $DIVE_LOG_ZERO $DIVE_LOG_NULL0 $DIVE_EVENTAI_NULL
+$DIVE_LOG_CRASH $DIVE_DBERROR_CRAS $DIVE_LOG_NONE $DIVE_LOG_ZERO $DIVE_LOG_NOTUS $DIVE_EVENTAINOTUS"
         printf '%b' "
    1 : Raw error output
    2 : tail error output\n"
@@ -2265,14 +2211,14 @@ WantedBy=multi-user.target" >"${FOLDER_WOW:?}"/TService.tmp 2>&1
           MA_CYCLE=$(grep -c -E "Returning old mails" "${FOLDER_CORE:?}"/run/logs/Server.log 2>&1 | awk '{ printf "%.0f\n", $1 }' 2>&1)
         fi
 
-        printline "Accounts" "$AC_COUNT" "Guilds" "$GU_COUNT" "Tickets" "$TI_COUNT"
-        printline "Banned" "$BN_COUNT" "Members" "$ME_COUNT" "Corpses" "$CO_COUNT"
-        printline "Online" "$ON_COUNT" "Mail" "$MA_COUNT" "PvP" "$PV_COUNT"
-        printline "Characters" "$CH_COUNT" "Pets" "$PE_COUNT" "Gifts" "$GI_COUNT"
-        printline "MailCycle" "$MA_CYCLE" "Petition" "$PT_COUNT" "PetitionSign" "$PS_COUNT"
-        printline "MailItems" "$MI_COUNT" "BugReport" "$BG_COUNT" "Groups" "$GP_COUNT"
-        printline "Realms" "$RL_COUNT" "Social" "$CS_COUNT" "Logons" "$AL_COUNT"
-        printline "Cooldowns" "$CC_COUNT" "GM_Surveys" "$GM_COUNT" "Auctions" "$AU_COUNT"
+        echo "Accounts $AC_COUNT Guilds $GU_COUNT Tickets $TI_COUNT
+Banned $BN_COUNT Members $ME_COUNT Corpses $CO_COUNT
+Online $ON_COUNT Mail $MA_COUNT PvP $PV_COUNT
+Characters $CH_COUNT Pets $PE_COUNT Gifts $GI_COUNT
+MailCycle $MA_CYCLE Petition $PT_COUNT PetitionSign $PS_COUNT
+MailItems $MI_COUNT BugReport $BG_COUNT Groups $GP_COUNT
+Realms $RL_COUNT Social $CS_COUNT Logons $AL_COUNT
+Cooldowns $CC_COUNT GM_Surveys $GM_COUNT Auctions $AU_COUNT" | column -t
         echo
         read -r -p "Press Enter to continue" </dev/tty
         echo
@@ -5333,9 +5279,9 @@ $(tail -100 /var/log/ms/last_logins 2>/dev/null | grep -v "id" | tac)")"
       display_result() {
         dialog --title "Player(s) online" \
           --no-collapse \
-          --msgbox "$RESULT" 15 50
+          --msgbox "$RESULT" 0 0
       }
-      RESULT="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM ${DB_CHARACTERS:?}.characters WHERE online = 1 ORDER BY name;" 2>&1)"
+      RESULT="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, level, online, account, class FROM ${DB_CHARACTERS:?}.characters WHERE online = 1 ORDER BY name;" 2>&1 | column -t)"
       display_result 2>/dev/null
 
       ;;
