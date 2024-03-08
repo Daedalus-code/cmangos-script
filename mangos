@@ -6892,7 +6892,7 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
 
     HEIGHT=21
     WIDTH=61
-    CHOICE_HEIGHT=14
+    CHOICE_HEIGHT=15
     BACKTITLE="Server configuration"
     TITLE="Configurations"
     MENU="Choose one option:"
