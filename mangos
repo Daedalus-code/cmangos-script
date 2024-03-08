@@ -6890,9 +6890,9 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
 
   "e")
 
-    HEIGHT=20
+    HEIGHT=21
     WIDTH=61
-    CHOICE_HEIGHT=13
+    CHOICE_HEIGHT=14
     BACKTITLE="Server configuration"
     TITLE="Configurations"
     MENU="Choose one option:"
@@ -6903,13 +6903,14 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
       4 "realmd.conf             Realmd config"
       5 "ahbot.conf              Auction House Bot config"
       6 "playerbot.conf          Player Bot config"
-      7 "anticheat.conf          Anti Cheat config"
-      8 "InstallFullDB           Install Full DB config"
-      9 "mangos.conf.dist        original"
-      10 "realmd.conf.dist        original"
-      11 "ahbot.conf.dist         original"
-      12 "anticheat.conf.dist     original"
-      13 "playerbot.conf.dist     original")
+      7 "aiplayerbot.conf        Ike3 Bot config"
+      8 "anticheat.conf          Anti Cheat config"
+      9 "InstallFullDB           Install Full DB config"
+      10 "mangos.conf.dist        original"
+      11 "realmd.conf.dist        original"
+      12 "ahbot.conf.dist         original"
+      13 "anticheat.conf.dist     original"
+      14 "playerbot.conf.dist     original")
 
     CHOICE=$(dialog --clear \
       --backtitle "$BACKTITLE" \
@@ -6927,13 +6928,15 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
     "4") nano "${FOLDER_CORE:?}"/run/etc/realmd.conf ;;
     "5") nano "${FOLDER_CORE:?}"/run/etc/ahbot.conf ;;
     "6") nano "${FOLDER_CORE:?}"/run/etc/playerbot.conf ;;
-    "7") nano "${FOLDER_CORE:?}"/run/etc/anticheat.conf ;;
-    "8") nano "$FOLDER_DB"/InstallFullDB.config ;;
-    "9") nano "${FOLDER_CORE:?}"/run/etc/mangosd.conf.dist ;;
-    "10") nano "${FOLDER_CORE:?}"/run/etc/realmd.conf.dist ;;
-    "11") nano "${FOLDER_CORE:?}"/run/etc/ahbot.conf.dist ;;
-    "12") nano "${FOLDER_CORE:?}"/run/etc/anticheat.conf.dist ;;
-    "13") nano "${FOLDER_CORE:?}"/run/etc/playerbot.conf.dist ;;
+    "7") nano "${FOLDER_CORE:?}"/run/etc/aiplayerbot.conf ;;
+    "8") nano "${FOLDER_CORE:?}"/run/etc/anticheat.conf ;;
+    "9") nano "$FOLDER_DB"/InstallFullDB.config ;;
+    "10") nano "${FOLDER_CORE:?}"/run/etc/mangosd.conf.dist ;;
+    "11") nano "${FOLDER_CORE:?}"/run/etc/realmd.conf.dist ;;
+    "12") nano "${FOLDER_CORE:?}"/run/etc/ahbot.conf.dist ;;
+    "13") nano "${FOLDER_CORE:?}"/run/etc/anticheat.conf.dist ;;
+    "14") nano "${FOLDER_CORE:?}"/run/etc/playerbot.conf.dist ;;
+    "15") nano "${FOLDER_CORE:?}"/run/etc/aiplayerbot.conf.dist ;;
     esac
 
     ;;
