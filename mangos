@@ -5585,7 +5585,7 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
     }
     GUILDS_INFO="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, motd FROM $DB_CHARACTERS.guild;" 2>&1)"
 
-    RESULT="$(echo "$GUILDS_INFO" | column -t)"
+    RESULT="$(echo "$GUILDS_INFO")"
     display_result 2>/dev/null
 
     ;;
