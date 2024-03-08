@@ -6890,7 +6890,7 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
 
   "e")
 
-    HEIGHT=21
+    HEIGHT=22
     WIDTH=61
     CHOICE_HEIGHT=15
     BACKTITLE="Server configuration"
@@ -6910,7 +6910,8 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
       11 "realmd.conf.dist        original"
       12 "ahbot.conf.dist         original"
       13 "anticheat.conf.dist     original"
-      14 "playerbot.conf.dist     original")
+      14 "playerbot.conf.dist     original"
+      15 "aiplayerbot.conf.dist   original")
 
     CHOICE=$(dialog --clear \
       --backtitle "$BACKTITLE" \
