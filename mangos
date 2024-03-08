@@ -5579,13 +5579,15 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
   "g")
 
     display_result() {
-      dialog --title "Guilds" \
+      dialog --title "Guilds ($GUILDS_COUNT)" \
         --no-collapse \
         --msgbox "$RESULT" 0 0
     }
-    GUILDS_INFO="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name, motd FROM $DB_CHARACTERS.guild;" 2>&1)"
+    GUILDS_NAME="$(mysql --defaults-extra-file="${SQL_MYCNF:?}" --execute="SELECT name FROM $DB_CHARACTERS.guild;" 2>&1)"
+    GUILDS_DATA="$(echo "$GUILDS_NAME" | grep -v "name")"
+    GUILDS_COUNT="$(echo "$GUILDS_DATA" | wc -l)"
 
-    RESULT="$(echo "$GUILDS_INFO")"
+    RESULT="$(echo "$GUILDS_DATA")"
     display_result 2>/dev/null
 
     ;;
