@@ -5049,21 +5049,22 @@ Check log for which database needs 'applying updates'"
           sudo service "$TYPE_CORE"_mangosd stop
           ;;
         esac
-        echo
-        read ! -t 5 -r -p "[YN] Without error output? y/n " -n 1 -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
-          mysql --defaults-extra-file="${SQL_MYCNF:?}" -f --database="$DB_CHARACTERS" <"${FOLDER_WOW:?}"/.all_characters.sql 2>&1
-        else
-          mysql --defaults-extra-file="${SQL_MYCNF:?}" -f --database="$DB_CHARACTERS" <"${FOLDER_WOW:?}"/.all_characters.sql &>/dev/null
+
+        # mysql db_characters db fix
+        mysql --defaults-extra-file="${SQL_MYCNF:?}" -f --database="$DB_CHARACTERS" <"${FOLDER_WOW:?}"/.all_characters.sql &>/dev/null
+
+        # local service restart
+        if [[ "$(sudo service mariadb status)" ]] &>/dev/null; then
+          sudo service mariadb restart &>/dev/null
+          printf '%b' "[${G1:?}OK${N0:?}] Restarting mariadb\n"
         fi
-        sudo service mariadb stop &>/dev/null
-        sudo service mysql stop &>/dev/null
         sleep 1
-        sudo service mariadb restart &>/dev/null
-        sudo service mysql restart &>/dev/null
-        printf '%b' "[${G1:?}OK${N0:?}]"
-        echo
+        if [[ "$(sudo service mysql status)" ]] &>/dev/null; then
+          sudo service mysql restart &>/dev/null
+          printf '%b' "[${G1:?}OK${N0:?}] Restarting mysql\n"
+        fi
+
+        printf '%b' "[${G1:?}OK${N0:?}]\n"
       fi
       # apply all updates [A] to [B] mangos?
       read -t 5 -r -p "[YN] Mangos? y/n " -n 1 -r
@@ -5087,19 +5088,21 @@ Check log for which database needs 'applying updates'"
           sudo service "$TYPE_CORE"_mangosd stop
           ;;
         esac
-        echo
-        read -t 5 -r -p "[YN] Without error output? y/n " -n 1 -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
-          mysql --defaults-extra-file="${SQL_MYCNF:?}" -f --database="$DB_MANGOS" <"${FOLDER_WOW:?}"/.all_mangos.sql 2>&1
-        else
-          mysql --defaults-extra-file="${SQL_MYCNF:?}" -f --database="$DB_MANGOS" <"${FOLDER_WOW:?}"/.all_mangos.sql &>/dev/null
+
+        # mysql db_mangos db fix
+        mysql --defaults-extra-file="${SQL_MYCNF:?}" -f --database="$DB_MANGOS" <"${FOLDER_WOW:?}"/.all_mangos.sql &>/dev/null
+
+        # local service restart
+        if [[ "$(sudo service mariadb status)" ]] &>/dev/null; then
+          sudo service mariadb restart &>/dev/null
+          printf '%b' "[${G1:?}OK${N0:?}] Restarting mariadb\n"
         fi
-        sudo service mariadb stop &>/dev/null
-        sudo service mysql stop &>/dev/null
         sleep 1
-        sudo service mariadb restart &>/dev/null
-        sudo service mysql restart &>/dev/null
+        if [[ "$(sudo service mysql status)" ]] &>/dev/null; then
+          sudo service mysql restart &>/dev/null
+          printf '%b' "[${G1:?}OK${N0:?}] Restarting mysql\n"
+        fi
+
         printf '%b' "[${G1:?}OK${N0:?}]\n"
       fi
       # apply all updates [A] to [B] realmd?
@@ -5124,19 +5127,21 @@ Check log for which database needs 'applying updates'"
           sudo service "$TYPE_CORE"_mangosd stop
           ;;
         esac
-        echo
-        read ! -t 5 -r -p "[YN] Without error output? y/n " -n 1 -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
-          mysql --defaults-extra-file="${SQL_MYCNF:?}" -f --database="${DB_REALMD:?}" <"${FOLDER_WOW:?}"/.all_realmd.sql 2>&1
-        else
-          mysql --defaults-extra-file="${SQL_MYCNF:?}" -f --database="${DB_REALMD:?}" <"${FOLDER_WOW:?}"/.all_realmd.sql &>/dev/null
+
+        # mysql db_realmd db fix
+        mysql --defaults-extra-file="${SQL_MYCNF:?}" -f --database="${DB_REALMD:?}" <"${FOLDER_WOW:?}"/.all_realmd.sql &>/dev/null
+
+        # local service restart
+        if [[ "$(sudo service mariadb status)" ]] &>/dev/null; then
+          sudo service mariadb restart &>/dev/null
+          printf '%b' "[${G1:?}OK${N0:?}] Restarting mariadb\n"
         fi
-        sudo service mariadb stop &>/dev/null
-        sudo service mysql stop &>/dev/null
         sleep 1
-        sudo service mariadb restart &>/dev/null
-        sudo service mysql restart &>/dev/null
+        if [[ "$(sudo service mysql status)" ]] &>/dev/null; then
+          sudo service mysql restart &>/dev/null
+          printf '%b' "[${G1:?}OK${N0:?}] Restarting mysql\n"
+        fi
+
         printf '%b' "[${G1:?}OK${N0:?}]\n"
       fi
       # remove old 'combined updates' sql files
