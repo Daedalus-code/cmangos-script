@@ -5050,7 +5050,7 @@ Check log for which database needs 'applying updates'"
           ;;
         esac
         echo
-        read -t 5 -r -p "[YN] Without error output? y/n " -n 1 -r
+        read ! -t 5 -r -p "[YN] Without error output? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
           mysql --defaults-extra-file="${SQL_MYCNF:?}" -f --database="$DB_CHARACTERS" <"${FOLDER_WOW:?}"/.all_characters.sql 2>&1
@@ -5125,7 +5125,7 @@ Check log for which database needs 'applying updates'"
           ;;
         esac
         echo
-        read -t 5 -r -p "[YN] Without error output? y/n " -n 1 -r
+        read ! -t 5 -r -p "[YN] Without error output? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
           mysql --defaults-extra-file="${SQL_MYCNF:?}" -f --database="${DB_REALMD:?}" <"${FOLDER_WOW:?}"/.all_realmd.sql 2>&1
