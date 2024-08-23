@@ -2587,11 +2587,12 @@ ${GR:?}(w) Helper > Update Helper${N0:?}\n"
       libtool
       make
       patch
+      psmisc
       subversion
       unzip
       zip
-      zlibc
-      psmisc)
+      zlib1g-dev
+      zlibc)
 
     HEIGHT=15
     WIDTH=38
