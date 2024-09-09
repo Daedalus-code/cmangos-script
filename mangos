@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20240702
-# 6.9.8.0
+# V20240909
+# 6.9.6.2
 
 while :; do
 
@@ -2808,12 +2808,13 @@ ${GR:?}(w) Helper > Update Helper${N0:?}\n"
         fi
 
         CMAKE="-DCMAKE_INSTALL_PREFIX=/home/$(whoami)/wow/mangos-$TYPE_CORE/run
-        -DBUILD_EXTRACTORS=$DBUILD_EXTRACTORS
-        -DPCH=$DPCH
-        -DDEBUG=$DDEBUG
-        -DBUILD_PLAYERBOT=$DBUILD_PLAYERBOT
-        -DBUILD_AHBOT=$DBUILD_AHBOT
-        $DEXTRA"
+-DBUILD_EXTRACTORS=$DBUILD_EXTRACTORS
+-DPCH=$DPCH
+-DDEBUG=$DDEBUG
+-DBUILD_AIPLAYERBOT=$DBUILD_AIPLAYERBOT
+-DBUILD_PLAYERBOT=$DBUILD_PLAYERBOT
+-DBUILD_AHBOT=$DBUILD_AHBOT
+$DEXTRA"
 
         # double quotes ("") and single quotes ('') around > $cmake < will mess things up.
         # shellcheck disable=SC2086
