@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20240909
-# 6.9.6.2
+# V20240912
+# 7.0.6.6
 
 while :; do
 
@@ -874,6 +874,7 @@ $(cat "${FOLDER_WOW:?}"/tmp.txt)
    m $GR: ${THEME_TXT:?}Maps${N0:?}    - ${THEME_DSC:?}Download maps  ${N0:?}Server.log${G0:?}......:${N0:?} $CM_SERVER_LOG_STAT $CM_SERVER_LOG_EMPTY $CM_SERVER_LOG $CM_SERVER_LOG_SERIOUS
    w $GR: ${THEME_TXT:?}Stats${N0:?}   - ${THEME_DSC:?}World stats    ${N0:?}$MENU_PRINT_CPU_TEMP
    i $GR: ${THEME_TXT:?}Info${N0:?}    - ${THEME_DSC:?}Helper info    ${N0:?}HDDuse${G0:?}..........:${N0:?} $MENU_USED_HDD ${GR:?}$MENU_USED_HDD_P${N0:?}
+   d $GR: ${THEME_TXT:?}Data${N0:?}    - ${THEME_DSC:?}Data usage     ${N0:?}
    q $GR: ${THEME_TXT:?}Quit${N0:?}    - ${THEME_DSC:?}Back to menu   ${N0:?}Memory${G0:?}..........:${N0:?} ${G1:?}${MENU_FREE_MEM:?}M${GR:?}/${G0:?}${MENU_TOTAL_MEM:?}M${N0:?}
 \n"
       read -r -s -n1
@@ -1157,7 +1158,6 @@ ${G0:?}>${N0:?} hit Enter to go back.
    s $GR: ${THEME_TXT:?}Stop${N0:?}    - ${THEME_DSC:?}Stop p2p$N0
    m $GR: ${THEME_TXT:?}Maps${N0:?}    - ${THEME_DSC:?}Import maps$N0
    i $GR: ${THEME_TXT:?}Info${N0:?}    - ${THEME_DSC:?}Torrent info$N0
-   d $GR: ${THEME_TXT:?}Data${N0:?}    - ${THEME_DSC:?}Data usage$N0
    q $GR: ${THEME_TXT:?}Quit${N0:?}    - ${THEME_DSC:?}Return$N0
 
 ${N0:?}"
@@ -2161,110 +2161,6 @@ $DIVE_LOG_CRASH ${GR:?}$DIVE_DBERROR_CRAS${N0:?} $DIVE_LOG_NONE ${GR:?}$DIVE_LOG
 
           ;;
 
-        "D")
-
-          # fetch current ifconfig data
-          ifconfig >/tmp/ifconfig
-
-          # extract RX and TX bytes
-          IFCONFIG_RX_BYTE=$(grep "RX" /tmp/ifconfig | head -1 | awk '{ print $5 }')
-          IFCONFIG_TX_BYTE=$(grep "TX" /tmp/ifconfig | head -1 | awk '{ print $5 }')
-          # fetch system uptime
-          UPTIME_PROC_SECONDS=$(awk -F. '{print $1}' /proc/uptime)
-          # time format
-          UPTIME_SYSTEM="$(echo "$(printf '%dh:%dm:%ds\n' $(("$UPTIME_PROC_SECONDS/3600")) $(("$UPTIME_PROC_SECONDS%3600/60")) $(("$UPTIME_PROC_SECONDS%60")))")"
-          # calculate current data usage rate in bytes per second
-          MEGA_SECOND_RX=$(echo "$IFCONFIG_RX_BYTE/$UPTIME_PROC_SECONDS" | bc -l 2>/dev/null)
-          MEGA_SECOND_TX=$(echo "$IFCONFIG_TX_BYTE/$UPTIME_PROC_SECONDS" | bc -l 2>/dev/null)
-
-          # function to convert bytes to MB, GB, or TB with the appropriate unit
-          convert_to_units() {
-            local BYTES=$1
-            if (($(echo "$BYTES >= 1024*1024*1024*1024" | bc -l))); then
-              echo "$(echo "$BYTES / 1024 / 1024 / 1024 / 1024" | bc -l | awk '{ printf "%.3f", $1 }') TB"
-            elif (($(echo "$BYTES >= 1024*1024*1024" | bc -l))); then
-              echo "$(echo "$BYTES / 1024 / 1024 / 1024" | bc -l | awk '{ printf "%.3f", $1 }') GB"
-            elif (($(echo "$BYTES >= 1024*1024" | bc -l))); then
-              echo "$(echo "$BYTES / 1024 / 1024" | bc -l | awk '{ printf "%.3f", $1 }') MB"
-            else
-              echo "$(echo "$BYTES / 1024" | bc -l | awk '{ printf "%.3f", $1 }') KB"
-            fi
-          }
-
-          # function to convert bytes per second to appropriate unit with "/s"
-          convert_to_rate_units() {
-            local BYTES_PER_SEC=$1
-            if (($(echo "$BYTES_PER_SEC >= 1024*1024*1024" | bc -l))); then
-              echo "$(echo "$BYTES_PER_SEC / 1024 / 1024 / 1024" | bc -l | awk '{ printf "%.3f", $1 }') GB/s"
-            elif (($(echo "$BYTES_PER_SEC >= 1024*1024" | bc -l))); then
-              echo "$(echo "$BYTES_PER_SEC / 1024 / 1024" | bc -l | awk '{ printf "%.3f", $1 }') MB/s"
-            elif (($(echo "$BYTES_PER_SEC >= 1024" | bc -l))); then
-              echo "$(echo "$BYTES_PER_SEC / 1024" | bc -l | awk '{ printf "%.3f", $1 }') KB/s"
-            else
-              echo "$(echo "$BYTES_PER_SEC" | bc -l | awk '{ printf "%.3f", $1 }') B/s"
-            fi
-          }
-
-          # calculate RX usage in bytes
-          DAILY_USAGE_RX_BYTES=$(echo "$MEGA_SECOND_RX*86400" | bc -l)
-          WEEKLY_USAGE_RX_BYTES=$(echo "$MEGA_SECOND_RX*604800" | bc -l)
-          MONTHLY_USAGE_RX_BYTES=$(echo "$MEGA_SECOND_RX*2419200" | bc -l)
-          YEARLY_USAGE_RX_BYTES=$(echo "$MEGA_SECOND_RX*29030400" | bc -l)
-          # calculate TX usage in bytes
-          DAILY_USAGE_TX_BYTES=$(echo "$MEGA_SECOND_TX*86400" | bc -l)
-          WEEKLY_USAGE_TX_BYTES=$(echo "$MEGA_SECOND_TX*604800" | bc -l)
-          MONTHLY_USAGE_TX_BYTES=$(echo "$MEGA_SECOND_TX*2419200" | bc -l)
-          YEARLY_USAGE_TX_BYTES=$(echo "$MEGA_SECOND_TX*29030400" | bc -l)
-          # convert RX values to human-readable units
-          DAILY_USAGE_RX=$(convert_to_units "$DAILY_USAGE_RX_BYTES")
-          WEEKLY_USAGE_RX=$(convert_to_units "$WEEKLY_USAGE_RX_BYTES")
-          MONTHLY_USAGE_RX=$(convert_to_units "$MONTHLY_USAGE_RX_BYTES")
-          YEARLY_USAGE_RX=$(convert_to_units "$YEARLY_USAGE_RX_BYTES")
-          # convert TX values to human-readable units
-          DAILY_USAGE_TX=$(convert_to_units "$DAILY_USAGE_TX_BYTES")
-          WEEKLY_USAGE_TX=$(convert_to_units "$WEEKLY_USAGE_TX_BYTES")
-          MONTHLY_USAGE_TX=$(convert_to_units "$MONTHLY_USAGE_TX_BYTES")
-          YEARLY_USAGE_TX=$(convert_to_units "$YEARLY_USAGE_TX_BYTES")
-          # convert RX and TX current rates to human-readable units
-          CURRENT_RX_RATE=$(convert_to_rate_units "$MEGA_SECOND_RX")
-          CURRENT_TX_RATE=$(convert_to_rate_units "$MEGA_SECOND_TX")
-
-          # display the result
-          RESULT="Download Data
--------------------------------------------
-$(grep "RX" /tmp/ifconfig | head -1 | awk -FRX '{ print $2 }' | xargs)
--------------------------------------------
-RX Current.: $CURRENT_RX_RATE
-RX Daily...: $DAILY_USAGE_RX
-RX Weekly..: $WEEKLY_USAGE_RX
-RX Monthly.: $MONTHLY_USAGE_RX
-RX Yearly..: $YEARLY_USAGE_RX
-
-Upload Data
--------------------------------------------
-$(grep "TX" /tmp/ifconfig | head -1 | awk -FTX '{ print $2 }' | xargs)
--------------------------------------------
-TX Current.: $CURRENT_TX_RATE
-TX Daily...: $DAILY_USAGE_TX
-TX Weekly..: $WEEKLY_USAGE_TX
-TX Monthly.: $MONTHLY_USAGE_TX
-TX Yearly..: $YEARLY_USAGE_TX
-
-Uptime.....: $UPTIME_SYSTEM"
-
-          WIDTH=$(echo "$(echo "$RESULT" | wc -L)+5" | bc 2>/dev/null)
-
-          # display results in a dialog box
-          display_result() {
-            dialog --title "Data Usage Statistics" \
-              --msgbox "$RESULT" 25 "$WIDTH"
-          }
-
-          # execute the display_result function
-          display_result 2>/dev/null
-
-          ;;
-
         "q") exit ;;
         *) ;;
 
@@ -2451,7 +2347,111 @@ $RA_TIP"
 
         ;;
 
-        # remote access done
+      # remote access done
+
+      "D")
+
+        # fetch current ifconfig data
+        ifconfig >/tmp/ifconfig
+
+        # extract RX and TX bytes
+        IFCONFIG_RX_BYTE=$(grep "RX" /tmp/ifconfig | head -1 | awk '{ print $5 }')
+        IFCONFIG_TX_BYTE=$(grep "TX" /tmp/ifconfig | head -1 | awk '{ print $5 }')
+        # fetch system uptime
+        UPTIME_PROC_SECONDS=$(awk -F. '{print $1}' /proc/uptime)
+        # time format
+        UPTIME_SYSTEM="$(echo "$(printf '%dh:%dm:%ds\n' $(("$UPTIME_PROC_SECONDS/3600")) $(("$UPTIME_PROC_SECONDS%3600/60")) $(("$UPTIME_PROC_SECONDS%60")))")"
+        # calculate current data usage rate in bytes per second
+        MEGA_SECOND_RX=$(echo "$IFCONFIG_RX_BYTE/$UPTIME_PROC_SECONDS" | bc -l 2>/dev/null)
+        MEGA_SECOND_TX=$(echo "$IFCONFIG_TX_BYTE/$UPTIME_PROC_SECONDS" | bc -l 2>/dev/null)
+
+        # function to convert bytes to MB, GB, or TB with the appropriate unit
+        convert_to_units() {
+          local BYTES=$1
+          if (($(echo "$BYTES >= 1024*1024*1024*1024" | bc -l))); then
+            echo "$(echo "$BYTES / 1024 / 1024 / 1024 / 1024" | bc -l | awk '{ printf "%.3f", $1 }') TB"
+          elif (($(echo "$BYTES >= 1024*1024*1024" | bc -l))); then
+            echo "$(echo "$BYTES / 1024 / 1024 / 1024" | bc -l | awk '{ printf "%.3f", $1 }') GB"
+          elif (($(echo "$BYTES >= 1024*1024" | bc -l))); then
+            echo "$(echo "$BYTES / 1024 / 1024" | bc -l | awk '{ printf "%.3f", $1 }') MB"
+          else
+            echo "$(echo "$BYTES / 1024" | bc -l | awk '{ printf "%.3f", $1 }') KB"
+          fi
+        }
+
+        # function to convert bytes per second to appropriate unit with "/s"
+        convert_to_rate_units() {
+          local BYTES_PER_SEC=$1
+          if (($(echo "$BYTES_PER_SEC >= 1024*1024*1024" | bc -l))); then
+            echo "$(echo "$BYTES_PER_SEC / 1024 / 1024 / 1024" | bc -l | awk '{ printf "%.3f", $1 }') GB/s"
+          elif (($(echo "$BYTES_PER_SEC >= 1024*1024" | bc -l))); then
+            echo "$(echo "$BYTES_PER_SEC / 1024 / 1024" | bc -l | awk '{ printf "%.3f", $1 }') MB/s"
+          elif (($(echo "$BYTES_PER_SEC >= 1024" | bc -l))); then
+            echo "$(echo "$BYTES_PER_SEC / 1024" | bc -l | awk '{ printf "%.3f", $1 }') KB/s"
+          else
+            echo "$(echo "$BYTES_PER_SEC" | bc -l | awk '{ printf "%.3f", $1 }') B/s"
+          fi
+        }
+
+        # calculate RX usage in bytes
+        DAILY_USAGE_RX_BYTES=$(echo "$MEGA_SECOND_RX*86400" | bc -l)
+        WEEKLY_USAGE_RX_BYTES=$(echo "$MEGA_SECOND_RX*604800" | bc -l)
+        MONTHLY_USAGE_RX_BYTES=$(echo "$MEGA_SECOND_RX*2419200" | bc -l)
+        YEARLY_USAGE_RX_BYTES=$(echo "$MEGA_SECOND_RX*29030400" | bc -l)
+        # calculate TX usage in bytes
+        DAILY_USAGE_TX_BYTES=$(echo "$MEGA_SECOND_TX*86400" | bc -l)
+        WEEKLY_USAGE_TX_BYTES=$(echo "$MEGA_SECOND_TX*604800" | bc -l)
+        MONTHLY_USAGE_TX_BYTES=$(echo "$MEGA_SECOND_TX*2419200" | bc -l)
+        YEARLY_USAGE_TX_BYTES=$(echo "$MEGA_SECOND_TX*29030400" | bc -l)
+        # convert RX values to human-readable units
+        DAILY_USAGE_RX=$(convert_to_units "$DAILY_USAGE_RX_BYTES")
+        WEEKLY_USAGE_RX=$(convert_to_units "$WEEKLY_USAGE_RX_BYTES")
+        MONTHLY_USAGE_RX=$(convert_to_units "$MONTHLY_USAGE_RX_BYTES")
+        YEARLY_USAGE_RX=$(convert_to_units "$YEARLY_USAGE_RX_BYTES")
+        # convert TX values to human-readable units
+        DAILY_USAGE_TX=$(convert_to_units "$DAILY_USAGE_TX_BYTES")
+        WEEKLY_USAGE_TX=$(convert_to_units "$WEEKLY_USAGE_TX_BYTES")
+        MONTHLY_USAGE_TX=$(convert_to_units "$MONTHLY_USAGE_TX_BYTES")
+        YEARLY_USAGE_TX=$(convert_to_units "$YEARLY_USAGE_TX_BYTES")
+        # convert RX and TX current rates to human-readable units
+        CURRENT_RX_RATE=$(convert_to_rate_units "$MEGA_SECOND_RX")
+        CURRENT_TX_RATE=$(convert_to_rate_units "$MEGA_SECOND_TX")
+
+        # display the result
+        RESULT="Download Data
+-------------------------------------------
+$(grep "RX" /tmp/ifconfig | head -1 | awk -FRX '{ print $2 }' | xargs)
+-------------------------------------------
+RX Current.: $CURRENT_RX_RATE
+RX Daily...: $DAILY_USAGE_RX
+RX Weekly..: $WEEKLY_USAGE_RX
+RX Monthly.: $MONTHLY_USAGE_RX
+RX Yearly..: $YEARLY_USAGE_RX
+
+Upload Data
+-------------------------------------------
+$(grep "TX" /tmp/ifconfig | head -1 | awk -FTX '{ print $2 }' | xargs)
+-------------------------------------------
+TX Current.: $CURRENT_TX_RATE
+TX Daily...: $DAILY_USAGE_TX
+TX Weekly..: $WEEKLY_USAGE_TX
+TX Monthly.: $MONTHLY_USAGE_TX
+TX Yearly..: $YEARLY_USAGE_TX
+
+Uptime.....: $UPTIME_SYSTEM"
+
+        WIDTH=$(echo "$(echo "$RESULT" | wc -L)+5" | bc 2>/dev/null)
+
+        # display results in a dialog box
+        display_result() {
+          dialog --title "Data Usage Statistics" \
+            --msgbox "$RESULT" 25 "$WIDTH"
+        }
+
+        # execute the display_result function
+        display_result 2>/dev/null
+
+        ;;
 
       "q")
         break
