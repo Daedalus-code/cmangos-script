@@ -874,8 +874,8 @@ $(cat "${FOLDER_WOW:?}"/tmp.txt)
    m $GR: ${THEME_TXT:?}Maps${N0:?}    - ${THEME_DSC:?}Download maps  ${N0:?}Server.log${G0:?}......:${N0:?} $CM_SERVER_LOG_STAT $CM_SERVER_LOG_EMPTY $CM_SERVER_LOG $CM_SERVER_LOG_SERIOUS
    w $GR: ${THEME_TXT:?}Stats${N0:?}   - ${THEME_DSC:?}World stats    ${N0:?}$MENU_PRINT_CPU_TEMP
    i $GR: ${THEME_TXT:?}Info${N0:?}    - ${THEME_DSC:?}Helper info    ${N0:?}HDDuse${G0:?}..........:${N0:?} $MENU_USED_HDD ${GR:?}$MENU_USED_HDD_P${N0:?}
-   d $GR: ${THEME_TXT:?}Data${N0:?}    - ${THEME_DSC:?}Data usage     ${N0:?}
-   q $GR: ${THEME_TXT:?}Quit${N0:?}    - ${THEME_DSC:?}Back to menu   ${N0:?}Memory${G0:?}..........:${N0:?} ${G1:?}${MENU_FREE_MEM:?}M${GR:?}/${G0:?}${MENU_TOTAL_MEM:?}M${N0:?}
+   d $GR: ${THEME_TXT:?}Data${N0:?}    - ${THEME_DSC:?}Data usage     ${N0:?}Memory${G0:?}..........:${N0:?} ${G1:?}${MENU_FREE_MEM:?}M${GR:?}/${G0:?}${MENU_TOTAL_MEM:?}M${N0:?}
+   q $GR: ${THEME_TXT:?}Quit${N0:?}    - ${THEME_DSC:?}Back to menu   ${N0:?}
 \n"
       read -r -s -n1
       case "$REPLY" in
