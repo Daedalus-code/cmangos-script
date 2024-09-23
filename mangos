@@ -470,8 +470,8 @@ $(cat "${FOLDER_WOW:?}"/tmp.txt)
 
         ########################################################################
 
-        # remote admin (netcat)
-        nc -q 1 "${HOST_NC:?}" "${PORT_NC:?}" <"${FOLDER_WOW:?}"/tmp.txt 2>/dev/null
+        # remote admin (netcat w timeout)
+        timeout 4 nc -q 1 "${HOST_NC:?}" "${PORT_NC:?}" <"${FOLDER_WOW:?}"/tmp.txt &>/dev/null
 
         ########################################################################
 
