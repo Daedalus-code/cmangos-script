@@ -456,26 +456,32 @@ while :; do
       # empty data, skip
       if [[ "$CMANGOS_EMPTY" -eq "0" ]] &>/dev/null; then
 
-        # create account txt
+        # create account txt (no spaces!)
         echo "${USER_NC:?}
 ${PASS_NC:?}
 .account create $CMANGOS_USR $CMANGOS_PWD
 .account set addon $CMANGOS_USR $CMANGOS_XPV
 .account set gmlevel $CMANGOS_USR $CMANGOS_LVL" >"${FOLDER_WOW:?}"/tmp.txt
         # create receipt
-        echo "$(date)
+        echo "$(date | xargs)
 - - - - - - - - - - - - - - -
 $(cat "${FOLDER_WOW:?}"/tmp.txt)
 -----------------------------" >>"${FOLDER_WOW:?}"/ac.list 2>/dev/null
+
+        ########################################################################
+
         # remote admin (netcat)
-        nc -q 1 "${HOST_NC:?}" "${PORT_NC:?}" <"${FOLDER_WOW:?}"/tmp.txt
+        nc -q 1 "${HOST_NC:?}" "${PORT_NC:?}" <"${FOLDER_WOW:?}"/tmp.txt 2>/dev/null
+
+        ########################################################################
+
         # remove old file
-        rm "${FOLDER_WOW:?}"/tmp.txt
+        rm "${FOLDER_WOW:?}"/tmp.txt &>/dev/null
 
         display_result() {
           dialog --title "$CA_TITLE" \
             --no-collapse \
-            --msgbox "$RESULT" 5 42
+            --msgbox "$RESULT" 0 0
         }
         RESULT="$(echo "[OK] Account '$CMANGOS_USR' ($CMANGOS_XPV/$CMANGOS_LVL) created.")"
         display_result 2>/dev/null
@@ -483,7 +489,7 @@ $(cat "${FOLDER_WOW:?}"/tmp.txt)
         display_result() {
           dialog --title "$CA_TITLE" \
             --no-collapse \
-            --msgbox "$RESULT" 5 40
+            --msgbox "$RESULT" 0 0
         }
         RESULT="$(echo "[!!] Empty data! Please try again.")"
         display_result 2>/dev/null
