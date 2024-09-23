@@ -458,10 +458,10 @@ while :; do
 
         # create account txt
         echo "${USER_NC:?}
-      ${PASS_NC:?}
-      .account create $CMANGOS_USR $CMANGOS_PWD
-      .account set addon $CMANGOS_USR $CMANGOS_XPV
-      .account set gmlevel $CMANGOS_USR $CMANGOS_LVL" >"${FOLDER_WOW:?}"/tmp.txt
+${PASS_NC:?}
+.account create $CMANGOS_USR $CMANGOS_PWD
+.account set addon $CMANGOS_USR $CMANGOS_XPV
+.account set gmlevel $CMANGOS_USR $CMANGOS_LVL" >"${FOLDER_WOW:?}"/tmp.txt
         # create receipt
         echo "$(date)
 - - - - - - - - - - - - - - -
