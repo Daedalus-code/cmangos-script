@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20242110
-# 7.1.6.1
+# 7.0.9.6
 
 while :; do
 
@@ -4838,71 +4838,6 @@ Database User, Client/Server is needed."
 
         ########################################################################
 
-        # title
-        MYSQL_TITLE="MySQL New Connection"
-
-        # new remote connection
-        read -r -p "[YN] New connection? y/n " -n 1 -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
-
-          # hostname
-          MYSQL_HOSTNAME=$(
-            dialog --title "$MYSQL_TITLE" \
-              --nocancel \
-              --inputbox "Enter Hostname:" 8 40 \
-              3>&1 1>&2 2>&3 3>&-
-          )
-
-          # port
-          MYSQL_PORT=$(
-            dialog --title "$MYSQL_TITLE" \
-              --nocancel \
-              --inputbox "Enter Port:" 8 40 \
-              3>&1 1>&2 2>&3 3>&-
-          )
-
-          # user
-          MYSQL_USER=$(
-            dialog --title "$MYSQL_TITLE" \
-              --nocancel \
-              --inputbox "Enter User:" 8 40 \
-              3>&1 1>&2 2>&3 3>&-
-          )
-
-          # password
-          MYSQL_PASSWORD=$(
-            dialog --title "$MYSQL_TITLE" \
-              --nocancel \
-              --inputbox "Enter Password:" 8 40 \
-              3>&1 1>&2 2>&3 3>&-
-          )
-
-          # if any data
-          if [[ -n "$MYSQL_HOSTNAME" && "$MYSQL_PORT" && "$MYSQL_USER" && "$MYSQL_PASSWORD" ]] &>/dev/null; then
-            # new remote mysql configuration
-            SQL_MYCNF="[mysql]
-host=$MYSQL_HOSTNAME
-port=$MYSQL_PORT
-user=$MYSQL_USER
-password=$MYSQL_PASSWORD
-
-[mysqldump]
-host=$MYSQL_HOSTNAME
-port=$MYSQL_PORT
-user=$MYSQL_USER
-password=$MYSQL_PASSWORD
-
-[mysqladmin]
-host=$MYSQL_HOSTNAME
-port=$MYSQL_PORT
-user=$MYSQL_USER
-password=$MYSQL_PASSWORD"
-          fi
-        fi
-
-        ########################################################################
-
         clear
         sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "${FOLDER_WOW:?}" &>/dev/null
 
@@ -4958,7 +4893,7 @@ password=$MYSQL_PASSWORD"
           sleep 1
           ######################################################################
 
-        } | dialog --title "Converting MySQL Engine: myisam -> innodb" --gauge " Converting mangos, characters, realmd and logs databases!" 6 65 0
+        } | dialog --title "Converting MySQL Engine: myisam -> innodb" --gauge " Altering mangos, characters, realmd and logs databases.." 6 65 0
 
         ########################################################################
 
