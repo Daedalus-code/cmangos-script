@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20240912
-# 7.0.6.6
+# V20242110
+# 7.1.6.0
 
 while :; do
 
@@ -4932,7 +4932,7 @@ password=$MYSQL_PASSWORD"
           done
 
           ######################################################################
-          echo "$(awk 'BEGIN {srand(); printf "%d\n", int(40 + rand() * (99 - 32))}')"
+          echo "$(awk 'BEGIN {srand(); printf "%d\n", int(40 + rand() * (87 - 32))}')"
           sleep 0.1
           ######################################################################
 
@@ -4940,6 +4940,17 @@ password=$MYSQL_PASSWORD"
           for T in $TABLES; do
             # alter realmd
             sudo mysql --defaults-extra-file="${SQL_MYCNF:?}" -D "${DB_REALMD:?}" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
+          done
+
+          ######################################################################
+          echo "$(awk 'BEGIN {srand(); printf "%d\n", int(40 + rand() * (99 - 87))}')"
+          sleep 0.1
+          ######################################################################
+
+          TABLES=$(sudo mysql --defaults-extra-file="${SQL_MYCNF:?}" --skip-column-names -B -D "${DB_LOGS:?}" -e 'show tables')
+          for T in $TABLES; do
+            # alter logs
+            sudo mysql --defaults-extra-file="${SQL_MYCNF:?}" -D "${DB_LOGS:?}" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
           done
 
           ######################################################################
