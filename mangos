@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20242110
-# 7.1.6.0
+# 7.1.6.1
 
 while :; do
 
@@ -4911,7 +4911,7 @@ password=$MYSQL_PASSWORD"
 
           ######################################################################
           echo "$(awk 'BEGIN {srand(); printf "%d\n", int(1 + rand() * (8 - 1))}')"
-          sleep 0.1
+          sleep 1
           ######################################################################
 
           TABLES=$(sudo mysql --defaults-extra-file="${SQL_MYCNF:?}" --skip-column-names -B -D "$DB_MANGOS" -e 'show tables')
@@ -4921,8 +4921,8 @@ password=$MYSQL_PASSWORD"
           done
 
           ######################################################################
-          echo "$(awk 'BEGIN {srand(); printf "%d\n", int(1 + rand() * (32 - 8))}')"
-          sleep 0.1
+          echo "$(awk 'BEGIN {srand(); printf "%d\n", int(20 + rand() * (32 - 8))}')"
+          sleep 1
           ######################################################################
 
           TABLES=$(sudo mysql --defaults-extra-file="${SQL_MYCNF:?}" --skip-column-names -B -D "$DB_CHARACTERS" -e 'show tables')
@@ -4933,7 +4933,7 @@ password=$MYSQL_PASSWORD"
 
           ######################################################################
           echo "$(awk 'BEGIN {srand(); printf "%d\n", int(40 + rand() * (87 - 32))}')"
-          sleep 0.1
+          sleep 1
           ######################################################################
 
           TABLES=$(sudo mysql --defaults-extra-file="${SQL_MYCNF:?}" --skip-column-names -B -D "${DB_REALMD:?}" -e 'show tables')
@@ -4943,8 +4943,8 @@ password=$MYSQL_PASSWORD"
           done
 
           ######################################################################
-          echo "$(awk 'BEGIN {srand(); printf "%d\n", int(40 + rand() * (99 - 87))}')"
-          sleep 0.1
+          echo "$(awk 'BEGIN {srand(); printf "%d\n", int(90 + rand() * (99 - 87))}')"
+          sleep 1
           ######################################################################
 
           TABLES=$(sudo mysql --defaults-extra-file="${SQL_MYCNF:?}" --skip-column-names -B -D "${DB_LOGS:?}" -e 'show tables')
@@ -4955,13 +4955,14 @@ password=$MYSQL_PASSWORD"
 
           ######################################################################
           echo "100"
-          sleep 0.05
+          sleep 1
           ######################################################################
 
-        } | dialog --title "Converting MySQL Engine: myisam -> innodb" --gauge " Please wait! myisam --> innodb" 6 60 0
+        } | dialog --title "Converting MySQL Engine: myisam -> innodb" --gauge " Converting mangos, characters, realmd and logs databases!" 6 65 0
 
         ########################################################################
 
+        clear
         printf '%b' "[${G1:?}OK${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
