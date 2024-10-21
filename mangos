@@ -4838,22 +4838,25 @@ Database User, Client/Server is needed."
 
         ########################################################################
 
-        # remote connection
-        read -t 5 -r -p "[YN] Remote connection? y/n " -n 1 -r
+        # title
+        MYSQL_TITLE="MySQL New Connection"
+
+        # new remote connection
+        read -r -p "[YN] New connection? y/n " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
 
           # hostname
           MYSQL_HOSTNAME=$(
-            dialog --title "MySQL Remote Connection" \
+            dialog --title "$MYSQL_TITLE" \
               --nocancel \
-              --inputbox "Enter hostname:" 8 40 \
+              --inputbox "Enter Hostname:" 8 40 \
               3>&1 1>&2 2>&3 3>&-
           )
 
           # port
           MYSQL_PORT=$(
-            dialog --title "MySQL Remote Connection" \
+            dialog --title "$MYSQL_TITLE" \
               --nocancel \
               --inputbox "Enter Port:" 8 40 \
               3>&1 1>&2 2>&3 3>&-
@@ -4861,7 +4864,7 @@ Database User, Client/Server is needed."
 
           # user
           MYSQL_USER=$(
-            dialog --title "MySQL Remote Connection" \
+            dialog --title "$MYSQL_TITLE" \
               --nocancel \
               --inputbox "Enter User:" 8 40 \
               3>&1 1>&2 2>&3 3>&-
@@ -4869,7 +4872,7 @@ Database User, Client/Server is needed."
 
           # password
           MYSQL_PASSWORD=$(
-            dialog --title "MySQL Remote Connection" \
+            dialog --title "$MYSQL_TITLE" \
               --nocancel \
               --inputbox "Enter Password:" 8 40 \
               3>&1 1>&2 2>&3 3>&-
@@ -4900,45 +4903,54 @@ password=$MYSQL_PASSWORD"
 
         ########################################################################
 
+        clear
         sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }')" "${FOLDER_WOW:?}" &>/dev/null
-        echo -ne '(0%)\r'
-        sleep 1
-        echo -ne '(10%)\r'
-        TABLES=$(sudo mysql --defaults-extra-file="${SQL_MYCNF:?}" --skip-column-names -B -D "$DB_MANGOS" -e 'show tables')
-        for T in $TABLES; do
-          echo -ne '(20%)\r'
-          sudo mysql --defaults-extra-file="${SQL_MYCNF:?}" -D "$DB_MANGOS" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
-          echo -ne '(30%)\r'
-        done
-        echo -ne '(40%)\r'
-        sleep 1
-        echo -ne '(50%)\r'
-        TABLES=$(sudo mysql --defaults-extra-file="${SQL_MYCNF:?}" --skip-column-names -B -D "${DB_REALMD:?}" -e 'show tables')
-        for T in $TABLES; do
-          echo -ne '(60%)\r'
-          sudo mysql --defaults-extra-file="${SQL_MYCNF:?}" -D "${DB_REALMD:?}" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
-        done
-        echo -ne '(70%)\r'
-        sleep 1
-        echo -ne '(80%)\r'
-        TABLES=$(sudo mysql --defaults-extra-file="${SQL_MYCNF:?}" --skip-column-names -B -D "$DB_CHARACTERS" -e 'show tables')
-        for T in $TABLES; do
-          echo -ne '(90%)\r'
-          sudo mysql --defaults-extra-file="${SQL_MYCNF:?}" -D "$DB_CHARACTERS" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
-          echo -ne '(95%)\r'
-        done
-        echo -ne '(96%)\r'
-        sudo service mariadb stop &>/dev/null
-        sudo service mysql stop &>/dev/null
-        echo -ne '(97%)\r'
-        sleep 1
-        echo -ne '(98%)\r'
-        sudo service mariadb restart &>/dev/null
-        sudo service mysql restart &>/dev/null
-        echo -ne '(99%)\r'
-        sleep 1
-        echo -ne '(100%)\r'
-        echo
+
+        # display progress bar
+        {
+
+          ######################################################################
+          echo "$(awk 'BEGIN {srand(); printf "%d\n", int(1 + rand() * (8 - 1))}')"
+          sleep 0.1
+          ######################################################################
+
+          TABLES=$(sudo mysql --defaults-extra-file="${SQL_MYCNF:?}" --skip-column-names -B -D "$DB_MANGOS" -e 'show tables')
+          for T in $TABLES; do
+            # alter mangos
+            sudo mysql --defaults-extra-file="${SQL_MYCNF:?}" -D "$DB_MANGOS" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
+          done
+
+          ######################################################################
+          echo "$(awk 'BEGIN {srand(); printf "%d\n", int(1 + rand() * (32 - 8))}')"
+          sleep 0.1
+          ######################################################################
+
+          TABLES=$(sudo mysql --defaults-extra-file="${SQL_MYCNF:?}" --skip-column-names -B -D "$DB_CHARACTERS" -e 'show tables')
+          for T in $TABLES; do
+            # alter characters
+            sudo mysql --defaults-extra-file="${SQL_MYCNF:?}" -D "$DB_CHARACTERS" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
+          done
+
+          ######################################################################
+          echo "$(awk 'BEGIN {srand(); printf "%d\n", int(40 + rand() * (99 - 32))}')"
+          sleep 0.1
+          ######################################################################
+
+          TABLES=$(sudo mysql --defaults-extra-file="${SQL_MYCNF:?}" --skip-column-names -B -D "${DB_REALMD:?}" -e 'show tables')
+          for T in $TABLES; do
+            # alter realmd
+            sudo mysql --defaults-extra-file="${SQL_MYCNF:?}" -D "${DB_REALMD:?}" -e "ALTER TABLE $T Engine=InnoDB ROW_FORMAT=DYNAMIC"
+          done
+
+          ######################################################################
+          echo "100"
+          sleep 0.05
+          ######################################################################
+
+        } | dialog --title "Converting MySQL Engine: myisam -> innodb" --gauge " Please wait! myisam --> innodb" 6 60 0
+
+        ########################################################################
+
         printf '%b' "[${G1:?}OK${N0:?}] "
         read -r -p "Press Enter to continue" </dev/tty
         echo
