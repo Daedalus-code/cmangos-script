@@ -2709,8 +2709,7 @@ ${GR:?}(w) Helper > Update Helper${N0:?}\n"
       unzip
       zip
       zlib1g
-      zlib1g-dev
-      zlibc)
+      zlib1g-dev)
 
     HEIGHT=15
     WIDTH=38
