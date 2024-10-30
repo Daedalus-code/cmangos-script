@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # By Rainman
-# V20222605
-# 0.0.5.8
+# V20243010
+# 0.0.5.9
 
 # what's the purpose of this tool?
 # this tool introduce helping functions and features for admins running a wow server.
@@ -12,15 +12,15 @@
 if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
   # first time install
   echo "Creating /home directory.."
-  sudo mkdir /home/ &>/dev/null
+  sudo mkdir /home/"$(whoami)" &>/dev/null
 
   if [[ ! -f /home/cmangos-script/README.md ]] &>/dev/null; then
     echo "Cloning repo.."
-    cd /home/ || exit && git clone https://github.com/Daedalus-code/cmangos-script.git
+    cd /home/"$(whoami)" || exit && git clone https://github.com/Daedalus-code/cmangos-script.git
   fi
 
   echo "Installing script (mangos).."
-  sudo cp /home/cmangos-script/mangos /usr/local/bin
+  sudo cp /home/"$(whoami)"/cmangos-script/mangos /usr/local/bin
   echo "Making script executable.."
   sudo chmod +x /usr/local/bin/mangos
 
@@ -29,7 +29,7 @@ if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
 
   if [[ ! -f /home/server.cnf ]] &>/dev/null; then
     echo "Copying configuration.."
-    cp /home/cmangos-script/server.cnf /home/
+    cp /home/"$(whoami)"/cmangos-script/server.cnf /home/
     echo "edit config file 'server.cnf' with MySQL credentials."
     echo
     echo "(nano) Save with CTRL+o"
@@ -39,7 +39,7 @@ if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
   echo
   if [[ ! -f /home/server.txt ]] &>/dev/null; then
     echo "Copying configuration.."
-    cp /home/cmangos-script/server.txt /home/
+    cp /home/"$(whoami)"/cmangos-script/server.txt /home/
     echo "edit config file 'server.txt' with correct information."
     echo
     echo "(nano) Save with CTRL+o"
