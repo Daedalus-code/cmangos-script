@@ -2359,6 +2359,11 @@ $RA_TIP"
 
       "d")
 
+        # if not installed
+        if ! [ -x "$(command -v net-tools)" ]; then
+          sudo apt install net-tools -y
+        fi
+
         # fetch current ifconfig data
         ifconfig >/tmp/ifconfig
 
