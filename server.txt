@@ -36,8 +36,9 @@ PORT_NC="3443"
 
 ### FOLDERS ####################################################################
 
-FOLDER_INSTALL="/home"
-FOLDER_HELPER="/home/cmangos-script"
+FOLDER_HELPER="/home/$(whoami)/cmangos-script"
+FOLDER_INSTALL="/home/$(whoami)"
+FOLDER_CONFIG="/home"
 
 ### MYSQL ######################################################################
 

@@ -20,7 +20,7 @@ while :; do
 
   # config directory
   # shellcheck disable=SC1091
-  source /home/server.txt # please edit if anything else.
+  source /home/server.txt # please edit if different from configuration!
 
   # Color ######################################################################
 
@@ -7071,8 +7071,8 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
 
     clear
     case $CHOICE in
-    "1") nano "$FOLDER_INSTALL"/server.txt ;;
-    "2") nano "$FOLDER_INSTALL"/server.cnf ;;
+    "1") nano "$FOLDER_CONFIG"/server.txt ;;
+    "2") nano "$FOLDER_CONFIG"/server.cnf ;;
     "3") nano "${FOLDER_CORE:?}"/run/etc/mangosd.conf ;;
     "4") nano "${FOLDER_CORE:?}"/run/etc/realmd.conf ;;
     "5") nano "${FOLDER_CORE:?}"/run/etc/ahbot.conf ;;
