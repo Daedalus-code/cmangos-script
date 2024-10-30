@@ -2873,7 +2873,7 @@ ${GR:?}(w) Helper > Update Helper${N0:?}\n"
         else
           # is packagelist@ installed?
           if ! [ -x "$(command -v "${PACKAGELIST[@]}")" ] &>/dev/null; then
-            sudo apt-get --ignore-missing install "${PACKAGELIST[@]}" -y 2>&1
+            sudo apt-get install "${PACKAGELIST[@]}" -y <"/dev/null"
           fi
           # realmd service
           case "$(echo "$PIDOF_REALMD")" in
@@ -3578,7 +3578,7 @@ Check if correct information, or just restart server.\n"
         else
           # is packagelist@ installed?
           if ! [ -x "$(command -v "${PACKAGELIST[@]}")" ] &>/dev/null; then
-            sudo apt-get --ignore-missing install "${PACKAGELIST[@]}" -y 2>&1
+            sudo apt-get install "${PACKAGELIST[@]}" -y <"/dev/null"
           fi
           # realmd service
           case "$(echo "$PIDOF_REALMD")" in
