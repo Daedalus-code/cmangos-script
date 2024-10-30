@@ -159,11 +159,6 @@ while :; do
 
   ##############################################################################
 
-  # fix cmangos-script ownership
-  sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }' 2>&1)" /home/"$(whoami)"/cmangos-script &>/dev/null
-
-  ##############################################################################
-
   # online players
   MENU_ON_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT SUM(online) FROM ${DB_CHARACTERS:?}.characters;" 2>&1)
   # guild count

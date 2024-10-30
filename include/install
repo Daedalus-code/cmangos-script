@@ -14,6 +14,9 @@ if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
   echo "Creating /home directory.."
   sudo mkdir /home/"$(whoami)" &>/dev/null
 
+  # fix cmangos-script ownership
+  sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }' 2>&1)" /home/"$(whoami)"/cmangos-script &>/dev/null
+
   if [[ ! -f /home/cmangos-script/README.md ]] &>/dev/null; then
     echo "Cloning repo.."
     cd /home/"$(whoami)" || exit && git clone https://github.com/Daedalus-code/cmangos-script.git
