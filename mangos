@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20242110
-# 7.0.9.6
+# V20243010
+# 7.1.0.3
 
 while :; do
 
@@ -156,6 +156,13 @@ while :; do
     # fix ownership
     sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }' 2>&1)" /var/log/ms &>/dev/null
   fi
+
+  ##############################################################################
+
+  # fix cmangos-script ownership
+  sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }' 2>&1)" /home/"$(whoami)"/cmangos-script &>/dev/null
+
+  ##############################################################################
 
   # online players
   MENU_ON_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT SUM(online) FROM ${DB_CHARACTERS:?}.characters;" 2>&1)
