@@ -4243,8 +4243,8 @@ $SERVER_BUILD Disabled.\n"
     "12")
 
       # updates, instances count
-      U_UPDATE_COUNT="$(ls -l "$FOLDER_DB"/Updates | awk '{ print $6,$7,$8,$9 }' | egrep "*.sql" | wc -l)"
-      INSTANCES_UPDATE_COUNT="$(ls -l "$FOLDER_DB"/Updates/Instances | awk '{ print $6,$7,$8,$9 }' | egrep "*.sql" | wc -l)"
+      U_UPDATE_COUNT="$(ls -l "$FOLDER_DB"/Updates | awk '{ print $6,$7,$8,$9 }' | egrep "*.sql" 2>/dev/null | wc -l)"
+      INSTANCES_UPDATE_COUNT="$(ls -l "$FOLDER_DB"/Updates/Instances | awk '{ print $6,$7,$8,$9 }' | egrep "*.sql" 2>/dev/null | wc -l)"
 
       # database updates list
       display_result() {
@@ -4252,7 +4252,7 @@ $SERVER_BUILD Disabled.\n"
           --no-collapse \
           --msgbox "$RESULT" 30 0
       }
-      RESULT="$(ls -l "$FOLDER_DB"/Updates | awk '{ print $6,$7,$8,$9 }' | egrep "*.sql" | tac)"
+      RESULT="$(ls -l "$FOLDER_DB"/Updates | awk '{ print $6,$7,$8,$9 }' | egrep "*.sql" 2>/dev/null | tac 2>/dev/null)"
       display_result 2>/dev/null
 
       # database updates/instances list
@@ -4261,7 +4261,7 @@ $SERVER_BUILD Disabled.\n"
           --no-collapse \
           --msgbox "$RESULT" 30 0
       }
-      RESULT="$(ls -l "$FOLDER_DB"/Updates/Instances | awk '{ print $6,$7,$8,$9 }' | egrep "*.sql")"
+      RESULT="$(ls -l "$FOLDER_DB"/Updates/Instances | awk '{ print $6,$7,$8,$9 }' | egrep "*.sql" 2>/dev/null)"
       display_result 2>/dev/null
 
       ;;
