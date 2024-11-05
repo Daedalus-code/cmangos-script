@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20243010
-# 7.1.0.3
+# V20240511
+# 7.1.1.4
 
 while :; do
 
@@ -4483,6 +4483,10 @@ Database User, Client/Server is needed."
       read -r -p "[YN] InstallFullDB.sh? y/n " -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
+
+        # start counting (seconds)
+        START="$SECONDS"
+
         shutdown_server
         cd "$FOLDER_DB" || exit
         ./InstallFullDB.sh
@@ -4602,6 +4606,13 @@ Database User, Client/Server is needed."
           printf '%b' "${GR:?}Please wait${N0:?}\n"
         fi
         install_mark_db
+        # seconds since start
+        DURATION=$(echo "$SECONDS-$START" 2>&1 | bc 2>&1)
+        # convert seconds
+        TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
+        echo "Database timer: $TIMER"
+        read -r -p "Press Enter to continue" </dev/tty
+        echo
       fi
 
       ;;
