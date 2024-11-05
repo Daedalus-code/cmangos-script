@@ -2360,7 +2360,7 @@ $RA_TIP"
       "d")
 
         # if not installed
-        if ! [ -x "$(command -v net-tools)" ]; then
+        if ! [ -x "$(command -v ifconfig)" ]; then
           sudo apt install net-tools -y
         fi
 
@@ -4606,8 +4606,15 @@ Database User, Client/Server is needed."
           printf '%b' "${GR:?}Please wait${N0:?}\n"
         fi
         install_mark_db
-        # seconds since start
-        DURATION=$(echo "$SECONDS-$START" 2>&1 | bc 2>&1)
+      fi
+
+      # seconds since start
+      DURATION=$(echo "$SECONDS-$START" 2>&1 | bc 2>&1)
+
+      # if zero
+      if [[ -z "$DURATION" ]] &>/dev/null; then
+        read -r -p "Press Enter to continue" </dev/tty
+      else
         # convert seconds
         TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
         echo "Database timer: $TIMER"
