@@ -2,7 +2,7 @@
 
 # By Rainman
 # V20251101
-# 2.1.2.1
+# 1.9.0.9
 
 # what's the purpose of this tool?
 # this tool introduce helping functions and features for admins running a wow server.
@@ -12,7 +12,7 @@
 # install
 if [[ -f /usr/local/bin/mangos ]] &>/dev/null; then
   clear
-  printf "Install CMaNGOS-Script? y/n "
+  printf "[!?] Install CMaNGOS-Script? y/n "
   read -r -p "" -n 1 -r -s
   if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
     sudo rm /usr/local/bin/mangos &>/dev/null
@@ -24,49 +24,42 @@ if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
 
   clear
   # first time install
-  echo "Creating /home directory.."
+  echo "[!!] Creating /home directory.."
   sudo mkdir /home/"$(whoami)" &>/dev/null
 
   # fix cmangos-script ownership
   sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }' 2>&1)" /home/
 
   if [[ ! -f /home/cmangos-script/README.md ]] &>/dev/null; then
-    echo "Cloning repo.."
-    cd /home/"$(whoami)" || exit && git clone https://github.com/Daedalus-code/cmangos-script.git
+    echo "[++] Cloning repo.."
+    cd /home/"$(whoami)" || exit && git clone https://github.com/Daedalus-code/cmangos-script.git 2>/dev/null
   fi
 
-  echo "Installing script (mangos).."
+  echo "[!!] Installing script (mangos).."
   sudo cp /home/"$(whoami)"/cmangos-script/mangos /usr/local/bin
-  echo "Making script executable.."
+  echo "[-x] Making script executable.."
   sudo chmod +x /usr/local/bin/mangos
 
   # mangos script will look for config files inside your "install folder" (default: /home)
   # you need to copy config files from cmangos-script folder into your "install folder".
 
-  if [[ ! -f /home/server.cnf ]] &>/dev/null; then
-    echo "Copying configuration.."
-    cp /home/"$(whoami)"/cmangos-script/server.cnf /home/
-    echo "edit config file 'server.cnf' with MySQL credentials."
-    echo
-    echo "(nano) Save with CTRL+o"
-    read -r -p "Press Enter to continue" </dev/tty
-    nano /home/server.cnf
-  fi
+  # install new configuration
+  echo "[OK] Copying new server configuration.."
+  cp /home/"$(whoami)"/cmangos-script/server.cnf /home/
+  # edit server configuration
+  read -r -p "Press Enter to continue" </dev/tty
+  nano /home/server.cnf
+
   echo
-  if [[ ! -f /home/server.txt ]] &>/dev/null; then
-    echo "Copying configuration.."
-    cp /home/"$(whoami)"/cmangos-script/server.txt /home/
-    echo "edit config file 'server.txt' with correct information."
-    echo
-    echo "(nano) Save with CTRL+o"
-    read -r -p "Press Enter to continue" </dev/tty
-    nano /home/server.txt
-  fi
+  # install new mysql configuration
+  echo "[OK] Copying new mysql configuration.."
+  cp /home/"$(whoami)"/cmangos-script/server.txt /home/
+  # edit mysql configuration
+  read -r -p "Press Enter to edit mysql configuration" </dev/tty
+  nano /home/server.txt
+
   echo "[OK] 'mangos' installed!!"
-  echo "Type 'mangos' to start."
-else
-  echo "[OK] 'mangos' already installed!"
-  echo "Type 'mangos' to start."
+  echo "[OK] Type 'mangos' to start."
 fi
 
 # END
