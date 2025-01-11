@@ -9,14 +9,18 @@
 
 # how do you get it to work?
 
-# re/install
-if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
+# install
+if [[ -f /usr/local/bin/mangos ]] &>/dev/null; then
   clear
   printf "Install CMaNGOS-Script? y/n "
   read -r -p "" -n 1 -r -s
   if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
     sudo rm /usr/local/bin/mango &>/dev/null
   fi
+fi
+
+# re/install
+if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
 
   # first time install
   echo "Creating /home directory.."
