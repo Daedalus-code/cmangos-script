@@ -15,7 +15,7 @@ if [[ -f /usr/local/bin/mangos ]] &>/dev/null; then
   printf "Install CMaNGOS-Script? y/n "
   read -r -p "" -n 1 -r -s
   if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
-    sudo rm /usr/local/bin/mango &>/dev/null
+    sudo rm /usr/local/bin/mangos &>/dev/null
   fi
 fi
 
