@@ -2,7 +2,7 @@
 
 # By Rainman
 # V20251101
-# 1.9.0.9
+# 1.9.3.7
 
 # what's the purpose of this tool?
 # this tool introduce helping functions and features for admins running a wow server.
@@ -44,20 +44,19 @@ if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
   # you need to copy config files from cmangos-script folder into your "install folder".
 
   # install new configuration
-  echo "[OK] Copying new server configuration.."
   cp /home/"$(whoami)"/cmangos-script/server.cnf /home/
   # edit server configuration
-  read -r -p "Press Enter to continue" </dev/tty
+  read -r -p "Press Enter to edit mysql configuration" </dev/tty
   nano /home/server.cnf
-
-  echo
+  echo "[OK] Copying new server configuration.."
   # install new mysql configuration
-  echo "[OK] Copying new mysql configuration.."
   cp /home/"$(whoami)"/cmangos-script/server.txt /home/
   # edit mysql configuration
-  read -r -p "Press Enter to edit mysql configuration" </dev/tty
+  read -r -p "Press Enter to edit server configuration" </dev/tty
   nano /home/server.txt
+  echo "[OK] Copying new mysql configuration.."
 
+  # install output
   echo "[OK] 'mangos' installed!!"
   echo "[OK] Type 'mangos' to start."
 fi
