@@ -2,12 +2,9 @@
 
 # By Rainman
 # V20251101
-# 1.9.3.7
+# 2.3.4.3
 
-# what's the purpose of this tool?
-# this tool introduce helping functions and features for admins running a wow server.
-
-# how do you get it to work?
+################################################################################
 
 # install
 if [[ -f /usr/local/bin/mangos ]] &>/dev/null; then
@@ -19,29 +16,38 @@ if [[ -f /usr/local/bin/mangos ]] &>/dev/null; then
   fi
 fi
 
+################################################################################
+
 # re/install
 if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
+
+  ##############################################################################
 
   clear
   # first time install
   echo "[!!] Creating /home directory.."
   sudo mkdir /home/"$(whoami)" &>/dev/null
 
+  ##############################################################################
+
   # fix cmangos-script ownership
   sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }' 2>&1)" /home/
+
+  ##############################################################################
 
   if [[ ! -f /home/cmangos-script/README.md ]] &>/dev/null; then
     echo "[++] Cloning repo.."
     cd /home/"$(whoami)" || exit && git clone https://github.com/Daedalus-code/cmangos-script.git 2>/dev/null
   fi
 
+  ##############################################################################
+
   echo "[!!] Installing script (mangos).."
   sudo cp /home/"$(whoami)"/cmangos-script/mangos /usr/local/bin
   echo "[-x] Making script executable.."
   sudo chmod +x /usr/local/bin/mangos
 
-  # mangos script will look for config files inside your "install folder" (default: /home)
-  # you need to copy config files from cmangos-script folder into your "install folder".
+  ##############################################################################
 
   # install new configuration
   cp /home/"$(whoami)"/cmangos-script/server.cnf /home/
@@ -49,12 +55,17 @@ if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
   read -r -p "Press Enter to edit mysql configuration" </dev/tty
   nano /home/server.cnf
   echo "[OK] Copying new server configuration.."
+
+  ##############################################################################
+
   # install new mysql configuration
   cp /home/"$(whoami)"/cmangos-script/server.txt /home/
   # edit mysql configuration
   read -r -p "Press Enter to edit server configuration" </dev/tty
   nano /home/server.txt
   echo "[OK] Copying new mysql configuration.."
+
+  ##############################################################################
 
   # install output
   echo "[OK] 'mangos' installed!!"
