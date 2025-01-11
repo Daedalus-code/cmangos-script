@@ -11,7 +11,8 @@
 
 # re/install
 if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
-  echo "Re/Install cmangos-script?"
+  clear
+  printf "Install CMaNGOS-Script? y/n "
   read -r -p "" -n 1 -r -s
   if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
     sudo rm /usr/local/bin/mango &>/dev/null
@@ -59,12 +60,9 @@ if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
     read -r -p "Press Enter to continue" </dev/tty
     nano /home/server.txt
   fi
-
-  clear
   echo "[OK] 'mangos' installed!!"
   echo "Type 'mangos' to start."
 else
-  clear
   echo "[OK] 'mangos' already installed!"
   echo "Type 'mangos' to start."
 fi
