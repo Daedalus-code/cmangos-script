@@ -17,10 +17,7 @@ if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
   if [[ $REPLY =~ ^[Yy]$ ]] &>/dev/null; then
     sudo rm /usr/local/bin/mango &>/dev/null
   fi
-fi
 
-# if missing
-if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
   # first time install
   echo "Creating /home directory.."
   sudo mkdir /home/"$(whoami)" &>/dev/null
