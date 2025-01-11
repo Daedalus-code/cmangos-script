@@ -2,7 +2,7 @@
 
 # By Rainman
 # V20251101
-# 2.3.4.3
+# 2.3.5.3
 
 ################################################################################
 
@@ -52,7 +52,7 @@ if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
   # install new configuration
   cp /home/"$(whoami)"/cmangos-script/server.cnf /home/
   # edit server configuration
-  read -r -p "Press Enter to edit mysql configuration" </dev/tty
+  read -r -p "[!!] Press Enter to edit MySQL configuration" </dev/tty
   nano /home/server.cnf
   echo "[OK] Copying new server configuration.."
 
@@ -61,7 +61,7 @@ if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
   # install new mysql configuration
   cp /home/"$(whoami)"/cmangos-script/server.txt /home/
   # edit mysql configuration
-  read -r -p "Press Enter to edit server configuration" </dev/tty
+  read -r -p "[!!] Press Enter to edit Server configuration" </dev/tty
   nano /home/server.txt
   echo "[OK] Copying new mysql configuration.."
 
