@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # By Rainman
-# V20243010
-# 0.0.5.9
+# V20251101
+# 2.1.2.1
 
 # what's the purpose of this tool?
 # this tool introduce helping functions and features for admins running a wow server.
@@ -22,6 +22,7 @@ fi
 # re/install
 if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
 
+  clear
   # first time install
   echo "Creating /home directory.."
   sudo mkdir /home/"$(whoami)" &>/dev/null
