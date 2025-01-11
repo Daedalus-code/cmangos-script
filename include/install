@@ -15,7 +15,7 @@ if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
   sudo mkdir /home/"$(whoami)" &>/dev/null
 
   # fix cmangos-script ownership
-  sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }' 2>&1)" /home/"$(whoami)"/cmangos-script &>/dev/null
+  sudo chown -R "$(whoami)":"$(groups 2>&1 | awk '{ print $1 }' 2>&1)" /home/
 
   if [[ ! -f /home/cmangos-script/README.md ]] &>/dev/null; then
     echo "Cloning repo.."
@@ -51,11 +51,11 @@ if [[ ! -f /usr/local/bin/mangos ]] &>/dev/null; then
   fi
 
   clear
-  echo "[Ok] 'mangos' installed!!"
+  echo "[OK] 'mangos' installed!!"
   echo "Type 'mangos' to start."
 else
   clear
-  echo "[Ok] 'mangos' already installed!"
+  echo "[OK] 'mangos' already installed!"
   echo "Type 'mangos' to start."
 fi
 
