@@ -874,8 +874,8 @@ $(cat "${FOLDER_WOW:?}"/tmp.txt)
    Core Hash${G0:?}...:${GR:?} $CORE_COMMIT_HASH${N0:?}
    Data Hash${G0:?}...:${GR:?} $DB_COMMIT_HASH${N0:?}
 
-   r $GR: ${THEME_TXT:?}Login${N0:?}   - ${THEME_DSC:?}Remote access  ${N0:?}mangosd.service${G0:?}.:${N0:?} $COMMAND_MANGOSD
-   l $GR: ${THEME_TXT:?}Logs${N0:?}    - ${THEME_DSC:?}Analyze logs   ${N0:?}realmd.service${G0:?}..:${N0:?} $COMMAND_REALMD
+   r $GR: ${THEME_TXT:?}Login${N0:?}   - ${THEME_DSC:?}Remote access  ${N0:?}mangosd service${G0:?}.:${N0:?} $COMMAND_MANGOSD
+   l $GR: ${THEME_TXT:?}Logs${N0:?}    - ${THEME_DSC:?}Analyze logs   ${N0:?}realmd service${G0:?}..:${N0:?} $COMMAND_REALMD
    b $GR: ${THEME_TXT:?}Backup${N0:?}  - ${THEME_DSC:?}New backup     ${N0:?}characters.sql${G0:?}..:${N0:?} $CHARAC_BACKUP
    h $GR: ${THEME_TXT:?}Reset${N0:?}   - ${THEME_DSC:?}Reset --hard   ${N0:?}realmd.sql${G0:?}......:${N0:?} $REALMD_BACKUP
    p $GR: ${THEME_TXT:?}htop${N0:?}    - ${THEME_DSC:?}Process view   ${N0:?}Realmd.log${G0:?}......:${N0:?} $CM_REALMD_LOG_STAT $CM_REALMD_LOG_EMPTY $CM_REALMD_LOG
@@ -2879,7 +2879,7 @@ ${GR:?}(w) Helper > Update Helper${N0:?}\n"
           case "$(echo "$PIDOF_REALMD")" in
           0) ;;
           *)
-            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping ${TYPE_CORE:?}_realmd.service${N0:?}\n"
             sudo service "$TYPE_CORE"_realmd stop
             ;;
           esac
@@ -2887,7 +2887,7 @@ ${GR:?}(w) Helper > Update Helper${N0:?}\n"
           case "$(echo "$PIDOFMANGOSD")" in
           0) ;;
           *)
-            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping ${TYPE_CORE:?}_mangosd.service${N0:?}\n"
             sudo service "$TYPE_CORE"_mangosd stop
             ;;
           esac
@@ -3045,6 +3045,8 @@ ${GR:?}$CPU_MODEL${N0:?}")
           # start counting (seconds)
           START="$SECONDS"
           make -j"$SYS_CORES" # max system cores
+          # seconds since start
+          DURATION=$(echo "$SECONDS-$START" 2>&1 | bc 2>&1)
           sudo make install 2>&1 | sudo tee /var/log/ms/build &>/dev/null
           cat /var/log/ms/build 2>&1
           if grep -q -o "100" /var/log/ms/build &>/dev/null; then
@@ -3057,8 +3059,6 @@ ${GR:?}$CPU_MODEL${N0:?}")
               MENU_PRINT_CPU_TEMP=$(lscpu 2>&1 | grep 'Model name' 2>&1 | cut -f 2 -d ":" 2>&1 | awk '{$1=$1}1' 2>&1 | grep -Eo "@.*" 2>&1 | tr -d '@' 2>&1 | tr -d ' ' 2>&1)
               MENU_PRINT_CPU_TEMP="CPU Freq${G0:?}..:${N0:?} $MENU_PRINT_CPU_TEMP"
             fi
-            # seconds since start
-            DURATION=$(echo "$SECONDS-$START" 2>&1 | bc 2>&1)
             # convert seconds
             TIMER=$(printf '%dh:%dm:%ds\n' $(("$DURATION/3600")) $(("$DURATION%3600/60")) $(("$DURATION%60")))
             echo
@@ -3584,7 +3584,7 @@ Check if correct information, or just restart server.\n"
           case "$(echo "$PIDOF_REALMD")" in
           0) ;;
           *)
-            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping ${TYPE_CORE:?}_realmd.service${N0:?}\n"
             sudo service "$TYPE_CORE"_realmd stop
             ;;
           esac
@@ -3592,7 +3592,7 @@ Check if correct information, or just restart server.\n"
           case "$(echo "$PIDOFMANGOSD")" in
           0) ;;
           *)
-            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping ${TYPE_CORE:?}_mangosd.service${N0:?}\n"
             sudo service "$TYPE_CORE"_mangosd stop
             ;;
           esac
@@ -4419,7 +4419,7 @@ This is needed to operate local/remote database"
           case "$(echo "$PIDOF_REALMD")" in
           0) ;;
           *)
-            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping ${TYPE_CORE:?}_realmd.service${N0:?}\n"
             sudo service "$TYPE_CORE"_realmd stop
             ;;
           esac
@@ -4427,7 +4427,7 @@ This is needed to operate local/remote database"
           case "$(echo "$PIDOFMANGOSD")" in
           0) ;;
           *)
-            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping ${TYPE_CORE:?}_mangosd.service${N0:?}\n"
             sudo service "$TYPE_CORE"_mangosd stop
             ;;
           esac
@@ -4597,6 +4597,9 @@ Database User, Client/Server is needed."
               printf '%b' "[!!] ${GR:?}$FOLDER_DB${N0:?} Not Found!\n"
             fi
 
+            # seconds since start
+            DURATION=$(echo "$SECONDS-$START" 2>&1 | bc 2>&1)
+
             if [[ ! "$(echo "$(ls -l /var/log/ms 2>&1)" | grep "total" 2>&1 | awk '{ print $2 }' 2>&1)" -gt "0" ]] &>/dev/null; then
               # create ms folder
               sudo mkdir /var/log/ms/ &>/dev/null
@@ -4608,9 +4611,6 @@ Database User, Client/Server is needed."
         fi
         install_mark_db
       fi
-
-      # seconds since start
-      DURATION=$(echo "$SECONDS-$START" 2>&1 | bc 2>&1)
 
       # if zero
       if [[ -z "$DURATION" ]] &>/dev/null; then
@@ -4651,7 +4651,7 @@ Database User, Client/Server is needed."
           case "$(echo "$PIDOF_REALMD")" in
           0) ;;
           *)
-            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping ${TYPE_CORE:?}_realmd.service${N0:?}\n"
             sudo service "$TYPE_CORE"_realmd stop
             ;;
           esac
@@ -4659,7 +4659,7 @@ Database User, Client/Server is needed."
           case "$(echo "$PIDOFMANGOSD")" in
           0) ;;
           *)
-            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping ${TYPE_CORE:?}_mangosd.service${N0:?}\n"
             sudo service "$TYPE_CORE"_mangosd stop
             ;;
           esac
@@ -4848,7 +4848,7 @@ Database User, Client/Server is needed."
           case "$(echo "$PIDOF_REALMD")" in
           0) ;;
           *)
-            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping ${TYPE_CORE:?}_realmd.service${N0:?}\n"
             sudo service "$TYPE_CORE"_realmd stop
             ;;
           esac
@@ -4856,7 +4856,7 @@ Database User, Client/Server is needed."
           case "$(echo "$PIDOFMANGOSD")" in
           0) ;;
           *)
-            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping ${TYPE_CORE:?}_mangosd.service${N0:?}\n"
             sudo service "$TYPE_CORE"_mangosd stop
             ;;
           esac
@@ -5199,7 +5199,7 @@ Check log for which database needs 'applying updates'"
         case "$(echo "$PIDOF_REALMD")" in
         0) ;;
         *)
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping ${TYPE_CORE:?}_realmd.service${N0:?}\n"
           sudo service "$TYPE_CORE"_realmd stop
           ;;
         esac
@@ -5207,7 +5207,7 @@ Check log for which database needs 'applying updates'"
         case "$(echo "$PIDOFMANGOSD")" in
         0) ;;
         *)
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping ${TYPE_CORE:?}_mangosd.service${N0:?}\n"
           sudo service "$TYPE_CORE"_mangosd stop
           ;;
         esac
@@ -5238,7 +5238,7 @@ Check log for which database needs 'applying updates'"
         case "$(echo "$PIDOF_REALMD")" in
         0) ;;
         *)
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping ${TYPE_CORE:?}_realmd.service${N0:?}\n"
           sudo service "$TYPE_CORE"_realmd stop
           ;;
         esac
@@ -5246,7 +5246,7 @@ Check log for which database needs 'applying updates'"
         case "$(echo "$PIDOFMANGOSD")" in
         0) ;;
         *)
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping ${TYPE_CORE:?}_mangosd.service${N0:?}\n"
           sudo service "$TYPE_CORE"_mangosd stop
           ;;
         esac
@@ -5277,7 +5277,7 @@ Check log for which database needs 'applying updates'"
         case "$(echo "$PIDOF_REALMD")" in
         0) ;;
         *)
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping ${TYPE_CORE:?}_realmd.service${N0:?}\n"
           sudo service "$TYPE_CORE"_realmd stop
           ;;
         esac
@@ -5285,7 +5285,7 @@ Check log for which database needs 'applying updates'"
         case "$(echo "$PIDOFMANGOSD")" in
         0) ;;
         *)
-          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
+          printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping ${TYPE_CORE:?}_mangosd.service${N0:?}\n"
           sudo service "$TYPE_CORE"_mangosd stop
           ;;
         esac
@@ -5322,7 +5322,7 @@ Check log for which database needs 'applying updates'"
           case "$(echo "$PIDOF_REALMD")" in
           0) ;;
           *)
-            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping realmd.service${N0:?}\n"
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping ${TYPE_CORE:?}_realmd.service${N0:?}\n"
             sudo service "$TYPE_CORE"_realmd stop
             ;;
           esac
@@ -5330,7 +5330,7 @@ Check log for which database needs 'applying updates'"
           case "$(echo "$PIDOFMANGOSD")" in
           0) ;;
           *)
-            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping mangosd.service${N0:?}\n"
+            printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}Stopping ${TYPE_CORE:?}_mangosd.service${N0:?}\n"
             sudo service "$TYPE_CORE"_mangosd stop
             ;;
           esac
@@ -5869,12 +5869,12 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
                 sleep 1
                 ;;
               *)
-                printf '%b' "[${Y1:?}OK${N0:?}] Stopping realmd.service\n"
+                printf '%b' "[${Y1:?}OK${N0:?}] Stopping ${TYPE_CORE:?}_realmd.service\n"
                 sleep 1
                 sudo service "$TYPE_CORE"_realmd stop
                 sudo kill -9 "$PIDOF_REALMD" &>/dev/null
                 sleep 1
-                printf '%b' "[${G1:?}OK${N0:?}] Stopped realmd.service!\n"
+                printf '%b' "[${G1:?}OK${N0:?}] Stopped ${TYPE_CORE:?}_realmd.service!\n"
                 ;;
               esac
               # mangosd service
@@ -5884,12 +5884,12 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
                 sleep 1
                 ;;
               *)
-                printf '%b' "[${Y1:?}OK${N0:?}] Stopping mangosd.service\n"
+                printf '%b' "[${Y1:?}OK${N0:?}] Stopping ${TYPE_CORE:?}_mangosd.service\n"
                 sleep 1
                 sudo service "${TYPE_CORE:?}"_mangosd stop
                 sudo kill -9 "$PIDOFMANGOSD" &>/dev/null
                 sleep 1
-                printf '%b' "[${G1:?}OK${N0:?}] Stopped mangosd.service!\n"
+                printf '%b' "[${G1:?}OK${N0:?}] Stopped ${TYPE_CORE:?}_mangosd.service!\n"
                 ;;
               esac
             fi
@@ -5938,12 +5938,12 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
               sleep 1
               ;;
             *)
-              printf '%b' "[${Y1:?}OK${N0:?}] Stopping realmd.service\n"
+              printf '%b' "[${Y1:?}OK${N0:?}] Stopping ${TYPE_CORE:?}_realmd.service\n"
               sleep 1
               sudo service "$TYPE_CORE"_realmd stop
               sudo kill -9 "$PIDOF_REALMD" &>/dev/null
               sleep 1
-              printf '%b' "[${G1:?}OK${N0:?}] Stopped realmd.service!\n"
+              printf '%b' "[${G1:?}OK${N0:?}] Stopped ${TYPE_CORE:?}_realmd.service!\n"
               sleep 2
               ;;
             esac
@@ -5992,12 +5992,12 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
               sleep 1
               ;;
             *)
-              printf '%b' "[${Y1:?}OK${N0:?}] Stopping mangosd.service\n"
+              printf '%b' "[${Y1:?}OK${N0:?}] Stopping ${TYPE_CORE:?}_mangosd.service\n"
               sleep 1
               sudo service "$TYPE_CORE"_mangosd stop
               sudo kill -9 "$PIDOFMANGOSD" &>/dev/null
               sleep 1
-              printf '%b' "[${G1:?}OK${N0:?}] Stopped mangosd.service!\n"
+              printf '%b' "[${G1:?}OK${N0:?}] Stopped ${TYPE_CORE:?}_mangosd.service!\n"
               ;;
             esac
           fi
@@ -6135,7 +6135,7 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
             cp "${FOLDER_CORE:?}"/run/logs/Server.log "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
             cp "${FOLDER_CORE:?}"/run/logs/Realmd.log "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
             # done
-            printf '%b' "[${G1:?}OK${N0:?}] Restarting realmd, mangos service..\n"
+            printf '%b' "[${G1:?}OK${N0:?}] Restarting ${TYPE_CORE:?}_realmd, ${TYPE_CORE:?}_mangosd service..\n"
             sleep 1
             sudo service "$TYPE_CORE"_realmd restart &>/dev/null
             # realmd service
@@ -6394,10 +6394,10 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
             # keep old logs
             cp "${FOLDER_CORE:?}"/run/logs/Realmd.log "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
             # restart service (realmd)
-            printf '%b' "[${Y1:?}OK${N0:?}] Restarting realmd.service\n"
+            printf '%b' "[${Y1:?}OK${N0:?}] Restarting ${TYPE_CORE:?}_realmd service\n"
             sleep 1
             sudo service "$TYPE_CORE"_realmd restart &>/dev/null
-            printf '%b' "[${G1:?}OK${N0:?}] realmd.service started!\n"
+            printf '%b' "[${G1:?}OK${N0:?}] ${TYPE_CORE:?}_realmd service started!\n"
             sleep 2
           fi
           # save genesis realm error rate
@@ -6442,10 +6442,10 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
             # keep old logs
             cp "${FOLDER_CORE:?}"/run/logs/Server.log "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
             # restart service (mangosd)
-            printf '%b' "[${Y1:?}OK${N0:?}] Restarting mangos.service\n"
+            printf '%b' "[${Y1:?}OK${N0:?}] Restarting ${TYPE_CORE:?}_mangosd service\n"
             sleep 1
             sudo service "${TYPE_CORE:?}"_mangosd restart &>/dev/null
-            printf '%b' "[${G1:?}OK${N0:?}] mangosd service started!\n"
+            printf '%b' "[${G1:?}OK${N0:?}] ${TYPE_CORE:?}_mangosd service started!\n"
             sleep 2
           fi
           # save genesis server error rate
