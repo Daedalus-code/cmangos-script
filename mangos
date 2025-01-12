@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20240511
-# 7.1.1.4
+# V20251201
+# 7.1.2.7
 
 while :; do
 
@@ -2683,6 +2683,7 @@ ${GR:?}(w) Helper > Update Helper${N0:?}\n"
     if ! [ -x "$(command -v dialog)" ] &>/dev/null; then
       sudo apt-get install dialog -y 2>&1
     fi
+
     # required 'packagelist' to build CMaNGOS
     # ubuntu server
     PACKAGELIST=(autoconf
@@ -7055,6 +7056,11 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
     # edit/copy config files?
 
   "e")
+
+    # is dialog installed?
+    if ! [ -x "$(command -v dialog)" ] &>/dev/null; then
+      sudo apt-get install dialog -y 2>&1
+    fi
 
     HEIGHT=22
     WIDTH=61
