@@ -13,7 +13,7 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20251201
+# V20252202
 # 7.1.2.7
 
 while :; do
@@ -6166,7 +6166,7 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
             # realmd.log #######################################################
 
             # if realm failed
-            if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "${FOLDER_CORE:?}"/run/logs/Realmd.log &>/dev/null; then
+            if grep -q -E "fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "${FOLDER_CORE:?}"/run/logs/Realmd.log &>/dev/null; then
               # if any, print "Realm failed or halted"
               printf '%b' "[${R1:?}0H${N0:?}] Realm failed or halted!\n"
             else
@@ -6220,7 +6220,7 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
             # server.log #######################################################
 
             # if world failed
-            if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "${FOLDER_CORE:?}"/run/logs/Server.log &>/dev/null; then
+            if grep -q -E "fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "${FOLDER_CORE:?}"/run/logs/Server.log &>/dev/null; then
               # if any, print "World failed or halted"
               printf '%b' "[${R1:?}0H${N0:?}] World failed or halted!\n"
             else
@@ -6256,7 +6256,7 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
                 printf '%b' "[${G1:?}OK${N0:?}] World OK!\n"
               fi
               # world failed
-              if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "${FOLDER_CORE:?}"/run/logs/Server.log &>/dev/null; then
+              if grep -q -E "fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "${FOLDER_CORE:?}"/run/logs/Server.log &>/dev/null; then
                 # if any, print "World failed"
                 echo
                 printf '%b' "$SERVER_LOG_FAILED"
@@ -6658,7 +6658,7 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
 
     if [[ "$PIDOFMANGOSD" -eq "1" ]] &>/dev/null; then
       # if realm failed
-      if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "${FOLDER_CORE:?}"/run/logs/Realmd.log &>/dev/null; then
+      if grep -q -E "fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "${FOLDER_CORE:?}"/run/logs/Realmd.log &>/dev/null; then
         # if any, print "Realm failed or halted"
         printf '%b' "[${R1:?}0H${N0:?}] Realm failed or halted!\n"
       else
@@ -6713,7 +6713,7 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
       # server.log ###############################################################
 
       # if world failed
-      if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "${FOLDER_CORE:?}"/run/logs/Server.log &>/dev/null; then
+      if grep -q -E "fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "${FOLDER_CORE:?}"/run/logs/Server.log &>/dev/null; then
         # if any, print "World failed or halted"
         printf '%b' "[${R1:?}0H${N0:?}] World failed or halted!\n"
       else
@@ -6750,7 +6750,7 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
           printf '%b' "[${G1:?}OK${N0:?}] World OK!\n"
         fi
         # world failed
-        if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "${FOLDER_CORE:?}"/run/logs/Server.log &>/dev/null; then
+        if grep -q -E "fatal|critical|Segmentation\sfault|core\sdumped|segfault|file\struncated|Halting\sprocess" "${FOLDER_CORE:?}"/run/logs/Server.log &>/dev/null; then
           # if any, print "World failed"
           echo
           printf '%b' "$SERVER_LOG_FAILED"
