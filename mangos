@@ -159,6 +159,16 @@ while :; do
 
   ##############################################################################
 
+  copy_logs_truncate() {
+    # keep old logs
+    cp "${FOLDER_CORE:?}"/run/logs/Server.log "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
+    cp "${FOLDER_CORE:?}"/run/logs/Realmd.log "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
+    # truncate old logs
+    truncate -s 0 "${FOLDER_CORE:?}"/run/logs/*.log
+  }
+
+  ##############################################################################
+
   # online players
   MENU_ON_COUNT=$(mysql --defaults-extra-file="${SQL_MYCNF:?}" -N --execute="SELECT SUM(online) FROM ${DB_CHARACTERS:?}.characters;" 2>&1)
   # guild count
@@ -2867,9 +2877,7 @@ ${GR:?}(w) Helper > Update Helper${N0:?}\n"
           printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}"
           sleep 3
           sudo killall screen &>/dev/null
-          # keep old logs
-          cp "${FOLDER_CORE:?}"/run/logs/Server.log "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
-          cp "${FOLDER_CORE:?}"/run/logs/Realmd.log "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
+          copy_logs_truncate
         else
           # is packagelist@ installed?
           if ! [ -x "$(command -v "${PACKAGELIST[@]}")" ] &>/dev/null; then
@@ -3572,9 +3580,7 @@ Check if correct information, or just restart server.\n"
           printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}"
           sleep 3
           sudo killall screen &>/dev/null
-          # keep old logs
-          cp "${FOLDER_CORE:?}"/run/logs/Server.log "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
-          cp "${FOLDER_CORE:?}"/run/logs/Realmd.log "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
+          copy_logs_truncate
         else
           # is packagelist@ installed?
           if ! [ -x "$(command -v "${PACKAGELIST[@]}")" ] &>/dev/null; then
@@ -4411,9 +4417,7 @@ This is needed to operate local/remote database"
           printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}"
           sleep 3
           sudo killall screen &>/dev/null
-          # keep old logs
-          cp "${FOLDER_CORE:?}"/run/logs/Server.log "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
-          cp "${FOLDER_CORE:?}"/run/logs/Realmd.log "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
+          copy_logs_truncate
         else
           # realmd service
           case "$(echo "$PIDOF_REALMD")" in
@@ -4643,9 +4647,7 @@ Database User, Client/Server is needed."
           printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}\n"
           sleep 3
           sudo killall screen 2>&1
-          # keep old logs
-          cp "${FOLDER_CORE:?}"/run/logs/Server.log "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
-          cp "${FOLDER_CORE:?}"/run/logs/Realmd.log "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
+          copy_logs_truncate
         else
           # realmd service
           case "$(echo "$PIDOF_REALMD")" in
@@ -4840,9 +4842,7 @@ Database User, Client/Server is needed."
           printf '%b' "[${G1:?}OK${N0:?}] ${GR:?}${GR:?}Killing screens (realmd, mangosd)${N0:?}"
           sleep 3
           sudo killall screen &>/dev/null
-          # keep old logs
-          cp "${FOLDER_CORE:?}"/run/logs/Server.log "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
-          cp "${FOLDER_CORE:?}"/run/logs/Realmd.log "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
+          copy_logs_truncate
         else
           # realmd service
           case "$(echo "$PIDOF_REALMD")" in
@@ -5849,18 +5849,12 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
             else
               printf '%b' "[!!] mangosd not running!\n"
             fi
-            # keep old logs
-            cp "${FOLDER_CORE:?}"/run/logs/Server.log "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
-            cp "${FOLDER_CORE:?}"/run/logs/Realmd.log "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
+            copy_logs_truncate
           else
-            # keep old logs
-            cp "${FOLDER_CORE:?}"/run/logs/Server.log "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
-            cp "${FOLDER_CORE:?}"/run/logs/Realmd.log "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
+            copy_logs_truncate
             # this is for docker users
             if [ -f /.dockerenv ] &>/dev/null; then
-              # keep old logs
-              cp "${FOLDER_CORE:?}"/run/logs/Server.log "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
-              cp "${FOLDER_CORE:?}"/run/logs/Realmd.log "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
+              copy_logs_truncate
             else
               # realmd service
               case "$(echo "$PIDOF_REALMD")" in
@@ -5921,16 +5915,12 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
               screen -S "$REALMD_ID" -X quit &>/dev/null
               screen -S realmd -X quit &>/dev/null
               printf '%b' "[${G1:?}OK${N0:?}] Stopped $REALMD_ID.realmd!\n"
-              # keep old logs
-              cp "${FOLDER_CORE:?}"/run/logs/Server.log "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
-              cp "${FOLDER_CORE:?}"/run/logs/Realmd.log "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
+              copy_logs_truncate
             else
               printf '%b' "[!!] realmd not running!\n"
               sleep 2
             fi
           else
-            # keep old logs
-            cp "${FOLDER_CORE:?}"/run/logs/Realmd.log "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
             # realmd service
             case "$(echo "$PIDOF_REALMD")" in
             0)
@@ -5975,16 +5965,12 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
               screen -S "$MANGOSD_ID" -X quit &>/dev/null
               screen -S mangosd -X quit &>/dev/null
               printf '%b' "[${G1:?}OK${N0:?}] Stopped $MANGOSD_ID.mangosd!\n"
-              # keep old logs
-              cp "${FOLDER_CORE:?}"/run/logs/Server.log "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
-              cp "${FOLDER_CORE:?}"/run/logs/Realmd.log "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
+              copy_logs_truncate
             else
               printf '%b' "[!!] mangosd not running!\n"
               sleep 2
             fi
           else
-            # keep old logs
-            cp "${FOLDER_CORE:?}"/run/logs/Server.log "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
             # mangosd service
             case "$(echo "$PIDOFMANGOSD")" in
             0)
@@ -6124,16 +6110,11 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
             # implement daemons inside newly made screens
             screen -S realmd -X -p 0 stuff "$REALMD_SCREEN" &>/dev/null
             screen -S mangosd -X -p 0 stuff "$MANGOSD_SCREEN" &>/dev/null
-            # keep old logs
-            cp "${FOLDER_CORE:?}"/run/logs/Server.log "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
-            cp "${FOLDER_CORE:?}"/run/logs/Realmd.log "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
+            copy_logs_truncate
             echo
             read -r -p "Press Enter to continue" </dev/tty
             echo
           else
-            # keep old logs
-            cp "${FOLDER_CORE:?}"/run/logs/Server.log "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
-            cp "${FOLDER_CORE:?}"/run/logs/Realmd.log "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
             # done
             printf '%b' "[${G1:?}OK${N0:?}] Restarting ${TYPE_CORE:?}_realmd, ${TYPE_CORE:?}_mangosd service..\n"
             sleep 1
@@ -6387,12 +6368,8 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
             REALMD_SCREEN="${FOLDER_CORE:?}/run/bin/./realmd -c ${FOLDER_CORE:?}/run/etc/realmd.conf\n"
             # implement daemon inside newly made screens
             screen -S realmd -X -p 0 stuff "$REALMD_SCREEN" &>/dev/null
-            # keep old logs
-            cp "${FOLDER_CORE:?}"/run/logs/Server.log "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
-            cp "${FOLDER_CORE:?}"/run/logs/Realmd.log "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
+            copy_logs_truncate
           else
-            # keep old logs
-            cp "${FOLDER_CORE:?}"/run/logs/Realmd.log "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
             # restart service (realmd)
             printf '%b' "[${Y1:?}OK${N0:?}] Restarting ${TYPE_CORE:?}_realmd service\n"
             sleep 1
@@ -6435,12 +6412,8 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
             MANGOSD_SCREEN="${FOLDER_CORE:?}/run/bin/./mangosd -c ${FOLDER_CORE:?}/run/etc/mangosd.conf\n"
             # implement daemon inside newly made screens
             screen -S mangosd -X -p 0 stuff "$MANGOSD_SCREEN" &>/dev/null
-            # keep old logs
-            cp "${FOLDER_CORE:?}"/run/logs/Server.log "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
-            cp "${FOLDER_CORE:?}"/run/logs/Realmd.log "${FOLDER_CORE:?}"/run/logs/Realmd.log.old &>/dev/null
+            copy_logs_truncate
           else
-            # keep old logs
-            cp "${FOLDER_CORE:?}"/run/logs/Server.log "${FOLDER_CORE:?}"/run/logs/Server.log.old &>/dev/null
             # restart service (mangosd)
             printf '%b' "[${Y1:?}OK${N0:?}] Restarting ${TYPE_CORE:?}_mangosd service\n"
             sleep 1
