@@ -14,7 +14,7 @@
 
 # By Rainman
 # V20252202
-# 7.1.2.7
+# 7.1.0.6
 
 while :; do
 
@@ -6322,9 +6322,7 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
 
             "l")
               echo
-              LOGS=("${FOLDER_CORE:?}"/run/logs/EventAIErrors.log
-                "${FOLDER_CORE:?}"/run/logs/DBErrors.log
-                "${FOLDER_CORE:?}"/run/logs/Realmd.log
+              LOGS=("${FOLDER_CORE:?}"/run/logs/Realmd.log
                 "${FOLDER_CORE:?}"/run/logs/Server.log)
               # is lnav installed?
               if ! [ -x "$(command -v lnav)" ] &>/dev/null; then
@@ -6838,9 +6836,7 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
 
     "l")
       echo
-      LOGS=("${FOLDER_CORE:?}"/run/logs/EventAIErrors.log
-        "${FOLDER_CORE:?}"/run/logs/DBErrors.log
-        "${FOLDER_CORE:?}"/run/logs/Realmd.log
+      LOGS=("${FOLDER_CORE:?}"/run/logs/Realmd.log
         "${FOLDER_CORE:?}"/run/logs/Server.log)
       # is lnav installed?
       if ! [ -x "$(command -v lnav)" ] &>/dev/null; then
