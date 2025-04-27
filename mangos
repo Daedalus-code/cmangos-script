@@ -13,8 +13,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20252202
-# 7.1.0.6
+# V20252702
+# 7.1.0.2
 
 while :; do
 
@@ -764,7 +764,7 @@ $(cat "${FOLDER_WOW:?}"/tmp.txt)
         CM_SERVER_LOG_EMPTY="${G1:?}✓${N0:?}"
       fi
       # look for serious error
-      if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "${FOLDER_CORE:?}"/run/logs/Server.log &>/dev/null; then
+      if grep -q -E "fatal|critical|Segmentation\sfault|core\sdumped|segfault" "${FOLDER_CORE:?}"/run/logs/Server.log &>/dev/null; then
         # if any, print "serious"
         CM_SERVER_LOG_SERIOUS="${R1:?}S${N0:?}"
       else
@@ -2028,7 +2028,7 @@ WantedBy=multi-user.target" >"${FOLDER_WOW:?}"/TService.tmp 2>&1
           # server.log.old
           DIVE_SERVER_OLD_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "${FOLDER_CORE:?}"/run/logs/old/Server.log.old 2>&1 | grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty.|.*empty*." 2>&1)
           DIVE_SERVER_OLD_ERROR=$(grep -E -v ".*is empty*." "${FOLDER_CORE:?}"/run/logs/old/Server.log.old 2>&1 | grep -c -E ".*ERROR*." 2>&1)
-          DIVE_SERVER_OLD_SERIO=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "${FOLDER_CORE:?}"/run/logs/old/Server.log.old 2>&1)
+          DIVE_SERVER_OLD_SERIO=$(grep -c -E "fatal|critical|Segmentation\sfault|core\sdumped|segfault" "${FOLDER_CORE:?}"/run/logs/old/Server.log.old 2>&1)
           DIVE_SERVER_OLD_IGNOR=$(grep -c -E ".*ignoring*.|.*ignore*.|.*ignored*." "${FOLDER_CORE:?}"/run/logs/old/Server.log.old 2>&1)
           DIVE_SERVER_OLD_POLYR=$(grep -c -E "Invalid poly ref" "${FOLDER_CORE:?}"/run/logs/old/Server.log.old 2>&1)
         fi
@@ -2043,7 +2043,7 @@ WantedBy=multi-user.target" >"${FOLDER_WOW:?}"/TService.tmp 2>&1
           # server.log
           DIVE_SERVER_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "${FOLDER_CORE:?}"/run/logs/Server.log 2>&1 | grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty.|.*empty*." 2>&1)
           DIVE_SERVER_ERROR=$(grep -E -v ".*is empty*." "${FOLDER_CORE:?}"/run/logs/Server.log 2>&1 | grep -c -E ".*ERROR*." 2>&1)
-          DIVE_SERVER_SERIO=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "${FOLDER_CORE:?}"/run/logs/Server.log 2>&1)
+          DIVE_SERVER_SERIO=$(grep -c -E "fatal|critical|Segmentation\sfault|core\sdumped|segfault" "${FOLDER_CORE:?}"/run/logs/Server.log 2>&1)
           DIVE_SERVER_IGNOR=$(grep -c -E ".*ignoring*.|.*ignore*.|.*ignored*." "${FOLDER_CORE:?}"/run/logs/Server.log 2>&1)
           DIVE_SERVER_POLYR=$(grep -c -E "Invalid poly ref" "${FOLDER_CORE:?}"/run/logs/Server.log 2>&1)
         fi
@@ -2056,7 +2056,7 @@ WantedBy=multi-user.target" >"${FOLDER_WOW:?}"/TService.tmp 2>&1
           # realmd.log
           DIVE_REALMD_EMPTY=$(grep -E -v "ERROR*.|Only expired mails*." "${FOLDER_CORE:?}"/run/logs/Realmd.log 2>&1 | grep -c -E "doesn't\sexist|table\s*\sis\sempty.|table\sis\sempty|is\sempty." 2>&1)
           DIVE_REALMD_ERROR=$(grep -E -v ".*is empty*." "${FOLDER_CORE:?}"/run/logs/Realmd.log 2>&1 | grep -c -E ".*ERROR*." 2>&1)
-          DIVE_REALMD_SERIO=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "${FOLDER_CORE:?}"/run/logs/Realmd.log 2>&1)
+          DIVE_REALMD_SERIO=$(grep -c -E "fatal|critical|Segmentation\sfault|core\sdumped|segfault" "${FOLDER_CORE:?}"/run/logs/Realmd.log 2>&1)
         fi
         if [ ! -f "${FOLDER_CORE:?}"/run/logs/DBErrors.log ] &>/dev/null; then
           # non responsive/responsive
@@ -6226,9 +6226,9 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
                 # if any, print "error"
                 printf '%b' "[${R1:?}1E${N0:?}] World: ${R1:?}$COUNT_ERROR_SERVER${N0:?} Error! ${N0:?}${ERROR_RATE_SERVER:?}${N0:?}\n"
                 # look for serious error
-                if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "${FOLDER_CORE:?}"/run/logs/Server.log &>/dev/null; then
+                if grep -q -E "fatal|critical|Segmentation\sfault|core\sdumped|segfault" "${FOLDER_CORE:?}"/run/logs/Server.log &>/dev/null; then
                   # count serious errors inside log
-                  COUNT_ERROR_SERIOUS=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "${FOLDER_CORE:?}"/run/logs/Server.log 2>&1)
+                  COUNT_ERROR_SERIOUS=$(grep -c -E "fatal|critical|Segmentation\sfault|core\sdumped|segfault" "${FOLDER_CORE:?}"/run/logs/Server.log 2>&1)
                   # if any, print "serious"
                   printf '%b' "[${R1:?}X9${N0:?}] World has ${R1:?}$COUNT_ERROR_SERIOUS${N0:?} serious error!\n"
                 fi
@@ -6716,9 +6716,9 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
           # if any, print "error"
           printf '%b' "[${R1:?}1E${N0:?}] World: ${R1:?}$COUNT_ERROR_SERVER${N0:?} Error! ${N0:?}${ERROR_RATE_SERVER:?} ${GR:?}$GEN_S_ER${N0:?}\n"
           # look for serious error
-          if grep -q -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "${FOLDER_CORE:?}"/run/logs/Server.log &>/dev/null; then
+          if grep -q -E "fatal|critical|Segmentation\sfault|core\sdumped|segfault" "${FOLDER_CORE:?}"/run/logs/Server.log &>/dev/null; then
             # count serious errors inside log
-            COUNT_ERROR_SERIOUS=$(grep -c -E "malformed|fatal|critical|Segmentation\sfault|core\sdumped|segfault" "${FOLDER_CORE:?}"/run/logs/Server.log 2>&1)
+            COUNT_ERROR_SERIOUS=$(grep -c -E "fatal|critical|Segmentation\sfault|core\sdumped|segfault" "${FOLDER_CORE:?}"/run/logs/Server.log 2>&1)
             # if any, print "serious"
             printf '%b' "[${R1:?}X9${N0:?}] World has ${R1:?}$COUNT_ERROR_SERIOUS${N0:?} serious error!\n"
           fi
