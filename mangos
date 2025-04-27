@@ -7,7 +7,8 @@
 
 # shellcheck disable=SC2034  # Unused variables left for readability
 
-# Built on a Linux ubuntu 5.4.0-1029-raspi - aarch64 (Raspberry Pi4)
+# Built on a Linux - 6.8.0-1020-raspi #24-Ubuntu - aarch64 (Raspberry Pi4)
+
 # https://ubuntu.com/download/raspberry-pi
 
 # C(ontinued)-MaNGOS - https://github.com/cmangos
