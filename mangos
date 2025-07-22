@@ -15,7 +15,7 @@
 
 # By Rainman
 # V20252207
-# 7.1.0.3
+# 7.1.0.1
 
 while :; do
 
@@ -3516,13 +3516,12 @@ Select install operation"
         echo "[Unit]
 Description=WoW $TYPE_CORE realmd service
 After=network.target mysql.service network-online.target
-Wants=network-online.target
-DefaultDependencies=no
 Before=shutdown.target reboot.target halt.target
 
 [Service]
 Type=simple
 User=$USER
+Group=$USER
 ExecStart=${FOLDER_CORE:?}/run/bin/realmd -c ${FOLDER_CORE:?}/run/etc/realmd.conf
 
 [Install]
@@ -3531,13 +3530,12 @@ WantedBy=multi-user.target" >"${FOLDER_WOW:?}"/"$TYPE_CORE"_realmd.service 2>&1
         echo "[Unit]
 Description=WoW $SERVER_TYPE mangosd service
 After=network.target mysql.service ${TYPE_CORE:?}_realmd.service network-online.target
-Wants=network-online.target
-DefaultDependencies=no
 Before=shutdown.target reboot.target halt.target
 
 [Service]
 Type=simple
 User=$USER
+Group=$USER
 WorkingDirectory=${FOLDER_CORE:?}/run/bin
 ExecStart=${FOLDER_CORE:?}/run/bin/mangosd -c ${FOLDER_CORE:?}/run/etc/mangosd.conf -a ${FOLDER_CORE:?}/run/etc/ahbot.conf
 
