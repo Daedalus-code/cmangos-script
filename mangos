@@ -15,7 +15,7 @@
 
 # By Rainman
 # V20252207
-# 7.1.0.1
+# 7.1.0.5
 
 while :; do
 
@@ -3529,7 +3529,7 @@ WantedBy=multi-user.target" >"${FOLDER_WOW:?}"/"$TYPE_CORE"_realmd.service 2>&1
         # /etc/systemd/system/mangosd.service
         echo "[Unit]
 Description=WoW $SERVER_TYPE mangosd service
-After=network.target mysql.service ${TYPE_CORE:?}_realmd.service network-online.target
+After=network.target mysql.service network-online.target
 Before=shutdown.target reboot.target halt.target
 
 [Service]
@@ -3538,18 +3538,22 @@ User=$USER
 Group=$USER
 WorkingDirectory=${FOLDER_CORE:?}/run/bin
 ExecStart=${FOLDER_CORE:?}/run/bin/mangosd -c ${FOLDER_CORE:?}/run/etc/mangosd.conf -a ${FOLDER_CORE:?}/run/etc/ahbot.conf
+Restart=on-failure
+TimeoutStopSec=10
 
 [Install]
 WantedBy=multi-user.target" >"${FOLDER_WOW:?}"/"$TYPE_CORE"_mangosd.service 2>&1
+
         # install services
         sudo mv "${FOLDER_WOW:?}"/*.service /etc/systemd/system/ &>/dev/null
+        # reload
+        sudo systemctl daemon-reload 2>&1
         # enable services
         sudo systemctl enable "$TYPE_CORE"_realmd
         sleep 1
         sudo systemctl enable "$TYPE_CORE"_mangosd
-        # reload
-        sudo systemctl daemon-reload 2>&1
         sleep 1
+
         printf '%b' "
 /etc/systemd/system/${THEME_ALL:?}${TYPE_CORE:?}_realmd.service${N0:?}
 /etc/systemd/system/${THEME_ALL:?}${TYPE_CORE:?}_mangosd.service${N0:?}
