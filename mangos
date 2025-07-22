@@ -3523,6 +3523,7 @@ Type=simple
 User=$USER
 Group=$USER
 ExecStart=${FOLDER_CORE:?}/run/bin/realmd -c ${FOLDER_CORE:?}/run/etc/realmd.conf
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target" >"${FOLDER_WOW:?}"/"$TYPE_CORE"_realmd.service 2>&1
@@ -3535,11 +3536,13 @@ Before=shutdown.target reboot.target halt.target
 [Service]
 Type=simple
 User=$USER
-Group=$USER
+StandardInput=tty
+TTYPath=/dev/tty3
+TTYReset=yes
+TTYVHangup=yes
 WorkingDirectory=${FOLDER_CORE:?}/run/bin
 ExecStart=${FOLDER_CORE:?}/run/bin/mangosd -c ${FOLDER_CORE:?}/run/etc/mangosd.conf -a ${FOLDER_CORE:?}/run/etc/ahbot.conf
 Restart=on-failure
-TimeoutStopSec=10
 
 [Install]
 WantedBy=multi-user.target" >"${FOLDER_WOW:?}"/"$TYPE_CORE"_mangosd.service 2>&1
