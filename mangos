@@ -3536,10 +3536,6 @@ After=network.target mysql.service ${TYPE_CORE:?}_realmd.service getty@tty3.serv
 [Service]
 Type=simple
 User=$USER
-StandardInput=tty
-TTYPath=/dev/tty3
-TTYRESET=yes
-TTYVHangup=yes
 WorkingDirectory=${FOLDER_CORE:?}/run/bin
 ExecStart=${FOLDER_CORE:?}/run/bin/mangosd -c ${FOLDER_CORE:?}/run/etc/mangosd.conf -a ${FOLDER_CORE:?}/run/etc/ahbot.conf
 Restart=on-failure
