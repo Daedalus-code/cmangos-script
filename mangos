@@ -14,8 +14,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20252704
-# 7.1.0.2
+# V20252207
+# 7.0.9.9
 
 while :; do
 
@@ -3522,9 +3522,6 @@ Type=simple
 User=$USER
 ExecStart=${FOLDER_CORE:?}/run/bin/realmd -c ${FOLDER_CORE:?}/run/etc/realmd.conf
 Restart=on-failure
-RestartSec=10
-TimeoutStopSec=30
-KillMode=process
 
 [Install]
 WantedBy=multi-user.target" >"${FOLDER_WOW:?}"/"$TYPE_CORE"_realmd.service 2>&1
@@ -3539,9 +3536,6 @@ User=$USER
 WorkingDirectory=${FOLDER_CORE:?}/run/bin
 ExecStart=${FOLDER_CORE:?}/run/bin/mangosd -c ${FOLDER_CORE:?}/run/etc/mangosd.conf -a ${FOLDER_CORE:?}/run/etc/ahbot.conf
 Restart=on-failure
-RestartSec=10
-TimeoutStopSec=30
-KillMode=process
 
 [Install]
 WantedBy=multi-user.target" >"${FOLDER_WOW:?}"/"$TYPE_CORE"_mangosd.service 2>&1
