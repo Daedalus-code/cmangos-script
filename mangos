@@ -15,7 +15,7 @@
 
 # By Rainman
 # V20252207
-# 7.1.0.5
+# 7.1.1.9
 
 while :; do
 
@@ -3510,8 +3510,12 @@ Select install operation"
         sudo systemctl disable realmd.service &>/dev/null
         sudo rm /etc/systemd/system/mangosd.service &>/dev/null
         sudo rm /etc/systemd/system/realmd.service &>/dev/null
-        # this user
+
+        # this user and group
         USER=$(whoami)
+
+        ########################################################################
+
         # /etc/systemd/system/realmd.service
         echo "[Unit]
 Description=WoW $TYPE_CORE realmd service
@@ -3527,6 +3531,9 @@ Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target" >"${FOLDER_WOW:?}"/"$TYPE_CORE"_realmd.service 2>&1
+
+        ########################################################################
+
         # /etc/systemd/system/mangosd.service
         echo "[Unit]
 Description=WoW $SERVER_TYPE mangosd service
@@ -3547,6 +3554,8 @@ Restart=on-failure
 [Install]
 WantedBy=multi-user.target" >"${FOLDER_WOW:?}"/"$TYPE_CORE"_mangosd.service 2>&1
 
+        ########################################################################
+
         # install services
         sudo mv "${FOLDER_WOW:?}"/*.service /etc/systemd/system/ &>/dev/null
         # reload
@@ -3556,6 +3565,8 @@ WantedBy=multi-user.target" >"${FOLDER_WOW:?}"/"$TYPE_CORE"_mangosd.service 2>&1
         sleep 1
         sudo systemctl enable "$TYPE_CORE"_mangosd
         sleep 1
+
+        ########################################################################
 
         printf '%b' "
 /etc/systemd/system/${THEME_ALL:?}${TYPE_CORE:?}_realmd.service${N0:?}
