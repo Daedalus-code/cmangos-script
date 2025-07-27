@@ -14,8 +14,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20252207
-# 7.1.1.9
+# V20252707
+# 7.1.2.3
 
 while :; do
 
@@ -3519,15 +3519,19 @@ Select install operation"
         # /etc/systemd/system/realmd.service
         echo "[Unit]
 Description=WoW $TYPE_CORE realmd service
-After=network.target mysql.service network-online.target
+After=network.target
+Requires=mysqld.service
+StartLimitIntervalSec=0
 Before=shutdown.target reboot.target halt.target
 
 [Service]
 Type=simple
+Restart=always
+RestartSec=1
+
 User=$USER
-Group=$USER
+WorkingDirectory=${FOLDER_CORE:?}/run/bin
 ExecStart=${FOLDER_CORE:?}/run/bin/realmd -c ${FOLDER_CORE:?}/run/etc/realmd.conf
-Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target" >"${FOLDER_WOW:?}"/"$TYPE_CORE"_realmd.service 2>&1
@@ -3537,19 +3541,19 @@ WantedBy=multi-user.target" >"${FOLDER_WOW:?}"/"$TYPE_CORE"_realmd.service 2>&1
         # /etc/systemd/system/mangosd.service
         echo "[Unit]
 Description=WoW $SERVER_TYPE mangosd service
-After=network.target mysql.service network-online.target
+After=network.target
+Requires=mysqld.service
+StartLimitIntervalSec=0
 Before=shutdown.target reboot.target halt.target
 
 [Service]
 Type=simple
+Restart=always
+RestartSec=1
+
 User=$USER
-StandardInput=tty
-TTYPath=/dev/tty3
-TTYReset=yes
-TTYVHangup=yes
 WorkingDirectory=${FOLDER_CORE:?}/run/bin
 ExecStart=${FOLDER_CORE:?}/run/bin/mangosd -c ${FOLDER_CORE:?}/run/etc/mangosd.conf -a ${FOLDER_CORE:?}/run/etc/ahbot.conf
-Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target" >"${FOLDER_WOW:?}"/"$TYPE_CORE"_mangosd.service 2>&1
