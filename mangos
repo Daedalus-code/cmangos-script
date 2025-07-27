@@ -15,7 +15,7 @@
 
 # By Rainman
 # V20252707
-# 7.1.2.3
+# 7.1.2.1
 
 while :; do
 
@@ -3520,7 +3520,6 @@ Select install operation"
         echo "[Unit]
 Description=WoW $TYPE_CORE realmd service
 After=network.target
-Requires=mysqld.service
 StartLimitIntervalSec=0
 Before=shutdown.target reboot.target halt.target
 
@@ -3542,7 +3541,6 @@ WantedBy=multi-user.target" >"${FOLDER_WOW:?}"/"$TYPE_CORE"_realmd.service 2>&1
         echo "[Unit]
 Description=WoW $SERVER_TYPE mangosd service
 After=network.target
-Requires=mysqld.service
 StartLimitIntervalSec=0
 Before=shutdown.target reboot.target halt.target
 
