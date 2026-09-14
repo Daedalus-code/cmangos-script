@@ -404,7 +404,7 @@ while :; do
    |   --| | | | .'| | | |  |  |  |  |__   |
    |_____|_|_|_|__,|_|___|_____|_____|_____|
    C(ontinued)-MaNGOS - Helper/Tool
-   2019-2024
+   2019-2026
 
    0 : Classic
    1 : The Burning Crusade
@@ -943,7 +943,7 @@ $(cat "${FOLDER_WOW:?}"/tmp.txt)
   |   --| | | | .'| | | |  |  |  |  |__   |${RC1:?}
   |_____|_|_|_|__,|_|___|_____|_____|_____|${N0:?}
    C(ontinued)-MaNGOS - ${GR:?}Helper/Tool
-   2019-2024${N0:?}
+   2019-2026${N0:?}
 
    ${GR:?}https://github.com/Daedalus-code/cmangos-script${N0:?}
 
@@ -2239,7 +2239,7 @@ Characters${G1:?}.:${N0:?} $CH_COUNT Pets${G1:?}.......:${N0:?} $PE_COUNT Gifts$
 MailG1cle${G1:?}..:${N0:?} $MA_CYCLE Petition${G1:?}...:${N0:?} $PT_COUNT PetitionSign${G1:?}.:${N0:?} $PS_COUNT
 MailItems${G1:?}..:${N0:?} $MI_COUNT BugReport${G1:?}..:${N0:?} $BG_COUNT Groups${G1:?}.......:${N0:?} $GP_COUNT
 Realms${G1:?}.....:${N0:?} $RL_COUNT Social${G1:?}.....:${N0:?} $CS_COUNT Logons${G1:?}.......:${N0:?} $AL_COUNT
-Cooldowns${G1:?}..:${N0:?} $CC_COUNT GM_Surveys${G1:?}.:${N0:?} $GM_COUNT Auctions${G1:?}.....:${N0:?} $AU_COUNT\n" | column -t
+Cooldowns${G1:?}..:${N0:?} $CC_COUNT GM_Surveys${G1:?}.:${N0:?} $GM_COUNT Auctions${G1:?}.....:${N0:?} $AU_COUNT\n" | column -t | sed 's/^/   /'
         echo
         read -r -p "Press Enter to continue" </dev/tty
         echo
