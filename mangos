@@ -14,8 +14,8 @@
 # C(ontinued)-MaNGOS - https://github.com/cmangos
 
 # By Rainman
-# V20252707
-# 7.1.2.1
+# V20261409
+# 7.1.4.3
 
 while :; do
 
@@ -2185,7 +2185,7 @@ $DIVE_LOG_CRASH ${GR:?}$DIVE_DBERROR_CRAS${N0:?} $DIVE_LOG_NONE ${GR:?}$DIVE_LOG
 
         esac
 
-        read -r -p "   Press Enter to continue" </dev/tty
+        read -r -p "Press Enter to continue" </dev/tty
         echo
 
         ;;
