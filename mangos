@@ -2185,7 +2185,7 @@ $DIVE_LOG_CRASH ${GR:?}$DIVE_DBERROR_CRAS${N0:?} $DIVE_LOG_NONE ${GR:?}$DIVE_LOG
 
         esac
 
-        read -r -p "Press Enter to continue" </dev/tty
+        read -r -p "   Press Enter to continue" </dev/tty
         echo
 
         ;;
@@ -2241,7 +2241,7 @@ MailItems${G1:?}..:${N0:?} $MI_COUNT BugReport${G1:?}..:${N0:?} $BG_COUNT Groups
 Realms${G1:?}.....:${N0:?} $RL_COUNT Social${G1:?}.....:${N0:?} $CS_COUNT Logons${G1:?}.......:${N0:?} $AL_COUNT
 Cooldowns${G1:?}..:${N0:?} $CC_COUNT GM_Surveys${G1:?}.:${N0:?} $GM_COUNT Auctions${G1:?}.....:${N0:?} $AU_COUNT\n" | column -t | sed 's/^/   /'
         echo
-        read -r -p "Press Enter to continue" </dev/tty
+        read -r -p "   Press Enter to continue" </dev/tty
         echo
 
         ;;
