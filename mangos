@@ -7056,12 +7056,34 @@ Drunk${G0:?}...: ${N0:?}${TOON_DRUNK:?}${N0:?}\n"
       sudo apt-get install dialog -y 2>&1
     fi
 
-    HEIGHT=22
-    WIDTH=61
-    CHOICE_HEIGHT=15
+    # default
+    CONFIG_MANGOSD_UPDATED="Not found!"
+    CONFIG_REALMD_UPDATED="Not found!"
+
+    # mangos config
+    DIFF_MANGOSD_CONF1="$(diff "${FOLDER_CORE:?}"/run/etc/mangosd.conf "${FOLDER_CORE:?}"/run/etc/mangosd.conf.dist | grep -c "<")"
+    DIFF_MANGOSD_CONF2="$(diff "${FOLDER_CORE:?}"/run/etc/mangosd.conf "${FOLDER_CORE:?}"/run/etc/mangosd.conf.dist | grep -c ">")"
+    if [[ "${DIFF_MANGOSD_CONF1:-0}" -eq "${DIFF_MANGOSD_CONF2:-0}" ]]; then
+      CONFIG_MANGOSD_UPDATED="OK"
+    else
+      CONFIG_MANGOSD_UPDATED="Not updated! ($(echo "${DIFF_MANGOSD_CONF1:-0}-${DIFF_MANGOSD_CONF2:-0}" | bc 2>/dev/null))"
+    fi
+
+    # realm config
+    DIFF_REALMD_CONF1="$(diff "${FOLDER_CORE:?}"/run/etc/realmd.conf "${FOLDER_CORE:?}"/run/etc/realmd.conf.dist | grep -c "<")"
+    DIFF_REALMD_CONF2="$(diff "${FOLDER_CORE:?}"/run/etc/realmd.conf "${FOLDER_CORE:?}"/run/etc/realmd.conf.dist | grep -c ">")"
+    if [[ "${DIFF_REALMD_CONF1:-0}" -eq "${DIFF_REALMD_CONF2:-0}" ]]; then
+      CONFIG_REALMD_UPDATED="OK"
+    else
+      CONFIG_REALMD_UPDATED="Not updated! ($(echo "${DIFF_REALMD_CONF1:-0}-${DIFF_REALMD_CONF2:-0}" | bc 2>/dev/null))"
+    fi
+
+    HEIGHT="22"
+    WIDTH="61"
+    CHOICE_HEIGHT="15"
     BACKTITLE="Server configuration"
     TITLE="Configurations"
-    MENU="Choose one option:"
+    MENU="Mangos.conf: $CONFIG_MANGOSD_UPDATED Realmd.conf: $CONFIG_REALMD_UPDATED"
 
     OPTIONS=(1 "server.txt              Helper/Tool config"
       2 "server.cnf              MySQL config"
